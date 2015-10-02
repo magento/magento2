@@ -12,6 +12,7 @@ use Magento\Paypal\Model\Express\Checkout\Quote as PaypalQuote;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
+use Magento\Paypal\Model\Cart as PaypalCart;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -537,6 +538,7 @@ class Checkout
         }
 
         // suppress or export shipping address
+        $address = null;
         if ($this->_quote->getIsVirtual()) {
             if ($this->_config->getValue('requireBillingAddress')
                 == PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL
@@ -558,29 +560,13 @@ class Checkout
             $this->_quote->getPayment()->save();
         }
 
-        // add line items
         /** @var $cart \Magento\Payment\Model\Cart */
         $cart = $this->_cartFactory->create(['salesModel' => $this->_quote]);
-        $this->_api->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($this->_config->getValue('lineItemsEnabled'));
 
-        // add shipping options if needed and line items are available
-        $cartItems = $cart->getAllItems();
-        if ($this->_config->getValue('lineItemsEnabled')
-            && $this->_config->getValue('transferShippingOptions')
-            && !empty($cartItems)
-        ) {
-            if (!$this->_quote->getIsVirtual()) {
-                $options = $this->_prepareShippingOptions($address, true);
-                if ($options) {
-                    $this->_api->setShippingOptionsCallbackUrl(
-                        $this->_coreUrl->getUrl(
-                            '*/*/shippingOptionsCallback',
-                            ['quote_id' => $this->_quote->getId()]
-                        )
-                    )->setShippingOptions($options);
-                }
-            }
+        $this->_api->setPaypalCart($cart);
+
+        if (!$this->_taxData->getConfig()->priceIncludesTax()) {
+            $this->setShippingOptions($cart, $address);
         }
 
         $this->_config->exportExpressCheckoutStyleSettings($this->_api);
@@ -590,8 +576,8 @@ class Checkout
         $this->_api->callSetExpressCheckout();
 
         $token = $this->_api->getToken();
-        $this->_redirectUrl = $button ? $this->_config->getExpressCheckoutStartUrl($token)
-            : $this->_config->getPayPalBasicStartUrl($token);
+
+        $this->_setRedirectUrl($button, $token);
 
         $payment = $this->_quote->getPayment();
         $payment->unsAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
@@ -1179,6 +1165,19 @@ class Checkout
     }
 
     /**
+     * Create payment redirect url
+     * @param bool|null $button
+     * @param string $token
+     * @return void
+     */
+    protected function _setRedirectUrl($button, $token)
+    {
+        $this->_redirectUrl = ($button && !$this->_taxData->getConfig()->priceIncludesTax())
+            ? $this->_config->getExpressCheckoutStartUrl($token)
+            : $this->_config->getPayPalBasicStartUrl($token);
+    }
+
+    /**
      * Get customer session object
      *
      * @return \Magento\Customer\Model\Session
@@ -1186,5 +1185,36 @@ class Checkout
     public function getCustomerSession()
     {
         return $this->_customerSession;
+    }
+
+    /**
+     * Set shipping options to api
+     * @param \Magento\Paypal\Model\Cart $cart
+     * @param \Magento\Quote\Model\Quote\Address $address
+     * @return void
+     */
+    private function setShippingOptions(PaypalCart $cart, Address $address)
+    {
+        // for included tax always disable line items (related to paypal amount rounding problem)
+        $this->_api->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));
+
+        // add shipping options if needed and line items are available
+        $cartItems = $cart->getAllItems();
+        if ($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS)
+            && $this->_config->getValue(PaypalConfig::TRANSFER_SHIPPING_OPTIONS)
+            && !empty($cartItems)
+        ) {
+            if (!$this->_quote->getIsVirtual()) {
+                $options = $this->_prepareShippingOptions($address, true);
+                if ($options) {
+                    $this->_api->setShippingOptionsCallbackUrl(
+                        $this->_coreUrl->getUrl(
+                            '*/*/shippingOptionsCallback',
+                            ['quote_id' => $this->_quote->getId()]
+                        )
+                    )->setShippingOptions($options);
+                }
+            }
+        }
     }
 }
