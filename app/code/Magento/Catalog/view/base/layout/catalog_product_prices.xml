@@ -17,9 +17,6 @@
                     <item name="special_price" xsi:type="array">
                         <item name="render_template" xsi:type="string">Magento_Catalog::product/price/special_price.phtml</item>
                     </item>
-                    <item name="group_price" xsi:type="array">
-                        <item name="render_template" xsi:type="string">Magento_Catalog::product/price/group_price.phtml</item>
-                    </item>
                     <item name="tier_price" xsi:type="array">
                         <item name="render_template" xsi:type="string">Magento_Catalog::product/price/tier_prices.phtml</item>
                     </item>

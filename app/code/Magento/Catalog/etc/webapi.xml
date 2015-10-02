@@ -227,26 +227,6 @@
         </resources>
     </route>
 
-    <!-- Group Price -->
-    <route url="/V1/products/:sku/group-prices/" method="GET">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="getList"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
-    <route url="/V1/products/:sku/group-prices/:customerGroupId/price/:price" method="POST">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="add"/>
-        <resources>
-            <resource ref="Magento_Catalog::catalog"/>
-        </resources>
-    </route>
-    <route url="/V1/products/:sku/group-prices/:customerGroupId/" method="DELETE">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="remove"/>
-        <resources>
-            <resource ref="Magento_Catalog::catalog"/>
-        </resources>
-    </route>
-
     <!-- Tier Price -->
     <route url="/V1/products/:sku/group-prices/:customerGroupId/tiers" method="GET">
         <service class="Magento\Catalog\Api\ProductTierPriceManagementInterface" method="getList"/>
