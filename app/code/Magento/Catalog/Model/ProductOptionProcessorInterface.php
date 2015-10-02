@@ -22,6 +22,7 @@ interface ProductOptionProcessorInterface
      * Convert buy request data to product option data
      *
      * @param DataObject $request
+     * @return array
      */
     public function convertToProductOption(DataObject $request);
 }

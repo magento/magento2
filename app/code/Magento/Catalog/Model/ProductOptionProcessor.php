@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
@@ -21,35 +20,19 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     protected $objectFactory;
 
     /**
-     * @var ProductOptionFactory
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory
-     */
-    protected $extensionFactory;
-
-    /**
      * @var CustomOptionFactory
      */
     protected $customOptionFactory;
 
     /**
      * @param DataObjectFactory $objectFactory
-     * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
      */
     public function __construct(
         DataObjectFactory $objectFactory,
-        ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $extensionFactory,
         CustomOptionFactory $customOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
-        $this->productOptionFactory = $productOptionFactory;
-        $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
     }
 
