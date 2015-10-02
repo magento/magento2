@@ -58,19 +58,10 @@ define([
         initialize: function () {
             _.bindAll(this, 'updateVisible');
 
-            this._super();
-
-            if (this.resizeConfig.enabled) {
-                this.initResize();
-            }
-
-            if (this.dndConfig.enabled) {
-                this.initDnd();
-            }
-
-            if (this.editorConfig.enabled) {
-                this.initEditor();
-            }
+            this._super()
+                .initDnd()
+                .initEditor()
+                .initResize();
 
             return this;
         },
@@ -96,7 +87,9 @@ define([
          * @returns {Listing} Chainable.
          */
         initDnd: function () {
-            layout([this.dndConfig]);
+            if (this.dndConfig.enabled) {
+                layout([this.dndConfig]);
+            }
 
             return this;
         },
@@ -107,7 +100,9 @@ define([
          * @returns {Listing} Chainable.
          */
         initResize: function () {
-            layout([this.resizeConfig]);
+            if (this.resizeConfig.enabled) {
+                layout([this.resizeConfig]);
+            }
 
             return this;
         },
@@ -118,7 +113,9 @@ define([
          * @returns {Listing} Chainable.
          */
         initEditor: function () {
-            layout([this.editorConfig]);
+            if (this.editorConfig.enabled) {
+                layout([this.editorConfig]);
+            }
 
             return this;
         },
@@ -206,6 +203,7 @@ define([
         },
 
         /**
+         * Returns reference to 'visibleColumns' array.
          *
          * @returns {Array}
          */

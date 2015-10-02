@@ -14,7 +14,7 @@ define([
 ], function (ko, _, utils, registry, Events, Class, links) {
     'use strict';
 
-    var Module;
+    var Element;
 
     /**
      * Creates observable property using knockouts'
@@ -60,7 +60,7 @@ define([
         }
     }
 
-    Module = _.extend({
+    Element = _.extend({
         defaults: {
             template: '',
             registerNodes: true,
@@ -207,14 +207,14 @@ define([
             var data = this.get(path),
                 diffs;
 
-            if (!_.isFunction(data)) {
-                diffs = utils.compare(data, value, path);
+            diffs = !_.isFunction(data) && !this.isTracked(path) ?
+                utils.compare(data, value, path) :
+                false;
 
-                utils.nested(this, path, value);
+            utils.nested(this, path, value);
 
+            if (diffs) {
                 this._notifyChanges(diffs);
-            } else {
-                utils.nested(this, path, value);
             }
 
             return this;
@@ -243,39 +243,6 @@ define([
 
                 this._notifyChanges(diffs);
             }
-
-            return this;
-        },
-
-        /**
-         * Destroys current instance along with all of its' children.
-         */
-        destroy: function () {
-            this._dropHandlers()
-                ._clearRefs();
-        },
-
-        /**
-         * Removes events listeners.
-         * @private
-         *
-         * @returns {Element} Chainable.
-         */
-        _dropHandlers: function () {
-            this.off();
-
-            return this;
-        },
-
-        /**
-         * Removes all references to current instance and
-         * calls 'destroy' method on all of its' children.
-         * @private
-         *
-         * @returns {Element} Chainable.
-         */
-        _clearRefs: function () {
-            registry.remove(this.name);
 
             return this;
         },
@@ -347,6 +314,16 @@ define([
             this.observe(true, properties);
 
             return this;
+        },
+
+        /**
+         * Checks if specified property is tracked.
+         *
+         * @param {String} property - Property to be checked.
+         * @returns {Boolean}
+         */
+        isTracked: function (property) {
+            return ko.es5.isTracked(this, property);
         },
 
         /**
@@ -439,8 +416,41 @@ define([
             this.storage('remove', path);
 
             return this;
+        },
+
+        /**
+         * Destroys current instance along with all of its' children.
+         */
+        destroy: function () {
+            this._dropHandlers()
+                ._clearRefs();
+        },
+
+        /**
+         * Removes events listeners.
+         * @private
+         *
+         * @returns {Element} Chainable.
+         */
+        _dropHandlers: function () {
+            this.off();
+
+            return this;
+        },
+
+        /**
+         * Removes all references to current instance and
+         * calls 'destroy' method on all of its' children.
+         * @private
+         *
+         * @returns {Element} Chainable.
+         */
+        _clearRefs: function () {
+            registry.remove(this.name);
+
+            return this;
         }
     }, Events, links);
 
-    return Class.extend(Module);
+    return Class.extend(Element);
 });

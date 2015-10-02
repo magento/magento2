@@ -112,10 +112,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid.sales_order_shipment_columns.ids</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="pdfshipments_order" xsi:type="array">
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
