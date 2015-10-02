@@ -44,9 +44,9 @@ class PaymentMethod extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
@@ -59,5 +59,7 @@ class PaymentMethod extends Column
                 }
             }
         }
+
+        return $dataSource;
     }
 }
