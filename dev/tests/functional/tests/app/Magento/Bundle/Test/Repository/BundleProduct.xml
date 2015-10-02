@@ -82,6 +82,7 @@
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
@@ -118,6 +119,7 @@
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -163,6 +165,7 @@
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -193,6 +196,7 @@
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
