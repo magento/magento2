@@ -72,8 +72,11 @@ class NonComposerComponentRegistration
     {
         $files = [];
         $staticList = __DIR__ . '/paths.php';
-        $pattern
-            = "/register\\(\\s*(?<type>[\\w\\:\\\\]*),\\s*(?<alias>[\\w\\'\\_\\/]*),\\s*(?<path>[\\w\\_]*)\\s*\\)/mu";
+
+        //@codingStandardsIgnoreStart
+        $pattern = "/register\\(\\s*(?<type>[\\w\\:\\\\]*),\\s*(?<alias>[\\w\\'\\_\\/\\-]*),\\s*(?<path>[\\w\\_]*)\\s*\\)/mu";
+        // @codingStandardsIgnoreEnd
+
         if (!file_exists($staticList)) {
             $content = '';
             foreach (static::$pathList as $path) {
