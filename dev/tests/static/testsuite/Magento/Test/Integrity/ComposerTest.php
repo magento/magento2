@@ -156,6 +156,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $this->assertDependsOnPhp($json->require);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
+                $this->assertAutoload($json);
                 break;
             case 'magento2-language':
                 $this->assertRegExp('/^magento\/language\-[a-z]{2}_[a-z]{2}$/', $json->name);
@@ -172,6 +173,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $this->assertDependsOnPhp($json->require);
                 $this->assertRegExp('/^magento\/framework*/', $json->name);
                 $this->assertRequireInSync($json);
+                $this->assertAutoload($json);
                 break;
             case 'project':
                 $this->checkProject();
@@ -194,6 +196,18 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('files', $json->autoload, $error);
         $this->assertEquals([ "registration.php" ], $json->autoload->files, $error);
         $this->assertFileExists("$dir/registration.php");
+    }
+
+    /**
+     * Assert that there is PSR-4 autoload in composer json
+     *
+     * @param \StdClass $json
+     */
+    private function assertAutoload(\StdClass $json)
+    {
+        $errorMessage = 'There must be an "autoload->psr-4" section in composer.json of each Magento component.';
+        $this->assertObjectHasAttribute('autoload', $json, $errorMessage);
+        $this->assertObjectHasAttribute('psr-4', $json->autoload, $errorMessage);
     }
 
     /**
