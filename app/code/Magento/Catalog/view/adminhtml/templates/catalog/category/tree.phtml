@@ -227,8 +227,15 @@
                             parameters: params,
                             method: 'post',
                             onComplete: function (transport) {
-                                var response = eval('(' + transport.responseText + ')');
-                                if (!response['parameters']) {
+                                var response;
+
+                                try {
+                                    response = JSON.parse(transport.responseText);
+                                } catch (e) {
+                                    console.warn('An error occured while parsing response');
+                                }
+
+                                if (!response || !response['parameters']) {
                                     return false;
                                 }
 

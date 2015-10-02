@@ -84,7 +84,11 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
         onComplete : function (transport, param){
             var response = false;
             if (transport && transport.responseText) {
-                response = eval('(' + transport.responseText + ')');
+                try {
+                    response = JSON.parse(transport.responseText);
+                } catch (e) {
+                    console.warn('An error occured while parsing response');
+                }
             }
             if (couponCodesGrid) {
                 couponCodesGrid.reload();
