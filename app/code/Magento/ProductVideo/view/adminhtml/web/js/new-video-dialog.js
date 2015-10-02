@@ -922,7 +922,7 @@ define([
                     'src': ''
                 });
                 $(this._previewImage).insertAfter(this._videoPreviewImagePointer);
-                $(this._previewImage).attr('data-role', 'video_preview_image')
+                $(this._previewImage).attr('data-role', 'video_preview_image');
             }
 
             return this._previewImage;
@@ -941,6 +941,7 @@ define([
          */
         _onClose: function () {
             var newVideoForm;
+
             this.imageData = null;
             if (this._previewImage) {
                 this._previewImage.remove();
