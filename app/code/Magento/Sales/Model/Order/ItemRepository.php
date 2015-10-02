@@ -21,6 +21,7 @@ use Magento\Sales\Model\Resource\Metadata;
 
 /**
  * Repository class for @see OrderItemInterface
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ItemRepository implements OrderItemRepositoryInterface
 {
@@ -218,20 +219,19 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected function setProductOption(OrderItemInterface $orderItem, array $data)
     {
-        if (!$orderItem->getProductOption()) {
-            $orderItem->setProductOption(
-                $this->productOptionFactory->create()
-            );
+        $productOption = $orderItem->getProductOption();
+        if (!$productOption) {
+            $productOption = $this->productOptionFactory->create();
+            $orderItem->setProductOption($productOption);
         }
 
-        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
-            $orderItem->getProductOption()->setExtensionAttributes(
-                $this->extensionFactory->create()
-            );
+        $extensionAttributes = $productOption->getExtensionAttributes();
+        if (!$extensionAttributes) {
+            $extensionAttributes = $this->extensionFactory->create();
+            $productOption->setExtensionAttributes($extensionAttributes);
         }
 
-        $orderItem->getProductOption()->getExtensionAttributes()
-            ->setData(key($data), current($data));
+        $extensionAttributes->setData(key($data), current($data));
 
         return $this;
     }
