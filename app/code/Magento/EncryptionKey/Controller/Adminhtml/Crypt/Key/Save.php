@@ -64,10 +64,10 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             }
 
             $newKey = $this->change->changeEncryptionKey($key);
-            $this->messageManager->addSuccess(__('The encryption key has been changed.'));
+            $this->messageManager->addSuccessMessage(__('The encryption key has been changed.'));
 
             if (!$key) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     __(
                         'This is your new encryption key: <span style="font-family:monospace;">%1</span>. ' .
                         'Be sure to write it down and take good care of it!',
@@ -77,7 +77,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             }
             $this->cache->clean();
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_session->setFormData(['crypt_key' => $key]);
         }
         $this->_redirect('adminhtml/*/');
