@@ -10,8 +10,13 @@ define(
     ],
     function (Component) {
         'use strict';
+
         return Component.extend({
-            isDisplayed: function() {
+
+            /**
+             * @return {*}
+             */
+            isDisplayed: function () {
                 return this.isFullMode();
             }
         });
