@@ -6,9 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\CustomOptionInterface;
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
@@ -30,16 +28,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
      * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectFactory;
-
-    /**
-     * @var ProductOptionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionExtensionFactory;
 
     /**
      * @var CustomOptionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -67,17 +55,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->dataObject);
 
-        $this->productOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductOptionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productOptionExtensionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductOptionExtensionFactory'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-
         $this->customOption = $this->getMockBuilder(
             'Magento\Catalog\Api\Data\CustomOptionInterface'
         )
@@ -98,8 +75,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
-            $this->productOptionFactory,
-            $this->productOptionExtensionFactory,
             $this->customOptionFactory
         );
     }

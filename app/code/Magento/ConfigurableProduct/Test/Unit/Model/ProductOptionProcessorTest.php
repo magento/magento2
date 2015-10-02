@@ -5,8 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\ProductOptionProcessor;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
@@ -30,16 +28,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
      * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectFactory;
-
-    /**
-     * @var ProductOptionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionExtensionFactory;
 
     /**
      * @var ConfigurableItemOptionValueFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -67,17 +55,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->dataObject);
 
-        $this->productOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductOptionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productOptionExtensionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductOptionExtensionFactory'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-
         $this->itemOptionValue = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface'
         )
@@ -95,8 +72,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
-            $this->productOptionFactory,
-            $this->productOptionExtensionFactory,
             $this->itemOptionValueFactory
         );
     }
