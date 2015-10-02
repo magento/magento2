@@ -3859,4 +3859,5 @@ return [
     ['Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\SuggestProductTemplates'],
     ['Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\SuggestProductTemplates'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute'],
+    ['Magento\Tax\Observer\QuoteCollectTotalsBefore'],
 ];
