@@ -1,70 +1,83 @@
-#Introduction
+# Introduction
 
-Sample data consists of installation scripts, fixtures and media files. 
-Installing sample data fills your database with a number of products of each type, price rules, CMS pages, banners and more.
+Magento sample data uses the responsive Luma theme to display a sample store, complete with products, categories, promotional price rules, CMS pages, banners, and so on. You can use the sample data to come up to speed quickly and see the power and flexibility of the Magento storefront.
 
-#Deployment
+Installing sample data is optional; you can install it before or after you install the Magento software.
 
-To deploy sample data, use Composer:
+# Deployment
 
-1. In your composer.json, specify the following:
-    - repository:
-        ```
-        {
-            "repositories": [
-                {
-                    "type": "composer",
-                    "url": "http://packages.magento.com/"
-                }
-            ],
-        }
-        ```
+Deployment of Sample Data can be performed in three ways: using Magento CLI, composer and from GitHub repository.
 
-    - packages:
-         ```
-        {
-            "require": {
-                "magento/sample-data": "{version}"
-            }
-        }
-        ```
-2. From your Magento root directory, run composer update.
+## Using CLI
 
-#Installation
+SampleData module is included to default scope of Magento CE modules. To deploy other sample data modules (e.g. ConfigurableSampleData, CatalogSampleData e.t.c) Magento CLI command can be used:
 
-Once deployed, the sample data can be installed using the Magento Installation Wizard (web installation) or using CLI (console installation).
-
-###Web Installation
-
-When installing the Magento application using the Magento Installation Wizard, you can choose to install the sample data at once. To do this, during installation, on the **Customize Your Store** step, select the **Use Sample Data** checkbox.
-
-###Console Installation
-
-The steps required to install sample data are different depending on whether the Magento application itself is installed:
-
-- If the Magento application is not installed, you can install it with sample data at once. Use the following code sample as an example:
 ```
-php -f index.php install --base-url=http://localhost/magento2/ \
-  --backend-frontname=admin \
-  --db-host=localhost --db-name=magento --db-user=magento --db-password=magento \
-  --admin-firstname=Magento --admin-lastname=User --admin-email=user@example.com \
-  --admin-user=admin --admin-password=iamtheadmin --language=en_US \
-  --currency=USD --timezone=America/Chicago
-  --use-sample-data
-```
-- If the Magento application is already installed, to install the sample data, enter the following commands in the order shown:
-```
-<path to Magento 2 bin dir>/magento setup:upgrade
-<path to Magento 2 bin dir>/magento sampledata:install <your Magento administrator user name>
+# bin/magento sampledata:deploy
 ```
 
-For example,
+CLI command collects suggest node from composer.json files of modules which suggest to install sample data:
+
 ```
-/var/www/magento2/bin magento setup:upgrade
-/var/www/magento2/bin magento sampledata:install admin
+"suggest": {
+  "magento/module-catalog-sample-data": "Sample Data version:1.0.0-beta"
+}
 ```
 
-#Removing Sample Data
+## Using Composer
 
-There are no special scripts that assist in uninstalling of sample data. 
-To remove sample data, you must delete the database and re-install Magento with a new empty database
+Also it's possible to add needed sample data modules manually (via composer require or editing main composer.json file)
+
+1. Specify packages
+```
+{
+    "require": {
+    ...
+       "magento/module-catalog-sample-data": "{version}",
+        "magento/module-configurable-sample-data": "{version}",
+        "magento/module-cms-sample-data": "{version}",
+        "magento/module-sales-sample-data": "{version}"
+        ....
+    }
+ }
+{version} - Go to packages.magento.com and write down suitable versions of magento/sample-data and magento/sample-data-media (typically, you should choose the most recent version).
+```
+2. Run composer update from your Magento root directory
+
+## From GitHub Repository
+
+1. Clone Sample Data from https://github.com/magento/magento2-sample-data
+2. Link Sample Data and Magento Edition using tool <sample-data-ce-root>/dev/tools/build-sample-data.php
+```
+php -f <sample-data-ce-root>/dev/tools/build-sample-data.php -- --ce-source="path/to/magento/ce/edition"
+```
+
+# Installing
+
+Being once deployed the Sample Data is available for installation through the Magento Setup Wizard or using CLI.
+
+## Web Installation
+
+Deployed SampleData modules have been selected to be installed by default. To prepare installation Magento with SampleData finish installation as you do it usual. In success page user will be notified about successfully installed SampleData
+
+## Console Installation
+
+Use Magento CLI installation command to install Magento as usual.
+
+# Uninstalling
+
+There is CLI command which allows to remove all sample data modules from Magento (only for case when sample data was installed via composer):
+
+```
+# bin/magento sampledata:remove
+```
+
+# Re-installation
+
+To prepare sample data for re installation process run:
+
+```
+# bin/magento sampledata:reset
+```
+
+Then install or upgrade Magento as usual
