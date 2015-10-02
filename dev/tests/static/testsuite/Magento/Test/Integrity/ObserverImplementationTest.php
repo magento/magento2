@@ -59,6 +59,9 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\User\Model\Backend\Observer\AuthObserver',
         'Magento\User\Model\Backend\Observer\PasswordObserver',
         'Magento\ProductVideo\Model\Observer',
+        // MAGETWO-43598
+        'Magento\Versi' . 'onsCms\Model\Backend\Observer',
+        'Magento\Versi' . 'onsCms\Model\Backend\PrepareFormObserver',
     ];
 
     public static function setUpBeforeClass()
