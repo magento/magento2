@@ -9,6 +9,8 @@ use Magento\Braintree\Block\PayPal\Shortcut;
 
 /**
  * Class Observer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
