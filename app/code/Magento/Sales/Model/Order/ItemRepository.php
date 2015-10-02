@@ -193,14 +193,16 @@ class ItemRepository implements OrderItemRepositoryInterface
         $request = $orderItem->getBuyRequest();
 
         $productType = $orderItem->getProductType();
-        if (isset($this->processorPool[$productType])) {
+        if (isset($this->processorPool[$productType])
+            && !$orderItem->getParentItemId()) {
             $data = $this->processorPool[$productType]->convertToProductOption($request);
             if ($data) {
                 $this->setProductOption($orderItem, $data);
             }
         }
 
-        if (isset($this->processorPool['custom_options'])) {
+        if (isset($this->processorPool['custom_options'])
+            && !$orderItem->getParentItemId()) {
             $data = $this->processorPool['custom_options']->convertToProductOption($request);
             if ($data) {
                 $this->setProductOption($orderItem, $data);
@@ -247,7 +249,8 @@ class ItemRepository implements OrderItemRepositoryInterface
         $request = $this->objectFactory->create(['qty' => $entity->getQtyOrdered()]);
 
         $productType = $entity->getProductType();
-        if (isset($this->processorPool[$productType])) {
+        if (isset($this->processorPool[$productType])
+            && !$entity->getParentItemId()) {
             $productOption = $entity->getProductOption();
             if ($productOption) {
                 $requestUpdate = $this->processorPool[$productType]->convertToBuyRequest($productOption);
@@ -255,7 +258,8 @@ class ItemRepository implements OrderItemRepositoryInterface
             }
         }
 
-        if (isset($this->processorPool['custom_options'])) {
+        if (isset($this->processorPool['custom_options'])
+            && !$entity->getParentItemId()) {
             $productOption = $entity->getProductOption();
             if ($productOption) {
                 $requestUpdate = $this->processorPool['custom_options']->convertToBuyRequest($productOption);
