@@ -225,5 +225,4 @@ class ImagesAndVideos extends Tab
         $this->_rootElement->find($this->getImageSelector(0))->click();
         return $this;
     }
-
 }
