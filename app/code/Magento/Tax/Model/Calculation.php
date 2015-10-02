@@ -548,9 +548,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                     }
                 } else {
                     //fallback for guest
-                    if ($basedOn == 'billing' && $shippingAddress->getCountryId()) {
+                    if ($basedOn == 'billing' && is_object($shippingAddress) && $shippingAddress->getCountryId()) {
                         $billingAddress = $shippingAddress;
-                    } elseif ($basedOn == 'shipping' && $billingAddress->getCountryId()) {
+                    } elseif ($basedOn == 'shipping' && is_object($billingAddress) && $billingAddress->getCountryId()) {
                         $shippingAddress = $billingAddress;
                     } else {
                         $basedOn = 'default';
