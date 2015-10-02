@@ -26,13 +26,18 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     protected $jsonEncoder;
 
+    /**
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
+     * @param EncoderInterface $jsonEncoder
+     * @param array $data
+     */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         EncoderInterface $jsonEncoder,
         array $data = []
-    )
-    {
+    ) {
         $this->jsonEncoder = $jsonEncoder;
         parent::__construct($context, $arrayUtils, $data);
     }
@@ -111,7 +116,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'isMain' => $this->isMainImage($image),
             ];
         }
-        if(empty($imagesItems)) {
+        if (empty($imagesItems)) {
             $imagesItems[] = [
                 'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
                 'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
