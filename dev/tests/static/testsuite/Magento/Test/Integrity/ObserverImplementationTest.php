@@ -59,9 +59,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\User\Model\Backend\Observer\AuthObserver',
         'Magento\User\Model\Backend\Observer\PasswordObserver',
         'Magento\ProductVideo\Model\Observer',
-        // MAGETWO-43598
-        'Magento\Versi' . 'onsCms\Model\Backend\Observer',
-        'Magento\Versi' . 'onsCms\Model\Backend\PrepareFormObserver',
     ];
 
     public static function setUpBeforeClass()
@@ -135,6 +132,9 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+        // MAGETWO-43598
+        unset($observerClasses['Magento\Versi' . 'onsCms\Model\Backend\Observer']);
+        unset($observerClasses['Magento\Versi' . 'onsCms\Model\Backend\PrepareFormObserver']);
         return array_diff(array_unique($observerClasses), self::$blackList);
     }
 }
