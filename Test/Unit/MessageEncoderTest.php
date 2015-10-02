@@ -6,8 +6,13 @@
 
 namespace Magento\Framework\Amqp\Test\Unit;
 
-use Magento\Framework\Object;
+use Magento\Framework\Amqp\Config\Converter as QueueConfigConverter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
+/**
+ * Test class for Magento\Framework\Amqp\MessageEncoder
+ */
 class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Amqp\MessageEncoder */
@@ -19,6 +24,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Amqp\Config\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
 
+    /** @var \Magento\Framework\Webapi\ServiceOutputProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dataObjectEncoderMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -26,9 +34,16 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder('Magento\Framework\Amqp\Config\Data')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->encoder = $this->objectManager->getObject(
             'Magento\Framework\Amqp\MessageEncoder',
-            ['queueConfig' => $this->configMock]
+            [
+                'queueConfig' => $this->configMock,
+                'dataObjectEncoder' => $this->dataObjectEncoderMock
+            ]
         );
         parent::setUp();
     }
@@ -51,45 +66,46 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $this->encoder->decode('customer.created', 'Some message');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
-     */
-    public function testEncodeInvalidMessage()
+    public function testEncodeMessage()
     {
-        $this->configMock
-            ->expects($this->any())
-            ->method('get')
-            ->willReturn(
-                [
-                    'topics' => [
-                        'customer.created' => [
-                            'schema' => 'Magento\Customer\Api\Data\CustomerInterface'
-                        ]
-                    ]
-                ]
-            );
-        $this->encoder->encode('customer.created', new Object());
+        $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
+        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->dataObjectEncoderMock
+            ->expects($this->once())
+            ->method('convertValue');
+        $this->encoder->encode('customer.created', $object);
+    }
+
+    public function testEncodeMessageArray()
+    {
+        $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
+        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->dataObjectEncoderMock
+            ->expects($this->once())
+            ->method('convertValue');
+        $this->encoder->encode('customer.created', [$object]);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "SomeType[]"
+     * Data provider for queue config
+     * @return array
      */
-    public function testEncodeInvalidMessageArray()
+    private function getQueueConfigData()
     {
-        $this->configMock
-            ->expects($this->any())
-            ->method('get')
-            ->willReturn(
-                [
-                    'topics' => [
-                        'customer.created' => [
-                            'schema' => 'SomeType[]'
-                        ]
-                    ]
+        return [
+            QueueConfigConverter::TOPICS => [
+                'customer.created' => [
+                    QueueConfigConverter::TOPIC_SCHEMA => 'Magento\Customer\Api\Data\CustomerInterface'
                 ]
-            );
-        $this->encoder->encode('customer.created', [new Object()]);
+            ],
+            QueueConfigConverter::TOPIC_SCHEMA_TYPE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT,
+            QueueConfigConverter::TOPIC_SCHEMA_VALUE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT
+        ];
     }
 }

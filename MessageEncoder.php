@@ -110,7 +110,7 @@ class MessageEncoder
     {
         $queueConfig = $this->queueConfig->get();
         if (isset($queueConfig[QueueConfigConverter::TOPICS][$topic])) {
-            return $queueConfig[QueueConfigConverter::TOPICS][$topic][QueueConfigConverter::TOPIC_SCHEMA];
+            return $queueConfig;
         }
         throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
     }

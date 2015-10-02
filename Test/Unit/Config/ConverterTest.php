@@ -159,42 +159,66 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'topics' => [
                 'customer.created' => [
                     'name' => 'customer.created',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-1',
                 ],
                 'customer.created.one' => [
                     'name' => 'customer.created.one',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-1',
                 ],
                 'customer.created.one.two' => [
                     'name' => 'customer.created.one.two',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-1',
                 ],
                 'customer.created.two' => [
                     'name' => 'customer.created.two',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-1',
                 ],
                 'customer.updated' => [
                     'name' => 'customer.updated',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-2',
                 ],
                 'customer.deleted' => [
                     'name' => 'customer.deleted',
-                    'schema' => 'Magento\\Customer\\Api\\Data\\CustomerInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ],
                     'publisher' => 'test-publisher-2',
                 ],
                 'cart.created' => [
                     'name' => 'cart.created',
-                    'schema' => 'Magento\\Quote\\Api\\Data\\CartInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Quote\Api\Data\CartInterface'
+                    ],
                     'publisher' => 'test-publisher-3',
                 ],
                 'cart.created.one' => [
                     'name' => 'cart.created.one',
-                    'schema' => 'Magento\\Quote\\Api\\Data\\CartInterface',
+                    'schema' => [
+                        'schema_type' => 'object',
+                        'schema_value' => 'Magento\Quote\Api\Data\CartInterface'
+                    ],
                     'publisher' => 'test-publisher-3',
                 ],
             ],
