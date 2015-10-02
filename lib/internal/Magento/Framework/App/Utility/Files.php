@@ -15,7 +15,6 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Files
 {
@@ -637,27 +636,38 @@ class Files
         $cacheKey = md5(BP . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
-            $etcAreaPaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-                $keyInfo = explode('_', $moduleName);
-                if ($keyInfo[0] == $params['namespace'] || $params['namespace'] == '*') {
-                    if ($keyInfo[1] == $params['module'] || $params['module'] == '*') {
-                        $etcAreaPaths[] = $moduleDir . "/etc/{$params['area']}";
-                    }
-                }
-            }
-            $files = self::getFiles(
-                $etcAreaPaths,
+            self::$_cache[__METHOD__][$cacheKey] = self::getFiles(
+                $this->getEtcAreaPaths($params['namespace'], $params['module'], $params['area']),
                 'page_types.xml'
             );
-
-            self::$_cache[__METHOD__][$cacheKey] = $files;
         }
 
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[__METHOD__][$cacheKey]);
         }
         return self::$_cache[__METHOD__][$cacheKey];
+    }
+
+    /**
+     * Get module etc paths for specified area
+     *
+     * @param string $namespace
+     * @param string $module
+     * @param string $area
+     * @return array
+     */
+    private function getEtcAreaPaths($namespace, $module, $area)
+    {
+        $etcAreaPaths = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $keyInfo = explode('_', $moduleName);
+            if ($keyInfo[0] == $namespace || $namespace == '*') {
+                if ($keyInfo[1] == $module || $module == '*') {
+                    $etcAreaPaths[] = $moduleDir . "/etc/{$area}";
+                }
+            }
+        }
+        return $etcAreaPaths;
     }
 
     /**
@@ -1383,29 +1393,9 @@ class Files
                 continue;
             }
             $patternParts = explode(' ', $pattern);
-            $files = [];
             if (count($patternParts) == 3) {
                 list($componentType, $componentName, $pathPattern) = $patternParts;
-                if ($componentType == '*') {
-                    $componentTypes = [
-                        ComponentRegistrar::MODULE,
-                        ComponentRegistrar::LIBRARY,
-                        ComponentRegistrar::THEME,
-                        ComponentRegistrar::LANGUAGE,
-                    ];
-                } else {
-                    $componentTypes = [$componentType];
-                }
-                foreach ($componentTypes as $type) {
-                    if ($componentName == '*') {
-                        $files = array_merge($files, $this->dirSearch->collectFiles($type, $pathPattern));
-                    } else {
-                        $componentDir = $this->componentRegistrar->getPath($type, $componentName);
-                        if (!empty($componentDir)) {
-                            $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
-                        }
-                    }
-                }
+                $files = $this->getPathByComponentPattern($componentType, $componentName, $pathPattern);
             } elseif (count($patternParts) == 1) {
                 /**
                  * Note that glob() for directories will be returned as is,
@@ -1427,6 +1417,40 @@ class Files
             throw new \Exception("The following patterns didn't return any result:\n" . join("\n", $incorrectPatterns));
         }
         return $result;
+    }
+
+    /**
+     * Get paths by pattern for specified component component
+     *
+     * @param $componentType
+     * @param $componentName
+     * @param $pathPattern
+     * @return array
+     */
+    private function getPathByComponentPattern($componentType, $componentName, $pathPattern)
+    {
+        $files = [];
+        if ($componentType == '*') {
+            $componentTypes = [
+                ComponentRegistrar::MODULE,
+                ComponentRegistrar::LIBRARY,
+                ComponentRegistrar::THEME,
+                ComponentRegistrar::LANGUAGE,
+            ];
+        } else {
+            $componentTypes = [$componentType];
+        }
+        foreach ($componentTypes as $type) {
+            if ($componentName == '*') {
+                $files = array_merge($files, $this->dirSearch->collectFiles($type, $pathPattern));
+            } else {
+                $componentDir = $this->componentRegistrar->getPath($type, $componentName);
+                if (!empty($componentDir)) {
+                    $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
+                }
+            }
+        }
+        return $files;
     }
 
     /**

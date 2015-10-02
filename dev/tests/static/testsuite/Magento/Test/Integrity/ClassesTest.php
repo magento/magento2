@@ -483,7 +483,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
      * @param string $badClass
      * @return bool
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function removeSpecialCasesNonFullyQualifiedClassNames($namespacePath, &$badClasses, $badClass)
     {
