@@ -39,9 +39,8 @@ define(
 
             /** Init popup login window */
             setModalElement: function (element) {
-                // create pop up if it doesn't exist
                 if (authenticationPopup.modalWindow == null) {
-                    authenticationPopup.createPopUp(element)
+                    authenticationPopup.createPopUp(element);
                 }
             },
 

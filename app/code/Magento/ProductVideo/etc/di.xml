@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry" />
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
+        <arguments>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="external-video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media">
+        <plugin name="external_video_media_entry_processor" type="Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor" />
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage">
+        <plugin name="base_image_element_render" type="Magento\ProductVideo\Model\Plugin\BaseImage" />
+    </type>
+</config>

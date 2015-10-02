@@ -43,19 +43,20 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
     public function testGetHashSpecifiedSalt()
     {
         $this->_randomGenerator->expects($this->never())->method('getRandomString');
-        $expected = '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt';
+        $expected = '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1';
         $actual = $this->_model->getHash('password', 'salt');
         $this->assertEquals($expected, $actual);
     }
 
     public function testGetHashRandomSaltDefaultLength()
     {
+        $salt = '-----------random_salt----------';
         $this->_randomGenerator
             ->expects($this->once())
             ->method('getRandomString')
             ->with(32)
-            ->will($this->returnValue('-----------random_salt----------'));
-        $expected = 'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:-----------random_salt----------';
+            ->will($this->returnValue($salt));
+        $expected = 'a1c7fc88037b70c9be84d3ad12522c7888f647915db78f42eb572008422ba2fa:' . $salt . ':1';
         $actual = $this->_model->getHash('password', true);
         $this->assertEquals($expected, $actual);
     }
@@ -67,7 +68,7 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
             ->method('getRandomString')
             ->with(11)
             ->will($this->returnValue('random_salt'));
-        $expected = '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt';
+        $expected = '4c5cab8dd00137d11258f8f87b93fd17bd94c5026fc52d3c5af911dd177a2611:random_salt:1';
         $actual = $this->_model->getHash('password', 11);
         $this->assertEquals($expected, $actual);
     }
@@ -88,10 +89,9 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
     public function validateHashDataProvider()
     {
         return [
-            ['password', 'hash', false],
-            ['password', 'hash:salt', false],
-            ['password', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', true],
-            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt', true],
+            ['password', 'hash:salt:1', false],
+            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt:0', true],
+            ['password', '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1', true],
         ];
     }
 
