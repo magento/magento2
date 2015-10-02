@@ -5,9 +5,7 @@
  */
 namespace Magento\Sales\Model\Observer\Backend;
 
-use Magento\Framework\Event\ObserverInterface;
-
-class CatalogPriceRule implements ObserverInterface
+class CatalogPriceRule
 {
     /**
      * @var \Magento\Quote\Model\Resource\Quote
@@ -25,11 +23,9 @@ class CatalogPriceRule implements ObserverInterface
     /**
      * When applying a catalog price rule, make related quotes recollect on demand
      *
-     * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function dispatch()
     {
         $this->_quote->markQuotesRecollectOnCatalogRules();
     }

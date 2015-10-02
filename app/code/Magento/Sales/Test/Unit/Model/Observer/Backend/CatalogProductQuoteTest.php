@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Observer\Backend;
 
-class CatalogProductSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
+class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Observer\Backend\CatalogProductSaveAfterObserver
+     * @var \Magento\Sales\Model\Observer\Backend\CatalogProductQuote
      */
     protected $_model;
 
@@ -39,7 +39,7 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
-        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogProductSaveAfterObserver($this->_quoteMock);
+        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogProductQuote($this->_quoteMock);
     }
 
     /**
@@ -60,14 +60,25 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getId')->will($this->returnValue($productId));
         $productMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
         $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
-        $this->_model->execute($this->_observerMock);
+        $this->_model->catalogProductSaveAfter($this->_observerMock);
     }
 
-    /**
-     * @return array
-     */
     public function statusUpdateDataProvider()
     {
         return [[125, 1], [100, 0]];
+    }
+
+    public function testSubtractQtyFromQuotes()
+    {
+        $productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['getId', 'getStatus', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
+        $this->_quoteMock->expects($this->once())->method('substractProductFromQuotes')->with($productMock);
+        $this->_model->subtractQtyFromQuotes($this->_observerMock);
     }
 }
