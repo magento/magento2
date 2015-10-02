@@ -1422,9 +1422,9 @@ class Files
     /**
      * Get paths by pattern for specified component component
      *
-     * @param $componentType
-     * @param $componentName
-     * @param $pathPattern
+     * @param string $componentType
+     * @param string $componentName
+     * @param string $pathPattern
      * @return array
      */
     private function getPathByComponentPattern($componentType, $componentName, $pathPattern)
