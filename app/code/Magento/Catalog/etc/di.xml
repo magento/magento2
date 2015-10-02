@@ -496,4 +496,26 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Config\View">
+        <arguments>
+            <argument name="xpath" xsi:type="array">
+                <item name="image" xsi:type="array">
+                    <item name="/view/media/images" xsi:type="array">
+                        <item name="id" xsi:type="string">module</item>
+                    </item>
+                    <item name="/view/media/images/image" xsi:type="array">
+                        <item name="id1" xsi:type="string">id</item>
+                        <item name="id2" xsi:type="string">type</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Xsd\Media\TypeDataExtractorPool">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="images" xsi:type="object">Magento\Catalog\Model\ImageExtractor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

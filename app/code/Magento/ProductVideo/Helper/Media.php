@@ -36,6 +36,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const NODE_CONFIG_VIDEO_AUTO_RESTART = 'video_auto_restart';
 
     /**
+     * Media config node
+     */
+    const MEDIA_TYPE_CONFIG_NODE = 'videos';
+
+    /**
      * @var ConfigInterface
      */
     protected $viewConfig;
@@ -91,10 +96,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPlayIfBaseAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_PLAY_IF_BASE
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE])) {
+            return $videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE];
+        }
     }
 
     /**
@@ -104,10 +113,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getShowRelatedAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_SHOW_RELATED
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_SHOW_RELATED])) {
+            return $videoAttributes[self::NODE_CONFIG_SHOW_RELATED];
+        }
     }
 
     /**
@@ -117,9 +130,13 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoAutoRestartAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_VIDEO_AUTO_RESTART
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART])) {
+            return $videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART];
+        }
     }
 }
