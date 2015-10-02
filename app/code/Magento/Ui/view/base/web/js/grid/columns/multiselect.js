@@ -19,6 +19,7 @@ define([
             allSelected: false,
             indetermine: false,
             selected: [],
+            disabled: [],
             excluded: [],
             actions: [{
                 value: 'selectAll',
@@ -58,7 +59,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'menuVisible',
+                    'disabled',
                     'selected',
                     'excluded',
                     'excludeMode',
@@ -68,28 +69,6 @@ define([
                     'totalRecords',
                     'rows'
                 ]);
-
-            return this;
-        },
-
-        /**
-         * Toggles menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        toggleMenu: function () {
-            this.menuVisible(!this.menuVisible());
-
-            return this;
-        },
-
-        /**
-         * Hides menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        hideMenu: function () {
-            this.menuVisible(false);
 
             return this;
         },
@@ -216,7 +195,10 @@ define([
          * @returns {Multiselect} Chainable.
          */
         selectPage: function () {
-            var selected = _.union(this.selected(), this.getIds());
+            var selected = _.difference(
+                _.union(this.selected(), this.getIds()),
+                this.disabled()
+            );
 
             this.selected(selected);
 

@@ -54,7 +54,8 @@ class SecureToken
      *
      * @param Quote $quote
      *
-     * @return Object
+     * @return DataObject
+     * @throws \Exception
      */
     public function requestToken(Quote $quote)
     {
