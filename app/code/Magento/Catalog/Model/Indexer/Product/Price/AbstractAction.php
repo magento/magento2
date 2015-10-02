@@ -252,55 +252,6 @@ abstract class AbstractAction
     }
 
     /**
-     * Prepare group price index table
-     *
-     * @param int|array $entityIds the entity ids limitation
-     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     */
-    protected function _prepareGroupPriceIndex($entityIds = null)
-    {
-        $table = $this->_defaultIndexerResource->getTable('catalog_product_index_group_price');
-        $this->_emptyTable($table);
-
-        $websiteExpression = $this->_connection->getCheckSql(
-            'gp.website_id = 0',
-            'ROUND(gp.value * cwd.rate, 4)',
-            'gp.value'
-        );
-        $select = $this->_connection->select()->from(
-            ['gp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'group_price'])],
-            ['entity_id']
-        )->join(
-            ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
-            'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
-            ['customer_group_id']
-        )->join(
-            ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
-            'gp.website_id = 0 OR gp.website_id = cw.website_id',
-            ['website_id']
-        )->join(
-            ['cwd' => $this->_defaultIndexerResource->getTable('catalog_product_index_website')],
-            'cw.website_id = cwd.website_id',
-            []
-        )->where(
-            'cw.website_id != 0'
-        )->columns(
-            new \Zend_Db_Expr("MIN({$websiteExpression})")
-        )->group(
-            ['gp.entity_id', 'cg.customer_group_id', 'cw.website_id']
-        );
-
-        if (!empty($entityIds)) {
-            $select->where('gp.entity_id IN(?)', $entityIds);
-        }
-
-        $query = $select->insertFromSelect($table);
-        $this->_connection->query($query);
-
-        return $this;
-    }
-
-    /**
      * Retrieve price indexers per product type
      *
      * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\PriceInterface[]
@@ -445,7 +396,6 @@ abstract class AbstractAction
             $this->_copyRelationIndexData($compositeIds, $notCompositeIds);
         }
         $this->_prepareTierPriceIndex($compositeIds + $notCompositeIds);
-        $this->_prepareGroupPriceIndex($compositeIds + $notCompositeIds);
 
         $indexers = $this->getTypeIndexers();
         foreach ($indexers as $indexer) {

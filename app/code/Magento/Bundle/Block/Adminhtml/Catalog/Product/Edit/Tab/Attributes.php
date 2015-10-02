@@ -126,19 +126,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
                 )
             );
         }
-
-        $groupPrice = $this->getForm()->getElement('group_price');
-        if ($groupPrice) {
-            $groupPrice->setRenderer(
-                $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group'
-                )->setPriceColumnHeader(
-                    __('Percent Discount')
-                )->setPriceValidation(
-                    'validate-greater-than-zero validate-number-range number-range-0.00-100.00'
-                )
-            );
-        }
     }
 
     /**

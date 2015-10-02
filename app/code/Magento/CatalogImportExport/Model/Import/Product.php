@@ -308,9 +308,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         '_tier_price_qty',
         '_tier_price_price',
         '_related_sku',
-        '_group_price_website',
-        '_group_price_customer_group',
-        '_group_price_price',
         '_related_position',
         '_crosssell_sku',
         '_crosssell_position',
@@ -1335,7 +1332,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->websitesCache = [];
             $this->categoriesCache = [];
             $tierPrices = [];
-            $groupPrices = [];
             $mediaGallery = [];
             $uploadedGalleryFiles = [];
             $previousType = null;
@@ -1420,18 +1416,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'value' => $rowData['_tier_price_price'],
                         'website_id' => self::VALUE_ALL == $rowData['_tier_price_website'] ||
                         $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_tier_price_website']),
-                    ];
-                }
-
-                // 4.2. Group prices phase
-                if (!empty($rowData['_group_price_website'])) {
-                    $groupPrices[$rowSku][] = [
-                        'all_groups' => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
-                        'customer_group_id' => $rowData['_group_price_customer_group'] ==
-                        self::VALUE_ALL ? 0 : $rowData['_group_price_customer_group'],
-                        'value' => $rowData['_group_price_price'],
-                        'website_id' => self::VALUE_ALL == $rowData['_group_price_website'] ||
-                        $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_group_price_website']),
                     ];
                 }
 
@@ -1624,8 +1608,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->categoriesCache
             )->_saveProductTierPrices(
                 $tierPrices
-            )->_saveProductGroupPrices(
-                $groupPrices
             )->_saveMediaGallery(
                 $mediaGallery
             )->_saveProductAttributes(
@@ -1704,45 +1686,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             if ($tierPriceIn) {
                 $this->_connection->insertOnDuplicate($tableName, $tierPriceIn, ['value']);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Save product group prices.
-     *
-     * @param array $groupPriceData
-     * @return $this
-     */
-    protected function _saveProductGroupPrices(array $groupPriceData)
-    {
-        static $tableName = null;
-
-        if (!$tableName) {
-            $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_group_price');
-        }
-        if ($groupPriceData) {
-            $groupPriceIn = [];
-            $delProductId = [];
-
-            foreach ($groupPriceData as $delSku => $groupPriceRows) {
-                $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
-                $delProductId[] = $productId;
-
-                foreach ($groupPriceRows as $row) {
-                    $row['entity_id'] = $productId;
-                    $groupPriceIn[] = $row;
-                }
-            }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $delProductId)
-                );
-            }
-            if ($groupPriceIn) {
-                $this->_connection->insertOnDuplicate($tableName, $groupPriceIn, ['value']);
             }
         }
         return $this;
