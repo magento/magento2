@@ -38,6 +38,7 @@ define([
         defaults: {
             template: 'ui/grid/filters/filters',
             stickyTmpl: 'ui/grid/sticky/filters',
+            _processed: [],
             applied: {
                 placeholder: true
             },
@@ -218,14 +219,17 @@ define([
          * @returns {Filters} Chainable.
          */
         addFilter: function (column) {
-            var index = column.index,
+            var index       = column.index,
+                processed   = this._processed,
                 filter;
 
-            if (!column.filter || this.hasFilter(index)) {
+            if (!column.filter || _.contains(processed, index)) {
                 return this;
             }
 
             filter = this.buildFilter(column);
+
+            processed.push(index);
 
             layout([filter]);
 

@@ -103,6 +103,22 @@ define([
         },
 
         /**
+         * Parses 'modules' object and creates
+         * async wrappers for specified components.
+         *
+         * @returns {Element} Chainable.
+         */
+        initModules: function () {
+            var modules = this.modules || {};
+
+            _.each(modules, function (component, property) {
+                this[property] = registry.async(component);
+            }, this);
+
+            return this;
+        },
+
+        /**
          * Initializes statefull properties
          * based on the keys of 'statefull' object.
          *
@@ -117,22 +133,6 @@ define([
                 }
 
                 this.setStatefull(key, path);
-            }, this);
-
-            return this;
-        },
-
-        /**
-         * Parses 'modules' object and creates
-         * async wrappers for specified components.
-         *
-         * @returns {Element} Chainable.
-         */
-        initModules: function () {
-            var modules = this.modules || {};
-
-            _.each(modules, function (component, property) {
-                this[property] = registry.async(component);
             }, this);
 
             return this;
