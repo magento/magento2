@@ -165,7 +165,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
