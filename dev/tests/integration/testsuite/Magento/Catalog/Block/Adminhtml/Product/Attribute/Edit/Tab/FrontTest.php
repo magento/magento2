@@ -56,7 +56,6 @@ class FrontTest extends \PHPUnit_Framework_TestCase
             ['visibility'],
             ['url_key'],
             ['status'],
-            ['group_price'],
             ['price_type'],
             ['category_ids'],
             ['media_gallery'],
