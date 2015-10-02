@@ -69,12 +69,11 @@ define([
          * @return {Object} - reference to instance
          */
         initObservable: function () {
-            this._super();
-
-            this.observe({
-                'noPreview': true,
-                'indexed': {}
-            });
+            this._super()
+                .observe({
+                    noPreview: true,
+                    indexed: {}
+                });
 
             return this;
         },
@@ -122,7 +121,7 @@ define([
          * Clears all data associated with component.
          * @private
          *
-         * @returns {Component} Chainable.
+         * @returns {Item} Chainable.
          */
         _clearData: function () {
             this.source.remove(this.dataScope);
