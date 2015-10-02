@@ -5,8 +5,6 @@
  */
 namespace Magento\Downloadable\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Downloadable\Api\Data\DownloadableOptionInterface;
 use Magento\Downloadable\Model\DownloadableOptionFactory;
 use Magento\Downloadable\Model\ProductOptionProcessor;
@@ -35,16 +33,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
      * @var DataObjectHelper | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectHelper;
-
-    /**
-     * @var ProductOptionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionExtensionFactory;
 
     /**
      * @var DownloadableOptionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -76,17 +64,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductOptionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productOptionExtensionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductOptionExtensionFactory'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-
         $this->downloadableOption = $this->getMockBuilder(
             'Magento\Downloadable\Api\Data\DownloadableOptionInterface'
         )
@@ -108,8 +85,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
             $this->dataObjectHelper,
-            $this->productOptionFactory,
-            $this->productOptionExtensionFactory,
             $this->downloadableOptionFactory
         );
     }

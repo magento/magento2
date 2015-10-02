@@ -8,8 +8,6 @@ namespace Magento\Bundle\Test\Unit\Model;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Bundle\Model\ProductOptionProcessor;
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,16 +28,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
      * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectFactory;
-
-    /**
-     * @var ProductOptionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productOptionExtensionFactory;
 
     /**
      * @var BundleOptionInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -68,17 +56,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->dataObject);
 
-        $this->productOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductOptionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productOptionExtensionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductOptionExtensionFactory'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-
         $this->bundleOption = $this->getMockBuilder(
             'Magento\Bundle\Api\Data\BundleOptionInterface'
         )
@@ -96,8 +73,6 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
-            $this->productOptionFactory,
-            $this->productOptionExtensionFactory,
             $this->bundleOptionInterfaceFactory
         );
     }
