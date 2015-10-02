@@ -153,7 +153,6 @@ define([
          * Update
          */
         update: function () {
-            this.reset();
             $(this.options.DOM.titleField).val(this.options.data.title);
             $(this.options.DOM.descriptionField).val(this.options.data.description);
         },
