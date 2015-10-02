@@ -7,7 +7,6 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([
