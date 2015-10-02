@@ -304,7 +304,7 @@
             </filterRange>
             <filterSelect name="custom_theme">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\Theme</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\ThemeFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -317,7 +317,7 @@
             </filterSelect>
             <filterSelect name="custom_root_template">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayoutFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -346,7 +346,7 @@
             </filterInput>
             <filterSelect name="page_layout">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayoutFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
