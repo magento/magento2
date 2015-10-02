@@ -245,10 +245,12 @@ define(["jquery", "jquery/ui"], function ($) {
 
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
-                    $widget.optionsMap[item.id][this.id] = {
-                        price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
-                        products: this.products
-                    };
+                    if (this.products.length > 0) {
+                        $widget.optionsMap[item.id][this.id] = {
+                            price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
+                            products: this.products
+                        };
+                    }
                 });
             });
 
