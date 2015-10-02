@@ -24,7 +24,8 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
             force: false,
             advanced: {
                 expanded: false
-            }
+            },
+            sampleDataModuleSelected: true
         };
 
         $scope.loading = false;
@@ -190,5 +191,19 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
                 $scope.customizeStore.submitted = false;
             }
         });
+
+        $scope.$watch(
+            function() { return $scope.store.selectedModules.indexOf('Magento_SampleData') > -1; },
+            function(selected) {
+                if ($scope.store.loadedAllModules) {
+                    if (selected) {
+                        $scope.store.sampleDataModuleSelected = true;
+                    } else {
+                        $scope.store.useSampleData = false;
+                        $scope.store.sampleDataModuleSelected = false;
+                    }
+                }
+            }
+        );
     }])
     ;
