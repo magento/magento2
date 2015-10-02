@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Class AssertCustomerGroupOnCustomerForm
+ * Assert that customer group find on account information page.
  */
 class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
 {
     /**
-     * Assert that customer group find on account information page
+     * Assert that customer group find on account information page.
      *
      * @param FixtureFactory $fixtureFactory
      * @param CustomerGroup $customerGroup
@@ -53,12 +53,12 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             empty($diff),
-            "Customer group {$customerGroup->getCustomerGroupCode()} not in customer form."
+            "Customer group {$customerGroup->getCustomerGroupCode()} not in account information page."
         );
     }
 
     /**
-     * Success assert of customer group find on account information page
+     * Success assert of customer group find on account information page.
      *
      * @return string
      */
