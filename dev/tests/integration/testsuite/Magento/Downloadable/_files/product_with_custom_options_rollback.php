@@ -4,19 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
-
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
-
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
 /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-$product = $productRepository->get('simple');
+$product = $productRepository->get('downloadable-product');
 if ($product->getId()) {
     $product->delete();
 }
-
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', false);
