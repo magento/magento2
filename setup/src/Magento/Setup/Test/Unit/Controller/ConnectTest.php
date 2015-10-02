@@ -29,7 +29,8 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
+        $this->composerInformation =
+            $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $this->connectManager = $this->getMock('Magento\Setup\Model\ConnectManager', [], [], '', false);
         $this->controller = new Connect($this->composerInformation, $this->connectManager);
     }

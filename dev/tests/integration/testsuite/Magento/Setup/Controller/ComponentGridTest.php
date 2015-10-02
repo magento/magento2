@@ -9,6 +9,7 @@ namespace Magento\Setup\Controller;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Setup\Model\UpdatePackagesCache;
+use Magento\Setup\Model\ConnectManager;
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +38,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectManager
      */
     private $connectManagerMock;
 

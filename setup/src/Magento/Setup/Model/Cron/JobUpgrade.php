@@ -30,9 +30,11 @@ class JobUpgrade extends AbstractJob
      * Constructor
      *
      * @param AbstractSetupCommand $command
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
+     * @param \Magento\Setup\Model\Cron\Queue $queue
      * @param Status $status
-     * @param string $name
+     * @param $name
      * @param array $params
      */
     public function __construct(

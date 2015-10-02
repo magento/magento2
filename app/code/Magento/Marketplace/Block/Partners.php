@@ -13,6 +13,9 @@ class Partners extends \Magento\Backend\Block\Template
      */
     protected $partnersModel;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Marketplace::partners.phtml';
 
     /**

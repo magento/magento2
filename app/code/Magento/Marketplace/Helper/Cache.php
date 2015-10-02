@@ -68,7 +68,8 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Save composer packages available for update to cache
      *
-     * @return bool|string
+     * @param $partners
+     * @return bool
      */
     public function savePartnersToCache($partners)
     {

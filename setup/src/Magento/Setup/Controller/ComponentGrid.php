@@ -132,7 +132,8 @@ class ComponentGrid extends AbstractActionController
 
         $packagesForInstall = $this->connectManager->getPackagesForInstall();
 
-        $lastSyncData['countOfInstall'] = isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
         $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
 
         return new JsonModel(
@@ -158,7 +159,8 @@ class ComponentGrid extends AbstractActionController
         $this->connectManager->syncPackagesForInstall();
         $packagesForInstall = $this->connectManager->getPackagesForInstall();
 
-        $lastSyncData['countOfInstall'] = isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
         $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
 
 

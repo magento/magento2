@@ -83,8 +83,7 @@ class ConnectManager
         Curl $curl,
         Filesystem $filesystem,
         MagentoComposerApplicationFactory $applicationFactory
-    )
-    {
+    ) {
         $this->serviceLocator = $serviceLocator;
         $this->composerInformation = $composerInformation;
         $this->curlClient = $curl;
@@ -128,7 +127,7 @@ class ConnectManager
         $serviceUrl = $this->getCheckCredentialUrl();
         $this->getCurlClient()->setCredentials($token, $secretKey);
         try {
-            $this->getCurlClient()->post($serviceUrl, array());
+            $this->getCurlClient()->post($serviceUrl, []);
             return $this->getCurlClient()->getBody();
         } catch (\Exception $e) {
             return \Zend_Json::encode(['success' => false, 'message' => $e->getMessage()]);
@@ -147,7 +146,7 @@ class ConnectManager
         if (!empty($authJsonData)) {
             $this->getCurlClient()->setCredentials($authJsonData['username'], $authJsonData['password']);
             try {
-                $this->getCurlClient()->post($serviceUrl, array());
+                $this->getCurlClient()->post($serviceUrl, []);
                 return $this->getCurlClient()->getBody();
             } catch (\Exception $e) {
             }
@@ -181,7 +180,7 @@ class ConnectManager
                 }
             }
             return $this->savePackagesForInstallToCache($installPackages) ? true : false;
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
         }
         return false;
     }

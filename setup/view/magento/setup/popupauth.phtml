@@ -17,11 +17,13 @@
                 <div class="modal-content" data-role="content">
                     <div class="sync-login-wrap">
                         <div class="login-header">
-                            <img class="logo-img" src="<?php echo $this->basePath() ?>/pub/images//magento-logo.svg" alt="Magento"/>
+                            <img class="logo-img"
+                                 src="<?php echo $this->basePath();?>/pub/images//magento-logo.svg" alt="Magento"/>
                             <span>Connect</span>
                         </div>
                         <div class="messages">
-                            <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined" class="message message-error error">
+                            <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined"
+                                 class="message message-error error">
                             <span class="message-text">
                                 {{saveAuthJson.result.message}}
                             </span>
@@ -33,7 +35,9 @@
                             role="form"
                             >
                             <fieldset class="fieldset">
-                                <legend ng-show="errors==false" class="legend"><span>Sign in to sync your Magento Connect Purchases</span></legend>
+                                <legend ng-show="errors==false" class="legend">
+                                    <span>Sign in to sync your Magento Connect Purchases</span>
+                                </legend>
                                 <br/>
                                 <div class="row form-row">
                                     <div class="col-m-12">
@@ -46,7 +50,8 @@
                                                name="username"
                                                ng-model="user.username"
                                                ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.username.$error.required && !auth.username.$pristine) || (auth.username.$error.required && user.submitted) }"
+                                               ng-class="{ 'invalid' : (auth.username.$error.required && !auth.username.$pristine)
+                                               || (auth.username.$error.required && user.submitted) }"
                                                autofocus
                                                required
                                             >
@@ -66,7 +71,8 @@
                                                name="password"
                                                ng-model="user.password"
                                                ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine) || (auth.password.$error.required && user.submitted) }"
+                                               ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine)
+                                               || (auth.password.$error.required && user.submitted) }"
                                                required
                                             >
                                         <div class="error-container">

@@ -33,7 +33,9 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceLocatorMock = $this->_getServiceLocatorMock();
-        $this->composerInformationMock = $this->_getComposerInformationMock(['getPackagesTypes', 'getInstalledMagentoPackages']);
+        $this->composerInformationMock = $this->_getComposerInformationMock(
+            ['getPackagesTypes', 'getInstalledMagentoPackages']
+        );
         $this->curlClientMock = $this->_getCurlClientMock(['setCredentials', 'getBody', 'post']);
         $this->filesystemMock = $this->_getFilesystemMock(['getDirectoryRead', 'getDirectoryWrite']);
         $this->applicationFactoryMock = $this->_getApplicationFactoryMock(['create']);
@@ -383,8 +385,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                             ]
                     ]
                 ]
-                )
-            );
+            )
+        );
         $connectManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
@@ -796,5 +798,4 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
     {
         return $this->getMock('Magento\Setup\Model\ConnectManager', $methods, $arguments, '', false);
     }
-
 }

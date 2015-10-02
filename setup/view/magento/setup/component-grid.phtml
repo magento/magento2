@@ -24,12 +24,17 @@
                     <div class="item-number">{{countOfInstall}}</div>
                     <div class="item-install">
                         <button ng-show="!enabledInstall" type="button" class="btn disabled">Install</button>
-                        <button ui-sref="root.install" href="#install-extension-grid" ng-show="enabledInstall" type="button" class="btn ">Install</button>
+                        <button ui-sref="root.install" href="#install-extension-grid"
+                                ng-show="enabledInstall" type="button" class="btn">
+                            Install
+                        </button>
                     </div>
                 </li>
                 <li class="item col-m-4">
                     <div ng-hide="isOutOfSync" class="item-title">Last Sync</div>
-                    <div ng-hide="isOutOfSync" class="item-date">at {{lastSyncDate|date:"h:mm:ssa"}} on {{lastSyncDate|date:"d MMM yyyy"}}</div>
+                    <div ng-hide="isOutOfSync" class="item-date">
+                        at {{lastSyncDate|date:"h:mm:ssa"}} on {{lastSyncDate|date:"d MMM yyyy"}}
+                    </div>
                     <span ng-show="isOutOfSync">No sync history</span>
                     <button type="button" ng-click="sync()" class="btn">Sync</button>
                 </li>
@@ -112,19 +117,24 @@
                 <th class="data-grid-th _col-xs">
                     <span></span>
                 </th>
-                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name' && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
+                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
                     <span>Component Name</span>
                 </th>
-                <th ng-click="order('moduleName')" ng-class="{'_ascend' : predicate === 'moduleName' && !reverse,'_descend' : predicate === 'moduleName' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('moduleName')" ng-class="{'_ascend' : predicate === 'moduleName'
+                && !reverse,'_descend' : predicate === 'moduleName' && reverse}" class="data-grid-th _sortable">
                     <span>Module Name</span>
                 </th>
-                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' &&
+                !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th  _sortable">
                     <span>Version</span>
                 </th>
-                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' && !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type'
+                && !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th  _sortable">
                     <span>Type</span>
                 </th>
-                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor' && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor'
+                && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th  _sortable">
                     <span>Vendor</span>
                 </th>
                 <th class="data-grid-actions-cell data-grid-th">
@@ -161,7 +171,8 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
-                                ng-show="component.update || component.uninstall || !component.disable || !component.update"
+                                ng-show="component.update || component.uninstall ||
+                                !component.disable || !component.update"
                                 ng-click="toggleActiveActionsCell(component)"
                                 ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
@@ -192,7 +203,8 @@
     </div>
 </div>
 
-<div ng-show="!isHiddenSpinner || $root.saveAuthProccessed || (!$root.componentsProcessed || !$root.isAuthLoadingComplete)" class="loading-mask ng-scope" data-role="loader">
+<div ng-show="!isHiddenSpinner || $root.saveAuthProccessed ||
+(!$root.componentsProcessed || !$root.isAuthLoadingComplete)" class="loading-mask ng-scope" data-role="loader">
     <div class="popup popup-loading">
         <div class="popup-inner">
             <img alt="Loading..." src="<?php echo $this->basePath() ?>/pub/images/loader-1.gif">

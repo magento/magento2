@@ -34,6 +34,7 @@ class Partners
     /**
      * @param Curl $curl
      * @param Cache $cache
+     * @param UrlInterface $backendUrl
      */
     public function __construct(Curl $curl, Cache $cache, UrlInterface $backendUrl)
     {
@@ -53,13 +54,13 @@ class Partners
     /**
      * Gets partners json
      *
-     * @return bool|string
+     * @return array
      */
     public function getPartners()
     {
         $apiUrl = $this->getApiUrl();
         try {
-            $this->getCurlClient()->post($apiUrl, array());
+            $this->getCurlClient()->post($apiUrl, []);
             $this->getCurlClient()->setOptions(
                 [
                     CURLOPT_REFERER => $this->getReferer()

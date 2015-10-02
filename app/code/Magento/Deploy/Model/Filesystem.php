@@ -95,6 +95,11 @@ class Filesystem
         $this->functionCallPath = 'php -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
+    /**
+     * Regenerate static
+     *
+     * @param OutputInterface $output
+     */
     public function regenerateStatic(OutputInterface $output)
     {
         // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
