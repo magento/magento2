@@ -69,15 +69,30 @@ class NonComposerComponentRegistration
      */
     public function register()
     {
-        foreach (static::$pathList as $path) {
-            // Sorting is disabled intentionally for performance improvement
-            $files = glob($path, GLOB_NOSORT);
-            if ($files === false) {
-                throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
+        $files = [];
+        $staticList = __DIR__ . '/paths.php';
+        if (file_exists($staticList)) {
+            $files = include $staticList;
+        } else {
+            foreach (static::$pathList as $path) {
+                // Sorting is disabled intentionally for performance improvement
+                $files = array_merge($files, glob($path, GLOB_NOSORT));
+                if ($files === false) {
+                    throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
+                }
             }
-            foreach ($files as $file) {
-                include $file;
-            }
+
+            $content = "<?php\n " .
+                "/**\n" .
+                "* Paths to registration files\n" .
+                "*/\n" .
+                "return [\n\t'" .
+                implode("',\n\t'", $files) .
+                "'\n];\n";
+            file_put_contents($staticList, $content);
+        }
+        foreach ($files as $file) {
+            include $file;
         }
     }
 }
