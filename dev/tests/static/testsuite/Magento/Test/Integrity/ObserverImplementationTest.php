@@ -51,7 +51,7 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\Sales\Model\Observer\Backend\CatalogPriceRule',
         'Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment',
         'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
-        'Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid',
+        'Magento\Sales\Model\Observer\Order\Creditmemo1\IndexGrid',
         'Magento\Sales\Model\Observer\Order\IndexGrid',
         'Magento\Sales\Model\Observer\Order\Invoice\IndexGrid',
         'Magento\Sales\Model\Observer\Order\Shipment\IndexGrid',
