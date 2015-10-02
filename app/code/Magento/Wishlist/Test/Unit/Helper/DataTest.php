@@ -19,6 +19,9 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Wishlist\Helper\Data */
