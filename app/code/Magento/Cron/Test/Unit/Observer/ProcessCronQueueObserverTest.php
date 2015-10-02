@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Test\Unit\Model;
+namespace Magento\Cron\Test\Unit\Observer;
 
 use Magento\Cron\Model\Schedule;
 use Magento\Cron\Observer\ProcessCronQueueObserver as ProcessCronQueueObserver;

@@ -58,6 +58,7 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
         'Magento\User\Model\Backend\Observer\AuthObserver',
         'Magento\User\Model\Backend\Observer\PasswordObserver',
+        'Magento\ProductVideo\Model\Observer',
     ];
 
     public static function setUpBeforeClass()
