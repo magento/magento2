@@ -81,5 +81,6 @@ class DeleteTaxRateEntityTest extends Injectable
         $this->taxRateIndex->open();
         $this->taxRateIndex->getTaxRateGrid()->searchAndOpen($filter);
         $this->taxRateNew->getFormPageActions()->delete();
+        $this->taxRateNew->getModalBlock()->acceptAlert();
     }
 }

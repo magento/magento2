@@ -7,8 +7,9 @@ define([
     'mageUtils',
     'uiRegistry',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, registry, Component, layout) {
+    'Magento_Ui/js/core/renderer/layout',
+    'Magento_Ui/js/modal/confirm'
+], function (_, utils, registry, Component, layout, confirm) {
     'use strict';
 
     var childTemplate = {
@@ -152,11 +153,16 @@ define([
          *      it requires function to invoke.
          */
         removeAddress: function (elem) {
-            var confirmed = confirm(this.removeMessage);
+            var self = this;
 
-            if (confirmed) {
-                this._removeAddress(elem);
-            }
+            confirm({
+                content: this.removeMessage,
+                actions: {
+                    confirm: function () {
+                        self._removeAddress(elem)
+                    }
+                }
+            });
         },
 
         /**
