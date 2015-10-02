@@ -191,9 +191,9 @@ class Links extends \Magento\Backend\Block\Template
             'Magento\Backend\Block\Widget\Button'
         )->setData(
             [
-                'label' => __('Add New Row'),
+                'label' => __('Add New Link'),
                 'id' => 'add_link_item',
-                'class' => 'add',
+                'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-link'],
             ]
         );
