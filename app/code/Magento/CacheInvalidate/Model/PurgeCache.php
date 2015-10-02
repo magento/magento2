@@ -5,19 +5,20 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
-use Zend\Uri\Uri;
 use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\App\DeploymentConfig;
 
 class PurgeCache
 {
+    const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
+
     /**
      * @var \Magento\PageCache\Model\Cache\Server
      */
     protected $cacheServer;
 
     /**
-     * @var SocketFactory
+     * @var \Magento\CacheInvalidate\Model\SocketFactory
      */
     protected $socketAdapterFactory;
 
@@ -30,12 +31,12 @@ class PurgeCache
      * Constructor
      *
      * @param \Magento\PageCache\Model\Cache\Server $cacheServer
-     * @param SocketFactory $socketAdapterFactory
+     * @param \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
      */
     public function __construct(
         \Magento\PageCache\Model\Cache\Server $cacheServer,
-        SocketFactory $socketAdapterFactory,
+        \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger
     ) {
         $this->cacheServer = $cacheServer;
@@ -54,7 +55,7 @@ class PurgeCache
     {
         $socketAdapter = $this->socketAdapterFactory->create();
         $servers = $this->cacheServer->getUris();
-        $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
+        $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $tagsPattern];
         $socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
             try {
