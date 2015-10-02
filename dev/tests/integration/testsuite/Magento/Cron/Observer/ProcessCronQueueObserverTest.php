@@ -21,7 +21,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
         $request = Bootstrap::getObjectManager()->create('Magento\Framework\App\Console\Request');
         $request->setParams(['group' => 'default', 'standaloneProcessStarted' => '0']);
-        $this->_model = Bootstrap::getObjectManager()->create('Magento\Cron\Observer\ProcessCronQueueObserver', ['request' => $request]);
+        $this->_model = Bootstrap::getObjectManager()
+            ->create('Magento\Cron\Observer\ProcessCronQueueObserver', ['request' => $request]);
         $this->_model->execute(new \Magento\Framework\Event\Observer());
     }
 

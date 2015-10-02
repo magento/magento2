@@ -12,7 +12,7 @@ use Magento\Cron\Observer\ProcessCronQueueObserver as ProcessCronQueueObserver;
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProcessCronQueueObserver
