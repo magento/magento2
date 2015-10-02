@@ -52,6 +52,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $columnSortOrder = self::DEFAULT_COLUMNS_MAX_ORDER;
         foreach ($this->attributeRepository->getList() as $attribute) {
+            $config = [];
             if (!isset($this->components[$attribute->getAttributeCode()])) {
                 $config['sortOrder'] = ++$columnSortOrder;
                 if ($attribute->getIsFilterableInGrid()) {
