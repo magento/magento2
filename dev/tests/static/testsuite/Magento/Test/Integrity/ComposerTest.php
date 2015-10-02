@@ -417,8 +417,12 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     {
         sort(self::$dependencies);
         $dependenciesListed = [];
-        if (self::$rootJson['name'] !== 'magento/project-community-edition') {
-
+        if (strpos(self::$rootJson['name'], 'magento/project-') !== 0) {
+            $this->assertArrayHasKey(
+                'replace',
+                (array)self::$rootJson,
+                'No "replace" section found in root composer.json'
+            );
             foreach (array_keys((array)self::$rootJson['replace']) as $key) {
                 if (MagentoComponent::matchMagentoComponent($key)) {
                     $dependenciesListed[] = $key;
