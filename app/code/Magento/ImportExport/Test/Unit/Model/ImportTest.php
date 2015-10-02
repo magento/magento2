@@ -328,7 +328,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
-        $this->assertEquals('boolean' , $this->import->getAttributeType($attribute));
+        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**
