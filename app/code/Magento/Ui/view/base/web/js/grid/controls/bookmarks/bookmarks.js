@@ -318,7 +318,10 @@ define([
         },
 
         /**
+         * Sets data to the specified view.
          *
+         * @param {String} index - Index of a view whose data will be replaced.
+         * @param {Object} data - New view data.
          * @returns {Bookmarks} Chainable.
          */
         setViewData: function (index, data) {
@@ -330,8 +333,9 @@ define([
         },
 
         /**
+         * Starts editing of a specified view.
          *
-         * @param {String} index
+         * @param {String} index - Index of a view.
          * @returns {Bookmarks} Chainable.
          */
         editView: function (index) {
@@ -341,8 +345,10 @@ define([
         },
 
         /**
+         * Ends editing of specified view
+         * and restores its' label.
          *
-         * @param {String} index
+         * @param {String} index - Index of a view.
          * @returns {Bookmarks} Chainable.
          */
         endEdit: function (index) {

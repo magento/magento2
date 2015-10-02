@@ -24,7 +24,6 @@ define([
         defaults: {
             template: 'ui/collection',
             componentType: 'container',
-            registerNodes: true,
             ignoreTmpls: {
                 childDefaults: true
             }
@@ -136,31 +135,26 @@ define([
         },
 
         /**
-         * Callback which fires when property under uniqueNs has changed.
-         */
-        onUniqueUpdate: function (name) {
-            var active = name === this.name,
-                property = this.uniqueProp;
-
-            this[property](active);
-        },
-
-        /**
          * Retrieves requested region.
          * Creates region if it was not created yet
          *
          * @returns {ObservableArray}.
          */
         getRegion: function (name) {
-            var regions = this.regions = this.regions || {};
+            var regions = this.regions = this.regions || {},
+                region;
 
-            if (!regions[name]) {
-                regions[name] = [];
+            if (name) {
+                if (!regions[name]) {
+                    regions[name] = [];
 
-                this.observe.call(regions, name);
+                    this.observe.call(regions, name);
+                }
+
+                region = regions[name];
             }
 
-            return regions[name];
+            return region;
         },
 
         /**
@@ -172,8 +166,10 @@ define([
          * @returns {Collection} Chainable.
          */
         updateRegion: function (items, name) {
-            if (name) {
-                this.getRegion(name)(items);
+            var region = this.getRegion(name);
+
+            if (region) {
+                region(items);
             }
 
             return this;
@@ -231,23 +227,14 @@ define([
         },
 
         /**
-         * Destroys current instance along with all of its' children.
-         */
-        destroy: function () {
-            this._dropHandlers()
-                ._clearRefs();
-        },
-
-        /**
          * Removes events listeners.
          * @private
          *
          * @returns {Collection} Chainable.
          */
         _dropHandlers: function () {
-            this.off();
-
-            this.source.off(this.name);
+            this._super()
+                .source.off(this.name);
 
             return this;
         },
@@ -260,7 +247,7 @@ define([
          * @returns {Collection} Chainable.
          */
         _clearRefs: function () {
-            registry.remove(this.name);
+            this._super();
 
             this.containers.forEach(function (parent) {
                 parent.removeChild(this);
@@ -367,6 +354,16 @@ define([
             });
 
             return !!bubble;
+        },
+
+        /**
+         * Callback which fires when property under uniqueNs has changed.
+         */
+        onUniqueUpdate: function (name) {
+            var active = name === this.name,
+                property = this.uniqueProp;
+
+            this[property](active);
         }
     });
 });
