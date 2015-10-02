@@ -32,6 +32,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     protected $registry;
 
+    /**
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $jsonEncoderMock;
+
     protected function setUp()
     {
         $this->mockContext();
@@ -42,7 +47,8 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\Catalog\Block\Product\View\Gallery(
             $this->context,
-            $this->arrayUtils
+            $this->arrayUtils,
+            $this->jsonEncoderMock
         );
     }
 
