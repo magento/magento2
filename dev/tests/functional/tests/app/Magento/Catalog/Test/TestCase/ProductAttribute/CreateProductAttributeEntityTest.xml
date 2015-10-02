@@ -58,6 +58,7 @@
             <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertProductAttributeIsUsedPromoRules" />
@@ -69,8 +70,11 @@
             <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_yesno_%isolation%</data>
             <data name="productAttribute/data/is_global" xsi:type="string">Global</data>
+            <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="productAttribute/data/default_value_yesno" xsi:type="string">No</data>
             <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Yes/No_Global</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
@@ -181,6 +185,35 @@
             <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique" />
+        </variation>
+        <variation name="CreateProductAttributeEntityTestVariation5">
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttribute/data/frontend_label" xsi:type="string">Multiple_Select_Admin_%isolation%</data>
+            <data name="productAttribute/data/frontend_input" xsi:type="string">Multiple Select</data>
+            <data name="productAttribute/data/options/dataset" xsi:type="string">default</data>
+            <data name="productAttribute/data/is_required" xsi:type="string">No</data>
+            <data name="productAttribute/data/attribute_code" xsi:type="string">attr_multiselect_%isolation%</data>
+            <data name="productAttribute/data/is_global" xsi:type="string">Website</data>
+            <data name="productAttribute/data/is_unique" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
+            <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
     </testCase>
 </config>
