@@ -3,18 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Test\Unit\Observer;
+namespace Magento\Cron\Test\Unit\Model;
 
 use Magento\Cron\Model\Schedule;
+use Magento\Cron\Observer\ProcessCronQueueObserver as ProcessCronQueueObserver;
 
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cron\Observer\ProcessCronQueueObserver
+     * @var ProcessCronQueueObserver
      */
     protected $_observer;
 
@@ -109,7 +110,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
-        $this->_observer = new \Magento\Cron\Observer\ProcessCronQueueObserver(
+        $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
             $this->_scheduleFactory,
             $this->_cache,
@@ -468,7 +469,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Observer\ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
+            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
         )->will(
             $this->returnValue(time() - 10000000)
         );
@@ -477,7 +478,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Observer\ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
+            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
         )->will(
             $this->returnValue(time() + 10000000)
         );
@@ -539,7 +540,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Observer\ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
+            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
         )->will(
             $this->returnValue(time() - 10000000)
         );
@@ -548,7 +549,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Observer\ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
+            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
         )->will(
             $this->returnValue(time() + 10000000)
         );

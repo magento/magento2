@@ -25,7 +25,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      *
-     * @covers \Magento\Quote\Observer\CollectTotalsObserver::execute
+     * @covers \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver::execute
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithDisabledAutomaticGroupChange()
     {
@@ -65,7 +65,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      *
-     * @covers \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch
+     * @covers \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver::execute
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithEnabledAutomaticGroupChange()
     {
