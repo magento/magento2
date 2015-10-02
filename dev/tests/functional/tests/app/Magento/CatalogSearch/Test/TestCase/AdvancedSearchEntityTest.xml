@@ -111,5 +111,19 @@
             <data name="productSearch/data/price/value/price_to" xsi:type="string">50</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
         </variation>
+        <variation name="AdvancedSearchEntityTestVariation14">
+            <data name="description" xsi:type="string">Search product in advanced search by Tax Class</data>
+            <data name="products/simple_1" xsi:type="string">Yes</data>
+            <data name="products/simple_2" xsi:type="string">-</data>
+            <data name="productSearch/data/tax_class_id" xsi:type="string">Taxable Goods</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation15">
+            <data name="description" xsi:type="string">Negative product search</data>
+            <data name="products/simple_1" xsi:type="string">Yes</data>
+            <data name="products/simple_2" xsi:type="string">-</data>
+            <data name="productSearch/data/name" xsi:type="string">Negative_product_search</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
+        </variation>
     </testCase>
 </config>

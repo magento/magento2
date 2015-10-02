@@ -414,6 +414,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             ? $data['product']['attribute_set_id']
             : $config['create_url_params']['set'];
         $url = $this->getUrl($config);
+        $data = $this->applyCustomAttribute($data);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write($url, $data);
@@ -426,6 +427,15 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
 
         return $this->parseResponse($response);
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function applyCustomAttribute($data)
+    {
+        return $data;
     }
 
     /**
