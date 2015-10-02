@@ -135,10 +135,9 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
         $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
         $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
-        $groupPriceColumn = $connection->getCheckSql("MIN(i.group_price) IS NOT NULL", "i.group_price", 'NULL');
 
         $select->columns(
-            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn]
+            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]
         );
 
         $query = $select->insertFromSelect($coaTable);
@@ -150,10 +149,9 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                 'parent_id',
                 'customer_group_id',
                 'website_id',
-                $connection->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MIN(price)'),
-                $connection->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MAX(price)'),
+                'MIN(price)',
+                'MAX(price)',
                 'MIN(tier_price)',
-                'MIN(group_price)'
             ]
         )->group(
             ['parent_id', 'customer_group_id', 'website_id']
@@ -174,7 +172,6 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                 'min_price' => new \Zend_Db_Expr('i.min_price - i.orig_price + io.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price - i.orig_price + io.max_price'),
                 'tier_price' => 'io.tier_price',
-                'group_price' => 'io.group_price'
             ]
         );
 
