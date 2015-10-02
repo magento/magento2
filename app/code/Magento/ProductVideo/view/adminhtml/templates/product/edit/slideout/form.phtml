@@ -20,16 +20,16 @@
   <div id="video-player-preview-location">
       <div class="video-player-container"></div>
       <div class="video-information title">
-          <label><?php echo $block->escapeHtml(__('Title:')) ?> </label><span></span>
+          <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
       </div>
       <div class="video-information uploaded">
-          <label><?php echo $block->escapeHtml(__('Uploaded:')) ?> </label><span></span>
+          <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
       </div>
       <div class="video-information uploader">
-          <label><?php echo $block->escapeHtml(__('Uploader:')) ?> </label><span></span>
+          <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
       </div>
       <div class="video-information duration">
-          <label><?php echo $block->escapeHtml(__('Duration:')) ?> </label><span></span>
+          <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
       </div>
   </div>
 </div>
