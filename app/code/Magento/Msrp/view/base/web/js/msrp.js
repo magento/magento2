@@ -11,7 +11,6 @@ define([
 ], function ($, _) {
     'use strict';
 
-    var openDropDown = null;
     $.widget('mage.addToCart', {
         options: {
             showAddToCart: true,
@@ -128,6 +127,7 @@ define([
                 this.closePopup($elem);
             }.bind(this))
         },
+
         /**
          *
          * @param $elem
