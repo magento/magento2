@@ -184,9 +184,12 @@ class Http implements \Magento\Framework\AppInterface
             $this->_response->setRedirect($setupInfo->getUrl());
             $this->_response->sendHeaders();
         } else {
-            $newMessage = $exception->getMessage() . "\nNOTE: web setup wizard is not accessible.\n"
-                . 'In order to install, use Magento Setup CLI or configure web access to the following directory: '
-                . $setupInfo->getDir($projectRoot);
+            $newMessage = $exception->getMessage() . "\nNOTE: You cannot install Magento using the Setup Wizard "
+                . "because the Magento setup directory cannot be accessed. \n"
+                . 'You can install Magento using either the command line or you must restore access '
+                . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
+            $newMessage .= 'If you are using the sample nginx configuration, please go to '
+                . $this->_request->getScheme(). '://' . $this->_request->getHttpHost() . $setupInfo->getUrl();
             throw new \Exception($newMessage, 0, $exception);
         }
     }
