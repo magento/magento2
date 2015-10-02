@@ -51,6 +51,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productOptionFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\ProductOptionFactory')
@@ -60,10 +61,13 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
-        $this->customOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\CustomOptions\CustomOptionFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->customOptionFactory = $this->getMock(
+            'Magento\Catalog\Model\CustomOptions\CustomOptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+            );
         $this->cartItem = $this->getMockBuilder('Magento\Quote\Api\Data\CartItemInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getOptionByCode', 'getProductOption', 'setProductOption'])
