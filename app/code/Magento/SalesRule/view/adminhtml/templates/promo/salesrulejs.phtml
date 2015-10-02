@@ -83,7 +83,7 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 try {
                     response = JSON.parse(transport.responseText);
                 } catch (e) {
-                    console.warn('error when parse response');
+                    console.warn('An error occured while parsing response');
                 }
             }
             if (couponCodesGrid) {
