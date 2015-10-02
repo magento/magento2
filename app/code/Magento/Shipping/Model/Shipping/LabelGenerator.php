@@ -105,7 +105,7 @@ class LabelGenerator
 
     /**
      * @param \Magento\Sales\Model\Order\Shipment $shipment
-     * @param array|string $trackingNumbers
+     * @param array $trackingNumbers
      * @param string $carrierCode
      * @param string $carrierTitle
      *
@@ -117,17 +117,17 @@ class LabelGenerator
         $carrierCode,
         $carrierTitle
     ) {
-        if (is_array($trackingNumbers)) {
-            foreach ($trackingNumbers as $number) {
+        foreach ($trackingNumbers as $number) {
+            if (is_array($number)) {
                 $this->addTrackingNumbersToShipment($shipment, $number, $carrierCode, $carrierTitle);
+            } else {
+                $shipment->addTrack(
+                    $this->trackFactory->create()
+                        ->setNumber($number)
+                        ->setCarrierCode($carrierCode)
+                        ->setTitle($carrierTitle)
+                );
             }
-        } else {
-            $shipment->addTrack(
-                $this->trackFactory->create()
-                    ->setNumber($trackingNumbers)
-                    ->setCarrierCode($carrierCode)
-                    ->setTitle($carrierTitle)
-            );
         }
     }
 
