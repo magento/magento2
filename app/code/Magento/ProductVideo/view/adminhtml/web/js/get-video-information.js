@@ -217,7 +217,7 @@ require([
              */
             _loadApi: function () {
                 var element,
-                scriptTag;
+                    scriptTag;
 
                 if (videoRegister.isRegistered('youtube')) {
                     if (videoRegister.isLoaded('youtube')) {
@@ -432,19 +432,16 @@ require([
                         this.options.youtubeKey;
                     $.get(googleapisUrl, $.proxy(_onYouTubeLoaded, this));
                 } else if (type === 'vimeo') {
-                    $.ajax({
-                        url: 'http://vimeo.com/api/v2/video/' + id + '.json',
-                        dataType: 'json',
-                        method: 'GET',
-                        success: $.proxy(_onVimeoLoaded, self),
-
-                        /**
-                         * @private
-                         */
-                        error: function () {
+                    $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
+                        {
+                            format: 'json'
+                        },
+                        $.proxy(_onVimeoLoaded, self)
+                    ).fail(
+                        function () {
                             self._onRequestError('Video not found');
                         }
-                    });
+                    );
                 }
             },
 
