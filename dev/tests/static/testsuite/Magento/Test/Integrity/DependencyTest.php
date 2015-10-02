@@ -332,10 +332,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     /**
      * Retrieve dependencies from files
      *
-     * @param $module
-     * @param $fileType
-     * @param $file
-     * @param $contents
+     * @param string $module
+     * @param string $fileType
+     * @param string $file
+     * @param string $contents
      * @return string[]
      */
     protected function getDependenciesFromFiles($module, $fileType, $file, $contents)
