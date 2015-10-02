@@ -45,7 +45,7 @@ define([
             type: 'popup',
             title: '',
             modalClass: '',
-            focus: '',
+            focus: '[data-role="closeBtn"]',
             autoOpen: false,
             clickableOverlay: true,
             popupTpl: popupTpl,
@@ -224,13 +224,9 @@ define([
                 infelicity;
 
             if (type === 'opened' && this.options.focus) {
-                if (typeof this.options.focus === 'object') {
-                    this.options.focus.focus();
-                } else if (this.options.focus !== 'none') {
-                    this.modal.find(this.options.focus).focus();
-                } else {
-                    this.modal.find(this.options.focusableScope).focus();
-                }
+                this.modal.find($(this.options.focus)).focus();
+            } else if (type === 'opened' && !this.options.focus) {
+                this.modal.find(this.options.focusableScope).focus();
             } else if (position === 'end') {
                 this.modal.find(this.options.modalCloseBtn).focus();
             } else if (position === 'start') {
