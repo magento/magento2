@@ -20,7 +20,6 @@ class AdvancedPricingTab extends ProductTab
      * @var array
      */
     protected $childrenForm = [
-        'group_price' => 'AdvancedPricingTab\OptionGroup',
         'tier_price' => 'AdvancedPricingTab\OptionTier',
     ];
 

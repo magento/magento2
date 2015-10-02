@@ -81,7 +81,6 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
                 'po_number' => null,
                 'cc_owner' => 'John',
                 'cc_type' => null,
@@ -119,7 +118,6 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
@@ -156,7 +154,6 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
@@ -196,7 +193,6 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
