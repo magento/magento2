@@ -227,11 +227,11 @@
     width: 140px;
     margin-right: 15px;
 }
-
+/*
 .admin__scope-old .field-quantity_and_stock_status select {
     vertical-align: middle;
 }
-
+*/
 /* Weight field */
 .admin__scope-old .field-weight .control {
     display: table;
