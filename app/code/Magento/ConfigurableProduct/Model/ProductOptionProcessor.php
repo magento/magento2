@@ -5,9 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
@@ -22,35 +20,19 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     protected $objectFactory;
 
     /**
-     * @var ProductOptionFactory
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory
-     */
-    protected $extensionFactory;
-
-    /**
      * @var ConfigurableItemOptionValueFactory
      */
     protected $itemOptionValueFactory;
 
     /**
      * @param DataObjectFactory $objectFactory
-     * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $extensionFactory
      * @param ConfigurableItemOptionValueFactory $itemOptionValueFactory
      */
     public function __construct(
         DataObjectFactory $objectFactory,
-        ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $extensionFactory,
         ConfigurableItemOptionValueFactory $itemOptionValueFactory
     ) {
         $this->objectFactory = $objectFactory;
-        $this->productOptionFactory = $productOptionFactory;
-        $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
     }
 
