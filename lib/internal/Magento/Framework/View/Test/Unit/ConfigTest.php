@@ -61,7 +61,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [],
             '',
-            false);
+            false
+        );
         $this->viewMock = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
         $this->viewFactoryMock->expects($this->any())
             ->method('create')
