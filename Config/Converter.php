@@ -7,6 +7,7 @@ namespace Magento\Framework\Amqp\Config;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Converts AMQP config from \DOMDocument to array
@@ -72,22 +73,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $queueConfig;
 
     /**
-     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     * @var MethodsMap
      */
-    private $serviceInputProcessor;
+    private $methodsMap;
 
     /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
+     * @param MethodsMap $methodsMap
      */
     public function __construct(
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
+        MethodsMap $methodsMap
     ) {
         $this->deploymentConfig = $deploymentConfig;
-        $this->serviceInputProcessor = $serviceInputProcessor;
+        $this->methodsMap = $methodsMap;
     }
 
     /**
@@ -166,14 +167,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $serviceClass = $matches[1];
         $serviceMethod = $matches[2];
         $result = [];
-        $paramsMeta = $this->serviceInputProcessor->getMethodParams($serviceClass, $serviceMethod);
+        $paramsMeta = $this->methodsMap->getMethodParams($serviceClass, $serviceMethod);
         foreach ($paramsMeta as $paramPosition => $paramMeta) {
             $result[] = [
-                // TODO: Introduce constants for param meta
-                self::SCHEMA_METHOD_PARAM_NAME => $paramMeta['name'],
+                self::SCHEMA_METHOD_PARAM_NAME => $paramMeta[MethodsMap::METHOD_META_NAME],
                 self::SCHEMA_METHOD_PARAM_POSITION => $paramPosition,
-                self::SCHEMA_METHOD_PARAM_IS_REQUIRED => !$paramMeta['isDefaultValueAvailable'],
-                self::SCHEMA_METHOD_PARAM_TYPE => $paramMeta['type'],
+                self::SCHEMA_METHOD_PARAM_IS_REQUIRED => !$paramMeta[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE],
+                self::SCHEMA_METHOD_PARAM_TYPE => $paramMeta[MethodsMap::METHOD_META_TYPE],
             ];
         }
         return $result;
