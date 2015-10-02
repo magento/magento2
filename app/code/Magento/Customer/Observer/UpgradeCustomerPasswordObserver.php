@@ -32,6 +32,8 @@ class UpgradeCustomerPasswordObserver implements ObserverInterface
 
     /**
      * @param EncryptorInterface $encryptor
+     * @param CustomerRegistry $customerRegistry
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         EncryptorInterface $encryptor,
