@@ -31,7 +31,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\FullModuleList
      */
     private $moduleList;
 
@@ -48,7 +48,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $this->moduleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $this->controller = new CustomizeYourStore($this->moduleList, $this->lists, $objectManagerProvider);
     }
 
