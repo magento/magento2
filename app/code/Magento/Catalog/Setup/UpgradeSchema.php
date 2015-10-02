@@ -136,6 +136,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     /**
      * @param SchemaSetupInterface $setup
+     * @return void
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
@@ -225,6 +226,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * Remove Group Price
      * @param SchemaSetupInterface $setup
+     * @return void
      */
     private function removeGroupPrice(SchemaSetupInterface $setup)
     {
