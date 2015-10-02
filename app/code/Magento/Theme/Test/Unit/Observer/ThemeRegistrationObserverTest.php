@@ -6,7 +6,7 @@
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class ThemeRegistrationObserver extends \PHPUnit_Framework_TestCase
+class ThemeRegistrationObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
