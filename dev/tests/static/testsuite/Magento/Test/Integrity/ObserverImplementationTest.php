@@ -43,7 +43,24 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\Sales\Model\Observer\Order\Invoice\SendEmails',
         'Magento\Sales\Model\Observer\Order\Shipment\SendEmails',
         'Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails',
-        'Magento\Sales\Model\Observer\AggregateSalesReportShipmentData'
+        'Magento\Sales\Model\Observer\AggregateSalesReportShipmentData',
+        'Magento\SalesRule\Model\Observer',
+        'Magento\Sales\Model\Observer\Backend\CatalogProductQuote',
+        'Magento\Sales\Model\Observer\CleanExpiredQuotes',
+        'Magento\SalesSequence\Model\Observer',
+        'Magento\Sales\Model\Observer\Backend\CatalogPriceRule',
+        'Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment',
+        'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
+        'Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid',
+        'Magento\Sales\Model\Observer\Order\IndexGrid',
+        'Magento\Sales\Model\Observer\Order\Invoice\IndexGrid',
+        'Magento\Sales\Model\Observer\Order\Shipment\IndexGrid',
+        'Magento\VersionsCms\Model\Backend\Observer',
+        'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
+        'Magento\User\Model\Backend\Observer\AuthObserver',
+        'Magento\User\Model\Backend\Observer\PasswordObserver',
+        'Magento\VersionsCms\Model\Backend\Observer',
+        'Magento\VersionsCms\Model\Backend\PrepareFormObserver',
     ];
 
     public static function setUpBeforeClass()
