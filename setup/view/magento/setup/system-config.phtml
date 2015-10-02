@@ -17,7 +17,8 @@
 </div>
 
 <div class="messages">
-    <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined" class="message message-error error">
+    <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined"
+         class="message message-error error">
         <span class="message-text">
             {{saveAuthJson.result.message}}
         </span>
@@ -61,7 +62,8 @@
                                    name="username"
                                    ng-model="user.username"
                                    ng-maxlength="40"
-                                   ng-class="{ 'invalid' : (auth.username.$error.required && !auth.username.$pristine) || (auth.username.$error.required && user.submitted)}"
+                                   ng-class="{ 'invalid' : (auth.username.$error.required && !auth.username.$pristine)
+                                   || (auth.username.$error.required && user.submitted)}"
                                    autofocus
                                    required
                                 >
@@ -87,7 +89,8 @@
                                    name="password"
                                    ng-model="user.password"
                                    ng-maxlength="40"
-                                   ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine) || (auth.password.$error.required && user.submitted) }"
+                                   ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine)
+                                   || (auth.password.$error.required && user.submitted) }"
                                    required
                                 >
                             <div class="error-container">

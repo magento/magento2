@@ -83,22 +83,27 @@
                             <li ng-show="!allExtensionsSelected" ng-click="selectAllExtensions()">
                                 <span class="action-menu-item">Select all</span>
                             </li>
-                            <li ng-show="allExtensionsSelected || someExtensionsSelected" ng-click="deselectAllExtensions()">
+                            <li ng-show="allExtensionsSelected || someExtensionsSelected"
+                                ng-click="deselectAllExtensions()">
                                 <span class="action-menu-item">Deselect all</span>
                             </li>
                         </ul>
                     </div>
                 </th>
-                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name' && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
+                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
                     <span>Extension Name</span>
                 </th>
-                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version'
+                && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
                     <span>Version</span>
                 </th>
-                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' && !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' &&
+                !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
                     <span>Type</span>
                 </th>
-                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor' && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th _sortable _ascend">
+                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor' &&
+                !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th _sortable _ascend">
                     <span>Vendor</span>
                 </th>
                 <th class="data-grid-actions-cell data-grid-th">
@@ -147,4 +152,5 @@
 <div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
     <div class="grid-loader"></div>
 </div>
-<div ng-controller="authDialogController" ng-show="edited===true" ng-include="'index.php/connect/popup-auth'" style="display: inline-block"></div>
+<div ng-controller="authDialogController" ng-show="edited===true"
+     ng-include="'index.php/connect/popup-auth'" style="display: inline-block"></div>

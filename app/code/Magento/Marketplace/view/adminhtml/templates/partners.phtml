@@ -7,10 +7,9 @@
 <?php
 $partners = $block->getPartners();
 if ($partners):
-    ?>
+?>
     <div class="row row-gutter">
         <?php foreach ($block->getPartners() as $partner): ?>
-
             <div class="col-m-4">
                 <img
                     class="partner-image"
@@ -22,7 +21,9 @@ if ($partners):
                     <br />
                     <a href="<?php echo $this->escapeHtml($partner['url_page']);?>" target="_blank">Read More</a>
                     <br />
-                    <a href="<?php echo $this->escapeHtml($partner['url_partner_page']);?>" target="_blank">Partner Page</a>
+                    <a href="<?php echo $this->escapeHtml($partner['url_partner_page']);?>" target="_blank">
+                        Partner Page
+                    </a>
                 </p>
             </div>
         <?php endforeach; ?>

@@ -18,10 +18,7 @@ class Index extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context
-    )
-    {
+    public function __construct(\Magento\Backend\Block\Template\Context $context) {
         $this->_urlBuilder = $context->getUrlBuilder();
         parent::__construct($context);
     }

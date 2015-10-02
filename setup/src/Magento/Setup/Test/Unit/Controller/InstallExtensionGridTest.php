@@ -24,7 +24,8 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->connectManager = $this->getMock('Magento\Setup\Model\ConnectManager', ['getPackagesForInstall'], [], '', false);
+        $this->connectManager =
+            $this->getMock('Magento\Setup\Model\ConnectManager', ['getPackagesForInstall'], [], '', false);
         $this->controller = new InstallExtensionGrid($this->connectManager);
     }
 
@@ -62,29 +63,28 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderForTestExtensionsAction()
     {
-        $extensions = array(
-            'magento/testing-extension' => array (
+        $extensions = [
+            'magento/testing-extension' => [
                 'name' => 'magento/testing-extension',
                 'type' => 'module',
                 'version' => '2.2.2',
-                'author' => 'magento'),
-            'magento/my-first-module' => array (
+                'author' => 'magento'],
+            'magento/my-first-module' => [
                 'name' => 'magento/my-first-module',
                 'type' => 'module',
                 'version' => '2.0.0',
-                'author' => 'magento'),
-            'magento/last-extension' => array (
+                'author' => 'magento'],
+            'magento/last-extension' => [
                 'name' => 'magento/last-extension',
                 'type' => 'module',
                 'version' => '2.1.1',
-                'author' => 'magento'),
-            'magento/magento-second-module' => array (
+                'author' => 'magento'],
+            'magento/magento-second-module' => [
                 'name' => 'magento/magento-second-module',
                 'type' => 'module',
                 'version' => '2.0.0',
-                'author' => 'magento'));
-        return array(
-            array($extensions)
-        );
+                'author' => 'magento']
+        ];
+        return [[$extensions]];
     }
 }
