@@ -35,14 +35,6 @@ define([
             return this;
         },
 
-        onUniqueUpdate: function (name) {
-            var active = name === this.name;
-
-            this._super();
-
-            this.trigger('active', active);
-        },
-
         /**
          * Sets active property to true, then invokes pushParams method.
          */
@@ -51,6 +43,8 @@ define([
             this.wasActivated(true);
 
             this.setUnique();
+
+            return true;
         }
     });
 });
