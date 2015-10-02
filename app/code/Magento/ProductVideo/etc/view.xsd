@@ -11,7 +11,7 @@
             <xs:complexContent>
                 <xs:extension base="mediaType">
                     <xs:sequence>
-                        <xs:element name="videos" type="videoType" minOccurs="1"/>
+                        <xs:element name="videos" type="videoType" minOccurs="0"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
@@ -20,7 +20,7 @@
 
     <xs:complexType name="videoType">
         <xs:sequence>
-            <xs:element name="video" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="video" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="play_if_base" type="xs:boolean" minOccurs="0"/>
