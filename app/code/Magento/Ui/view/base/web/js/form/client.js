@@ -15,7 +15,7 @@ define([
 
         data = utils.serialize(data);
 
-        data.form_key = FORM_KEY;
+        data.form_key = window.FORM_KEY;
 
         if (!url) {
             save.resolve();
@@ -52,15 +52,6 @@ define([
     }
 
     return Class.extend({
-        /**
-         * Initializes DataProvider instance.
-         * @param {Object} settings - Settings to initialize object with.
-         */
-        initialize: function (config) {
-            _.extend(this, config);
-
-            return this;
-        },
 
         /**
          * Assembles data and submits it using 'utils.submit' method
@@ -79,8 +70,6 @@ define([
 
             options = options || {};
 
-            data.form_key = FORM_KEY;
-
             if (!options.redirect) {
                 url += 'back/edit';
             }
@@ -88,7 +77,7 @@ define([
             utils.submit({
                 url: url,
                 data: data
-            });
+            }, options.attributes);
 
             return this;
         }
