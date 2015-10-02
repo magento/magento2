@@ -37,6 +37,11 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectManagerMock;
+
+    /**
      * @var array
      */
     private $componentData = [];
@@ -115,13 +120,22 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->connectManagerMock = $this->getMock(
+            'Magento\Setup\Model\ConnectManager',
+            [],
+            [],
+            '',
+            false
+        );
+
         $packageInfoFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
             $objectManagerProvider,
-            $this->updatePackagesCacheMock
+            $this->updatePackagesCacheMock,
+            $this->connectManagerMock
         );
     }
 
