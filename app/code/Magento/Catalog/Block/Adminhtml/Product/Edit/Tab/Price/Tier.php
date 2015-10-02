@@ -71,7 +71,7 @@ class Tier extends Group\AbstractGroup
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Add Tier'), 'onclick' => 'return tierPriceControl.addItem()', 'class' => 'add']
+            ['label' => __('Add Price'), 'onclick' => 'return tierPriceControl.addItem()', 'class' => 'add']
         );
         $button->setName('add_tier_price_item_button');
 
