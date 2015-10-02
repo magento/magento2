@@ -15,12 +15,14 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\FormPageActions
 {
+    // @codingStandardsIgnoreStart
     /**
-     * Selector for "Affected Attribute Set" popup form
+     * Selector for "Affected Attribute Set" modal window
      *
      * @var string
      */
-    protected $affectedAttributeSetForm = '//ancestor::body//div[div[@id="affected-attribute-set-form"]]';
+    protected $affectedAttributeSetForm = '//div[@data-role="affected-attribute-set-selector"]/ancestor::*[@data-role="modal"]';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Click on "Save" button
@@ -46,7 +48,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
     {
         return $this->blockFactory->create(
             '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AffectedAttributeSet',
-            ['element' => $this->_rootElement->find($this->affectedAttributeSetForm, Locator::SELECTOR_XPATH)]
+            ['element' => $this->browser->find($this->affectedAttributeSetForm, Locator::SELECTOR_XPATH)]
         );
     }
 }
