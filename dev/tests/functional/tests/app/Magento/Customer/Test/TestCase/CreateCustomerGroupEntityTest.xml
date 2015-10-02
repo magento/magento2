@@ -28,9 +28,6 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm" />
         </variation>
     </testCase>
 </config>
