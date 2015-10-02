@@ -51,6 +51,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productOptionFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\ProductOptionFactory')
