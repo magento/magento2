@@ -55,14 +55,18 @@ class Server
     public function getUris()
     {
         $servers = [];
-        $configedHosts = $this->config->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS);
-        if (null == $configedHosts) {
+        $configuredHosts = $this->config->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS);
+        if (null == $configuredHosts) {
             $httpHost = $this->request->getHttpHost();
             $servers[] = $httpHost ?
                 UriFactory::factory('')->setHost($httpHost)->setPort(self::DEFAULT_PORT)->setScheme('http') :
-                UriFactory::factory($this->urlBuilder->getUrl('*'));
+                UriFactory::factory($this->urlBuilder->getUrl('*'))
+                    ->setScheme('http')
+                    ->setPath(null)
+                    ->setQuery(null);
+
         } else {
-            foreach ($configedHosts as $host) {
+            foreach ($configuredHosts as $host) {
                 $servers[] = UriFactory::factory('')->setHost($host['host'])
                     ->setPort(isset($host['port']) ? $host['port'] : self::DEFAULT_PORT)
                     ->setScheme('http');
