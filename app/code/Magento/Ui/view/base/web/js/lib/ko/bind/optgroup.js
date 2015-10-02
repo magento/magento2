@@ -193,7 +193,7 @@ define([
                     itemUpdate = true;
                 }
 
-                if (arrayEntry === captionPlaceholder) {// empty value, label === caption
+                if (arrayEntry === captionPlaceholder) { // empty value, label === caption
                     option = element.ownerDocument.createElement('option');
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
@@ -208,7 +208,7 @@ define([
                     option = element.ownerDocument.createElement('option');
                     option.setAttribute('data-title', arrayEntry[optionsText + 'title']);
                     ko.selectExtensions.writeValue(option, arrayEntry[optionsValue]);
-                    ko.utils.setTextContent(option, arrayEntry[optionsText].replace(/^\s+/g, ''));
+                    ko.utils.setTextContent(option, arrayEntry[optionsText]);
                 }
 
                 return [option];
@@ -265,7 +265,7 @@ define([
                         res.push(obj);
                         res = res.concat(formatOptions(value));
                     } else {
-                        obj[optionsText] = strPad('  ', nestedOptionsLevel * 3) + label;
+                        obj[optionsText] = strPad('  ', nestedOptionsLevel * 2) + label;
                         obj[optionsValue] = value;
                         res.push(obj);
                     }
