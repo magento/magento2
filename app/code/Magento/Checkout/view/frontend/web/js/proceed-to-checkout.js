@@ -15,7 +15,7 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (customer() == false && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
                     authenticationPopup.showModal();
                     return false;
                 }
