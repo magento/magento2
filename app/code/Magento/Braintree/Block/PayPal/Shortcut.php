@@ -141,7 +141,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     public function getReviewPageUrl()
     {
-        return $this->_urlBuilder->getUrl('braintree/paypal/review');
+        return $this->_urlBuilder->getUrl('braintree/paypal/review', ['_secure' => true]);
     }
 
     /**
