@@ -58,6 +58,6 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $uri = 'rest' . $path;
         $result = $this->pathProcessor->process($uri);
         $this->assertEquals($path, $result);
-        $this->assertEquals(Store::DEFAULT_CODE, $this->storeManager->getStore()->getCode());
+        $this->assertEquals('default', $this->storeManager->getStore()->getCode());
     }
 }

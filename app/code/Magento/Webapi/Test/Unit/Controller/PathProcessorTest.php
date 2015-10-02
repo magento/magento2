@@ -29,21 +29,22 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->storeManagerMock->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->arbitraryStoreCode => 'store object', Store::DEFAULT_CODE => 'default store object']);
+            ->willReturn([$this->arbitraryStoreCode => 'store object', 'default' => 'default store object']);
         $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock);
     }
 
     /**
      * @dataProvider processPathDataProvider
      *
-     * @param $storeCodeInPath
-     * @param $storeCodeSet
+     * @param string $storeCodeInPath
+     * @param string $storeCodeSet
+     * @param int $setCurrentStoreCallCtr
      */
-    public function testAllStoreCode($storeCodeInPath, $storeCodeSet)
+    public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
     {
         $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
         $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
             ->method('setCurrentStore')
             ->with($storeCodeSet);
         $result = $this->model->process($inPath);
@@ -54,9 +55,9 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'All store code' => ['all', Store::ADMIN_CODE],
-            'Default store code' => ['', Store::DEFAULT_CODE],
+            'Default store code' => ['', 'default', 0],
             'Arbitrary store code' => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
-            'Explicit default store code' => [Store::DEFAULT_CODE, Store::DEFAULT_CODE]
+            'Explicit default store code' => ['default', 'default']
         ];
     }
 }
