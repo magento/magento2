@@ -14,7 +14,11 @@ $queues = [
     'demo-queue-2',
     'demo-queue-3',
     'demo-queue-4',
-    'demo-queue-5'
+    'demo-queue-5',
+    'demo-queue-6',
+    'demo-queue-7',
+    'demo-queue-8',
+    'demo-queue-9',
 ];
 foreach ($queues as $queueName) {
     /** @var \Magento\MysqlMq\Model\Queue $queue */
