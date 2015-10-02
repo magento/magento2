@@ -28,19 +28,18 @@ class MediaGallery extends DataSource
      * @constructor
      * @param array $params
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(array $params, $data = [])
     {
         if (isset($data['images']) && is_array($data['images']) && count($data['images'])) {
-            foreach ($data['images'] as $key => $media) {
-                //$this->data[$key] = $media;
+            foreach ($data['images'] as $media) {
                 if (isset($media['file'])) {
                     $this->createTestImage($media['file']);
                 }
             }
-        } //else {
-            $this->data = $data;
-        //}
+        }
+        $this->data = $data;
     }
 
     /**
@@ -48,6 +47,7 @@ class MediaGallery extends DataSource
      *
      * @param string $filename
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function createTestImage($filename)
     {
@@ -84,6 +84,6 @@ class MediaGallery extends DataSource
      */
     protected function getFullPath($filename)
     {
-        return BP. $this->mediaPathTmp . $filename;
+        return BP . $this->mediaPathTmp . $filename;
     }
 }
