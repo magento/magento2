@@ -3855,4 +3855,8 @@ return [
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Checkbox'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Filter\Inventory'],
+    ['Magento\Catalog\Block\Product\TemplateSelector'],
+    ['Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\SuggestProductTemplates'],
+    ['Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\SuggestProductTemplates'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute'],
 ];
