@@ -65,8 +65,12 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->encoder->decode('customer.created', 'Some message');
     }
-
-    public function testEncodeMessage()
+    
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
+     */
+    public function testEncodeInvalidMessage()
     {
         $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
@@ -75,11 +79,17 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dataObjectEncoderMock
             ->expects($this->once())
-            ->method('convertValue');
-        $this->encoder->encode('customer.created', $object);
+            ->method('convertValue')
+            ->willThrowException(new LocalizedException(new Phrase('')));
+
+    $this->encoder->encode('customer.created', $object);
     }
 
-    public function testEncodeMessageArray()
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
+     */
+    public function testEncodeInvalidMessageArray()
     {
         $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
@@ -88,7 +98,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dataObjectEncoderMock
             ->expects($this->once())
-            ->method('convertValue');
+            ->method('convertValue')
+            ->willThrowException(new LocalizedException(new Phrase('')));
+
         $this->encoder->encode('customer.created', [$object]);
     }
 
@@ -101,11 +113,12 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         return [
             QueueConfigConverter::TOPICS => [
                 'customer.created' => [
-                    QueueConfigConverter::TOPIC_SCHEMA => 'Magento\Customer\Api\Data\CustomerInterface'
+                    QueueConfigConverter::TOPIC_SCHEMA => [
+                        QueueConfigConverter::TOPIC_SCHEMA_TYPE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT,
+                        QueueConfigConverter::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                    ]
                 ]
-            ],
-            QueueConfigConverter::TOPIC_SCHEMA_TYPE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT,
-            QueueConfigConverter::TOPIC_SCHEMA_VALUE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT
+            ]
         ];
     }
 }
