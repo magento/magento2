@@ -6,9 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\ConnectManager;
@@ -19,19 +17,17 @@ use Magento\Setup\Model\ConnectManager;
 class InstallExtensionGrid extends AbstractActionController
 {
     /**
-     * @var ComposerInformation
+     * @var ConnectManager
      */
-    private $composerInformation;
+    private $connectManager;
 
     /**
-     * @param ComposerInformation $composerInformation
+     * @param ConnectManager $connectManager
      */
     public function __construct(
-        ComposerInformation $composerInformation,
         ConnectManager $connectManager
     )
     {
-        $this->composerInformation = $composerInformation;
         $this->connectManager = $connectManager;
     }
 
@@ -54,7 +50,7 @@ class InstallExtensionGrid extends AbstractActionController
      */
     public function extensionsAction()
     {
-        $extensions = $this->connectManager->getPackagesForInstall();
+        $extensions = $this->getConnectManager()->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
         return new JsonModel(
             [
@@ -65,20 +61,8 @@ class InstallExtensionGrid extends AbstractActionController
         );
     }
 
-    /**
-     * Install action
-     *
-     * @return JsonModel
-     */
-    public function installAction()
+    public function getConnectManager()
     {
-        $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $lastSyncData = $this->connectManager->getPackagesForInstall();
-        return new JsonModel(
-            [
-                'success' => true,
-                'lastSyncData' => $lastSyncData
-            ]
-        );
+        return $this->connectManager;
     }
 }
