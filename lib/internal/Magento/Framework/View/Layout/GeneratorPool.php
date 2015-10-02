@@ -115,8 +115,8 @@ class GeneratorPool
             $this->helper->scheduleElement($scheduledStructure, $structure, key($scheduledStructure->getStructure()));
         }
         $scheduledStructure->flushPaths();
-        foreach ($scheduledStructure->getListToSort() as $elementToSort) {
-            $this->reorderElements($structure, $elementToSort);
+        while (false === $scheduledStructure->isListToSortEmpty()) {
+            $this->reorderElements($scheduledStructure, $structure, key($scheduledStructure->getListToSort()));
         }
         foreach ($scheduledStructure->getListToMove() as $elementToMove) {
             $this->moveElementInStructure($scheduledStructure, $structure, $elementToMove);
@@ -138,12 +138,36 @@ class GeneratorPool
     /**
      * Reorder a child of a specified element
      *
+     * @param ScheduledStructure $scheduledStructure,
      * @param Data\Structure $structure
-     * @param array $element
+     * @param string $elementName
      * @return void
      */
-    protected function reorderElements(Data\Structure $structure, array $element)
-    {
+    protected function reorderElements(
+        ScheduledStructure $scheduledStructure,
+        Data\Structure $structure,
+        $elementName
+    ) {
+        $element = $scheduledStructure->getElementToSort($elementName);
+        $scheduledStructure->unsetElementToSort($element[ScheduledStructure::ELEMENT_NAME]);
+
+        if (isset($element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING])) {
+            $siblingElement = $scheduledStructure->getElementToSort(
+                $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING]
+            );
+
+            if (
+                isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
+                    && $structure->hasElement($siblingElement[ScheduledStructure::ELEMENT_NAME])
+            ) {
+                $this->reorderElements(
+                    $scheduledStructure,
+                    $structure,
+                    $siblingElement[ScheduledStructure::ELEMENT_NAME]
+                );
+            }
+        }
+
         $structure->reorderChildElement(
             $element[ScheduledStructure::ELEMENT_PARENT_NAME],
             $element[ScheduledStructure::ELEMENT_NAME],

@@ -118,6 +118,39 @@ class ScheduledStructure
     }
 
     /**
+     * Check if elements list of sorting is empty
+     *
+     * @return bool
+     */
+    public function isListToSortEmpty()
+    {
+        return empty($this->elementsToSort);
+    }
+
+    /**
+     * Unset specified element from list of sorting
+     *
+     * @param $elementName
+     * @return void
+     */
+    public function unsetElementToSort($elementName)
+    {
+        unset($this->elementsToSort[$elementName]);
+    }
+
+    /**
+     * Get element to sort by name
+     *
+     * @param string $elementName
+     * @param array $default
+     * @return array
+     */
+    public function getElementToSort($elementName, $default = [])
+    {
+        return isset($this->elementsToSort[$elementName]) ? $this->elementsToSort[$elementName] : $default;
+    }
+
+    /**
      * Get elements to sort
      *
      * @return array

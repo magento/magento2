@@ -426,21 +426,70 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetElementToSortList()
     {
-        $elementName = 'element name';
-        $elementParentName = 'parent name';
-        $elementSibling = 'sibling';
-        $elementIsAfter = false;
-        $elementsToSort = [
-            $elementName => [
-                ScheduledStructure::ELEMENT_NAME => $elementName,
-                ScheduledStructure::ELEMENT_PARENT_NAME => $elementParentName,
-                ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING => $elementSibling,
-                ScheduledStructure::ELEMENT_IS_AFTER => $elementIsAfter
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $elementsList = [$name => $element];
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($elementsList, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSortEmpty()
+    {
+        $this->assertEmpty($this->model->getElementToSort('test'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($element, $this->model->getElementToSort($name));
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnsetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertArrayHasKey($name, $this->model->getListToSort());
+        $this->model->unsetElementToSort($name);
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsListToSortEmpty()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->assertTrue($this->model->isListToSortEmpty());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertFalse($this->model->isListToSortEmpty());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDataSort()
+    {
+        return [
+            'parent name',
+            'element name',
+            'sibling',
+            false,
+            [
+                ScheduledStructure::ELEMENT_NAME => 'element name',
+                ScheduledStructure::ELEMENT_PARENT_NAME => 'parent name',
+                ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING => 'sibling',
+                ScheduledStructure::ELEMENT_IS_AFTER => false
             ]
         ];
-
-        $this->assertNotContains($elementName, $this->model->getListToSort());
-        $this->model->setElementToSortList($elementParentName, $elementName, $elementSibling, $elementIsAfter);
-        $this->assertEquals($elementsToSort, $this->model->getListToSort());
     }
 }
