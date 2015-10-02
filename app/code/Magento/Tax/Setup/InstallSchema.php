@@ -405,6 +405,5 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $setup->endSetup();
-
     }
 }

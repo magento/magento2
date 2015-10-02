@@ -467,6 +467,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 'label' => $newEntry['label'],
                 'position' => $newEntry['position'],
                 'disabled' => $newEntry['disabled'],
+                'media_type' => $newEntry['media_type'],
             ]
         );
         return $this;

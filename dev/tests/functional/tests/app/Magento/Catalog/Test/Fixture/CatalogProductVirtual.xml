@@ -24,7 +24,7 @@
             </item>
             <item name="input_prefix" xsi:type="string">product</item>
         </data_config>
-        <field name="is_virtual" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
         <field name="category_ids" is_required="0" source="Magento\Catalog\Test\Fixture\Product\CategoryIds" group="product-details" />
         <field name="color" is_required="0" />
         <field name="country_of_manufacture" is_required="0" />

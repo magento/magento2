@@ -196,7 +196,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/products/:sku/media/:imageId" method="GET">
+    <route url="/V1/products/:sku/media/:entryId" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="get"/>
         <resources>
             <resource ref="anonymous"/>
