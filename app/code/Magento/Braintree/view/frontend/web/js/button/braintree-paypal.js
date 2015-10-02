@@ -9,6 +9,7 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/lib/view/utils/dom-observer'
 ], function ($, builder, actionGetData, customerData, domObserver) {
+    'use strict';
 
     return function (config) {
 
@@ -19,14 +20,20 @@ define([
 
             isRendered: false,
 
+            /**
+             * @returns
+             */
             afterClickAction: function () {
                 var paypalButton = config.containerId + ' .paypal-button';
+
                 $('body').trigger('processStart');
 
-                domObserver.get(paypalButton, function (event) {
+                domObserver.get(paypalButton, function () {
                     domObserver.off(paypalButton);
+
                     if (this.isRendered) {
                         this.isRendered = false;
+
                         return;
                     }
                     $('body').trigger('processStop');
@@ -35,6 +42,10 @@ define([
                 }.bind(this));
             },
 
+            /**
+             * @param {*} response
+             * @returns
+             */
             update: function (response) {
                 config.options.amount = response.isEmpty ? 1 : response.amount;
                 config.options.currency = response.isEmpty ? 'USD' : response.currency;
@@ -53,6 +64,10 @@ define([
                     .build();
             },
 
+            /**
+             * @param {*} event
+             * @returns
+             */
             mousedown: function (event) {
                 this.isClick = true;
                 event.preventDefault();
@@ -63,11 +78,16 @@ define([
                     .click();
             },
 
+            /**
+             * @param {*} event
+             * @returns
+             */
             click: function (event) {
 
                 if (this.isAfterClick) {
                     this.isAfterClick = false;
                     this.isClick = false;
+
                     return;
                 }
 
