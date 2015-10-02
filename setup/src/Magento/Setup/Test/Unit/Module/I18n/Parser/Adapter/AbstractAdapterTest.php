@@ -47,7 +47,8 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->_adapterMock->getPhrases());
     }
 
-    public function testAddPhrase() {
+    public function testAddPhrase()
+    {
         $testPhrase = 'test phrase';
         $testLine = 2;
         $expected = [
