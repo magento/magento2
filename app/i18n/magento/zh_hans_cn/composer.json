@@ -1,5 +1,5 @@
 {
-    "name": "magento/language-zh_cn",
+    "name": "magento/language-zh_hans_cn",
     "description": "Chinese (China) language",
     "version": "1.0.0-beta",
     "license": [
@@ -15,7 +15,7 @@
         "map": [
             [
                 "*",
-                "magento/zh_cn"
+                "magento/zh_hans_cn"
             ]
         ]
     }
