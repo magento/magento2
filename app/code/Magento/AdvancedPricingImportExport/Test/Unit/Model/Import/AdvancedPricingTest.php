@@ -52,6 +52,11 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $websiteValidator;
 
     /**
+     * @var AdvancedPricing\Validator\TearPrice |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $tierPriceValidator;
+
+    /**
      * @var \Magento\ImportExport\Model\Resource\Helper |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
@@ -224,6 +229,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $this->websiteValidator = $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->tierPriceValidator = $this->getMock(
+            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice',
             [],
             [],
             '',
@@ -778,7 +790,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->storeResolver,
                 $this->importProduct,
                 $this->validator,
-                $this->websiteValidator
+                $this->websiteValidator,
+                $this->tierPriceValidator
             ],
             ''
         );
