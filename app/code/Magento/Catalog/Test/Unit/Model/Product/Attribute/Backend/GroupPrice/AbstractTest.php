@@ -67,12 +67,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
 
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('group_price'));
+        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tear_price'));
 
         $this->_model->setAttribute($attribute);
 
         $object = new \Magento\Framework\DataObject();
-        $object->setGroupPrice([['price_id' => 10]]);
+        $object->setTearPrice([['price_id' => 10]]);
         $object->setId(555);
 
         $this->assertEquals(
