@@ -37,15 +37,7 @@ foreach ($iterator as $file) {
 }
 unset($iterator, $file);
 
-// Register the modules under '_files/'
-$pathPattern = $pathToInstalledMagentoInstanceModules . '/TestModule*/registration.php';
-$files = glob($pathPattern, GLOB_NOSORT);
-if ($files === false) {
-    throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
-}
-foreach ($files as $file) {
-    include $file;
-}
+unlink(__DIR__ . '/../../../../app/etc/paths.php');
 
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
