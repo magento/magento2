@@ -96,7 +96,6 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
                 'min_price' => new \Zend_Db_Expr('MIN(' . $minCheckSql . ')'),
                 'max_price' => new \Zend_Db_Expr('MAX(' . $maxCheckSql . ')'),
                 'tier_price' => new \Zend_Db_Expr('NULL'),
-                'group_price' => new \Zend_Db_Expr('NULL')
             ]
         )->group(
             ['e.entity_id', 'cg.customer_group_id', 'cw.website_id']

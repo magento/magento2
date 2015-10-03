@@ -476,21 +476,28 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             return [];
         }
         $select = $this->_connection->select()->from(
-            ['mg' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery')],
+            ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                'mg.entity_id',
+                'mgvte.entity_id',
+                'mgvte.value_id'
+            ]
+        )->joinLeft(
+            ['mg' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery')],
+            '(mg.value_id = mgvte.value_id)',
+            [
                 'mg.attribute_id',
                 'filename' => 'mg.value',
-                'mgv.label',
-                'mgv.position',
-                'mgv.disabled'
             ]
         )->joinLeft(
             ['mgv' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value')],
             '(mg.value_id = mgv.value_id AND mgv.store_id = 0)',
-            []
+            [
+                'mgv.label',
+                'mgv.position',
+                'mgv.disabled'
+            ]
         )->where(
-            'mg.entity_id IN(?)',
+            'mgvte.entity_id IN(?)',
             $productIds
         );
 

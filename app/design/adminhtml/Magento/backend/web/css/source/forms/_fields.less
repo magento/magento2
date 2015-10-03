@@ -291,6 +291,14 @@
     }
 }
 
+//  Group of checkboxes or radiobuttons
+.admin__field-control-group {
+    margin-top: .8rem;
+    & > .admin__field {
+        padding: 0;
+    }
+}
+
 //
 //  Form legend
 //  _____________________________________________
@@ -300,6 +308,7 @@
     float: left;
     position: static;
     width: 100%;
+    &:extend(.abs-fieldset-legend);
     & + br {
         display: block;
         height: 0;
