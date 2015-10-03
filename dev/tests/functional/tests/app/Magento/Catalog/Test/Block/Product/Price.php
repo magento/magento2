@@ -27,7 +27,7 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
             'selector' => '.special-price .price',
         ],
         'old_price' => [
-            'selector' => '.old-price .price-wrapper',
+            'selector' => '.old-price .price-wrapper ',
         ],
         'price_from' => [
             'selector' => '.price-from .price',
