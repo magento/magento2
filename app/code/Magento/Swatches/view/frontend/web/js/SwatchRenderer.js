@@ -181,7 +181,8 @@ define(["jquery", "jquery/ui"], function ($) {
             onlySwatches: false,                               // show only swatch controls
             enableControlLabel: true,                          // enable label for control
             moreButtonText: 'More',                            // text for more button
-            mediaCallback: ''                                  // Callback url for media
+            mediaCallback: '',                                 // Callback url for media
+            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
         },
 
         /**
@@ -202,6 +203,20 @@ define(["jquery", "jquery/ui"], function ($) {
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+        },
+
+        /**
+         * @private
+         */
+        _create: function () {
+            var options = this.options,
+                gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main');
+
+            gallery.on('gallery:loaded', function () {
+                var galleryObject = gallery.data('gallery');
+
+                options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+            });
         },
 
         /**
@@ -705,6 +720,8 @@ define(["jquery", "jquery/ui"], function ($) {
                 };
 
             if ($widget._ObjectLength(response) < 1) {
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
+
                 return;
             }
 
@@ -717,7 +734,7 @@ define(["jquery", "jquery/ui"], function ($) {
 
                 if (response.hasOwnProperty('gallery')) {
                     $.each(response.gallery, function () {
-                        if (!support(this) || response.large == this.large) {
+                        if (!support(this) || response.large === this.large) {
                             return;
                         }
                         images.push({
@@ -729,13 +746,23 @@ define(["jquery", "jquery/ui"], function ($) {
                 }
             }
 
+            this.updateBaseImage(images, $main, isProductViewExist);
+        },
+
+        /**
+         * Update [gallery-placeholder] or [product-image-photo]
+         * @param {Array} images
+         * @param {jQuery} context
+         * @param {Boolean} isProductViewExist
+         */
+        updateBaseImage: function (images, context, isProductViewExist) {
             if (isProductViewExist) {
-                $main
+                context
                     .find('[data-gallery-role=gallery-placeholder]')
                     .data('gallery')
                     .updateData(images);
             } else {
-                $main.find('.product-image-photo').attr('src', images.shift().medium);
+                context.find('.product-image-photo').attr('src', images.shift().medium);
             }
         },
 
