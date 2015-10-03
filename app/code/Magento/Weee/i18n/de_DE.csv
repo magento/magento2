@@ -7,7 +7,7 @@ Website,Website
 "We found a duplicate of website, country and state fields for a fixed product tax","We found a duplicate of website, country and state fields for a fixed product tax"
 "Including FPT only","Lediglich einschließlich FPT"
 "Including FPT and FPT description","Einschließlich FPT und FPT-Beschreibung"
-"Excluding FPT, FPT description, final price","Ausschließlich FPT, FPT-Beschreibung, Endpreis"
+"Excluding FPT. Including FPT description and final price","Excluding FPT. Including FPT description and final price"
 "Excluding FPT","Ausschließlich FPT"
 "Fixed Product Tax","Feste Produktsteuer"
 Country/State,Country/State
