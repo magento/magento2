@@ -51,12 +51,14 @@ class Data
                 $image->setData(
                     'medium_image_url',
                     $this->imageHelper->init($product, 'product_page_image_medium')
+                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
                 $image->setData(
                     'large_image_url',
                     $this->imageHelper->init($product, 'product_page_image_large')
+                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
