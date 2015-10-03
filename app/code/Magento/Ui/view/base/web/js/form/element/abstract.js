@@ -6,12 +6,12 @@
 define([
     'underscore',
     'mageUtils',
-    'uiComponent',
+    'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Component, validator) {
+], function (_, utils, Element, validator) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             visible: true,
             preview: '',
@@ -77,7 +77,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        initProperties: function () {
+        initConfig: function () {
             var uid = utils.uniqueid();
 
             this._super();

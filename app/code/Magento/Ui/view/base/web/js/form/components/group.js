@@ -88,6 +88,15 @@ define([
          */
         isMultiple: function () {
             return this.elems.getLength() > 1;
+        },
+
+        /**
+         * Returns an array of child components previews.
+         *
+         * @returns {Array}
+         */
+        getPreview: function () {
+            return this.elems.map('getPreview');
         }
     });
 });

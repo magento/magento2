@@ -24,6 +24,7 @@ define([
         defaults: {
             template: 'ui/collection',
             componentType: 'container',
+            _elems: [],
             ignoreTmpls: {
                 childDefaults: true
             }
@@ -36,7 +37,6 @@ define([
          */
         initialize: function () {
             this._super()
-                .initProperties()
                 .initUnique();
 
             return this;
@@ -52,24 +52,6 @@ define([
                 .observe({
                     elems: []
                 });
-
-            return this;
-        },
-
-        /**
-         * Defines various properties.
-         *
-         * @returns {Collection} Chainable.
-         */
-        initProperties: function () {
-            if (!_.isFunction(this.source)) {
-                this.source = registry.get(this.provider);
-            }
-
-            _.extend(this, {
-                containers: [],
-                _elems: []
-            });
 
             return this;
         },
@@ -93,27 +75,13 @@ define([
         },
 
         /**
-         * Called when current element was injected to another component.
-         *
-         * @param {Object} parent - Instance of a 'parent' component.
-         * @returns {Collection} Chainable.
-         */
-        initContainer: function (parent) {
-            this.containers.push(parent);
-
-            return this;
-        },
-
-        /**
          * Called when another element was added to current component.
          *
          * @param {Object} elem - Instance of an element that was added.
          * @returns {Collection} Chainable.
          */
         initElement: function (elem) {
-            if (_.isFunction(elem.initContainer)) {
-                elem.initContainer(this);
-            }
+            elem.initContainer(this);
 
             return this;
         },
@@ -227,19 +195,6 @@ define([
         },
 
         /**
-         * Removes events listeners.
-         * @private
-         *
-         * @returns {Collection} Chainable.
-         */
-        _dropHandlers: function () {
-            this._super()
-                .source.off(this.name);
-
-            return this;
-        },
-
-        /**
          * Removes all references to current instance and
          * calls 'destroy' method on all of its' children.
          * @private
@@ -248,10 +203,6 @@ define([
          */
         _clearRefs: function () {
             this._super();
-
-            this.containers.forEach(function (parent) {
-                parent.removeChild(this);
-            }, this);
 
             this.elems.each('destroy');
 
@@ -324,36 +275,20 @@ define([
             var result;
 
             result = this.elems.map(function (elem) {
-                return elem.delegate.apply(elem, args);
-            });
+                var target;
 
-            return _.flatten(result);
-        },
+                if (!_.isFunction(elem.delegate)) {
+                    target = elem[args[0]];
 
-        /**
-         * Overrides 'EventsBus.trigger' method to implement events bubbling.
-         *
-         * @param {...*} parameters - Any number of arguments that should be passed to the events' handler.
-         * @returns {Boolean} False if event bubbling was canceled.
-         */
-        bubble: function () {
-            var args = _.toArray(arguments),
-                bubble = this.trigger.apply(this, args),
-                result;
-
-            if (!bubble) {
-                return false;
-            }
-
-            this.containers.forEach(function (parent) {
-                result = parent.bubble.apply(parent, args);
-
-                if (result === false) {
-                    bubble = false;
+                    if (_.isFunction(target)) {
+                        return target.apply(elem, args.slice(1));
+                    }
+                } else {
+                    return elem.delegate.apply(elem, args);
                 }
             });
 
-            return !!bubble;
+            return _.flatten(result);
         },
 
         /**

@@ -35,7 +35,7 @@ define([
             return this;
         },
 
-        initProperties: function () {
+        initConfig: function () {
             this._super();
             // the list of child components that are responsible for address rendering
             this.rendererComponents = {};

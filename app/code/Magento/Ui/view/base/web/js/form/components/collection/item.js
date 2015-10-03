@@ -54,7 +54,7 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initProperties: function () {
+        initConfig: function () {
             this._super();
 
             this.displayed = [];
@@ -177,7 +177,7 @@ define([
             items = items.map(function (index) {
                 var elem = elems[index];
 
-                preview = elem && elem.visible() ? elem.delegate('getPreview') : '';
+                preview = elem && elem.visible() ? elem.getPreview() : '';
 
                 preview = Array.isArray(preview) ?
                     _.compact(preview).join(', ') :
