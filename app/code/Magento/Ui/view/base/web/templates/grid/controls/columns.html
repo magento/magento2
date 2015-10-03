@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<div data-bind="css: {_active: opened}, outerClick: close" class="admin__action-dropdown-wrap admin__data-grid-action-columns">
+<div data-bind="collapsible"
+     class="admin__action-dropdown-wrap admin__data-grid-action-columns"
+     data-role="toolbar-menu-item">
     <button
         class="admin__action-dropdown"
         type="button"
-        data-bind="click: toggleOpened"
+        data-bind="toggleCollapsible"
         data-toggle="dropdown"
         aria-haspopup="true">
         <span class="admin__action-dropdown-text" data-bind="i18n: 'Columns'"></span>
@@ -19,9 +21,22 @@
         </div>
         <div class="admin__action-dropdown-menu-content" data-bind="foreach: elems">
             <div class="admin__field-option">
-                <input data-bind="attr: {id: 'grid-controls-columns-' + index}, disable: $parent.isDisabled($data), checked: visible"
-                       class="admin__control-checkbox" type="checkbox"/>
-                <label data-bind="text: label, attr: {for: 'grid-controls-columns-' + index}" class="admin__field-label"></label>
+                <input
+                    class="admin__control-checkbox"
+                    type="checkbox"
+                    data-bind="
+                        attr: {
+                                id: ++ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
+                        },
+                        disable: $parent.isDisabled($data),
+                        checked: visible"/>
+                <label
+                    class="admin__field-label"
+                    data-bind="
+                        text: label,
+                        attr: {
+                            for: ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
+                        }"></label>
             </div>
         </div>
         <div class="admin__action-dropdown-menu-footer">
@@ -31,7 +46,7 @@
                 </button>
             </div>
             <div class="admin__action-dropdown-footer-main-actions">
-                <button data-bind="click: function () { $data.close().cancel(); }" class="action-tertiary" type="button">
+                <button data-bind="click: cancel, closeCollapsible" class="action-tertiary" type="button">
                     <span data-bind="i18n: 'Cancel'"></span>
                 </button>
             </div>

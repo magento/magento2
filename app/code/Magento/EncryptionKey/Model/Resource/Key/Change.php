@@ -78,35 +78,6 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Re-encrypt all encrypted data in the database
-     *
-     * TODO: seems not used
-     *
-     * @param bool $safe Specifies whether wrapping re-encryption into the database transaction or not
-     * @return void
-     * @throws \Exception
-     */
-    public function reEncryptDatabaseValues($safe = true)
-    {
-        // update database only
-        if ($safe) {
-            $this->beginTransaction();
-        }
-        try {
-            $this->_reEncryptSystemConfigurationValues();
-            $this->_reEncryptCreditCardNumbers();
-            if ($safe) {
-                $this->commit();
-            }
-        } catch (\Exception $e) {
-            if ($safe) {
-                $this->rollBack();
-            }
-            throw $e;
-        }
-    }
-
-    /**
      * Change encryption key
      *
      * @param string|null $key
