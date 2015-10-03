@@ -10,9 +10,7 @@ define([
 
     return Component.extend({
 
-        /**
-         * TODO: MAGETWO-43367
-         */
+
         initialize: function (config) {
             return this._super(config, messageContainer);
         }
