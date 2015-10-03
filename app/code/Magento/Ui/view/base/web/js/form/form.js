@@ -42,7 +42,7 @@ define([
             return this;
         },
 
-        initProperties: function () {
+        initConfig: function () {
             this._super();
 
             this.selector = '[data-form-part=' + this.namespace + ']';

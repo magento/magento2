@@ -107,10 +107,11 @@ define([
          * @returns {Filters} Chainable.
          */
         initialize: function () {
+            _.bindAll(this, 'updateActive');
+
             this._super()
                 .initChips()
-                .cancel()
-                .updateActive();
+                .cancel();
 
             return this;
         },
@@ -148,9 +149,12 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initElement: function () {
-            this._super()
-                .updateActive();
+        initElement: function (elem) {
+            this._super();
+
+            elem.on('elems', this.updateActive);
+
+            this.updateActive();
 
             return this;
         },
@@ -341,7 +345,11 @@ define([
          * @returns {Filters} Chainable.
          */
         updateActive: function () {
-            this.active = this.elems.filter('hasData');
+            var applied = _.keys(this.applied);
+
+            this.active = this.elems.filter(function (elem) {
+                return _.contains(applied, elem.index);
+            });
 
             return this;
         },

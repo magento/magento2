@@ -63,6 +63,7 @@ define([
     Element = _.extend({
         defaults: {
             template: '',
+            containers: [],
             registerNodes: true,
             storageConfig: {
                 provider: 'localStorage',
@@ -114,6 +115,22 @@ define([
             _.each(modules, function (component, property) {
                 this[property] = registry.async(component);
             }, this);
+
+            if (!_.isFunction(this.source)) {
+                this.source = registry.get(this.provider);
+            }
+
+            return this;
+        },
+
+        /**
+         * Called when current element was injected to another component.
+         *
+         * @param {Object} parent - Instance of a 'parent' component.
+         * @returns {Collection} Chainable.
+         */
+        initContainer: function (parent) {
+            this.containers.push(parent);
 
             return this;
         },
@@ -236,13 +253,15 @@ define([
 
             data = utils.nested(this, path);
 
-            if (!_.isUndefined(data) && !_.isFunction(data)) {
-                diffs = utils.compare(data, undefined, path);
-
-                utils.nestedRemove(this, path);
-
-                this._notifyChanges(diffs);
+            if (_.isUndefined(data) || _.isFunction(data)) {
+                return this;
             }
+
+            diffs = utils.compare(data, undefined, path);
+
+            utils.nestedRemove(this, path);
+
+            this._notifyChanges(diffs);
 
             return this;
         },
@@ -434,6 +453,7 @@ define([
          */
         _dropHandlers: function () {
             this.off();
+            this.source.off(this.name);
 
             return this;
         },
@@ -448,7 +468,37 @@ define([
         _clearRefs: function () {
             registry.remove(this.name);
 
+            this.containers.forEach(function (parent) {
+                parent.removeChild(this);
+            }, this);
+
             return this;
+        },
+
+        /**
+         * Overrides 'EventsBus.trigger' method to implement events bubbling.
+         *
+         * @param {...*} parameters - Any number of arguments that should be passed to the events' handler.
+         * @returns {Boolean} False if event bubbling was canceled.
+         */
+        bubble: function () {
+            var args = _.toArray(arguments),
+                bubble = this.trigger.apply(this, args),
+                result;
+
+            if (!bubble) {
+                return false;
+            }
+
+            this.containers.forEach(function (parent) {
+                result = parent.bubble.apply(parent, args);
+
+                if (result === false) {
+                    bubble = false;
+                }
+            });
+
+            return !!bubble;
         }
     }, Events, links);
 

@@ -104,15 +104,6 @@ define([
          */
         hasData: function () {
             return this.elems.some('hasData');
-        },
-
-        /**
-         * Returns an array of child components previews.
-         *
-         * @returns {Array}
-         */
-        getPreview: function () {
-            return this.elems.map('getPreview');
         }
     });
 });
