@@ -18,6 +18,7 @@ define([
         defaults: {
             rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
             tableSelector: '${ $.rootSelector } -> table.data-grid',
+            mainTableSelector: '[data-role="grid"]',
             columnSelector: '${ $.tableSelector } thead tr th',
             fieldSelector: '${ $.tableSelector } tbody tr td',
 
@@ -84,10 +85,15 @@ define([
          * @returns {Object} Chainable
          */
         initTable: function (table) {
-            this.table = table;
-            this.tableWidth = $(table).outerWidth();
+            if ($(table).is(this.mainTableSelector))
+            {
+                this.table = table;
+                this.tableWidth = $(table).outerWidth();
+                $(window).resize(this.checkAfterResize);
+            }
+
             $(table).addClass(this.fixedLayoutClass);
-            $(window).resize(this.checkAfterResize);
+
             return this;
         },
 
@@ -202,15 +208,17 @@ define([
          */
         initColumn: function (column) {
             var model = ko.dataFor(column),
+                ctxIndex = this.getCtxIndex(ko.contextFor(column)),
                 table = this.table;
 
             model.width = this.getDefaultWidth(column);
 
-            if (!this.hasColumn(model, false)) {
+            if (!this.hasColumn(model, ctxIndex, false)) {
+                this.columnsElements[model.index] = this.columnsElements[model.index] || {};
+                this.columnsElements[model.index][ctxIndex] = column;
                 this.initResizableElement(column);
-                this.columnsElements[model.index] = column;
-                $(column).outerWidth(model.width);
                 this.setStopPropagationHandler(column);
+                $(column).outerWidth(model.width);
             }
 
             this.refreshLastColumn(column);
@@ -383,7 +391,7 @@ define([
         _canResize: function (column) {
             if (
                 $(column).hasClass(this.visibleClass) ||
-                !$(this.resizeConfig.depResizeElem.elem).find('.' + this.resizableElementClass).length
+                !$(this.resizeConfig.depResizeElem.elems[0]).find('.' + this.resizableElementClass).length
             ) {
                 return false;
             }
@@ -406,11 +414,11 @@ define([
             event.stopImmediatePropagation();
             cfg.curResizeElem.model = ko.dataFor(column);
             cfg.curResizeElem.ctx = ko.contextFor(column);
-            cfg.curResizeElem.elem = this.hasColumn(cfg.curResizeElem.model, true);
+            cfg.curResizeElem.elems = this.hasColumn(cfg.curResizeElem.model, false, true);
             cfg.curResizeElem.position = event.pageX;
-            cfg.depResizeElem.elem = this.getNextElement(cfg.curResizeElem.elem);
-            cfg.depResizeElem.model = ko.dataFor(cfg.depResizeElem.elem);
-            cfg.depResizeElem.ctx = ko.contextFor(cfg.depResizeElem.elem);
+            cfg.depResizeElem.elems = this.getNextElements(cfg.curResizeElem.elems[0]);
+            cfg.depResizeElem.model = ko.dataFor(cfg.depResizeElem.elems[0]);
+            cfg.depResizeElem.ctx = ko.contextFor(cfg.depResizeElem.elems[0]);
 
             this._setResizeClass();
 
@@ -420,8 +428,8 @@ define([
 
             event.stopPropagation();
             this.resizable = true;
-            cfg.curResizeElem.model.width = $(cfg.curResizeElem.elem).outerWidth();
-            cfg.depResizeElem.model.width = $(cfg.depResizeElem.elem).outerWidth();
+            cfg.curResizeElem.model.width = $(cfg.curResizeElem.elems[0]).outerWidth();
+            cfg.depResizeElem.model.width = $(cfg.depResizeElem.elems[0]).outerWidth();
             body.addClass(this.inResizeClass);
             body.bind('mousemove', this.mousemoveHandler);
             $(window).bind('mouseup', this.mouseupHandler);
@@ -435,7 +443,8 @@ define([
          */
         mousemoveHandler: function (event) {
             var cfg = this.resizeConfig,
-                width = event.pageX - cfg.curResizeElem.position;
+                width = event.pageX - cfg.curResizeElem.position,
+                self = this;
 
             event.stopPropagation();
             event.preventDefault();
@@ -448,26 +457,40 @@ define([
             ) {
                 cfg.curResizeElem.model.width += width;
                 cfg.depResizeElem.model.width -= width;
-                $(cfg.curResizeElem.elem).outerWidth(cfg.curResizeElem.model.width);
-                $(cfg.depResizeElem.elem).outerWidth(cfg.depResizeElem.model.width);
+
+                cfg.curResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(cfg.curResizeElem.model.width);
+                });
+                cfg.depResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(cfg.depResizeElem.model.width);
+                });
+
                 cfg.previousWidth = width;
                 cfg.curResizeElem.position = event.pageX;
             } else if (width <= -(cfg.curResizeElem.model.width - this.minColumnWidth)) {
-                $(cfg.curResizeElem.elem).outerWidth(this.minColumnWidth);
 
-                $(cfg.depResizeElem.elem).outerWidth(
+                cfg.curResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(self.minColumnWidth);
+                });
+                cfg.depResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(
                     cfg.depResizeElem.model.width +
                     cfg.curResizeElem.model.width -
-                    this.minColumnWidth
-                );
+                    self.minColumnWidth);
+                });
+
             } else if (width >= cfg.depResizeElem.model.width - this.minColumnWidth) {
 
-                $(cfg.depResizeElem.elem).outerWidth(this.minColumnWidth);
-                $(cfg.curResizeElem.elem).outerWidth(
-                    cfg.curResizeElem.model.width +
-                    cfg.depResizeElem.model.width -
-                    this.minColumnWidth
-                );
+                cfg.depResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(self.minColumnWidth);
+                });
+                cfg.curResizeElem.elems.forEach(function (el) {
+                    $(el).outerWidth(
+                        cfg.curResizeElem.model.width +
+                        cfg.depResizeElem.model.width -
+                        self.minColumnWidth
+                    );
+                });
             }
         },
 
@@ -502,17 +525,17 @@ define([
          * @param {Object} element - current element
          * @returns {Object} next element data
          */
-        getNextElement: function (element) {
+        getNextElements: function (element) {
             var nextElem = $(element).next()[0],
                 nextElemModel = ko.dataFor(nextElem),
-                nextElemData = this.hasColumn(nextElemModel, true);
+                nextElemData = this.hasColumn(nextElemModel, false, true);
 
             if (nextElemData) {
                 if (nextElemModel.visible()) {
                     return nextElemData;
                 }
 
-                return this.getNextElement(nextElem);
+                return this.getNextElements(nextElem);
             }
         },
 
@@ -540,14 +563,20 @@ define([
          * Check column is render or not
          *
          * @param {Object} model - cur column model
+         * @param {String|Boolean} ctxIndex - index of context, or false, if want to get cols from all ctx
          * @param {Boolean} returned - need return column object or not
-         * @return {Boolean} if returned param is false, returned boolean falue, else return current object data
+         * @return {Boolean} if returned param is false, returned boolean value, else return current object data
          */
-        hasColumn: function (model, returned) {
-            if (this.columnsElements.hasOwnProperty(model.index)) {
+        hasColumn: function (model, ctxIndex, returned) {
+            var colElem = this.columnsElements[model.index] || {},
+                getFromAllCtx = ctxIndex === false;
+
+            if (colElem && (getFromAllCtx || colElem.hasOwnProperty(ctxIndex))) {
 
                 if (returned) {
-                    return this.columnsElements[model.index];
+                    return getFromAllCtx ?
+                        _.values(colElem) :
+                        colElem[ctxIndex];
                 }
 
                 return true;
@@ -581,6 +610,19 @@ define([
             }
 
             return false;
+        },
+
+        /**
+         * Generate index that will indentify context
+         *
+         * @param {Object} ctx
+         * @return {String}
+         */
+        getCtxIndex: function (ctx)
+        {
+            return ctx ? ctx.$parents.reduce(function (pv, cv) {
+                return (pv.index || pv) + (cv || {}).index;
+            }) : ctx;
         }
     });
 });
