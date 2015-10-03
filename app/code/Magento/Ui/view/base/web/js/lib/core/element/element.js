@@ -63,6 +63,7 @@ define([
     Element = _.extend({
         defaults: {
             template: '',
+            displayArea: '',
             containers: [],
             registerNodes: true,
             storageConfig: {
@@ -200,6 +201,15 @@ define([
          */
         getTemplate: function () {
             return this.template;
+        },
+
+        /**
+         * Checks if template was specified for an element.
+         *
+         * @returns {Boolean}
+         */
+        hasTemplate: function () {
+            return !!this.template;
         },
 
         /**
