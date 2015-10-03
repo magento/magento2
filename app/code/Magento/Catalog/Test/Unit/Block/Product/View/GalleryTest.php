@@ -45,6 +45,10 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new \Magento\Catalog\Block\Product\View\Gallery(
             $this->context,
             $this->arrayUtils,
