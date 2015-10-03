@@ -8,7 +8,6 @@ define([
 ], function (ko, Messages) {
     'use strict';
 
-    /** TODO: MAGETWO-43367 **/
     return new Messages();
 });
 
