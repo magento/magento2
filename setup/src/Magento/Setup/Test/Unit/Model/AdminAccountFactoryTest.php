@@ -16,8 +16,8 @@ class AdminAccountFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceLocatorMock
             ->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Math\Random')
-            ->will($this->returnValue($this->getMock('Magento\Framework\Math\Random')));
+            ->with('Magento\Framework\Encryption\Encryptor')
+            ->willReturn($this->getMockForAbstractClass('Magento\Framework\Encryption\EncryptorInterface'));
         $adminAccountFactory = new AdminAccountFactory($serviceLocatorMock);
         $adminAccount = $adminAccountFactory->create(
             $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
