@@ -17,15 +17,15 @@ use Magento\Mtf\Client\Locator;
  */
 class Config extends Tab
 {
+    /** @var string */
+    protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
+
     /**
      * Selector for trigger show/hide "Variations" tab.
      *
      * @var string
      */
-    protected $variationsTabTrigger = '[data-target="#super_config-content"][data-toggle="collapse"] span';
-
-    /** @var string */
-    protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
+    protected $variationsTabTrigger = '[data-tab=super_config] [data-role=trigger]';
 
     /**
      * Selector for content "Variations" tab.
@@ -54,13 +54,6 @@ class Config extends Tab
      * @var string
      */
     protected $template = './ancestor::body';
-
-    /**
-     * Selector for variations tab wrapper.
-     *
-     * @var string
-     */
-    protected $variationsTabWrapper = '#super_config-wrapper';
 
     /**
      * Attribute element selector.
@@ -124,7 +117,6 @@ class Config extends Tab
     {
         $content = $this->_rootElement->find($this->variationsTabContent);
         if (!$content->isVisible()) {
-            $this->_rootElement->find($this->variationsTabWrapper)->click();
             $this->_rootElement->find($this->variationsTabTrigger)->click();
             $this->waitForElementVisible($this->variationsTabContent);
         }

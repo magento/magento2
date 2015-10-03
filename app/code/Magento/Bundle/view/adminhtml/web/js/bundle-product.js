@@ -8,11 +8,12 @@
 /*global $H*/
 define([
     "jquery",
+    "Magento_Catalog/js/product/weight-handler",
     "jquery/ui",
     "mage/translate",
     "Magento_Theme/js/sortable",
     "prototype"
-], function($){
+], function ($, weightHandler) {
     'use strict';
 
     $.widget('mage.bundleProduct', {
@@ -188,7 +189,7 @@ define([
             return this;
         },
         _hideProductTypeSwitcher: function () {
-            $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
+            weightHandler.hideWeightSwitcher();
         },
         _bindCheckboxHandlers: function () {
             this._on({
