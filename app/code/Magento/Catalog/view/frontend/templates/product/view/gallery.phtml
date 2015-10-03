@@ -35,7 +35,7 @@
                         ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
                     "transitionduration": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/transition/duration"); ?>,
                     "transition": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/transition/effect"); ?>",
-                    "navarrows": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navarrows"); ?>",
+                    "navarrows": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/navarrows"); ?>,
                     "navtype": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navtype"); ?>",
                     "navdir": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navdir"); ?>"
                 },
