@@ -24,10 +24,10 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
         'true',
         'false',
         'null',
-        //'resource',
-        //'object',
-        //'mixed',
-        //'numeric',
+        'resource',
+        'object',
+        'mixed',
+        'numeric',
     ];
 
     /**
@@ -94,8 +94,7 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
                 $this->validateClass($sourceFile, $stackPtr);
                 break;
             case "T_NAMESPACE":
-                // PHP 7 beta 3 doesn't really have limitations for namespaces
-                //$this->validateNameSpace($sourceFile, $stackPtr);
+                $this->validateNameSpace($sourceFile, $stackPtr);
                 break;
         }
     }
