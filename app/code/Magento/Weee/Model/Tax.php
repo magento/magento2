@@ -27,7 +27,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     const DISPLAY_INCL_DESCR = 1;
 
     /**
-     * Excluding FPT, FPT description, final price
+     * Excluding FPT. Including FPT description and final price
      */
     const DISPLAY_EXCL_DESCR_INCL = 2;
 
