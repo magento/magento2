@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Updater;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,12 +35,12 @@ class JobComponentUninstall extends AbstractJob
     /**#@-*/
 
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var Updater
+     * @var \Magento\Setup\Model\Updater
      */
     private $updater;
 
@@ -62,7 +60,7 @@ class JobComponentUninstall extends AbstractJob
     private $themeUninstall;
 
     /**
-     * @var Queue
+     * @var \Magento\Setup\Model\Cron\Queue
      */
     private $queue;
 
@@ -72,11 +70,11 @@ class JobComponentUninstall extends AbstractJob
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param Helper\ModuleUninstall $moduleUninstall
      * @param Helper\ThemeUninstall $themeUninstall
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param OutputInterface $output
-     * @param Queue $queue
-     * @param Status $status
-     * @param Updater $updater
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Magento\Setup\Model\Cron\Queue $queue
+     * @param \Magento\Setup\Model\Cron\Status $status
+     * @param \Magento\Setup\Model\Updater $updater
      * @param string $name
      * @param array $params
      */
@@ -84,11 +82,11 @@ class JobComponentUninstall extends AbstractJob
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         Helper\ModuleUninstall $moduleUninstall,
         Helper\ThemeUninstall $themeUninstall,
-        ObjectManagerProvider $objectManagerProvider,
-        OutputInterface $output,
-        Queue $queue,
-        Status $status,
-        Updater $updater,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Symfony\Component\Console\Output\OutputInterface $output,
+        \Magento\Setup\Model\Cron\Queue $queue,
+        \Magento\Setup\Model\Cron\Status $status,
+        \Magento\Setup\Model\Updater $updater,
         $name,
         $params = []
     ) {

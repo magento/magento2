@@ -8,12 +8,8 @@ namespace Magento\Deploy\Model;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Filesystem\Driver\File;
-use Magento\Store\Model\Config\StoreView;
 use Magento\Developer\Console\Command\CssDeployCommand;
 
 /**
@@ -43,19 +39,19 @@ class Filesystem
     /** @var \Magento\Framework\App\DeploymentConfig\Reader */
     private $reader;
 
-    /** @var ObjectManagerInterface */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var Filesystem */
+    /** @var \Magento\Framework\Filesystem */
     private $filesystem;
 
-    /** @var Filesystem */
+    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
     private $directoryList;
 
-    /** @var File */
+    /** @var \Magento\Framework\Filesystem\Driver\File */
     private $driverFile;
 
-    /** @var StoreView */
+    /** @var \Magento\Store\Model\Config\StoreView */
     private $storeView;
 
     /** @var \Magento\Framework\Shell */
@@ -65,23 +61,23 @@ class Filesystem
     private $functionCallPath;
 
     /**
-     * @param Writer $writer
-     * @param Reader $reader
-     * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
+     * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param DirectoryList $directoryList
-     * @param File $driverFile
-     * @param StoreView $storeView
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
+     * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\Shell $shell
      */
     public function __construct(
-        Writer $writer,
-        Reader $reader,
-        ObjectManagerInterface $objectManager,
+        \Magento\Framework\App\DeploymentConfig\Writer $writer,
+        \Magento\Framework\App\DeploymentConfig\Reader $reader,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Filesystem $filesystem,
-        DirectoryList $directoryList,
-        File $driverFile,
-        StoreView $storeView,
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        \Magento\Framework\Filesystem\Driver\File $driverFile,
+        \Magento\Store\Model\Config\StoreView $storeView,
         \Magento\Framework\Shell $shell
     ) {
         $this->writer = $writer;
@@ -98,10 +94,11 @@ class Filesystem
     /**
      * Regenerate static
      *
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function regenerateStatic(OutputInterface $output)
-    {
+    public function regenerateStatic(
+        \Symfony\Component\Console\Output\OutputInterface $output
+    ) {
         // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
         $this->cleanupFilesystem(
             [
@@ -130,11 +127,12 @@ class Filesystem
     /**
      * Deploy CSS
      *
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
-    protected function deployCss(OutputInterface $output)
-    {
+    protected function deployCss(
+        \Symfony\Component\Console\Output\OutputInterface $output
+    ) {
         $themeLocalePairs = $this->storeView->retrieveThemeLocalePairs();
         foreach ($themeLocalePairs as $themeLocalePair) {
             $theme = $themeLocalePair['theme'] ?: self::DEFAULT_THEME;
@@ -154,12 +152,13 @@ class Filesystem
     /**
      * Deploy static content
      *
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      * @throws \Exception
      */
-    protected function deployStaticContent(OutputInterface $output)
-    {
+    protected function deployStaticContent(
+        \Symfony\Component\Console\Output\OutputInterface $output
+    ) {
         $output->writeln('Static content deployment start');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
             . implode(' ', $this->storeView->retrieveLocales());
@@ -175,11 +174,12 @@ class Filesystem
     /**
      * Runs code multi-tenant compiler to generate code and DI information
      *
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
-    protected function compile(OutputInterface $output)
-    {
+    protected function compile(
+        \Symfony\Component\Console\Output\OutputInterface $output
+    ) {
         $output->writeln('Start compilation');
         $this->cleanupFilesystem(
             [

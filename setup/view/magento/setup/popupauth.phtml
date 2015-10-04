@@ -50,7 +50,8 @@
                                                name="username"
                                                ng-model="user.username"
                                                ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.username.$error.required && !auth.username.$pristine)
+                                               ng-class="{ 'invalid' : (auth.username.$error.required
+                                               && !auth.username.$pristine)
                                                || (auth.username.$error.required && user.submitted) }"
                                                autofocus
                                                required
@@ -71,7 +72,8 @@
                                                name="password"
                                                ng-model="user.password"
                                                ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine)
+                                               ng-class="{ 'invalid' : (auth.password.$error.required
+                                               && !auth.password.$pristine)
                                                || (auth.password.$error.required && user.submitted) }"
                                                required
                                             >

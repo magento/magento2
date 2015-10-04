@@ -185,7 +185,7 @@ class ConnectManager
     /**
      * Gets auth.json file
      *
-     * @return bool
+     * @return array|false
      */
     public function getAuthJsonData()
     {
@@ -237,7 +237,9 @@ class ConnectManager
                         return unlink(getenv('COMPOSER_HOME') . DIRECTORY_SEPARATOR . $this->pathToAuthFile);
                     } else {
                         $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-                        $this->getDirectory()->writeFile(DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile, $data);
+                        $this->getDirectory()->writeFile(
+                            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile, $data
+                        );
                         return true;
                     }
                 }
@@ -305,7 +307,9 @@ class ConnectManager
 
         try {
             $installPackages = $installPackagesInfo['packages'];
-            $availablePackageNames = array_column($this->getComposerInformation()->getInstalledMagentoPackages(), 'name');
+            $availablePackageNames = array_column(
+                $this->getComposerInformation()->getInstalledMagentoPackages(), 'name'
+            );
             foreach ($installPackages as $package) {
                 if (!in_array($package['name'], $availablePackageNames) &&
                     in_array($package['type'], $this->getComposerInformation()->getPackagesTypes())
@@ -327,7 +331,10 @@ class ConnectManager
      */
     public function loadPackagesForInstallFromCache()
     {
-        if ($this->getDirectory()->isExist($this->pathToInstallPackagesCacheFile) && $this->getDirectory()->isReadable($this->pathToInstallPackagesCacheFile)) {
+        if ($this->getDirectory()->isExist(
+            $this->pathToInstallPackagesCacheFile)
+            && $this->getDirectory()->isReadable($this->pathToInstallPackagesCacheFile
+        )) {
             try {
                 $data = $this->getDirectory()->readFile($this->pathToInstallPackagesCacheFile);
                 return json_decode($data, true);

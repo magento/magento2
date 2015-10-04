@@ -6,7 +6,7 @@
 
 namespace Magento\Marketplace\Test\Unit\Controller\Partners;
 
-class IndexsTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Controller\Adminhtml\Partners\Index

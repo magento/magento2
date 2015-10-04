@@ -24,7 +24,8 @@ class InstallExtensionGrid extends AbstractActionController
     /**
      * @param ConnectManager $connectManager
      */
-    public function __construct(ConnectManager $connectManager) {
+    public function __construct(ConnectManager $connectManager)
+    {
         $this->connectManager = $connectManager;
     }
 
