@@ -14,28 +14,24 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
     private $partnersModelMock;
 
     private $returnPackages = '
-                {
+                 {
                     "partners": {
                         "1": {
-                            "url": "http://test.com",
+                            "url_page": "http://test.com",
                             "url_partner_page": "http://test.com",
-                            "img": "http://www.test.com/2.png",
-                            "title": "Dropship",
-                            "description": "Lorem ipsum dolor sit amet, consectetur
-                            adipisicing elit. Aspernatur dignissimos, laudantium odio quae qui
-                            sed voluptate. Quasi qui tenetur voluptatum!"
+                            "img": "http://test.com/img",
+                            "title": "Test page",
+                            "description": "Test page description"
                         },
                         "2": {
-                            "url": "http://test.com",
+                            "url_page": "http://test.com",
                             "url_partner_page": "http://test.com",
-                            "img": "http://www.test.com/1.png",
-                            "title": "Newrelic",
-                            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Aspernatur dignissimos, laudantium odio quae qui sed voluptate.
-                            Quasi qui tenetur voluptatum!"
+                            "img": "http://test.com/img",
+                            "title": "Test page",
+                            "description": "Test page description"
                         }
                     }
-                }';
+                 }';
 
     public function setUp()
     {

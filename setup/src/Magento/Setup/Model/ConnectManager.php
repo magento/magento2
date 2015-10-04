@@ -7,26 +7,23 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 class ConnectManager
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
     protected $serviceLocator;
 
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     protected $composerInformation;
 
     /**
-     * @var Curl
+     * @var \Magento\Framework\HTTP\Client\Curl
      */
     protected $curlClient;
 
@@ -71,18 +68,18 @@ class ConnectManager
     protected $application;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param ComposerInformation $composerInformation
-     * @param Curl $curl
-     * @param Filesystem $filesystem
-     * @param MagentoComposerApplicationFactory $applicationFactory
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Framework\HTTP\Client\Curl $curl
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $applicationFactory
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
-        ComposerInformation $composerInformation,
-        Curl $curl,
-        Filesystem $filesystem,
-        MagentoComposerApplicationFactory $applicationFactory
+        \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator,
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Framework\HTTP\Client\Curl $curl,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Composer\MagentoComposerApplicationFactory $applicationFactory
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->composerInformation = $composerInformation;
@@ -349,7 +346,7 @@ class ConnectManager
     }
 
     /**
-     * @return ComposerInformation
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     public function getComposerInformation()
     {
@@ -357,7 +354,7 @@ class ConnectManager
     }
 
     /**
-     * @return Curl
+     * @return \Magento\Framework\HTTP\Client\Curl
      */
     public function getCurlClient()
     {
@@ -365,7 +362,7 @@ class ConnectManager
     }
 
     /**
-     * @return Filesystem
+     * @return \Magento\Framework\Filesystem
      */
     public function getFilesystem()
     {

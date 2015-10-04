@@ -3,17 +3,17 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
-    "jquery/ui",
-    "domReady!"
+    'jquery'
 ], function ($) {
-    return function(configFromPage, element) {
+    'use strict';
+
+    return function (configFromPage) {
         var url = configFromPage.url;
-        $.ajax({
-            method: 'get',
+        $.ajax( {
+            method: 'GET',
             url: url
-        }).done(function(data) {
-            $("div[data-role='partners-block']").html(data);
+        }).done(function (data) {
+            $('div[data-role=partners-block]').html(data);
         });
-    }
+    };
 });
