@@ -19,13 +19,13 @@ class Partners extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Marketplace::partners.phtml';
 
     /**
-     * @param \Magento\Marketplace\Model\Partners $partnersModel
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Marketplace\Model\Partners $partnersModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Marketplace\Model\Partners $partnersModel,
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Marketplace\Model\Partners $partnersModel,
         array $data = []
     ) {
         $this->partnersModel = $partnersModel;
