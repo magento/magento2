@@ -6,46 +6,32 @@
 
 namespace Magento\Marketplace\Helper;
 
-use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Config\CacheInterface;
 
 /**
  * Cache helper
  */
 class Cache extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
-     */
-    protected $directory;
-
     /**
      * @var string
      */
     protected $pathToCacheFile = 'partners';
 
     /**
-     * @var Reader
-     */
-    protected $moduleReader;
-
-    /**
      * Configuration cache model
      *
-     * @var CacheInterface
+     * @var \Magento\Framework\Config\CacheInterface
      */
     protected $cache;
 
     /**
-     * @param Context $context
-     * @param CacheInterface $cache
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Config\CacheInterface $cache
      */
     public function __construct(
-        Context $context,
-        CacheInterface $cache
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Config\CacheInterface $cache
     ) {
         $this->cache = $cache;
         parent::__construct($context);
