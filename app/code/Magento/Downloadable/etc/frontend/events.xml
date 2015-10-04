@@ -7,12 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="checkout_type_multishipping_create_orders_single">
-        <observer name="checkout_type_multishipping_create_orders_single" instance="Magento\Downloadable\Model\Observer" method="setHasDownloadableProducts" />
+        <observer name="checkout_type_multishipping_create_orders_single" instance="Magento\Downloadable\Observer\SetHasDownloadableProductsObserver" method="execute"  />
     </event>
     <event name="checkout_allow_guest">
-        <observer name="checkout_allow_guest" instance="Magento\Downloadable\Model\Observer" method="isAllowedGuestCheckout" />
+        <observer name="checkout_allow_guest" instance="Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver" method="execute" />
     </event>
     <event name="product_option_renderer_init">
-        <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="initOptionRenderer" />
+        <observer name="downloadable_observer" instance="Magento\Downloadable\Observer\InitOptionRendererObserver" method="execute" />
     </event>
 </config>
