@@ -95,6 +95,7 @@ class Filesystem
      * Regenerate static
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return void
      */
     public function regenerateStatic(
         \Symfony\Component\Console\Output\OutputInterface $output

@@ -41,7 +41,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Setup\Model\ConnectManager::getCheckCredentialUrl
-    */
+     */
     public function testGetCheckCredentialUrl()
     {
         $connectManager = $this->_getConnectManagerMock(

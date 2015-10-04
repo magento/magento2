@@ -238,7 +238,8 @@ class ConnectManager
                     } else {
                         $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
                         $this->getDirectory()->writeFile(
-                            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile, $data
+                            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+                            $data
                         );
                         return true;
                     }
@@ -308,7 +309,8 @@ class ConnectManager
         try {
             $installPackages = $installPackagesInfo['packages'];
             $availablePackageNames = array_column(
-                $this->getComposerInformation()->getInstalledMagentoPackages(), 'name'
+                $this->getComposerInformation()->getInstalledMagentoPackages(),
+                'name'
             );
             foreach ($installPackages as $package) {
                 if (!in_array($package['name'], $availablePackageNames) &&
@@ -331,10 +333,8 @@ class ConnectManager
      */
     public function loadPackagesForInstallFromCache()
     {
-        if ($this->getDirectory()->isExist(
-            $this->pathToInstallPackagesCacheFile)
-            && $this->getDirectory()->isReadable($this->pathToInstallPackagesCacheFile
-        )) {
+        if ($this->getDirectory()->isExist($this->pathToInstallPackagesCacheFile)
+            && $this->getDirectory()->isReadable($this->pathToInstallPackagesCacheFile)) {
             try {
                 $data = $this->getDirectory()->readFile($this->pathToInstallPackagesCacheFile);
                 return json_decode($data, true);
