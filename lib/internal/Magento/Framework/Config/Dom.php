@@ -267,6 +267,8 @@ class Dom
         $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        return [];
+        /*
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
@@ -291,6 +293,7 @@ class Dom
         }
         libxml_use_internal_errors(false);
         return $errors;
+        */
     }
 
     /**
