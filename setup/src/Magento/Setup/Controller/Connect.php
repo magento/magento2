@@ -70,7 +70,9 @@ class Connect extends AbstractActionController
             $authDataJson = $this->connectManager->getAuthJsonData();
             if ($authDataJson) {
                 $isValid = $this->connectManager->checkCredentialsAction(
-                    $authDataJson['username'], $authDataJson['password']);
+                    $authDataJson['username'],
+                    $authDataJson['password']
+                );
                 $isValid = json_decode($isValid, true);
                 if ($isValid['success'] === true) {
                     return new JsonModel(['success' => true, 'data' => $authDataJson]);

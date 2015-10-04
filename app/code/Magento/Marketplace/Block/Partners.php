@@ -21,13 +21,15 @@ class Partners extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Marketplace\Model\Partners $partnersModel
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param array $data
      */
     public function __construct(
         \Magento\Marketplace\Model\Partners $partnersModel,
-        \Magento\Backend\Block\Template\Context $context
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = []
     ) {
         $this->partnersModel = $partnersModel;
-        parent::__construct($context);
+        parent::__construct($context, $data);
     }
 
     /**
