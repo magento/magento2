@@ -6,12 +6,10 @@
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Framework\App\Cache;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Static regenerate job
@@ -19,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 class JobStaticRegenerate extends AbstractJob
 {
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -34,23 +32,23 @@ class JobStaticRegenerate extends AbstractJob
     protected $cleanupFiles;
 
     /**
-     * @var Status
+     * @var \Magento\Setup\Model\Cron\Status
      */
     protected $status;
 
     /**
      *  Constructor
      *
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param OutputInterface $output
-     * @param Status $status
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Magento\Setup\Model\Cron\Status $status
      * @param array $name
      * @param array $params
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        OutputInterface $output,
-        Status $status,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Symfony\Component\Console\Output\OutputInterface $output,
+        \Magento\Setup\Model\Cron\Status $status,
         $name,
         $params = []
     ) {
