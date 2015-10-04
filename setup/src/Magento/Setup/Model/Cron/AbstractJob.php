@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache;
 
@@ -15,12 +14,12 @@ use Magento\Framework\App\Cache;
 abstract class AbstractJob
 {
     /**
-     * @var AbstractSetupCommand
+     * @var \Magento\Setup\Console\Command\AbstractSetupCommand
      */
     protected $command;
 
     /**
-     * @var OutputInterface
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
 

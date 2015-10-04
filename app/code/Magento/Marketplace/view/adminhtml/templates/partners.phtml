@@ -7,9 +7,9 @@
 <?php
 $partners = $block->getPartners();
 ?>
-<?php if ($partners):?>
+<?php if ($partners) : ?>
     <div class="row row-gutter">
-        <?php foreach ($block->getPartners() as $partner):?>
+        <?php foreach ($block->getPartners() as $partner) : ?>
             <div class="col-m-4">
                 <img
                     class="partner-image"
@@ -30,7 +30,7 @@ $partners = $block->getPartners();
             </div>
         <?php endforeach; ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <p>
         No partners were found
     </p>
