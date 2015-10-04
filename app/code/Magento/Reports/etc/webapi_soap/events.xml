@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="sales_quote_item_save_before">
-        <observer name="reports" instance="Magento\Reports\Model\Event\Observer" method="checkoutCartAddProduct" />
+        <observer name="reports" instance="Magento\Reports\Observer\CheckoutCartAddProductObserver" method="execute" />
     </event>
 </config>

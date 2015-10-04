@@ -35,11 +35,10 @@ class Observer
     /**
      * Scheduled send handler
      *
-     * @param Schedule $schedule
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function scheduledSend($schedule)
+    public function scheduledSend()
     {
         $countOfQueue  = 3;
         $countOfSubscriptions = 20;
