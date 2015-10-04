@@ -9,7 +9,8 @@ define([
 
     return function (configFromPage) {
         var url = configFromPage.url;
-        $.ajax( {
+
+        $.ajax({
             method: 'GET',
             url: url
         }).done(function (data) {

@@ -17,32 +17,32 @@ use Magento\Setup\Model\Cron\Queue;
 class JobUpgrade extends AbstractJob
 {
     /**
-     * @var Status
+     * @var \Magento\Setup\Model\Cron\Status
      */
     protected $status;
 
     /**
-     * @var Queue
+     * @var \Magento\Setup\Model\Cron\Queue
      */
     private $queue;
 
     /**
      * Constructor
      *
-     * @param AbstractSetupCommand $command
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param OutputInterface $output
+     * @param \Magento\Setup\Console\Command\AbstractSetupCommand $command
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Magento\Setup\Model\Cron\Queue $queue
-     * @param Status $status
-     * @param $name
+     * @param \Magento\Setup\Model\Cron\Status $status
+     * @param string $name
      * @param array $params
      */
     public function __construct(
-        AbstractSetupCommand $command,
-        ObjectManagerProvider $objectManagerProvider,
-        OutputInterface $output,
-        Queue $queue,
-        Status $status,
+        \Magento\Setup\Console\Command\AbstractSetupCommand $command,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Symfony\Component\Console\Output\OutputInterface $output,
+        \Magento\Setup\Model\Cron\Queue $queue,
+        \Magento\Setup\Model\Cron\Status $status,
         $name,
         $params = []
     ) {

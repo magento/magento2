@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Setup\Model\ConnectManager;
-
 class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,7 +52,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
@@ -62,7 +61,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->urlPrefix . $this->checkingCredentialsUrl . '/check_credentials',
-            $connectManager->getCheckCredentialUrl());
+            $connectManager->getCheckCredentialUrl()
+        );
     }
 
     /**
@@ -78,7 +78,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $this->serviceLocatorMock
             ->expects($this->once())
             ->method('get')
@@ -91,7 +92,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->checkingCredentialsUrl,
-            $connectManager->getCredentialBaseUrl());
+            $connectManager->getCredentialBaseUrl()
+        );
     }
 
     /**
@@ -107,7 +109,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
@@ -115,7 +118,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->urlPrefix . $this->checkingCredentialsUrl . '/packages.json',
-            $connectManager->getPackagesJsonUrl());
+            $connectManager->getPackagesJsonUrl()
+        );
     }
 
     /**
@@ -134,7 +138,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $this->curlClientMock
             ->expects($this->once())
             ->method('setCredentials')
@@ -169,7 +174,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $this->curlClientMock
             ->expects($this->once())
             ->method('setCredentials')
@@ -210,7 +216,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $this->curlClientMock
             ->expects($this->once())
             ->method('setCredentials')
@@ -250,13 +257,14 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $this->curlClientMock
             ->expects($this->once())
             ->method('setCredentials')
             ->with('username', 'password');
 
-       $this->curlClientMock
+        $this->curlClientMock
            ->expects($this->once())
            ->method('post')
            ->will($this->throwException(new \Exception));
@@ -295,7 +303,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('getPackagesJson')
@@ -371,12 +380,12 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('getAuthJson')
-            ->will($this->returnValue(
-                [
+            ->will($this->returnValue([
                     'http-basic' => [
                         $this->checkingCredentialsUrl =>
                             [
@@ -385,8 +394,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                             ]
                     ]
                 ]
-            )
-        );
+            ));
         $connectManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
@@ -407,7 +415,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $directory = $this->_getDirectoryMock();
         $this->filesystemMock
             ->expects($this->once())
@@ -452,7 +461,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $directory = $this->_getDirectoryMock();
         $this->filesystemMock
             ->expects($this->once())
@@ -473,8 +483,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $connectManager
             ->expects($this->once())
             ->method('getAuthJson')
-            ->will($this->returnValue(
-                [
+            ->will($this->returnValue([
                     'http-basic' => [
                         $this->checkingCredentialsUrl =>
                             [
@@ -483,8 +492,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                             ]
                     ]
                 ]
-            )
-            );
+            ));
         $connectManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
@@ -518,7 +526,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $directory = $this->_getDirectoryMock();
         $this->filesystemMock
             ->expects($this->once())
@@ -571,7 +580,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $application = $this->_getApplicationMock(['runComposerCommand']);
         $connectManager
             ->expects($this->once())
@@ -597,7 +607,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $directory = $this->_getDirectoryMock();
         $connectManager
             ->expects($this->any())
@@ -628,7 +639,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('loadPackagesForInstallFromCache')
@@ -655,14 +667,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
         $connectManager
             ->expects($this->once())
             ->method('loadPackagesForInstallFromCache')
             ->will($this->returnValue([
                 'packages'=> [
                     ['name' => 'test1', "type" => "magento2-module"],
-                    ['name' => 'test2',"type" =>  "magento2-module"]
+                    ['name' => 'test2', "type" =>  "magento2-module"]
                 ]
             ]));
         $connectManager
@@ -690,7 +703,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->curlClientMock,
                 $this->filesystemMock,
                 $this->applicationFactoryMock
-            ]);
+            ]
+        );
 
         $directory = $this->_getDirectoryMock();
         $connectManager
