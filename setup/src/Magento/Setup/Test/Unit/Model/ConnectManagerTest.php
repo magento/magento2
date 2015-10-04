@@ -385,7 +385,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $connectManager
             ->expects($this->once())
             ->method('getAuthJson')
-            ->will($this->returnValue([
+            ->will($this->returnValue(
+                [
                     'http-basic' => [
                         $this->checkingCredentialsUrl =>
                             [
@@ -483,7 +484,8 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $connectManager
             ->expects($this->once())
             ->method('getAuthJson')
-            ->will($this->returnValue([
+            ->will($this->returnValue(
+                [
                     'http-basic' => [
                         $this->checkingCredentialsUrl =>
                             [
