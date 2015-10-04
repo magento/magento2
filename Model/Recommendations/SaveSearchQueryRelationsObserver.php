@@ -7,8 +7,9 @@ namespace Magento\AdvancedSearch\Model\Recommendations;
 
 use Magento\AdvancedSearch\Model\Resource\RecommendationsFactory;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
-class Observer
+class SaveSearchQueryRelationsObserver implements ObserverInterface
 {
 
     /**
@@ -30,7 +31,7 @@ class Observer
      * @param EventObserver $observer
      * @return void
      */
-    public function searchQueryEditFormAfterSave(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $searchQueryModel = $observer->getEvent()->getDataObject();
         $queryId = $searchQueryModel->getId();
