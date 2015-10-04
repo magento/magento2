@@ -47,7 +47,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\SalesRule\Model\Observer',
         'Magento\Sales\Model\Observer\Backend\CatalogProductQuote',
         'Magento\Sales\Model\Observer\CleanExpiredQuotes',
-        'Magento\SalesSequence\Model\Observer',
         'Magento\Sales\Model\Observer\Backend\CatalogPriceRule',
         'Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment',
         'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
