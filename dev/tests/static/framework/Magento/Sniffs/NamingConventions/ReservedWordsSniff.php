@@ -58,7 +58,7 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
             }
             $nameSpacePart = strtolower($tokens[$stackPtr]['content']);
             if (in_array($nameSpacePart, $this->reservedWords)) {
-                $sourceFile->addError('"' . $nameSpacePart . '" is a reserved word in PHP 7.', $stackPtr);
+                $sourceFile->addError('\'' . $nameSpacePart . '\' is a reserved word in PHP 7.', $stackPtr);
             }
             $stackPtr++;
         }
@@ -79,7 +79,7 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
         $className = strtolower($tokens[$stackPtr]['content']);
 
         if (in_array($className, $this->reservedWords)) {
-            $sourceFile->addError('Class name "' . $className . " is a reserved word in PHP 7", $stackPtr);
+            $sourceFile->addError('Class name \'' . $className . '\' is a reserved word in PHP 7', $stackPtr);
         }
     }
 
