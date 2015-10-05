@@ -224,7 +224,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      */
     public function clean()
     {
-        $this->_getResource()->clean($this);
+        $this->_getResource()->clean();
         return $this;
     }
 
