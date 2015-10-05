@@ -95,6 +95,7 @@ class ComponentGrid extends AbstractActionController
      *
      * @return JsonModel
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function componentsAction()
     {
