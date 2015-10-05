@@ -148,7 +148,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         $cartId = $this->getQuoteMaskedId($quote->getId());
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
         $salesRule->load('Test Coupon', 'name');
-        $couponCode = $salesRule->getCouponCode();
+        $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,

@@ -84,7 +84,7 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
             $billingAddress->setFirstname($details['firstName']);
             $billingAddress->setLastname($details['lastName']);
             $billingAddress->setEmail($details['email']);
-        } elseif ($billingAddress->getEmail() == null) {
+        } elseif ($exportedShippingAddress) {
             $this->importAddressData($billingAddress, $exportedShippingAddress);
             $billingAddress->setFirstname($details['firstName']);
             $billingAddress->setLastname($details['lastName']);

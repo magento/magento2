@@ -181,7 +181,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return $this->isActive($quote ? $quote->getStoreId() : null);
     }
@@ -290,8 +290,8 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
         try {
             if ($payment->getCcTransId()) {
                 $result = $this->braintreeTransaction->submitForSettlement($payment->getCcTransId(), $amount);
-                $this->_debug($payment->getCcTransId().' - '.$amount);
-                $this->_debug($result);
+                $this->_debug([$payment->getCcTransId().' - '.$amount]);
+                $this->_debug($this->_convertObjToArray($result));
                 if ($result->success) {
                     $payment->setIsTransactionClosed(0)
                         ->setShouldCloseParentTransaction(false);

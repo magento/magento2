@@ -28,6 +28,7 @@ class PropertyLocker
     /**
      * @param Registry $registry
      * @param Config $attributeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         Registry $registry,

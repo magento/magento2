@@ -1,0 +1,73 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Customer Module Styles
+//  _____________________________________________
+
+.email-credentials {
+    width: 100%;
+
+    th {
+        text-align: left;
+    }
+
+    tr + tr {
+        th,
+        td {
+            padding-bottom: @indent__s;
+        }
+    }
+}
+
+.email-features {
+    width: 100%;
+
+    td {
+        width: 50%;
+
+        table {
+            width: 100%;
+
+            td {
+                padding-right: @indent__s;
+                width: 30px;
+
+                h3 {
+                    margin-bottom: 0;
+                    margin-top: 5px;
+                }
+
+                p {
+                    margin-bottom: 0;
+                }
+            }
+
+            td + td {
+                padding-right: @indent__m;
+                width: auto;
+            }
+        }
+    }
+
+    tr + tr > td {
+        padding-top: @indent__base;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .email-features{
+        > tbody {
+            > tr {
+                > td {
+                    clear: both;
+                    display: block;
+                    padding-top: @indent__base;
+                    width: auto !important;
+                }
+            }
+        }
+    }
+}

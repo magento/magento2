@@ -123,12 +123,6 @@ class Cache
             $this->imageHelper->backgroundColor($imageData['background']);
         }
 
-        $width = isset($imageData['width']) ? $imageData['width'] : null;
-        $height = isset($imageData['height']) ? $imageData['height'] : null;
-        if ($width || $height) {
-            $this->imageHelper->resize($width, $height);
-        }
-
         $this->imageHelper->save();
 
         return $this;

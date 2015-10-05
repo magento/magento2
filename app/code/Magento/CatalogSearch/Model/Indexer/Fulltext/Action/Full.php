@@ -107,7 +107,7 @@ class Full
     protected $engine;
 
     /**
-     * @var \Magento\Framework\IndexerInterface
+     * @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface
      */
     protected $indexHandler;
 
@@ -168,7 +168,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
-     * @param \Magento\Indexer\Model\ConfigInterface $indexerConfig
+     * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -188,7 +188,7 @@ class Full
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
-        \Magento\Indexer\Model\ConfigInterface $indexerConfig
+        \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -734,18 +734,18 @@ class Full
         $attribute = $this->getSearchableAttribute($attributeId);
         $value = $this->engine->processAttributeValue($attribute, $valueId);
 
-        if ($attribute->getIsSearchable()
+        if (false !== $value
+            && $attribute->getIsSearchable()
             && $attribute->usesSource()
             && $this->engine->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
-            $valueText = $attribute->getSource()->getIndexOptionText($valueId);
 
-            if (is_array($valueText)) {
-                $value .=  $this->separator . implode($this->separator, $valueText);
-            } else {
-                $value .= $this->separator . $valueText;
-            }
+            $valueText = (array) $attribute->getSource()->getIndexOptionText($valueId);
+
+            $pieces = array_filter(array_merge([$value], $valueText));
+
+            $value = implode($this->separator, $pieces);
         }
 
         $value = preg_replace('/\\s+/siu', ' ', trim(strip_tags($value)));

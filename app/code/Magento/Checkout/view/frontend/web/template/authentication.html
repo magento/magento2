@@ -36,6 +36,9 @@
                         aria-level="2"
                         data-bind="i18n: 'Sign In'"></strong>
             </div>
+            <!-- ko foreach: getRegion('messages') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
             <div class="block-content" aria-labelledby="block-customer-login-heading">
                 <form data-role="login"
                       data-bind="submit:login"
@@ -49,6 +52,7 @@
                                        class="input-text"
                                        id="login-email"
                                        name="username"
+                                       data-bind="attr: {autocomplete: autocomplete}"
                                        data-validate="{required:true, 'validate-email':true}" />
                             </div>
                         </div>
@@ -59,6 +63,7 @@
                                        class="input-text"
                                        id="login-password"
                                        name="password"
+                                       data-bind="attr: {autocomplete: autocomplete}"
                                        data-validate="{required:true, 'validate-password':true}"/>
                             </div>
                         </div>

@@ -11,12 +11,12 @@ use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\IndexStructure
+ * Test for \Magento\Framework\Indexer\IndexStructure
  */
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
     /**
@@ -45,11 +45,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connection);
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
-            ->setMethods(['resolve'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
+        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,9 +99,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $position = $this->mockFulltextTable($position, $expectedTable, true);
+        $this->mockFulltextTable($position, $expectedTable, true);
 
-        $this->target->create($index, $dimensions);
+        $this->target->create($index, [], $dimensions);
     }
 
     /**

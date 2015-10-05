@@ -42,7 +42,7 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
-        if (!$this->_getSession()->authenticate($this)) {
+        if (!$this->_getSession()->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);
@@ -67,7 +67,9 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
                 return $billingAgreement;
             }
         }
-        $this->messageManager->addError(__('Please specify the correct billing agreement ID and try again.'));
+        $this->messageManager->addErrorMessage(
+            __('Please specify the correct billing agreement ID and try again.')
+        );
         $this->_redirect('*/*/');
         return false;
     }

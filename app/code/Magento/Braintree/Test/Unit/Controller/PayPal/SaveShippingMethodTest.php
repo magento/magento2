@@ -229,8 +229,8 @@ class SaveShippingMethodTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with($exceptionMsg);
+            ->method('addExceptionMessage')
+            ->with($exception, $exceptionMsg);
 
         $this->responseMock->expects($this->once())
             ->method('setBody')

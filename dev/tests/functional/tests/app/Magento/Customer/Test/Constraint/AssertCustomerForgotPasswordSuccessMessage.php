@@ -15,7 +15,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  */
 class AssertCustomerForgotPasswordSuccessMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = "We'll email you a link to reset your password.";
+    const SUCCESS_MESSAGE =
+        'If there is an account associated with %s you will receive an email with a link to reset your password.';
 
     /**
      * Assert that customer forgot password message is present on customer account forgot password page.

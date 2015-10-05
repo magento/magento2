@@ -15,6 +15,6 @@
 <dl class="payment-method">
     <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
 <?php if ($block->getInstructions()): ?>
-    <dd class="content"><?php echo nl2br($block->getInstructions()) ?></dd>
+    <dd class="content"><?php /* @escapeNotVerified */ echo nl2br($block->getInstructions()) ?></dd>
 <?php endif; ?>
 </dl>

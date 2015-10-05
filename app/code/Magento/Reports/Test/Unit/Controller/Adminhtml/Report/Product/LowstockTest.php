@@ -33,10 +33,14 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lowstock = new Lowstock(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->lowstock = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 

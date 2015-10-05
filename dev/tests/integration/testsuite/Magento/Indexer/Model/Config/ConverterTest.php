@@ -8,14 +8,14 @@ namespace Magento\Indexer\Model\Config;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Config\Converter
+     * @var \Magento\Framework\Indexer\Config\Converter
      */
     protected $model;
 
     protected function setUp()
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\Indexer\Model\Config\Converter');
+            ->create('Magento\Framework\Indexer\Config\Converter');
     }
 
     public function testConverter()

@@ -26,7 +26,7 @@ class Image extends AbstractHelper
      *
      * @var bool
      */
-    protected $_scheduleResize = false;
+    protected $_scheduleResize = true;
 
     /**
      * Scheduled for rotate image
@@ -146,7 +146,6 @@ class Image extends AbstractHelper
     protected function _reset()
     {
         $this->_model = null;
-        $this->_scheduleResize = false;
         $this->_scheduleRotate = false;
         $this->_angle = null;
         $this->_watermark = null;
@@ -446,14 +445,9 @@ class Image extends AbstractHelper
      */
     protected function applyScheduledActions()
     {
-        $model = $this->_getModel();
-        if ($this->getImageFile()) {
-            $model->setBaseFile($this->getImageFile());
-        } else {
-            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
-        }
-
-        if (!$model->isCached()) {
+        $this->initBaseFile();
+        if ($this->isScheduledActionsAllowed()) {
+            $model = $this->_getModel();
             if ($this->_scheduleRotate) {
                 $model->rotate($this->getAngle());
             }
@@ -466,6 +460,42 @@ class Image extends AbstractHelper
             $model->saveFile();
         }
         return $this;
+    }
+
+    /**
+     * Initialize base image file
+     *
+     * @return $this
+     */
+    protected function initBaseFile()
+    {
+        $model = $this->_getModel();
+        $baseFile = $model->getBaseFile();
+        if (!$baseFile) {
+            if ($this->getImageFile()) {
+                $model->setBaseFile($this->getImageFile());
+            } else {
+                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Check if scheduled actions is allowed
+     *
+     * @return bool
+     */
+    protected function isScheduledActionsAllowed()
+    {
+        $model = $this->_getModel();
+        if ($model->isBaseFilePlaceholder()
+            && $model->getNewFile() === true
+            || $model->isCached()
+        ) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -499,13 +529,8 @@ class Image extends AbstractHelper
      */
     public function getResizedImageInfo()
     {
-        $model = $this->_getModel();
-        if ($this->getImageFile()) {
-            $model->setBaseFile($this->getImageFile());
-        } else {
-            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
-        }
-        return $model->getResizedImageInfo();
+        $this->applyScheduledActions();
+        return $this->_getModel()->getResizedImageInfo();
     }
 
     /**

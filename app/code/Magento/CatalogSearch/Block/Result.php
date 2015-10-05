@@ -200,7 +200,7 @@ class Result extends Template
     {
         if (!$this->getData('result_count')) {
             $size = $this->_getProductCollection()->getSize();
-            $this->_getQuery()->setNumResults($size);
+            $this->_getQuery()->saveNumResults($size);
             $this->setResultCount($size);
         }
         return $this->getData('result_count');

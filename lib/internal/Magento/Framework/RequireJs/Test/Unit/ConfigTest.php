@@ -198,6 +198,17 @@ code;
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
     }
 
+    public function testGetMixinsFileRelativePath()
+    {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('path'));
+        $actual = $this->object->getMixinsFileRelativePath();
+        $this->assertSame('path/mage/requirejs/mixins.js', $actual);
+    }
+
     public function testGetMinResolverRelativePath()
     {
         $this->minificationMock

@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
-class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
+class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
 {
     /**
      * @var Config
@@ -28,23 +28,15 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
     private $searchableAttributes;
     
     /**
-     * @var string
-     */
-    private $defaultHandler;
-
-    /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory
-     * @param string $defaultHandler
      */
     public function __construct(
         Config $eavConfig,
-        CollectionFactory $collectionFactory,
-        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler'
+        CollectionFactory $collectionFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->collectionFactory = $collectionFactory;
-        $this->defaultHandler = $defaultHandler;
     }
 
     /**
@@ -60,14 +52,6 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultHandler()
-    {
-        return $this->defaultHandler;
     }
 
     /**

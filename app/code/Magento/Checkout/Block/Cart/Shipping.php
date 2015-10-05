@@ -27,6 +27,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -46,6 +47,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Retrieve checkout configuration
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getCheckoutConfig()
     {
@@ -63,5 +65,16 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             $this->jsLayout = $processor->process($this->jsLayout);
         }
         return \Zend_Json::encode($this->jsLayout);
+    }
+
+    /**
+     * Get base url for block.
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }

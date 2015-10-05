@@ -71,8 +71,8 @@ sub vcl_backend_response {
         set beresp.do_gzip = true;
     }
  
-    # cache only successfully responses
-    if (beresp.status != 200) {
+    # cache only successfully responses and 404s
+    if (beresp.status != 200 && beresp.status != 404) {
         set beresp.ttl = 0s;
         set beresp.uncacheable = true;
         return (deliver);

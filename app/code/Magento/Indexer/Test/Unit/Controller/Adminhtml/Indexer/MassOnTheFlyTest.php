@@ -57,7 +57,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexReg;
 
@@ -83,6 +83,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up test
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -144,7 +145,13 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->getMock('\Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMock('Magento\Framework\TestFramework\Unit\Helper\ObjectManager', ['get'], [], '', false);
+        $this->objectManager = $this->getMock(
+            'Magento\Framework\TestFramework\Unit\Helper\ObjectManager',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->request = $this->getMockForAbstractClass(
             '\Magento\Framework\App\RequestInterface',
             ['getParam', 'getRequest'],
@@ -164,7 +171,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->indexReg = $this->getMock(
-            'Magento\Indexer\Model\IndexerRegistry',
+            'Magento\Framework\Indexer\IndexerRegistry',
             ['get', 'setScheduled'],
             [],
             '',
@@ -200,10 +207,10 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
         } else {
 
             $this->objectManager->expects($this->any())
-                ->method('get')->with('Magento\Indexer\Model\IndexerRegistry')
+                ->method('get')->with('Magento\Framework\Indexer\IndexerRegistry')
                 ->will($this->returnValue($this->indexReg));
             $indexerInterface = $this->getMockForAbstractClass(
-                'Magento\Indexer\Model\IndexerInterface',
+                'Magento\Framework\Indexer\IndexerInterface',
                 ['setScheduled'],
                 '',
                 false

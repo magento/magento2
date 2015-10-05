@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\CustomerData;
 
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\CustomerData\Messages;
 
 class MessagesTest extends \PHPUnit_Framework_TestCase
@@ -15,6 +16,11 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
+     * @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $messageInterpretationStrategy;
+
+    /**
      * @var Messages
      */
     protected $object;
@@ -22,7 +28,10 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')->getMock();
-        $this->object = new Messages($this->messageManager);
+        $this->messageInterpretationStrategy = $this->getMock(
+            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        );
+        $this->object = new Messages($this->messageManager, $this->messageInterpretationStrategy);
     }
 
     public function testGetSectionData()
@@ -31,14 +40,16 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
         $msgText = 'All is lost';
         $msg = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')->getMock();
         $messages = [$msg];
+        $msgCollection = $this->getMockBuilder('Magento\Framework\Message\Collection')
+            ->getMock();
+
         $msg->expects($this->once())
             ->method('getType')
             ->willReturn($msgType);
-        $msg->expects($this->once())
-            ->method('getText')
+        $this->messageInterpretationStrategy->expects(static::once())
+            ->method('interpret')
+            ->with($msg)
             ->willReturn($msgText);
-        $msgCollection = $this->getMockBuilder('Magento\Framework\Message\Collection')
-            ->getMock();
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true, null)
@@ -46,6 +57,7 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
         $msgCollection->expects($this->once())
             ->method('getItems')
             ->willReturn($messages);
+
         $this->assertEquals(
             ['messages' => [['type' => $msgType, 'text' => $msgText]]],
             $this->object->getSectionData()

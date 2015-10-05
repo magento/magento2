@@ -25,7 +25,7 @@ ConfigurableNodeExists = function(currentNode) {
 editSet.submit = editSet.submit.wrap(function(original) {
     if (editSet.currentNode){
         if (ConfigurableNodeExists(editSet.currentNode)) {
-            alert('<?php echo $block->escapeJsQuote(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
+            alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
             return;
         }
     }
@@ -34,7 +34,7 @@ editSet.submit = editSet.submit.wrap(function(original) {
 
 editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
-        alert('<?php echo $block->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the product template.')) ?>');
+        alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the product template.')) ?>');
         return false;
     }
     return original(tree, nodeThis, node, newParent);
@@ -42,7 +42,7 @@ editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tr
 
 editSet.rightBeforeInsert = editSet.rightBeforeInsert.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
-        alert('<?php echo $block->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the product template.')) ?>');
+        alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the product template.')) ?>');
         return false;
     }
     return original(tree, nodeThis, node, newParent);

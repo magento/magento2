@@ -381,12 +381,20 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerSecureData->expects($this->once())
             ->method('getPasswordHash')
             ->willReturn('passwordHash');
-        $customerModel->expects($this->once())
+
+        $customerModel->expects($this->exactly(2))
             ->method('setRpToken')
-            ->with('rpToken');
-        $customerModel->expects($this->once())
+            ->willReturnMap([
+                ['rpToken', $customerModel],
+                [null, $customerModel],
+            ]);
+        $customerModel->expects($this->exactly(2))
             ->method('setRpTokenCreatedAt')
-            ->with('rpTokenCreatedAt');
+            ->willReturnMap([
+                ['rpTokenCreatedAt', $customerModel],
+                [null, $customerModel],
+            ]);
+
         $customerModel->expects($this->once())
             ->method('setPasswordHash')
             ->with('passwordHash');

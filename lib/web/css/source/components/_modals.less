@@ -40,7 +40,7 @@
 //  Utilities
 //  ---------------------------------------------
 
-.abs-modal() {
+.lib-modal() {
     bottom: 0;
     left: 0;
     min-width: 0;
@@ -64,7 +64,7 @@
     }
 }
 
-.abs-modal-slide() {
+.lib-modal-slide() {
     left: @modal-slide__first__indent-left;
     z-index: @modal-slide__z-index;
     &._show {
@@ -87,7 +87,7 @@
     }
 }
 
-.abs-modal-popup() {
+.lib-modal-popup() {
     left: 0;
     overflow-y: auto;
     z-index: @modal-popup__z-index;
@@ -110,8 +110,8 @@
         -webkit-transition-property: -webkit-transform, visibility;
                 transition-property:         transform, visibility;
         transition-timing-function: ease;
-        .vendor-prefix-display(flex);
-        .vendor-prefix-flex-direction(column);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
         width: @modal-popup__width;
     }
 }
@@ -126,7 +126,7 @@ body {
     }
 }
 
-// Modals overlay
+//  Modals overlay
 
 .modals-overlay {
     &:extend(.abs-modal-overlay all);
@@ -135,21 +135,21 @@ body {
 
 .modal-slide,
 .modal-popup {
-    .abs-modal();
+    .lib-modal();
 }
 
 .modal-slide {
-    .abs-modal-slide();
+    .lib-modal-slide();
     &._inner-scroll {
         .modal-inner-wrap {
             overflow-y: visible;
-            .vendor-prefix-display(flex);
-            .vendor-prefix-flex-direction(column);
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(column);
         }
         .modal-header,
         .modal-footer {
-            .vendor-prefix-flex-grow(0);
-            .vendor-prefix-flex-shrink(0);
+            .lib-vendor-prefix-flex-grow(0);
+            .lib-vendor-prefix-flex-shrink(0);
         }
         .modal-content {
             overflow-y: auto;
@@ -170,7 +170,7 @@ body {
 }
 
 .modal-popup {
-    .abs-modal-popup();
+    .lib-modal-popup();
     //  If applied, switching outer popup scroll to inner
     &._inner-scroll {
         overflow-y: visible;
@@ -197,8 +197,8 @@ body {
     }
     .modal-header,
     .modal-footer {
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
+        .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
     }
     .modal-header {
         padding-bottom: @modal-popup__padding;
@@ -252,7 +252,7 @@ body {
 @media (max-width: @screen__m) {
     .modal-popup {
         &.modal-slide {
-            .abs-modal-slide();
+            .lib-modal-slide();
             .modal-inner-wrap {
                 margin: 0;
                 max-height: none;

@@ -16,14 +16,30 @@ class View extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -48,18 +64,17 @@ class View extends \Magento\Backend\App\Action
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
-            $this->_view->loadLayout();
-            $this->_view->getLayout()->getBlock(
-                'sales_shipment_view'
-            )->updateBackButtonUrl(
-                $this->getRequest()->getParam('come_from')
-            );
-            $this->_setActiveMenu('Magento_Sales::sales_order');
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
-            $this->_view->getPage()->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
-            $this->_view->renderLayout();
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()->getBlock('sales_shipment_view')
+                ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
+            $resultPage->setActiveMenu('Magento_Sales::sales_shipment');
+            $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
+            $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
+            return $resultPage;
         } else {
-            $this->_forward('noroute');
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
     }
 }

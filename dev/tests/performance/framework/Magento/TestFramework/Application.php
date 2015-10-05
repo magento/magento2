@@ -10,6 +10,7 @@
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Application
 {
@@ -118,7 +119,7 @@ class Application
     public function reindex()
     {
         $this->_shell->execute(
-            'php -f ' . $this->_config->getApplicationBaseDir() . '/bin/magento indexer:reindex --all'
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/bin/magento indexer:reindex'
         );
         return $this;
     }
@@ -184,7 +185,7 @@ class Application
         )->getDirectoryWrite(
             DirectoryList::VAR_DIR
         );
-        $varDirectory->changePermissions('', 0777);
+        $varDirectory->changePermissions('', DriverInterface::WRITEABLE_DIRECTORY_MODE);
     }
 
     /**

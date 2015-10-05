@@ -27,7 +27,7 @@ class AssertDiscountInShoppingCart extends AbstractConstraint
     public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
     {
         $checkoutCart->open();
-
+        $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         \PHPUnit_Framework_Assert::assertEquals(
             number_format($cart->getDiscount(), 2),
             $checkoutCart->getTotalsBlock()->getDiscount(),

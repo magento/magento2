@@ -2,7 +2,7 @@
     "name": "magento/module-catalog-widget",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-catalog": "1.0.0-beta",
         "magento/module-widget": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",

@@ -37,7 +37,7 @@ class FileManager
     public function createTranslateConfigAsset()
     {
         return $this->assetRepo->createArbitrary(
-            $this->assetRepo->getStaticViewFileContext()->getConfigPath() . '/' . self::TRANSLATION_CONFIG_FILE_NAME,
+            $this->assetRepo->getStaticViewFileContext()->getPath() . '/' . self::TRANSLATION_CONFIG_FILE_NAME,
             ''
         );
     }

@@ -165,7 +165,7 @@ class CssDeployCommand extends Command
                     self::AREA_OPTION,
                     null,
                     InputOption::VALUE_REQUIRED,
-                    'Area, one of [frontend|adminhtml|doc]',
+                    'Area, one of [frontend|adminhtml]',
                     'frontend'
                 ),
                 new InputOption(
@@ -219,26 +219,28 @@ class CssDeployCommand extends Command
                 ]
             );
 
+            $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
             $sourceFile = $this->assetSource->findSource($asset);
-            $content = \file_get_contents($sourceFile);
+            $relativePath = $rootDir->getRelativePath($sourceFile);
+            $content = $rootDir->readFile($relativePath);
 
             $chain = $this->chainFactory->create(
                 [
                     'asset'           => $asset,
                     'origContent'     => $content,
-                    'origContentType' => $asset->getContentType()
+                    'origContentType' => $asset->getContentType(),
+                    'origAssetPath'   => $relativePath
                 ]
             );
 
             $processedCoreFile = $sourceFileGenerator->generateFileTree($chain);
 
             $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-            $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
             $source = $rootDir->getRelativePath($processedCoreFile);
             $destination = $asset->getPath();
             $rootDir->copyFile($source, $destination, $targetDir);
 
-            $output->writeln("<info>Successfully processed LESS and/or SASS files</info>");
+            $output->writeln("<info>Successfully processed dynamic stylesheet into CSS</info>");
         }
     }
 }

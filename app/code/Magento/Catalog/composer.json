@@ -2,7 +2,7 @@
     "name": "magento/module-catalog",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-store": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
         "magento/module-cms": "1.0.0-beta",
@@ -10,7 +10,6 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/module-checkout": "1.0.0-beta",
-        "magento/module-log": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-widget": "1.0.0-beta",
         "magento/module-wishlist": "1.0.0-beta",

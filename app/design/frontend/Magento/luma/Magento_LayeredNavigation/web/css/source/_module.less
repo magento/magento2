@@ -22,8 +22,8 @@
             text-align: center;
             padding: 7px 10px;
             @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color__base, 30);
-            .css(background-color, @toolbar-element-background);
-            .css(box-shadow, @_shadow);
+            .lib-css(background-color, @toolbar-element-background);
+            .lib-css(box-shadow, @_shadow);
             border-radius: 3px;
             font-weight: 400;
             top: 0;
@@ -35,7 +35,7 @@
                 padding: 2px;
                 font-size: .8em;
                 margin: 0 5px;
-                .css(color, @color-white);
+                .lib-css(color, @color-white);
                 min-width: 1em;
                 line-height: 1;
                 background: @color-orange-red4;
@@ -88,7 +88,7 @@
         }
     }
     &-value {
-        .css(color, @filter-quantity);
+        .lib-css(color, @filter-quantity);
     }
     &-options {
         display: none;
@@ -107,7 +107,7 @@
             z-index: 1;
             text-transform: uppercase;
 
-            .icon-font(
+            .lib-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
                 @_icon-font-position: after,
@@ -119,10 +119,10 @@
                 top: 9px;
             }
             &:hover {
-                .css(color, @filter-link-hover);
+                .lib-css(color, @filter-link-hover);
             }
             .active > & {
-                .icon-font-symbol(
+                .lib-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                 );
@@ -136,7 +136,7 @@
                 line-height: 1.5em;
             }
             a {
-                .css(color, @filter-link);
+                .lib-css(color, @filter-link);
                 margin-right: -5px;
                 padding-left: 5px;
                 margin-left: -5px;
@@ -150,7 +150,7 @@
                 }
             }
             .count {
-                .css(color, @filter-quantity);
+                .lib-css(color, @filter-quantity);
                 padding-right: 5px;
                 &:before {
                     content: "(";
@@ -206,9 +206,9 @@
                         top: 10px;
                         border: 0;
                         background: none;
-                        .css(box-shadow, none);
+                        .lib-css(box-shadow, none);
                         color: transparent;
-                        .icon-font(
+                        .lib-icon-font(
                             @icon-remove,
                             @_icon-font-color: @text__color__muted,
                             @_icon-font-size: 16px,
@@ -223,7 +223,7 @@
                 right: 0;
                 left: 0;
                 height: 50px;
-                .css(background, @toolbar-background);
+                .lib-css(background, @toolbar-background);
                 z-index: 1;
                 line-height: 32px;
             }
@@ -235,7 +235,7 @@
                 right: 0;
                 bottom: 0;
                 overflow: scroll;
-                .css(background, @color-white);
+                .lib-css(background, @color-white);
                 z-index: 10;
             }
         }
@@ -278,7 +278,7 @@
             text-transform: uppercase;
             position: relative;
             z-index: 1;
-            .icon-font(
+            .lib-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
                 @_icon-font-position: before,
@@ -293,13 +293,13 @@
             &:after {
                 content:' (' attr(data-count) ')';
                 font-size:.9em;
-                .css(color, @text__color__muted);
+                .lib-css(color, @text__color__muted);
             }
         }
         &.active {
             padding-bottom: 30px;
             .block-subtitle {
-                .icon-font-symbol(
+                .lib-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: before
                 );
@@ -386,7 +386,7 @@
                         &:before {
                             content: "";
                             display: block;
-                            .arrow(up, 8px, @color-black);
+                            .lib-arrow(up, 8px, @color-black);
                             position: absolute;
                             left: 50%;
                             bottom: -1px;
@@ -394,7 +394,7 @@
                             margin-left: -20px;
                         }
                         &:after {
-                            .css(border-bottom-color, @color-white);
+                            .lib-css(border-bottom-color, @color-white);
                             margin-top:2px;
                             z-index: 4;
                         }
@@ -411,13 +411,13 @@
                 &-content {
                     position: absolute;
                     z-index: 2;
-                    .css(background, @color-white);
+                    .lib-css(background, @color-white);
                     width: 180px;
                     top: 100%;
                     border: 1px solid @border-color__base;
                     padding: @indent__xs 0;
                     @_shadow:  0 3px 5px 0 rgba(50, 50, 50, .75);
-                    .css(box-shadow, @_shadow, 1);
+                    .lib-css(box-shadow, @_shadow, 1);
                     .item {
                         padding: @indent__xs;
                         margin:0;
@@ -436,7 +436,7 @@
                 &-subtitle {
                     display: inline;
                     padding: 0;
-                    .css(color, @text__color__muted);
+                    .lib-css(color, @text__color__muted);
                     font-size: @font-size__base;
                     font-weight: normal;
                     &:after {

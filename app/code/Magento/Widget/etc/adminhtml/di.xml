@@ -14,4 +14,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\Model\Template\FilterProvider">
+        <arguments>
+            <argument name="pageFilter" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
+            <argument name="blockFilter" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
+        </arguments>
+    </type>
 </config>

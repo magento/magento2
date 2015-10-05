@@ -29,13 +29,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $queryFactory = null;
 
     /**
-     * Catalog search fulltext
-     *
-     * @var \Magento\CatalogSearch\Model\Fulltext
-     */
-    protected $_catalogSearchFulltext;
-
-    /**
      * @var \Magento\Framework\Search\Request\Builder
      */
     private $requestBuilder;
@@ -80,7 +73,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Search\Model\QueryFactory $catalogSearchData
-     * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
@@ -109,14 +101,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Search\Model\QueryFactory $catalogSearchData,
-        \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
-        $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->queryFactory = $catalogSearchData;
         parent::__construct(
             $entityFactory,

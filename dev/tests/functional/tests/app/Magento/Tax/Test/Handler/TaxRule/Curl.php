@@ -6,20 +6,19 @@
 
 namespace Magento\Tax\Test\Handler\TaxRule;
 
+use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Curl handler for creating Tax Rule
+ * Curl handler for creating Tax Rule.
  */
 class Curl extends AbstractCurl implements TaxRuleInterface
 {
     /**
-     * Default Tax Class values
+     * Default Tax Class values.
      *
      * @var array
      */
@@ -29,58 +28,73 @@ class Curl extends AbstractCurl implements TaxRuleInterface
     ];
 
     /**
-     * Post request for creating tax rule
+     * Post request for creating tax rule.
      *
      * @param FixtureInterface $fixture
-     * @return mixed|null
+     * @return array
+     * @throws \Exception
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        /** @var TaxRule $fixture */
         $data = $this->prepareData($fixture);
 
         $url = $_ENV['app_backend_url'] . 'tax/rule/save/?back=1';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
+            throw new \Exception("Tax rate creation by curl handler was not successful!");
+        }
+
         preg_match("~Location: [^\s]*\/rule\/(\d+)~", $response, $matches);
         $id = isset($matches[1]) ? $matches[1] : null;
+
         return ['id' => $id];
     }
 
     /**
-     * Returns data for curl POST params
+     * Returns data for Web API params.
      *
-     * @param FixtureInterface $fixture
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param TaxRule $fixture
+     * @return array
      */
-    protected function prepareData($fixture)
+    protected function prepareData(TaxRule $fixture)
     {
         $data = $fixture->getData();
-        $fields = [
-            'tax_rate',
-            'tax_customer_class',
-            'tax_product_class',
-        ];
+        $data = $this->prepareFieldData($fixture, $data, 'tax_rate');
+        $data = $this->prepareFieldData($fixture, $data, 'tax_product_class');
+        $data = $this->prepareFieldData($fixture, $data, 'tax_customer_class');
 
-        foreach ($fields as $field) {
-            if (!array_key_exists($field, $data)) {
-                $data[$field][] = $this->defaultTaxClasses[$field];
-                continue;
-            }
-            $fieldFixture = $fixture->getDataFieldConfig($field);
-            $fieldFixture = $fieldFixture['source']->getFixture();
-            foreach ($data[$field] as $key => $value) {
-                $id = $fieldFixture[$key]->getId();
-                if ($id === null) {
-                    $fieldFixture[$key]->persist();
-                    $id = $fieldFixture[$key]->getId();
+        return $data;
+    }
+
+    /**
+     * Prepare tax rule field data using new field.
+     *
+     * @param TaxRule $fixture
+     * @param array $data
+     * @param string $fixtureField
+     * @param string $newField
+     * @return array
+     */
+    public function prepareFieldData(TaxRule $fixture, array $data, $fixtureField, $newField = null)
+    {
+        $newField = $newField === null ? $fixtureField : $newField;
+        unset($data[$fixtureField]);
+
+        if (!$fixture->hasData($fixtureField)) {
+            $data[$newField][] = $this->defaultTaxClasses[$fixtureField];
+        } else {
+            foreach ($fixture->getDataFieldConfig($fixtureField)['source']->getFixture() as $taxField) {
+                if (!$taxField->hasData('id')) {
+                    $taxField->persist();
                 }
-                $data[$field][$key] = $id;
+                $data[$newField][] = $taxField->getId();
             }
         }
 

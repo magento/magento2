@@ -25,7 +25,8 @@
                     <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
-                    <xs:element type="massaction" name="massaction"/>
+                    <xs:element type="massactionConfiguration" name="massaction"/>
+                    <xs:element type="action" name="action"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
                     <xs:element type="containerConfiguration" name="container"/>
                     <xs:element type="field" name="field"/>
@@ -54,7 +55,7 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
-                    <xs:element type="massaction" name="massaction"/>
+                    <xs:element type="massactionConfiguration" name="massaction"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
                     <xs:element type="containerConfiguration" name="container"/>
@@ -79,6 +80,15 @@
             <xs:extension base="columns">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="column" type="column" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="massactionConfiguration">
+        <xs:complexContent>
+            <xs:extension base="massaction">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="action" type="action" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

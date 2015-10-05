@@ -33,7 +33,17 @@ define(
             }
         });
         quote.shippingMethod.subscribe(function () {
-            totalsDefaultProvider.estimateTotals();
+            totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+        });
+        quote.billingAddress.subscribe(function () {
+            var type = quote.billingAddress().getType();
+            if (quote.isVirtual()) {
+                // update totals block when estimated address was set
+                totalsProcessors['default'] = totalsDefaultProvider;
+                totalsProcessors[type]
+                    ? totalsProcessors[type].estimateTotals(quote.billingAddress())
+                    : totalsProcessors['default'].estimateTotals(quote.billingAddress());
+            }
         });
     }
 );

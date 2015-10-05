@@ -14,6 +14,8 @@ use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class Filter
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter
 {
@@ -81,6 +83,7 @@ class Filter
         $component = $this->getComponent();
         $this->prepareComponent($component);
         $dataProvider = $component->getContext()->getDataProvider();
+        $dataProvider->setLimit(0, false);
         $ids = [];
         foreach ($dataProvider->getSearchResult()->getItems() as $document) {
             $ids[] = $document->getId();

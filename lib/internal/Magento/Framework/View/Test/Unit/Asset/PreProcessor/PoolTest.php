@@ -46,8 +46,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                         ],
                     'less' =>
                         [
-                            'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                            'Magento\Framework\Less\PreProcessor\Instruction\Import',
+                            'Magento\Framework\Css\PreProcessor\Instruction\MagentoImport',
+                            'Magento\Framework\Css\PreProcessor\Instruction\Import',
                         ],
                 ],
                 'css' => [
@@ -84,7 +84,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 ->with($this->processorChain);
             $processorMaps[] = [$processor, $processorMock];
         }
-        $this->objectManager->method('get')->willReturnMap($processorMaps);
+        $this->objectManager
+            ->expects(static::atLeastOnce())
+            ->method('get')
+            ->willReturnMap($processorMaps);
 
         $this->processorPool->process($this->processorChain);
     }
@@ -115,8 +118,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             'less => less' => [
                 'less', 'less',
                 [
-                    'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                    'Magento\Framework\Less\PreProcessor\Instruction\Import',
+                    'Magento\Framework\Css\PreProcessor\Instruction\MagentoImport',
+                    'Magento\Framework\Css\PreProcessor\Instruction\Import',
                 ],
             ],
             //all undefined types will be processed by Passthrough preprocessor

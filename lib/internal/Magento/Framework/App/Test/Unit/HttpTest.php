@@ -65,8 +65,30 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $cookieReaderMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieReaderInterface')
             ->disableOriginalConstructor()
+            ->getMock();
+        $routeConfigMock = $this->getMockBuilder('Magento\Framework\App\Route\ConfigInterface\Proxy')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pathInfoProcessorMock = $this->getMockBuilder('Magento\Framework\App\Request\PathInfoProcessorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+            ->disableOriginalConstructor()
+            ->setMethods(['cleanString'])
+            ->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->setConstructorArgs([
+                'cookieReader' => $cookieReaderMock,
+                'converter' => $converterMock,
+                'routeConfig' => $routeConfigMock,
+                'pathInfoProcessor' => $pathInfoProcessorMock,
+                'objectManager' => $objectManagerMock
+            ])
             ->setMethods(['getFrontName'])
             ->getMock();
         $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')

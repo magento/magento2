@@ -6,6 +6,8 @@
 namespace Magento\ImportExport\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import controller

@@ -171,9 +171,12 @@ class FixtureModel
      */
     public function initObjectManager()
     {
-        $this->getObjectManager()->configure(
-            $this->getObjectManager()->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
-        );
+        $this->getObjectManager()
+            ->configure(
+                $this->getObjectManager()
+                    ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
+                    ->load(self::AREA_CODE)
+            );
         $this->getObjectManager()->get('Magento\Framework\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
         return $this;
     }

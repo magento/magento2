@@ -9,9 +9,9 @@
 <script>
     require(["jquery", "jquery/ui", "swatchRenderer"], function ($) {
         $('.swatch-opt').SwatchRenderer({
-            jsonConfig: <?php echo $swatchOptions = $block->getJsonConfig(); ?>,
-            jsonSwatchConfig: <?php echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
-            mediaCallback: '<?php echo $block->getMediaCallback() ?>'
+            jsonConfig: <?php /* @escapeNotVerified */ echo $swatchOptions = $block->getJsonConfig(); ?>,
+            jsonSwatchConfig: <?php /* @escapeNotVerified */ echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
+            mediaCallback: '<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>'
         });
     });
 </script>

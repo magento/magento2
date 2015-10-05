@@ -144,7 +144,7 @@ class UiComponentFactory extends DataObject
                 $identifier,
                 $bundleComponents[$identifier]
             );
-            $componentArguments = array_merge($componentArguments, $arguments);
+            $componentArguments = array_replace_recursive($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
                 $componentArguments['context'] = $this->contextFactory->create([
                     'namespace' => $identifier
@@ -164,11 +164,14 @@ class UiComponentFactory extends DataObject
             $componentArguments['components'] = $components;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
-            $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));
+            $component = $this->objectManager->create(
+                $className,
+                array_replace_recursive($componentArguments, $arguments)
+            );
 
             return $component;
         } else {
-            $defaultData = $this->componentManager->createRawComponentData($name, true);
+            $defaultData = $this->componentManager->createRawComponentData($name);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(

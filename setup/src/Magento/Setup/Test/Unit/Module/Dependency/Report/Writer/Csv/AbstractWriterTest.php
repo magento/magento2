@@ -19,7 +19,7 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->csvMock = $this->getMock('Magento\Framework\File\Csv');
+        $this->csvMock = $this->getMock('Magento\Framework\File\Csv', [], [], '', false);
 
         $this->writer = $this->getMockForAbstractClass(
             'Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter',

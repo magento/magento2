@@ -181,7 +181,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ['event_table' => $this->getMainTable()],
                 ['event_id']
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'event_table.subject_id = visitor_table.visitor_id',
                 []
             )->where('visitor_table.visitor_id IS NULL')

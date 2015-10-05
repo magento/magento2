@@ -1,2 +1,0 @@
-<?php
-$variable = 1;

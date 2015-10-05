@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Validator;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Module\ConnectionFactory;
 
@@ -62,11 +63,11 @@ class DbValidator
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
         $connection = $this->connectionFactory->create([
-            'dbname' => $dbName,
-            'host' => $dbHost,
-            'username' => $dbUser,
-            'password' => $dbPass,
-            'active' => true,
+            ConfigOptionsListConstants::KEY_NAME => $dbName,
+            ConfigOptionsListConstants::KEY_HOST => $dbHost,
+            ConfigOptionsListConstants::KEY_USER => $dbUser,
+            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+            ConfigOptionsListConstants::KEY_ACTIVE => true,
         ]);
 
         if (!$connection) {
@@ -79,12 +80,31 @@ class DbValidator
                 if (isset($matches[1]) && !empty($matches[1])) {
                     if (version_compare($matches[1], Installer::MYSQL_VERSION_REQUIRED) < 0) {
                         throw new \Magento\Setup\Exception(
-                            'Sorry, but we support MySQL version '. Installer::MYSQL_VERSION_REQUIRED . ' or later.'
+                            'Sorry, but we support MySQL version ' . Installer::MYSQL_VERSION_REQUIRED . ' or later.'
                         );
                     }
                 }
             }
         }
-        return true;
+        return $this->checkDatabasePrivileges($connection, $dbName);
+    }
+
+    /**
+     * Checks database privileges
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $dbName
+     * @return bool
+     * @throws \Magento\Setup\Exception
+     */
+    private function checkDatabasePrivileges(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
+    {
+        $grantInfo = $connection->query('SHOW GRANTS FOR current_user()')->fetchAll(\PDO::FETCH_NUM);
+        foreach ($grantInfo as $grantRow) {
+            if (preg_match('/(ALL|ALL\sPRIVILEGES)\sON\s[^a-zA-Z\d\s]?(\*|' . $dbName .  ')/', $grantRow[0]) === 1) {
+                return true;
+            }
+        }
+        throw new \Magento\Setup\Exception('Database user does not have enough privileges.');
     }
 }

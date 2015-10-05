@@ -193,41 +193,55 @@
                     <item name="selectProvider" xsi:type="string">product_listing.product_listing.product_columns.ids</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="delete" xsi:type="array">
-                            <item name="confirm" xsi:type="array">
-                                <item name="title" xsi:type="string" translate="true">Delete items</item>
-                                <item name="message" xsi:type="string" translate="true">Delete selected items?</item>
-                            </item>
-                            <item name="type" xsi:type="string">delete</item>
-                            <item name="label" xsi:type="string" translate="true">Delete</item>
-                            <item name="url" xsi:type="string">catalog/product/massDelete</item>
-                        </item>
-                        <item name="status" xsi:type="array">
-                            <item name="type" xsi:type="string">status</item>
-                            <item name="label" xsi:type="string" translate="true">Change status</item>
-                            <item name="actions" xsi:type="array">
-                                <item name="0" xsi:type="array">
-                                    <item name="type" xsi:type="string">enable</item>
-                                    <item name="label" xsi:type="string" translate="true">Enable</item>
-                                    <item name="url" xsi:type="string">catalog/product/massEnable</item>
-                                </item>
-                                <item name="1" xsi:type="array">
-                                    <item name="type" xsi:type="string">disable</item>
-                                    <item name="label" xsi:type="string" translate="true">Disable</item>
-                                    <item name="url" xsi:type="string">catalog/product/massDisable</item>
-                                </item>
-                            </item>
-                        </item>
-                        <item name="attributes" xsi:type="array">
-                            <item name="type" xsi:type="string">attributes</item>
-                            <item name="label" xsi:type="string" translate="true">Update attributes</item>
-                            <item name="url" xsi:type="string">catalog/product_action_attribute/edit</item>
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete items</item>
+                            <item name="message" xsi:type="string" translate="true">Delete selected items?</item>
+                        </item>
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="catalog/product/massDelete"/>
+                    </item>
+                </argument>
+            </action>
+            <action name="status">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">status</item>
+                        <item name="label" xsi:type="string" translate="true">Change status</item>
+                    </item>
+                </argument>
+                <argument name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="type" xsi:type="string">enable</item>
+                        <item name="label" xsi:type="string" translate="true">Enable</item>
+                        <item name="url" xsi:type="url" path="catalog/product/massStatus">
+                            <param name="status">1</param>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="type" xsi:type="string">disable</item>
+                        <item name="label" xsi:type="string" translate="true">Disable</item>
+                        <item name="url" xsi:type="url" path="catalog/product/massStatus">
+                            <param name="status">2</param>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="attributes">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">attributes</item>
+                        <item name="label" xsi:type="string" translate="true">Update attributes</item>
+                        <item name="url" xsi:type="url" path="catalog/product_action_attribute/edit"/>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -238,28 +252,6 @@
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="options" xsi:type="array">
-                        <item name="20" xsi:type="array">
-                            <item name="value" xsi:type="number">20</item>
-                            <item name="label" xsi:type="string" translate="true">20</item>
-                        </item>
-                        <item name="30" xsi:type="array">
-                            <item name="value" xsi:type="number">30</item>
-                            <item name="label" xsi:type="string" translate="true">30</item>
-                        </item>
-                        <item name="50" xsi:type="array">
-                            <item name="value" xsi:type="number">50</item>
-                            <item name="label" xsi:type="string" translate="true">50</item>
-                        </item>
-                        <item name="100" xsi:type="array">
-                            <item name="value" xsi:type="number">100</item>
-                            <item name="label" xsi:type="string" translate="true">100</item>
-                        </item>
-                        <item name="200" xsi:type="array">
-                            <item name="value" xsi:type="number">200</item>
-                            <item name="label" xsi:type="string" translate="true">200</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </paging>

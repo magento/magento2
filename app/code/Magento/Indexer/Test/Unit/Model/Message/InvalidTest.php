@@ -48,7 +48,7 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
     public function testDisplayMessage()
     {
         $this->indexerMock->expects($this->any())->method('getStatus')->with()
-            ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
+            ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
 
         $this->assertTrue($this->model->isDisplayed());
     }

@@ -45,32 +45,22 @@ class PlaceOrderStep implements TestStepInterface
     protected $prices;
 
     /**
-     * Checkout method.
-     *
-     * @var string
-     */
-    protected $checkoutMethod;
-
-    /**
      * @construct
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
-     * @param string $checkoutMethod
      * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        $checkoutMethod,
         array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
         $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
-        $this->checkoutMethod = $checkoutMethod;
     }
 
     /**

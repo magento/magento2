@@ -5,11 +5,11 @@
 
 //  # Tabs and accordions
 //
-//  To set up tabs and accordions Magento UI library provides 2 types of mixins: <code>.data-tabs__base()</code> and <code>.data-accordion__base()</code>. These mixins reset markup elements default styles and add minimal required css setup to make these elements work properly.
+//  To set up tabs and accordions Magento UI library provides 2 types of mixins: <code>.lib-data-tabs__base()</code> and <code>.lib-data-accordion__base()</code>. These mixins reset markup elements default styles and add minimal required css setup to make these elements work properly.
 //
 //  # Tabs
 //
-//  The <code>.data-tabs()</code> mixin is used to setup tabs parameters.
+//  The <code>.lib-data-tabs()</code> mixin is used to setup tabs parameters.
 //
 //  ```html
 //  <dl class="example-sections-1" data-sections="tabs">
@@ -37,7 +37,7 @@
 //  ```
 
 .example-sections-1 {
-    .data-tabs();
+    .lib-data-tabs();
 }
 
 //  # Tabs mixin variables
@@ -259,14 +259,14 @@
 //  ```
 
 .example-sections-2 {
-    .data-tabs(
+    .lib-data-tabs(
         @_tab-content-border-top-status: true
     );
 }
 
 //  # Accordion
 //
-//  The <code>.data-accordion()</code> mixin is used to setup accordion parameters. Accordion has the same markup as tabs.
+//  The <code>.lib-data-accordion()</code> mixin is used to setup accordion parameters. Accordion has the same markup as tabs.
 //
 //  ```html
 //  <dl class="example-sections-3" data-sections="tabs">
@@ -293,7 +293,7 @@
 //  ```
 
 .example-sections-3 {
-    .data-accordion();
+    .lib-data-accordion();
 }
 
 //  # Accordion mixin variables
@@ -496,7 +496,7 @@
 
 //  # Responsive tabs
 //
-//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desctop version it is transformed to tabs. To implement this approach, use the  <code>.data-accordion()</code> mixin for mobile version, and the <code>.data-tabs()</code> mixin for desctop version.
+//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desctop version it is transformed to tabs. To implement this approach, use the  <code>.lib-data-accordion()</code> mixin for mobile version, and the <code>.lib-data-tabs()</code> mixin for desctop version.
 //
 //  ```html
 //  <dl class="example-sections-4" data-sections="tabs">
@@ -524,19 +524,19 @@
 
 @media only screen and (max-width: 99999px) {
     .example-sections-4 {
-        .data-tabs();
+        .lib-data-tabs();
     }
 }
 
 @media only screen and (max-width: @screen__m) {
     .example-sections-4 {
-        .data-accordion();
+        .lib-data-accordion();
     }
 }
 
 //  # Tabs Base
 //
-//  The <code>.data-tabs__base()</code> mixin sets basic tabs styles.
+//  The <code>.lib-data-tabs__base()</code> mixin sets basic tabs styles.
 //
 //  ```html
 //  <dl class="example-sections-5" data-sections="tabs">
@@ -564,12 +564,12 @@
 //  ```
 
 .example-sections-5 {
-    .data-tabs__base();
+    .lib-data-tabs__base();
 }
 
 //  # Accordion Base
 //
-//  The <code>.data-accordion__base()</code> mixin sets basic accordion styles.
+//  The <code>.lib-data-accordion__base()</code> mixin sets basic accordion styles.
 //  Data accordion uses the same markup as data tabs.
 //
 //  ```html
@@ -597,5 +597,5 @@
 //  ```
 
 .example-sections-6 {
-    .data-accordion__base();
+    .lib-data-accordion__base();
 }

@@ -88,7 +88,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
                 'getAffectedFields',
                 'isStatic',
                 'getEntityValueId',
-                'getEntityIdField'
             ]
         );
 
@@ -102,14 +101,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
 
         $backendModel->expects($this->any())->method('isStatic')->will($this->returnValue(false));
         $backendModel->expects($this->never())->method('getEntityValueId');
-        $backendModel->expects(
-            isset($productData['entity_id']) ? $this->never() : $this->once()
-        )->method(
-            'getEntityIdField'
-        )->will(
-            $this->returnValue('entity_id')
-        );
-
         $backendModel->setAttribute($attribute);
 
         $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));

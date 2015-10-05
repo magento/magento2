@@ -146,17 +146,17 @@ define([
                     [
                         {
                             'items': ['1'],
-                            'separator': '',
+                            'separator': ' ',
                             'prefix': ''
                         },
                         {
                             'items': ['2'],
-                            'separator': '',
+                            'separator': ' ',
                             'prefix': ''
                         },
                         {
                             'items': ['3'],
-                            'separator': '',
+                            'separator': ' ',
                             'prefix': ''
                         }
                     ]

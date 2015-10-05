@@ -97,6 +97,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'js_config' => ['extends' => 'test_config_extends'],
             'config' => ['dataType' => 'test_type', 'sortable' => true]
         ];
+        $saveUrl = 'module/controller/save';
 
         $this->contextMock->expects($this->once())
             ->method('getDataProvider')
@@ -104,6 +105,10 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('addComponentDefinition')
             ->with('columns', ['extends' => 'test_config_extends']);
+        $this->contextMock->expects($this->once())
+            ->method('getUrl')
+            ->with($saveUrl)
+            ->willReturn('http://localhost.com/admin/' . $saveUrl);
 
         $dataProviderMock->expects($this->once())
             ->method('getFieldMetaInfo')
@@ -130,7 +135,28 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                 'data' => $data
             ]
         );
-
+        $columns->setData(
+            'config',
+            [
+                'test_config_data' => 'test_config_value',
+                'editorConfig' => [
+                    'clientConfig' => [
+                        'saveUrl' => $saveUrl,
+                    ]
+                ]
+            ]
+        );
         $columns->prepare();
+        $this->assertEquals(
+            [
+                'test_config_data' => 'test_config_value',
+                'editorConfig' => [
+                    'clientConfig' => [
+                        'saveUrl' => 'http://localhost.com/admin/' . $saveUrl,
+                    ]
+                ]
+            ],
+            $columns->getData('config')
+        );
     }
 }

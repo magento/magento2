@@ -8,7 +8,7 @@
 
 namespace Magento\CatalogInventory\Model\Indexer;
 
-class Stock implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row

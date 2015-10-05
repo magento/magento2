@@ -17,20 +17,20 @@
 <?php foreach ($_creditmemos as $_creditmemo): ?>
 <div class="order-details-items creditmemo">
     <div class="order-title">
-        <strong><?php echo __('Refund #%1', $_creditmemo->getIncrementId()) ?></strong>
+        <strong><?php /* @escapeNotVerified */ echo __('Refund #%1', $_creditmemo->getIncrementId()) ?></strong>
     </div>
     <div class="table-wrapper order-items-creditmemo">
-        <table class="data table table-order-items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
-            <caption class="table-caption"><?php echo __('Items Refunded') ?></caption>
+        <table class="data table table-order-items creditmemo" id="my-refund-table-<?php /* @escapeNotVerified */ echo $_creditmemo->getId(); ?>">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Refunded') ?></caption>
             <thead>
                 <tr>
-                    <th class="col name"><?php echo __('Product Name') ?></th>
-                    <th class="col sku"><?php echo __('SKU') ?></th>
-                    <th class="col price"><?php echo __('Price') ?></th>
-                    <th class="col qty"><?php echo __('Qty') ?></th>
-                    <th class="col subtotal"><?php echo __('Subtotal') ?></th>
-                    <th class="col discount"><?php echo __('Discount Amount') ?></th>
-                    <th class="col rowtotal"><?php echo __('Row Total') ?></th>
+                    <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                    <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                    <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                    <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                    <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                    <th class="col discount"><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></th>
+                    <th class="col rowtotal"><?php /* @escapeNotVerified */ echo __('Row Total') ?></th>
                 </tr>
             </thead>
             <?php $_items = $_creditmemo->getAllItems(); ?>
@@ -50,22 +50,22 @@
     </div>
     <div class="block block-order-details-view">
         <div class="block-title">
-            <strong><?php echo __('Order Information') ?></strong>
+            <strong><?php /* @escapeNotVerified */ echo __('Order Information') ?></strong>
         </div>
         <div class="block-content">
         <?php if (!$_order->getIsVirtual()): ?>
             <div class="box box-order-shipping-address">
                 <div class="box-title">
-                    <strong><?php echo __('Shipping Address') ?></strong>
+                    <strong><?php /* @escapeNotVerified */ echo __('Shipping Address') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_creditmemo->getShippingAddress() ?>
-                    <address><?php echo $block->formatAddress($_shipping, 'html') ?></address>
+                    <address><?php /* @escapeNotVerified */ echo $block->formatAddress($_shipping, 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-shipping-method">
                 <div class="box-title">
-                    <strong><?php echo __('Shipping Method') ?></strong>
+                    <strong><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
@@ -74,16 +74,16 @@
         <?php endif; ?>
             <div class="box box-order-billing-address">
                 <div class="box-title">
-                    <strong><?php echo __('Billing Address') ?></strong>
+                    <strong><?php /* @escapeNotVerified */ echo __('Billing Address') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_creditmemo->getbillingAddress() ?>
-                    <address><?php echo $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                    <address><?php /* @escapeNotVerified */ echo $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-billing-method">
                 <div class="box-title">
-                    <strong><?php echo __('Payment Method') ?></strong>
+                    <strong><?php /* @escapeNotVerified */ echo __('Payment Method') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php echo $block->getPaymentInfoHtml() ?>

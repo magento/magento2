@@ -13,17 +13,17 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 {
     public function testRender()
     {
-        $testCacheValue = '1433259723';
-        $testDatetime   = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
-        $formattedDate  = (\IntlDateFormatter::formatObject($testDatetime));
-        $htmlId         = 'test_HTML_id';
-        $label          = 'test_label';
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getFrontend', 'remove', 'save', 'clean'])
-            ->getMock();
-        $cacheMock->expects($this->any())->method('load')->willReturn($testCacheValue);
+        $testCacheValue = '1433259723';
+        $testDatetime = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
+
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface $dateTimeFormatter */
+        $dateTimeFormatter = $objectManager->getObject('Magento\Framework\Stdlib\DateTime\DateTimeFormatter');
+        $formattedDate = $dateTimeFormatter->formatObject($testDatetime);
+
+        $htmlId = 'test_HTML_id';
+        $label = 'test_label';
 
         $localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->disableOriginalConstructor()
@@ -38,13 +38,18 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
+        $dateTimeFormatter->expects($this->once())
+            ->method('formatObject')
+            ->with($testDatetime)
+            ->willReturn($formattedDate);
 
+        /** @var \Magento\Config\Block\System\Config\Form\Field\Notification $notification */
         $notification = $objectManager->getObject(
             'Magento\Config\Block\System\Config\Form\Field\Notification',
             [
-                'cache'      => $cacheMock,
                 'localeDate' => $localeDateMock,
+                'dateTimeFormatter' => $dateTimeFormatter,
             ]
         );
 

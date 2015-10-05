@@ -25,4 +25,5 @@
     <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation" />
     <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
     <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
 </config>

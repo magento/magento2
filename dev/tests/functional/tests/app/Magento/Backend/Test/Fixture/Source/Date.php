@@ -19,10 +19,10 @@ class Date extends DataSource
     /**
      * @constructor
      * @param array $params
-     * @param array $data
+     * @param array|string $data
      * @throws \Exception
      */
-    public function __construct(array $params, array $data = [])
+    public function __construct(array $params, $data = [])
     {
         $this->params = $params;
         if (isset($data['pattern']) && $data['pattern'] !== '-') {
@@ -40,6 +40,8 @@ class Date extends DataSource
                 $date = date('m/d/Y');
             }
             $this->data = $date;
+        } else {
+            $this->data = $data;
         }
     }
 }

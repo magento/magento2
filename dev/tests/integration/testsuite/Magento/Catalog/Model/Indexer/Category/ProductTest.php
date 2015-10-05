@@ -17,7 +17,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_ROOT_CATEGORY = 2;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
 
@@ -28,7 +28,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Indexer\Model\IndexerInterface indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );

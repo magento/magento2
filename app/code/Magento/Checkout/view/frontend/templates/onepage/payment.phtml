@@ -15,7 +15,7 @@
     <?php echo $block->getBlockHtml('formkey') ?>
     <fieldset class="fieldset">
         <legend class="legend payments-title">
-            <span><?php echo __('Payment Information') ?></span>
+            <span><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
         </legend><br>
         <?php echo $block->getChildChildHtml('methods_additional') ?>
         <div id="checkout-payment-method-load" class="opc-payment"></div>
@@ -23,10 +23,10 @@
     <?php echo $block->getChildChildHtml('additional') ?>
     <div class="actions-toolbar" id="payment-buttons-container">
         <div class="primary">
-            <button data-role="opc-continue" type="button" class="button action continue primary"><span><?php echo __('Continue') ?></span></button>
+            <button data-role="opc-continue" type="button" class="button action continue primary"><span><?php /* @escapeNotVerified */ echo __('Continue') ?></span></button>
         </div>
         <div class="secondary">
-            <a class="action back" href="#"><span><?php echo __('Back') ?></span></a>
+            <a class="action back" href="#"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
         </div>
     </div>
 </form>

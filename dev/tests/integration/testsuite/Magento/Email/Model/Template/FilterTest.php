@@ -254,17 +254,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'CSS from theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-1.css"',
-                'color: #111;'
+                'color: #111'
             ],
             'CSS from parent theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-2.css"',
-                'color: #222;'
+                'color: #222'
             ],
             'CSS from grandparent theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-3.css"',
-                'color: #333;'
+                'color: #333'
             ],
             'Missing file parameter' => [
                 TemplateTypesInterface::TYPE_HTML,
@@ -284,7 +284,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/file-with-error.css"',
-                Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
             ],
         ];
     }
@@ -316,10 +316,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->model->setPlainTemplateMode($plainTemplateMode);
         $this->model->setIsChildTemplate($isChildTemplateMode);
 
-        if ($productionMode) {
-            $this->objectManager->get('Magento\Framework\App\State')
-                ->setMode(State::MODE_PRODUCTION);
-        }
+        $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
+        $this->objectManager->get('Magento\Framework\App\State')->setMode($appMode);
 
         $this->assertContains($expectedOutput, $this->model->filter($templateText));
     }
@@ -366,7 +364,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
                 false,
             ],
         ];

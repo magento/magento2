@@ -548,14 +548,27 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="tooltip">' . '<span class="help"><a' . ' href="' . $this->escapeUrl(
+            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
                 $url
             ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
                 'What is this?'
-            ) . '"' . ' class="link-store-scope"><span>' . __(
+            ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
                 'What is this?'
             ) . '</span></a></span>' . ' </div>';
         }
         return $html;
+    }
+
+    /**
+     * Get whether iframe is being used
+     *
+     * @return bool
+     */
+    public function isUsingIframe()
+    {
+        if ($this->hasData('is_using_iframe')) {
+            return (bool)$this->getData('is_using_iframe');
+        }
+        return false;
     }
 }

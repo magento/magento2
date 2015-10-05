@@ -33,6 +33,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param string $model
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

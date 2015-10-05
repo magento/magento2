@@ -13,17 +13,17 @@
         <?php $edition = $block->hasEdition() ? 'data-edition="' . $block->escapeHtml($block->getEdition()) . '"' : ''; ?>
         <?php $logoSrc = ($block->hasLogoImageSrc()) ? $block->escapeHtml($block->getLogoImageSrc()) : 'images/magento-logo.svg' ?>
         <a
-            href="<?php echo $block->getHomeLink() ?>"
-            <?php echo $edition; ?>
+            href="<?php /* @escapeNotVerified */ echo $block->getHomeLink() ?>"
+            <?php /* @escapeNotVerified */ echo $edition; ?>
             class="logo">
-            <img class="logo-img" src="<?php echo $block->getViewFileUrl($logoSrc) ?>"
+            <img class="logo-img" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl($logoSrc) ?>"
             alt="<?php echo $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
         </a>
     <?php break; ?>
     <?php case 'user': ?>
         <div class="admin-user admin__action-dropdown-wrap">
             <a
-                href="<?php echo $block->getUrl('adminhtml/system_account/index') ?>"
+                href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
                 class="admin__action-dropdown"
                 title="<?php echo $block->escapeHtml(__('My Account')) ?>"
                 data-mage-init='{"dropdown":{}}'
@@ -36,27 +36,27 @@
                 <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>
                 <li>
                     <a
-                        href="<?php echo $block->getUrl('adminhtml/system_account/index') ?>"
-                        <?php echo $block->getUiId('user', 'account', 'settings')?>
+                        href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
+                        <?php /* @escapeNotVerified */ echo $block->getUiId('user', 'account', 'settings')?>
                         title="<?php echo $block->escapeHtml(__('Account Setting')) ?>">
-                        <?php echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>)
+                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>)
                     </a>
                 </li>
                 <?php endif; ?>
                 <li>
                     <a
-                        href="<?php echo $block->getBaseUrl(); ?>"
+                        href="<?php /* @escapeNotVerified */ echo $block->getBaseUrl(); ?>"
                         title="<?php echo $block->escapeHtml(__('Customer View')); ?>"
                         target="_blank" class="store-front">
-                        <?php echo __('Customer View'); ?>
+                        <?php /* @escapeNotVerified */ echo __('Customer View'); ?>
                     </a>
                 </li>
                 <li>
                     <a
-                        href="<?php echo $block->getLogoutLink() ?>"
+                        href="<?php /* @escapeNotVerified */ echo $block->getLogoutLink() ?>"
                         class="account-signout"
                         title="<?php echo $block->escapeHtml(__('Sign Out')) ?>">
-                        <?php echo __('Sign Out') ?>
+                        <?php /* @escapeNotVerified */ echo __('Sign Out') ?>
                     </a>
                 </li>
             </ul>

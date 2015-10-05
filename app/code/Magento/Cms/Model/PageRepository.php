@@ -109,7 +109,7 @@ class PageRepository implements PageRepositoryInterface
     public function getById($pageId)
     {
         $page = $this->pageFactory->create();
-        $this->resource->load($page, $pageId);
+        $page->load($pageId);
         if (!$page->getId()) {
             throw new NoSuchEntityException(__('CMS Page with id "%1" does not exist.', $pageId));
         }

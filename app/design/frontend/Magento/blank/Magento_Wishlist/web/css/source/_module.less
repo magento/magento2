@@ -28,7 +28,7 @@
     .action {
         &.towishlist {
             &:extend(.abs-actions-addto-gridlist all);
-            .icon-font-symbol(
+            .lib-icon-font-symbol(
                 @icon-wishlist-empty
             );
         }
@@ -36,7 +36,7 @@
 }
 
 .account .table-wrapper .data.table.wishlist {
-    .table-bordered(
+    .lib-table-bordered(
         @_table_type: horizontal
     );
     thead > tr > th {
@@ -165,7 +165,7 @@
                     float: left;
                 }
                 &-name {
-                    .font-size(16);
+                    .lib-font-size(16);
                 }
                 &-actions {
                     display: block;

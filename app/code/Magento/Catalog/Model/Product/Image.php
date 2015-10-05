@@ -547,6 +547,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve 'true' if image is a base file placeholder
+     *
+     * @return bool
+     */
+    public function isBaseFilePlaceholder()
+    {
+        return (bool)$this->_isBaseFilePlaceholder;
+    }
+
+    /**
      * @param MagentoImage $processor
      * @return $this
      */

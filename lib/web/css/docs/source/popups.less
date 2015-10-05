@@ -4,9 +4,9 @@
 //  */
 
 //  # Popups
-//  To implement the popup, use the following markup. It corresponds accessibility requirements. To set Popup styles use the <code>.popup()</code> mixin.
+//  To implement the popup, use the following markup. It corresponds accessibility requirements. To set Popup styles use the <code>.lib-popup()</code> mixin.
 //
-//  The <code>.window-overlay()</code> mixin controls the styles of overlay background.
+//  The <code>.lib-window-overlay()</code> mixin controls the styles of overlay background.
 //  ##Simple popup
 //
 //  ``` html
@@ -57,15 +57,15 @@
 //  ```
 
 .window.popup.popup-example {
-    .popup();
+    .lib-popup();
 }
 
 .window.popup.popup-example-1 {
-    .popup();
+    .lib-popup();
 }
 
 .window.overlay {
-    .window-overlay();
+    .lib-window-overlay();
 }
 
 //  #Popup variables
@@ -472,7 +472,7 @@
 //  ```
 
 .window.popup.popup-example-2 {
-    .popup(
+    .lib-popup(
         @_popup-height: 200px
     );
 }
@@ -499,7 +499,7 @@
 //  ```
 
 .window.popup.popup-example-3 {
-    .popup(
+    .lib-popup(
         @_popup-content-height: 200px
     );
 }
@@ -540,7 +540,7 @@
 // ```
 
 .window.popup.popup-example-4 {
-    .popup(
+    .lib-popup(
         @_popup-header-margin: 0 0 25px,
         @_popup-content-margin: 0 0 20px,
         @_popup-footer-margin: 0 20px
@@ -585,7 +585,7 @@
 // ```
 
 .window.popup.popup-example-5 {
-    .popup(
+    .lib-popup(
         @_popup-title-headings: true,
         @_popup-title-headings-level: h1
     );
@@ -593,7 +593,7 @@
 
 //  # Popup action toolbar
 //
-//  The <code>.popup()</code> mixin uses the same variables as <code>.actions-toolbar()</code>, but with <code>'@_popup-'</code> prefix added.
+//  The <code>.lib-popup()</code> mixin uses the same variables as <code>.actions-toolbar()</code>, but with <code>'@_popup-'</code> prefix added.
 //
 //  To use variables from the <code>.actions-toolbar()</code> mixin set:
 //  ```css
@@ -628,7 +628,7 @@
 // ```
 
 .window.popup.popup-example-6 {
-    .popup(
+    .lib-popup(
         @_popup-actions-toolbar: true,
         @_popup-actions-toolbar-actions-position: left,
         @_popup-actions-toolbar-actions-reverse: true
@@ -669,7 +669,7 @@
 //  ```
 
 .window.popup.popup-example-7 {
-    .popup(
+    .lib-popup(
         @_popup-button-close-icon: false,
         @_popup-button-close-reset: false
     );
@@ -677,7 +677,7 @@
 
 //  # Modify the icon of popup Close button
 //
-//  The <code>.popup()</code> mixin uses all the same variables as <code>.icon-font()</code> mixin with <code>'@_popup-'</code> prefix added. More information about <code>.icon-font()</code> parameters you can find at **Icons** page
+//  The <code>.lib-popup()</code> mixin uses all the same variables as <code>.icon-font()</code> mixin with <code>'@_popup-'</code> prefix added. More information about <code>.lib-icon-font()</code> parameters you can find at **Icons** page
 //
 // ``` html
 // <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
@@ -707,7 +707,7 @@
 // ```
 
 .window.popup.popup-example-8 {
-    .popup(
+    .lib-popup(
         @_popup-icon-font-content: @icon-arrow-up,
         @_popup-icon-font-color: #f00,
         @_popup-icon-font-color-hover: #090,
@@ -720,7 +720,7 @@
 
 //  # Modify overlay styles
 //
-//  To modify overlay styles use the <code>.window-overlay()</code> mixin
+//  To modify overlay styles use the <code>.lib-window-overlay()</code> mixin
 //
 //  ``` html
 //  <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
@@ -751,11 +751,11 @@
 //  ```
 
 .window.popup.popup-example-9 {
-    .popup();
+    .lib-popup();
 }
 
 .window.overlay.example-overlay-1.active {
-    .window-overlay(
+    .lib-window-overlay(
         @_overlay-background: #0f5293,
         @_overlay-opacity: .8,
         @_overlay-opacity-old: 80

@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
 
 define([
     'Magento_Ui/js/lib/registry/registry'
@@ -42,7 +43,7 @@ define([
                     prop = 'magento';
                 
                 registry.set(elem, prop);
-                expect(registry.storage.data[elem]).toEqual(prop);
+                expect(registry.storage.data.get(elem)).toEqual(prop);
             });
         });
         describe('"registry.get" method', function () {
@@ -76,7 +77,7 @@ define([
                 expect(registry.hasOwnProperty('remove')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.remove);
+                var type = typeof registry.remove;
 
                 expect(type).toEqual('function');
             });
@@ -101,14 +102,14 @@ define([
                 expect(registry.hasOwnProperty('has')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.has);
+                var type = typeof registry.has;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if registry.storage has property', function () {
                 var name = 'magento';
 
-                registry.storage.data[name] = 'magentoValue';
+                registry.storage.data.set(name, 'magentoValue');
                 expect(registry.has(name)).toEqual(true);
             });
             it('Check returned value if registry.storage has not property', function () {
@@ -129,17 +130,17 @@ define([
                 expect(registry.hasOwnProperty('async')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.async);
+                var type = typeof registry.async;
 
                 expect(type).toEqual('function');
-            })
+            });
         });
         describe('"registry.create" method', function () {
             it('Check for defined', function () {
                 expect(registry.hasOwnProperty('create')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.async);
+                var type = typeof registry.async;
 
                 expect(type).toEqual('function');
             });

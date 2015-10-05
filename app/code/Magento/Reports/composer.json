@@ -2,7 +2,7 @@
     "name": "magento/module-reports",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-config": "1.0.0-beta",
         "magento/module-store": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
@@ -12,7 +12,6 @@
         "magento/module-cms": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-widget": "1.0.0-beta",
-        "magento/module-log": "1.0.0-beta",
         "magento/module-wishlist": "1.0.0-beta",
         "magento/module-review": "1.0.0-beta",
         "magento/module-catalog-inventory": "1.0.0-beta",
