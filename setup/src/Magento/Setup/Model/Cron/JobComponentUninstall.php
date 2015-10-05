@@ -12,6 +12,8 @@ use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Job to remove a component. Run by Setup Cron Task
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class JobComponentUninstall extends AbstractJob
 {
