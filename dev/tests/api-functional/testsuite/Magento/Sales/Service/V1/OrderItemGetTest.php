@@ -32,6 +32,10 @@ class OrderItemGetTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_custom_options.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_with_custom_options.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_with_custom_options.php
      * @magentoApiDataFixture Magento/Sales/_files/order_with_all_types_of_products.php
      */
     public function testOrderItemGet()

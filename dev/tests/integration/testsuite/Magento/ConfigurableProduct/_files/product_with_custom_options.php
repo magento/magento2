@@ -23,7 +23,6 @@ foreach ($options as $option) {
     $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
     $productId = array_shift($productIds);
     $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-        ->setId($productId)
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
         ->setName('Configurable Option' . $option->getLabel())
@@ -46,7 +45,6 @@ foreach ($options as $option) {
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
-    ->setId(array_shift($productIds))
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')

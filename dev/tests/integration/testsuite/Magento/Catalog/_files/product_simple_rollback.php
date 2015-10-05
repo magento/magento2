@@ -10,10 +10,9 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
-/** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-$product = $productRepository->get('simple');
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->load('simple', 'sku');
 if ($product->getId()) {
     $product->delete();
 }

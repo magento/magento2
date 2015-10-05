@@ -12,9 +12,9 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
-/** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-$product = $productRepository->get('configurable');
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->load('configurable', 'sku');
 if ($product->getId()) {
     $product->delete();
 }
