@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogSearch\Test\Block\Advanced;
+namespace Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute;
 
 use Magento\Mtf\Block\Form as BaseForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Advanced search form with custom Select attribute.
+ * Advanced search form with custom Text attribute.
  */
-class CustomAttributeText extends BaseForm
+class Text extends BaseForm
 {
     /**
      * Selector for text input.

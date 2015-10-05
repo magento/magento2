@@ -45,7 +45,7 @@ class AssertAdvancedSearchProductByAttribute extends AbstractConstraint
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         $searchForm = $searchPage->getForm();
         $productSearch = $this->prepareFixture($product);
 
@@ -60,7 +60,7 @@ class AssertAdvancedSearchProductByAttribute extends AbstractConstraint
     }
 
     /**
-     * Preparation of fixture data before comparing
+     * Preparation of fixture data before comparing.
      *
      * @param InjectableFixture $productSearch
      * @return CatalogProductSimple

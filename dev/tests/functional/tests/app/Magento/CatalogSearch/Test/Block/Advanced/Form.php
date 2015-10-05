@@ -47,6 +47,13 @@ class Form extends ParentForm
     protected $labelSelector = 'label';
 
     /**
+     * Selector for custom attribute.
+     *
+     * @var string
+     */
+    protected $customAttributeSelector = 'div[class*="%s"]';
+
+    /**
      * Submit search form.
      *
      * @return void
@@ -74,10 +81,15 @@ class Form extends ParentForm
 
         // Mapping
         $mapping = $this->dataMapping($data);
+        $attributeType = $attributeCode = '';
         if ($fixture->hasData('custom_attribute')) {
+            /** @var CatalogProductAttribute $attribute */
             $attribute = $fixture->getDataFieldConfig('custom_attribute')['source']->getAttribute();
             $attributeType = $attribute->getFrontendInput();
-            $element = $this->_rootElement->find('div[class*="' . $attribute->getAttributeCode() . '"]');
+            $attributeCode = $attribute->getAttributeCode();
+        }
+        if ($this->hasRender($attributeType)) {
+            $element = $this->_rootElement->find(sprintf($this->customAttributeSelector, $attributeCode));
             $arguments = ['fixture' => $fixture, 'element' => $element, 'mapping' => $mapping];
             $this->callRender($attributeType, 'fill', $arguments);
         } else {
