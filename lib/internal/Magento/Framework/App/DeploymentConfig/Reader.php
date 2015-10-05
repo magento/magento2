@@ -101,10 +101,12 @@ class Reader
     }
 
     /**
+     * Finds list of files that has the key
+     *
      * @param array $keys
      * @return string
      */
-    private function findFileWithKeys($keys)
+    private function findFilesWithKeys($keys)
     {
         $displayMessage = '';
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
