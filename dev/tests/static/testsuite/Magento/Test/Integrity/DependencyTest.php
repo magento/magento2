@@ -149,7 +149,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
             // The Dependency test is skipped for vendor/magento build
             self::markTestSkipped(
-                'The build is running from vendor/magento. DependencyTest is skipped(MAGETWO-43654)'
+                'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
             );
         }
 
