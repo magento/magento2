@@ -43,6 +43,7 @@ class Processor
     /**
      * @param ImageContentInterface $imageContent
      * @param string $destinationFolder
+     * @return void
      */
     protected function saveFile(ImageContentInterface $imageContent, $destinationFolder)
     {
@@ -54,9 +55,10 @@ class Processor
     /**
      * @param ImageContentInterface $imageContent
      * @param \Magento\Catalog\Model\Product\Option $option
-     * @param $destinationFolder
+     * @param string $destinationFolder
      * @return bool|array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processFileContent(ImageContentInterface $imageContent, $option, $destinationFolder)
     {
