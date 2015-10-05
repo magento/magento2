@@ -59,6 +59,6 @@
                 </referenceBlock>
             </referenceBlock>
         </referenceBlock>
-        <remove name="parent_txn_id"/>
+        <referenceBlock name="parent_txn_id" remove="true"/>
     </body>
 </page>

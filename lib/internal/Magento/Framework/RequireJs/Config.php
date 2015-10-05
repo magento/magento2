@@ -174,7 +174,7 @@ config;
      */
     public function getMixinsFileRelativePath()
     {
-        return $this->staticContext->getConfigPath() . '/' . self::MIXINS_FILE_NAME;
+        return $this->staticContext->getPath() . '/' . self::MIXINS_FILE_NAME;
     }
 
     /**

@@ -13,5 +13,16 @@ use Magento\Backend\Test\Block\Widget\FormTabs;
  */
 class IntegrationForm extends FormTabs
 {
-    //
+    /**
+     * Get array of label => js error text.
+     *
+     * @param string $tabName
+     * @return array
+     */
+    public function getJsErrors($tabName)
+    {
+        $tab = $this->getTab($tabName);
+        $this->openTab($tabName);
+        return $tab->getJsErrors();
+    }
 }

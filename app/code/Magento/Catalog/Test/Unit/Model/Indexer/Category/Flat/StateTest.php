@@ -18,12 +18,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $flatIndexerMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -32,7 +32,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->flatIndexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+            'Magento\Framework\Indexer\IndexerInterface',
             [],
             '',
             false,
@@ -41,7 +41,13 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
     }
 
     public function testIsFlatEnabled()

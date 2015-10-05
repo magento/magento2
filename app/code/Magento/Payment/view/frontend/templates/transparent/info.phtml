@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * @see \Magento\Payment\Block\Transparent\Info
  */
 ?>
-<fieldset id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none" class="fieldset items redirect">
-    <div><?php echo __('We\'ll ask for your payment details before you place an order.') ?></div>
+<fieldset id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display:none" class="fieldset items redirect">
+    <div><?php /* @escapeNotVerified */ echo __('We\'ll ask for your payment details before you place an order.') ?></div>
 </fieldset>

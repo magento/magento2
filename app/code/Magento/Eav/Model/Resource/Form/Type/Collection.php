@@ -19,6 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Initialize collection model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

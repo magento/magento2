@@ -14,22 +14,22 @@
         line-height: @tab-control__height;
         margin: 0 0 -1px;
         strong {
-            .css(background, @tab-control__active__background-color);
+            .lib-css(background, @tab-control__active__background-color);
             border: @border-width__base solid @border-color__base;
             display: block;
             font-weight: @tab-control__font-weight;
             padding: 0 20px;
         }
         a {
-            .css(background, @tab-control__background-color);
-            .css(color, @tab-control__color);
+            .lib-css(background, @tab-control__background-color);
+            .lib-css(color, @tab-control__color);
             border: @border-width__base solid @border-color__base;
             display: block;
             font-weight: @tab-control__font-weight;
             padding: 0 20px;
             &:hover {
-                .css(background, @tab-control__hover__background-color);
-                .css(text-decoration, @tab-control__hover__text-decoration);
+                .lib-css(background, @tab-control__hover__background-color);
+                .lib-css(text-decoration, @tab-control__hover__text-decoration);
             }
         }
     }
@@ -43,7 +43,7 @@
         border-bottom: @border-width__base solid @border-color__base;
         padding: 0 0 @indent__s;
         > strong {
-            .font-size(24);
+            .lib-font-size(24);
             font-weight: @font-weight__light;
         }
         .action {
@@ -152,7 +152,7 @@
     }
     .action {
         &.show {
-            .icon-font(
+            .lib-icon-font(
                 @icon-down,
                 @_icon-font-size: 10px,
                 @_icon-font-line-height: 10px,
@@ -160,9 +160,9 @@
                 @_icon-font-position: after,
                 @_icon-font-display: inline-block
             );
-            .css(color, @primary__color);
+            .lib-css(color, @primary__color);
             &.expanded {
-                .icon-font-symbol(
+                .lib-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                 );
@@ -170,7 +170,7 @@
         }
     }
     .product-item-name {
-        .font-size(18);
+        .lib-font-size(18);
     }
     .items-qty {
         &:extend(.abs-reset-list all);
@@ -383,7 +383,7 @@
             }
         }
         .action {
-            .css(margin-top, @indent__s);
+            .lib-css(margin-top, @indent__s);
         }
         .items-qty {
             display: inline-block;
@@ -416,7 +416,7 @@
                 padding-left: 10px;
             }
             .col {
-                .font-size(12);
+                .lib-font-size(12);
                 padding: 0 10px;
                 &:first-child {
                     padding-top: 3px;

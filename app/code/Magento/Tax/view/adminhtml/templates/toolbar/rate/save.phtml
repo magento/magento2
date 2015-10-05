@@ -16,7 +16,7 @@ require([
     "mage/mage"
 ], function($){
 
-    $('#<?php echo $form->getForm()->getId() ?>').mage('form').mage('validation');
+    $('#<?php /* @escapeNotVerified */ echo $form->getForm()->getId() ?>').mage('form').mage('validation');
 
     $(document).ready(function () {
         'use strict';

@@ -6,8 +6,39 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-class ForgotPassword extends \Magento\Customer\Controller\Account
+use Magento\Customer\Controller\AccountInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+
+class ForgotPassword extends Action implements AccountInterface
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @param Context $context
+     * @param Session $customerSession
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        Session $customerSession,
+        PageFactory $resultPageFactory
+    ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+
     /**
      * Forgot customer password page
      *
@@ -17,9 +48,9 @@ class ForgotPassword extends \Magento\Customer\Controller\Account
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->getBlock('forgotPassword')->setEmailValue($this->_getSession()->getForgottenEmail());
+        $resultPage->getLayout()->getBlock('forgotPassword')->setEmailValue($this->session->getForgottenEmail());
 
-        $this->_getSession()->unsForgottenEmail();
+        $this->session->unsForgottenEmail();
 
         return $resultPage;
     }

@@ -186,7 +186,9 @@ class Builder implements BuilderInterface
                 $transaction = $this->transactionRepository->create()->setTxnId($this->transactionId);
             }
             $transaction->setPaymentId($this->payment->getId())
+                ->setPayment($this->payment)
                 ->setOrderId($this->order->getId())
+                ->setOrder($this->order)
                 ->setTxnType($type)
                 ->isFailsafe($this->failSafe);
 

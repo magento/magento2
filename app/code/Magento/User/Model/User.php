@@ -470,7 +470,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $result = false;
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
-                throw new AuthenticationException(__('This account is inactive.'));
+                throw new AuthenticationException(
+                    __('You did not sign in correctly or your account is temporarily disabled.')
+                );
             }
             if (!$this->hasAssigned2Role($this->getId())) {
                 throw new AuthenticationException(__('You need more permissions to access this.'));

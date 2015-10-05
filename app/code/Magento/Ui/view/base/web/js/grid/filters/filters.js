@@ -6,8 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, layout, Collapsible) {
+    'uiComponent'
+], function (_, utils, layout, Component) {
     'use strict';
 
     /**
@@ -31,15 +31,13 @@ define([
      * @returns {Object}
      */
     function removeEmpty(data) {
-        data = utils.flatten(data);
-        data = _.omit(data, utils.isEmpty);
-
-        return utils.unflatten(data);
+        return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
+            stickyTmpl: 'ui/grid/sticky/filters',
             applied: {
                 placeholder: true
             },
@@ -158,15 +156,6 @@ define([
             this.set('filters', utils.copy(this.applied));
 
             return this;
-        },
-
-        /**
-         * Tells wether filters pannel should be opened.
-         *
-         * @returns {Boolean}
-         */
-        isOpened: function () {
-            return this.opened() && this.hasVisible();
         },
 
         /**

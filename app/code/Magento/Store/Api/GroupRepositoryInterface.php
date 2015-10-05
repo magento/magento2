@@ -18,7 +18,7 @@ interface GroupRepositoryInterface
      * Retrieve group by id
      *
      * @param int $id
-     * @return Data\GroupInterface
+     * @return \Magento\Store\Api\Data\GroupInterface
      * @throws NoSuchEntityException
      */
     public function get($id);
@@ -26,7 +26,7 @@ interface GroupRepositoryInterface
     /**
      * Retrieve list of all groups
      *
-     * @return Data\GroupInterface[]
+     * @return \Magento\Store\Api\Data\GroupInterface[]
      */
     public function getList();
 

@@ -125,7 +125,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     public function getReviewPageUrl()
     {
-        return $this->_urlBuilder->getUrl('braintree/paypal/review');
+        return $this->_urlBuilder->getUrl('braintree/paypal/review', ['_secure' => true]);
     }
 
     /**
@@ -183,7 +183,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     {
         if ($this->isInMiniCart()) {
             return 'braintree_paypal_container_minicart';
-
         } else {
             return 'braintree_paypal_container' . $this->mathRandom->getRandomString(5);
         }

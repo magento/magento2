@@ -33,6 +33,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param string $model
      * @param string|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

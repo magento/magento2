@@ -24,11 +24,11 @@
 //  ```
 
 .example-icon-1 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
 }
 
 .example-icon-2 {
-    .icon-image(
+    .lib-icon-image(
         @_icon-image: '@{baseDir}images/blank-theme-icons.png',
         @_icon-image-position-x: -26px,
         @_icon-image-position-y: 0,
@@ -37,7 +37,7 @@
 }
 
 .example-icon-3 {
-    .icon-image(
+    .lib-icon-image(
         @_icon-image: '@{baseDir}images/blank-theme-icons.png',
         @_icon-image-position-x: -156px,
         @_icon-image-position-y: -52px,
@@ -46,14 +46,14 @@
 }
 
 .example-icon-4 {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @icon-settings,
         @_icon-font-size: 24px
    );
 }
 
 .example-icon-5 {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @icon-star,
         @_icon-font-size: 24px,
         @_icon-font-position: after
@@ -61,7 +61,7 @@
 }
 
 .example-icon-6 {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @icon-flag,
         @_icon-font-size: 24px,
         @_icon-font-text-hide: true
@@ -69,14 +69,14 @@
 }
 
 //  # Icon with image or sprite
-//  the <code>.icon-image()</code> mixin is used to create icons using single image or sprite. It has one mandatory parameter - <code>@_icon-image</code>. This parameter accepts the path to an image or sprite.
+//  the <code>.lib-icon-image()</code> mixin is used to create icons using single image or sprite. It has one mandatory parameter - <code>@_icon-image</code>. This parameter accepts the path to an image or sprite.
 //
 //  ```
 //  <a href="#" class="example-icon-7"><span>icon-search</span></a>
 //  ```
 
 .example-icon-7 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
 }
 
 //  # Icon with image or sprite variables
@@ -147,7 +147,7 @@
 //  </pre>
 
 //  # Icon position for an icon with image or sprite
-//  To change the position for icons with image the <code>.icon-image-position()</code> mixin is used. By managing its <code>@_icon-image-position-x</code> and <code>@_icon-image-position-y</code> variables you can move the image on element's background. The <code>@_icon-image-position</code> variable is used to define the position of icon (before or after the element).
+//  To change the position for icons with image the <code>.lib-icon-image-position()</code> mixin is used. By managing its <code>@_icon-image-position-x</code> and <code>@_icon-image-position-y</code> variables you can move the image on element's background. The <code>@_icon-image-position</code> variable is used to define the position of icon (before or after the element).
 //  ```
 //  <a href="#" class="example-icon-8"><span>icon-star</span></a>
 //  <br>
@@ -155,15 +155,15 @@
 //  ```
 
 .example-icon-8 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
-    .icon-image-position(
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+    .lib-icon-image-position(
         @_icon-image-position-x: -182px
    );
 }
 
 .example-icon-9 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png', @_icon-image-position: after);
-    .icon-image-position(
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png', @_icon-image-position: after);
+    .lib-icon-image-position(
         @_icon-image-position-x: -52px,
         @_icon-image-position-y: -26px,
         @_icon-image-position: after
@@ -202,14 +202,14 @@
 //  </pre>
 
 //  # Icon sprite position (with grid)
-//  Mixin <code>.icon-sprite-position()</code> is used to manage the position of sprite background image. It assumes the use of a single sprite image with individual images **placed on a regular grid**.
+//  Mixin <code>.lib-icon-sprite-position()</code> is used to manage the position of sprite background image. It assumes the use of a single sprite image with individual images **placed on a regular grid**.
 //  ```
 //  <a href="#" class="example-icon-10"><span>icon text</span></a>
 //  ```
 
 .example-icon-10 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
-    .icon-sprite-position(4, 0);
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+    .lib-icon-sprite-position(4, 0);
 }
 
 //  # Icon sprite position variables
@@ -250,14 +250,14 @@
 //  </pre>
 
 //  # Image/sprite icon size
-//  Mixin <code>.icon-image-size()</code> is used to change the image/sprite icon size
+//  Mixin <code>.lib-icon-image-size()</code> is used to change the image/sprite icon size
 //  ```
 //  <a href="#" class="example-icon-11"><span>icon-search</span></a>
 //  ```
 
 .example-icon-11 {
-    .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
-    .icon-image-size(30px, 30px);
+    .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+    .lib-icon-image-size(30px, 30px);
     &:before {
         background-color: #f1f1f1;
     }
@@ -295,14 +295,14 @@
 //  </pre>
 //
 //  # Font icon
-//  The <code>.icon-font()</code> mixin is used to create icons using font icons. It has one mandatory parameter - <code>@_icon-font-content</code>. This parameter accepts the font icon code.
+//  The <code>.lib-icon-font()</code> mixin is used to create icons using font icons. It has one mandatory parameter - <code>@_icon-font-content</code>. This parameter accepts the font icon code.
 //
 //  ```
 //  <a href="#" class="example-icon-12"><span>icon-calendar</span></a>
 //  ```
 
 .example-icon-12 {
-    .icon-font(
+    .lib-icon-font(
         @icon-calendar,
         @_icon-font-size: 28px
    );
@@ -394,15 +394,15 @@
 //  </pre>
 
 //  # Change the size of font icon
-//  The <code>.icon-font-size()</code> mixin is used to change size of the font icon which is already defined. The mixin generates only new font size and line height without any other options. @_icon-font-position variable is used to define the position of icon (before or after the element) which we want to set font size of.
+//  The <code>.lib-icon-font-size()</code> mixin is used to change size of the font icon which is already defined. The mixin generates only new font size and line height without any other options. @_icon-font-position variable is used to define the position of icon (before or after the element) which we want to set font size of.
 //
 //  ```
 //  <a href="#" class="example-icon-13"><span>icon-calendar</span></a>
 //  ```
 
 .example-icon-13 {
-    .icon-font(@icon-calendar);
-    .icon-font-size(
+    .lib-icon-font(@icon-calendar);
+    .lib-icon-font-size(
         @_icon-font-size: 26px
    );
 }
@@ -438,18 +438,18 @@
 //  </pre>
 //
 //  # Hide icon text
-//  The <code>.icon-text-hide()</code> mixin can be used separately to hide text of an element that has an icon text. This mixin accepts no variables.
+//  The <code>.lib-icon-text-hide()</code> mixin can be used separately to hide text of an element that has an icon text. This mixin accepts no variables.
 //
 //  ```
 //  <a href="#" class="example-icon-14"><span>icon-calendar</span></a>
 //  ```
 
 .example-icon-14 {
-    .icon-font(
+    .lib-icon-font(
         @icon-envelope,
         @_icon-font-size: 26px
    );
-    .icon-text-hide();
+    .lib-icon-text-hide();
 }
 
 // # Sprite and font icons for Blank theme
@@ -701,112 +701,112 @@
         float: left;
         width: 33%;
         > span {
-            .icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
+            .lib-icon-image(@_icon-image: '@{baseDir}images/blank-theme-icons.png');
         }
         .icon-search {
-            .icon-sprite-position(0, 0);
+            .lib-icon-sprite-position(0, 0);
         }
         .icon-cart {
-            .icon-sprite-position(1, 0);
+            .lib-icon-sprite-position(1, 0);
         }
         .icon-arrow-down {
-            .icon-sprite-position(2, 0);
+            .lib-icon-sprite-position(2, 0);
         }
         .icon-arrow-up {
-            .icon-sprite-position(3, 0);
+            .lib-icon-sprite-position(3, 0);
         }
         .icon-grid {
-            .icon-sprite-position(4, 0);
+            .lib-icon-sprite-position(4, 0);
         }
         .icon-list {
-            .icon-sprite-position(5, 0);
+            .lib-icon-sprite-position(5, 0);
         }
         .icon-remove {
-            .icon-sprite-position(6, 0);
+            .lib-icon-sprite-position(6, 0);
         }
         .icon-star {
-            .icon-sprite-position(7, 0);
+            .lib-icon-sprite-position(7, 0);
         }
         .icon-pointer-down {
-            .icon-sprite-position(8, 0);
+            .lib-icon-sprite-position(8, 0);
         }
         .icon-pointer-up {
-            .icon-sprite-position(9, 0);
+            .lib-icon-sprite-position(9, 0);
         }
         .icon-pointer-left {
-            .icon-sprite-position(10, 0);
+            .lib-icon-sprite-position(10, 0);
         }
         .icon-pointer-right {
-            .icon-sprite-position(11, 0);
+            .lib-icon-sprite-position(11, 0);
         }
         .icon-compare-empty {
-            .icon-sprite-position(0, 1);
+            .lib-icon-sprite-position(0, 1);
         }
         .icon-compare-full {
-            .icon-sprite-position(1, 1);
+            .lib-icon-sprite-position(1, 1);
         }
         .icon-wishlist-empty {
-            .icon-sprite-position(2, 1);
+            .lib-icon-sprite-position(2, 1);
         }
         .icon-wishlist-full {
-            .icon-sprite-position(3, 1);
+            .lib-icon-sprite-position(3, 1);
         }
         .icon-update {
-            .icon-sprite-position(4, 1);
+            .lib-icon-sprite-position(4, 1);
         }
         .icon-collapse {
-            .icon-sprite-position(5, 1);
+            .lib-icon-sprite-position(5, 1);
         }
         .icon-expand {
-            .icon-sprite-position(6, 1);
+            .lib-icon-sprite-position(6, 1);
         }
         .icon-menu {
-            .icon-sprite-position(7, 1);
+            .lib-icon-sprite-position(7, 1);
         }
         .icon-prev {
-            .icon-sprite-position(8, 1);
+            .lib-icon-sprite-position(8, 1);
         }
         .icon-next {
-            .icon-sprite-position(9, 1);
+            .lib-icon-sprite-position(9, 1);
         }
         .icon-settings {
-            .icon-sprite-position(10, 1);
+            .lib-icon-sprite-position(10, 1);
         }
         .icon-info {
-            .icon-sprite-position(11, 1);
+            .lib-icon-sprite-position(11, 1);
         }
         .icon-checkmark {
-            .icon-sprite-position(0, 2);
+            .lib-icon-sprite-position(0, 2);
         }
         .icon-calendar {
-            .icon-sprite-position(1, 2);
+            .lib-icon-sprite-position(1, 2);
         }
         .icon-comment {
-            .icon-sprite-position(2, 2);
+            .lib-icon-sprite-position(2, 2);
         }
         .icon-comment-reflected {
-            .icon-sprite-position(3, 2);
+            .lib-icon-sprite-position(3, 2);
         }
         .icon-envelope {
-            .icon-sprite-position(4, 2);
+            .lib-icon-sprite-position(4, 2);
         }
         .icon-warning {
-            .icon-sprite-position(5, 2);
+            .lib-icon-sprite-position(5, 2);
         }
         .icon-trash {
-            .icon-sprite-position(6, 2);
+            .lib-icon-sprite-position(6, 2);
         }
         .icon-flag {
-            .icon-sprite-position(7, 2);
+            .lib-icon-sprite-position(7, 2);
         }
         .icon-location {
-            .icon-sprite-position(8, 2);
+            .lib-icon-sprite-position(8, 2);
         }
         .icon-up {
-            .icon-sprite-position(9, 2);
+            .lib-icon-sprite-position(9, 2);
         }
         .icon-down {
-            .icon-sprite-position(10, 2);
+            .lib-icon-sprite-position(10, 2);
         }
     }
 }
@@ -860,7 +860,7 @@
         margin-bottom: 35px;
         text-align: center;
         > span {
-            .icon-font('', @_icon-font-size: 34px);
+            .lib-icon-font('', @_icon-font-size: 34px);
             &:before {
                 content: attr(data-icon);
                 margin: 0 auto;

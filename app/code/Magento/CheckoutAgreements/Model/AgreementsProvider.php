@@ -5,7 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\Checkout\Model\Agreements\AgreementsProviderInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -37,6 +36,7 @@ class AgreementsProvider implements AgreementsProviderInterface
      * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
@@ -60,6 +60,7 @@ class AgreementsProvider implements AgreementsProviderInterface
             $agreementCollection = $this->agreementCollectionFactory->create();
             $agreementCollection->addStoreFilter($this->storeManager->getStore()->getId());
             $agreementCollection->addFieldToFilter('is_active', 1);
+            $agreementCollection->addFieldToFilter('mode', AgreementModeOptions::MODE_MANUAL);
             $agreementIds = $agreementCollection->getAllIds();
         }
         return $agreementIds;

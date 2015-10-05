@@ -33,16 +33,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="advancedSearchFilterList" type="Magento\Catalog\Model\Layer\FilterList">
-        <arguments>
-            <argument name="filterableAttributes" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList">
-        <arguments>
-            <argument name="layer" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
@@ -163,11 +153,6 @@
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\Collection</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Layer\Advanced\ItemCollectionProvider" type="Magento\Catalog\Model\Layer\Search\ItemCollectionProvider">
-        <arguments>
-            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\CatalogSearch\Model\Advanced">
         <arguments>
             <argument name="productCollectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</argument>
@@ -184,13 +169,6 @@
             <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced\Context">
-        <arguments>
-            <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\ItemCollectionProvider</argument>
-            <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
-            <argument name="collectionFilter" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Layer\Category">
         <arguments>
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Category\Context</argument>
@@ -201,23 +179,11 @@
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\Context</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced">
-        <arguments>
-            <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\Context</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
-    </type>
-    <type name="Magento\Catalog\Model\Layer\Resolver">
-        <arguments>
-            <argument name="layersPool" xsi:type="array">
-                <item name="advanced" xsi:type="string">Magento\CatalogSearch\Model\Layer\Advanced</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Mapper">
         <arguments>

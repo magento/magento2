@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import EAV entity abstract model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,6 +80,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -91,12 +94,13 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         array $data = []
     ) {
-        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->_storeManager = $storeManager;
         $this->_attributeCollection = isset(
@@ -176,6 +180,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
                 'options' => $this->getAttributeOptions($attribute),
             ];
+            $this->validColumnNames[] = $attribute->getAttributeCode();
         }
         return $this;
     }

@@ -6,9 +6,9 @@
 //  # Utilities
 //  <code>_utilities.less</code> is a reuseable collection of basic Less mixins.
 //
-// # .clearfix()
+// # .lib-clearfix()
 //
-//  The <code>.clearfix()</code> mixin is a modern solution for healing container`s height which have floated elements. Also its applying prevents top-margins from collapsing.
+//  The <code>.lib-clearfix()</code> mixin is a modern solution for healing container`s height which have floated elements. Also its applying prevents top-margins from collapsing.
 //
 
 .example-clearfix-container-1 {
@@ -16,7 +16,7 @@
 }
 
 .example-clearfix-container-2 {
-    .clearfix();
+    .lib-clearfix();
     border: 1px solid #0f0;
 }
 
@@ -27,7 +27,7 @@
     float: right;
 }
 
-// Container with floated child elements without <code>.clearfix()</code>
+// Container with floated child elements without <code>.lib-clearfix()</code>
 //  ```
 //  <div class="example-clearfix-container-1">
 //      <div class="example-clearfix-item left">
@@ -39,7 +39,7 @@
 //  </div>
 //  ```
 
-// Container with floated child elements with <code>.clearfix()</code>
+// Container with floated child elements with <code>.lib-clearfix()</code>
 //  ```
 //  <div class="example-clearfix-container-2">
 //      <div class="example-clearfix-item left">
@@ -51,17 +51,17 @@
 //  </div>
 //  ```
 
-// # .visibility-hidden()
+// # .lib-visibility-hidden()
 //
-//  The <code>.visibility-hidden()()</code> mixin changes element`s visibility to hidden and height to 0.
+//  The <code>.lib-visibility-hidden()()</code> mixin changes element`s visibility to hidden and height to 0.
 //
 
 .example-visibility-hidden {
-    .visibility-hidden();
+    .lib-visibility-hidden();
 }
 
 //
-//  This is a block with applied <code>.visibility-hidden()</code> mixin.
+//  This is a block with applied <code>.lib-visibility-hidden()</code> mixin.
 
 //
 //  ```
@@ -72,17 +72,17 @@
 //  </div>
 //  ```
 
-// # .visually-hidden()
+// # .lib-visually-hidden()
 //
-//  The <code>.visually-hidden()</code> mixin safely hides the element for accessibility reasons.
+//  The <code>.lib-visually-hidden()</code> mixin safely hides the element for accessibility reasons.
 //
 
 .example-visually-hidden-1 {
-    .visually-hidden();
+    .lib-visually-hidden();
 }
 
 //
-//  This is a block with applied <code>.visually-hidden()</code> mixin.
+//  This is a block with applied <code>.lib-visually-hidden()</code> mixin.
 
 //
 //  ```
@@ -93,23 +93,23 @@
 //  </div>
 //  ```
 
-// # .visually-hidden-reset()
+// # .lib-visually-hidden-reset()
 //
-//  The <code>.visually-hidden-reset()</code> mixin resets hidden visibility and makes element again visible.
+//  The <code>.lib-visually-hidden-reset()</code> mixin resets hidden visibility and makes element again visible.
 //
 
 .example-visually-hidden-2 {
     background: #fdf0d5;
     padding: 5px;
-    .visually-hidden();
+    .lib-visually-hidden();
 }
 
 .example-visually-hidden-2 {
-    .visually-hidden-reset();
+    .lib-visually-hidden-reset();
 }
 
 //
-//  This is a block with applied <code>.visually-hidden-reset()</code> mixin after <code>.visually-hidden()</code> applying.
+//  This is a block with applied <code>.lib-visually-hidden-reset()</code> mixin after <code>.lib-visually-hidden()</code> applying.
 
 //
 //  ```
@@ -120,18 +120,18 @@
 //  </div>
 //  ```
 
-// # .css()
+// # .lib-css()
 //
-//  The <code>.css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
+//  The <code>.lib-css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.lib-css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
 //
 
 .example-css-container {
-    .css(padding, @indent__base);
-    .css(background, @secondary__color);
+    .lib-css(padding, @indent__base);
+    .lib-css(background, @secondary__color);
 }
 
 //
-//  If the variable is set to <code>false</code>, the <code>.css()</code> mixin will add nothing to the code.
+//  If the variable is set to <code>false</code>, the <code>.lib-css()</code> mixin will add nothing to the code.
 //
 //  ```
 //  <div class="example-css-container">
@@ -141,7 +141,7 @@
 //
 
 .example-css-container-2 {
-    .css(background, false);
+    .lib-css(background, false);
 }
 
 //  ```
@@ -151,7 +151,7 @@
 //  ```
 //
 
-//  # .css() variables
+//  # .lib-css() variables
 //
 //  <pre>
 //    <table>
@@ -182,9 +182,9 @@
 //    </table>
 //  </pre>
 
-// # .rotate()
+// # .lib-rotate()
 //
-//  The <code>.rotate()</code> mixin is a wrapper for css3 transform property with rotate value.
+//  The <code>.lib-rotate()</code> mixin is a wrapper for css3 transform property with rotate value.
 //
 
 .example-rotate {
@@ -192,7 +192,7 @@
     position: absolute;
     height: 20px;
     width: 40px;
-    .rotate(
+    .lib-rotate(
         @_rotation: 45deg;
     );
 }
@@ -202,7 +202,7 @@
 //  <div class="example-rotate"></div>
 //  ```
 
-//  #  .rotate() variables
+//  #  .lib-rotate() variables
 //
 //  <pre>
 //    <table>
@@ -221,13 +221,13 @@
 //    </table>
 //  </pre>
 
-// # .input-placeholder()
+// # .lib-input-placeholder()
 //
-//  The <code>.input-placeholder()</code> mixin is used to change placeholder font-color and font-weight.
+//  The <code>.lib-input-placeholder()</code> mixin is used to change placeholder font-color and font-weight.
 //
 
 .example-placeholder {
-    .input-placeholder(#808080, bold);
+    .lib-input-placeholder(#808080, bold);
 }
 
 //
@@ -236,7 +236,7 @@
 //  ```
 //
 
-//  #  .input-placeholder() variables
+//  #  .lib-input-placeholder() variables
 //
 //  <pre>
 //    <table>
@@ -261,13 +261,13 @@
 //    </table>
 //  </pre>
 
-// # .background-gradient()
+// # .lib-background-gradient()
 //
-//  The <code>.background-gradient()</code> mixin is used for applying custom css3 gradient.
+//  The <code>.lib-background-gradient()</code> mixin is used for applying custom css3 gradient.
 //
 
 .example-background-gradient-1 {
-    .background-gradient(
+    .lib-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: vertical,
         @_background-gradient-color-start: #cff,
@@ -276,7 +276,7 @@
 }
 
 .example-background-gradient-2 {
-    .background-gradient(
+    .lib-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
         @_background-gradient-color-start: #cff,
@@ -290,7 +290,7 @@
 }
 
 .example-background-gradient-3 {
-    .background-gradient(
+    .lib-background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
         @_background-gradient-color-start: rgba(255,255,255,0),
@@ -325,7 +325,7 @@
 //  ```
 //
 
-//  # .background-gradient() variables
+//  # .lib-background-gradient() variables
 //
 //  <pre>
 //    <table>

@@ -17,7 +17,6 @@ use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCol
 use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 /**
- * Class Pdfshipments
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction

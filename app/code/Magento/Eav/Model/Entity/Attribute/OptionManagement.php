@@ -25,6 +25,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     /**
      * @param \Magento\Eav\Model\AttributeRepository $attributeRepository
      * @param \Magento\Eav\Model\Resource\Entity\Attribute $resourceModel
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\AttributeRepository $attributeRepository,

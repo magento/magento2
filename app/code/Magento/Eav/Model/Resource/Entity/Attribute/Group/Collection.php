@@ -16,6 +16,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Init resource model for collection
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -40,6 +41,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param string $direction
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setSortOrder($direction = self::SORT_ORDER_ASC)
     {

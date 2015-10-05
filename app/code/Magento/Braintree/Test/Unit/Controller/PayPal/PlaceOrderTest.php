@@ -51,6 +51,11 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
     protected $controller;
 
     /**
+     * @var \Magento\Checkout\Api\AgreementsValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $validatorMock;
+
+    /**
      * test setup
      */
     public function setUp()
@@ -80,7 +85,7 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
+        $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', '', false);
 
         $this->resultFactoryMock = $this->getMockBuilder('\Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
@@ -98,14 +103,15 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->validatorMock = $this->getMock('Magento\Checkout\Api\AgreementsValidatorInterface');
         $this->controller = $this->objectManagerHelper->getObject(
             '\Magento\Braintree\Controller\PayPal\PlaceOrder',
             [
                 'context' => $contextMock,
                 'checkoutSession' => $this->checkoutSessionMock,
                 'checkoutFactory' => $this->checkoutFactoryMock,
+                'agreementsValidator' => $this->validatorMock
             ]
         );
     }
@@ -131,6 +137,7 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->checkoutMock);
 
+        $this->requestMock->expects($this->any())->method('getPost')->willReturn([]);
         return $quoteMock;
     }
 
@@ -141,7 +148,7 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
         $orderIncrementId = 125;
 
         $quoteMock = $this->setupCart();
-
+        $this->validatorMock->expects($this->once())->method('isValid')->willReturn(true);
         $this->checkoutMock->expects($this->once())
             ->method('place')
             ->with(null);
@@ -203,7 +210,7 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
     public function testExecuteException()
     {
         $this->setupCart();
-
+        $this->validatorMock->expects($this->once())->method('isValid')->willReturn(true);
         $exceptionMsg = new \Magento\Framework\Phrase('error');
         $exception = new \Magento\Framework\Exception\LocalizedException($exceptionMsg);
         $this->checkoutMock->expects($this->once())
@@ -212,8 +219,8 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with($exceptionMsg);
+            ->method('addExceptionMessage')
+            ->with($exception, $exceptionMsg);
 
         $resultRedirect = $this->getMockBuilder('\Magento\Framework\Controller\Result\Redirect')
             ->disableOriginalConstructor()

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Category;
 
-class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID

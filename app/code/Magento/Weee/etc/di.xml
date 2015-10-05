@@ -11,13 +11,6 @@
             <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Weee\Model\Observer">
-        <arguments>
-            <argument name="layout" xsi:type="object">Magento\Framework\View\Layout\Proxy</argument>
-            <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
-            <argument name="weeeData" xsi:type="object">Magento\Weee\Helper\Data\Proxy</argument>
-        </arguments>
-    </type>
 
     <type name="Magento\Framework\Pricing\Adjustment\Collection">
         <arguments>
@@ -38,6 +31,11 @@
         </arguments>
     </type>
     <type name="Magento\Bundle\Pricing\Price\BundleSelectionPrice">
+        <arguments>
+            <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Pricing\Price\CustomOptionPrice">
         <arguments>
             <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
         </arguments>

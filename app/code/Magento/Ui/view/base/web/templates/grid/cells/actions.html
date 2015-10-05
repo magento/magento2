@@ -6,35 +6,35 @@
 -->
 
 <td data-bind="visible: visible" class="data-grid-actions-cell">
-    <!-- ko if: isSingle($parentContext.$index()) -->
-        <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
+    <!-- ko if: isSingle(row._rowIndex) -->
+        <!-- ko foreach: getVisibleActions(row._rowIndex) -->
     <a
         class="action-menu-item"
         data-bind="
             attr: {
                 href: $data.href
             },
-            click: $parent.applyAction.bind($parent, index, rowIndex),
+            click: $parent.isHandlerRequired(index, rowIndex) ?
+                $parent.applyAction.bind($parent, index, rowIndex) :
+                false,
             text: $data.label"></a>
         <!-- /ko -->
     <!-- /ko -->
 
-    <!-- ko if: isMultiple($parentContext.$index()) -->
+    <!-- ko if: isMultiple(row._rowIndex) -->
     <div
         class="action-select-wrap"
-        data-bind="
-            css : {
-                '_active' : opened() === $parentContext.$index()
-            },
-            outerClick: closeList.bind($data, $parentContext.$index())">
-        <button class="action-select" data-bind="click: toggleList.bind($data, $parentContext.$index())">
+        data-bind="collapsible">
+        <button class="action-select" data-bind="toggleCollapsible">
             <span data-bind="i18n: 'Select'"></span>
         </button>
         <ul
             class="action-menu"
-            data-bind="
-                css: {'_active': opened() === $parentContext.$index()}">
-            <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
+            data-bind="css: {
+            '_active': $collapsible.opened
+            },
+            foreach: getVisibleActions(row._rowIndex)"
+            >
             <li>
                 <a
                     class="action-menu-item"
@@ -42,10 +42,11 @@
                         attr: {
                             href: $data.href
                         },
-                        click: $parent.applyAction.bind($parent, index, rowIndex),
+                        click: $parent.isHandlerRequired(index, rowIndex) ?
+                            $parent.applyAction.bind($parent, index, rowIndex) :
+                            false,
                         text: $data.label"></a>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
     <!-- /ko -->

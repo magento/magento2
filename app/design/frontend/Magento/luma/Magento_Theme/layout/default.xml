@@ -23,7 +23,7 @@
         <referenceContainer name="footer">
             <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" after="footer_links" template="switch/stores.phtml"/>
         </referenceContainer>
-        <remove name="report.bugs"/>
+        <referenceBlock name="report.bugs" remove="true"/>
         <move element="copyright" destination="before.body.end"/>
     </body>
 </page>

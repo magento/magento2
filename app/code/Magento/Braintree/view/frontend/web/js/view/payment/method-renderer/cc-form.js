@@ -51,8 +51,8 @@ define(
                 selectedCardToken: configBraintree ? configBraintree.selectedCardToken : '',
                 storedCards: configBraintree ? configBraintree.storedCards : {},
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
-                creditCardExpMonth: configBraintree ? configBraintree.creditCardExpMonth : null,
-                creditCardExpYear: configBraintree ? configBraintree.creditCardExpYear : null
+                creditCardExpMonth: null,
+                creditCardExpYear: null
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -69,6 +69,9 @@ define(
                     this.isPaymentProcessing = null;
                     this.braintreeClient = null;
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
+            },
+            canInitialise: function () {
+                return this.clientToken
             },
             /**
              * @override
@@ -95,9 +98,13 @@ define(
                     });
                 }
 
-                this.braintreeClient = new braintreeClientSDK.api.Client({
-                    clientToken: this.clientToken
-                });
+                if (this.canInitialise()) {
+                    this.braintreeClient = new braintreeClientSDK.api.Client({
+                        clientToken: this.clientToken
+                    });
+                } else {
+                    this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
+                }
 
                 return this;
             },
@@ -109,7 +116,7 @@ define(
                     var self = this,
                         cardInfo = null;
 
-                    messageList.clear();
+                    this.messageContainer.clear();
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
 
                     this.isPaymentProcessing = $.Deferred();
@@ -187,9 +194,9 @@ define(
                 this.paymentMethodNonce('');
 
                 if (_.isObject(error)) {
-                    messageList.addErrorMessage(error);
+                    this.messageContainer.addErrorMessage(error);
                 } else {
-                    messageList.addErrorMessage({
+                    this.messageContainer.addErrorMessage({
                         message: error
                     });
                 }
@@ -342,6 +349,10 @@ define(
                         }
                     });
                 }
+            },
+
+            getCssClass: function () {
+                return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
             }
         });
     }

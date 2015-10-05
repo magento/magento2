@@ -6,6 +6,11 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
+/**
+ * Manage children products of configurable product
+ *
+ * @api
+ */
 interface LinkManagementInterface
 {
     /**

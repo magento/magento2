@@ -30,7 +30,8 @@
     width: 100%;
 
     tr {
-        > td {
+        > .address-details,
+        > .method-info {
             padding: @email-content__padding__base @email-content__padding__base @email-content__padding__base 0;
             width: 50%;
 
@@ -40,7 +41,7 @@
         }
 
         //  Prevent extra spacing on Payment & Shipping Method row
-        & + tr {
+        & + .method-info {
             > td {
                 padding: 0 0 @email-content__padding__base;
             }
@@ -53,6 +54,16 @@
         .title {
             font-weight: @font-weight__regular;
         }
+
+        .data.table {
+            > caption {
+                display: none;
+            }
+
+            th {
+                padding-right: @email-content__padding__base;
+            }
+        }
     }
 }
 
@@ -62,7 +73,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     //  Stack columns
     .order-details {
-        td {
+        .address-details,
+        .method-info {
             display: block;
             padding: @email-content__padding__base 0 !important;
             width: auto !important;
@@ -80,7 +92,7 @@
 // ----------------------------------------------
 
 .shipment-track {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
 
     thead,
     tbody {
@@ -107,7 +119,7 @@
 // ----------------------------------------------
 
 .email-items {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
     border: @table__border-width @table__border-style @table__border-color;
 
     thead,
@@ -225,6 +237,6 @@
 
 .email-non-inline() {
     .email-items {
-        .table-overflow();
+        .lib-table-overflow();
     }
 }

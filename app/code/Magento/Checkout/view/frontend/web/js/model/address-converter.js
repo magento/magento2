@@ -29,12 +29,15 @@ define(
                 }
 
                 addressData.region = {
-                    region_id: null,
-                    region_code: null,
+                    region_id: addressData.region_id,
+                    region_code: addressData.region_code,
                     region: regionName
                 };
 
-                if (addressData.region_id && countryData()[addressData.country_id]['regions']) {
+                if (addressData.region_id
+                    && countryData()[addressData.country_id]
+                    && countryData()[addressData.country_id]['regions']
+                ) {
                     region = countryData()[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
@@ -55,6 +58,15 @@ define(
             quoteAddressToFormAddressData: function (address) {
                 var self = this;
                 var output = {};
+
+                if ($.isArray(address.street)) {
+                    var streetObject = {};
+                    address.street.forEach(function(value, index) {
+                        streetObject[index] = value;
+                    });
+                    address.street = streetObject;
+                }
+
                 $.each(address, function (key) {
                     if (address.hasOwnProperty(key) && !$.isFunction(address[key])) {
                         output[self.toUnderscore(key)] = address[key];
@@ -100,6 +112,16 @@ define(
                 });
 
                 return convertedArray.slice(0);
+            },
+
+            addressToEstimationAddress: function (address) {
+                var estimatedAddressData = {
+                    country_id: address.countryId,
+                    region: address.region,
+                    region_id: address.regionId,
+                    postcode: address.postcode
+                };
+               return this.formAddressDataToQuoteAddress(estimatedAddressData);
             }
         };
     }

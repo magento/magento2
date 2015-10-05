@@ -42,7 +42,35 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->with('SHOW GRANTS FOR current_user()')
+            ->willReturn($pdo);
+        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT ALL PRIVILEGES ON `name.*` TO']]);
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database user does not have enough privileges.
+     */
+    public function testCheckDatabaseConnectionNotEnoughPrivileges()
+    {
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with('SELECT version()')
+            ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->once())
+            ->method('query')
+            ->with('SHOW GRANTS FOR current_user()')
+            ->willReturn($pdo);
+        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT SELECT ON *.* TO']]);
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
     public function testCheckDatabaseTablePrefix()

@@ -12,6 +12,7 @@ define([
     return {
         defaults: {
             template: 'ui/collection',
+            registerNodes: true,
             ignoreTmpls: {
                 childDefaults: true
             },
@@ -22,7 +23,8 @@ define([
             },
             modules: {
                 storage: '${ $.storageConfig.provider }'
-            }
+            },
+            componentType: 'container'
         },
 
         /**
@@ -31,8 +33,6 @@ define([
          * @returns {Component} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, '_insert', 'trigger');
-
             this._super()
                 .initProperties()
                 .initObservable()
@@ -53,8 +53,7 @@ define([
             _.extend(this, {
                 source: registry.get(this.provider),
                 containers: [],
-                _elems: [],
-                elems: []
+                _elems: []
             });
 
             return this;
@@ -66,7 +65,9 @@ define([
          * @returns {Component} Chainable.
          */
         initObservable: function () {
-            this.observe('elems');
+            this.observe({
+                elems: []
+            });
 
             return this;
         },

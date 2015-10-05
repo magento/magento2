@@ -169,7 +169,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 ['main_table' => $this->getMainTable()],
                 [$this->getIdFieldName()]
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'main_table.visitor_id = visitor_table.visitor_id',
                 []
             )->where(

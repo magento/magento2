@@ -9,7 +9,7 @@ define([
     './manip',
     './traversal',
     './provider',
-    'Magento_Ui/js/lib/class',
+    'uiClass',
     'Magento_Ui/js/lib/ko/initialize'
 ], function (utils, core, links, manip, traversal, provider, Class) {
     'use strict';

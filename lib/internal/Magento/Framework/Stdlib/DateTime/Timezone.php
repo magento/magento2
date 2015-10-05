@@ -247,11 +247,19 @@ class Timezone implements TimezoneInterface
         $timezone = null,
         $pattern = null
     ) {
+        if ($timezone === null) {
+            if ($date->getTimezone() === null || $date->getTimezone()->getName() === '+00:00') {
+                $timezone = new \DateTimeZone('UTC');
+            } else {
+                $timezone = $date->getTimezone();
+            }
+        }
+
         $formatter = new \IntlDateFormatter(
             $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
-            $timezone ?: $date->getTimezone() ?: new \DateTimeZone(\DateTimeZone::UTC),
+            $timezone,
             null,
             $pattern
         );

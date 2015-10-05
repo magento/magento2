@@ -11,7 +11,6 @@
             <data name="description" xsi:type="string">Create root category with required fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/name" xsi:type="string">RootCategory%isolation%</data>
-            <data name="category/data/url_key" xsi:type="string">RootCategory%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/description" xsi:type="string">RootCategory Required</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
@@ -25,7 +24,6 @@
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/name" xsi:type="string">RootCategory%isolation%</data>
-            <data name="category/data/url_key" xsi:type="string">RootCategory%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/description" xsi:type="string">RootCategory All Fields</data>
             <data name="category/data/meta_title" xsi:type="string">RootCategory Page Title</data>

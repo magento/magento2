@@ -93,7 +93,7 @@ table {
 //  See email-fonts.less for @font-face declarations
 
 @font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
-.typography-all();
+.lib-typography-all();
 
 body {
     font-family: @font-family__base;
@@ -184,10 +184,6 @@ body {
         min-width: 240px;
         width: auto !important;
     }
-
-    .main-content {
-        padding: @email-body__padding !important;
-    }
 }
 
 //
@@ -201,13 +197,13 @@ body {
 
     .inner-wrapper {
         td {
-            .css(border-radius, @button__border-radius, 1);
+            .lib-css(border-radius, @button__border-radius, 1);
             background-color: @button-primary__background;
 
             a {
                 font-size: @button__font-size;
                 color: @button-primary__color;
-                .css(border-radius, @button__border-radius, 1);
+                .lib-css(border-radius, @button__border-radius, 1);
                 border: 1px solid @button-primary__background;
                 text-decoration: none;
                 padding: @button__padding;

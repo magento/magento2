@@ -150,9 +150,9 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->tester->execute([]);
         $expected = 'Enabling maintenance mode' . PHP_EOL
-            . 'Not enough information provided to roll back.'  . PHP_EOL
-            . 'Disabling maintenance mode';
-        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
+            . 'Not enough information provided to roll back.' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
+        $this->assertSame($expected, $this->tester->getDisplay());
     }
 
     public function testInteraction()

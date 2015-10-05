@@ -56,6 +56,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getStructureCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setStructureCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */
@@ -63,21 +66,27 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $elementCurrent,
         $containerName,
         $structureElement,
-        $expectedData
+        $expectedData,
+        $getStructureCondition,
+        $setStructureCondition,
+        $setRemoveCondition
     ) {
         /** @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject $scheduledStructureMock */
         $scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
             ->disableOriginalConstructor()->getMock();
-        $scheduledStructureMock->expects($this->once())
+        $scheduledStructureMock->expects($getStructureCondition)
             ->method('getStructureElementData')
             ->with($containerName)
             ->willReturn($structureElement);
-        $scheduledStructureMock->expects($this->once())
+        $scheduledStructureMock->expects($setStructureCondition)
             ->method('setStructureElementData')
             ->with($containerName, $expectedData)
             ->willReturnSelf();
+        $scheduledStructureMock->expects($setRemoveCondition)
+            ->method('setElementToRemoveList')
+            ->with($containerName);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
             ->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())
@@ -98,6 +107,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function processDataProvider()
     {
@@ -122,6 +132,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                         'unchanged' => 'unchanged_value',
                     ],
                 ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
             ],
             'referenceContainer' => [
                 'elementCurrent' => $this->getElement(
@@ -136,8 +149,77 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                         Container::CONTAINER_OPT_HTML_ID    => 'id_add',
                         Container::CONTAINER_OPT_HTML_CLASS => 'new',
                         Container::CONTAINER_OPT_LABEL      => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY    => null,
                     ],
                 ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
+            ],
+            'referenceContainerNoRemove' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="false"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [
+                    'attributes' => [
+                        Container::CONTAINER_OPT_HTML_TAG   => null,
+                        Container::CONTAINER_OPT_HTML_ID    => null,
+                        Container::CONTAINER_OPT_HTML_CLASS => null,
+                        Container::CONTAINER_OPT_LABEL      => null,
+                        Container::CONTAINER_OPT_DISPLAY    => null,
+                    ],
+                ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
+            ],
+            'referenceContainerRemove' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="1"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [],
+                'getStructureCondition' => $this->never(),
+                'setStructureCondition' => $this->never(),
+                'setRemoveCondition' => $this->once(),
+            ],
+            'referenceContainerRemove2' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="true"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [],
+                'getStructureCondition' => $this->never(),
+                'setStructureCondition' => $this->never(),
+                'setRemoveCondition' => $this->once(),
+            ],
+            'referenceContainerDisplayFalse' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"'
+                    . ' display="true"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [
+                    'attributes' => [
+                        Container::CONTAINER_OPT_HTML_TAG   => 'span',
+                        Container::CONTAINER_OPT_HTML_ID    => 'id_add',
+                        Container::CONTAINER_OPT_HTML_CLASS => 'new',
+                        Container::CONTAINER_OPT_LABEL      => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY    => 'true',
+                    ],
+                ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
             ]
         ];
     }

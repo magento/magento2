@@ -3,6 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 
 <?php
@@ -19,7 +21,7 @@ require([
 ], function(){
 
 //<![CDATA[
-optionalZipCountries = <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
+optionalZipCountries = <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
 
 function onAddressCountryChanged (countryElement) {
     var zipElementId = countryElement.id.replace(/country_id/, 'postcode');

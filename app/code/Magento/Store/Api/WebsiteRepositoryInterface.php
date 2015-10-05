@@ -18,7 +18,7 @@ interface WebsiteRepositoryInterface
      * Retrieve website by code
      *
      * @param string $code
-     * @return Data\WebsiteInterface
+     * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws NoSuchEntityException
      */
     public function get($code);
@@ -27,7 +27,7 @@ interface WebsiteRepositoryInterface
      * Retrieve website by id
      *
      * @param int $id
-     * @return Data\WebsiteInterface
+     * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws NoSuchEntityException
      */
     public function getById($id);
@@ -35,14 +35,14 @@ interface WebsiteRepositoryInterface
     /**
      * Retrieve list of all websites
      *
-     * @return Data\WebsiteInterface[]
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]
      */
     public function getList();
 
     /**
      * Retrieve default website
      *
-     * @return Data\WebsiteInterface
+     * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws \DomainException
      */
     public function getDefault();

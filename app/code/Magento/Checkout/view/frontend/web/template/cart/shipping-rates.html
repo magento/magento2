@@ -12,8 +12,7 @@
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
             <dd class="item-options" data-bind="foreach: $parent.getRatesForGroup($data)">
-                <div data-bind="click: $parents[1].selectShippingMethod,
-                                css: {'field choice item': available, 'message error': !available} ">
+                <div data-bind="css: {'field choice item': available, 'message error': !available} ">
                     <!-- ko ifnot: (available) -->
                     <div data-bind="text: error_message"></div>
                     <!-- /ko -->
@@ -22,6 +21,7 @@
                            type="radio"
                            class="radio"
                            data-bind="
+                                click: $parents[1].selectShippingMethod,
                                 checked: $parents[1].selectedShippingMethod,
                                 attr: {
                                         value: carrier_code + '_' + method_code,

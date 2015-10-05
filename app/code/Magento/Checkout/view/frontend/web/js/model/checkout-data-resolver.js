@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/action/select-payment-method',
     'Magento_Checkout/js/model/address-converter',
     'Magento_Checkout/js/action/select-billing-address',
-    'Magento_Checkout/js/action/create-billing-address'
+    'Magento_Checkout/js/action/create-billing-address',
+    'underscore'
 ], function (
     addressList,
     quote,
@@ -30,7 +31,8 @@ define([
     selectPaymentMethodAction,
     addressConverter,
     selectBillingAddress,
-    createBillingAddress
+    createBillingAddress,
+    _
 ) {
     'use strict';
 
@@ -39,8 +41,18 @@ define([
             if (checkoutData.getShippingAddressFromData()) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
+            } else {
+                this.resolveShippingAddress();
             }
-            this.applyShippingAddress();
+            if (quote.isVirtual()) {
+               if  (checkoutData.getBillingAddressFromData()) {
+                    address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
+                    selectBillingAddress(address);
+                } else {
+                   this.resolveBillingAddress();
+               }
+            }
+
         },
 
         resolveShippingAddress: function () {
@@ -48,20 +60,24 @@ define([
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
+            this.applyShippingAddress();
+        },
 
+        applyShippingAddress: function (isEstimatedAddress) {
             if (addressList().length == 0) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
-            this.applyShippingAddress();
-        },
-
-        applyShippingAddress: function () {
-            var shippingAddress = quote.shippingAddress();
+            var shippingAddress = quote.shippingAddress(),
+                isConvertAddress = isEstimatedAddress || false,
+                addressData;
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {
                     if (checkoutData.getSelectedShippingAddress() == address.getKey()) {
-                        selectShippingAddress(address);
+                        addressData = isConvertAddress
+                            ? addressConverter.addressToEstimationAddress(address)
+                            : address;
+                        selectShippingAddress(addressData);
                         return true;
                     }
                     return false;
@@ -70,21 +86,27 @@ define([
                 if (!isShippingAddressInitialized) {
                     isShippingAddressInitialized = addressList.some(function (address) {
                         if (address.isDefaultShipping()) {
-                            selectShippingAddress(address);
+                            addressData = isConvertAddress
+                                ? addressConverter.addressToEstimationAddress(address)
+                                : address;
+                            selectShippingAddress(addressData);
                             return true;
                         }
                         return false;
                     });
                 }
                 if (!isShippingAddressInitialized && addressList().length == 1) {
-                    selectShippingAddress(addressList()[0]);
+                    addressData = isConvertAddress
+                        ? addressConverter.addressToEstimationAddress(addressList()[0])
+                        : addressList()[0];
+                    selectShippingAddress(addressData);
                 }
             }
         },
 
         resolveShippingRates: function (ratesData) {
             var selectedShippingRate = checkoutData.getSelectedShippingRate();
-            var rateIsAvailable = false;
+            var availableRate = false;
 
             if (ratesData.length == 1) {
                 //set shipping rate if we have only one available shipping rate
@@ -92,32 +114,29 @@ define([
                 return;
             }
 
-            if(quote.shippingMethod()) {
-                rateIsAvailable = ratesData.some(function (rate) {
+            if (quote.shippingMethod()) {
+                availableRate = _.find(ratesData, function (rate) {
                     return rate.carrier_code == quote.shippingMethod().carrier_code
                         && rate.method_code == quote.shippingMethod().method_code;
                 });
             }
 
-            if (!rateIsAvailable && selectedShippingRate) {
-                rateIsAvailable = ratesData.some(function (rate) {
-                    if (rate.carrier_code + "_" + rate.method_code == selectedShippingRate) {
-                        selectShippingMethodAction(rate);
-                        return true;
-                    }
-                    return false;
-
+            if (!availableRate && selectedShippingRate) {
+                availableRate = _.find(ratesData, function (rate) {
+                    return rate.carrier_code + "_" + rate.method_code === selectedShippingRate;
                 });
             }
 
-            if (!rateIsAvailable && window.checkoutConfig.selectedShippingMethod) {
-                rateIsAvailable = true;
+            if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
+                availableRate = true;
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
             }
 
             //Unset selected shipping method if not available
-            if (!rateIsAvailable) {
+            if (!availableRate) {
                 selectShippingMethodAction(null);
+            } else {
+                selectShippingMethodAction(availableRate);
             }
         },
 
@@ -148,11 +167,15 @@ define([
                         }
                     });
                 }
-            } else if (
-                shippingAddress
+            } else {
+                this.applyBillingAddress()
+            }
+        },
+        applyBillingAddress: function () {
+            var shippingAddress = quote.shippingAddress();
+            if (shippingAddress
                 && shippingAddress.canUseForBilling()
-                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())
-            ) {
+                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }

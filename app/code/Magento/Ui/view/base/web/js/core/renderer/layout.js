@@ -140,7 +140,7 @@ define([
                 return false;
             }
 
-            if (node.disabled) {
+            if (node.disabled === true) {
                 return false;
             }
 

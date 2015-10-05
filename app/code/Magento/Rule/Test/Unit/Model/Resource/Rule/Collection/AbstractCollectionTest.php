@@ -120,9 +120,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->will($this->returnSelf());
 
-        $collectionSelect->expects($this->once())
-            ->method('exists');
-
         $this->abstractCollection->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connection));

@@ -38,10 +38,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
         $this->_cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+            ->disableOriginalConstructor()
+            ->setMethods(['cleanString'])
+            ->getMock();
         $this->_request = $this->getMock(
             'Magento\Framework\Webapi\Rest\Request',
             ['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'],
-            [$this->_cookieManagerMock, $areaListMock, $configScopeMock, $this->_deserializerFactory, ]
+            [$this->_cookieManagerMock, $converterMock, $areaListMock, $configScopeMock, $this->_deserializerFactory]
         );
 
         parent::setUp();

@@ -18,4 +18,8 @@
 //  ---------------------------------------------
 
 @media-common: false; // Don't output extra styles from _typography.less
-@import 'source/_typography.less';
+
+//  Font stylesheet @import is wrapped in a media query in order to prevent it from causing problems in Outlook
+@media screen {
+    @import 'source/_typography.less';
+}

@@ -30,8 +30,6 @@
         <item type="file">Lib::mage/dropdown.js</item>
         <item type="file">Lib::mage/dropdowns.js</item>
         <item type="file">Lib::mage/fieldset-controls.js</item>
-        <item type="file">Lib::mage/gallery-fullscreen.js</item>
-        <item type="file">Lib::mage/gallery.js</item>
         <item type="file">Lib::mage/item-table.js</item>
         <item type="file">Lib::mage/list.js</item>
         <item type="file">Lib::mage/loader.js</item>

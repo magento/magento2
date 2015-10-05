@@ -2,12 +2,12 @@
     "name": "magento/module-import-export",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-store": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/module-indexer": "1.0.0-beta",
         "magento/module-media-storage": "1.0.0-beta",
+        "magento/module-user": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "ext-ctype": "*",
         "magento/magento-composer-installer": "*"

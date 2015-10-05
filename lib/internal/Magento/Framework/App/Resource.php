@@ -27,28 +27,28 @@ class Resource
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface[]
      */
-    protected $_connections = [];
+    protected $connections = [];
 
     /**
      * Mapped tables cache array
      *
      * @var array
      */
-    protected $_mappedTableNames;
+    protected $mappedTableNames;
 
     /**
      * Resource config
      *
      * @var ResourceConfigInterface
      */
-    protected $_config;
+    protected $config;
 
     /**
      * Resource connection adapter factory
      *
      * @var ConnectionFactoryInterface
      */
-    protected $_connectionFactory;
+    protected $connectionFactory;
 
     /**
      * @var DeploymentConfig $deploymentConfig
@@ -58,7 +58,7 @@ class Resource
     /**
      * @var string
      */
-    protected $_tablePrefix;
+    protected $tablePrefix;
 
     /**
      * @param ResourceConfigInterface $resourceConfig
@@ -72,22 +72,23 @@ class Resource
         DeploymentConfig $deploymentConfig,
         $tablePrefix = ''
     ) {
-        $this->_config = $resourceConfig;
-        $this->_connectionFactory = $connectionFactory;
+        $this->config = $resourceConfig;
+        $this->connectionFactory = $connectionFactory;
         $this->deploymentConfig = $deploymentConfig;
-        $this->_tablePrefix = $tablePrefix ?: null;
+        $this->tablePrefix = $tablePrefix ?: null;
     }
 
     /**
      * Retrieve connection to resource specified by $resourceName
      *
      * @param string $resourceName
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
      * @codeCoverageIgnore
      */
     public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
-        $connectionName = $this->_config->getConnectionName($resourceName);
+        $connectionName = $this->config->getConnectionName($resourceName);
         return $this->getConnectionByName($connectionName);
     }
 
@@ -95,12 +96,13 @@ class Resource
      * Retrieve connection by $connectionName
      *
      * @param string $connectionName
-     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
      */
     public function getConnectionByName($connectionName)
     {
-        if (isset($this->_connections[$connectionName])) {
-            return $this->_connections[$connectionName];
+        if (isset($this->connections[$connectionName])) {
+            return $this->connections[$connectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -108,13 +110,12 @@ class Resource
         );
 
         if ($connectionConfig) {
-            $connection = $this->_connectionFactory->create($connectionConfig);
-        }
-        if (empty($connection)) {
-            return false;
+            $connection = $this->connectionFactory->create($connectionConfig);
+        } else {
+            throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->_connections[$connectionName] = $connection;
+        $this->connections[$connectionName] = $connection;
         return $connection;
     }
 
@@ -174,7 +175,7 @@ class Resource
      */
     public function setMappedTableName($tableName, $mappedName)
     {
-        $this->_mappedTableNames[$tableName] = $mappedName;
+        $this->mappedTableNames[$tableName] = $mappedName;
         return $this;
     }
 
@@ -186,8 +187,8 @@ class Resource
      */
     public function getMappedTableName($tableName)
     {
-        if (isset($this->_mappedTableNames[$tableName])) {
-            return $this->_mappedTableNames[$tableName];
+        if (isset($this->mappedTableNames[$tableName])) {
+            return $this->mappedTableNames[$tableName];
         } else {
             return false;
         }
@@ -240,11 +241,11 @@ class Resource
      */
     private function getTablePrefix()
     {
-        if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->deploymentConfig->get(
+        if (null === $this->tablePrefix) {
+            $this->tablePrefix = (string)$this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
             );
         }
-        return $this->_tablePrefix;
+        return $this->tablePrefix;
     }
 }

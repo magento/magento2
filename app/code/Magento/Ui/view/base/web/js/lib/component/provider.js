@@ -12,9 +12,10 @@ define([
      /**
      * Wrapper for ko.observable and ko.observableArray.
      * Assignes one or another ko property to obj[key]
-     * @param  {Object} obj   - object to store property to
-     * @param  {String} key   - key
-     * @param  {*} value      - initial value of observable
+     *
+     * @param {Object} obj - object to store property to
+     * @param {String} key - key
+     * @param {*} value - initial value of observable
      */
     function observe(obj, key, value) {
         var method = Array.isArray(value) ? 'observableArray' : 'observable';
@@ -36,46 +37,35 @@ define([
         obj[key] = ko[method](value);
     }
 
-    function notify(diffs, data, callback) {
-        diffs.changes.forEach(function (change) {
-            callback(change.path, change.value, change);
-        });
-
-        _.each(diffs.containers, function (changes, name) {
-            var value = utils.nested(data, name);
-
-            callback(name, value, changes);
-        });
-    }
-
     return {
         /**
-         * Retrieves nested data.
+         * Returns value of the nested property.
          *
          * @param {String} path - Path to the property.
-         * @returns {*}
+         * @returns {*} Value of the property.
          */
         get: function (path) {
             return utils.nested(this, path);
         },
 
         /**
-         * Sets value property to path and triggers update by path, passing result.
+         * Sets provided value as a value of the specified nested property.
+         * Triggers changes notifications, if value has mutated.
          *
-         * @param {String} path
-         * @param {*} value
+         * @param {String} path - Path to property.
+         * @param {*} value - New value of the property.
          * @returns {Component} Chainable.
          */
         set: function (path, value) {
             var data = utils.nested(this, path),
                 diffs;
 
-            if (typeof data !== 'function') {
+            if (!_.isFunction(data)) {
                 diffs = utils.compare(data, value, path);
 
                 utils.nested(this, path, value);
 
-                notify(diffs, this, this.trigger);
+                this._notify(diffs);
             } else {
                 utils.nested(this, path, value);
             }
@@ -84,19 +74,39 @@ define([
         },
 
         /**
-         * Removes nested data from the object.
+         * Removes nested property from the object.
          *
-         * @param {String} path - Path to the property that should be removed.
+         * @param {String} path - Path to the property.
+         * @returns {Component} Chainable.
          */
         remove: function (path) {
-            utils.nestedRemove(this, path);
+            var data,
+                diffs;
+
+            if (!path) {
+                return this;
+            }
+
+            data = utils.nested(this, path);
+
+            if (!_.isUndefined(data) && !_.isFunction(data)) {
+                diffs = utils.compare(data, undefined, path);
+
+                utils.nestedRemove(this, path);
+
+                this._notify(diffs);
+            }
+
+            return this;
         },
 
         /**
          * If 2 params passed, path is considered as key.
          * Else, path is considered as object.
          * Assignes props to this based on incoming params
-         * @param  {Object|String} path
+         *
+         * @param {(Object|String)} path
+         * @returns {Component} Chainable.
          */
         observe: function (path) {
             var type = typeof path;
@@ -118,6 +128,24 @@ define([
             return this;
         },
 
+        /**
+         *
+         */
+        _notify: function (diffs) {
+            diffs.changes.forEach(function (change) {
+                this.trigger(change.path, change.value, change);
+            }, this);
+
+            _.each(diffs.containers, function (changes, name) {
+                var value = utils.nested(this, name);
+
+                this.trigger(name, value, changes);
+            }, this);
+        },
+
+        /**
+         *
+         */
         restore: function () {
             var ns = this.storageConfig.namespace,
                 storage = this.storage();
@@ -129,6 +157,13 @@ define([
             return this;
         },
 
+        /**
+         * Stores value of the specified property in components' storage module.
+         *
+         * @param {String} property
+         * @param {*} [data=this[property]]
+         * @returns {Component} Chainable.
+         */
         store: function (property, data) {
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
@@ -140,6 +175,12 @@ define([
             return this;
         },
 
+        /**
+         * Removes stored property.
+         *
+         * @param {String} property - Property to be removed from storage.
+         * @returns {Component} Chainable.
+         */
         removeStored: function (property) {
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);

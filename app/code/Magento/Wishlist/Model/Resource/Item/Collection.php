@@ -257,7 +257,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $productIds = [];
 
         $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
-        $attributes = $this->_wishlistConfig->getProductAttributes();
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
 
@@ -268,7 +267,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($attributes)
+            ->addAttributeToSelect('*')
             ->addOptionsToResult()
             ->addUrlRewrite();
 
