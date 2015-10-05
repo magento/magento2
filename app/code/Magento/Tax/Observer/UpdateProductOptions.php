@@ -6,7 +6,9 @@
 
 namespace Magento\Tax\Observer;
 
-class UpdateProductOptions
+use Magento\Framework\Event\ObserverInterface;
+
+class UpdateProductOptions implements ObserverInterface
 {
     /**
      * Tax data
@@ -38,7 +40,7 @@ class UpdateProductOptions
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function invoke(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $response = $observer->getEvent()->getResponseObject();
         $options = $response->getAdditionalOptions();
