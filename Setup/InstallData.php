@@ -8,8 +8,8 @@ namespace Magento\MysqlMq\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Amqp\Config\Data as AmqpConfig;
-use Magento\Framework\Amqp\Config\Converter as AmqpConfigConverter;
+use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\Config\Converter as AmqpConfigConverter;
 
 /**
  * @codeCoverageIgnore

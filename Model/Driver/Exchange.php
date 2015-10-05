@@ -5,9 +5,9 @@
  */
 namespace Magento\MysqlMq\Model\Driver;
 
-use Magento\Framework\Amqp\EnvelopeInterface;
-use Magento\Framework\Amqp\ExchangeInterface;
-use Magento\Framework\Amqp\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\ExchangeInterface;
+use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
 use Magento\MysqlMq\Model\QueueManagement;
 
 class Exchange implements ExchangeInterface
