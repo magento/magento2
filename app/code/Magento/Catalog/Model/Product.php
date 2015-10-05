@@ -25,7 +25,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
  * @method int getPriceType
- * @method Resource\Product\Collection getCollection()
+ * @method \Magento\Catalog\Model\Resource\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
  * @method Product setRequestPath(string $requestPath)
@@ -343,8 +343,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Type $catalogProductType
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param Resource\Product $resource
-     * @param Resource\Product\Collection $resourceCollection
+     * @param \Magento\Catalog\Model\Resource\Product $resource
+     * @param \Magento\Catalog\Model\Resource\Product\Collection $resourceCollection
      * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
@@ -382,8 +382,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Type $catalogProductType,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        Resource\Product $resource,
-        Resource\Product\Collection $resourceCollection,
+        \Magento\Catalog\Model\Resource\Product $resource,
+        \Magento\Catalog\Model\Resource\Product\Collection $resourceCollection,
         \Magento\Framework\Data\CollectionFactory $collectionFactory,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,

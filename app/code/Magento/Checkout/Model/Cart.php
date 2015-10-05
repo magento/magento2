@@ -94,7 +94,7 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Resource\Cart $resourceCart
+     * @param \Magento\Checkout\Model\Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager

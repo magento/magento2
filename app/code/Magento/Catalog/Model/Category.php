@@ -230,11 +230,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param Resource\Category\Tree $categoryTreeResource
-     * @param Resource\Category\TreeFactory $categoryTreeFactory
+     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource
+     * @param \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\UrlInterface $url
-     * @param Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param Config $catalogConfig
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param Indexer\Category\Flat\State $flatState

@@ -8,8 +8,8 @@ namespace Magento\Review\Model;
 /**
  * Rating model
  *
- * @method Resource\Rating getResource()
- * @method Resource\Rating _getResource()
+ * @method \Magento\Review\Model\Resource\Rating getResource()
+ * @method \Magento\Review\Model\Resource\Rating _getResource()
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()

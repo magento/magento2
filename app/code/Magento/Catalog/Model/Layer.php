@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
  * Catalog view layer model
@@ -54,7 +55,7 @@ class Layer extends \Magento\Framework\DataObject
     /**
      * Attribute collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
@@ -88,8 +89,8 @@ class Layer extends \Magento\Framework\DataObject
     /**
      * @param Layer\ContextInterface $context
      * @param Layer\StateFactory $layerStateFactory
-     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param Resource\Product $catalogProduct
+     * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
@@ -98,7 +99,7 @@ class Layer extends \Magento\Framework\DataObject
     public function __construct(
         \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        AttributeCollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,

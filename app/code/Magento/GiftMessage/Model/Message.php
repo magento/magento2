@@ -29,7 +29,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TypeFactory $typeFactory
-     * @param Resource\Message $resource
+     * @param \Magento\GiftMessage\Model\Resource\Message $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */

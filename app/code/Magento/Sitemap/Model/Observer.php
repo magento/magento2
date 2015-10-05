@@ -66,7 +66,7 @@ class Observer
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation

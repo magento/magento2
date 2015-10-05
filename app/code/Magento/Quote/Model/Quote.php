@@ -340,13 +340,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
+     * @param \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param Status\ListFactory $statusListFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Quote\PaymentFactory $quotePaymentFactory
-     * @param Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Quote\Item\Processor $itemProcessor

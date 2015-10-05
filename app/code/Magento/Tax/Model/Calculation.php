@@ -197,8 +197,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param Resource\TaxClass\CollectionFactory $classesFactory
-     * @param Resource\Calculation $resource
+     * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
+     * @param \Magento\Tax\Model\Resource\Calculation $resource
      * @param CustomerAccountManagement $customerAccountManagement
      * @param CustomerGroupManagement $customerGroupManagement
      * @param CustomerGroupRepository $customerGroupRepository
