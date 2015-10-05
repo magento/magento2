@@ -5,15 +5,15 @@
  */
 namespace Magento\Amqp\Model;
 
-use Magento\Framework\Amqp\ConsumerConfigurationInterface;
-use Magento\Framework\Amqp\ConsumerInterface;
-use Magento\Framework\Amqp\Config\Data as AmqpConfig;
-use Magento\Framework\Amqp\EnvelopeInterface;
-use Magento\Framework\Amqp\MergerFactory;
-use Magento\Framework\Amqp\MergerInterface;
-use Magento\Framework\Amqp\MessageEncoder;
-use Magento\Framework\Amqp\QueueInterface;
-use Magento\Framework\Amqp\QueueRepository;
+use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
+use Magento\Framework\MessageQueue\ConsumerInterface;
+use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\MergerFactory;
+use Magento\Framework\MessageQueue\MergerInterface;
+use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\QueueInterface;
+use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -171,7 +171,7 @@ class BatchConsumer implements ConsumerInterface
             $this->dispatchMessage($mergedMessages);
             $this->acknowledgeAll($queue, $messages);
             $this->resource->getConnection()->commit();
-        } catch (\Magento\Framework\Amqp\ConnectionLostException $e) {
+        } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
             $this->resource->getConnection()->rollBack();
         } catch (\Exception $e) {
             $this->resource->getConnection()->rollBack();

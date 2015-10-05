@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
-    <preference for="Magento\Framework\Amqp\EnvelopeInterface" type="Magento\Framework\Amqp\Envelope"/>
+    <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherProxy"/>
+    <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
