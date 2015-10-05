@@ -1904,8 +1904,6 @@ return [
     ['Magento\Core\Model\Session\Context'],
     ['Magento\Core\Model\Session\AbstractSession', 'Magento\Framework\Session\SessionManager'],
     ['Magento\Catalog\Model\Resource\Convert'],
-    ['Magento\Reminder\Model\Resource\HelperFactory'],
-    ['Magento\Reminder\Model\Resource\Helper'],
     ['Magento\Core\Model\ConfigInterface', 'Magento\Framework\App\Config\ScopeConfigInterface'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser'],
     [
@@ -2501,22 +2499,6 @@ return [
     [
         'Magento\ImportExport\Model\Import\Uploader',
         'Magento\CatalogImportExport\Model\Import\Uploader',
-    ],
-    [
-        'Magento\ImportExport\Model\Export\Entity\Customer\Finance',
-        'Magento\CustomerFinance\Model\Export\Customer\Finance',
-    ],
-    [
-        'Magento\ImportExport\Model\Import\Entity\Eav\Customer\Finance',
-        'Magento\CustomerFinance\Model\Import\Entity\Eav\Customer\Finance',
-    ],
-    [
-        'Magento\ImportExport\Model\Resource\Customer\Attribute\Finance\Collection',
-        'Magento\CustomerFinance\Model\Resource\Customer\Attribute\Finance\Collection',
-    ],
-    [
-        'Magento\ImportExport\Model\Resource\Customer\Collection',
-        'Magento\CustomerFinance\Model\Resource\Customer\Collection',
     ],
     ['Magento\Profiler', 'Magento\Framework\Profiler'],
     ['Magento\Shell', 'Magento\Framework\Shell'],
