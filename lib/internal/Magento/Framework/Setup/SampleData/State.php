@@ -49,5 +49,4 @@ class State implements StateInterface
     {
 
     }
-
 }

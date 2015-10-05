@@ -69,7 +69,7 @@ class State implements Setup\SampleData\StateInterface
     public function isInstalled()
     {
         $isInstalled = false;
-        /**@var $stream Filesystem\File\WriteInterface */
+        /**@var $stream \Magento\Framework\Filesystem\File\WriteInterface */
         $stream = $this->openStream('r');
         if (!$stream) {
             return $isInstalled;
@@ -104,7 +104,7 @@ class State implements Setup\SampleData\StateInterface
     }
 
     /**
-     * @return Filesystem\File\WriteInterface
+     * @return \Magento\Framework\Filesystem\File\WriteInterface
      */
     protected function getStream()
     {
@@ -116,7 +116,7 @@ class State implements Setup\SampleData\StateInterface
 
     /**
      * @param string $mode
-     * @return bool|Filesystem\File\WriteInterface
+     * @return bool|\Magento\Framework\Filesystem\File\WriteInterface
      */
     protected function openStream($mode = 'w')
     {
@@ -151,7 +151,7 @@ class State implements Setup\SampleData\StateInterface
     /**
      * Closing file stream
      *
-     * @param Filesystem\File\WriteInterface $stream
+     * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
     protected function closeStream($stream)
