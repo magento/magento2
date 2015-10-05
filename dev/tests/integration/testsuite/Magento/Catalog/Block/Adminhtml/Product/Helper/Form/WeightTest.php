@@ -27,7 +27,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      * @param string $type
      * @dataProvider virtualTypesDataProvider
      */
-    public function testIsVirtualChecked($type)
+    public function testProductWithoutWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */
         $currentProduct = $this->_objectManager->create('Magento\Catalog\Model\Product');
@@ -38,10 +38,10 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         $form->setDataObject($currentProduct);
         $block->setForm($form);
 
-        $this->assertContains(
-            'checked="checked"',
+        $this->assertRegExp(
+            '/value="0".*checked="checked"/',
             $block->getElementHtml(),
-            'Is Virtual checkbox is not selected for virtual products'
+            '"Does this have a weight" is set to "Yes" for virtual products'
         );
     }
 
@@ -60,7 +60,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      * @param string $type
      * @dataProvider physicalTypesDataProvider
      */
-    public function testIsVirtualUnchecked($type)
+    public function testProductHasWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */
         $currentProduct = $this->_objectManager->create('Magento\Catalog\Model\Product');
@@ -71,11 +71,10 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         $form = $this->_formFactory->create();
         $form->setDataObject($currentProduct);
         $block->setForm($form);
-
-        $this->assertNotContains(
-            'checked="checked"',
+        $this->assertNotRegExp(
+            '/value="0".*checked="checked"/',
             $block->getElementHtml(),
-            'Is Virtual checkbox is selected for physical products'
+            '"Does this have a weight" is set to "No" for physical products'
         );
     }
 
