@@ -138,7 +138,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
-        $consumerTypeName = 'Magento\Amqp\Model\TestConsumer';
+        $consumerTypeName = 'Magento\MessageQueue\Model\TestConsumer';
         $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')
             ->setMethods(['configure'])
             ->getMockForAbstractClass();
