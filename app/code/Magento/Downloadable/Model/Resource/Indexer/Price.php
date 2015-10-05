@@ -133,7 +133,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $connection->query($query);
 
         $ifTierPrice = $connection->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
-        $ifGroupPrice = $connection->getCheckSql('i.group_price IS NOT NULL', '(i.group_price + id.min_price)', 'NULL');
 
         $select = $connection->select()->join(
             ['id' => $table],
@@ -145,7 +144,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'min_price' => new \Zend_Db_Expr('i.min_price + id.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price + id.max_price'),
                 'tier_price' => new \Zend_Db_Expr($ifTierPrice),
-                'group_price' => new \Zend_Db_Expr($ifGroupPrice),
             ]
         );
 
