@@ -7,6 +7,7 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
+
 /**
  * Theme model class
  *
