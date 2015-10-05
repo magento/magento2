@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'Magento_Ui/js/lib/spinner',
@@ -13,6 +14,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'ui/grid/listing',
+            stickyTmpl: 'ui/grid/sticky/listing',
             positions: false,
             storageConfig: {
                 positions: '${ $.storageConfig.path }.positions'
@@ -103,6 +105,11 @@ define([
             return this;
         },
 
+        /**
+         * Creates resize widget instance.
+         *
+         * @returns {Listing} Chainable.
+         */
         initResize: function () {
             layout([this.resizeConfig]);
 
