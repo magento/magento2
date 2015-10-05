@@ -4,5 +4,5 @@
  */
 
 require([
-    "Magento_Customer/edit/post-wrapper"
+    'Magento_Customer/edit/post-wrapper'
 ]);
