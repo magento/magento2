@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Pricing\Object;
+namespace Magento\Framework\Pricing;
 
 /**
  * Interface SaleableInterface
