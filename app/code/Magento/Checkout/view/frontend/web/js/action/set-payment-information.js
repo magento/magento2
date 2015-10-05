@@ -54,7 +54,7 @@ define(
                     errorProcessor.process(response, messageContainer);
                 }
             ).always(
-                function() {
+                function () {
                     fullScreenLoader.stopLoader();
                 }
             );
