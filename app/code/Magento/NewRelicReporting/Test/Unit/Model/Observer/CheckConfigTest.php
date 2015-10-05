@@ -65,14 +65,16 @@ class CheckConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckConfigModuleDisabledFromConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -82,6 +84,11 @@ class CheckConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckConfigExtensionNotInstalled()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -89,10 +96,7 @@ class CheckConfigTest extends \PHPUnit_Framework_TestCase
             ->method('isExtensionInstalled')
             ->willReturn(true);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -102,6 +106,11 @@ class CheckConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -113,9 +122,6 @@ class CheckConfigTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addError');
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 }

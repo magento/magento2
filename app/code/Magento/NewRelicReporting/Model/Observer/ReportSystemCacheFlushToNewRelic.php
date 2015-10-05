@@ -5,12 +5,14 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportSystemCacheFlushToNewRelic
  */
-class ReportSystemCacheFlushToNewRelic
+class ReportSystemCacheFlushToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -28,8 +30,6 @@ class ReportSystemCacheFlushToNewRelic
     protected $deploymentsFactory;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @param \Magento\NewRelicReporting\Model\Apm\DeploymentsFactory $deploymentsFactory
@@ -47,9 +47,11 @@ class ReportSystemCacheFlushToNewRelic
     /**
      * Report system cache is flushed to New Relic
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlushToNewRelic
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             $user = $this->backendAuthSession->getUser();
@@ -61,7 +63,5 @@ class ReportSystemCacheFlushToNewRelic
                 );
             }
         }
-
-        return $this;
     }
 }

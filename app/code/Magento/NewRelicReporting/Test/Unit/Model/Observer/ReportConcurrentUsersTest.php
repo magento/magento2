@@ -112,14 +112,16 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportConcurrentUsersModuleDisabledFromConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -129,6 +131,11 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportConcurrentUsersUserIsNotLoggedIn()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -136,10 +143,7 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
             ->method('isLoggedIn')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -152,6 +156,11 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
         $testCustomerId = 1;
         $testAction = 'JSON string';
         $testUpdated = '1970-01-01 00:00:00';
+
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
@@ -187,9 +196,6 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
         $this->usersModel->expects($this->once())
             ->method('save');
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 }

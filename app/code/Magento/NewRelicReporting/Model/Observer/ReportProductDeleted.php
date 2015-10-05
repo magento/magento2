@@ -5,12 +5,14 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportProductDeleted
  */
-class ReportProductDeleted
+class ReportProductDeleted implements ObserverInterface
 {
     /**
      * @var Config
@@ -33,8 +35,6 @@ class ReportProductDeleted
     protected $dateTime;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\SystemFactory $systemFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -55,10 +55,10 @@ class ReportProductDeleted
     /**
      * Reports any products deleted to the database reporting_system_updates table
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportProductDeleted
+     * @param Observer $observer
+     * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -80,7 +80,5 @@ class ReportProductDeleted
             $systemModel->setData($modelData);
             $systemModel->save();
         }
-
-        return $this;
     }
 }

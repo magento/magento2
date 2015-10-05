@@ -82,14 +82,16 @@ class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportConcurrentUsersToNewRelicModuleDisabledFromConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertInstanceOf(
-            'Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsersToNewRelic',
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -99,6 +101,11 @@ class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportConcurrentUsersToNewRelicUserIsNotLoggedIn()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -117,10 +124,7 @@ class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('addCustomParameter')
             ->willReturn(true);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -131,6 +135,11 @@ class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
     public function testReportConcurrentUsersToNewRelic()
     {
         $testCustomerId = 1;
+
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
@@ -157,9 +166,6 @@ class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('addCustomParameter')
             ->willReturn(true);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 }

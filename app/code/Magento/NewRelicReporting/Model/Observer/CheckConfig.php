@@ -5,6 +5,8 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
@@ -12,7 +14,7 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 /**
  * Class CheckConfig
  */
-class CheckConfig
+class CheckConfig implements ObserverInterface
 {
     /**
      * @var Config
@@ -30,8 +32,6 @@ class CheckConfig
     protected $messageManager;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      * @param ManagerInterface $messageManager
@@ -49,9 +49,11 @@ class CheckConfig
     /**
      * Update items stock status and low stock date.
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdminsToNewRelic
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             if (!$this->newRelicWrapper->isExtensionInstalled()) {
@@ -66,6 +68,5 @@ class CheckConfig
                 );
             }
         }
-        return $this;
     }
 }

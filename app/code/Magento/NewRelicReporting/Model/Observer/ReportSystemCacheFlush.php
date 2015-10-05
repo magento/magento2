@@ -5,12 +5,14 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportSystemCacheFlush
  */
-class ReportSystemCacheFlush
+class ReportSystemCacheFlush implements ObserverInterface
 {
     /**
      * @var Config
@@ -33,8 +35,6 @@ class ReportSystemCacheFlush
     protected $dateTime;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\SystemFactory $systemFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -55,9 +55,11 @@ class ReportSystemCacheFlush
     /**
      * Reports a system cache flush to the database reporting_system_updates table
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlush
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             $jsonData = ['status' => 'updated'];
@@ -73,7 +75,5 @@ class ReportSystemCacheFlush
             $systemModel->setData($modelData);
             $systemModel->save();
         }
-
-        return $this;
     }
 }

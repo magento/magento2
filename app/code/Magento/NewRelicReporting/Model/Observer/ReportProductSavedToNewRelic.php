@@ -5,13 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportProductSavedToNewRelic
  */
-class ReportProductSavedToNewRelic
+class ReportProductSavedToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -24,8 +26,6 @@ class ReportProductSavedToNewRelic
     protected $newRelicWrapper;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
@@ -40,10 +40,10 @@ class ReportProductSavedToNewRelic
     /**
      * Reports any products created or updated to New Relic
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic
+     * @param Observer $observer
+     * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -60,7 +60,5 @@ class ReportProductSavedToNewRelic
                 );
             }
         }
-
-        return $this;
     }
 }

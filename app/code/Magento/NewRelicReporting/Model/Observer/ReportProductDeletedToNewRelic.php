@@ -5,13 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportProductDeletedToNewRelic
  */
-class ReportProductDeletedToNewRelic
+class ReportProductDeletedToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -24,8 +26,6 @@ class ReportProductDeletedToNewRelic
     protected $newRelicWrapper;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
@@ -40,14 +40,14 @@ class ReportProductDeletedToNewRelic
     /**
      * Reports any products deleted to New Relic
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportProductDeletedToNewRelic
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             $this->newRelicWrapper->addCustomParameter(Config::PRODUCT_CHANGE, 'delete');
         }
-
-        return $this;
     }
 }

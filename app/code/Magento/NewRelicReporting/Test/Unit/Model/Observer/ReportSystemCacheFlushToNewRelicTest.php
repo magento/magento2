@@ -78,14 +78,16 @@ class ReportSystemCacheFlushToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportSystemCacheFlushToNewRelicModuleDisabledFromConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -95,6 +97,11 @@ class ReportSystemCacheFlushToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportSystemCacheFlushToNewRelic()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -112,9 +119,6 @@ class ReportSystemCacheFlushToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('setDeployment')
             ->willReturnSelf();
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 }

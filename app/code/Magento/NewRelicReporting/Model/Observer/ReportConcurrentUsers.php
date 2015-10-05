@@ -5,12 +5,14 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportConcurrentUsers
  */
-class ReportConcurrentUsers
+class ReportConcurrentUsers implements ObserverInterface
 {
     /**
      * @var Config
@@ -48,8 +50,6 @@ class ReportConcurrentUsers
     protected $dateTime;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
@@ -79,9 +79,11 @@ class ReportConcurrentUsers
     /**
      * Reports concurrent users to the database reporting_users table
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsers
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             if ($this->customerSession->isLoggedIn()) {
@@ -106,7 +108,5 @@ class ReportConcurrentUsers
                 $usersModel->save();
             }
         }
-
-        return $this;
     }
 }
