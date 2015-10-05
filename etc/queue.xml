@@ -9,8 +9,8 @@
     <publisher name="demo-publisher-1" connection="db" exchange="magento"/>
     <publisher name="demo-publisher-2" connection="db" exchange="magento"/>
 
-    <publisher name="test-publisher-1" connection="rabbitmq" exchange="magento"/>
-    <publisher name="test-publisher-3" connection="rabbitmq" exchange="test-exchange-1"/>
+    <publisher name="test-publisher-1" connection="amqp" exchange="magento"/>
+    <publisher name="test-publisher-3" connection="amqp" exchange="test-exchange-1"/>
 
     <topic name="demo.object.created" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-1"/>
     <topic name="demo.object.updated" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-2"/>
@@ -34,9 +34,9 @@
     <consumer name="demoConsumerQueueFour" queue="demo-queue-4" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
     <consumer name="demoConsumerQueueFive" queue="demo-queue-5" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
 
-    <consumer name="customerCreatedListener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
+    <consumer name="customerCreatedListener" queue="test-queue-1" connection="amqp" class="Data\Type" method="processMessage"/>
     <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2" max_messages="98765"/>
-    <consumer name="cartCreatedListener" queue="test-queue-3" connection="rabbitmq" class="Other\Type" method="processMessage3"/>
+    <consumer name="cartCreatedListener" queue="test-queue-3" connection="amqp" class="Other\Type" method="processMessage3"/>
 
     <consumer name="delayedOperationConsumer" queue="demo-queue-6" connection="db" class="Magento\MysqlMq\Model\DataObjectRepository" method="delayedOperation"/>
 
