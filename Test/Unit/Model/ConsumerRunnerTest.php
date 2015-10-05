@@ -6,6 +6,7 @@
 
 namespace Magento\MessageQueue\Test\Unit\Model;
 
+use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\MessageQueue\Model\ConsumerRunner;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -51,7 +52,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMagicMethod()
     {
-        /** @var \Magento\Framework\MessageQueue\ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
+        /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
         $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')->getMock();
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
