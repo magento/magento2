@@ -7,7 +7,6 @@ namespace Magento\Framework\Acl\Test\Unit\Resource\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetSchema()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
