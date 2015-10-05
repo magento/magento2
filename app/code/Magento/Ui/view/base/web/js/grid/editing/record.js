@@ -142,24 +142,12 @@ define([
          */
         createFields: function (columns) {
             columns.forEach(function (column) {
-                if (column.editor && !this.getField(column.index)) {
+                if (column.editor && !this.hasChild(column.index)) {
                     this.initField(column);
                 }
             }, this);
 
             return this;
-        },
-
-        /**
-         * Returns instance of a field found by provided identifier.
-         *
-         * @param {String} index - Identifier of a field inside record.
-         * @returns {Object}
-         */
-        getField: function (index) {
-            return this.elems.findWhere({
-                index: index
-            });
         },
 
         /**
@@ -169,7 +157,7 @@ define([
          * @returns {Column}
          */
         getColumn: function (index) {
-            return this.columns().getColumn(index);
+            return this.columns().getChild(index);
         },
 
         /**
@@ -320,7 +308,7 @@ define([
             var fields;
 
             fields = this.columns().elems.map(function (column) {
-                return this.getField(column.index) || column;
+                return this.getChild(column.index) || column;
             }, this);
 
             this.fields(fields);

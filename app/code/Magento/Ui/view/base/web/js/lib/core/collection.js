@@ -23,23 +23,10 @@ define([
     return Element.extend({
         defaults: {
             template: 'ui/collection',
-            componentType: 'container',
             _elems: [],
             ignoreTmpls: {
                 childDefaults: true
             }
-        },
-
-        /**
-         * Initializes component.
-         *
-         * @returns {Collection} Chainable.
-         */
-        initialize: function () {
-            this._super()
-                .initUnique();
-
-            return this;
         },
 
         /**
@@ -57,24 +44,6 @@ define([
         },
 
         /**
-         * Initializes listeners of the unique property.
-         *
-         * @returns {Collection} Chainable.
-         */
-        initUnique: function () {
-            var update = this.onUniqueUpdate.bind(this),
-                uniqueNs = this.uniqueNs;
-
-            this.hasUnique = this.uniqueProp && uniqueNs;
-
-            if (this.hasUnique) {
-                this.source.on(uniqueNs, update, this.name);
-            }
-
-            return this;
-        },
-
-        /**
          * Called when another element was added to current component.
          *
          * @param {Object} elem - Instance of an element that was added.
@@ -87,60 +56,15 @@ define([
         },
 
         /**
-         * Updates property specified in uniqueNs
-         * if components' unique property is set to 'true'.
+         * Returns instance of a child found by provided index.
          *
-         * @returns {Collection} Chainable.
+         * @param {String} index - Index of a child.
+         * @returns {Object}
          */
-        setUnique: function () {
-            var property = this.uniqueProp;
-
-            if (this[property]()) {
-                this.source.set(this.uniqueNs, this.name);
-            }
-
-            return this;
-        },
-
-        /**
-         * Retrieves requested region.
-         * Creates region if it was not created yet
-         *
-         * @returns {ObservableArray}.
-         */
-        getRegion: function (name) {
-            var regions = this.regions = this.regions || {},
-                region;
-
-            if (name) {
-                if (!regions[name]) {
-                    regions[name] = [];
-
-                    this.observe.call(regions, name);
-                }
-
-                region = regions[name];
-            }
-
-            return region;
-        },
-
-        /**
-         * Replaces specified regions' data with a provided one.
-         * Creates region if it was not created yet.
-         *
-         * @param {Array} items - New regions' data.
-         * @param {String} name - Name of the region.
-         * @returns {Collection} Chainable.
-         */
-        updateRegion: function (items, name) {
-            var region = this.getRegion(name);
-
-            if (region) {
-                region(items);
-            }
-
-            return this;
+        getChild: function (index) {
+            return _.findWhere(this.elems(), {
+                index: index
+            });
         },
 
         /**
@@ -175,38 +99,104 @@ define([
             });
 
             if (update) {
-                this._update();
+                this._updateCollection();
             }
 
             return this;
         },
 
         /**
-         * Removes specified element from the 'elems' array.
+         * Removes specified child from collection.
          *
-         * @param {Object} elem - Element to be removed.
+         * @param {(Object|String)} elem - Child or index of a child to be removed.
          * @returns {Collection} Chainable.
          */
         removeChild: function (elem) {
-            utils.remove(this._elems, elem);
-            this._update();
+            if (_.isString(elem)) {
+                elem = this.getChild(elem);
+            }
+
+            if (elem) {
+                utils.remove(this._elems, elem);
+                this._updateCollection();
+            }
 
             return this;
         },
 
         /**
-         * Removes all references to current instance and
-         * calls 'destroy' method on all of its' children.
-         * @private
+         * Checks if specified child exists in collection.
          *
+         * @param {Sring} index - Index of a child.
+         * @returns {Boolean}
+         */
+        hasChild: function (index) {
+            return !!this.getChild(index);
+        },
+
+        /**
+         * Creates 'async' wrapper for the specified child
+         * using uiRegistry 'async' method and caches it
+         * in a '_requested' components  object.
+         *
+         * @param {String} index - Index of a child.
+         * @returns {Function} Async module wrapper.
+         */
+        requestChild: function (index) {
+            var name = this.formChildName(index);
+
+            return this.requestModule(name);
+        },
+
+        /**
+         * Creates complete child name based on a provided index.
+         *
+         * @param {String} index - Index of a child.
+         * @returns {String}
+         */
+        formChildName: function (index) {
+            return this.name + '.' + index;
+        },
+
+        /**
+         * Retrieves requested region.
+         * Creates region if it was not created yet
+         *
+         * @returns {ObservableArray}
+         */
+        getRegion: function (name) {
+            var regions = this.regions = this.regions || {};
+
+            if (!regions[name]) {
+                regions[name] = [];
+
+                this.observe.call(regions, name);
+            }
+
+            return regions[name];
+        },
+
+        /**
+         * Replaces specified regions' data with a provided one.
+         * Creates region if it was not created yet.
+         *
+         * @param {Array} items - New regions' data.
+         * @param {String} name - Name of the region.
          * @returns {Collection} Chainable.
          */
-        _clearRefs: function () {
+        updateRegion: function (items, name) {
+            this.getRegion(name)(items);
+
+            return this;
+        },
+
+        /**
+         * Destroys collection along with its' elements.
+         */
+        destroy: function () {
             this._super();
 
             this.elems.each('destroy');
-
-            return this;
         },
 
         /**
@@ -222,7 +212,7 @@ define([
                 this._elems[index] = elem;
             }
 
-            this._update()
+            this._updateCollection()
                 .initElement(elem);
         },
 
@@ -233,9 +223,14 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        _update: function () {
+        _updateCollection: function () {
             var _elems = compact(this._elems),
-                grouped = _.groupBy(_elems, 'displayArea');
+                grouped;
+
+            grouped = _elems.filter(function (elem) {
+                return elem.displayArea && _.isString(elem.displayArea);
+            });
+            grouped = _.groupBy(grouped, 'displayArea');
 
             _.each(grouped, this.updateRegion, this);
 
@@ -289,16 +284,6 @@ define([
             });
 
             return _.flatten(result);
-        },
-
-        /**
-         * Callback which fires when property under uniqueNs has changed.
-         */
-        onUniqueUpdate: function (name) {
-            var active = name === this.name,
-                property = this.uniqueProp;
-
-            this[property](active);
         }
     });
 });
