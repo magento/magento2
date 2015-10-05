@@ -11,7 +11,17 @@
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
     </type>
-    <type name="Magento\Captcha\Model\Observer">
+    <type name="Magento\Captcha\Observer\CheckUserCreateObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Captcha\Observer\CheckUserForgotPasswordBackendObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Captcha\Observer\CheckUserLoginObserver">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
