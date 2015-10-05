@@ -13,7 +13,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\Resource\Page;
+use Magento\Cms\Model\Resource\Page as ResourcePage;
 use Magento\Cms\Model\Resource\Page\CollectionFactory as PageCollectionFactory;
 
 /**
@@ -23,7 +23,7 @@ use Magento\Cms\Model\Resource\Page\CollectionFactory as PageCollectionFactory;
 class PageRepository implements PageRepositoryInterface
 {
     /**
-     * @var Page
+     * @var ResourcePage
      */
     protected $resource;
 
@@ -58,7 +58,7 @@ class PageRepository implements PageRepositoryInterface
     protected $dataPageFactory;
 
     /**
-     * @param Page $resource
+     * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
      * @param PageCollectionFactory $pageCollectionFactory
@@ -67,7 +67,7 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
-        Page $resource,
+        ResourcePage $resource,
         PageFactory $pageFactory,
         Data\PageInterfaceFactory $dataPageFactory,
         PageCollectionFactory $pageCollectionFactory,
