@@ -4,5 +4,5 @@
  */
 
 require([
-    "Magento_Sales/order/view/post-wrapper"
+    'Magento_Sales/order/view/post-wrapper'
 ]);

@@ -4,14 +4,29 @@
  */
 
 define([
-    "jquery",
-    "mage/translate"
+    'jquery',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
+    /**
+     * @param {string} url
+     * @returns {Object}
+     */
+    function getForm(url) {
+        return $('<form>', {
+            'action': url,
+            'method': 'POST'
+        }).append($('<input>', {
+            'name': 'form_key',
+            'value': window.FORM_KEY,
+            'type': 'hidden'
+        }));
+    }
+
     $('#customer-edit-delete-button').click(function () {
-        var msg = $.mage.__('Are you sure you want to do this?');
-        var url = $('#customer-edit-delete-button').data('url');
+        var msg = $.mage.__('Are you sure you want to do this?'),
+            url = $('#customer-edit-delete-button').data('url');
 
         if (confirm(msg)) {
             getForm(url).submit();
@@ -19,15 +34,4 @@ define([
             return false;
         }
     });
-
-    function getForm(url) {
-        return $('<form>', {
-            'action': url,
-            'method': 'POST'
-        }).append($('<input>', {
-            'name': 'form_key',
-            'value': FORM_KEY,
-            'type': 'hidden'
-        }));
-    }
 });

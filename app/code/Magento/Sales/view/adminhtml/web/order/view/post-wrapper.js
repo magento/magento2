@@ -4,14 +4,29 @@
  */
 
 define([
-    "jquery",
-    "mage/translate"
+    'jquery',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
+    /**
+     * @param {string} url
+     * @returns {Object}
+     */
+    function getForm(url) {
+        return $('<form>', {
+            'action': url,
+            'method': 'POST'
+        }).append($('<input>', {
+            'name': 'form_key',
+            'value': window.FORM_KEY,
+            'type': 'hidden'
+        }));
+    }
+
     $('#order-view-cancel-button').click(function () {
-        var msg = $.mage.__('Are you sure you want to cancel this order?');
-        var url = $('#order-view-cancel-button').data('url');
+        var msg = $.mage.__('Are you sure you want to cancel this order?'),
+            url = $('#order-view-cancel-button').data('url');
 
         if (confirm(msg)) {
             getForm(url).submit();
@@ -22,22 +37,13 @@ define([
 
     $('#order-view-hold-button').click(function () {
         var url = $('#order-view-hold-button').data('url');
+
         getForm(url).submit();
     });
 
     $('#order-view-unhold-button').click(function () {
         var url = $('#order-view-unhold-button').data('url');
+
         getForm(url).submit();
     });
-
-    function getForm(url) {
-        return $('<form>', {
-            'action': url,
-            'method': 'POST'
-        }).append($('<input>', {
-            'name': 'form_key',
-            'value': FORM_KEY,
-            'type': 'hidden'
-        }));
-    }
 });
