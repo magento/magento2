@@ -129,7 +129,7 @@ class CustomerSetup extends EavSetup
                 'entity_model' => 'Magento\Customer\Model\Resource\Customer',
                 'attribute_model' => 'Magento\Customer\Model\Attribute',
                 'table' => 'customer_entity',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'additional_attribute_table' => 'customer_eav_attribute',
                 'entity_attribute_collection' => 'Magento\Customer\Model\Resource\Attribute\Collection',
                 'attributes' => [
