@@ -145,7 +145,7 @@ class ScheduledStructure
      * @param array $default
      * @return array
      */
-    public function getElementToSort($elementName, $default = [])
+    public function getElementToSort($elementName, array $default = [])
     {
         return isset($this->elementsToSort[$elementName]) ? $this->elementsToSort[$elementName] : $default;
     }

@@ -200,7 +200,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'toRemoveList' => 0,
                 'siblingName' => 'sibling',
                 'isAfter' => false,
-                'toSortList' => 1
+                'toSortList' => 1,
             ],
             [
                 'hasParent' => false,
@@ -208,7 +208,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'toRemoveList' => 1,
                 'siblingName' => null,
                 'isAfter' => false,
-                'toSortList' => 0
+                'toSortList' => 0,
             ]
         ];
     }

@@ -160,7 +160,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                         'second.element',
                         'third.element',
                         'remove.element',
-                        'sort.element'
+                        'sort.element',
                     ],
                     'move' => [
                         'third.element' => ['second.element', 'sibling', false, 'alias'],
