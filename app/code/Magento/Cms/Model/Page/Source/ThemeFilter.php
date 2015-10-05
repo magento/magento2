@@ -13,7 +13,8 @@ class ThemeFilter extends Theme
     /**
      * {@inheritdoc}
      */
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return array_merge([['label' => '', 'value' => '']], parent::toOptionArray());
     }
 }
