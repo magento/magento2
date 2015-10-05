@@ -487,4 +487,71 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->save($abstractModelMock);
     }
+
+    /**
+     * Test that we only set/override id on object if PK autoincrement is enabled
+     * @param bool $pkIncrement
+     * @dataProvider testSaveNewObjectDataProvider
+     */
+    public function testSaveNewObject($pkIncrement)
+    {
+        /**
+         * Mock SUT so as not to test extraneous logic
+         */
+        $model = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+            ->disableOriginalConstructor()
+            ->setMethods(['_prepareDataForSave', 'getIdFieldName', 'getConnection', 'getMainTable'])
+            ->getMockForAbstractClass();
+        /**
+         * Only testing the logic in a protected method and property, must use reflection to avoid dealing with large
+         * amounts of unrelated logic in save function
+         *
+         * make saveNewObject and _isPkAutoIncrement public
+         */
+        $reflectionMethod = new \ReflectionMethod($model, 'saveNewObject');
+        $reflectionMethod->setAccessible(true);
+        $reflectionProperty = new \ReflectionProperty($model, '_isPkAutoIncrement');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $pkIncrement);
+
+        // Mocked behavior
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['lastInsertId'])
+            ->getMockForAbstractClass();
+        $getConnectionInvokedCount = $pkIncrement ? 2 : 1;
+        $model->expects($this->exactly($getConnectionInvokedCount))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+
+        $idFieldName = 'id_field_name';
+        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id',]);
+
+
+        // Test expectations
+        //      Only get object's id field name if not PK autoincrement
+        $getIdFieldNameInvokedCount = $pkIncrement ? 1 : 0;
+        $model->expects($this->exactly($getIdFieldNameInvokedCount))
+            ->method('getIdFieldName')
+            ->willReturn($idFieldName);
+
+        //      Only set object id if not PK autoincrement
+        $setIdInvokedCount = $pkIncrement ? 1 : 0;
+        $inputObject = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $inputObject->expects($this->exactly($setIdInvokedCount))->method('setId');
+
+        //      Only call lastInsertId if not PK autoincrement
+        $lastInsertIdInvokedCount = $pkIncrement ? 1 : 0;
+        $connectionMock->expects($this->exactly($lastInsertIdInvokedCount))->method('lastInsertId');
+
+        $reflectionMethod->invokeArgs($model, [$inputObject]);
+    }
+
+    public function testSaveNewObjectDataProvider()
+    {
+        return [[true], [false]];
+    }
+
 }
