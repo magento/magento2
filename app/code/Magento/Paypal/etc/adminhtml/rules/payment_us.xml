@@ -92,6 +92,10 @@
                 </predicate>
             </event>
         </events>
+        <events selector="tr:has(> td > [data-enable='payment']) [type='checkbox']">
+            <event value="1" name="usedefault-on"/>
+            <event value="0" name="usedefault-off"/>
+        </events>
         <events selector="[data-enable='bml']">
             <event value="0" name="deactivate-bml"/>
             <event value="1" name="activate-bml"/>
@@ -108,6 +112,8 @@
         <relation target="payflow_link_us">
             <rule type="disable" event="activate-rule"/>
             <rule type="payflow/express/disable-conditional" event="deactivate-rule"/>
+            <rule type="payflow/express/usedefault-disable" event="usedefault-off"/>
+            <rule type="payflow/express/usedefault-enable" event="usedefault-on"/>
             <rule type="payflow/bml/disable-conditional" event="deactivate-rule"/>
             <rule type="payflow/bml/enable-conditional" event="activate-bml">
                 <argument name="wpp_usuk">wpp_usuk</argument>

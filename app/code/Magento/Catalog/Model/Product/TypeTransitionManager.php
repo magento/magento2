@@ -11,6 +11,7 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 
 class TypeTransitionManager
 {
@@ -22,11 +23,20 @@ class TypeTransitionManager
     protected $compatibleTypes;
 
     /**
+     * @var Edit\WeightResolver
+     */
+    protected $weightResolver;
+
+    /**
+     * @param Edit\WeightResolver $weightResolver
      * @param array $compatibleTypes
      */
-    public function __construct(array $compatibleTypes)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\Product\Edit\WeightResolver $weightResolver,
+        array $compatibleTypes
+    ) {
         $this->compatibleTypes = $compatibleTypes;
+        $this->weightResolver = $weightResolver;
     }
 
     /**
@@ -39,7 +49,9 @@ class TypeTransitionManager
     {
         if (in_array($product->getTypeId(), $this->compatibleTypes)) {
             $product->setTypeInstance(null);
-            $productTypeId = $product->hasIsVirtual() ? \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL : \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
+            $productTypeId = $this->weightResolver->resolveProductHasWeight($product)
+                ? Type::TYPE_SIMPLE
+                : Type::TYPE_VIRTUAL;
             $product->setTypeId($productTypeId);
         }
     }

@@ -6,7 +6,6 @@
 
 namespace Magento\Braintree\Test\Unit\Model\Plugin\Sales\Order;
 
-use Magento\Braintree\Model\Observer;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
