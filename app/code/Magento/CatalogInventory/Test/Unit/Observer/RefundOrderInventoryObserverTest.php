@@ -149,7 +149,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getCreditmemo')
             ->will($this->returnValue($creditMemo));
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 
     private function getCreditMemoItem($productId)

@@ -24,7 +24,7 @@
             <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Cron\Model\Observer">
+    <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
         <arguments>
             <argument name="shell" xsi:type="object">shellBackground</argument>
         </arguments>

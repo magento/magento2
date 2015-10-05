@@ -57,11 +57,6 @@
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\Observer">
-        <arguments>
-            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Model\Url\ScopeResolver">
         <arguments>
             <argument name="areaCode" xsi:type="string">adminhtml</argument>
