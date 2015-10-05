@@ -6,11 +6,12 @@
 namespace Magento\Sales\Model\Observer\Frontend\Quote;
 
 use Magento\Customer\Helper\Address as CustomerAddress;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class AddVatRequestParamsOrderComment
  */
-class AddVatRequestParamsOrderComment
+class AddVatRequestParamsOrderComment implements ObserverInterface
 {
     /**
      * Customer address
