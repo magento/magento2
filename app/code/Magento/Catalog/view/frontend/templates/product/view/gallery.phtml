@@ -12,7 +12,13 @@
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder" data-gallery-role="gallery-placeholder"></div>
+<div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
+    <div data-role="loader" class="loading-mask">
+        <div class="loader">
+            <img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-2.gif'); ?>" alt="Loading...">
+        </div>
+    </div>
+</div>
 <script type="text/x-magento-init">
     {
         "[data-gallery-role=gallery-placeholder]": {
