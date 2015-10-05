@@ -88,8 +88,9 @@ class Reader
                         foreach (array_keys($intersection) as $key) {
                             $displayList .= $key . PHP_EOL;
                         }
+                        $displayMessage = $this->findFileWithKeys(array_keys($intersection));
                         throw new \Exception(
-                            "Key collision! The following keys occur in multiple config files:" . PHP_EOL . $displayList
+                            "Key collision! The following keys occur in multiple config files:" . PHP_EOL . $displayMessage
                         );
                     }
                     $result = array_merge($result, $fileData);
@@ -97,5 +98,26 @@ class Reader
             }
         }
         return $result ?: [];
+    }
+
+    /**
+     * @param array $keys
+     * @return string
+     */
+    private function findFileWithKeys($keys)
+    {
+        $displayMessage = '';
+        $path = $this->dirList->getPath(DirectoryList::CONFIG);
+        $configFiles = $this->configFilePool->getPaths();
+        foreach (array_keys($configFiles) as $fileKey) {
+            $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
+            $fileData = @include $configFile;
+            foreach ($keys as $key) {
+                if(array_key_exists($key, $fileData)){
+                    $displayMessage .= 'Key "'. $key . '" found in ' . $configFile . PHP_EOL;
+                }
+            }
+        }
+        return $displayMessage;
     }
 }
