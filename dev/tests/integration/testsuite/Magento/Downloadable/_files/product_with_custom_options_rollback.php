@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
-/** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-$product = $productRepository->get('downloadable-product');
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->load('downloadable-product', 'sku');
 if ($product->getId()) {
     $product->delete();
 }

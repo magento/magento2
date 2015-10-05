@@ -6,12 +6,6 @@
 
 // @codingStandardsIgnoreFile
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-require __DIR__ . '/../../../Magento/Bundle/_files/product_with_custom_options.php';
-require __DIR__ . '/../../../Magento/Downloadable/_files/product_with_custom_options.php';
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_with_custom_options.php';
-
 function getOptionValue(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
 {
     $returnValue = null;
@@ -78,10 +72,10 @@ $order->setIncrementId('100000001')
 $simpleOrderItem = $objectManager->create('Magento\Sales\Model\Order\Item');
 $simpleOrderItem->setProductId($simpleProduct->getId())->setQtyOrdered(2);
 $simpleOrderItem->setOrderId($order->getId());
-$simpleOrderItem->setBasePrice($product->getPrice());
-$simpleOrderItem->setPrice($product->getPrice());
-$simpleOrderItem->setRowTotal($product->getPrice());
-$simpleOrderItem->setProductType($product->getTypeId());
+$simpleOrderItem->setBasePrice($simpleProduct->getPrice());
+$simpleOrderItem->setPrice($simpleProduct->getPrice());
+$simpleOrderItem->setRowTotal($simpleProduct->getPrice());
+$simpleOrderItem->setProductType($simpleProduct->getTypeId());
 $order->addItem($simpleOrderItem);
 $order->save();
 

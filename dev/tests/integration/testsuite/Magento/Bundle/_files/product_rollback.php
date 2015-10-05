@@ -20,9 +20,8 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
-/** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-$product = $productRepository->get('bundle-product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product->load('bundle-product', 'sku');
 if ($product->getId()) {
     $product->delete();
 }
