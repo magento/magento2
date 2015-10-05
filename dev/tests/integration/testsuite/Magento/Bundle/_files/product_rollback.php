@@ -11,17 +11,14 @@
  */
 require __DIR__ . '/../../../Magento/Catalog/_files/products_rollback.php';
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
-
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
-$product->load('bundle-product', 'sku');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->load(3);
 if ($product->getId()) {
     $product->delete();
 }

@@ -14,7 +14,7 @@ $registry->register('isSecureArea', true);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load('configurable', 'sku');
+$product->load(10);
 if ($product->getId()) {
     $product->delete();
 }

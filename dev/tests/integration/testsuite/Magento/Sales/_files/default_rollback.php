@@ -17,20 +17,11 @@ foreach ($orderCollection as $order) {
     $order->delete();
 }
 
-$productOptionsCollection = Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Resource\Product\Option\Collection');
-/** @var \Magento\Catalog\Model\Product\Option $option */
-foreach ($productOptionsCollection as $option) {
-    $option->delete();
-}
-
 /** @var $product \Magento\Catalog\Model\Product */
 $productCollection = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Resource\Product\Collection');
 foreach ($productCollection as $product) {
     $product->delete();
 }
-
-
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
