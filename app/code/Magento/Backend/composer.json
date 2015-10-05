@@ -7,7 +7,6 @@
         "magento/module-directory": "1.0.0-beta",
         "magento/module-developer": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/module-cron": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/module-reports": "1.0.0-beta",
         "magento/module-sales": "1.0.0-beta",
