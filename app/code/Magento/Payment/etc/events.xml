@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="sales_order_save_before">
-        <observer name="payment_sales_order_save_before" instance="Magento\Payment\Model\Observer" method="salesOrderBeforeSave" />
+        <observer name="payment_sales_order_save_before" instance="Magento\Payment\Observer\SalesOrderBeforeSaveObserver" method="execute" />
     </event>
     <event name="sales_order_status_unassign">
-        <observer name="sales_order_status_update" instance="Magento\Payment\Model\Observer" method="updateOrderStatusForPaymentMethods" />
+        <observer name="sales_order_status_update" instance="Magento\Payment\Observer\UpdateOrderStatusForPaymentMethodsObserver" method="execute" />
     </event>
 </config>
