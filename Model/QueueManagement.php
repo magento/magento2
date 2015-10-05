@@ -57,7 +57,7 @@ class QueueManagement
     private $messageStatusCollectionFactory;
 
     /**
-     * @param Resource\Queue $messageResource
+     * @param \Magento\MysqlMq\Model\Resource\Queue $messageResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
