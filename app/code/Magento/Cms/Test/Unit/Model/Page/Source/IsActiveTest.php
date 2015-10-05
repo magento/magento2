@@ -52,6 +52,7 @@ class IsActiveTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $availableStatuses
      * @param array $expected
+     * @return void
      * @dataProvider getAvailableStatusesDataProvider
      */
     public function testToOptionArray(array $availableStatuses, array $expected)

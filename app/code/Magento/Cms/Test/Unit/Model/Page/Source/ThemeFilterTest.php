@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\Page\Source;
 class ThemeFilterTest extends ThemeTest
 {
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     protected function getClassName()
     {
