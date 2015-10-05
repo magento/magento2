@@ -37,6 +37,11 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManagerMock;
 
+    /**
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMock;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -74,6 +79,35 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addTotal',
+                    'getQuote',
+                    'getAllItems',
+                    'getShippingAmount',
+                    'getDiscountAmount',
+                    'getDiscountDescription',
+                    'getCustomAttributesCodes',
+                    '__wakeup'
+                ]
+            )
+            ->getMock();
+        $this->addressMock->expects($this->any())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+        $this->addressMock->expects($this->any())
+            ->method('getShippingAmount')
+            ->willReturn(true);
+        $this->addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
+
         /** @var \Magento\SalesRule\Model\Quote\Discount $discount */
         $this->discount = $this->objectManager->getObject(
             'Magento\SalesRule\Model\Quote\Discount',
@@ -108,26 +142,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
-            ->getMock();
-        $addressMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$itemNoDiscount]);
-        $addressMock->expects($this->any())
-            ->method('getShippingAmount')
-            ->willReturn(true);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
-            $this->discount->collect($addressMock)
+            $this->discount->collect($this->addressMock)
         );
     }
 
@@ -160,26 +181,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
-            ->getMock();
-        $addressMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$itemWithParentId]);
-        $addressMock->expects($this->any())
-            ->method('getShippingAmount')
-            ->willReturn(true);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
-            $this->discount->collect($addressMock)
+            $this->discount->collect($this->addressMock)
         );
     }
 
@@ -244,26 +252,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
-            ->getMock();
-        $addressMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$itemWithChildren]);
-        $addressMock->expects($this->any())
-            ->method('getShippingAmount')
-            ->willReturn(true);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
-            $this->discount->collect($addressMock)
+            $this->discount->collect($this->addressMock)
         );
 
         foreach ($expectedChildData as $itemId => $expectedItemData) {
@@ -363,45 +358,28 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
-            ->getMock();
-        $addressMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$itemWithChildren]);
-        $addressMock->expects($this->any())
-            ->method('getShippingAmount')
-            ->willReturn(true);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
-            $this->discount->collect($addressMock)
+            $this->discount->collect($this->addressMock)
         );
     }
 
     public function testFetch()
     {
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getDiscountAmount', 'getDiscountDescription', 'addTotal', '__wakeup'])
-            ->getMock();
-        $addressMock->expects($this->once())
+        $this->addressMock->expects($this->once())
             ->method('getDiscountAmount')
             ->willReturn(10);
-        $addressMock->expects($this->once())
+        $this->addressMock->expects($this->once())
             ->method('getDiscountDescription')
             ->willReturn('test description');
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
-            $this->discount->fetch($addressMock)
+            $this->discount->fetch($this->addressMock)
         );
     }
 }
