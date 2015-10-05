@@ -37,6 +37,7 @@ define([
             visibleClass: '_resize-visible',
             cellContentElement: 'div.data-grid-cell-content',
             minColumnWidth: 40,
+            layoutFixedPolyfillIterator: 0,
             windowResize: false,
             resizable: false,
             resizeConfig: {
@@ -90,6 +91,12 @@ define([
                 this.table = table;
                 this.tableWidth = $(table).outerWidth();
                 $(window).resize(this.checkAfterResize);
+            }
+
+            //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
+            //ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
+            if (navigator.userAgent.search(/Firefox/) > -1) {
+                this._layoutFixedPolyfill();
             }
 
             $(table).addClass(this.fixedLayoutClass);
@@ -224,19 +231,25 @@ define([
             this.refreshLastColumn(column);
             this.preprocessingWidth();
 
-            //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
-            //ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
-            if (navigator.userAgent.search(/Firefox/) > -1) {
-                setTimeout(function () {
-                    $(table).css('table-layout', 'auto');
-                    setTimeout(function () {
-                        $(table).css('table-layout', 'fixed');
-                    }, 500);
-                }, 500);
-            }
-
             model.on('visible', this.refreshLastColumn.bind(this, column));
             model.on('visible', this.preprocessingWidth.bind(this));
+        },
+
+        /**
+         * Hack for mozilla firefox
+         */
+        _layoutFixedPolyfill: function () {
+            var self = this;
+
+            setTimeout(function () {
+                if (self.layoutFixedPolyfillIterator < 20) {
+                    $(window).resize();
+                    self.layoutFixedPolyfillIterator++;
+                    self._layoutFixedPolyfill();
+                } else {
+                    return false;
+                }
+            }, 500);
         },
 
         /**
