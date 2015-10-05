@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-$downloadableProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$downloadableProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Product');
 $downloadableProduct->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
