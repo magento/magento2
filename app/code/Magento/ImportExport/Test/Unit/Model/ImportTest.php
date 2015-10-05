@@ -328,7 +328,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->disableOriginalConstructor()->getMock();
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
-        $this->assertEquals('boolean' , $this->import->getAttributeType($attribute));
+        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**
