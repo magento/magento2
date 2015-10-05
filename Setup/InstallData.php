@@ -8,8 +8,8 @@ namespace Magento\MysqlMq\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
-use Magento\Framework\MessageQueue\Config\Converter as AmqpConfigConverter;
+use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
 
 /**
  * @codeCoverageIgnore
@@ -17,18 +17,18 @@ use Magento\Framework\MessageQueue\Config\Converter as AmqpConfigConverter;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var AmqpConfig
+     * @var MessageQueueConfig
      */
-    private $amqpConfig;
+    private $messageQueueConfig;
 
     /**
      * Initialize dependencies.
      *
-     * @param AmqpConfig $amqpConfig
+     * @param MessageQueueConfig $messageQueueConfig
      */
-    public function __construct(AmqpConfig $amqpConfig)
+    public function __construct(MessageQueueConfig $messageQueueConfig)
     {
-        $this->amqpConfig = $amqpConfig;
+        $this->messageQueueConfig = $messageQueueConfig;
     }
 
     /**
@@ -37,10 +37,10 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $binds = $this->amqpConfig->get()[AmqpConfigConverter::BINDS];
+        $binds = $this->messageQueueConfig->get()[MessageQueueConfigConverter::BINDS];
         $queues = [];
         foreach ($binds as $bind) {
-            $queues[] = $bind[AmqpConfigConverter::BIND_QUEUE];
+            $queues[] = $bind[MessageQueueConfigConverter::BIND_QUEUE];
         }
         $queues = array_unique($queues);
         /** Populate 'queue' table */

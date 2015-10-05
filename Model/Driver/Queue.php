@@ -11,7 +11,7 @@ use Magento\MysqlMq\Model\QueueManagement;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 
 /**
- * Queue based on Amqp protocol
+ * Queue based on MessageQueue protocol
  */
 class Queue implements QueueInterface
 {
