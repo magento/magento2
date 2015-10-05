@@ -14,7 +14,7 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - pad_char
  * - last_id
  */
-class Numeric extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
+class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
     /**
      * Get next id

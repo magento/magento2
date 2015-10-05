@@ -34,7 +34,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $pricesMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItemMock;
 
@@ -63,7 +63,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->saleableItemMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\Object\SaleableInterface',
+            'Magento\Framework\Pricing\SaleableInterface',
             [],
             '',
             false,
