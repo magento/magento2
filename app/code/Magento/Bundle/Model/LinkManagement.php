@@ -36,7 +36,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $bundleSelection;
 
     /**
-     * @var Resource\Option\CollectionFactory
+     * @var \Magento\Bundle\Model\Resource\Option\CollectionFactory
      */
     protected $optionCollection;
 

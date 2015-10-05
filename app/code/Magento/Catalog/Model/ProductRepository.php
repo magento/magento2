@@ -138,10 +138,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
-     * @param Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param Resource\Product $resourceModel
+     * @param \Magento\Catalog\Model\Resource\Product $resourceModel
      * @param Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -153,7 +153,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ImageContentValidatorInterface $contentValidator
      * @param ImageContentInterfaceFactory $contentFactory
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

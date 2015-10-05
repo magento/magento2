@@ -94,7 +94,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Model\Session $customerSession
      * @param AccountManagementInterface $accountManagement
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param Resource\Tax $resource
+     * @param \Magento\Weee\Model\Resource\Tax $resource
      * @param Config $weeeConfig
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection

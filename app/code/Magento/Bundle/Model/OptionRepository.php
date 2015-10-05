@@ -31,7 +31,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $optionFactory;
 
     /**
-     * @var Resource\Option
+     * @var \Magento\Bundle\Model\Resource\Option
      */
     protected $optionResource;
 
@@ -64,7 +64,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
-     * @param Resource\Option $optionResource
+     * @param \Magento\Bundle\Model\Resource\Option $optionResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList

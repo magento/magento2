@@ -23,7 +23,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $productFactory;
 
     /**
-     * @var Resource\Product\Type\Configurable
+     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable
      */
     private $configurableType;
 
@@ -35,7 +35,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
-     * @param Resource\Product\Type\Configurable $configurableType
+     * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(

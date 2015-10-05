@@ -49,8 +49,8 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * @param Config $eavConfig
-     * @param Resource\Entity\Attribute $eavResource
-     * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute $eavResource
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor

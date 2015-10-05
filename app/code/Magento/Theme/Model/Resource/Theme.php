@@ -8,7 +8,7 @@ namespace Magento\Theme\Model\Resource;
 /**
  * Theme resource model
  */
-class Theme extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Theme extends \Magento\Framework\Model\Resource\Db\AbstractDb ///
 {
     /**
      * Resource initialization

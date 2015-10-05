@@ -51,7 +51,7 @@ class Utility
     protected $priceCurrency;
 
     /**
-     * @param Resource\Coupon\UsageFactory $usageFactory
+     * @param \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
      * @param \Magento\Framework\DataObjectFactory $objectFactory

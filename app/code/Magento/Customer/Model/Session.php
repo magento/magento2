@@ -11,7 +11,6 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 use Magento\Framework\App\ActionInterface;
-
 /**
  * Customer session model
  * @method string getNoReferer()
@@ -25,6 +24,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var CustomerData
      */
     protected $_customer;
+
+    /**
+     * @var ResourceCustomer
+     */
+    protected $_customerResource;
 
     /**
      * Customer model
@@ -137,7 +141,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         Config\Share $configShare,
         \Magento\Framework\Url\Helper\Data $coreUrl,
         \Magento\Customer\Model\Url $customerUrl,
-        Resource\Customer $customerResource,
+        ResourceCustomer $customerResource,
         CustomerFactory $customerFactory,
         \Magento\Framework\UrlFactory $urlFactory,
         \Magento\Framework\Session\Generic $session,

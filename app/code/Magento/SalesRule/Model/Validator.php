@@ -95,7 +95,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param Resource\Rule\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier

@@ -6,7 +6,7 @@
 namespace Magento\Theme\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
-
+use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
 /**
  * Theme model class
  *
@@ -106,8 +106,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
         \Magento\Framework\View\Design\Theme\Validator $validator,
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
-        Resource\Theme $resource = null,
-        Resource\Theme\Collection $resourceCollection = null,
+        \Magento\Theme\Model\Resource\Theme $resource = null,
+        ThemeCollection $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

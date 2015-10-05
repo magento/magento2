@@ -218,37 +218,37 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_orderHistoryFactory;
 
     /**
-     * @var Resource\Order\Address\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Address\CollectionFactory
      */
     protected $_addressCollectionFactory;
 
     /**
-     * @var Resource\Order\Payment\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Payment\CollectionFactory
      */
     protected $_paymentCollectionFactory;
 
     /**
-     * @var Resource\Order\Status\History\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory
      */
     protected $_historyCollectionFactory;
 
     /**
-     * @var Resource\Order\Invoice\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory
      */
     protected $_invoiceCollectionFactory;
 
     /**
-     * @var Resource\Order\Shipment\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory
      */
     protected $_shipmentCollectionFactory;
 
     /**
-     * @var Resource\Order\Creditmemo\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory
      */
     protected $_memoCollectionFactory;
 
     /**
-     * @var Resource\Order\Shipment\Track\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
      */
     protected $_trackCollectionFactory;
 
@@ -271,19 +271,19 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Order\Status\HistoryFactory $orderHistoryFactory
-     * @param Resource\Order\Address\CollectionFactory $addressCollectionFactory
-     * @param Resource\Order\Payment\CollectionFactory $paymentCollectionFactory
-     * @param Resource\Order\Status\History\CollectionFactory $historyCollectionFactory
-     * @param Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory
-     * @param Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
-     * @param Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
-     * @param Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Address\CollectionFactory $addressCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Payment\CollectionFactory $paymentCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory $historyCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource

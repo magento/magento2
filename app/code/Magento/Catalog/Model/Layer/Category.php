@@ -14,8 +14,8 @@ class Category extends \Magento\Catalog\Model\Layer
     /**
      * @param ContextInterface $context
      * @param StateFactory $layerStateFactory
-     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param Resource\Product $catalogProduct
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
@@ -24,8 +24,8 @@ class Category extends \Magento\Catalog\Model\Layer
     public function __construct(
         ContextInterface $context,
         StateFactory $layerStateFactory,
-        Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        Resource\Product $catalogProduct,
+        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,

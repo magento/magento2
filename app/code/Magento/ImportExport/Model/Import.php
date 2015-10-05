@@ -159,7 +159,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
      * @param Import\Entity\Factory $entityFactory
-     * @param Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
