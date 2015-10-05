@@ -5,7 +5,7 @@
  */
 namespace Magento\MysqlMq\Model;
 
-use Magento\Framework\Amqp\PublisherInterface;
+use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
  * Test for MySQL publisher class.
@@ -29,31 +29,31 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $objectManagerConfiguration = [
-            'Magento\Framework\Amqp\Config\Reader' => [
+            'Magento\Framework\MessageQueue\Config\Reader' => [
                 'arguments' => [
                     'fileResolver' => ['instance' => 'Magento\MysqlMq\Config\Reader\FileResolver'],
                 ],
             ],
         ];
         $this->objectManager->configure($objectManagerConfiguration);
-        /** @var \Magento\Framework\Amqp\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\Amqp\Config\Data');
+        /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
+        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
         $queueConfig->reset();
-        $this->publisher = $this->objectManager->create('Magento\Framework\Amqp\PublisherInterface');
+        $this->publisher = $this->objectManager->create('Magento\Framework\MessageQueue\PublisherInterface');
     }
 
     protected function tearDown()
     {
         $objectManagerConfiguration = [
-            'Magento\Framework\Amqp\Config\Reader' => [
+            'Magento\Framework\MessageQueue\Config\Reader' => [
                 'arguments' => [
                     'fileResolver' => ['instance' => 'Magento\Framework\Config\FileResolverInterface'],
                 ],
             ],
         ];
         $this->objectManager->configure($objectManagerConfiguration);
-        /** @var \Magento\Framework\Amqp\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\Amqp\Config\Data');
+        /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
+        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
         $queueConfig->reset();
     }
 
@@ -166,8 +166,8 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $expectedNumberOfProcessedMessages,
         $outputPattern
     ) {
-        /** @var \Magento\Framework\Amqp\ConsumerFactory $consumerFactory */
-        $consumerFactory = $this->objectManager->create('Magento\Framework\Amqp\ConsumerFactory');
+        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
+        $consumerFactory = $this->objectManager->create('Magento\Framework\MessageQueue\ConsumerFactory');
         $consumer = $consumerFactory->get($consumerName);
         ob_start();
         $consumer->process($messagesToProcess);
