@@ -43,7 +43,7 @@ class AssertCustomerLogout extends AbstractConstraint
         $cmsIndex->getCmsPageBlock()->waitPageInit();
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getLinksBlock()->isLinkVisible('Sign In'),
-            "Customer doesn't log out."
+            "Customer wasn't logged out."
         );
     }
 
