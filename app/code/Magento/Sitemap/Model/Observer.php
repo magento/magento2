@@ -88,12 +88,10 @@ class Observer
     /**
      * Generate sitemaps
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function scheduledGenerateSitemaps($schedule)
+    public function scheduledGenerateSitemaps()
     {
         $errors = [];
 
