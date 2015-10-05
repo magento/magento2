@@ -72,16 +72,13 @@ class Processor
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),
             'fullpath' => $fileAbsolutePath,
+            'quote_path' => $this->fileFullPath,
+            'order_path' => $this->fileFullPath,
             'size' => filesize($fileAbsolutePath),
             'width' => $width,
             'height' => $height,
             'secret_key' => substr($fileHash, 0, 20),
         ];
-        if ($destinationFolder == '/custom_options/quote') {
-            $result['quote_path'] = $this->fileFullPath;
-        } else {
-            $result['order_path'] = $this->fileFullPath;
-        }
         return $result;
     }
 }
