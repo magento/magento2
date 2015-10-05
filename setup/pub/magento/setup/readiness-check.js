@@ -287,21 +287,15 @@ angular.module('readiness-check', [])
         $scope.query = function(item) {
             if (item.params) {
                 if (item.useGet === true) {
-                    item.url = item.url + '?type=' + item.params;
-
                     // The http request type has been changed from POST to GET for a reason. The POST request
                     // results in PHP throwing a warning regards to 'always_populate_raw_post_data'
                     // being incorrectly set to a value different than -1. This warning is throw during the initial
                     // boot up sequence when POST request is received before the control gets transferred over to
-                    // the magento customer error handler, hence not catachable. To avoid that warning, the HTTP
-                    // request type is being changed from POST to GET for select queries.
-                    return $http.get(item.url)
-                        .success(function (data) {
-                            item.process(data)
-                        })
-                        .error(function (data, status) {
-                            item.fail();
-                        });
+                    // the Magento customer error handler, hence not catchable. To avoid that warning, the HTTP
+                    // request type is being changed from POST to GET for select queries. Those queries are:
+                    // (1) PHP Version Check (2) PHP Settings Check and (3) PHP Extensions Check.
+
+                    item.url = item.url + '?type=' + item.params;
                 } else {
                     return $http.post(item.url, item.params)
                         .success(function (data) {

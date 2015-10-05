@@ -218,7 +218,7 @@ class PhpReadinessCheck
             'message' => $message,
             'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
             'error' => $error
-            ];
+        ];
 
         return $data;
     }
