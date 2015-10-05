@@ -6,7 +6,9 @@
 
 namespace Magento\Tax\Observer;
 
-class QuoteCollectTotalsBefore
+use Magento\Framework\Event\ObserverInterface;
+
+class QuoteCollectTotalsBefore implements ObserverInterface
 {
     /**
      * Reset extra tax amounts on quote addresses before recollecting totals
@@ -14,7 +16,7 @@ class QuoteCollectTotalsBefore
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function invoke(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
