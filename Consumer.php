@@ -15,7 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
 
 /**
- * A RabbitMQ Consumer to handle receiving a message.
+ * A MessageQueue Consumer to handle receiving a message.
  */
 class Consumer implements ConsumerInterface
 {

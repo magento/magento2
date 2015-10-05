@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 
 /**
- * A RabbitMQ Publisher to handle publishing a message.
+ * A MessageQueue Publisher to handle publishing a message.
  */
 class Publisher implements PublisherInterface
 {

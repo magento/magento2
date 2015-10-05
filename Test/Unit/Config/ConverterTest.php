@@ -142,7 +142,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'publishers' => [
                 'test-publisher-1' => [
                     'name' => 'test-publisher-1',
-                    'connection' => 'rabbitmq',
+                    'connection' => 'amqp',
                     'exchange' => 'magento',
                 ],
                 'test-publisher-2' => [
@@ -152,7 +152,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 ],
                 'test-publisher-3' => [
                     'name' => 'test-publisher-3',
-                    'connection' => 'rabbitmq',
+                    'connection' => 'amqp',
                     'exchange' => 'test-exchange-1',
                 ],
             ],
@@ -226,7 +226,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'customerCreatedListener' => [
                     'name' => 'customerCreatedListener',
                     'queue' => 'test-queue-1',
-                    'connection' => 'rabbitmq',
+                    'connection' => 'amqp',
                     'class' => 'Data\Type',
                     'method' => 'processMessage',
                     'max_messages' => null,
@@ -244,7 +244,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'cartCreatedListener' => [
                     'name' => 'cartCreatedListener',
                     'queue' => 'test-queue-3',
-                    'connection' => 'rabbitmq',
+                    'connection' => 'amqp',
                     'class' => 'Other\Type',
                     'method' => 'processMessage3',
                     'max_messages' => null,
