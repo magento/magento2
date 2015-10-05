@@ -5,13 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportOrderPlacedToNewRelic
  */
-class ReportOrderPlacedToNewRelic
+class ReportOrderPlacedToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -24,8 +26,6 @@ class ReportOrderPlacedToNewRelic
     protected $newRelicWrapper;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
@@ -40,10 +40,10 @@ class ReportOrderPlacedToNewRelic
     /**
      * Reports orders placed to New Relic
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportOrderPlacedToNewRelic
+     * @param Observer $observer
+     * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             /** @var \Magento\Sales\Model\Order $order */
@@ -57,7 +57,5 @@ class ReportOrderPlacedToNewRelic
             $this->newRelicWrapper->addCustomParameter(Config::ORDER_ITEMS, $itemCount);
             $this->newRelicWrapper->addCustomParameter(Config::ORDER_VALUE, $order->getBaseGrandTotal());
         }
-
-        return $this;
     }
 }

@@ -56,14 +56,16 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportProductDeletedToNewRelicModuleDisabledFromConfig()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -73,6 +75,11 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportProductDeletedToNewRelic()
     {
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -80,9 +87,6 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('addCustomParameter')
             ->willReturn(true);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute()
-        );
+        $this->model->execute($eventObserver);
     }
 }

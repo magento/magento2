@@ -5,12 +5,14 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportOrderPlaced
  */
-class ReportOrderPlaced
+class ReportOrderPlaced implements ObserverInterface
 {
     /**
      * @var Config
@@ -28,8 +30,6 @@ class ReportOrderPlaced
     protected $dateTime;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\OrdersFactory $ordersFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -47,10 +47,10 @@ class ReportOrderPlaced
     /**
      * Reports orders placed to the database reporting_orders table
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportOrderPlaced
+     * @param Observer $observer
+     * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             /** @var \Magento\Sales\Model\Order $order */
@@ -73,7 +73,5 @@ class ReportOrderPlaced
             $orderModel->setData($modelData);
             $orderModel->save();
         }
-
-        return $this;
     }
 }

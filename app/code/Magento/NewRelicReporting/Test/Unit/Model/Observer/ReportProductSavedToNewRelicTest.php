@@ -5,6 +5,7 @@
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic;
 
 /**
@@ -56,7 +57,7 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportProductSavedToNewRelicModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,10 +65,7 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -77,7 +75,7 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportProductSavedToNewRelic()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,10 +98,8 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
         $this->newRelicWrapper->expects($this->once())
             ->method('addCustomParameter')
             ->willReturn(true);
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -114,7 +110,7 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportProductUpdatedToNewRelic($isNewObject)
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();
@@ -140,10 +136,8 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
         $this->newRelicWrapper->expects($this->once())
             ->method('addCustomParameter')
             ->willReturn(true);
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+
+        $this->model->execute($eventObserver);
     }
 
     public function actionDataProvider()

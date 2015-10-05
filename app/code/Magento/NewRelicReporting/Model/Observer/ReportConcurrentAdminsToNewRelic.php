@@ -5,13 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportConcurrentAdminsToNewRelic
  */
-class ReportConcurrentAdminsToNewRelic
+class ReportConcurrentAdminsToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -29,8 +31,6 @@ class ReportConcurrentAdminsToNewRelic
     protected $newRelicWrapper;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @param NewRelicWrapper $newRelicWrapper
@@ -48,9 +48,11 @@ class ReportConcurrentAdminsToNewRelic
     /**
      * Adds New Relic custom parameters per adminhtml request for current admin user, if applicable
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdminsToNewRelic
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             if ($this->backendAuthSession->isLoggedIn()) {
@@ -63,7 +65,5 @@ class ReportConcurrentAdminsToNewRelic
                 );
             }
         }
-
-        return $this;
     }
 }

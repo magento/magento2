@@ -5,13 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Class ReportConcurrentUsersToNewRelic
  */
-class ReportConcurrentUsersToNewRelic
+class ReportConcurrentUsersToNewRelic implements ObserverInterface
 {
     /**
      * @var Config
@@ -39,8 +41,6 @@ class ReportConcurrentUsersToNewRelic
     protected $newRelicWrapper;
 
     /**
-     * Constructor
-     *
      * @param Config $config
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
@@ -64,9 +64,11 @@ class ReportConcurrentUsersToNewRelic
     /**
      * Adds New Relic custom parameters per request for store, website, and logged in user if applicable
      *
-     * @return \Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsersToNewRelic
+     * @param Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {
             $this->newRelicWrapper->addCustomParameter(Config::STORE, $this->storeManager->getStore()->getName());
@@ -81,7 +83,5 @@ class ReportConcurrentUsersToNewRelic
                 );
             }
         }
-
-        return $this;
     }
 }

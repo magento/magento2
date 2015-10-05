@@ -77,18 +77,16 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportOrderPlacedModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($event)
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -156,9 +154,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
         $this->ordersModel->expects($this->once())
             ->method('save');
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 }

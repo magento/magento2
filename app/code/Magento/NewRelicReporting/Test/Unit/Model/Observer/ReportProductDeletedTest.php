@@ -93,10 +93,7 @@ class ReportProductDeletedTest extends \PHPUnit_Framework_TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -144,9 +141,6 @@ class ReportProductDeletedTest extends \PHPUnit_Framework_TestCase
         $this->systemModel->expects($this->once())
             ->method('save');
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 }

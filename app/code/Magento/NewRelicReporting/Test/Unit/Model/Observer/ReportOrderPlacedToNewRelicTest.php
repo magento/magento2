@@ -64,10 +64,7 @@ class ReportOrderPlacedToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 
     /**
@@ -112,9 +109,6 @@ class ReportOrderPlacedToNewRelicTest extends \PHPUnit_Framework_TestCase
             ->method('addCustomParameter')
             ->willReturn(true);
 
-        $this->assertSame(
-            $this->model,
-            $this->model->execute($eventObserver)
-        );
+        $this->model->execute($eventObserver);
     }
 }
