@@ -53,6 +53,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $options
      * @param array $expected
+     * @return void
      * @dataProvider getOptionsDataProvider
      */
     public function testToOptionArray(array $options, array $expected)
