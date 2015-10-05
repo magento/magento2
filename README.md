@@ -1,3 +1,3 @@
-# Amqp
+# MessageQueue
 
-**Amqp** provides support of Advanced Message Queuing Protocol
+**MessageQueue** provides support of Advanced Message Queuing Protocol

@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
 
 /**
- * Command for starting AMQP consumers.
+ * Command for starting MessageQueue consumers.
  */
 class StartConsumerCommand extends Command
 {
@@ -54,7 +54,7 @@ class StartConsumerCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_QUEUE_CONSUMERS_START);
-        $this->setDescription('Start AMQP consumer');
+        $this->setDescription('Start MessageQueue consumer');
         $this->addArgument(
             self::ARGUMENT_CONSUMER,
             InputArgument::REQUIRED,
@@ -69,7 +69,7 @@ class StartConsumerCommand extends Command
         );
         $this->setHelp(
             <<<HELP
-This command starts AMQP consumer by its name.
+This command starts MessageQueue consumer by its name.
 
 To start consumer which will process all queued messages and terminate execution:
 

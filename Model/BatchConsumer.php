@@ -7,7 +7,7 @@ namespace Magento\MessageQueue\Model;
 
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\MergerFactory;
 use Magento\Framework\MessageQueue\MergerInterface;
@@ -29,9 +29,9 @@ class BatchConsumer implements ConsumerInterface
     private $configuration;
 
     /**
-     * @var AmqpConfig
+     * @var MessageQueueConfig
      */
-    private $amqpConfig;
+    private $messageQueueConfig;
 
     /**
      * @var MessageEncoder
@@ -58,7 +58,7 @@ class BatchConsumer implements ConsumerInterface
     private $resource;
 
     /**
-     * @param AmqpConfig $amqpConfig
+     * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
@@ -66,14 +66,14 @@ class BatchConsumer implements ConsumerInterface
      * @param int $interval
      */
     public function __construct(
-        AmqpConfig $amqpConfig,
+        MessageQueueConfig $messageQueueConfig,
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
         Resource $resource,
         $interval = 5
     ) {
-        $this->amqpConfig = $amqpConfig;
+        $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
         $this->mergerFactory = $mergerFactory;
@@ -96,7 +96,7 @@ class BatchConsumer implements ConsumerInterface
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->amqpConfig->getConnectionByConsumer($consumerName);
+        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($consumerName);
 
         $queue = $this->queueRepository->get($connectionName, $queueName);
         $merger = $this->mergerFactory->create($consumerName);
