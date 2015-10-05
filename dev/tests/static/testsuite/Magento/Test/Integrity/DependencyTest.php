@@ -143,22 +143,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        // For internal development, the application will be running from app/code. And as part of
-        // build, the dependency test will be run and any issues will be caught and fixed. This test
-        // will be skipped if the magento application was installed through "composer create project"
-        // in which case it will be running from "vendor/magento" directory instead.
-        // In the future when there is time, this test case should be rewritten to accommodate
-        // different install configs i.e. through composer create project (from vendor/magento dir)
-        // or through git clone (from app/code)
-
-        // Check for installation type
         $root = Files::init()->getPathToSource();
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
 
-            // The Dependency test will be skipped for vendor/magento build
+            // The Dependency test is skipped for vendor/magento build
             self::markTestSkipped(
-                "The build is running from vendor/magento. DependencyTest will be skipped."
+                'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
             );
         }
 
@@ -183,18 +174,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     private static function getLibraryWhiteLists()
     {
-        $listofLibraries = [];
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
             if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
-
-                $temp = implode('\\', array_slice(($partOfLibraryPath), -3));
-                $listofLibraries[] = $temp;
+                self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
             }
         }
-        self::$whiteList = $listofLibraries;
     }
 
     /**
