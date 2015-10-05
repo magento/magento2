@@ -115,7 +115,7 @@ class Reader
             $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
             $fileData = @include $configFile;
             foreach ($keys as $key) {
-                if(array_key_exists($key, $fileData)){
+                if (array_key_exists($key, $fileData)){
                     $displayMessage .= 'Key "'. $key . '" found in ' . $configFile . PHP_EOL;
                 }
             }
