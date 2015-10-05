@@ -7,7 +7,6 @@ namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
 
 use Magento\Framework\Pricing\PriceInfo\Factory;
 
-
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Factory
  */

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\Resource\Block as ResourceBlock;
 use Magento\Cms\Model\Resource\Block\CollectionFactory as BlockCollectionFactory;
+
 /**
  * Class BlockRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
