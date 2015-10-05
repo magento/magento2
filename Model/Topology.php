@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 
 /**
- * Class Topology creates topology for RabbitMq messaging
+ * Class Topology creates topology for Amqp messaging
  *
  * @package Magento\Amqp\Model
  */
@@ -22,9 +22,9 @@ class Topology
     const TOPIC_EXCHANGE = 'topic';
 
     /**
-     * RabbitMq connection
+     * Amqp connection
      */
-    const RABBITMQ_CONNECTION = 'rabbitmq';
+    const AMQP_CONNECTION = 'amqp';
 
     /**
      * Durability for exchange and queue
@@ -34,7 +34,7 @@ class Topology
     /**
      * @var Config
      */
-    private $rabbitMqConfig;
+    private $amqpConfig;
 
     /**
      * @var QueueConfig
@@ -54,22 +54,22 @@ class Topology
     /**
      * Initialize dependencies
      *
-     * @param Config $rabbitMqConfig
+     * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        Config $rabbitMqConfig,
+        Config $amqpConfig,
         QueueConfig $queueConfig,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->rabbitMqConfig = $rabbitMqConfig;
+        $this->amqpConfig = $amqpConfig;
         $this->queueConfig = $queueConfig;
         $this->logger = $logger;
     }
 
     /**
-     * Install RabbitMq Exchanges, Queues and bind them
+     * Install Amqp Exchanges, Queues and bind them
      *
      * @return void
      */
@@ -77,8 +77,8 @@ class Topology
     {
         $queueConfig = $this->getQueueConfigData();
         if (isset($queueConfig[QueueConfigConverter::BINDS])) {
-            $availableQueues = $this->getQueuesList(self::RABBITMQ_CONNECTION);
-            $availableExchanges = $this->getExchangesList(self::RABBITMQ_CONNECTION);
+            $availableQueues = $this->getQueuesList(self::AMQP_CONNECTION);
+            $availableExchanges = $this->getExchangesList(self::AMQP_CONNECTION);
 
             foreach ($queueConfig[QueueConfigConverter::BINDS] as $bind) {
                 $queueName = $bind[QueueConfigConverter::BIND_QUEUE];
@@ -105,7 +105,7 @@ class Topology
     }
 
     /**
-     * Declare RabbitMq Queue
+     * Declare Amqp Queue
      *
      * @param string $queueName
      * @return void
@@ -116,7 +116,7 @@ class Topology
     }
 
     /**
-     * Declare RabbitMq Exchange
+     * Declare Amqp Exchange
      *
      * @param string $exchangeName
      * @return void
@@ -140,13 +140,13 @@ class Topology
     }
 
     /**
-     * Return RabbitMq channel
+     * Return Amqp channel
      *
      * @return \PhpAmqpLib\Channel\AMQPChannel
      */
     private function getChannel()
     {
-        return $this->rabbitMqConfig->getChannel();
+        return $this->amqpConfig->getChannel();
     }
 
     /**

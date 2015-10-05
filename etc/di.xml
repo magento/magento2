@@ -9,14 +9,14 @@
     <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
             <argument name="queues" xsi:type="array">
-                <item name="rabbitmq" xsi:type="string">Magento\Amqp\Model\Queue</item>
+                <item name="amqp" xsi:type="string">Magento\Amqp\Model\Queue</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\MessageQueue\ExchangeRepository">
         <arguments>
             <argument name="exchanges" xsi:type="array">
-                <item name="rabbitmq" xsi:type="string">Magento\Amqp\Model\Exchange</item>
+                <item name="amqp" xsi:type="string">Magento\Amqp\Model\Exchange</item>
             </argument>
         </arguments>
     </type>
@@ -24,9 +24,9 @@
     <type name="Magento\Framework\MessageQueue\PublisherFactory">
         <arguments>
             <argument name="publishers" xsi:type="array">
-                <item name="rabbitmq" xsi:type="array">
+                <item name="amqp" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-                    <item name="connectionName" xsi:type="string">rabbitmq</item>
+                    <item name="connectionName" xsi:type="string">amqp</item>
                 </item>
             </argument>
         </arguments>
@@ -34,9 +34,9 @@
     <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
-                <item name="rabbitmq" xsi:type="array">
+                <item name="amqp" xsi:type="array">
                     <item name="type" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
-                    <item name="connectionName" xsi:type="string">rabbitmq</item>
+                    <item name="connectionName" xsi:type="string">amqp</item>
                 </item>
             </argument>
         </arguments>

@@ -9,12 +9,12 @@ namespace Magento\Amqp\Setup;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 /**
- * Class ConnectionValidator - validates RabbitMq related settings
+ * Class ConnectionValidator - validates Amqp related settings
  */
 class ConnectionValidator
 {
     /**
-     * Checks RabbitMq Connection
+     * Checks Amqp Connection
      *
      * @param string $host
      * @param string $port

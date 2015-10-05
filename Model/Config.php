@@ -11,7 +11,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
- * Reads the RabbitMQ config in the deployed environment configuration
+ * Reads the Amqp config in the deployed environment configuration
  */
 class Config
 {
@@ -21,9 +21,9 @@ class Config
     const QUEUE_CONFIG = 'queue';
 
     /**
-     * RabbitMQ config key
+     * Amqp config key
      */
-    const RABBITMQ_CONFIG = 'rabbit';
+    const AMQP_CONFIG = 'amqp';
 
     const HOST = 'host';
     const PORT = 'port';
@@ -50,7 +50,7 @@ class Config
     private $channel;
 
     /**
-     * Associative array of RabbitMQ configuration
+     * Associative array of Amqp configuration
      *
      * @var array
      */
@@ -63,7 +63,7 @@ class Config
      * <code>
      * 'queue' =>
      *     [
-     *         'rabbit' => [
+     *         'amqp' => [
      *             'host' => 'localhost',
      *             'port' => 5672,
      *             'username' => 'guest',
@@ -104,7 +104,7 @@ class Config
     }
 
     /**
-     * Return RabbitMq channel
+     * Return Amqp channel
      *
      * @return AMQPChannel
      */
@@ -124,7 +124,7 @@ class Config
     }
 
     /**
-     * Load the configuration for RabbitMQ
+     * Load the configuration for Amqp
      *
      * @return void
      */
@@ -132,12 +132,12 @@ class Config
     {
         if (null === $this->data) {
             $queueConfig = $this->deploymentConfig->getConfigData(self::QUEUE_CONFIG);
-            $this->data = isset($queueConfig[self::RABBITMQ_CONFIG]) ? $queueConfig[self::RABBITMQ_CONFIG] : [];
+            $this->data = isset($queueConfig[self::AMQP_CONFIG]) ? $queueConfig[self::AMQP_CONFIG] : [];
         }
     }
 
     /**
-     * Close RabbitMq connection and Channel
+     * Close Amqp connection and Channel
      *
      * @return void
      */

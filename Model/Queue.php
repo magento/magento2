@@ -19,7 +19,7 @@ class Queue implements QueueInterface
     /**
      * @var Config
      */
-    private $rabbitMqConfig;
+    private $amqpConfig;
 
     /**
      * @var AmqpConfig
@@ -39,18 +39,18 @@ class Queue implements QueueInterface
     /**
      * Initialize dependencies.
      *
-     * @param Config $rabbitMqConfig
+     * @param Config $amqpConfig
      * @param AmqpConfig $amqpConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
      */
     public function __construct(
-        Config $rabbitMqConfig,
+        Config $amqpConfig,
         AmqpConfig $amqpConfig,
         EnvelopeFactory $envelopeFactory,
         $queueName
     ) {
-        $this->rabbitMqConfig = $rabbitMqConfig;
+        $this->amqpConfig = $amqpConfig;
         $this->amqpConfig = $amqpConfig;
         $this->queueName = $queueName;
         $this->envelopeFactory = $envelopeFactory;
@@ -62,7 +62,7 @@ class Queue implements QueueInterface
     public function dequeue()
     {
         $envelope = null;
-        $channel = $this->rabbitMqConfig->getChannel();
+        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         /** @var \PhpAmqpLib\Message\AMQPMessage $message */
         try {
@@ -95,7 +95,7 @@ class Queue implements QueueInterface
     public function acknowledge(EnvelopeInterface $envelope)
     {
         $properties = $envelope->getProperties();
-        $channel = $this->rabbitMqConfig->getChannel();
+        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         try {
             $channel->basic_ack($properties['delivery_tag']);
@@ -134,7 +134,7 @@ class Queue implements QueueInterface
             }
         };
 
-        $channel = $this->rabbitMqConfig->getChannel();
+        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         $channel->basic_consume($this->queueName, '', false, false, false, false, $callbackConverter);
         // @codingStandardsIgnoreEnd
@@ -150,7 +150,7 @@ class Queue implements QueueInterface
     {
         $properties = $envelope->getProperties();
 
-        $channel = $this->rabbitMqConfig->getChannel();
+        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         $channel->basic_reject($properties['delivery_tag'], true);
         // @codingStandardsIgnoreEnd

@@ -1,3 +1,3 @@
-# RabbitMq
+# Amqp
 
-**RabbitMq** provides functionality to publish/consume messages with RabbitMq.
+**Amqp** provides functionality to publish/consume messages with Amqp.

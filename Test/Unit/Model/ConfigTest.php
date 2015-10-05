@@ -25,7 +25,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Config
      */
-    private $rabbitMqConfig;
+    private $amqpConfig;
 
     protected function setUp()
     {
@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getConfigData'])
             ->getMock();
-        $this->rabbitMqConfig = $this->objectManager->getObject(
+        $this->amqpConfig = $this->objectManager->getObject(
             'Magento\Amqp\Model\Config',
             [
                 'config' => $this->deploymentConfigMock,
@@ -49,12 +49,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::QUEUE_CONFIG)
             ->will($this->returnValue(null));
 
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::HOST));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::PORT));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::USERNAME));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::PASSWORD));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::VIRTUALHOST));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::SSL));
+        $this->assertNull($this->amqpConfig->getValue(Config::HOST));
+        $this->assertNull($this->amqpConfig->getValue(Config::PORT));
+        $this->assertNull($this->amqpConfig->getValue(Config::USERNAME));
+        $this->assertNull($this->amqpConfig->getValue(Config::PASSWORD));
+        $this->assertNull($this->amqpConfig->getValue(Config::VIRTUALHOST));
+        $this->assertNull($this->amqpConfig->getValue(Config::SSL));
     }
 
     public function testGetEmptyConfig()
@@ -64,12 +64,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::QUEUE_CONFIG)
             ->will($this->returnValue([]));
 
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::HOST));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::PORT));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::USERNAME));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::PASSWORD));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::VIRTUALHOST));
-        $this->assertNull($this->rabbitMqConfig->getValue(Config::SSL));
+        $this->assertNull($this->amqpConfig->getValue(Config::HOST));
+        $this->assertNull($this->amqpConfig->getValue(Config::PORT));
+        $this->assertNull($this->amqpConfig->getValue(Config::USERNAME));
+        $this->assertNull($this->amqpConfig->getValue(Config::PASSWORD));
+        $this->assertNull($this->amqpConfig->getValue(Config::VIRTUALHOST));
+        $this->assertNull($this->amqpConfig->getValue(Config::SSL));
     }
 
     public function testGetStandardConfig()
@@ -86,7 +86,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::QUEUE_CONFIG)
             ->will($this->returnValue(
                 [
-                    Config::RABBITMQ_CONFIG => [
+                    Config::AMQP_CONFIG => [
                         'host' => $expectedHost,
                         'port' => $expectedPort,
                         'user' => $expectedUsername,
@@ -98,12 +98,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        $this->assertEquals($expectedHost, $this->rabbitMqConfig->getValue(Config::HOST));
-        $this->assertEquals($expectedPort, $this->rabbitMqConfig->getValue(Config::PORT));
-        $this->assertEquals($expectedUsername, $this->rabbitMqConfig->getValue(Config::USERNAME));
-        $this->assertEquals($expectedPassword, $this->rabbitMqConfig->getValue(Config::PASSWORD));
-        $this->assertEquals($expectedVirtualHost, $this->rabbitMqConfig->getValue(Config::VIRTUALHOST));
-        $this->assertEquals($expectedSsl, $this->rabbitMqConfig->getValue(Config::SSL));
-        $this->assertEquals('randomValue', $this->rabbitMqConfig->getValue('randomKey'));
+        $this->assertEquals($expectedHost, $this->amqpConfig->getValue(Config::HOST));
+        $this->assertEquals($expectedPort, $this->amqpConfig->getValue(Config::PORT));
+        $this->assertEquals($expectedUsername, $this->amqpConfig->getValue(Config::USERNAME));
+        $this->assertEquals($expectedPassword, $this->amqpConfig->getValue(Config::PASSWORD));
+        $this->assertEquals($expectedVirtualHost, $this->amqpConfig->getValue(Config::VIRTUALHOST));
+        $this->assertEquals($expectedSsl, $this->amqpConfig->getValue(Config::SSL));
+        $this->assertEquals('randomValue', $this->amqpConfig->getValue('randomKey'));
     }
 }

@@ -41,12 +41,12 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->options = [
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_HOST => 'host',
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_PORT => 'port',
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_USER => 'user',
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_PASSWORD => 'password',
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_VIRTUAL_HOST => 'virtual host',
-            ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_SSL => 'ssl',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => 'port',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => 'user',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => 'password',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => 'virtual host',
+            ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
 
         ];
 
@@ -73,46 +73,46 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     {
         $expectedOptions = [
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_HOST,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_HOST,
-                'RabbitMQ server host',
-                ConfigOptionsList::DEFAULT_RABBITMQ_HOST
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_HOST,
+                'Amqp server host',
+                ConfigOptionsList::DEFAULT_AMQP_HOST
             ),
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_PORT,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_PORT,
-                'RabbitMQ server port',
-                ConfigOptionsList::DEFAULT_RABBITMQ_PORT
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_PORT,
+                'Amqp server port',
+                ConfigOptionsList::DEFAULT_AMQP_PORT
             ),
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_USER,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_USER,
-                'RabbitMQ server username',
-                ConfigOptionsList::DEFAULT_RABBITMQ_USER
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_USER,
+                'Amqp server username',
+                ConfigOptionsList::DEFAULT_AMQP_USER
             ),
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_PASSWORD,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_PASSWORD,
-                'RabbitMQ server password',
-                ConfigOptionsList::DEFAULT_RABBITMQ_PASSWORD
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_PASSWORD,
+                'Amqp server password',
+                ConfigOptionsList::DEFAULT_AMQP_PASSWORD
             ),
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_VIRTUAL_HOST,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_VIRTUAL_HOST,
-                'RabbitMQ virtualhost',
-                ConfigOptionsList::DEFAULT_RABBITMQ_VIRTUAL_HOST
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST,
+                'Amqp virtualhost',
+                ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST
             ),
             new TextConfigOption(
-                ConfigOptionsList::INPUT_KEY_QUEUE_RABBITMQ_SSL,
+                ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsList::CONFIG_PATH_QUEUE_RABBITMQ_SSL,
-                'RabbitMQ SSL',
-                ConfigOptionsList::DEFAULT_RABBITMQ_SSL
+                ConfigOptionsList::CONFIG_PATH_QUEUE_AMQP_SSL,
+                'Amqp SSL',
+                ConfigOptionsList::DEFAULT_AMQP_SSL
             )
         ];
         $this->assertEquals($expectedOptions, $this->model->getOptions());
@@ -121,7 +121,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     public function testCreateConfig()
     {
         $expectedConfigData = ['queue' =>
-            ['rabbit' =>
+            ['amqp' =>
                 [
                     'host' => 'host',
                     'port' => 'port',
@@ -145,7 +145,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateInvalidConnection()
     {
-        $expectedResult = ['Could not connect to the RabbitMq Server.'];
+        $expectedResult = ['Could not connect to the Amqp Server.'];
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(false);
         $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }

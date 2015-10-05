@@ -16,7 +16,7 @@ class Exchange implements ExchangeInterface
     /**
      * @var Config
      */
-    private $rabbitMqConfig;
+    private $amqpConfig;
 
     /**
      * @var QueueConfig
@@ -25,12 +25,12 @@ class Exchange implements ExchangeInterface
 
     /**
      * Exchange constructor.
-     * @param Config $rabbitMqConfig
+     * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
      */
-    public function __construct(Config $rabbitMqConfig, QueueConfig $queueConfig)
+    public function __construct(Config $amqpConfig, QueueConfig $queueConfig)
     {
-        $this->rabbitMqConfig = $rabbitMqConfig;
+        $this->amqpConfig = $amqpConfig;
         $this->queueConfig = $queueConfig;
     }
 
@@ -39,7 +39,7 @@ class Exchange implements ExchangeInterface
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {
-        $channel = $this->rabbitMqConfig->getChannel();
+        $channel = $this->amqpConfig->getChannel();
         $exchange = $this->queueConfig->getExchangeByTopic($topic);
 
         $msg = new AMQPMessage(
