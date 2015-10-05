@@ -66,6 +66,6 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_Te
             ->method('getWebsite')
             ->will($this->returnValue($websiteId));
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }

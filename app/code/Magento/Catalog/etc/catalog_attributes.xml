@@ -47,7 +47,6 @@
         <attribute name="image" />
         <attribute name="category_ids" />
         <attribute name="media_gallery_content" />
-        <attribute name="group_price" />
         <attribute name="tier_price" />
         <attribute name="gift_message_available" />
         <attribute name="inventory_manage_stock" />
