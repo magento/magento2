@@ -88,7 +88,7 @@ class Reader
                         foreach (array_keys($intersection) as $key) {
                             $displayList .= $key . PHP_EOL;
                         }
-                        $displayMessage = $this->findFileWithKeys(array_keys($intersection));
+                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection));
                         throw new \Exception(
                             "Key collision! The following keys occur in multiple config files:" . PHP_EOL . $displayMessage
                         );
