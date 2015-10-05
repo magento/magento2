@@ -32,7 +32,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->absolutePath = BP . '/var/sample-data-state.flag';
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->setMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
@@ -44,7 +43,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getAbsolutePath']
+            ['write', 'close']
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->state = $objectManager->getObject(
@@ -56,7 +55,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testClearState()
     {
         $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->any())->method('getAbsolutePath')->willReturn($this->absolutePath);
+        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf();
 
         $this->state->clearState();
     }
@@ -66,9 +65,13 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasError()
     {
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->once())->method('getAbsolutePath')->willReturn($this->absolutePath);
-
+        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
+        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf();
+        $this->writeInterface->expects($this->any())->method('write')->willReturnSelf();
+        $this->writeInterface->expects($this->any())->method('close');
+        $this->writeInterface->expects($this->any())->method('isExist')->willReturn(true);
+        $this->writeInterface->expects($this->any())->method('read')
+            ->willReturn(\Magento\SampleData\Model\State::ERROR);
         $this->state->setError();
         $this->assertTrue($this->state->hasError());
     }
@@ -78,8 +81,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->once())->method('getAbsolutePath')->willReturn($this->absolutePath);
+        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
+        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf($this->absolutePath);
 
         $this->state->clearState();
     }
