@@ -6,33 +6,20 @@
 
 // @codingStandardsIgnoreFile
 
-function getOptionValue(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
-{
-    $returnValue = null;
-    switch ($option->getType()) {
-        case 'field':
-            $returnValue = 'Test value';
-            break;
-        case 'date_time':
-            $returnValue = [
-                'year' => '2015',
-                'month' => '9',
-                'day' => '9',
-                'hour' => '2',
-                'minute' => '2',
-                'day_part' => 'am',
-                'date_internal' => '',
-            ];
-            break;
-        case 'drop_down':
-            $returnValue = '3-1-select';
-            break;
-        case 'radio':
-            $returnValue = '4-1-radio';
-            break;
-    }
-    return $returnValue;
-}
+$optionValue = [
+    'field' => 'Test value',
+    'date_time' => [
+        'year' => '2015',
+        'month' => '9',
+        'day' => '9',
+        'hour' => '2',
+        'minute' => '2',
+        'day_part' => 'am',
+        'date_internal' => '',
+    ],
+    'drop_down' => '3-1-select',
+    'radio' => '4-1-radio',
+];
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
@@ -103,7 +90,7 @@ foreach ([$simpleProduct, $configurableProduct, $bundleProduct, $downloadablePro
         /** @var \Magento\Catalog\Api\Data\CustomOptionInterface $customOption */
         $customOption = $customOptionFactory->create();
         $customOption->setOptionId($option->getId());
-        $customOption->setOptionValue(getOptionValue($option));
+        $customOption->setOptionValue($optionValue[$option]);
         $options[] = $customOption;
     }
     $extensionAttributes->setCustomOptions($options);
