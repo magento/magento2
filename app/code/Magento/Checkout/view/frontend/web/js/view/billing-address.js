@@ -16,7 +16,7 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
-        'Magento_Checkout/js/action/set-payment-information',
+        'Magento_Checkout/js/action/set-billing-address',
         'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
@@ -31,7 +31,7 @@ define(
         checkoutData,
         checkoutDataResolver,
         customerData,
-        setPaymentInfoAction,
+        setBillingAddressAction,
         globalMessageList,
         $t
     ) {
@@ -130,8 +130,6 @@ define(
              * Update address action
              */
             updateAddress: function () {
-                var paymentData;
-
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
                     checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
@@ -154,10 +152,7 @@ define(
                         checkoutData.setNewCustomerBillingAddress(addressData);
 
                         if (window.checkoutConfig.reloadOnBillingAddress) {
-                            paymentData = {
-                                'method': quote.paymentMethod().method
-                            };
-                            setPaymentInfoAction(globalMessageList, paymentData);
+                            setBillingAddressAction(globalMessageList);
                         }
                     }
                 }
