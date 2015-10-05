@@ -67,21 +67,23 @@ class CollectTotalsObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Quote\Model\Quote\Address $quoteAddress */
-        $quoteAddress = $observer->getQuoteAddress();
-
+        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
+        $shippingAssignment = $observer->getShippingAssignment();
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $quoteAddress->getQuote();
+        $quote = $observer->getQuote();
+        /** @var \Magento\Quote\Model\Quote\Address $address */
+        $address = $shippingAssignment->getShipping()->getAddress();
+
         $customer = $quote->getCustomer();
         $storeId = $customer->getStoreId();
 
         if ($customer->getDisableAutoGroupChange()
-            || false == $this->vatValidator->isEnabled($quoteAddress, $storeId)
+            || false == $this->vatValidator->isEnabled($address, $storeId)
         ) {
             return;
         }
-        $customerCountryCode = $quoteAddress->getCountryId();
-        $customerVatNumber = $quoteAddress->getVatId();
+        $customerCountryCode = $address->getCountryId();
+        $customerVatNumber = $address->getVatId();
         $groupId = null;
         if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
             $groupId = $customer->getId() ? $this->groupManagement->getDefaultGroup(
@@ -91,13 +93,13 @@ class CollectTotalsObserver implements ObserverInterface
             // Magento always has to emulate group even if customer uses default billing/shipping address
             $groupId = $this->customerVat->getCustomerGroupIdBasedOnVatNumber(
                 $customerCountryCode,
-                $this->vatValidator->validate($quoteAddress, $storeId),
+                $this->vatValidator->validate($address, $storeId),
                 $storeId
             );
         }
 
         if ($groupId) {
-            $quoteAddress->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
+            $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
