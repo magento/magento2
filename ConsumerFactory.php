@@ -167,7 +167,10 @@ class ConsumerFactory
             ],
         ];
 
-        return $this->objectManager->create('Magento\Framework\MessageQueue\ConsumerConfiguration', [ 'data' => $configData ]);
+        return $this->objectManager->create(
+            'Magento\Framework\MessageQueue\ConsumerConfiguration',
+            [ 'data' => $configData ]
+        );
     }
 
     /**
