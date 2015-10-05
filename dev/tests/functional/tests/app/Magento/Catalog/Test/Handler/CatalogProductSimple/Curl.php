@@ -47,8 +47,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0
         ],
-        'is_virtual' => [
-            'Yes' => 1
+        'product_has_weight' => [
+            'Yes' => 1,
+            'No' => 0,
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
@@ -204,9 +205,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (isset($fields['tier_price'])) {
             $fields['tier_price'] = $this->preparePriceData($fields['tier_price']);
         }
-        if (isset($fields['group_price'])) {
-            $fields['group_price'] = $this->preparePriceData($fields['group_price']);
-        }
         if (isset($fields['fpt'])) {
             $attributeLabel = $fixture->getDataFieldConfig('attribute_set_id')['source']
                 ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
@@ -247,10 +245,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $fields = $prefix ? [$prefix => $fields] : $fields;
         if ($isCustomOptions) {
             $fields['affect_product_custom_options'] = 1;
-        }
-
-        if (isset($fields['product']['weight'])) {
-            unset($fields['product']['is_virtual']);
         }
 
         return $fields;
@@ -410,6 +404,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function createProduct(array $data, array $config)
     {
+        $config['create_url_params']['set'] = isset($data['product']['attribute_set_id'])
+            ? $data['product']['attribute_set_id']
+            : $config['create_url_params']['set'];
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
