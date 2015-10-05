@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
 
-use \Magento\Framework\Pricing\PriceInfo\Factory;
+use Magento\Framework\Pricing\PriceInfo\Factory;
 
 
 /**
