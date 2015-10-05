@@ -10,15 +10,14 @@ use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCustomerSuccessRegisterMessage
- *
+ * Assert that success message is displayed after customer registered on frontend.
  */
 class AssertCustomerSuccessRegisterMessage extends AbstractConstraint
 {
     const SUCCESS_MESSAGE = 'Thank you for registering with Main Website Store.';
 
     /**
-     * Assert that success message is displayed after customer registered on frontend
+     * Assert that success message is displayed after customer registered on frontend.
      *
      * @param CustomerAccountCreate $registerPage
      * @return void
@@ -36,7 +35,7 @@ class AssertCustomerSuccessRegisterMessage extends AbstractConstraint
     }
 
     /**
-     * Text of success register message is displayed
+     * Text of success register message is displayed.
      *
      * @return string
      */
