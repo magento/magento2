@@ -143,17 +143,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        // The test will be executed when Magento is installed through "git clone" under "app/code".
-        // JIRA ticket MAGETWO-43654 has been raised to refactor this test and support installation
-        // through composer as well under "vendor/magento"
-
         $root = Files::init()->getPathToSource();
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
 
             // The Dependency test is skipped for vendor/magento build
             self::markTestSkipped(
-                "The build is running from vendor/magento. DependencyTest is skipped."
+                'The build is running from vendor/magento. DependencyTest is skipped(MAGETWO-43654)'
             );
         }
 
