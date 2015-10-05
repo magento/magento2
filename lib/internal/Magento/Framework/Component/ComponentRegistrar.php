@@ -79,7 +79,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     private static function validateType($type)
     {
-        if (!in_array($type, array_keys(self::$paths))) {
+        if (!isset(self::$paths[$type])) {
             throw new \LogicException('\'' . $type . '\' is not a valid component type');
         }
     }
