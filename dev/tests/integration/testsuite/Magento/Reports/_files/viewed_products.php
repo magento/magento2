@@ -15,12 +15,12 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.ph
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
 
 // imitate product views
-/** @var \Magento\Reports\Model\Event\Observer $reportObserver */
+/** @var \Magento\Reports\Observer\CatalogProductViewObserver $reportObserver */
 $reportObserver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Reports\Model\Event\Observer'
+    'Magento\Reports\Observer\CatalogProductViewObserver'
 );
 foreach ([1, 2, 1, 21, 1, 21] as $productId) {
-    $reportObserver->catalogProductView(
+    $reportObserver->execute(
         new \Magento\Framework\Event\Observer(
             [
                 'event' => new \Magento\Framework\DataObject(
