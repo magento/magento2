@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Weee\Model\Observer
- */
 namespace Magento\Tax\Test\Unit\Observer;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -76,7 +73,7 @@ class UpdateProductOptionsTest extends \PHPUnit_Framework_TestCase
              ]
          );
 
-         $taxObserverObject->invoke($observerObject);
+         $taxObserverObject->execute($observerObject);
 
          $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }
