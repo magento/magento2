@@ -163,9 +163,6 @@
 
 #product_options_container .data-table td,
 #attribute-tier_price-container .data-table td,
-#attribute-group_price-container .data-table td {
-    vertical-align: top;
-}
 
 #product_options_container .data-table td.opt-price-type,
 #product_options_container .data-table td.select-opt-price-type,

@@ -5,12 +5,13 @@
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
  */
-class SaveOrderAfterSubmitObserver
+class SaveOrderAfterSubmitObserver implements ObserverInterface
 {
     /**
      * Core registry
@@ -36,7 +37,7 @@ class SaveOrderAfterSubmitObserver
      * @param EventObserver $observer
      * @return $this
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');

@@ -19,7 +19,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
-    const KEY_GROUP_PRICES = 'group_prices';
     const KEY_TIER_PRICES = 'tier_prices';
 
     /**
@@ -330,6 +329,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData['media_gallery_entries'] = [
             [
                 'position' => 1,
+                'media_type' => 'image',
                 'disabled' => true,
                 'label' => 'tiny1',
                 'types' => [],
@@ -341,6 +341,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
             [
                 'position' => 2,
+                'media_type' => 'image',
                 'disabled' => false,
                 'label' => 'tiny2',
                 'types' => ['image', 'small_image'],
@@ -363,6 +364,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [
                 'label' => 'tiny1',
                 'position' => 1,
+                'media_type' => 'image',
                 'disabled' => true,
                 'types' => [],
                 'file' => '/t/i/' . $filename1,
@@ -370,6 +372,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [
                 'label' => 'tiny2',
                 'position' => 2,
+                'media_type' => 'image',
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
                 'file' => '/t/i/' . $filename2,
@@ -380,6 +383,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response['media_gallery_entries'] = [
             [
                 'id' => $id,
+                'media_type' => 'image',
                 'label' => 'tiny1_new_label',
                 'position' => 1,
                 'disabled' => false,
@@ -391,15 +395,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [
-            [
-                'label' => 'tiny1_new_label',
-                'position' => 1,
-                'disabled' => false,
-                'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1,
-            ]
-        ];
+        $expectedValue = [[
+            'label' => 'tiny1_new_label',
+            'media_type' => 'image',
+            'position' => 1,
+            'disabled' => false,
+            'types' => ['image', 'small_image'],
+            'file' => '/t/i/' . $filename1,
+        ]];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
@@ -628,79 +631,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
-    }
-
-    public function testGroupPrices()
-    {
-        // create a product with group prices
-        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
-        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
-        $productData = $this->getSimpleProductData();
-        $productData[self::KEY_GROUP_PRICES] = [
-            [
-                'customer_group_id' => $custGroup1,
-                'value' => 3.14
-            ],
-            [
-                'customer_group_id' => $custGroup2,
-                'value' => 3.45,
-            ]
-        ];
-        $this->saveProduct($productData);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "CREATE: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "CREATE: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.14, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(3.45, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup2, $groupPrices[1]['customer_group_id']);
-
-        // update the product's group prices: update 1st group price, (delete the 2nd group price), add a new one
-        $custGroup3 = 1;
-        $groupPrices[0]['value'] = 3.33;
-        $groupPrices[1] = [
-            'customer_group_id' => $custGroup3,
-            'value' => 2.10,
-        ];
-        $response[self::KEY_GROUP_PRICES] = $groupPrices;
-        $response = $this->updateProduct($response);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "UPDATE 1: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "UPDATE 1: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.33, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
-
-        // update the product without any mention of group prices; no change expected for group pricing
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        unset($response[self::KEY_GROUP_PRICES]);
-        $response = $this->updateProduct($response);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "UPDATE 2: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "UPDATE 2: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.33, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
-
-        // update the product with empty group prices; expect to have the existing group prices removed
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $response[self::KEY_GROUP_PRICES] = [];
-        $response = $this->updateProduct($response);
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response, "expected to have the 'group_prices' key");
-        $this->assertEmpty($response[self::KEY_GROUP_PRICES], "expected to have an empty array of 'group_prices'");
-
-        // delete the product with group prices; expect that all goes well
-        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
-        $this->assertTrue($response);
     }
 
     public function testTierPrices()

@@ -52,6 +52,11 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchCriteriaBuilderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $totalsCollectorMock;
+
     protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
@@ -97,7 +102,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
-
+        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
         $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -119,6 +124,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
             $quoteRepositoryMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
+            $this->totalsCollectorMock,
             $data
         );
     }

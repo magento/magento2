@@ -20,5 +20,6 @@ $product->load(1)
             'position' => 1,
             'label' => 'Image Alt Text',
             'disabled' => 0,
+            'media_type' => 'image'
         ],
     ]])->save();
