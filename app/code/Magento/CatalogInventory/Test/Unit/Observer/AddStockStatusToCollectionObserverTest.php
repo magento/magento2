@@ -70,6 +70,6 @@ class AddStockStatusToCollectionObserverTest extends \PHPUnit_Framework_TestCase
             ->with($productCollection)
             ->will($this->returnSelf());
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }
