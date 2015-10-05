@@ -40,7 +40,7 @@ define([
                 rows: '${ $.provider }:data.items'
             },
             listens: {
-                elems: 'setPositions updateVisible',
+                elems: 'updatePositions updateVisible',
                 '${ $.provider }:reload': 'showLoader',
                 '${ $.provider }:reloaded': 'hideLoader'
             },
@@ -156,7 +156,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        setPositions: function () {
+        updatePositions: function () {
             var positions = {};
 
             this.elems.each(function (elem, index) {
@@ -188,18 +188,6 @@ define([
             this.insertChild(sorting);
 
             return this;
-        },
-
-        /**
-         * Returns instance of a column found by provided identifier.
-         *
-         * @param {String} index - Columns' identifier.
-         * @returns {Column}
-         */
-        getColumn: function (index) {
-            return this.elems.findWhere({
-                index: index
-            });
         },
 
         /**

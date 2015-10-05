@@ -63,8 +63,8 @@ define([
     Element = _.extend({
         defaults: {
             template: '',
-            displayArea: '',
             containers: [],
+            _requesetd: {},
             registerNodes: true,
             storageConfig: {
                 provider: 'localStorage',
@@ -90,7 +90,8 @@ define([
                 .initObservable()
                 .initModules()
                 .initStatefull()
-                .initLinks();
+                .initLinks()
+                .initUnique();
 
             return this;
         },
@@ -113,8 +114,8 @@ define([
         initModules: function () {
             var modules = this.modules || {};
 
-            _.each(modules, function (component, property) {
-                this[property] = registry.async(component);
+            _.each(modules, function (name, property) {
+                this[property] = this.requestModule(name);
             }, this);
 
             if (!_.isFunction(this.source)) {
@@ -175,6 +176,24 @@ define([
         },
 
         /**
+         * Initializes listeners of the unique property.
+         *
+         * @returns {Element} Chainable.
+         */
+        initUnique: function () {
+            var update = this.onUniqueUpdate.bind(this),
+                uniqueNs = this.uniqueNs;
+
+            this.hasUnique = this.uniqueProp && uniqueNs;
+
+            if (this.hasUnique) {
+                this.source.on(uniqueNs, update, this.name);
+            }
+
+            return this;
+        },
+
+        /**
          * Makes specified property to be stored automatically.
          *
          * @param {String} key - Name of the property
@@ -192,6 +211,40 @@ define([
                 .setLinks(link, 'exports');
 
             return this;
+        },
+
+        /**
+         * Updates property specified in uniqueNs
+         * if elements' unique property is set to 'true'.
+         *
+         * @returns {Element} Chainable.
+         */
+        setUnique: function () {
+            var property = this.uniqueProp;
+
+            if (this[property]()) {
+                this.source.set(this.uniqueNs, this.name);
+            }
+
+            return this;
+        },
+
+        /**
+         * Creates 'async' wrapper for the specified component
+         * using uiRegistry 'async' method and caches it
+         * in a '_requested' components  object.
+         *
+         * @param {String} name - Name of requested component.
+         * @returns {Function} Async module wrapper.
+         */
+        requestModule: function (name) {
+            var requested = this._requesetd;
+
+            if (!requested[name]) {
+                requested[name] = registry.async(name);
+            }
+
+            return requested[name];
         },
 
         /**
@@ -254,14 +307,8 @@ define([
          * @returns {Element} Chainable.
          */
         remove: function (path) {
-            var data,
+            var data = utils.nested(this, path),
                 diffs;
-
-            if (!path) {
-                return this;
-            }
-
-            data = utils.nested(this, path);
 
             if (_.isUndefined(data) || _.isFunction(data)) {
                 return this;
@@ -509,6 +556,16 @@ define([
             });
 
             return !!bubble;
+        },
+
+        /**
+         * Callback which fires when property under uniqueNs has changed.
+         */
+        onUniqueUpdate: function (name) {
+            var active = name === this.name,
+                property = this.uniqueProp;
+
+            this[property](active);
         }
     }, Events, links);
 

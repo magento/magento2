@@ -266,28 +266,6 @@ define([
         },
 
         /**
-         * Returns instance of a filter found by provided index.
-         *
-         * @param {String} index - Index of a filter (e.g. 'title').
-         * @returns {Filter}
-         */
-        getFilter: function (index) {
-            return this.elems.findWhere({
-                index: index
-            });
-        },
-
-        /**
-         * Checks if collection contains a specfied filter.
-         *
-         * @param {String} index - Index of a filter.
-         * @returns {Boolean}
-         */
-        hasFilter: function (index) {
-            return !!this.getFilter(index);
-        },
-
-        /**
          * Returns an array of range filters.
          *
          * @returns {Array}

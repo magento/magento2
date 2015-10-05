@@ -19,7 +19,6 @@ define([
             pageSize: 20,
             current: 1,
             selectProvider: '',
-            componentType: 'paging',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
