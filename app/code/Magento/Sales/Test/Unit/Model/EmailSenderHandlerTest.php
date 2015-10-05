@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Observer;
+namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Unit test of sales emails sending observer.
  */
-class SendEmailsTest extends \PHPUnit_Framework_TestCase
+class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Subject of testing.
      *
-     * @var \Magento\Sales\Model\Observer\SendEmails
+     * @var \Magento\Sales\Model\EmailSenderHandler
      */
     protected $object;
 
@@ -88,7 +88,7 @@ class SendEmailsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->object = $objectManager->getObject(
-            'Magento\Sales\Model\Observer\SendEmails',
+            'Magento\Sales\Model\EmailSenderHandler',
             [
                 'emailSender' => $this->emailSender,
                 'entityResource' => $this->entityResource,
@@ -156,7 +156,7 @@ class SendEmailsTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $this->object->execute();
+        $this->object->sendEmails();
     }
 
     /**

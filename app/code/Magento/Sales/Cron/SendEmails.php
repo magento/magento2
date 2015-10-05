@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Observer;
-
-use Magento\Framework\Event\ObserverInterface;
+namespace Magento\Sales\Cron;
 
 /**
  * Sales emails sending observer.
@@ -13,7 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
  * Performs handling of cron jobs related to sending emails to customers
  * after creation/modification of Order, Invoice, Shipment or Creditmemo.
  */
-class SendEmails implements ObserverInterface
+class SendEmails
 {
     /**
      * Global configuration storage.
@@ -41,11 +39,9 @@ class SendEmails implements ObserverInterface
      * Works only if asynchronous email sending is enabled
      * in global settings.
      *
-     * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute()
     {
         $this->emailSenderHandler->sendEmails();
     }

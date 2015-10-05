@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Observer\Backend;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class CatalogPriceRule implements ObserverInterface
+class SubtractQtyFromQuotesObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Quote\Model\Resource\Quote
@@ -23,14 +23,14 @@ class CatalogPriceRule implements ObserverInterface
     }
 
     /**
-     * When applying a catalog price rule, make related quotes recollect on demand
+     * When deleting product, subtract it from all quotes quantities
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_quote->markQuotesRecollectOnCatalogRules();
+        $product = $observer->getEvent()->getProduct();
+        $this->_quote->substractProductFromQuotes($product);
     }
 }

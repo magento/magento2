@@ -6,11 +6,12 @@
 namespace Magento\Sales\Model\Observer\Frontend\Quote;
 
 use Magento\Customer\Helper\Address as CustomerAddress;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class RestoreCustomerGroupId
  */
-class RestoreCustomerGroupId
+class RestoreCustomerGroupId implements ObserverInterface
 {
     /**
      * Customer address
@@ -33,7 +34,7 @@ class RestoreCustomerGroupId
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function execute($observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $observer->getEvent()->getShippingAssignment();

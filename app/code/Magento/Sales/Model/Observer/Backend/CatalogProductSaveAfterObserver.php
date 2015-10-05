@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Model\Observer\Backend;
 
-class CatalogProductQuote
+use Magento\Framework\Event\ObserverInterface;
+
+class CatalogProductSaveAfterObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Quote\Model\Resource\Quote
@@ -40,21 +42,9 @@ class CatalogProductQuote
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function catalogProductSaveAfter(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $product = $observer->getEvent()->getProduct();
         $this->_recollectQuotes($product->getId(), $product->getStatus());
-    }
-
-    /**
-     * When deleting product, subtract it from all quotes quantities
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return void
-     */
-    public function subtractQtyFromQuotes($observer)
-    {
-        $product = $observer->getEvent()->getProduct();
-        $this->_quote->substractProductFromQuotes($product);
     }
 }
