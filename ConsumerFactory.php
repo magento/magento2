@@ -46,9 +46,9 @@ class ConsumerFactory
      * <type name="Magento\Framework\MessageQueue\ConsumerFactory">
      *     <arguments>
      *         <argument name="consumers" xsi:type="array">
-     *             <item name="rabbitmq" xsi:type="array">
+     *             <item name="amqp" xsi:type="array">
      *                 <item name="type" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
-     *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
+     *                 <item name="connectionName" xsi:type="string">amqp</item>
      *             </item>
      *         </argument>
      *     </arguments>
