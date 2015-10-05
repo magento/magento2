@@ -10,7 +10,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
- * Converts AMQP config from \DOMDocument to array
+ * Converts MessageQueue config from \DOMDocument to array
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {

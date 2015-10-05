@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
- * Class for access to AMQP configuration.
+ * Class for access to MessageQueue configuration.
  */
 class Data extends \Magento\Framework\Config\Data
 {
@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\Config\Data
     public function __construct(
         \Magento\Framework\MessageQueue\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'amqp_config_cache'
+        $cacheId = 'message_queue_config_cache'
     ) {
         parent::__construct($reader, $cache, $cacheId);
     }

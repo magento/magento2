@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
- * Class which provides encoding and decoding capabilities for AMQP messages.
+ * Class which provides encoding and decoding capabilities for MessageQueue messages.
  */
 class MessageEncoder
 {

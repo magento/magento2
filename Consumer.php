@@ -9,10 +9,10 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\EnvelopeFactory;
-use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\Config\Converter as AmqpConfigConverter;
+use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
 
 /**
  * A RabbitMQ Consumer to handle receiving a message.
@@ -20,9 +20,9 @@ use Magento\Framework\MessageQueue\Config\Converter as AmqpConfigConverter;
 class Consumer implements ConsumerInterface
 {
     /**
-     * @var AmqpConfig
+     * @var MessageQueueConfig
      */
-    private $amqpConfig;
+    private $messageQueueConfig;
 
     /**
      * @var MessageEncoder
@@ -42,16 +42,16 @@ class Consumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param AmqpConfig $amqpConfig
+     * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      */
     public function __construct(
-        AmqpConfig $amqpConfig,
+        MessageQueueConfig $messageQueueConfig,
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository
     ) {
-        $this->amqpConfig = $amqpConfig;
+        $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
     }
@@ -94,7 +94,7 @@ class Consumer implements ConsumerInterface
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
         if (isset($decodedMessage)) {
-            if ($this->amqpConfig->getMessageSchemaType($topicName) == AmqpConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
+            if ($this->messageQueueConfig->getMessageSchemaType($topicName) == MessageQueueConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
                 call_user_func_array($callback, $decodedMessage);
             } else {
                 call_user_func($callback, $decodedMessage);
@@ -150,7 +150,7 @@ class Consumer implements ConsumerInterface
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->amqpConfig->getConnectionByConsumer($consumerName);
+        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($consumerName);
         $queue = $this->queueRepository->get($connectionName, $queueName);
 
         return $queue;

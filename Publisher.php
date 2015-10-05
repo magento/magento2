@@ -9,7 +9,7 @@ use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\ExchangeRepository;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 
 /**
  * A RabbitMQ Publisher to handle publishing a message.
@@ -27,26 +27,26 @@ class Publisher implements PublisherInterface
     private $envelopeFactory;
 
     /**
-     * @var AmqpConfig
+     * @var MessageQueueConfig
      */
-    private $amqpConfig;
+    private $messageQueueConfig;
 
     /**
      * Initialize dependencies.
      *
      * @param ExchangeRepository $exchangeRepository
      * @param EnvelopeFactory $envelopeFactory
-     * @param AmqpConfig $amqpConfig
+     * @param MessageQueueConfig $messageQueueConfig
      * @internal param ExchangeInterface $exchange
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
-        AmqpConfig $amqpConfig
+        MessageQueueConfig $messageQueueConfig
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
-        $this->amqpConfig = $amqpConfig;
+        $this->messageQueueConfig = $messageQueueConfig;
     }
 
     /**
@@ -55,7 +55,7 @@ class Publisher implements PublisherInterface
     public function publish($topicName, $data)
     {
         $envelope = $this->envelopeFactory->create(['body' => $data]);
-        $connectionName = $this->amqpConfig->getConnectionByTopic($topicName);
+        $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
     }
