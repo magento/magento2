@@ -19,7 +19,7 @@ class FixtureManager
     protected $_modulesDirectory;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_string;
 
