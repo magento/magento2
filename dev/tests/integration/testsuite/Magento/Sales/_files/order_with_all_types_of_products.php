@@ -11,7 +11,6 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 require __DIR__ . '/../../../Magento/Bundle/_files/product_with_custom_options.php';
 require __DIR__ . '/../../../Magento/Downloadable/_files/product_with_custom_options.php';
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_with_custom_options.php';
-require __DIR__ . '/../../../Magento/GiftCard/_files/product_with_custom_options.php';
 
 function getOptionValue(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
 {
@@ -48,7 +47,6 @@ $simpleProduct = $productRepository->get('simple');
 $configurableProduct = $productRepository->get('configurable');
 $bundleProduct = $productRepository->get('bundle-product');
 $downloadableProduct = $productRepository->get('downloadable-product');
-$giftCardProduct = $productRepository->get('gift-card');
 
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = $objectManager->create('Magento\Sales\Model\Order\Address', ['data' => $addressData]);
@@ -96,7 +94,7 @@ $customOptionFactory = $objectManager->create('Magento\Catalog\Model\CustomOptio
 $repository = $objectManager->create('Magento\Sales\Model\Order\ItemRepository');
 
 /** @var Magento\Catalog\Model\Product $product */
-foreach ([$simpleProduct, $configurableProduct, $bundleProduct, $downloadableProduct, $giftCardProduct] as $product) {
+foreach ([$simpleProduct, $configurableProduct, $bundleProduct, $downloadableProduct] as $product) {
     /** @var \Magento\Sales\Model\Order\Item $orderItem */
     $orderItem = $objectManager->create('Magento\Sales\Model\Order\Item');
     $orderItem->setProductId($product->getId())->setQtyOrdered(2);
