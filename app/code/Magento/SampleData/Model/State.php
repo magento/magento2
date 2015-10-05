@@ -69,7 +69,7 @@ class State implements Setup\SampleData\StateInterface
     public function isInstalled()
     {
         $isInstalled = false;
-        /**@var $stream \Magento\Framework\Filesystem\File\WriteInterface */
+        /**@var $stream Filesystem\File\WriteInterface */
         $stream = $this->openStream('r');
         if (!$stream) {
             return $isInstalled;
