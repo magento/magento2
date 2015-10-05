@@ -210,7 +210,7 @@ define(
              * @return {*}
              */
             getCountryName: function (countryId) {
-                return (countryData()[countryId] != undefined) ? countryData()[countryId].name : '';
+                return countryData()[countryId] != undefined ? countryData()[countryId].name : '';
             }
         });
     }
