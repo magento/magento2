@@ -21,6 +21,13 @@ class Address extends Column
      */
     protected $escaper;
 
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param Escaper $escaper
+     * @param array $components
+     * @param array $data
+     */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
@@ -31,7 +38,6 @@ class Address extends Column
         $this->escaper = $escaper;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
-
 
     /**
      * Prepare Data Source
