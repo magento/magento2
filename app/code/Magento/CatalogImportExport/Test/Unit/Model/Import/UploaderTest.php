@@ -71,7 +71,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Writer')
-            ->setMethods(['writeFile', 'getRelativePath', 'getAbsolutePath'])
+            ->setMethods(['writeFile', 'getRelativePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -102,7 +102,6 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $expectedFileName;
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
-        $this->directoryMock->expects($this->any())->method('getAbsolutePath')->with('');
         // Check writeFile() method invoking.
         $this->directoryMock->expects($this->any())->method('writeFile')->will($this->returnValue(null));
 
