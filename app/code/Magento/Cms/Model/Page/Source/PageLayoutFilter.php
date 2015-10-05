@@ -15,6 +15,6 @@ class PageLayoutFilter extends PageLayout
      */
     public function toOptionArray()
     {
-        return array_merge(['label' => '', 'value' => ''], parent::toOptionArray());
+        return array_merge([['label' => '', 'value' => '']], parent::toOptionArray());
     }
 }
