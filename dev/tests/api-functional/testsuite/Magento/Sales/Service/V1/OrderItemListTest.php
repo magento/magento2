@@ -36,7 +36,7 @@ class OrderItemListTest extends WebapiAbstract
      */
     public function testOrderItemList()
     {
-        $productsSku = ['simple', 'configurable', 'bundle-product', 'downloadable-product', 'gift-card'];
+        $productsSku = ['simple', 'configurable', 'bundle-product', 'downloadable-product'];
 
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create('Magento\Sales\Model\Order');

@@ -11,8 +11,10 @@
  */
 require __DIR__ . '/../../../Magento/Catalog/_files/products_rollback.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = $objectManager->get('Magento\Framework\Registry');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);

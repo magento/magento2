@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="default">
-        <observer name="cron_observer" instance="Magento\Cron\Model\Observer" method="dispatch" />
+        <observer name="cron_observer" instance="Magento\Cron\Observer\ProcessCronQueueObserver" method="execute" />
     </event>
 </config>
