@@ -36,8 +36,7 @@ $bundleProduct->setTypeId('bundle')
     ->setPriceView(1)
     ->setPriceType(1)
     ->setPrice(10.0)
-    ->setBundleOptionsData
-    (
+    ->setBundleOptionsData(
         [
             [
                 'title' => 'Bundle Product Items',
