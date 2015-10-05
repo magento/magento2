@@ -13,8 +13,8 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\Resource\Block;
-use Magento\Cms\Model\Resource\Block\CollectionFactory;
+use Magento\Cms\Model\Resource\Block as ResourceBlock;
+use Magento\Cms\Model\Resource\Block\CollectionFactory as BlockCollectionFactory;
 /**
  * Class BlockRepository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,7 +22,7 @@ use Magento\Cms\Model\Resource\Block\CollectionFactory;
 class BlockRepository implements BlockRepositoryInterface
 {
     /**
-     * @var Block
+     * @var ResourceBlock
      */
     protected $resource;
 
@@ -32,7 +32,7 @@ class BlockRepository implements BlockRepositoryInterface
     protected $blockFactory;
 
     /**
-     * @var CollectionFactory
+     * @var BlockCollectionFactory
      */
     protected $blockCollectionFactory;
 
@@ -57,19 +57,19 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataBlockFactory;
 
     /**
-     * @param Block $resource
+     * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
-     * @param CollectionFactory $blockCollectionFactory
+     * @param BlockCollectionFactory $blockCollectionFactory
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
-        Block $resource,
+        ResourceBlock $resource,
         BlockFactory $blockFactory,
         \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
-        CollectionFactory $blockCollectionFactory,
+        BlockCollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor
