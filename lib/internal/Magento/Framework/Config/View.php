@@ -71,15 +71,18 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function parseVarElement(\DOMElement $node)
     {
-        if ($node->getElementsByTagName('var')->length) {
-            $result = [];
-            foreach ($node->getElementsByTagName('var') as $varNode) {
+        $result = [];
+        for ($varNode = $node->firstChild; $varNode !== null; $varNode = $varNode->nextSibling) {
+            if ($varNode instanceof \DOMElement && $varNode->tagName == "var") {
                 $varName = $varNode->getAttribute('name');
                 $result[$varName] = $this->parseVarElement($varNode);
             }
-        } else {
+        }
+        if (!count($result))
+        {
             $result = $node->nodeValue;
         }
+
         return $result;
     }
 
@@ -105,6 +108,10 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVarValue($module, $var)
     {
+        if (!isset($this->_data['vars'][$module])) {
+            return false;
+        }
+
         $value = $this->_data['vars'][$module];
         foreach (explode('/', $var) as $node) {
             if (is_array($value) && isset($value[$node])) {
@@ -113,6 +120,7 @@ class View extends \Magento\Framework\Config\AbstractXml
                 return false;
             }
         }
+
         return $value;
     }
 
