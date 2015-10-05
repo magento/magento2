@@ -6,13 +6,14 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
  */
-class RevertQuoteInventoryObserver
+class RevertQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var ProductQty
@@ -59,7 +60,7 @@ class RevertQuoteInventoryObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
         $items = $this->productQty->getProductQty($quote->getAllItems());
