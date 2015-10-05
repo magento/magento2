@@ -108,6 +108,10 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVarValue($module, $var)
     {
+        if (!isset($this->_data['vars'][$module])) {
+            return false;
+        }
+
         $value = $this->_data['vars'][$module];
         foreach (explode('/', $var) as $node) {
             if (is_array($value) && isset($value[$node])) {
@@ -116,6 +120,7 @@ class View extends \Magento\Framework\Config\AbstractXml
                 return false;
             }
         }
+
         return $value;
     }
 
