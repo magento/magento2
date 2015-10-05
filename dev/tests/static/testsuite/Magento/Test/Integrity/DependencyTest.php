@@ -183,18 +183,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     private static function getLibraryWhiteLists()
     {
-        $listofLibraries = [];
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
             if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
-
-                $temp = implode('\\', array_slice(($partOfLibraryPath), -3));
-                $listofLibraries[] = $temp;
+                self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
             }
         }
-        self::$whiteList = $listofLibraries;
     }
 
     /**
