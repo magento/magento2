@@ -90,7 +90,7 @@ foreach ([$simpleProduct, $configurableProduct, $bundleProduct, $downloadablePro
         /** @var \Magento\Catalog\Api\Data\CustomOptionInterface $customOption */
         $customOption = $customOptionFactory->create();
         $customOption->setOptionId($option->getId());
-        $customOption->setOptionValue($optionValue[$option]);
+        $customOption->setOptionValue($optionValue[$option->getType()]);
         $options[] = $customOption;
     }
     $extensionAttributes->setCustomOptions($options);
