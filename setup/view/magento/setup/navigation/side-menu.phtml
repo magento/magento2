@@ -29,19 +29,24 @@
     </span>
     <ul id="nav" role="menubar">
         <li class="item-home level-0" ng-class="{_active: $state.current.name === 'root.home'}">
-            <a ui-sref="root.home">
-            <span>Home</span>
+            <a href="" ui-sref="root.home">
+                <span>Home</span>
             </a>
         </li>
         <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'update'
         || $state.current.type === 'uninstall'}">
-            <a ui-sref="root.update">
-            <span>Component Manager</span>
+            <a href="" ui-sref="root.update">
+                <span>Component Manager</span>
             </a>
         </li>
         <li class="item-upgrade level-0" ng-class="{_active: $state.current.type === 'upgrade'}">
-            <a ui-sref="root.upgrade">
+            <a href="" ui-sref="root.upgrade">
                 <span>System Upgrade</span>
+            </a>
+        </li>
+        <li class="item-system-config level-0" ng-class="{_active: state.current.name === 'root.system-config'}">
+            <a href="" ui-sref="root.system-config">
+                <span>System Config</span>
             </a>
         </li>
     </ul>
