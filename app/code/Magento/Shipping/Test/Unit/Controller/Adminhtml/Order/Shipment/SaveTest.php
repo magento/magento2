@@ -88,6 +88,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $saveAction;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -223,6 +226,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @param bool $formKeyIsValid
      * @param bool $isPost
      * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute($formKeyIsValid, $isPost)
     {
