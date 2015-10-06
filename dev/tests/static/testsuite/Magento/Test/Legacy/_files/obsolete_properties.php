@@ -362,7 +362,7 @@ return [
     ['_conditionModels', 'Magento\Rule\Model\Condition\Combine'],
     ['_lables', 'Magento\SalesRule\Model\Rule'],
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
-    ['_env', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
+    ['_env', 'Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection'],
     ['_catalogImage', 'Magento\Catalog\Model\Product'],
     ['_view', 'Magento\Cms\Helper\Page'],
     ['aclFilter', 'Magento\Backend\Model\View\Layout\Builder'],

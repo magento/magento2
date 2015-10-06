@@ -9,7 +9,7 @@
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rule\Model\Resource\Rule\Collection;
+namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
 
 abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {

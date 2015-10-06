@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Model\Resource\Rule;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map

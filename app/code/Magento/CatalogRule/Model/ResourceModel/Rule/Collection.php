@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 
-class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map
