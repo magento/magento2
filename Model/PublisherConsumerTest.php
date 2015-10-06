@@ -9,7 +9,6 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
  * Test for MySQL publisher class.
- * @magentoDbIsolation disabled
  */
 class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 {
