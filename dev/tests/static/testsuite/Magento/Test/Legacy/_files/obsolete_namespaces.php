@@ -114,4 +114,6 @@ return [
     ['Magento\Indexer\Test\Unit\Model\Resource', 'Magento\Indexer\Test\Unit\Model\ResourceModel'],
     ['Magento\Integration\Model\Resource', 'Magento\Integration\Model\ResourceModel'],
     ['Magento\Integration\Test\Unit\Model\Resource', 'Magento\Integration\Test\Unit\Model\ResourceModel'],
+    ['Magento\MediaStorage\Model\Resource', 'Magento\MediaStorage\Model\ResourceModel'],
+    ['Magento\MediaStorage\Test\Unit\Model\Resource', 'Magento\MediaStorage\Test\Unit\Model\ResourceModel'],
 ];

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MediaStorage\Model\Resource\File\Storage;
+namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
