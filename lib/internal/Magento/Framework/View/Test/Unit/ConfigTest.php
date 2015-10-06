@@ -9,6 +9,10 @@ namespace Magento\Framework\View\Test\Unit;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class ConfigTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\View\Config */
@@ -35,6 +39,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $directoryReadMock;
 
+    /** @var \Magento\Framework\Config\ViewFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $viewFactoryMock;
+
+    /** @var \Magento\Framework\Config\View|\PHPUnit_Framework_MockObject_MockObject */
+    protected $viewMock;
+
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->readerMock = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
@@ -47,6 +60,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->repositoryMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->fileSystemMock = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
         $this->fileIteratorFactoryMock = $this->getMock('Magento\Framework\Config\FileIteratorFactory');
+        $this->viewFactoryMock = $this->getMock(
+            'Magento\Framework\Config\ViewFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->viewMock = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
+        $this->viewFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->viewMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
@@ -56,11 +80,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'filesystem' => $this->filesystemMock,
                 'assetRepo' => $this->repositoryMock,
                 'viewFileSystem' => $this->fileSystemMock,
-                'fileIteratorFactory' => $this->fileIteratorFactoryMock
+                'fileIteratorFactory' => $this->fileIteratorFactoryMock,
+                'viewFactory' => $this->viewFactoryMock
             ]
         );
     }
 
+    /**
+     * Test getViewConfig
+     */
     public function testGetViewConfig()
     {
         $themeMock = $this->getMock(
