@@ -27,7 +27,7 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
 
         /**
          * Get youtube ID
-         * @param {String} srchref
+         * @param {String} srcid
          * @returns {{}}
          */
         function _getYoutubeId(srcid) {
