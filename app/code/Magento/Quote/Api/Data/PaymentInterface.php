@@ -18,8 +18,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
     const KEY_METHOD = 'method';
 
-    const KEY_TITLE = 'title';
-
     const KEY_ADDITIONAL_DATA = 'additional_data';
 
     /**#@-*/
@@ -53,21 +51,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setMethod($method);
-
-    /**
-     * Get payment method code
-     *
-     * @return string
-     */
-    public function getTitle();
-
-    /**
-     * Set payment method code
-     *
-     * @param string $method
-     * @return $this
-     */
-    public function setTitle($method);
 
     /**
      * Get payment additional details

@@ -5,8 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-
 /**
  * Quote payment information
  *
@@ -273,27 +271,6 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function setMethod($method)
     {
         return $this->setData(self::KEY_METHOD, $method);
-    }
-
-    /**
-     * Get payment title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->getData(self::KEY_TITLE);
-    }
-
-    /**
-     * Set payment title
-     *
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        return $this->setData(self::KEY_TITLE, $title);
     }
 
     /**

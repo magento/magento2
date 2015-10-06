@@ -258,4 +258,5 @@ return [
     ['/dev/tests/unit/testsuite'],
     ['/app/code/Magento/Log'],
     ['/app/code/Magento/DesignEditor'],
+    ['/dev/tests/performance'],
 ];
