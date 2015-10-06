@@ -80,7 +80,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
                     'type' => 'magento2-module',
                     'version' => '1.0.0'
                 ]
-            ]
+            ],
+            'countOfInstall' => 0,
+            'countOfUpdate' => 1
         ];
         $this->componentData = [
             'magento/sample-module1' => [
