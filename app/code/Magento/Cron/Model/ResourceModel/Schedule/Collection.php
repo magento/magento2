@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Model\Resource\Schedule;
+namespace Magento\Cron\Model\ResourceModel\Schedule;
 
 /**
  * Schedules Collection
@@ -19,6 +19,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function _construct()
     {
-        $this->_init('Magento\Cron\Model\Schedule', 'Magento\Cron\Model\Resource\Schedule');
+        $this->_init('Magento\Cron\Model\Schedule', 'Magento\Cron\Model\ResourceModel\Schedule');
     }
 }
