@@ -17,25 +17,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Dir\Reader | \PHPUnit_Framework_MockObject_MockObject */
     protected $readerMock;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject */
     protected $filesystemMock;
 
-    /** @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Asset\Repository | \PHPUnit_Framework_MockObject_MockObject */
     protected $repositoryMock;
 
-    /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\FileSystem | \PHPUnit_Framework_MockObject_MockObject */
     protected $fileSystemMock;
 
-    /** @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Config\FileIteratorFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $fileIteratorFactoryMock;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject */
     protected $directoryReadMock;
 
-    /** @var \Magento\Framework\Config\ViewFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Config\ViewFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $viewConfigFactoryMock;
 
     protected function setUp()
@@ -120,11 +122,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->with($this->equalTo($configFile))
             ->will($this->returnValue($xmlData));
-        $viewConfigFactory = new \Magento\Framework\Config\ViewFactory();
+        $configViewMock = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
         $this->viewConfigFactoryMock->expects($this->once())
             ->method('create')
             ->with([$configFile => $xmlData])
-            ->willReturn($viewConfigFactory->create([$xmlData]));
+            ->willReturn($configViewMock);
         $this->assertInstanceOf('Magento\Framework\Config\View', $this->config->getViewConfig($params));
         // lazy load test
         $this->assertInstanceOf('Magento\Framework\Config\View', $this->config->getViewConfig($params));

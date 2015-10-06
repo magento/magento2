@@ -9,6 +9,16 @@ namespace Magento\Framework\Config;
 class ViewFactory
 {
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * @param array $configFiles
      * @return View
      */
@@ -16,7 +26,8 @@ class ViewFactory
     {
         return new \Magento\Framework\Config\View(
             $configFiles,
-            new \Magento\Framework\Config\Dom\UrnResolver()
+            new \Magento\Framework\Config\Dom\UrnResolver(),
+            $this->objectManager->create('\Magento\Framework\View\Xsd\Media\TypeDataExtractorPool')
         );
     }
 }
