@@ -17,6 +17,7 @@ use Magento\Framework\App\Resource;
 
 /**
  * A MessageQueue Consumer to handle receiving a message.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Consumer implements ConsumerInterface
 {
