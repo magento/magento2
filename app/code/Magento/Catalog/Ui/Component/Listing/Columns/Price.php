@@ -45,9 +45,9 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             $store = $this->storeManager->getStore(
@@ -64,5 +64,7 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
                 }
             }
         }
+
+        return $dataSource;
     }
 }
