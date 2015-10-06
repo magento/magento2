@@ -139,7 +139,7 @@ define([
                         $('body').notification('clear').notification('add', {
                             error: true,
                             message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount
-                                + 'image at one dash'),
+                                + ' images in one time'),
                             insertMethod: function(message) {
                                 $('.page-main-actions').after(message);
                             }
