@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Test\Unit\Model\Resource;
+namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\Resource;
-use Magento\SalesSequence\Model\Resource\Meta;
+use Magento\SalesSequence\Model\ResourceModel\Meta;
 
 /**
  * Class MetaTest
@@ -39,7 +39,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\Resource\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Profile | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceProfile;
 
@@ -87,7 +87,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceProfile = $this->getMock(
-            'Magento\SalesSequence\Model\Resource\Profile',
+            'Magento\SalesSequence\Model\ResourceModel\Profile',
             ['loadActiveProfile', 'save'],
             [],
             '',

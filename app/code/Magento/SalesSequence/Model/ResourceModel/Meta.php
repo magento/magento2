@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource;
+namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
-use Magento\SalesSequence\Model\Resource\Profile as ResourceProfile;
+use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\Profile as ModelProfile;
 

@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Test\Unit\Model\Resource;
+namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
-use Magento\SalesSequence\Model\Resource\Profile;
+use Magento\SalesSequence\Model\ResourceModel\Profile;
 
 /**
  * Class ProfileTest

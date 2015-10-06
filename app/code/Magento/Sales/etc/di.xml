@@ -198,12 +198,12 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesSequence\Model\Resource\Meta">
+    <type name="Magento\SalesSequence\Model\ResourceModel\Meta">
         <arguments>
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <type name="Magento\SalesSequence\Model\Resource\Profile">
+    <type name="Magento\SalesSequence\Model\ResourceModel\Profile">
         <arguments>
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
