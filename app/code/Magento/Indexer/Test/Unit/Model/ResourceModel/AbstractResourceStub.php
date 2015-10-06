@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model\Resource;
+namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
 
-class AbstractResourceStub extends \Magento\Indexer\Model\Resource\AbstractResource
+class AbstractResourceStub extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
      * New DB Adapter

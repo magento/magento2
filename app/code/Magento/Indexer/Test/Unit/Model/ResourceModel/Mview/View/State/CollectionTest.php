@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model\Resource\Mview\View\State;
+namespace Magento\Indexer\Test\Unit\Model\ResourceModel\Mview\View\State;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Resource\Mview\View\State\Collection
+     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection
      */
     protected $model;
 
@@ -28,7 +28,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
 
-        $this->model = new \Magento\Indexer\Model\Resource\Mview\View\State\Collection(
+        $this->model = new \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection(
             $entityFactoryMock,
             $loggerMock,
             $fetchStrategyMock,
@@ -38,7 +38,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'Magento\Indexer\Model\Resource\Mview\View\State\Collection',
+            'Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection',
             $this->model
         );
         $this->assertEquals(
@@ -46,7 +46,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->model->getModelName()
         );
         $this->assertEquals(
-            'Magento\Indexer\Model\Resource\Mview\View\State',
+            'Magento\Indexer\Model\ResourceModel\Mview\View\State',
             $this->model->getResourceModelName()
         );
     }

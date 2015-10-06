@@ -110,4 +110,6 @@ return [
     ['Magento\GroupedProduct\Model\Resource', 'Magento\GroupedProduct\Model\ResourceModel'],
     ['Magento\ImportExport\Model\Resource', 'Magento\ImportExport\Model\ResourceModel'],
     ['Magento\ImportExport\Test\Unit\Model\Resource', 'Magento\ImportExport\Test\Unit\Model\ResourceModel'],
+    ['Magento\Indexer\Model\Resource', 'Magento\Indexer\Model\ResourceModel'],
+    ['Magento\Indexer\Test\Unit\Model\Resource', 'Magento\Indexer\Test\Unit\Model\ResourceModel'],
 ];

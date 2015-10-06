@@ -13,7 +13,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
+class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
      * Store id
