@@ -90,4 +90,5 @@ return [
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
     ['Magento\DesignEditor'],
     ['Magento\AdminNotification\Model\Resource', 'Magento\AdminNotification\Model\ResourceModel'],
+    ['Magento\Authorization\Model\Resource', 'Magento\Authorization\Model\ResourceModel'],
 ];

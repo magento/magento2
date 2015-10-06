@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Resource\Role;
+namespace Magento\Authorization\Model\ResourceModel\Role;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\Role', 'Magento\Authorization\Model\Resource\Role');
+        $this->_init('Magento\Authorization\Model\Role', 'Magento\Authorization\Model\ResourceModel\Role');
     }
 
     /**

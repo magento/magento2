@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Resource;
+namespace Magento\Authorization\Model\ResourceModel;
 
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Resource;
+namespace Magento\Authorization\Model\ResourceModel;
 
 /**
  * Role resource test
@@ -16,7 +16,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     {
         $role = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Authorization\Model\Role');
         $roleResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Authorization\Model\Resource\Role'
+            'Magento\Authorization\Model\ResourceModel\Role'
         );
 
         $this->assertEmpty($roleResource->getRoleUsers($role));
