@@ -235,7 +235,11 @@ define([
                     this._fillSelect(element.nextSetting);
                     this._resetChildren(element.nextSetting);
                 } else {
-                    this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]);
+                    if (!!document.documentMode) {
+                        this.inputSimpleProduct.val(element.options[element.selectedIndex].config.allowedProducts[0]);
+                    } else {
+                        this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]);
+                    }
                 }
             } else {
                 this._resetChildren(element);
