@@ -54,7 +54,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\Resource\Wishlist');
+        $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\ResourceModel\Wishlist');
         $this->setWishlistTable($this->getTable('wishlist'));
     }
 

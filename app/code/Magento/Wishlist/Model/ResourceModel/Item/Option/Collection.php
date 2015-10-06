@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Model\Resource\Item\Option;
+namespace Magento\Wishlist\Model\ResourceModel\Item\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
@@ -37,7 +37,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Item\Option', 'Magento\Wishlist\Model\Resource\Item\Option');
+        $this->_init('Magento\Wishlist\Model\Item\Option', 'Magento\Wishlist\Model\ResourceModel\Item\Option');
     }
 
     /**

@@ -14,13 +14,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
-use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
  *
- * @method \Magento\Wishlist\Model\Resource\Item getResource()
+ * @method \Magento\Wishlist\Model\ResourceModel\Item getResource()
  * @method int getWishlistId()
  * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
  * @method int getProductId()
@@ -166,7 +166,7 @@ class Item extends AbstractModel implements ItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Resource\Item');
+        $this->_init('Magento\Wishlist\Model\ResourceModel\Item');
     }
 
     /**
@@ -184,7 +184,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Wishlist\Model\Resource\Item
+     * @return \Magento\Wishlist\Model\ResourceModel\Item
      */
     protected function _getResource()
     {

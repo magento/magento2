@@ -89,7 +89,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
                 'value' => 'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection',
             ],
             [$typeAttr => 'object', 'value' => 'Magento\Solr\Model\ResourceModel\Search\Grid\Collection'],
-            [$typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\Resource\Item\Collection\Grid'],
+            [$typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid'],
             [
                 $typeAttr => 'object',
                 'value' => 'Magento\CustomerSegment\Model\ResourceModel\Segment\Report\Detail\Collection'
