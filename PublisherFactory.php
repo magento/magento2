@@ -34,7 +34,7 @@ class PublisherFactory
      *     <arguments>
      *         <argument name="publishers" xsi:type="array">
      *             <item name="amqp" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\MessageQueue\Model\Publisher</item>
+     *                 <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
      *                 <item name="connectionName" xsi:type="string">amqp</item>
      *             </item>
      *         </argument>
