@@ -34,12 +34,12 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\Resource\StockFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\ResourceModel\StockFactory
      */
     protected $stockFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\Resource\Stock
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\ResourceModel\Stock
      */
     protected $stock;
 
@@ -59,9 +59,9 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
         $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
-        $this->stock = $this->getMock('Magento\CatalogInventory\Model\Resource\Stock', [], [], '', false);
+        $this->stock = $this->getMock('Magento\CatalogInventory\Model\ResourceModel\Stock', [], [], '', false);
         $this->stockFactory = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\StockFactory',
+            'Magento\CatalogInventory\Model\ResourceModel\StockFactory',
             ['create'],
             [],
             '',

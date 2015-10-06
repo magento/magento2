@@ -89,7 +89,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
-     * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
@@ -111,7 +111,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
-        \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,

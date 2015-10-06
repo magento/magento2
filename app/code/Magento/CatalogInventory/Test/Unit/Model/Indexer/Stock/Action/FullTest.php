@@ -14,7 +14,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithAdapterErrorThrowsException()
     {
         $indexerFactoryMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Indexer\StockFactory',
+            'Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory',
             [],
             [],
             '',

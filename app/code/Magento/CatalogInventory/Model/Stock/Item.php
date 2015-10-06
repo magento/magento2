@@ -141,7 +141,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock\Item');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
     }
 
     /**

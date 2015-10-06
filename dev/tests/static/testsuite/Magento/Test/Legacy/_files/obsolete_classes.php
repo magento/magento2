@@ -2057,7 +2057,7 @@ return [
         'Magento\ConfigurableProduct\Block\Stockqty\Type\Configurable',
     ],
     [
-        'Magento\CatalogInventory\Model\Resource\Indexer\Stock\Configurable',
+        'Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\Configurable',
         'Magento\ConfigurableProduct\Model\Resource\Indexer\Stock\Configurable',
     ],
     [

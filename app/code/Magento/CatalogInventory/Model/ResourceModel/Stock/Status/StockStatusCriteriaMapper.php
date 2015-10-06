@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Model\Resource\Stock\Status;
+namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Framework\DB\GenericMapper;
 
 /**
  * Class StockStatusCriteriaMapper
- * @package Magento\CatalogInventory\Model\Resource\Stock\Status
+ * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
  */
 class StockStatusCriteriaMapper extends GenericMapper
 {
@@ -19,7 +19,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\Resource\Stock\Status');
+        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock\Status');
     }
 
     /**
