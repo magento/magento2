@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Model\Resource;
+namespace Magento\Checkout\Model\ResourceModel;
 
 /**
  * Resource model for Checkout Cart
