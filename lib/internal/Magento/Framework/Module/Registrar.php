@@ -19,6 +19,18 @@ class Registrar implements ModuleRegistryInterface
      * @var string[]
      */
     private static $modulePaths = [];
+    
+    /**
+     * Paths to modules, immutable
+     *
+     * @var string[]
+     */
+    private $immutableModulePaths;
+    
+    public function __construct()
+    {
+        $this->immutableModulePaths = self::$modulePaths;
+    }
 
     /**
      * Sets the location of a module. Necessary for modules which do not reside in modules directory
@@ -37,7 +49,7 @@ class Registrar implements ModuleRegistryInterface
      */
     public function getModulePaths()
     {
-        return self::$modulePaths;
+        return $this->immutableModulePaths;
     }
 
     /**
@@ -45,6 +57,6 @@ class Registrar implements ModuleRegistryInterface
      */
     public function getModulePath($moduleName)
     {
-        return isset(self::$modulePaths[$moduleName]) ? self::$modulePaths[$moduleName] : null;
+        return isset($this->immutableModulePaths[$moduleName]) ? $this->immutableModulePaths[$moduleName] : null;
     }
 }
