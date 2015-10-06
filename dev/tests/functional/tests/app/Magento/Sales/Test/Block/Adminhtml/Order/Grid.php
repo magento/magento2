@@ -21,7 +21,7 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'id' => [
-            'selector' => '[name="filters[increment_id]"]',
+            'selector' => '[name="increment_id"]',
         ],
         'status' => [
             'selector' => '[name="filters[status]"]',
