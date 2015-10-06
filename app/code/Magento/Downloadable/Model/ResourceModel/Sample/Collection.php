@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Model\Resource\Sample;
+namespace Magento\Downloadable\Model\ResourceModel\Sample;
 
 /**
  * Downloadable samples resource collection
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Sample', 'Magento\Downloadable\Model\Resource\Sample');
+        $this->_init('Magento\Downloadable\Model\Sample', 'Magento\Downloadable\Model\ResourceModel\Sample');
     }
 
     /**

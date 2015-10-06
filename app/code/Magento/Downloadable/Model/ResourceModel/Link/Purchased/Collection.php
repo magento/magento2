@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Model\Resource\Link\Purchased;
+namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased;
 
 /**
  * Downloadable links purchased resource collection
@@ -21,7 +21,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init(
             'Magento\Downloadable\Model\Link\Purchased',
-            'Magento\Downloadable\Model\Resource\Link\Purchased'
+            'Magento\Downloadable\Model\ResourceModel\Link\Purchased'
         );
     }
 

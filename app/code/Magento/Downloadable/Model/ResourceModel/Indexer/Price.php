@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Model\Resource\Indexer;
+namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
 /**
  * Downloadable products Price indexer resource model

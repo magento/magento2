@@ -10,8 +10,8 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Downloadable sample model
  *
- * @method \Magento\Downloadable\Model\Resource\Sample _getResource()
- * @method \Magento\Downloadable\Model\Resource\Sample getResource()
+ * @method \Magento\Downloadable\Model\ResourceModel\Sample _getResource()
+ * @method \Magento\Downloadable\Model\ResourceModel\Sample getResource()
  * @method int getProductId()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -67,7 +67,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Resource\Sample');
+        $this->_init('Magento\Downloadable\Model\ResourceModel\Sample');
         parent::_construct();
     }
 

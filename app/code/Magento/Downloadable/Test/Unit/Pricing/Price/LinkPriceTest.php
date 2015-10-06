@@ -32,7 +32,7 @@ class LinkPriceTest extends \PHPUnit_Framework_TestCase
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkMock;
 
