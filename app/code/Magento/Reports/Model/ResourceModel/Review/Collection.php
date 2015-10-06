@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review;
 
-class Collection extends \Magento\Review\Model\Resource\Review\Collection
+class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {
     /**
      * Resource initialization
@@ -20,7 +20,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Review', 'Magento\Review\Model\Resource\Review');
+        $this->_init('Magento\Review\Model\Review', 'Magento\Review\Model\ResourceModel\Review');
     }
 
     /**

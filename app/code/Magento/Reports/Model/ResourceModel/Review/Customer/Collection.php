@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
-class Collection extends \Magento\Review\Model\Resource\Review\Collection
+class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer

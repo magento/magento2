@@ -1333,7 +1333,7 @@ return [
     ['helper', 'Magento\Framework\View\Element\AbstractBlock'],
     ['getDataHelperName', 'Magento\Backend\Block\Dashboard\AbstractDashboard'],
     ['setDataHelperName', 'Magento\Backend\Block\Dashboard\AbstractDashboard'],
-    ['addStoresToCollection', '\Magento\Review\Model\Resource\Rating\Collection'],
+    ['addStoresToCollection', '\Magento\Review\Model\ResourceModel\Rating\Collection'],
     ['getSessionSaveMethod', '\Magento\Core\Model\Session\AbstractSession', '\Magento\Core\Model\Session\Config'],
     ['setSessionName', '\Magento\Core\Model\Session\AbstractSession', 'setName'],
     ['getCode', '\Magento\Framework\Message\AbstractMessage', 'getText'],
