@@ -138,7 +138,7 @@ return [
     ['_inludeControllerClass', '', '_includeControllerClass'],
     ['_isApplyDesign', 'Magento\Catalog\Model\Design'],
     ['_isApplyFor', 'Magento\Catalog\Model\Design'],
-    ['_isPositiveDecimalNumber', 'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate'],
+    ['_isPositiveDecimalNumber', 'Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate'],
     ['_isRuntimeValidated', 'Magento\Framework\ObjectManager\Config\Reader\Dom'],
     ['_loadCache', 'Magento\Backend\Model\Menu\Config'],
     ['_loadCache', 'Magento\Core\Model\Config'],

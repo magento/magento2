@@ -9,7 +9,7 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\OfflineShipping\Model\Resource\Carrier;
+namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
@@ -244,7 +244,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -347,7 +347,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load directory countries
      *
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      */
     protected function _loadDirectoryCountries()
     {
@@ -371,7 +371,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load directory regions
      *
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      */
     protected function _loadDirectoryRegions()
     {
@@ -507,7 +507,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Save import data batch
      *
      * @param array $data
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      */
     protected function _saveImportData(array $data)
     {
