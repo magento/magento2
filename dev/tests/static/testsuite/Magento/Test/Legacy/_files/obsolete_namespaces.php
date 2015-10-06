@@ -150,4 +150,6 @@ return [
     ['Magento\Translation\Model\Resource', 'Magento\Translation\Model\ResourceModel'],
     ['Magento\Ui\Model\Resource', 'Magento\Ui\Model\ResourceModel'],
     ['Magento\Ui\Test\Unit\Model\Resource', 'Magento\Ui\Test\Unit\Model\ResourceModel'],
+    ['Magento\UrlRewrite\Model\Resource', 'Magento\UrlRewrite\Model\ResourceModel'],
+    ['Magento\UrlRewrite\Test\Unit\Model\Resource', 'Magento\UrlRewrite\Test\Unit\Model\ResourceModel'],
 ];

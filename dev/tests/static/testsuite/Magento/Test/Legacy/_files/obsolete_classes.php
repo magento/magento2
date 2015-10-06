@@ -2246,11 +2246,11 @@ return [
     ['Magento\Backend\Helper\Media\Js'],
     [
         'Magento\Core\Model\Resource\Url\Rewrite\Collection',
-        'Magento\UrlRewrite\Model\Resource\UrlRewriteCollection',
+        'Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection',
     ],
     [
         'Magento\Core\Model\Resource\Url\Rewrite',
-        'Magento\UrlRewrite\Model\Resource\UrlRewrite',
+        'Magento\UrlRewrite\Model\ResourceModel\UrlRewrite',
     ],
     [
         'Magento\Core\Model\Url\Rewrite',
