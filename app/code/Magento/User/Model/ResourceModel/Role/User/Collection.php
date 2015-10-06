@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\User\Model\Resource\Role\User;
+namespace Magento\User\Model\ResourceModel\Role\User;
 
 /**
  * Admin role users collection
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\User', 'Magento\User\Model\Resource\User');
+        $this->_init('Magento\User\Model\User', 'Magento\User\Model\ResourceModel\User');
     }
 
     /**

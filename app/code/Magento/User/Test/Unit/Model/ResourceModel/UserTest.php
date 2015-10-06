@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Test\Unit\Model\Resource;
+namespace Magento\User\Test\Unit\Model\ResourceModel;
 
 /**
- * Test class for \Magento\User\Model\Resource\User testing
+ * Test class for \Magento\User\Model\ResourceModel\User testing
  */
 class UserTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\User\Model\Resource\User */
+    /** @var \Magento\User\Model\ResourceModel\User */
     protected $model;
 
     /** @var \Magento\User\Model\User|\PHPUnit_framework_MockObject_MockObject */
@@ -86,7 +86,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\User\Model\Resource\User',
+            'Magento\User\Model\ResourceModel\User',
             [
                 'resource' => $this->resourceMock,
                 'aclCache' => $this->aclCacheMock,
@@ -112,7 +112,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update');
 
-        $this->assertInstanceOf('Magento\User\Model\Resource\User', $this->model->recordLogin($this->userMock));
+        $this->assertInstanceOf('Magento\User\Model\ResourceModel\User', $this->model->recordLogin($this->userMock));
     }
 
     public function testLoadByUsername()
@@ -215,7 +215,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceMock->expects($this->never())->method('getConnection');
         $this->assertInstanceOf(
-            'Magento\User\Model\Resource\User',
+            'Magento\User\Model\ResourceModel\User',
             $this->model->saveExtra($this->userMock, [1, 2, 3])
         );
     }
@@ -227,7 +227,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update');
         $this->assertInstanceOf(
-            'Magento\User\Model\Resource\User',
+            'Magento\User\Model\ResourceModel\User',
             $this->model->saveExtra($this->userMock, [1, 2, 3])
         );
     }
@@ -326,7 +326,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
-        $this->assertInstanceOf('\Magento\User\Model\Resource\User', $this->model->deleteFromRole($methodUserMock));
+        $this->assertInstanceOf('\Magento\User\Model\ResourceModel\User', $this->model->deleteFromRole($methodUserMock));
     }
 
     public function testRoleUserExists()
@@ -387,7 +387,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testInitUniqueFields()
     {
         $this->assertInstanceOf(
-            '\Magento\User\Model\Resource\User',
+            '\Magento\User\Model\ResourceModel\User',
             $this->invokeMethod($this->model, '_initUniqueFields', [])
         );
     }
@@ -397,7 +397,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->userMock->expects($this->once())->method('isObjectNew')->willReturn(true);
 
         $this->assertInstanceOf(
-            '\Magento\User\Model\Resource\User',
+            '\Magento\User\Model\ResourceModel\User',
             $this->invokeMethod($this->model, '_beforeSave', [$this->userMock])
         );
     }
@@ -418,7 +418,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
 
         $this->assertInstanceOf(
-            '\Magento\User\Model\Resource\User',
+            '\Magento\User\Model\ResourceModel\User',
             $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])
         );
     }
