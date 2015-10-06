@@ -4,21 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Newsletter\Model\Resource;
+namespace Magento\Newsletter\Model\ResourceModel;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 class SubscriberTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber
      */
     protected $_resourceModel;
 
     protected function setUp()
     {
         $this->_resourceModel = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Resource\Subscriber');
+            ->create('Magento\Newsletter\Model\ResourceModel\Subscriber');
     }
 
     /**

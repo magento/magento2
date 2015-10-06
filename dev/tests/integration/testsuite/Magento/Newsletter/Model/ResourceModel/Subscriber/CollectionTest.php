@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Newsletter\Model\Resource\Subscriber;
+namespace Magento\Newsletter\Model\ResourceModel\Subscriber;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */
     protected $_collectionModel;
 
     protected function setUp()
     {
         $this->_collectionModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Resource\Subscriber\Collection');
+            ->create('Magento\Newsletter\Model\ResourceModel\Subscriber\Collection');
     }
 
     /**

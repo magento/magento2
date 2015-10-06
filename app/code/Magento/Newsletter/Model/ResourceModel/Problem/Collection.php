@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Newsletter\Model\Resource\Problem;
+namespace Magento\Newsletter\Model\ResourceModel\Problem;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -87,7 +87,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Problem', 'Magento\Newsletter\Model\Resource\Problem');
+        $this->_init('Magento\Newsletter\Model\Problem', 'Magento\Newsletter\Model\ResourceModel\Problem');
     }
 
     /**

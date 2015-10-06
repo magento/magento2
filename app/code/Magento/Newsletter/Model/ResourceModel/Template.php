@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Newsletter\Model\Resource;
+namespace Magento\Newsletter\Model\ResourceModel;
 
 /**
  * Newsletter template resource model

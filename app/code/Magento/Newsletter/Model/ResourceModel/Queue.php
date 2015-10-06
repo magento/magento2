@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Newsletter\Model\Resource;
+namespace Magento\Newsletter\Model\ResourceModel;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Newsletter\Model\Queue as ModelQueue;
@@ -18,7 +18,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Subscriber collection
      *
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */
     protected $_subscriberCollection;
 
@@ -26,12 +26,12 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Construct
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
+     * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscriberCollection
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection,
+        \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscriberCollection,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
