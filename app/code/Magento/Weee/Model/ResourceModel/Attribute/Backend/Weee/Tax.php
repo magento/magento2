@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
+namespace Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee;
 
 /**
  * Catalog product WEEE tax backend attribute model

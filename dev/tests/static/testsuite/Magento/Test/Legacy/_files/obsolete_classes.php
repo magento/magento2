@@ -3113,7 +3113,7 @@ return [
     ['Magento\Sales\Model\ResourceModel\Setup', 'Magento\Sales\Setup\SalesSetup'],
     ['Magento\Tax\Model\ResourceModel\Setup', 'Magento\Tax\Setup\TaxSetup'],
     ['Magento\Theme\Model\ResourceModel\Setup', 'Magento\Theme\Setup\InstallData'],
-    ['Magento\Weee\Model\Resource\Setup', 'Magento\Weee\Setup\InstallData'],
+    ['Magento\Weee\Model\ResourceModel\Setup', 'Magento\Weee\Setup\InstallData'],
     ['Magento\Integration\Model\ResourceModel\Setup'],
     ['Magento\Framework\Module\ResourceResolver'],
     ['Magento\Framework\Module\ResourceResolverInterface'],

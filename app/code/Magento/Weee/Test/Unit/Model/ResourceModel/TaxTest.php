@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Test\Unit\Model\Resource;
+namespace Magento\Weee\Test\Unit\Model\ResourceModel;
 
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Weee\Model\Resource\Tax
+     * @var \Magento\Weee\Model\ResourceModel\Tax
      */
     protected $model;
 
@@ -59,7 +59,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Weee\Model\Resource\Tax',
+            'Magento\Weee\Model\ResourceModel\Tax',
             [
                 'context' => $contextMock,
             ]
