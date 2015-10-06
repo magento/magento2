@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogInventory\Model\Resource\Stock\Status;
+namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Framework\Data\AbstractCriteria;
 
@@ -20,7 +20,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function __construct($mapper = '')
     {
-        $this->mapperInterfaceName = $mapper ?: 'Magento\CatalogInventory\Model\Resource\Stock\Status\StockStatusCriteriaMapper';
+        $this->mapperInterfaceName = $mapper ?: 'Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper';
         $this->data['initial_condition'] = true;
     }
 

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Model\Resource\Stock;
+namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\DB\GenericMapper;
 
 /**
  * Class StockCriteriaMapper
- * @package Magento\CatalogInventory\Model\Resource\Stock
+ * @package Magento\CatalogInventory\Model\ResourceModel\Stock
  */
 class StockCriteriaMapper extends GenericMapper
 {
@@ -19,6 +19,6 @@ class StockCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\Resource\Stock');
+        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock');
     }
 }

@@ -13,7 +13,7 @@ namespace Magento\GroupedProduct\Model\Resource\Indexer\Stock;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
-class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
      * Get the select object for get stock status by grouped product ids

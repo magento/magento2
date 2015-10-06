@@ -8,10 +8,10 @@ namespace Magento\CatalogInventory\Model;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
-use Magento\CatalogInventory\Model\Resource\QtyCounterInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Model\Resource\Stock as ResourceStock;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
  * Class StockManagement

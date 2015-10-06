@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Model\Resource\Stock\Item;
+namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
 use Magento\Framework\DB\GenericMapper;
 use Magento\Framework\DB\MapperFactory;
@@ -16,7 +16,7 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 
 /**
  * Interface StockItemCriteriaMapper
- * @package Magento\CatalogInventory\Model\Resource\Stock\Status
+ * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
  */
 class StockItemCriteriaMapper extends GenericMapper
 {
@@ -45,7 +45,7 @@ class StockItemCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\Resource\Stock\Item');
+        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
         $this->map['qty'] = ['main_table', 'qty', 'qty'];
     }
 

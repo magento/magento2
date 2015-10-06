@@ -74,7 +74,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock\Status');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Status');
     }
 
     //@codeCoverageIgnoreStart

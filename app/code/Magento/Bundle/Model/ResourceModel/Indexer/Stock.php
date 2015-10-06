@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
      * Reindex temporary (price result data) for defined product(s)

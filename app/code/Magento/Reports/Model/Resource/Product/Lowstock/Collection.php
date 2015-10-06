@@ -41,7 +41,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Item
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item
      */
     protected $_itemResource;
 
@@ -71,7 +71,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteResource
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -102,7 +102,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\Quote\Model\Resource\Quote\Collection $quoteResource,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(

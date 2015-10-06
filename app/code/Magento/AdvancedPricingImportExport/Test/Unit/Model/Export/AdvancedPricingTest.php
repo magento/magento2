@@ -68,7 +68,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $categoryColFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemFactory;
 
@@ -230,7 +230,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->itemFactory = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory',
             [],
             [],
             '',

@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Model\Resource\Stock\Status;
+namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
 use Magento\Framework\Data\AbstractSearchResult;
 
 /**
  * Class Collection
- * @package Magento\CatalogInventory\Model\Resource\Stock\Status
+ * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
  */
 class Collection extends AbstractSearchResult implements StockStatusCollectionInterface
 {

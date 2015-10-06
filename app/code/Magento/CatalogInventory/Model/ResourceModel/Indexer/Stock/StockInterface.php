@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
+namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 /**
  * CatalogInventory Stock Indexer Interface

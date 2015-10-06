@@ -113,7 +113,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var  \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_mediaDirectory;
 
-    /** @var  \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_stockResItemFac;
 
     /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -263,7 +263,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
                 ->getMock();
         $this->_stockResItemFac = $this->getMock(
-            '\Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
+            '\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory',
             ['create'],
             [],
             '',

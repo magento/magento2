@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Resource;
+namespace Magento\CatalogInventory\Model\ResourceModel;
 
 /**
  * Correct particular stock products qty
