@@ -267,4 +267,12 @@ class ComposerInformation
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
         );
     }
+
+    /**
+     * @return array
+     */
+    public function getPackagesTypes()
+    {
+        return self::$packageTypes;
+    }
 }
