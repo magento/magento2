@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Rule\Test\Unit\Model\Resource\Rule\Collection;
+namespace Magento\Rule\Test\Unit\Model\ResourceModel\Rule\Collection;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $abstractCollection;
 
@@ -62,7 +62,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->abstractCollection = $this->getMockForAbstractClass(
-            '\Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection',
+            '\Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection',
             [
                 'entityFactory' => $this->_entityFactoryMock,
                 'logger' => $this->_loggerMock,
@@ -147,7 +147,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
 
         $this->assertInstanceOf(
-            '\Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection',
+            '\Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection',
             $this->abstractCollection->addWebsiteFilter($website)
         );
     }

@@ -18,7 +18,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rule extends \Magento\Rule\Model\Resource\AbstractResource
+class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 {
     /**
      * Store number of seconds in a day

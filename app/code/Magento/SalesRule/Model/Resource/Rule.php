@@ -10,7 +10,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Sales Rule resource model
  */
-class Rule extends \Magento\Rule\Model\Resource\AbstractResource
+class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 {
     /**
      * Store associated with rule entities information map

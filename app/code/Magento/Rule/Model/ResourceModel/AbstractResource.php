@@ -9,7 +9,7 @@
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rule\Model\Resource;
+namespace Magento\Rule\Model\ResourceModel;
 
 abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
