@@ -3375,7 +3375,7 @@ return [
     ['Magento\Integration\Service\V1\Integration', 'Magento\Integration\Model\IntegrationService'],
     ['Magento\Integration\Service\V1\Oauth', 'Magento\Integration\Model\OauthService'],
     ['Magento\Integration\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Integration'],
-    ['Magento\Search\Model\Resource\Helper'],
+    ['Magento\Search\Model\ResourceModel\Helper'],
     ['Magento\Tools\Layout\Reference'],
     ['Magento\Tools\Layout\Formatter', 'Magento\Developer\Model\Tools\Formatter'],
     ['Magento\Tools\Dependency\Circular', 'Magento\Setup\Module\Dependency\Circular'],

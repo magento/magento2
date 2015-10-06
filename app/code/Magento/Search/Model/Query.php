@@ -6,8 +6,8 @@
 namespace Magento\Search\Model;
 
 use Magento\Framework\App\Resource;
-use Magento\Search\Model\Resource\Query\Collection as QueryCollection;
-use Magento\Search\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
+use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
+use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
 use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,8 +20,8 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\Resource\Query _getResource()
- * @method \Magento\Search\Model\Resource\Query getResource()
+ * @method \Magento\Search\Model\ResourceModel\Query _getResource()
+ * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -131,7 +131,7 @@ class Query extends AbstractModel implements QueryInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\Resource\Query');
+        $this->_init('Magento\Search\Model\ResourceModel\Query');
     }
 
     /**

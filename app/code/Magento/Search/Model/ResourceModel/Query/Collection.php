@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Model\Resource\Query;
+namespace Magento\Search\Model\ResourceModel\Query;
 
 use Magento\Store\Model\Store;
 
@@ -66,7 +66,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\Query', 'Magento\Search\Model\Resource\Query');
+        $this->_init('Magento\Search\Model\Query', 'Magento\Search\Model\ResourceModel\Query');
     }
 
     /**
