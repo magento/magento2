@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Model\Resource\Rule\Product\Price;
+namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
 
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -16,7 +16,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         parent::_construct();
         $this->_init(
             'Magento\CatalogRule\Model\Rule\Product\Price',
-            'Magento\CatalogRule\Model\Resource\Rule\Product\Price'
+            'Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price'
         );
     }
 

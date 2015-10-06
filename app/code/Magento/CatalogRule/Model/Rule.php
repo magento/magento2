@@ -10,8 +10,8 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Resource\Rule _getResource()
- * @method \Magento\CatalogRule\Model\Resource\Rule getResource()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
  * @method \Magento\CatalogRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -214,7 +214,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\Resource\Rule');
+        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
 

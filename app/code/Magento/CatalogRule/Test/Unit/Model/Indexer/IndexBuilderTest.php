@@ -28,7 +28,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $ruleCollectionFactory;
 
@@ -123,7 +123,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->ruleCollectionFactory = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\Rule\CollectionFactory',
+            'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
             ['create', 'addFieldToFilter'],
             [],
             '',

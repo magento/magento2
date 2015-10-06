@@ -99,4 +99,5 @@ return [
     ['Magento\Catalog\Model\Resource', 'Magento\Catalog\Model\ResourceModel'],
     ['Magento\Catalog\Test\Unit\Model\Resource', 'Magento\Catalog\Test\Unit\Model\ResourceModel'],
     ['Magento\CatalogInventory\Model\Resource', 'Magento\CatalogInventory\Model\ResourceModel'],
+    ['Magento\CatalogRule\Model\Resource', 'Magento\CatalogRule\Model\ResourceModel'],
 ];

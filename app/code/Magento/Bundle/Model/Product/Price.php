@@ -42,7 +42,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Price constructor.
      *
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
@@ -56,7 +56,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
+        \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
