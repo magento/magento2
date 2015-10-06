@@ -10,8 +10,8 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * SendFriend Log
  *
- * @method \Magento\SendFriend\Model\Resource\SendFriend _getResource()
- * @method \Magento\SendFriend\Model\Resource\SendFriend getResource()
+ * @method \Magento\SendFriend\Model\ResourceModel\SendFriend _getResource()
+ * @method \Magento\SendFriend\Model\ResourceModel\SendFriend getResource()
  * @method int getIp()
  * @method \Magento\SendFriend\Model\SendFriend setIp(int $value)
  * @method int getTime()
@@ -157,7 +157,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\SendFriend\Model\Resource\SendFriend');
+        $this->_init('Magento\SendFriend\Model\ResourceModel\SendFriend');
     }
 
     /**
