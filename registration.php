@@ -6,6 +6,6 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::LIBRARY,
-    'magento/framework-amqp',
+    'magento/framework-message-queue',
     __DIR__
 );
