@@ -11,27 +11,20 @@ class JobUpgradeTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles');
-        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
-        $cache->expects($this->once())->method('clean');
-        $valueMap = [
-            ['Magento\Framework\App\State\CleanupFiles', $cleanupFiles],
-            ['Magento\Framework\App\Cache', $cache],
-        ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
-        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
         $command = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
         $command->expects($this->once())->method('run');
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $status->expects($this->atLeastOnce())->method('add');
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
+        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', ['get'], [], '', false);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+
         $jobUpgrade = new JobUpgrade(
             $command,
             $objectManagerProvider,
             $output,
+            $queue,
             $status,
             'setup:upgrade',
             []
