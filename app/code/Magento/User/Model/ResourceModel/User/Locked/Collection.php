@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\User\Model\Resource\User\Locked;
+namespace Magento\User\Model\ResourceModel\User\Locked;
 
 /**
  * Admin user collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\User\Model\Resource\User\Collection
+class Collection extends \Magento\User\Model\ResourceModel\User\Collection
 {
     /**
      * Collection Init Select

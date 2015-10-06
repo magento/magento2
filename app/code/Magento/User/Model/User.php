@@ -15,8 +15,8 @@ use Magento\User\Api\Data\UserInterface;
 /**
  * Admin user model
  *
- * @method \Magento\User\Model\Resource\User _getResource()
- * @method \Magento\User\Model\Resource\User getResource()
+ * @method \Magento\User\Model\ResourceModel\User _getResource()
+ * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -165,7 +165,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\Resource\User');
+        $this->_init('Magento\User\Model\ResourceModel\User');
     }
 
     /**
