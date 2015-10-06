@@ -73,7 +73,9 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
 
         $this->initResponseFactoryMock();
 
-        $this->transactionRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction\Repository')
+        $this->transactionRepositoryMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Order\Payment\Transaction\Repository'
+        )
             ->disableOriginalConstructor()
             ->setMethods(['getByTransactionId'])
             ->getMock();
@@ -488,8 +490,13 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
      * @param $responseCode
      * @return Element
      */
-    private function getTransactionXmlDocument($transactionId, $resultCode, $resultStatus, $responseStatus, $responseCode)
-    {
+    private function getTransactionXmlDocument(
+        $transactionId,
+        $resultCode,
+        $resultStatus,
+        $responseStatus,
+        $responseCode
+    ) {
         $body = sprintf('<?xml version="1.0" encoding="utf-8"?>
             <getTransactionDetailsResponse
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

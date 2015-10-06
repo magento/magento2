@@ -58,6 +58,8 @@ class TransactionService
 
     /**
      * @param Security $xmlSecurityHelper
+     * @param Logger $logger
+     * @param ZendClientFactory $httpClientFactory
      */
     public function __construct(
         Security $xmlSecurityHelper,
@@ -72,7 +74,7 @@ class TransactionService
     /**
      * Get transaction information
      * @param \Magento\Authorizenet\Model\Authorizenet $context
-     * @param $transactionId
+     * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -139,9 +141,9 @@ class TransactionService
 
     /**
      * Create request body to get transaction details
-     * @param $login
-     * @param $transactionKey
-     * @param $transactionId
+     * @param string $login
+     * @param string $transactionKey
+     * @param string $transactionId
      * @return string
      */
     private function getRequestBody($login, $transactionKey, $transactionId)
