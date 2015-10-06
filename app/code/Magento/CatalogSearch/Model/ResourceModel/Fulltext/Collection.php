@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Model\Resource\Fulltext;
+namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;

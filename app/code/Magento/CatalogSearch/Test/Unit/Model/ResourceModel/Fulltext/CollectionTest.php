@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Test\Unit\Model\Resource\Fulltext;
+namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_TestCase;
@@ -11,7 +11,7 @@ use PHPUnit_Framework_TestCase;
 class CollectionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
      */
     private $model;
 
@@ -28,7 +28,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $requestBuilder = $this->getRequestBuilder();
 
         $this->model = $helper->getObject(
-            'Magento\CatalogSearch\Model\Resource\Fulltext\Collection',
+            'Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection',
             [
                 'storeManager' => $storeManager,
                 'universalFactory' => $universalFactory,

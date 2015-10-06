@@ -7,7 +7,7 @@
 /**
  * CatalogSearch Index Engine Interface
  */
-namespace Magento\CatalogSearch\Model\Resource;
+namespace Magento\CatalogSearch\Model\ResourceModel;
 
 interface EngineInterface
 {

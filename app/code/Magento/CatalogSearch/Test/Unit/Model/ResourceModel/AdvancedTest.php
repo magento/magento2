@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Test\Unit\Model\Resource;
+namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use PHPUnit_Framework_TestCase;
@@ -11,7 +11,7 @@ use PHPUnit_Framework_TestCase;
 class AdvancedTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Advanced
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced
      */
     private $model;
 
@@ -22,7 +22,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->model = $helper->getObject('Magento\CatalogSearch\Model\Resource\Advanced');
+        $this->model = $helper->getObject('Magento\CatalogSearch\Model\ResourceModel\Advanced');
     }
 
     /**

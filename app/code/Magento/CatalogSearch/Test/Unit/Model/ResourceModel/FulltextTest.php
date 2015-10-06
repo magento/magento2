@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogSearch\Test\Unit\Model\Resource;
+namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 
-use Magento\CatalogSearch\Model\Resource\Fulltext;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\Resource\Db\Context;
@@ -52,7 +52,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\Resource\Fulltext',
+            '\Magento\CatalogSearch\Model\ResourceModel\Fulltext',
             [
                 'context' => $this->context,
             ]

@@ -100,4 +100,6 @@ return [
     ['Magento\Catalog\Test\Unit\Model\Resource', 'Magento\Catalog\Test\Unit\Model\ResourceModel'],
     ['Magento\CatalogInventory\Model\Resource', 'Magento\CatalogInventory\Model\ResourceModel'],
     ['Magento\CatalogRule\Model\Resource', 'Magento\CatalogRule\Model\ResourceModel'],
+    ['Magento\CatalogSearch\Model\Resource', 'Magento\CatalogSearch\Model\ResourceModel'],
+    ['Magento\CatalogSearch\Test\Unit\Model\Resource', 'Magento\CatalogSearch\Test\Unit\Model\ResourceModel'],
 ];

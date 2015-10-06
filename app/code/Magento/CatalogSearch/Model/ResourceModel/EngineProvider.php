@@ -7,7 +7,7 @@
 /**
  * Catalog Search engine provider
  */
-namespace Magento\CatalogSearch\Model\Resource;
+namespace Magento\CatalogSearch\Model\ResourceModel;
 
 use Magento\Store\Model\ScopeInterface;
 
@@ -16,7 +16,7 @@ class EngineProvider
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\EngineInterface
+     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
      */
     protected $engine;
 
@@ -69,9 +69,9 @@ class EngineProvider
             $engineClassName = $this->enginePool[$currentEngine];
 
             $engine = $this->objectManager->create($engineClassName);
-            if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
+            if (false === $engine instanceof \Magento\CatalogSearch\Model\ResourceModel\EngineInterface) {
                 throw new \LogicException(
-                    $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
+                    $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\ResourceModel\EngineInterface'
                 );
             }
 

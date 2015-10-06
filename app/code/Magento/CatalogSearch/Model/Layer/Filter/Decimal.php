@@ -95,7 +95,7 @@ class Decimal extends AbstractFilter
     {
         $attribute = $this->getAttributeModel();
 
-        /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
+        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
         $productSize = $productCollection->getSize();
         $facets = $productCollection->getFacetedData($attribute->getAttributeCode());

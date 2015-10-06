@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogSearch\Test\Unit\Model\Resource;
+namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class EngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     private $target;
 
@@ -41,7 +41,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\Resource\Engine',
+            '\Magento\CatalogSearch\Model\ResourceModel\Engine',
             [
                 'resource' => $resource,
             ]

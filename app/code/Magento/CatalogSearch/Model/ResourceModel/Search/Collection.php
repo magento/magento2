@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogSearch\Model\Resource\Search;
+namespace Magento\CatalogSearch\Model\ResourceModel\Search;
 
 /**
  * Search collection

@@ -201,7 +201,7 @@ class Price extends AbstractFilter
         $attribute = $this->getAttributeModel();
         $this->_requestVar = $attribute->getAttributeCode();
 
-        /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
+        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
         $facets = $productCollection->getFacetedData($attribute->getAttributeCode());
 

@@ -103,7 +103,7 @@ return [
     ['_adminhtmlAddresses', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address'],
     ['_useAnalyticFunction'],
     ['_defaultIndexer', 'Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock'],
-    ['_engine', 'Magento\CatalogSearch\Model\Resource\Fulltext'],
+    ['_engine', 'Magento\CatalogSearch\Model\ResourceModel\Fulltext'],
     ['_allowedAreas', 'Magento\Core\Model\Config'],
     ['_app', 'Magento\Core\Block\AbstractBlock'],
     ['_app', 'Magento\Framework\View\Element\Template'],

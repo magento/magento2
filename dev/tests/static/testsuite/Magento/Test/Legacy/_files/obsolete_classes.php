@@ -1265,7 +1265,7 @@ return [
     ['Magento\Customer\Model\Attribute\Data'],
     ['Magento\Eav\Model\Attribute\Data'],
     ['Magento\Log\Model\Resource\Helper\Mysql4', 'Magento\Log\Model\Resource\Helper'],
-    ['Magento\CatalogSearch\Model\Resource\Helper\Mysql4', 'Magento\CatalogSearch\Model\Resource\Helper'],
+    ['Magento\CatalogSearch\Model\ResourceModel\Helper\Mysql4', 'Magento\CatalogSearch\Model\ResourceModel\Helper'],
     ['Magento\ImportExport\Model\Resource\Helper\Mysql4', 'Magento\ImportExport\Model\Resource\Helper'],
     ['Magento\Reports\Model\Resource\Helper\Mysql4', 'Magento\Reports\Model\Resource\Helper'],
     ['Magento\Backup\Model\ResourceModel\Helper\Mysql4', 'Magento\Backup\Model\ResourceModel\Helper'],
@@ -2704,7 +2704,7 @@ return [
     ],
     ['Magento\Catalog\Model\Observer\Reindex'],
     ['Magento\CatalogSearch\Model\Fulltext\Observer'],
-    ['Magento\CatalogSearch\Model\Resource\Indexer\Fulltext'],
+    ['Magento\CatalogSearch\Model\ResourceModel\Indexer\Fulltext'],
     [
         'Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Country',
         'Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer\Country',

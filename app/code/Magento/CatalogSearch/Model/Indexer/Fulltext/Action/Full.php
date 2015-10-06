@@ -102,7 +102,7 @@ class Full
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
 
@@ -132,7 +132,7 @@ class Full
     protected $resource;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
      */
     protected $fulltextResource;
 
@@ -158,7 +158,7 @@ class Full
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
-     * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
+     * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
      * @param \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -166,7 +166,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
+     * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -178,7 +178,7 @@ class Full
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
+        \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -186,7 +186,7 @@ class Full
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
+        \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {

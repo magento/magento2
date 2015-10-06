@@ -12,15 +12,15 @@ namespace Magento\CatalogSearch\Test\Unit\Model;
 class AdvancedTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\Advanced\Collection
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
     protected $collection;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\Advanced
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
      */
     protected $resource;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\ResourceProvider
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
      */
     protected $resourceProvider;
     /**
@@ -47,7 +47,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\Advanced\Collection',
+            'Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection',
             [
                 'addAttributeToSelect',
                 'setStore',
@@ -62,7 +62,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\Advanced',
+            'Magento\CatalogSearch\Model\ResourceModel\Advanced',
             ['prepareCondition', '__wakeup', 'getIdFieldName'],
             [],
             '',
@@ -70,7 +70,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceProvider = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\ResourceProvider',
+            'Magento\CatalogSearch\Model\ResourceModel\ResourceProvider',
             ['getResource', 'getResourceCollection', 'getAdvancedResultCollection'],
             [],
             '',
@@ -199,7 +199,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new \ArrayIterator($attributes)));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $advancedFactory = $this->getMockBuilder('Magento\CatalogSearch\Model\Resource\AdvancedFactory')
+        $advancedFactory = $this->getMockBuilder('Magento\CatalogSearch\Model\ResourceModel\AdvancedFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
