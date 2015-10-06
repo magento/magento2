@@ -41,11 +41,9 @@ class AggregateSalesReportTaxData
     /**
      * Refresh sales tax report statistics for last day
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function invoke($schedule)
+    public function invoke()
     {
         $this->localeResolver->emulate(0);
         $currentDate = $this->localeDate->date();
