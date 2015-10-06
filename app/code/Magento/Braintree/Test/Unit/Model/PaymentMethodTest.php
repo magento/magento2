@@ -124,6 +124,9 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderRepository;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
