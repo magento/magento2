@@ -3,23 +3,23 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ProductAlert\Model\Resource\Price;
+namespace Magento\ProductAlert\Model\ResourceModel\Stock;
 
 /**
- * Product alert for changed price collection
+ * Product alert for back in stock collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * Define price collection
+     * Define stock collection
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Price', 'Magento\ProductAlert\Model\Resource\Price');
+        $this->_init('Magento\ProductAlert\Model\Stock', 'Magento\ProductAlert\Model\ResourceModel\Stock');
     }
 
     /**
@@ -30,17 +30,31 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addWebsiteFilter($website)
     {
+        $connection = $this->getConnection();
         if ($website === null || $website == 0) {
             return $this;
         }
         if (is_array($website)) {
-            $condition = $this->getConnection()->quoteInto('website_id IN(?)', $website);
+            $condition = $connection->quoteInto('website_id IN(?)', $website);
         } elseif ($website instanceof \Magento\Store\Model\Website) {
-            $condition = $this->getConnection()->quoteInto('website_id=?', $website->getId());
+            $condition = $connection->quoteInto('website_id=?', $website->getId());
         } else {
-            $condition = $this->getConnection()->quoteInto('website_id=?', $website);
+            $condition = $connection->quoteInto('website_id=?', $website);
         }
         $this->addFilter('website_id', $condition, 'string');
+        return $this;
+    }
+
+    /**
+     * Add status filter
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function addStatusFilter($status)
+    {
+        $condition = $this->getConnection()->quoteInto('status=?', $status);
+        $this->addFilter('status', $condition, 'string');
         return $this;
     }
 
