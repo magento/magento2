@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Resource;
+namespace Magento\ImportExport\Model\ResourceModel;
 
 class Helper extends \Magento\Framework\DB\Helper
 {

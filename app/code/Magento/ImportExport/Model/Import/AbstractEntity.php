@@ -107,7 +107,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     protected $_dataSourceModel;
 
@@ -275,7 +275,7 @@ abstract class AbstractEntity
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
@@ -285,7 +285,7 @@ abstract class AbstractEntity
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         Resource $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []

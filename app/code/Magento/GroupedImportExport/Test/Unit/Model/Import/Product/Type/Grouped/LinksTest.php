@@ -164,7 +164,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function processBehaviorGetter($behavior)
     {
-        $dataSource = $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false);
+        $dataSource = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
         $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
         $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
     }

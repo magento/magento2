@@ -1266,7 +1266,7 @@ return [
     ['Magento\Eav\Model\Attribute\Data'],
     ['Magento\Log\Model\Resource\Helper\Mysql4', 'Magento\Log\Model\Resource\Helper'],
     ['Magento\CatalogSearch\Model\ResourceModel\Helper\Mysql4', 'Magento\CatalogSearch\Model\ResourceModel\Helper'],
-    ['Magento\ImportExport\Model\Resource\Helper\Mysql4', 'Magento\ImportExport\Model\Resource\Helper'],
+    ['Magento\ImportExport\Model\ResourceModel\Helper\Mysql4', 'Magento\ImportExport\Model\ResourceModel\Helper'],
     ['Magento\Reports\Model\Resource\Helper\Mysql4', 'Magento\Reports\Model\Resource\Helper'],
     ['Magento\Backup\Model\ResourceModel\Helper\Mysql4', 'Magento\Backup\Model\ResourceModel\Helper'],
     ['Magento\Sales\Model\CarrierFactory', 'Magento\Shipping\Model\CarrierFactory'],

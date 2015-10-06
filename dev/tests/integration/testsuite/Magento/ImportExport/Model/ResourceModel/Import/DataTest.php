@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ImportExport\Model\Resource\Import;
+namespace Magento\ImportExport\Model\ResourceModel\Import;
 
 /**
  * Test Import Data resource model
@@ -13,7 +13,7 @@ namespace Magento\ImportExport\Model\Resource\Import;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     protected $_model;
 
@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Model\Resource\Import\Data'
+            'Magento\ImportExport\Model\ResourceModel\Import\Data'
         );
     }
 
