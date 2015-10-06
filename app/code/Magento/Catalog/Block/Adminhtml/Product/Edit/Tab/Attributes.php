@@ -57,13 +57,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
                 );
             }
 
-            $groupPrice = $form->getElement('group_price');
-            if ($groupPrice) {
-                $groupPrice->setRenderer(
-                    $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group')
-                );
-            }
-
             // Add new attribute controls if it is not an image tab
             if (!$form->getElement(
                 'media_gallery'

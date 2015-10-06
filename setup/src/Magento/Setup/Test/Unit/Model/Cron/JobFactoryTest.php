@@ -41,6 +41,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $moduleDisabler = $this->getMock('Magento\Setup\Console\Command\ModuleDisableCommand', [], [], '', false);
 
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
+        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+
 
         $returnValueMap = [
             ['Magento\Setup\Model\Updater', $updater],
@@ -50,7 +52,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ['Magento\Setup\Model\ModuleUninstaller', $moduleUninstaller],
             ['Magento\Setup\Model\ModuleRegistryUninstaller', $moduleRegistryUninstaller],
             ['Magento\Setup\Console\Command\ModuleDisableCommand', $moduleDisabler],
-            ['Magento\Setup\Console\Command\ModuleEnableCommand', $moduleEnabler]
+            ['Magento\Setup\Console\Command\ModuleEnableCommand', $moduleEnabler],
+            ['Magento\Setup\Model\Cron\Queue', $queue]
         ];
 
         $serviceManager->expects($this->atLeastOnce())
