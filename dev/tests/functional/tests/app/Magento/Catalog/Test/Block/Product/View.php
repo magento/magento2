@@ -161,8 +161,10 @@ class View extends AbstractConfigureBlock
      */
     public function getPriceBlock()
     {
-        return $this->blockFactory->create('Magento\Catalog\Test\Block\Product\Price',
-            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]);
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Price',
+            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 
     /**
@@ -174,8 +176,10 @@ class View extends AbstractConfigureBlock
     public function addToCart(FixtureInterface $product)
     {
         /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
-        $miniCart = $this->blockFactory->create('\Magento\Checkout\Test\Block\Cart\Sidebar',
-            ['element' => $this->browser->find($this->miniCartBlock)]);
+        $miniCart = $this->blockFactory->create(
+            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            ['element' => $this->browser->find($this->miniCartBlock)]
+        );
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
 
@@ -301,9 +305,11 @@ class View extends AbstractConfigureBlock
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
-        return $this->hasRender($typeId) ? $this->callRender($typeId,
+        return $this->hasRender($typeId) ? $this->callRender(
+            $typeId,
             'getOptions',
-            ['product' => $product]) : $this->getCustomOptionsBlock()->getOptions($product);
+            ['product' => $product]
+        ) : $this->getCustomOptionsBlock()->getOptions($product);
     }
 
     /**
@@ -314,8 +320,10 @@ class View extends AbstractConfigureBlock
      */
     public function getTierPrices($lineNumber = 1)
     {
-        return $this->_rootElement->find(str_replace('%line-number%', $lineNumber, $this->tierPricesSelector),
-            Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find(
+            str_replace('%line-number%', $lineNumber, $this->tierPricesSelector),
+            Locator::SELECTOR_XPATH
+        )->getText();
     }
 
     /**
@@ -356,8 +364,10 @@ class View extends AbstractConfigureBlock
     public function clickAddToCompare()
     {
         /** @var \Magento\Backend\Test\Block\Messages $messageBlock */
-        $messageBlock = $this->blockFactory->create('Magento\Backend\Test\Block\Messages',
-            ['element' => $this->browser->find($this->messageBlock)]);
+        $messageBlock = $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Messages',
+            ['element' => $this->browser->find($this->messageBlock)]
+        );
         $this->_rootElement->find($this->clickAddToCompare, Locator::SELECTOR_CSS)->click();
         $messageBlock->waitSuccessMessage();
     }
