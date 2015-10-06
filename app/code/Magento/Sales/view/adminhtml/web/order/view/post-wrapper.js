@@ -5,12 +5,13 @@
 
 define([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'mage/translate'
-], function ($) {
+], function ($, confirm) {
     'use strict';
 
     /**
-     * @param {string} url
+     * @param {String} url
      * @returns {Object}
      */
     function getForm(url) {
@@ -28,22 +29,27 @@ define([
         var msg = $.mage.__('Are you sure you want to cancel this order?'),
             url = $('#order-view-cancel-button').data('url');
 
-        if (confirm(msg)) {
-            getForm(url).submit();
-        } else {
-            return false;
-        }
+        confirm({
+            'content': msg,
+            'actions': {
+                confirm: function () {
+                    getForm(url).appendTo('body').submit();
+                }
+            }
+        });
+
+        return false;
     });
 
     $('#order-view-hold-button').click(function () {
         var url = $('#order-view-hold-button').data('url');
 
-        getForm(url).submit();
+        getForm(url).appendTo('body').submit();
     });
 
     $('#order-view-unhold-button').click(function () {
         var url = $('#order-view-unhold-button').data('url');
 
-        getForm(url).submit();
+        getForm(url).appendTo('body').submit();
     });
 });
