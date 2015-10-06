@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GroupedProduct\Model\Resource\Product\Type\Grouped;
+namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

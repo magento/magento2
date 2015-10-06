@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GroupedProduct\Model\Resource\Product\Indexer\Price;
+namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
 class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
@@ -13,7 +13,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
      * Reindex temporary (price result data) for all products
      *
      * @throws \Exception
-     * @return \Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped
+     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
      */
     public function reindexAll()
     {
@@ -33,7 +33,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return \Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped
+     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
      */
     public function reindexEntity($entityIds)
     {
@@ -47,7 +47,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
      * Use calculated price for relation products
      *
      * @param int|array $entityIds  the parent entity ids limitation
-     * @return \Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped
+     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
      */
     protected function _prepareGroupedProductPriceData($entityIds = null)
     {
@@ -63,7 +63,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
         )->joinLeft(
             ['l' => $this->getTable('catalog_product_link')],
             'e.entity_id = l.product_id AND l.link_type_id=' .
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
             []
         )->join(
             ['cg' => $this->getTable('customer_group')],

@@ -107,7 +107,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setLinkTypeId'
         )->with(
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));

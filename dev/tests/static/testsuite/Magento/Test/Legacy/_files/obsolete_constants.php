@@ -527,12 +527,12 @@ return [
     [
         'LINK_TYPE_GROUPED',
         '\Magento\Catalog\Model\Product\Link',
-        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED',
+        '\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED',
     ],
     [
         'TYPE_GROUPED',
         '\Magento\Catalog\Model\Product\Type',
-        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED',
+        '\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED',
     ],
     ['PARAM_APP_URIS', 'Magento\Framework\Filesystem'],
     ['ROOT_DIR', '\Magento\Framework\App\Filesystem', '\Magento\Framework\App\Filesystem\DirectoryList::ROOT'],

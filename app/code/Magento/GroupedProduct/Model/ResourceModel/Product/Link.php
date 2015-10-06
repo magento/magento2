@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GroupedProduct\Model\Resource\Product;
+namespace Magento\GroupedProduct\Model\ResourceModel\Product;
 
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
@@ -15,7 +15,7 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
      * @param \Magento\Catalog\Model\Product $product
      * @param array $data
      *
-     * @return \Magento\GroupedProduct\Model\Resource\Product\Link
+     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Link
      */
     public function saveGroupedLinks($product, $data)
     {

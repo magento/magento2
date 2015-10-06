@@ -1916,11 +1916,11 @@ return [
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Grouped',
-        'Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped',
+        'Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped',
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection',
-        'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
+        'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection',
     ],
     ['Magento\Catalog\Model\Product\Type\Grouped', 'Magento\GroupedProduct\Model\Product\Type\Grouped'],
     [
