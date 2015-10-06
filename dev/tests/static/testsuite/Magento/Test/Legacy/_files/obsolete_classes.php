@@ -3847,6 +3847,9 @@ return [
     ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
     ['Magento\Customer\Controller\Account\ResetPassword'],
     ['Magento\Customer\Controller\Account'],
+    ['Magento\Quote\Model\Quote\Address\Total\Discount'],
+    ['Magento\Quote\Model\Quote\Address\Total\Custbalance'],
+    ['Magento\Quote\Model\Quote\Address\Total\Tax'],
     ['Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet'],
     ['Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
@@ -3861,6 +3864,7 @@ return [
     ['Magento\Weee\Model\Observer\Session', 'Magento\Weee\Observer\*'],
     ['Magento\Tax\Model\Observer\Session', 'Magento\Tax\Observer\*'],
     ['Magento\Weee\Model\Observer', 'Magento\Weee\Observer\*'],
+    ['Magento\Tax\Observer\QuoteCollectTotalsBefore'],
     ['Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice'],
     ['Magento\Catalog\Api\Data\ProductGroupPriceInterface'],
     ['Magento\Catalog\Api\ProductGroupPriceManagementInterface'],
@@ -3871,4 +3875,5 @@ return [
     ['Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice'],
     ['Magento\Catalog\Pricing\Price\GroupPrice'],
     ['Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice'],
+    ['Magento\Catalog\Model\App\Action\ContextPlugin'],
 ];
