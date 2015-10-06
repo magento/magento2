@@ -430,12 +430,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('convertToBuyRequest')
             ->with($this->dataMock)
             ->willReturn($buyRequest);
-        $buyRequest->expects($this->at(1))
-            ->method('setData')
-            ->with(['qty' => '12']);
-        $buyRequest->expects($this->once())
-            ->method('getData')
-            ->willReturn(['qty' => '12']);
         $this->assertEquals($this->quoteItemMock, $this->repository->save($this->dataMock));
     }
 
