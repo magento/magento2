@@ -497,7 +497,8 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
         $responseStatus,
         $responseCode
     ) {
-        $body = sprintf('<?xml version="1.0" encoding="utf-8"?>
+        $body = sprintf(
+            '<?xml version="1.0" encoding="utf-8"?>
             <getTransactionDetailsResponse
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
