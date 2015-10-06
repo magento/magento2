@@ -16,7 +16,7 @@
     <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
         <arguments>
             <argument name="linkTypes" xsi:type="array">
-                <item name="associated" xsi:type="const">Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED</item>
+                <item name="associated" xsi:type="const">Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED</item>
             </argument>
         </arguments>
     </type>

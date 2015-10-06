@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GroupedProduct\Model\Resource\Indexer\Stock;
+namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
@@ -45,7 +45,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         )->joinLeft(
             ['l' => $this->getTable('catalog_product_link')],
             'e.entity_id = l.product_id AND l.link_type_id=' .
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
             []
         )->joinLeft(
             ['le' => $this->getTable('catalog_product_entity')],

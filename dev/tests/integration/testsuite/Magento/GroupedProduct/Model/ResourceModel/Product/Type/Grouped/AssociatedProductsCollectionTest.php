@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GroupedProduct\Model\Resource\Product\Type\Grouped;
+namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
 class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,9 +23,9 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
 
-        /** @var \Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection $collection */
+        /** @var \Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection $collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection'
+            'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection'
         );
 
         $this->assertEquals(['simple-1', 'virtual-product'], $collection->getColumnValues('sku'));

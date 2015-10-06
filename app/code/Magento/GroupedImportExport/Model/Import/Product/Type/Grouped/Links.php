@@ -149,7 +149,7 @@ class Links
      */
     protected function getLinkTypeId()
     {
-        return \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED;
+        return \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED;
     }
 
     /**
