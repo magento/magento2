@@ -10,7 +10,6 @@ namespace Magento\Framework\Webapi;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
@@ -18,18 +17,16 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\Webapi\ServicePayloadConverterInterface;
+use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessor
+class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const CACHE_ID_PREFIX = 'service_method_params_';
-
     const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
 
     /** @var \Magento\Framework\Reflection\TypeProcessor */
@@ -41,11 +38,11 @@ class ServiceInputProcessor
     /** @var AttributeValueFactory */
     protected $attributeValueFactory;
 
-    /** @var WebapiCache */
-    protected $cache;
-
     /** @var  CustomAttributeTypeLocatorInterface */
     protected $customAttributeTypeLocator;
+
+    /** @var  MethodsMap */
+    protected $methodsMap;
 
     /**
      * Initialize dependencies.
@@ -53,21 +50,21 @@ class ServiceInputProcessor
      * @param TypeProcessor $typeProcessor
      * @param ObjectManagerInterface $objectManager
      * @param AttributeValueFactory $attributeValueFactory
-     * @param WebapiCache $cache
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param MethodsMap $methodsMap
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
         AttributeValueFactory $attributeValueFactory,
-        WebapiCache $cache,
-        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
+        MethodsMap $methodsMap
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
         $this->attributeValueFactory = $attributeValueFactory;
-        $this->cache = $cache;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
+        $this->methodsMap = $methodsMap;
     }
 
     /**
@@ -90,8 +87,8 @@ class ServiceInputProcessor
     {
         $inputData = [];
         $inputError = [];
-        foreach ($this->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
-            $paramName = $param['name'];
+        foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
+            $paramName = $param[MethodsMap::METHOD_META_NAME];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
                 $paramValue = isset($inputArray[$paramName])
@@ -99,13 +96,13 @@ class ServiceInputProcessor
                     : $inputArray[$snakeCaseParamName];
 
                 try {
-                    $inputData[] = $this->convertValue($paramValue, $param['type']);
+                    $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
                 } catch (SerializationException $e) {
                     throw new WebapiException(new Phrase($e->getMessage()));
                 }
             } else {
-                if ($param['isDefaultValueAvailable']) {
-                    $inputData[] = $param['defaultValue'];
+                if ($param[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE]) {
+                    $inputData[] = $param[MethodsMap::METHOD_META_DEFAULT_VALUE];
                 } else {
                     $inputError[] = $paramName;
                 }
@@ -237,32 +234,32 @@ class ServiceInputProcessor
     /**
      * Convert data from array to Data Object representation if type is Data Object or array of Data Objects.
      *
-     * @param mixed $value
+     * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function convertValue($value, $type)
+    public function convertValue($data, $type)
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
-        if ($isArrayType && isset($value['item'])) {
-            $value = $this->_removeSoapItemNode($value);
+        if ($isArrayType && isset($data['item'])) {
+            $data = $this->_removeSoapItemNode($data);
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
+            $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
         } else {
             /** Complex type or array of complex types */
             if ($isArrayType) {
                 // Initializing the result for array type else it will return null for empty array
-                $result = is_array($value) ? [] : null;
+                $result = is_array($data) ? [] : null;
                 $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($value)) {
-                    foreach ($value as $key => $item) {
+                if (is_array($data)) {
+                    foreach ($data as $key => $item) {
                         $result[$key] = $this->_createFromArray($itemType, $item);
                     }
                 }
             } else {
-                $result = $this->_createFromArray($type, $value);
+                $result = $this->_createFromArray($type, $data);
             }
         }
         return $result;
@@ -293,38 +290,6 @@ class ServiceInputProcessor
          */
         $isAssociative = array_keys($value) !== range(0, count($value) - 1);
         return $isAssociative ? [$value] : $value;
-    }
-
-    /**
-     * Retrieve requested service method params metadata.
-     *
-     * @param string $serviceClassName
-     * @param string $serviceMethodName
-     * @return array
-     */
-    protected function getMethodParams($serviceClassName, $serviceMethodName)
-    {
-        $cacheId = self::CACHE_ID_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
-        $params = $this->cache->load($cacheId);
-        if ($params !== false) {
-            return unserialize($params);
-        }
-        $serviceClass = new ClassReflection($serviceClassName);
-        /** @var MethodReflection $serviceMethod */
-        $serviceMethod = $serviceClass->getMethod($serviceMethodName);
-        $params = [];
-        /** @var ParameterReflection $paramReflection */
-        foreach ($serviceMethod->getParameters() as $paramReflection) {
-            $isDefaultValueAvailable = $paramReflection->isDefaultValueAvailable();
-            $params[] = [
-                'name' => $paramReflection->getName(),
-                'type' => $this->typeProcessor->getParamType($paramReflection),
-                'isDefaultValueAvailable' => $isDefaultValueAvailable,
-                'defaultValue' => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
-            ];
-        }
-        $this->cache->save(serialize($params), $cacheId, [WebapiCache::CACHE_TAG]);
-        return $params;
     }
 
     /**
