@@ -111,7 +111,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->frontendAttrMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Address\Attribute\Frontend',
+            'Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend',
             [],
             [],
             '',

@@ -18,20 +18,20 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productRelation;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote
+     * @var \Magento\Quote\Model\ResourceModel\Quote
      */
     protected $quoteResource;
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
-     * @param \Magento\Quote\Model\Resource\Quote $quoteResource
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation,
-        \Magento\Quote\Model\Resource\Quote $quoteResource,
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);

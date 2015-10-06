@@ -123,4 +123,6 @@ return [
     ['Magento\Paypal\Model\Resource', 'Magento\Paypal\Model\ResourceModel'],
     ['Magento\Persistent\Model\Resource', 'Magento\Persistent\Model\ResourceModel'],
     ['Magento\ProductAlert\Model\Resource', 'Magento\ProductAlert\Model\ResourceModel'],
+    ['Magento\Quote\Model\Resource', 'Magento\Quote\Model\ResourceModel'],
+    ['Magento\Quote\Test\Unit\Model\Resource', 'Magento\Quote\Test\Unit\Model\ResourceModel'],
 ];

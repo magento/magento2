@@ -5,7 +5,7 @@
  */
 namespace Magento\Reports\Model\Resource\Quote;
 
-class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
+class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
 {
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer

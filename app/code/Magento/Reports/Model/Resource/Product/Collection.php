@@ -57,7 +57,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_productType;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Collection
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
      */
     protected $quoteResource;
 
@@ -84,7 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteResource
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -112,7 +112,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Product $product,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\Quote\Model\Resource\Quote\Collection $quoteResource,
+        \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
