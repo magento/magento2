@@ -166,13 +166,11 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     ) {
         if (isset($this->cartItemProcessors['custom_options'])) {
             $buyRequestUpdate = $this->cartItemProcessors['custom_options']->convertToBuyRequest($cartItem);
+            if (!$buyRequestUpdate) {
+                return $params;
+            }
             if ($params instanceof \Magento\Framework\DataObject) {
-                $buyRequestUpdate->setData(
-                    array_merge(
-                        $params->getData(),
-                        $buyRequestUpdate->getData()
-                    )
-                );
+                $buyRequestUpdate->addData($params->getData());
             } else if (is_numeric($params)) {
                 $buyRequestUpdate->setData('qty', $params);
             }
