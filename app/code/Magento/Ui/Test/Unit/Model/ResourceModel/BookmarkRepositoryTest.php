@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Ui\Test\Unit\Model\Resource;
+namespace Magento\Ui\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\Api\SortOrder;
-use Magento\Ui\Model\Resource\BookmarkRepository;
+use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 
 /**
  * Class BookmarkRepositoryTest
@@ -25,7 +25,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $bookmarkMock;
 
     /**
-     * @var \Magento\Ui\Model\Resource\Bookmark|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Model\ResourceModel\Bookmark|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $bookmarkResourceMock;
 
@@ -50,7 +50,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $bookmarkFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->bookmarkMock);
-        $this->bookmarkResourceMock = $this->getMockBuilder('Magento\Ui\Model\Resource\Bookmark')
+        $this->bookmarkResourceMock = $this->getMockBuilder('Magento\Ui\Model\ResourceModel\Bookmark')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'save', 'delete'])
             ->getMock();
@@ -200,7 +200,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterGroup->expects($this->once())
             ->method('getFilters')
             ->willReturn([$fieldAsc, $fieldDesc]);
-        $collection = $this->getMockBuilder('Magento\Ui\Model\Resource\Bookmark\Collection')
+        $collection = $this->getMockBuilder('Magento\Ui\Model\ResourceModel\Bookmark\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())

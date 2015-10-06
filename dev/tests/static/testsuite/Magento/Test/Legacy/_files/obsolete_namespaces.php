@@ -148,4 +148,6 @@ return [
     ['Magento\Tax\Test\Unit\Model\Resource', 'Magento\Tax\Test\Unit\Model\ResourceModel'],
     ['Magento\Theme\Model\Resource', 'Magento\Theme\Model\ResourceModel'],
     ['Magento\Translation\Model\Resource', 'Magento\Translation\Model\ResourceModel'],
+    ['Magento\Ui\Model\Resource', 'Magento\Ui\Model\ResourceModel'],
+    ['Magento\Ui\Test\Unit\Model\Resource', 'Magento\Ui\Test\Unit\Model\ResourceModel'],
 ];
