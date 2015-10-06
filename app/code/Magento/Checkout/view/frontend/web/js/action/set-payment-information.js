@@ -45,10 +45,6 @@ define(
 
             return storage.post(
                 serviceUrl, JSON.stringify(payload)
-            ).done(
-                function () {
-                    getTotalsAction([]);
-                }
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
