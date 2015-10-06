@@ -6,7 +6,6 @@
  */
 -->
 <mapping strict="0">
-    <wrapper>shippingAddress</wrapper>
     <fields>
         <email>
             <selector>#customer-email</selector>
@@ -15,7 +14,7 @@
         <lastname />
         <company />
         <street>
-            <selector>[name='shippingAddress[street][0]']</selector>
+            <selector>[name='street.0']</selector>
         </street>
         <city />
         <region_id>
@@ -26,7 +25,7 @@
         </country_id>
         <telephone />
         <postcode>
-            <selector>[name='shippingAddress[postcode]']</selector>
+            <selector>[name='postcode']</selector>
         </postcode>
     </fields>
 </mapping>
