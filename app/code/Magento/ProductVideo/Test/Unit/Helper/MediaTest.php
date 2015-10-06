@@ -21,7 +21,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $currentThemeMock;
 
     /**
-     * @var \Magento\Swatches\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var \Magento\ProductVideo\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $mediaHelperObject;
 
@@ -36,7 +36,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->viewConfigMock = $this->getMock(
             '\Magento\Framework\View\Config',
-            ['getVideoAttributeValue', 'getViewConfig'],
+            ['getMediaAttributes', 'getViewConfig'],
             [],
             '',
             false
@@ -123,7 +123,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlayIfBaseAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
         $this->mediaHelperObject->getPlayIfBaseAttribute();
     }
 
@@ -132,7 +132,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetShowRelatedAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
         $this->mediaHelperObject->getShowRelatedAttribute();
     }
 
@@ -141,7 +141,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVideoAutoRestartAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
         $this->mediaHelperObject->getVideoAutoRestartAttribute();
     }
 }

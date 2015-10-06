@@ -86,7 +86,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * @param null $scope
      * @return array|\Magento\Framework\Config\FileIterator
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function read($scope = null)
     {
