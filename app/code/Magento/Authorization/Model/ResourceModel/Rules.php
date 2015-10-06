@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Authorization\Model\Resource;
+namespace Magento\Authorization\Model\ResourceModel;
 
 /**
  * Admin rule resource model

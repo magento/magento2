@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Resource\Role;
+namespace Magento\Authorization\Model\ResourceModel\Role;
 
 use Magento\Authorization\Model\UserContextInterface;
 
@@ -14,14 +14,14 @@ use Magento\Authorization\Model\UserContextInterface;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Authorization\Model\Resource\Role\Collection
+     * @var \Magento\Authorization\Model\ResourceModel\Role\Collection
      */
     protected $_collection;
 
     protected function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Authorization\Model\Resource\Role\Collection'
+            'Magento\Authorization\Model\ResourceModel\Role\Collection'
         );
     }
 

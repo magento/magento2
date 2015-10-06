@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Resource\Role\Grid;
+namespace Magento\Authorization\Model\ResourceModel\Role\Grid;
 
 /**
  * @magentoAppArea adminhtml
@@ -11,14 +11,14 @@ namespace Magento\Authorization\Model\Resource\Role\Grid;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Authorization\Model\Resource\Role\Grid\Collection
+     * @var \Magento\Authorization\Model\ResourceModel\Role\Grid\Collection
      */
     private $_collection;
 
     protected function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Authorization\Model\Resource\Role\Grid\Collection'
+            'Magento\Authorization\Model\ResourceModel\Role\Grid\Collection'
         );
     }
 
