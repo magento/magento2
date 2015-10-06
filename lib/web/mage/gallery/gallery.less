@@ -509,6 +509,7 @@
 }
 
 .fotorama__thumb {
+  background-color: @color-gray92;
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -1206,6 +1207,16 @@
 
 .magnify-fullimage {
     display: none;
+}
+
+.gallery-placeholder {
+    .loading-mask {
+        padding: 0 0 50%;
+        position: absolute;
+    }
+    .loader img {
+      position: absolute;
+    }
 }
 
 body.fotorama__fullscreen {
