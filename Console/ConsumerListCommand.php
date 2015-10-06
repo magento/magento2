@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConsumerListCommand extends Command
 {
     const COMMAND_QUEUE_CONSUMERS_LIST = 'queue:consumers:list';
+
     /**
      * @var QueueConfig
      */
@@ -24,7 +25,7 @@ class ConsumerListCommand extends Command
 
     /**
      * @param QueueConfig $queueConfig
-     * @param $name
+     * @param string|null $name
      */
     public function __construct(QueueConfig $queueConfig, $name = null)
     {
