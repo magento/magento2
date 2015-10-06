@@ -245,7 +245,7 @@ class Calculator implements BundleCalculatorInterface
      * Get bundle options
      *
      * @param Product $saleableItem
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     protected function getBundleOptions(Product $saleableItem)
     {

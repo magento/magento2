@@ -94,4 +94,5 @@ return [
     ['Magento\Authorizenet\Model\Resource', 'Magento\Authorizenet\Model\ResourceModel'],
     ['Magento\Backend\Model\Resource', 'Magento\Backend\Model\ResourceModel'],
     ['Magento\Backup\Model\Resource', 'Magento\Backup\Model\ResourceModel'],
+    ['Magento\Bundle\Model\Resource', 'Magento\Bundle\Model\ResourceModel'],
 ];

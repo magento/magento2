@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Bundle\Model\Resource\Indexer;
+namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 /**
  * Bundle Stock Status Indexer Resource Model

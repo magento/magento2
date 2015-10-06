@@ -70,7 +70,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * Get Options with attached Selections collection
      *
-     * @return array|\Magento\Bundle\Model\Resource\Option\Collection
+     * @return array|\Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions()
     {
@@ -83,7 +83,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
         $bundleOptionsIds = $optionsQuoteItemOption ? unserialize($optionsQuoteItemOption->getValue()) : [];
         if ($bundleOptionsIds) {
-            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $bundleProduct);
             // get and add bundle selections collection
             $selectionsQuoteItemOption = $this->item->getOptionByCode('bundle_selection_ids');

@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
-use Magento\Bundle\Model\Resource\Option\Collection;
-use Magento\Bundle\Model\Resource\Selection\Collection as SelectionCollection;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Bundle\Model\Resource\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $bundleFactory;
     /**
@@ -30,7 +30,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $bundleCollection;
 
@@ -74,7 +74,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->bundleCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\CollectionFactory')
+        $this->bundleCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -108,7 +108,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\Resource\BundleFactory')
+        $this->bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\BundleFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -156,7 +156,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,7 +184,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -290,7 +290,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -347,7 +347,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -530,7 +530,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -578,7 +578,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -749,7 +749,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -797,7 +797,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -977,7 +977,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1049,7 +1049,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1082,7 +1082,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1177,7 +1177,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1210,7 +1210,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getItemById'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1346,7 +1346,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1473,7 +1473,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $optionCollectionMock = $this->getMock(
-            'Magento\Bundle\Model\Resource\Option\Collection',
+            'Magento\Bundle\Model\ResourceModel\Option\Collection',
             [],
             [],
             '',
@@ -1788,7 +1788,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function getSelectionsByIdsMock($selectionIds, $productMock, $getSelectionsIndex, $getSelectionsIdsIndex)
     {
-        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1890,7 +1890,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(
                 [
                     'addAttributeToSelect',
@@ -2001,7 +2001,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(
                 [
                     'addAttributeToSelect',
@@ -2088,7 +2088,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $usedOptionsMock = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $usedOptionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getResourceCollection'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2170,7 +2170,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSalableWithoutOptions()
     {
-        $optionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -2398,7 +2398,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getSelectionCollectionMock(array $selectedOptions)
     {
-        $selectionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->setMethods(['getItems', 'getIterator'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2427,7 +2427,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             $ids[] = $option->getId();
         }
 
-        $optionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['getItems', 'getAllIds'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2539,7 +2539,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $resource = $this->getMockBuilder('Magento\Bundle\Model\Resource\Bundle')
+        $resource = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Bundle')
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleFactory->expects($this->once())
@@ -2564,7 +2564,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())
             ->method('getBundleSelectionsData')
             ->willReturn($selections);
-        $option = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $option = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['setData', 'setParentId', 'setStoreId', 'isDeleted', 'save', 'getOptionId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2664,7 +2664,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -2746,7 +2746,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getRequired'])
             ->getMock();
-        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -2792,11 +2792,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'hasData', 'getData', 'setData', 'getId', 'getStoreId'])
             ->getMock();
-        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
             ->getMock();
-        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Selection\Collection')
+        $selectionCollection = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

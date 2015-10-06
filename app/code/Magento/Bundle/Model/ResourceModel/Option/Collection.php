@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Bundle\Model\Resource\Option;
+namespace Magento\Bundle\Model\ResourceModel\Option;
 
 /**
  * Bundle Options Resource Collection
@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\Option', 'Magento\Bundle\Model\Resource\Option');
+        $this->_init('Magento\Bundle\Model\Option', 'Magento\Bundle\Model\ResourceModel\Option');
     }
 
     /**
@@ -98,7 +98,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * stripBefore - indicates to reload
      * appendAll - indicates do we need to filter by saleable and required custom options
      *
-     * @param \Magento\Bundle\Model\Resource\Selection\Collection $selectionsCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selectionsCollection
      * @param bool $stripBefore
      * @param bool $appendAll
      * @return \Magento\Framework\DataObject[]
