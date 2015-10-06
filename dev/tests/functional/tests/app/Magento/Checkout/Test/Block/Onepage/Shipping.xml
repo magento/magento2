@@ -14,7 +14,7 @@
         <lastname />
         <company />
         <street>
-            <selector>[name='street.0']</selector>
+            <selector>[name='shippingAddress.street.0']</selector>
         </street>
         <city />
         <region_id>
@@ -25,7 +25,7 @@
         </country_id>
         <telephone />
         <postcode>
-            <selector>[name='postcode']</selector>
+            <selector>[name='shippingAddress.postcode']</selector>
         </postcode>
     </fields>
 </mapping>
