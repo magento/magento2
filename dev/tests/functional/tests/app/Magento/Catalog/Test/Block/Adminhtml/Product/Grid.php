@@ -63,6 +63,13 @@ class Grid extends DataGrid
     ];
 
     /**
+     * Product base image.
+     *
+     * @var string
+     */
+    protected $baseImage = '.data-grid-thumbnail-cell img';
+
+    /**
      * Update attributes for selected items.
      *
      * @param array $items [optional]
@@ -71,5 +78,16 @@ class Grid extends DataGrid
     public function updateAttributes(array $items = [])
     {
         $this->massaction($items, 'Update attributes');
+    }
+
+    /**
+     * Get base image source link.
+     *
+     * @return string
+     */
+    public function getBaseImageSource()
+    {
+        $baseImage = $this->_rootElement->find($this->baseImage);
+        return $baseImage->isVisible() ? $baseImage->getAttribute('src') : '';
     }
 }
