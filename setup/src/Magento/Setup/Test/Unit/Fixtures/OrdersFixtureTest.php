@@ -47,7 +47,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Resource\Order\Item',
             'Magento\Sales\Model\Resource\Order\Payment',
             'Magento\Sales\Model\Resource\Order\Status\History',
-            '\Magento\Eav\Model\Resource\Entity\Store'
+            '\Magento\Eav\Model\ResourceModel\Entity\Store'
         ];
         $mockObjects = [];
 

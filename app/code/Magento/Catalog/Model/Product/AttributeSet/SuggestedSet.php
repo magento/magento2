@@ -13,7 +13,7 @@ class SuggestedSet
     /**
      * Set collection factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $attributeSetCollectionFactory;
 
@@ -31,12 +31,12 @@ class SuggestedSet
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product $product,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
     ) {
         $this->attributeSetCollectionFactory = $attributeSetCollectionFactory;
@@ -53,7 +53,7 @@ class SuggestedSet
     public function getSuggestedSets($labelPart)
     {
         $labelPart = $this->resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
         $collection = $this->attributeSetCollectionFactory->create();
         $collection->setEntityTypeFilter(
             $this->product->getTypeId()
@@ -68,7 +68,7 @@ class SuggestedSet
             'label'
         )->setOrder(
             'attribute_set_name',
-            \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
         );
         return $collection->getData();
     }

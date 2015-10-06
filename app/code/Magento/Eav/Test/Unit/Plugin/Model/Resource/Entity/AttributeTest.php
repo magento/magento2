@@ -18,14 +18,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheState;
 
-    /** @var \Magento\Eav\Model\Resource\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $subject;
 
     protected function setUp()
     {
         $this->cache = $this->getMock('Magento\Framework\App\CacheInterface');
         $this->cacheState = $this->getMock('Magento\Framework\App\Cache\StateInterface');
-        $this->subject = $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute', [], [], '', false);
+        $this->subject = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute', [], [], '', false);
     }
 
     public function testGetStoreLabelsByAttributeIdOnCacheDisabled()

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Attribute;
 /**
  * Catalog product EAV additional attribute resource collection
  */
-class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
     /**
      * Entity factory1
@@ -48,7 +48,7 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Eav\Attribute', 'Magento\Eav\Model\Resource\Entity\Attribute');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Eav\Attribute', 'Magento\Eav\Model\ResourceModel\Entity\Attribute');
     }
 
     /**

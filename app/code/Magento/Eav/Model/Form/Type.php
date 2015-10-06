@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Form;
 /**
  * Eav Form Type Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Type getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Form\Type getResource()
  * @method string getCode()
  * @method \Magento\Eav\Model\Form\Type setCode(string $value)
  * @method string getLabel()
@@ -73,13 +73,13 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Type');
+        $this->_init('Magento\Eav\Model\ResourceModel\Form\Type');
     }
 
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Type
+     * @return \Magento\Eav\Model\ResourceModel\Form\Type
      * @codeCoverageIgnore
      */
     protected function _getResource()
@@ -90,7 +90,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource collection instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Type\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Type\Collection
      * @codeCoverageIgnore
      */
     public function getCollection()

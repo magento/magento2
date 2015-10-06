@@ -92,14 +92,14 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Set collection factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setCollectionFactory;
 
     /**
      * Group collection factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
      */
     protected $_groupCollectionFactory;
 
@@ -122,14 +122,14 @@ class Config extends \Magento\Eav\Model\Config
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
      * @param \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      *
@@ -138,14 +138,14 @@ class Config extends \Magento\Eav\Model\Config
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
-        \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,
         \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig
     ) {

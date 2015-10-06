@@ -32,14 +32,14 @@ class Attribute
     }
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $subject
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $subject
      * @param callable $proceed
      * @param int $attributeId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetStoreLabelsByAttributeId(
-        \Magento\Eav\Model\Resource\Entity\Attribute $subject,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $subject,
         \Closure $proceed,
         $attributeId
     ) {

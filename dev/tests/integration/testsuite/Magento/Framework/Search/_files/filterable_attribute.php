@@ -32,9 +32,9 @@ $selectAttribute->save();
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $selectAttribute->getId());
 
-/** @var $selectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+/** @var $selectOptions \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
 );
 $selectOptions->setAttributeFilter($selectAttribute->getId());
 
@@ -59,9 +59,9 @@ $multiselectAttribute->save();
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $multiselectAttribute->getId());
 
-/** @var $multiselectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+/** @var $multiselectOptions \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $multiselectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
 );
 $multiselectOptions->setAttributeFilter($multiselectAttribute->getId());
 

@@ -36,7 +36,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
@@ -53,7 +53,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,

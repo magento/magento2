@@ -25,7 +25,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Array of same attributes for selected products
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected $_attributes;
 
@@ -160,7 +160,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Return collection of same attributes for selected products without unique
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     public function getAttributes()
     {

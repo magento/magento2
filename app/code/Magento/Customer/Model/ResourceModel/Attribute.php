@@ -11,7 +11,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
-class Attribute extends \Magento\Eav\Model\Resource\Attribute
+class Attribute extends \Magento\Eav\Model\ResourceModel\Attribute
 {
     /**
      * Get EAV website table

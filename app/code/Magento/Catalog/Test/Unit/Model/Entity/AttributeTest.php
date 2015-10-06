@@ -57,7 +57,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helperMock;
 
@@ -151,7 +151,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMock();
-        $this->helperMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Helper')
+        $this->helperMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Helper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->universalFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\UniversalFactory')

@@ -42,7 +42,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $validatorFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
      */
     protected $groupCollectionFactory;
 
@@ -53,7 +53,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -67,7 +67,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Catalog\Helper\Product $productHelper
     ) {

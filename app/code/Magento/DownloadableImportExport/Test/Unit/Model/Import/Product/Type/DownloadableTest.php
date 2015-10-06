@@ -25,12 +25,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $select;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFacMock;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColMock;
 
@@ -101,14 +101,14 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         //constructor arguments:
         // 1. $attrSetColFac
         $this->attrSetColFacMock = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->attrSetColMock = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',

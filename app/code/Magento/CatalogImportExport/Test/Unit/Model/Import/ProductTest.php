@@ -92,7 +92,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected $_resourceFactory;
 
     // @codingStandardsIgnoreStart
-    /** @var  \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_setColFactory;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject */
@@ -221,7 +221,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             false
         );
         $this->_setColFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
@@ -428,7 +428,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->method('getId')
             ->willReturn('2');
         $attributeSetCol = [$attributeSetOne, $attributeSetTwo];
-        $collection = $this->getMockBuilder('\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection')
+        $collection = $this->getMockBuilder('\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())

@@ -24,7 +24,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
@@ -39,7 +39,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,

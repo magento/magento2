@@ -19,12 +19,12 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $configurable;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollection;
 
@@ -80,14 +80,14 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         parent::setUp();
 
         $this->setCollectionFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->setCollection = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',

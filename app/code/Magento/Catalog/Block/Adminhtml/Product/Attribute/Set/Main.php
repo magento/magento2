@@ -220,7 +220,7 @@ class Main extends \Magento\Backend\Block\Template
         $items = [];
         $setId = $this->_getSetId();
 
-        /* @var $groups \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection */
+        /* @var $groups \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection */
         $groups = $this->_groupFactory->create()->getResourceCollection()->setAttributeSetFilter(
             $setId
         )->setSortOrder()->load();

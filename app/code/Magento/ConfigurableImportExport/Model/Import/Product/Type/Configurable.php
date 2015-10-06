@@ -184,7 +184,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
      * @param array $params
@@ -193,7 +193,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\Resource $resource,
         array $params,

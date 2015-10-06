@@ -95,7 +95,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -121,7 +121,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,

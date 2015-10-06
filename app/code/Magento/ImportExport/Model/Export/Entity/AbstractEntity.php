@@ -370,10 +370,10 @@ abstract class AbstractEntity
     /**
      * Clean up attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $collection->load();
 
@@ -388,7 +388,7 @@ abstract class AbstractEntity
     /**
      * Entity attributes collection getter.
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     abstract public function getAttributeCollection();
 

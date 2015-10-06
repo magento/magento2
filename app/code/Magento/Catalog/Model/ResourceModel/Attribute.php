@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Attribute\LockValidatorInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
+class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
     /**
      * Eav config
@@ -29,7 +29,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
      * @param string $connectionName
@@ -37,7 +37,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
+        \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
         $connectionName = null

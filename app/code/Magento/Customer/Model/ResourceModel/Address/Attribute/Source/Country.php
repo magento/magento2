@@ -19,13 +19,13 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_countriesFactory;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
     ) {
         $this->_countriesFactory = $countriesFactory;

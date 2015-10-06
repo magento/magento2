@@ -56,9 +56,9 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->_eavIndexerProcessor->reindexAll();
 
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $options **/
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $options **/
         $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
         );
         $options->setAttributeFilter($attr->getId())->load();
         $optionIds = $options->getAllIds();

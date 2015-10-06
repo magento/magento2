@@ -467,7 +467,7 @@
     <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink" />
     <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="\Magento\Catalog\Model\Product\Option\Value" />
-    <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\Resource\Entity\Attribute\Collection">
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="transactionWrapper" type="\Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>

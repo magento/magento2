@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testLoadAttributeSets()
     {
         $setCollectionFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
@@ -36,7 +36,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $setItem->expects($this->once())->method('getEntityTypeId')->will($this->returnValue(1));
         $setItem->expects($this->once())->method('getAttributeSetName')->will($this->returnValue('name'));
         $setCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['load'],
             [],
             '',
@@ -74,7 +74,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testLoadAttributeGroups()
     {
         $groupCollectionFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory',
             ['create'],
             [],
             '',
@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $setItem->expects($this->once())->method('getAttributeSetId')->will($this->returnValue(1));
         $setItem->expects($this->once())->method('getAttributeGroupName')->will($this->returnValue('name'));
         $groupCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection',
             ['load'],
             [],
             '',

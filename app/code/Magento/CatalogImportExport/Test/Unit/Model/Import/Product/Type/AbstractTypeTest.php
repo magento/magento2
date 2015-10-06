@@ -61,14 +61,14 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attrSetColFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $attrSetCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             [],
             [],
             '',
@@ -89,7 +89,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attrCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection',
             [
                 'addFieldToFilter',
             ],

@@ -18,14 +18,14 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_storeCollectionFactory;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
     ) {
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);

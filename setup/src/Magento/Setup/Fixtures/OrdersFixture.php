@@ -86,7 +86,7 @@ class OrdersFixture extends Fixture
         );
         $eavEntityStoreTableName = $this->getTableName(
             'eav_entity_store',
-            '\Magento\Eav\Model\Resource\Entity\Store'
+            '\Magento\Eav\Model\ResourceModel\Entity\Store'
         );
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');

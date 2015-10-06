@@ -34,18 +34,18 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Eav entity attribute
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $_eavEntityAttribute;
 
     /**
      * Construct
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute
      * @param array $data
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute,
         array $data = []
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;

@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Form;
 /**
  * Eav Form Fieldset Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Fieldset getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Form\Fieldset getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Fieldset setTypeId(int $value)
  * @method string getCode()
@@ -61,13 +61,13 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Fieldset');
+        $this->_init('Magento\Eav\Model\ResourceModel\Form\Fieldset');
     }
 
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Fieldset
+     * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset
      * @codeCoverageIgnore
      */
     protected function _getResource()
@@ -78,7 +78,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource collection instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Fieldset\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset\Collection
      * @codeCoverageIgnore
      */
     public function getCollection()

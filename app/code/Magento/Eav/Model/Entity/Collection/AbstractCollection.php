@@ -116,7 +116,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_eavEntityFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -133,7 +133,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
      * @codeCoverageIgnore
@@ -147,7 +147,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {

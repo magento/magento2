@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 /**
  * Eav Mysql resource helper model
  */
-class Helper extends \Magento\Eav\Model\Resource\Helper
+class Helper extends \Magento\Eav\Model\ResourceModel\Helper
 {
     /**
      * @param \Magento\Framework\App\Resource $resource
