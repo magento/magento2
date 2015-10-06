@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Payment\Test\Unit\Model\Resource\Grid;
+namespace Magento\Payment\Test\Unit\Model\ResourceModel\Grid;
 
 class GroupListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Resource\Grid\GroupsList
+     * @var \Magento\Payment\Model\ResourceModel\Grid\GroupsList
      */
     protected $groupArrayModel;
 
@@ -21,7 +21,7 @@ class GroupListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->groupArrayModel = new \Magento\Payment\Model\Resource\Grid\GroupList($this->helperMock);
+        $this->groupArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\GroupList($this->helperMock);
     }
 
     public function testToOptionArray()

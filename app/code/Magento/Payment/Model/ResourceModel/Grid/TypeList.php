@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Payment\Model\Resource\Grid;
+namespace Magento\Payment\Model\ResourceModel\Grid;
 
 /**
  * Sales transaction payment method types option array

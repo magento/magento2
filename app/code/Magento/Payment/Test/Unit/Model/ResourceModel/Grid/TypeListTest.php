@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Payment\Test\Unit\Model\Resource\Grid;
+namespace Magento\Payment\Test\Unit\Model\ResourceModel\Grid;
 
 class TypeListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Resource\Grid\TypeList
+     * @var \Magento\Payment\Model\ResourceModel\Grid\TypeList
      */
     protected $typesArrayModel;
 
@@ -21,7 +21,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->typesArrayModel = new \Magento\Payment\Model\Resource\Grid\TypeList($this->helperMock);
+        $this->typesArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\TypeList($this->helperMock);
     }
 
     public function testToOptionArray()
