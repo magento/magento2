@@ -95,8 +95,8 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
                 'value' => 'Magento\CustomerSegment\Model\ResourceModel\Segment\Report\Detail\Collection'
             ],
             [$typeAttr => 'options', 'model' => 'Magento\Solr\Model\Adminhtml\Search\Grid\Options'],
-            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\ActionsGroup'],
-            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\Actions'],
+            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\ResourceModel\Grid\ActionsGroup'],
+            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\ResourceModel\Grid\Actions'],
         ];
         $isIgnoredArgument = in_array($argumentData, $ignoredArguments, true);
 
