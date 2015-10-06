@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Unit\Model\Resource\Product\Type;
+namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
     protected $configurable;
 
@@ -40,7 +40,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
                 'resource' => $this->resource,
                 'catalogProductRelation' => $this->relation
@@ -84,7 +84,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigurableOptions()
     {
         $configurable = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
                 'getTable',
                 'getConnection',
@@ -152,7 +152,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $superAttribute = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute',
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute',
             [
                 'getBackendTable',
                 'getAttributeId',

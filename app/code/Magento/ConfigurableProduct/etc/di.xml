@@ -45,7 +45,7 @@
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">
-                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Resource\Setup\PropertyMapper</item>
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\ResourceModel\Setup\PropertyMapper</item>
             </argument>
         </arguments>
     </type>

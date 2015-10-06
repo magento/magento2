@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product;
+namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -29,7 +29,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Init select
-     * @return $this|\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection
+     * @return $this|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
     protected function _initSelect()
     {
