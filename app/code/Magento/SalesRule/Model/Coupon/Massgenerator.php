@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Model\Coupon;
 /**
  * SalesRule Mass Coupon Generator
  *
- * @method \Magento\SalesRule\Model\Resource\Coupon getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -94,7 +94,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\SalesRule\Model\Resource\Coupon');
+        $this->_init('Magento\SalesRule\Model\ResourceModel\Coupon');
     }
 
     /**

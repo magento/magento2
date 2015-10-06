@@ -19,7 +19,7 @@
                 <item name="shipping" xsi:type="string">Magento\Sales\Model\ResourceModel\Report\Shipping</item>
                 <item name="invoiced" xsi:type="string">Magento\Sales\Model\ResourceModel\Report\Invoiced</item>
                 <item name="refunded" xsi:type="string">Magento\Sales\Model\ResourceModel\Report\Refunded</item>
-                <item name="coupons" xsi:type="string">Magento\SalesRule\Model\Resource\Report\Rule</item>
+                <item name="coupons" xsi:type="string">Magento\SalesRule\Model\ResourceModel\Report\Rule</item>
                 <item name="bestsellers" xsi:type="string">Magento\Sales\Model\ResourceModel\Report\Bestsellers</item>
                 <item name="viewed" xsi:type="string">Magento\Reports\Model\ResourceModel\Report\Product\Viewed</item>
             </argument>

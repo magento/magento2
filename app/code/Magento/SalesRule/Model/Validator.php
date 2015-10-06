@@ -29,7 +29,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * Rule source collection
      *
-     * @var \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection
      */
     protected $_rules;
 
@@ -63,7 +63,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -95,7 +95,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier
@@ -110,7 +110,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
+        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\SalesRule\Model\Utility $utility,
         \Magento\SalesRule\Model\RulesApplier $rulesApplier,
@@ -162,7 +162,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * Get rules collection for current object state
      *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
      */
     protected function _getRules()
     {
