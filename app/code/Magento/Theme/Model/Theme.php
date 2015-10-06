@@ -6,7 +6,7 @@
 namespace Magento\Theme\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
 /**
  * Theme model class
@@ -93,8 +93,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory
      * @param \Magento\Framework\View\Design\Theme\Validator $validator
      * @param \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory
-     * @param \Magento\Theme\Model\Resource\Theme $resource
-     * @param \Magento\Theme\Model\Resource\Theme\Collection $resourceCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme $resource
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -107,7 +107,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
         \Magento\Framework\View\Design\Theme\Validator $validator,
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
-        \Magento\Theme\Model\Resource\Theme $resource = null,
+        \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
         array $data = []
     ) {
@@ -127,7 +127,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Resource\Theme');
+        $this->_init('Magento\Theme\Model\ResourceModel\Theme');
     }
 
     /**

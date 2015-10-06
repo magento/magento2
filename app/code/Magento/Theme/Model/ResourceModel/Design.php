@@ -5,7 +5,7 @@
  */
 
 // @codingStandardsIgnoreFile
-namespace Magento\Theme\Model\Resource;
+namespace Magento\Theme\Model\ResourceModel;
 
 use Magento\Framework\Stdlib\DateTime;
 
