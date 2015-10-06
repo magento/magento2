@@ -3676,12 +3676,12 @@ return [
         'Magento\Authorizenet\Model\Debug'
     ],
     [
-        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug\Collection',
-        'Magento\Authorizenet\Model\Resource\Debug\Collection'
+        'Magento\Authorizenet\Model\ResourceModel\Authorizenet\Debug\Collection',
+        'Magento\Authorizenet\Model\ResourceModel\Debug\Collection'
     ],
     [
-        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug',
-        'Magento\Authorizenet\Model\Resource\Debug'
+        'Magento\Authorizenet\Model\ResourceModel\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\ResourceModel\Debug'
     ],
     ['Magento\GoogleShopping\Block\SiteVerification'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items\Renderer\Id'],

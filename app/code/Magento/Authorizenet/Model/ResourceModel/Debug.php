@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorizenet\Model\Resource;
+namespace Magento\Authorizenet\Model\ResourceModel;
 
 /**
  * Resource Authorize.net debug model
