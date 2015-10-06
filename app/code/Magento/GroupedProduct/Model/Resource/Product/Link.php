@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Model\Resource\Product;
 
-class Link extends \Magento\Catalog\Model\Resource\Product\Link
+class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
     const LINK_TYPE_GROUPED = 3;
 

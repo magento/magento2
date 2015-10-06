@@ -65,7 +65,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
@@ -85,7 +85,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
@@ -96,7 +96,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = []
@@ -132,7 +132,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttributeObject()
     {
@@ -168,7 +168,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
                 $this->_isUsedForRuleProperty
             )
@@ -332,7 +332,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Collect validated attributes
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)

@@ -78,7 +78,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('testMainTableName'));
 
         $catalogConfFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\ConfigFactory',
+            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
             ['create'],
             [],
             '',
@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $catalogConf = $this->getMock(
-            'Magento\Catalog\Model\Resource\Config',
+            'Magento\Catalog\Model\ResourceModel\Config',
             ['getEntityTypeId'],
             [],
             '',

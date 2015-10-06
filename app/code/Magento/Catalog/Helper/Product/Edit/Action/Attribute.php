@@ -18,7 +18,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Selected products for mass-update
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $_products;
 
@@ -37,7 +37,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     protected $_excludedAttributes = ['url_key'];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productsFactory;
 
@@ -66,7 +66,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -80,7 +80,7 @@ class Attribute extends \Magento\Backend\Helper\Data
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Backend\Model\Session $session,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_eavConfig = $eavConfig;
@@ -94,7 +94,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return product collection with selected product filter
      * Product collection didn't load
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProducts()
     {

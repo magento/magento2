@@ -23,7 +23,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected $rowCustomizerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productResourceCollection;
 
@@ -62,7 +62,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '\Magento\BundleImportExport\Model\Export\RowCustomizer'
         );
         $this->productResourceCollection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
             ['addAttributeToFilter', 'getIterator'],
             [],
             '',

@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products

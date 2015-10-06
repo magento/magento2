@@ -55,7 +55,7 @@ class Full
     protected $productEmulators = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $productAttributeCollectionFactory;
 
@@ -157,7 +157,7 @@ class Full
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
      * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
      * @param \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -177,7 +177,7 @@ class Full
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
         \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,

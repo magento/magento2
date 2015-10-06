@@ -34,20 +34,20 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $_categoryResource;
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Category $categoryResource
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Category $categoryResource,
+        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;

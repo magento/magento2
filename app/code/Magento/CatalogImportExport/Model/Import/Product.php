@@ -453,7 +453,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productTypeFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\LinkFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkFactory
      */
     protected $_linkFactory;
 
@@ -585,7 +585,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\OptionFactory $optionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param Product\Type\Factory $productTypeFactory
-     * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory
      * @param Proxy\ProductFactory $proxyProdFactory
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
@@ -625,7 +625,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\CatalogImportExport\Model\Import\Product\OptionFactory $optionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\CatalogImportExport\Model\Import\Product\Type\Factory $productTypeFactory,
-        \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory,
         \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,

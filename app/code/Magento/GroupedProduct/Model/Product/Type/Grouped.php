@@ -291,7 +291,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve collection of associated products
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     public function getAssociatedProductCollection($product)
     {

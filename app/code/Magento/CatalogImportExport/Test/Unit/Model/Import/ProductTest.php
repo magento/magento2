@@ -98,7 +98,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_productTypeFactory;
 
-    /** @var  \Magento\Catalog\Model\Resource\Product\LinkFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Product\LinkFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_linkFactory;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -235,7 +235,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             false
         );
         $this->_linkFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\LinkFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\LinkFactory',
             ['create'],
             [],
             '',

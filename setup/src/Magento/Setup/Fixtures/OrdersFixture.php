@@ -127,9 +127,9 @@ class OrdersFixture extends Fixture
                     /** @var $productCategory \Magento\Catalog\Model\Category */
                     $productCategory = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
 
-                    /** @var $simpleProductCollection \Magento\Catalog\Model\Resource\Product\Collection */
+                    /** @var $simpleProductCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                     $simpleProductCollection = $this->fixtureModel->getObjectManager()->create(
-                        'Magento\Catalog\Model\Resource\Product\Collection'
+                        'Magento\Catalog\Model\ResourceModel\Product\Collection'
                     );
 
                     $simpleProductCollection->addStoreFilter($storeId);

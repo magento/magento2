@@ -86,7 +86,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'getIsUnique',
         ];
         $this->attributeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             $attributeMethods,
             [],
             '',

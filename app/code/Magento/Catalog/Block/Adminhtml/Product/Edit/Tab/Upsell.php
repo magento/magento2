@@ -364,7 +364,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Apply `position` filter to cross-sell grid.
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
      * @return $this
      */

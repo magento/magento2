@@ -45,15 +45,15 @@ class Attribute
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $subject
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $subject,
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
     ) {
         if ($attribute->dataHasChangedFor('is_used_for_promo_rules') && !$attribute->getIsUsedForPromoRules()) {
             $this->checkCatalogRulesAvailability($attribute->getAttributeCode());
@@ -62,15 +62,15 @@ class Attribute
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $subject
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $subject,
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
     ) {
         if ($attribute->getIsUsedForPromoRules()) {
             $this->checkCatalogRulesAvailability($attribute->getAttributeCode());

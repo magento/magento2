@@ -7,7 +7,7 @@
  */
 namespace Magento\GroupedProduct\Model\Resource\Product\Indexer\Price;
 
-class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products

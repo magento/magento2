@@ -219,7 +219,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice',
             ['getMainTable'],
             [],
             '',

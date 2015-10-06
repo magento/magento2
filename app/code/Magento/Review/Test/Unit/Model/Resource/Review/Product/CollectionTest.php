@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->connectionMock->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
         $entity = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product',
+            'Magento\Catalog\Model\ResourceModel\Product',
             ['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable', 'getEntityType', 'getType'],
             [],
             '',

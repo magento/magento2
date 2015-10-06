@@ -5,7 +5,7 @@
  */
 
 require 'product_configurable.php';
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');

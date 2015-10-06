@@ -11,7 +11,7 @@ class Grouped implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      * Retrieve collection grouped link
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Collection
      */
     protected function _getGroupedLinkCollection(\Magento\Catalog\Model\Product $product)
     {

@@ -24,7 +24,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceProvider;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Catalog\Model\Resource\Eav\Attribute[]
+     * @var \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     protected $attributes;
     /**
@@ -205,7 +205,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $advancedFactory->expects($this->once())->method('create')->willReturn($this->resource);
 
-        $productCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\CollectionFactory')
+        $productCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -377,7 +377,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
      * @param null $storeLabel
      * @param null $frontendInput
      * @param null $backendType
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createAttribute(
         $backend,
@@ -388,7 +388,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $backendType = null
     ) {
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             [
                 'getAttributeCode',
                 'getStoreLabel',

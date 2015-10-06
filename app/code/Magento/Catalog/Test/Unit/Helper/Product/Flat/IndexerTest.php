@@ -66,7 +66,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $attributeConfigMock = $this->getMock('Magento\Catalog\Model\Attribute\Config', [], [], '', false);
 
         $resourceConfigFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\ConfigFactory',
+            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
             ['create'],
             [],
             '',

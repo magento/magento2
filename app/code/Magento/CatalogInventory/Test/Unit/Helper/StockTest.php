@@ -114,7 +114,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $stockStatusMock->expects($this->once())
             ->method('getStockStatus')
             ->willReturn($status);
-        $productCollectionMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Collection\AbstractCollection')
+        $productCollectionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection')
             ->disableOriginalConstructor()
             ->getMock();
         $productCollectionMock->expects($this->any())
@@ -151,7 +151,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddInStockFilterToCollection($configMock)
     {
-        $collectionMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Link\Product\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())
@@ -175,7 +175,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testAddIsInStockFilterToCollection()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $stockStatusMock = $this->getMockBuilder('Magento\CatalogInventory\Model\Resource\Stock\Status')

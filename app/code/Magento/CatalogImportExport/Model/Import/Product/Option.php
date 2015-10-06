@@ -210,7 +210,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Product options collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Option\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     protected $_optionCollection;
 
@@ -290,7 +290,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
      */
     protected $_optionColFactory;
 
@@ -310,7 +310,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Store\Model\StoreManagerInterface $_storeManager
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -327,7 +327,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Store\Model\StoreManagerInterface $_storeManager,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -541,7 +541,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ];
                     }
                 };
-                /** @var $collection \Magento\Catalog\Model\Resource\Product\Option\Collection */
+                /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Option\Collection */
                 $this->_optionCollection->reset();
                 $this->_optionCollection->getSelect()->join(
                     ['option_title' => $optionTitleTable],

@@ -82,7 +82,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->customerResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Customer\Model\Resource\Customer'
         );

@@ -10,7 +10,7 @@ namespace Magento\Downloadable\Model\Resource\Indexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products
@@ -45,7 +45,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
 
     /**
      * @param null|int|array $entityIds
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      */
     protected function reindex($entityIds = null)
     {

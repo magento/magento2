@@ -43,7 +43,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $attrSetColFac;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFac;
 
@@ -165,14 +165,14 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->method('setEntityTypeFilter')
             ->will($this->returnValue([]));
         $this->prodAttrColFac = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $attrCollection =
-            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->prodAttrColFac->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
         $this->params = [

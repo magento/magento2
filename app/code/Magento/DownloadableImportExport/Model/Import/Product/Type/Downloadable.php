@@ -245,7 +245,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Constructor
      *
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
@@ -254,7 +254,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\Resource $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,

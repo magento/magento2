@@ -113,12 +113,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_optionCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\ConfigFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
      */
     protected $_catalogConfFactory;
 
@@ -145,8 +145,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\App\Resource $coreResource
      * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\Framework\App\State $appState
@@ -167,8 +167,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\App\Resource $coreResource,
         \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
         \Magento\Framework\App\State $appState,
@@ -257,7 +257,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $productIds = [];
 
         $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
 
         if ($this->_productVisible) {

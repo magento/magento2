@@ -13,7 +13,7 @@ use Magento\Framework\App\Resource;
 class Links
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Link
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
      */
     protected $productLink;
 
@@ -40,12 +40,12 @@ class Links
     protected $attributes;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Link $productLink
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link $productLink
      * @param Resource $resource
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Link $productLink,
+        \Magento\Catalog\Model\ResourceModel\Product\Link $productLink,
         Resource $resource,
         \Magento\ImportExport\Model\ImportFactory $importFactory
     ) {

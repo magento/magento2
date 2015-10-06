@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false));
         $constructArgs['resource'] = $resourceMock;
-        $productResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        $productResourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $constructArgs['productResource'] = $productResourceMock;
         $orderResourceMock = $this->getMock('\Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
         $constructArgs['orderResource'] = $orderResourceMock;

@@ -75,7 +75,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attrColFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',

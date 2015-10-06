@@ -61,7 +61,7 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
         $attributeOption = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Option', [], [], '', false);
         $attributeOption->expects($this->once())->method('getData')->willReturn(['key' => 'value']);
 
-        $attribute = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attribute->expects($this->any())->method('getOptions')->willReturn([$attributeOption]);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn(10);
 

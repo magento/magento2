@@ -215,7 +215,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Get collection instance
      *
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
      */
     public function getResourceCollection()
     {

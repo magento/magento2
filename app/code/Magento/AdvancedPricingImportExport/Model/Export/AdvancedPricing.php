@@ -84,14 +84,14 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
@@ -106,14 +106,14 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
-        \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
+        \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory,
-        \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Resource;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use PHPUnit_Framework_TestCase;
 
 class AdvancedTest extends PHPUnit_Framework_TestCase
@@ -31,7 +31,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     public function testPrepareCondition($backendType, $value, $expected)
     {
         /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->setMethods(['getBackendType'])
             ->disableOriginalConstructor()
             ->getMock();

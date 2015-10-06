@@ -18,7 +18,7 @@ class Bestsellers extends AbstractReport
     const AGGREGATION_YEARLY = 'yearly';
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
@@ -43,7 +43,7 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\Resource\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
      * @param string $connectionName
@@ -56,7 +56,7 @@ class Bestsellers extends AbstractReport
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
-        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Sales\Model\Resource\Helper $salesResourceHelper,
         $connectionName = null,
         array $ignoredProductTypes = []

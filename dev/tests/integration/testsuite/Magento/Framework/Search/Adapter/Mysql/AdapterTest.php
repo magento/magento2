@@ -368,8 +368,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomFilterableAttribute()
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get('Magento\Catalog\Model\Resource\Eav\Attribute')
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager

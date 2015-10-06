@@ -24,7 +24,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected $setCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrCollectionFactory;
 
@@ -81,7 +81,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
         $this->setCollection->expects($this->any())->method('setEntityTypeFilter')->will($this->returnValue([]));
         $this->attrCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create', 'addFieldToFilter'],
             [],
             '',

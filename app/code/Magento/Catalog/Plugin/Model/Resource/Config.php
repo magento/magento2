@@ -33,11 +33,11 @@ class Config
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Config $config
+     * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param callable $proceed
      * @return array
      */
-    public function aroundGetAttributesUsedInListing(\Magento\Catalog\Model\Resource\Config $config, \Closure $proceed)
+    public function aroundGetAttributesUsedInListing(\Magento\Catalog\Model\ResourceModel\Config $config, \Closure $proceed)
     {
         $cacheId = self::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $config->getEntityTypeId() . '_' . $config->getStoreId();
         if ($this->isCacheEnabled && ($attributes = $this->cache->load($cacheId))) {
@@ -58,11 +58,11 @@ class Config
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Config $config
+     * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param callable $proceed
      * @return array
      */
-    public function aroundGetAttributesUsedForSortBy(\Magento\Catalog\Model\Resource\Config $config, \Closure $proceed)
+    public function aroundGetAttributesUsedForSortBy(\Magento\Catalog\Model\ResourceModel\Config $config, \Closure $proceed)
     {
         $cacheId = self::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID . $config->getEntityTypeId() . '_'
             . $config->getStoreId();

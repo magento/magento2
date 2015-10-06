@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
     protected $_itemOptionCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -46,7 +46,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param Option\CollectionFactory $itemOptionCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -59,7 +59,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Quote\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null

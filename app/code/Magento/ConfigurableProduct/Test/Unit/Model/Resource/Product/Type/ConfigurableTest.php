@@ -26,7 +26,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $relation;
 
@@ -36,7 +36,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->relation = $this->getMock('Magento\Catalog\Model\Resource\Product\Relation', [], [], '', false);
+        $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(

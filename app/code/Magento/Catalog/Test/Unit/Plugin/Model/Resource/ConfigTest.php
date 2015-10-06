@@ -19,14 +19,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheState;
 
-    /** @var \Magento\Catalog\Model\Resource\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $subject;
 
     protected function setUp()
     {
         $this->cache = $this->getMock('Magento\Framework\App\CacheInterface');
         $this->cacheState = $this->getMock('Magento\Framework\App\Cache\StateInterface');
-        $this->subject = $this->getMock('Magento\Catalog\Model\Resource\Config', [], [], '', false);
+        $this->subject = $this->getMock('Magento\Catalog\Model\ResourceModel\Config', [], [], '', false);
     }
 
     public function testGetAttributesUsedInListingOnCacheDisabled()

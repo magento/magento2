@@ -45,7 +45,7 @@ class Categories
         $category = $this->getObjectManager()->get('Magento\Catalog\Model\Category');
         $category->load($rootCategoryId);
 
-        /** @var $categoryResource \Magento\Catalog\Model\Resource\Category */
+        /** @var $categoryResource \Magento\Catalog\Model\ResourceModel\Category */
         $categoryResource = $category->getResource();
         $categories = $categoryResource->getAllChildren($category);
         $this->_categoriesNumber = count($categories);

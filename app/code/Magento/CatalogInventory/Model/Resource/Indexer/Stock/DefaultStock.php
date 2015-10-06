@@ -9,7 +9,7 @@ namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
  */
-class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer implements StockInterface
+class DefaultStock extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer implements StockInterface
 {
     /**
      * Current Product Type Id

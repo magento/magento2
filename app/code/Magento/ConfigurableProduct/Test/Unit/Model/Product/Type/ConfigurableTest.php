@@ -217,7 +217,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testCanUseAttribute()
     {
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             [
                 'getIsGlobal',
                 'getIsVisible',
@@ -341,7 +341,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attributeFrontend->expects($this->any())->method('getLabel')->will($this->returnValue('Label'));
 
         $eavAttribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getFrontend', 'getSource', 'getStoreLabel', '__wakeup', 'setStoreId', '__sleep'],
             [],
             '',
@@ -533,7 +533,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getProductAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->setMethods(['getStoreLabel', 'getSourceModel'])
             ->disableOriginalConstructor()
             ->getMock();

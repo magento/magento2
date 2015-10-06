@@ -7,7 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price;
 
-class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products

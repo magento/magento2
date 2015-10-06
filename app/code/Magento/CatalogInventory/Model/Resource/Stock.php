@@ -290,11 +290,11 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb implements Q
     /**
      * Add low stock filter to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param array $fields
      * @return $this
      */
-    public function addLowStockFilter(\Magento\Catalog\Model\Resource\Product\Collection $collection, $fields)
+    public function addLowStockFilter(\Magento\Catalog\Model\ResourceModel\Product\Collection $collection, $fields)
     {
         $this->_initConfig();
         $connection = $collection->getSelect()->getConnection();

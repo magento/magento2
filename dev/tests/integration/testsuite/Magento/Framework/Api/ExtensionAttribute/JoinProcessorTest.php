@@ -232,8 +232,8 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
             ['joinProcessorHelper' => $extensionAttributesProcessorHelper]
         );
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
-        $collection = $objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
         $extensionAttributesProcessor->process($collection);
         $config->reset();
 

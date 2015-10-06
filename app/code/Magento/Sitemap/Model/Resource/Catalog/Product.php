@@ -48,7 +48,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_sitemapData = null;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
@@ -68,7 +68,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productStatus;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     protected $_mediaAttribute;
 
@@ -85,11 +85,11 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute
      * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param string $connectionName
@@ -98,11 +98,11 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute,
         \Magento\Eav\Model\ConfigFactory $eavConfigFactory,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         $connectionName = null
@@ -234,7 +234,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal() ==
-                \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
                 'backend_type' => $attribute->getBackendType(),
             ];
         }

@@ -417,7 +417,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      * Find and instantiate a catalog attribute model by attribute code
      *
      * @param string $code
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected function _getAttributeByCode($code)
     {

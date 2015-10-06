@@ -22,12 +22,12 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_catalogType;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_cpCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $_cpCollectionInstance;
 
@@ -40,7 +40,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $cpCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection
      * @param \Magento\Catalog\Model\Product\Type $catalogType
      * @param array $data
      */
@@ -48,7 +48,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $cpCollection,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection,
         \Magento\Catalog\Model\Product\Type $catalogType,
         array $data = []
     ) {
@@ -128,7 +128,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get catalog product resource collection instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _getCpCollectionInstance()
     {

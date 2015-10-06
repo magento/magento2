@@ -239,7 +239,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             $this->getMock(
-                'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
+                'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
                 [],
                 [],
                 '',

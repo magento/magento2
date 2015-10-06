@@ -58,7 +58,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $resourceProductMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product',
+            'Magento\Catalog\Model\ResourceModel\Product',
             ['getEntityType'],
             [],
             '',

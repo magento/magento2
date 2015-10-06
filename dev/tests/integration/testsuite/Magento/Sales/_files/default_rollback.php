@@ -18,7 +18,7 @@ foreach ($orderCollection as $order) {
 }
 
 /** @var $product \Magento\Catalog\Model\Product */
-$productCollection = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Resource\Product\Collection');
+$productCollection = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
 foreach ($productCollection as $product) {
     $product->delete();
 }

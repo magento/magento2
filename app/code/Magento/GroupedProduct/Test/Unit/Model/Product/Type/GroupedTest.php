@@ -248,7 +248,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
         );
         $collection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             ['setFlag', 'setIsStrongMode', 'setProduct'],
             [],
             '',
@@ -305,7 +305,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $expectedMsg = "Please specify the quantity of product(s).";
 
         $productCollection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             [],
             [],
             '',

@@ -8,9 +8,9 @@ namespace Magento\CatalogSearch\Model;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\Resource\Eav\Attribute;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogSearch\Model\Resource\Advanced\Collection as ProductCollection;
 use Magento\CatalogSearch\Model\Resource\AdvancedFactory;
 use Magento\Directory\Model\CurrencyFactory;
@@ -235,7 +235,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve array of attributes used in advanced search
      *
-     * @return array|\Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getAttributes()
     {

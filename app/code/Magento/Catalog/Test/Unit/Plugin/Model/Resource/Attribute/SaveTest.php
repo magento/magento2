@@ -35,10 +35,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSaveWithoutInvalidate()
     {
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\Resource\Attribute')
+        $subject = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Attribute')
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->disableOriginalConstructor()
             ->getMock();
         $self = $this;
@@ -58,10 +58,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSave()
     {
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\Resource\Attribute')
+        $subject = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Attribute')
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->disableOriginalConstructor()
             ->getMock();
 

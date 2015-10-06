@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\ResourceModel\Selection;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * Selection table name

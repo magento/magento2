@@ -11,6 +11,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Proxy\Product;
 
-class Resource extends \Magento\Catalog\Model\Resource\Product
+class Resource extends \Magento\Catalog\Model\ResourceModel\Product
 {
 }

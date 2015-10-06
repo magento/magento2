@@ -10,9 +10,9 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     'Magento\Catalog\Setup\CategorySetup',
     ['resourceName' => 'catalog_setup']
 );
-/** @var $selectAttribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $selectAttribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $selectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $selectAttribute->setData(
     [
@@ -39,7 +39,7 @@ $selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->cr
 $selectOptions->setAttributeFilter($selectAttribute->getId());
 
 $multiselectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $multiselectAttribute->setData(
     [

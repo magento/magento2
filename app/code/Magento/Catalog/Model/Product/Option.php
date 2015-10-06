@@ -10,14 +10,14 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option model
  *
- * @method \Magento\Catalog\Model\Resource\Product\Option getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
@@ -170,7 +170,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Option');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option');
         parent::_construct();
     }
 
@@ -476,7 +476,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * Get Product Option Collection
      *
      * @param Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     public function getProductOptionCollection(Product $product)
     {

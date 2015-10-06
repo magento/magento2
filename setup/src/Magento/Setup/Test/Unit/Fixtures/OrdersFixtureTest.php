@@ -173,7 +173,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
-        $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $collectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($selectMock);
@@ -187,7 +187,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ['Magento\Catalog\Model\Category', $categoryMock],
             ['Magento\Catalog\Model\Product', $productMock],
             ['Magento\Framework\App\Resource', $resourceMock],
-            ['Magento\Catalog\Model\Resource\Product\Collection', [], $collectionMock]
+            ['Magento\Catalog\Model\ResourceModel\Product\Collection', [], $collectionMock]
         );
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);

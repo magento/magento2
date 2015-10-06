@@ -27,7 +27,7 @@ class Main extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -56,7 +56,7 @@ class Main extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $registry
      * @param AttributeMapperInterface $attributeMapper
      * @param array $data
@@ -66,7 +66,7 @@ class Main extends \Magento\Backend\Block\Template
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $registry,
         AttributeMapperInterface $attributeMapper,
         array $data = []

@@ -86,8 +86,8 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductsCollection()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
-        $productCollection = $this->getMock('Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        $productCollection = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $this->product->expects($this->once())->method('getCollection')->will($this->returnValue($productCollection));
 
         $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());

@@ -11,8 +11,8 @@ $entityType = $objectManager->create('Magento\Eav\Model\Entity\Type')->loadByCod
 
 // remove attribute
 
-/** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $attributeCollection */
-$attributeCollection = $objectManager->create('Magento\Catalog\Model\Resource\Product\Attribute\Collection');
+/** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $attributeCollection */
+$attributeCollection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection');
 $attributeCollection->setFrontendInputTypeFilter('media_image');
 $attributeCollection->setCodeFilter('funny_image');
 $attributeCollection->setEntityTypeFilter($entityType->getId());

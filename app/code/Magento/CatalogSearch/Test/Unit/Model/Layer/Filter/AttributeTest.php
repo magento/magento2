@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory|MockObject */
     private $filterAttributeFactory;
 
     /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
@@ -81,7 +81,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->filterAttributeFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory'
+            '\Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
