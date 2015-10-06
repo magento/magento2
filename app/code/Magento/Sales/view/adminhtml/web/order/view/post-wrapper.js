@@ -32,6 +32,9 @@ define([
         confirm({
             'content': msg,
             'actions': {
+                /**
+                 * 'Confirm' action handler.
+                 */
                 confirm: function () {
                     getForm(url).appendTo('body').submit();
                 }
