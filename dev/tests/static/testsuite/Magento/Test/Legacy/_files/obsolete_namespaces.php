@@ -146,4 +146,5 @@ return [
     ['Magento\Swatches\Model\Resource', 'Magento\Swatches\Model\ResourceModel'],
     ['Magento\Tax\Model\Resource', 'Magento\Tax\Model\ResourceModel'],
     ['Magento\Tax\Test\Unit\Model\Resource', 'Magento\Tax\Test\Unit\Model\ResourceModel'],
+    ['Magento\Theme\Model\Resource', 'Magento\Theme\Model\ResourceModel'],
 ];

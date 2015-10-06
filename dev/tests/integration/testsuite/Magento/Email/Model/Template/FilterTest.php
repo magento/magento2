@@ -123,7 +123,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $this->objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
+        $collection = $this->objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/Magento/default')->getId();
         $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
             ->setValue(DesignInterface::XML_PATH_THEME_ID, $themeId, ScopeInterface::SCOPE_STORE);
