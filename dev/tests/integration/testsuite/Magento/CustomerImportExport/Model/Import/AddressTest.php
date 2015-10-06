@@ -74,7 +74,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'not_delete' => '72701',  // not deleted address
     ];
 
-    /** @var \Magento\Customer\Model\Resource\Customer */
+    /** @var \Magento\Customer\Model\ResourceModel\Customer */
     protected $customerResource;
 
     /**
@@ -84,7 +84,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->customerResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Model\Resource\Customer'
+            'Magento\Customer\Model\ResourceModel\Customer'
         );
         $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             $this->_testClassName
@@ -417,7 +417,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // get addresses
         $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Address\Collection'
+            'Magento\Customer\Model\ResourceModel\Address\Collection'
         );
         $addressCollection->addAttributeToSelect($requiredAttributes);
         $addresses = [];
@@ -504,9 +504,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $keyAttribute = 'postcode';
 
         // get addresses
-        /** @var $addressCollection \Magento\Customer\Model\Resource\Address\Collection */
+        /** @var $addressCollection \Magento\Customer\Model\ResourceModel\Address\Collection */
         $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Address\Collection'
+            'Magento\Customer\Model\ResourceModel\Address\Collection'
         );
         $addressCollection->addAttributeToSelect($keyAttribute);
         $addresses = [];

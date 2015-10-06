@@ -8,8 +8,8 @@ namespace Magento\Customer\Model;
 /**
  * Customer group model
  *
- * @method \Magento\Customer\Model\Resource\Group _getResource()
- * @method \Magento\Customer\Model\Resource\Group getResource()
+ * @method \Magento\Customer\Model\ResourceModel\Group _getResource()
+ * @method \Magento\Customer\Model\ResourceModel\Group getResource()
  * @method string getCustomerGroupCode()
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
@@ -96,7 +96,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Group');
+        $this->_init('Magento\Customer\Model\ResourceModel\Group');
     }
 
     /**

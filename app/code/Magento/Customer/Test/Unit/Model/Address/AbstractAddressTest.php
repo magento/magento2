@@ -29,7 +29,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject  */
     protected $countryFactoryMock;
 
-    /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject  */
     protected $resourceMock;
 
     /** @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject  */
@@ -77,7 +77,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($countryMock));
 
-        $this->resourceMock = $this->getMock('Magento\Customer\Model\Resource\Customer', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Customer\Model\ResourceModel\Customer', [], [], '', false);
         $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

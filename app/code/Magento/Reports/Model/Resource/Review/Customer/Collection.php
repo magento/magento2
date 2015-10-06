@@ -14,7 +14,7 @@ namespace Magento\Reports\Model\Resource\Review\Customer;
 class Collection extends \Magento\Review\Model\Resource\Review\Collection
 {
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
+     * @var \Magento\Customer\Model\ResourceModel\Customer
      */
     protected $_customerResource;
 
@@ -26,7 +26,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -39,7 +39,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
+        \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {

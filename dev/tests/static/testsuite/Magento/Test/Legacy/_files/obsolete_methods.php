@@ -816,7 +816,7 @@ return [
     ['setAttributeSetExcludeFilter', 'Magento\Eav\Model\Resource\Entity\Attribute\Collection'],
     ['setBlockAlias'],
     ['setConfig', 'Magento\Captcha\Helper\Data'],
-    ['setCustomerId', 'Magento\Customer\Model\Resource\Address'],
+    ['setCustomerId', 'Magento\Customer\Model\ResourceModel\Address'],
     ['setDirectOutput', 'Magento\Framework\View\Layout'],
     ['setInstance', 'Magento\TestFramework\Bootstrap', 'Magento_TestFramework_Helper_Bootstrap::setInstance'],
     ['setIsAjaxRequest', 'Magento\Framework\Translate\Inline'],

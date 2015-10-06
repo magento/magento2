@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $productResource;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
+     * @var \Magento\Customer\Model\ResourceModel\Customer
      */
     protected $customerResource;
 
@@ -50,7 +50,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -61,7 +61,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
+        \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Sales\Model\Resource\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null

@@ -17,7 +17,7 @@ class Storage
     /**
      * Customer collection
      *
-     * @var \Magento\Customer\Model\Resource\Customer\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
      */
     protected $_customerCollection;
 
@@ -50,12 +50,12 @@ class Storage
     protected $_byPagesIterator;
 
     /**
-     * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $collectionFactory
+     * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Customer\Model\Resource\Customer\CollectionFactory $collectionFactory,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = []
     ) {

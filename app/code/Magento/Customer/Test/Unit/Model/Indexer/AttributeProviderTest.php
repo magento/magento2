@@ -58,8 +58,8 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
-        $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
@@ -161,8 +161,8 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
-        $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
@@ -260,8 +260,8 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
         $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
-        $entity = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */

@@ -27,7 +27,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage(
-            $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\CollectionFactory')
+            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
                 ->disableOriginalConstructor()
                 ->getMock(),
             $this->getMockBuilder('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
@@ -55,7 +55,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['from'])
             ->getMock();
         $select->expects($this->any())->method('from')->will($this->returnCallback([$this, 'validateFrom']));
-        $customerCollection = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\Collection')
+        $customerCollection = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'removeAttributeToSelect', 'getResource', 'getSelect'])
             ->getMock();

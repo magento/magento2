@@ -75,7 +75,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())
             ->method('getTable')
             ->willReturn('test_table');
-        $this->customerResourceMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer')
+        $this->customerResourceMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer')
             ->disableOriginalConstructor()
             ->getMock();
 

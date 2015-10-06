@@ -93,4 +93,6 @@ return [
     ['Magento\ConfigurableProduct\Model\Resource', 'Magento\ConfigurableProduct\Model\ResourceModel'],
     ['Magento\ConfigurableProduct\Test\Unit\Model\Resource', 'Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel'],
     ['Magento\Cron\Model\Resource', 'Magento\Cron\Model\ResourceModel'],
+    ['Magento\Customer\Model\Resource', 'Magento\Customer\Model\ResourceModel'],
+    ['Magento\Customer\Test\Unit\Model\Resource', 'Magento\Customer\Test\Unit\Model\ResourceModel'],
 ];

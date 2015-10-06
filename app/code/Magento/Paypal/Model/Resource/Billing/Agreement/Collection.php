@@ -28,7 +28,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     ];
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
+     * @var \Magento\Customer\Model\ResourceModel\Customer
      */
     protected $_customerResource;
 
@@ -42,7 +42,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
      * @param \Magento\Eav\Helper\Data $eavHelper
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -52,7 +52,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
+        \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Eav\Helper\Data $eavHelper,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null

@@ -245,7 +245,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer',
+            'Magento\Customer\Model\ResourceModel\Customer',
             ['getIdFieldName'],
             [],
             '',
@@ -259,7 +259,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false),
                 $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
                 $this->getMock(
-                    'Magento\Customer\Model\Resource\Address\CollectionFactory',
+                    'Magento\Customer\Model\ResourceModel\Address\CollectionFactory',
                     [],
                     [],
                     '',
@@ -463,8 +463,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
             $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory', [], [], '', false),
             new \Magento\Framework\Stdlib\DateTime(),
             $this->_getModelDependencies()
         );

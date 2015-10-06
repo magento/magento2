@@ -10,7 +10,7 @@ namespace Magento\ProductAlert\Model\Resource\Price\Customer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
+class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
      * Join productalert price data to customer collection

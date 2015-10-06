@@ -8,7 +8,7 @@ namespace Magento\Reports\Model\Resource\Quote;
 class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
 {
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
+     * @var \Magento\Customer\Model\ResourceModel\Customer
      */
     protected $customerResource;
 
@@ -18,7 +18,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -28,7 +28,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
+        \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
