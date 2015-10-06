@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Model\Resource;
+namespace Magento\GoogleOptimizer\Model\ResourceModel;
 
 class Code extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

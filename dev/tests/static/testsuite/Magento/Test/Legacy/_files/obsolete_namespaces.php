@@ -106,4 +106,5 @@ return [
     ['Magento\EncryptionKey\Model\Resource', 'Magento\EncryptionKey\Model\ResourceModel'],
     ['Magento\EncryptionKey\Test\Unit\Model\Resource', 'Magento\EncryptionKey\Test\Unit\Model\ResourceModel'],
     ['Magento\GiftMessage\Model\Resource', 'Magento\GiftMessage\Model\ResourceModel'],
+    ['Magento\GoogleOptimizer\Model\Resource', 'Magento\GoogleOptimizer\Model\ResourceModel'],
 ];
