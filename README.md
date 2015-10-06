@@ -1,3 +1,3 @@
 # Amqp
 
-**Amqp** provides support of Advanced Message Queuing Protocol
+**Amqp** provides functionality to publish/consume messages with Amqp.
