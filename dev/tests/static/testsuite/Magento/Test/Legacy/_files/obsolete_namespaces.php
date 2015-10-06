@@ -143,4 +143,5 @@ return [
     ['Magento\Shipping\Model\Resource', 'Magento\Shipping\Model\ResourceModel'],
     ['Magento\Sitemap\Model\Resource', 'Magento\Sitemap\Model\ResourceModel'],
     ['Magento\Store\Model\Resource', 'Magento\Store\Model\ResourceModel'],
+    ['Magento\Swatches\Model\Resource', 'Magento\Swatches\Model\ResourceModel'],
 ];

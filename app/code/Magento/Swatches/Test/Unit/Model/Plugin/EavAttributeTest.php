@@ -27,7 +27,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Model\SwatchFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $swatchFactory;
 
-    /** @var \Magento\Swatches\Model\Resource\Swatch\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $collectionFactory;
 
     /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
@@ -39,10 +39,10 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Model\Swatch|\PHPUnit_Framework_MockObject_MockObject */
     private $swatch;
 
-    /** @var \Magento\Swatches\Model\Resource\Swatch|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Model\ResourceModel\Swatch|\PHPUnit_Framework_MockObject_MockObject */
     private $resource;
 
-    /** @var \Magento\Swatches\Model\Resource\Swatch\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection|\PHPUnit_Framework_MockObject_MockObject */
     private $collection;
 
     /** @var array */
@@ -60,10 +60,10 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
         $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
         $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', [], [], '', false);
         $this->swatch = $this->getMock('\Magento\Swatches\Model\Swatch', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Swatches\Model\Resource\Swatch', [], [], '', false);
-        $this->collection = $this->getMock('\Magento\Swatches\Model\Resource\Swatch\Collection', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Swatches\Model\ResourceModel\Swatch', [], [], '', false);
+        $this->collection = $this->getMock('\Magento\Swatches\Model\ResourceModel\Swatch\Collection', [], [], '', false);
         $this->collectionFactory = $this->getMock(
-            '\Magento\Swatches\Model\Resource\Swatch\CollectionFactory',
+            '\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory',
             ['create'],
             [],
             '',
