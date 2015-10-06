@@ -132,7 +132,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
@@ -166,7 +166,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
@@ -183,7 +183,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\GroupFactory $storeGroupFactory,

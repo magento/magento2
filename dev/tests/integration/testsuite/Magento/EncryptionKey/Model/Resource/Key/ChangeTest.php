@@ -59,7 +59,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         );
 
         $configModel = $this->objectManager->create(
-            'Magento\Config\Model\Resource\Config'
+            'Magento\Config\Model\ResourceModel\Config'
         );
         $configModel->saveConfig($testPath, 'test', 'default', 0);
         $this->assertNotNull($keyChangeModel->changeEncryptionKey());

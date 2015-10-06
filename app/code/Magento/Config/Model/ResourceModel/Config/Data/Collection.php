@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Resource\Config\Data;
+namespace Magento\Config\Model\ResourceModel\Config\Data;
 
 /**
  * Config data collection
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Framework\App\Config\Value', 'Magento\Config\Model\Resource\Config\Data');
+        $this->_init('Magento\Framework\App\Config\Value', 'Magento\Config\Model\ResourceModel\Config\Data');
     }
 
     /**

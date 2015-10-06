@@ -1459,7 +1459,7 @@ return [
     ['Magento\Core\Model\TemplateEngine\Factory', 'Magento\Framework\View\TemplateEngineFactory'],
     ['Magento\Core\Model\TemplateEngine\Php', 'Magento\Framework\View\TemplateEngine\Php'],
     ['Magento\Core\Model\TemplateEngine\Pool', 'Magento\Framework\View\TemplateEnginePool'],
-    ['Magento\Core\Model\Resource\Config', 'Magento\Config\Model\Resource\Config'],
+    ['Magento\Core\Model\Resource\Config', 'Magento\Config\Model\ResourceModel\Config'],
     ['Magento\Media\Model\File\Image'],
     ['Magento\Media\Model\Image'],
     ['Magento\Media\Helper\Data'],
