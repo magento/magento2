@@ -12,6 +12,7 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\Data\Collection;
+use Magento\Catalog\Helper\Image;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -112,7 +113,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
-        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        $attributes =
+            $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
         return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
     }
 

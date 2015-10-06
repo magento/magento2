@@ -232,7 +232,8 @@ class Dom
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains multiple nodes for identifier
+     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains
+     *     multiple nodes for identifier
      * @return \DOMElement|null
      */
     protected function _getMatchedNode($nodePath)
@@ -273,7 +274,11 @@ class Dom
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
-            $result = $dom->schemaValidate($schema);
+            if (file_exists($schema)) {
+                $result = $dom->schemaValidate($schema);
+            } else {
+                $result = $dom->schemaValidateSource($schema);
+            }
             $errors = [];
             if (!$result) {
                 $validationErrors = libxml_get_errors();

@@ -159,7 +159,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $this->assertAutoload($json);
                 break;
             case 'magento2-language':
-                $this->assertRegExp('/^magento\/language\-[a-z]{2}_[a-z]{2}$/', $json->name);
+                $this->assertRegExp('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 break;
