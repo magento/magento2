@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Model\Resource;
+namespace Magento\Ui\Model\ResourceModel;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Ui\Api\Data\BookmarkInterface;
-use Magento\Ui\Model\Resource\Bookmark\Collection;
+use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -28,7 +28,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     protected $bookmarkFactory;
 
     /**
-     * @var \Magento\Ui\Model\Resource\Bookmark
+     * @var \Magento\Ui\Model\ResourceModel\Bookmark
      */
     protected $bookmarkResourceModel;
 
@@ -44,7 +44,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      */
     public function __construct(
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
-        \Magento\Ui\Model\Resource\Bookmark $bookmarkResourceModel,
+        \Magento\Ui\Model\ResourceModel\Bookmark $bookmarkResourceModel,
         \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
     ) {
 
@@ -99,7 +99,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
 
-        /** @var \Magento\Ui\Model\Resource\Bookmark\Collection $collection */
+        /** @var \Magento\Ui\Model\ResourceModel\Bookmark\Collection $collection */
         $collection = $this->bookmarkFactory->create()->getCollection();
         // Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
