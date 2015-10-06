@@ -11,14 +11,14 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\AdminNotification\Model\Resource\Grid;
+namespace Magento\AdminNotification\Model\ResourceModel\Grid;
 
-class Collection extends \Magento\AdminNotification\Model\Resource\Inbox\Collection
+class Collection extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
 {
     /**
      * Add remove filter
      *
-     * @return \Magento\AdminNotification\Model\Resource\Grid\Collection|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\AdminNotification\Model\ResourceModel\Grid\Collection|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     protected function _initSelect()
     {

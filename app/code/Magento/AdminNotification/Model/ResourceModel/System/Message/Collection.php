@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Model\Resource\System\Message;
+namespace Magento\AdminNotification\Model\ResourceModel\System\Message;
 
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -52,7 +52,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init(
             'Magento\AdminNotification\Model\System\Message',
-            'Magento\AdminNotification\Model\Resource\System\Message'
+            'Magento\AdminNotification\Model\ResourceModel\System\Message'
         );
     }
 

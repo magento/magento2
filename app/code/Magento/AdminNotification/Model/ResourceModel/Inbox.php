@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Model\Resource;
+namespace Magento\AdminNotification\Model\ResourceModel;
 
 /**
  * AdminNotification Inbox model

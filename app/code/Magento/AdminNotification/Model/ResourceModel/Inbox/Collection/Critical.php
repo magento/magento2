@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Model\Resource\Inbox\Collection;
+namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
 class Critical extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -16,7 +16,7 @@ class Critical extends \Magento\Framework\Model\Resource\Db\Collection\AbstractC
      */
     protected function _construct()
     {
-        $this->_init('Magento\AdminNotification\Model\Inbox', 'Magento\AdminNotification\Model\Resource\Inbox');
+        $this->_init('Magento\AdminNotification\Model\Inbox', 'Magento\AdminNotification\Model\ResourceModel\Inbox');
     }
 
     /**
