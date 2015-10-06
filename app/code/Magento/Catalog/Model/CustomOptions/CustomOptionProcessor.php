@@ -62,19 +62,19 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
-        $buyRequest = $this->objectFactory->create();
-        if ($cartItem->getProductOption()) {
-            /** @var CustomOptionInterface[] $options */
-            $extensionAttributes = $cartItem->getProductOption()->getExtensionAttributes();
-            if ($extensionAttributes && is_array($extensionAttributes->getCustomOptions())) {
+        if ($cartItem->getProductOption()
+            && $cartItem->getProductOption()->getExtensionAttributes()
+            && $cartItem->getProductOption()->getExtensionAttributes()->getCustomOptions()) {
+            $customOptions = $cartItem->getProductOption()->getExtensionAttributes()->getCustomOptions();
+            if (!empty($customOptions) && is_array($customOptions)) {
                 $requestData = [];
-                foreach ($extensionAttributes->getCustomOptions() as $option) {
+                foreach ($customOptions as $option) {
                     $requestData['options'][$option->getOptionId()] = $this->getOptionValue($option);
                 }
-                $buyRequest->setData($requestData);
+                return $this->objectFactory->create($requestData);
             }
         }
-        return $buyRequest;
+        return null;
     }
 
     /**
@@ -109,7 +109,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     public function processOptions(CartItemInterface $cartItem)
     {
         $options = $this->getOptions($cartItem);
-        if (is_array($options)) {
+        if (!empty($options) && is_array($options)) {
             $this->updateOptionsValues($options);
             $productOption = $cartItem->getProductOption()
                 ? $cartItem->getProductOption()
