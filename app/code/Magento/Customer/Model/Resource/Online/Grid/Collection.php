@@ -92,7 +92,7 @@ class Collection extends SearchResult
      *
      * @param string|array $field
      * @param string|int|array|null $condition
-     * @return \Magento\Cms\Model\Resource\Block\Collection
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
      */
     public function addFieldToFilter($field, $condition = null)
     {

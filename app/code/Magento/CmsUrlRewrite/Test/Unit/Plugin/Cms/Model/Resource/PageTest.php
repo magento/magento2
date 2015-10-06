@@ -26,7 +26,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $cmsPageMock;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cmsPageResourceMock;
 
@@ -50,7 +50,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cmsPageResourceMock = $this->getMockBuilder('Magento\Cms\Model\Resource\Page')
+        $this->cmsPageResourceMock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
             ->disableOriginalConstructor()
             ->getMock();
 

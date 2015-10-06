@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Model\Resource\Page;
+namespace Magento\Cms\Model\ResourceModel\Page;
 
-use \Magento\Cms\Model\Resource\AbstractCollection;
+use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
  * CMS page collection
@@ -31,7 +31,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Page', 'Magento\Cms\Model\Resource\Page');
+        $this->_init('Magento\Cms\Model\Page', 'Magento\Cms\Model\ResourceModel\Page');
         $this->_map['fields']['page_id'] = 'main_table.page_id';
         $this->_map['fields']['store'] = 'store_table.store_id';
     }

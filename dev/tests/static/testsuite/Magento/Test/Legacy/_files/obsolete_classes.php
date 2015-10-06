@@ -2947,7 +2947,7 @@ return [
     ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
-    ['Magento\Cms\Model\Resource\Page\Service'],
+    ['Magento\Cms\Model\ResourceModel\Page\Service'],
     [
         'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
@@ -3102,7 +3102,7 @@ return [
     ['Magento\Authorization\Model\ResourceModel\Setup', 'Magento\Authorization\Setup\AuthorizationFactory'],
     ['Magento\Catalog\Model\ResourceModel\Setup', 'Magento\Catalog\Setup\CategorySetup'],
     ['Magento\Checkout\Model\ResourceModel\Setup', 'Magento\Checkout\Setup\InstallData'],
-    ['Magento\Cms\Model\Resource\Setup', 'Magento\Cms\Setup\InstallData'],
+    ['Magento\Cms\Model\ResourceModel\Setup', 'Magento\Cms\Setup\InstallData'],
     ['Magento\Customer\Model\Resource\Setup', 'Magento\Customer\Setup\CustomerSetup'],
     ['Magento\Dhl\Model\Resource\Setup', 'Magento\Dhl\Setup\InstallData'],
     ['Magento\Directory\Model\Resource\Setup', 'Magento\Directory\Setup\InstallData'],

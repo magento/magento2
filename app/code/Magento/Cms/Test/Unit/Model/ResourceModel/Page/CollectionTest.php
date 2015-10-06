@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Test\Unit\Model\Resource\Block;
+namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page;
 
-use Magento\Cms\Test\Unit\Model\Resource\AbstractCollectionTest;
+use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTest;
 use Magento\Framework\DataObject;
 
 class CollectionTest extends AbstractCollectionTest
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection
+     * @var \Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $collection;
 
@@ -20,7 +20,7 @@ class CollectionTest extends AbstractCollectionTest
         parent::setUp();
 
         $this->collection = $this->objectManager->getObject(
-            'Magento\Cms\Model\Resource\Block\Collection',
+            'Magento\Cms\Model\ResourceModel\Page\Collection',
             [
                 'resource' => $this->resource,
                 'connection' => $this->connection
