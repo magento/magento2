@@ -36,7 +36,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
@@ -51,7 +51,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null

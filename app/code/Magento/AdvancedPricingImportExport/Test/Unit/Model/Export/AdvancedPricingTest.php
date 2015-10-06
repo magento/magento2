@@ -58,7 +58,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFactory;
 
@@ -210,7 +210,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->attrSetColFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             [
                 'create',
                 'setEntityTypeFilter',

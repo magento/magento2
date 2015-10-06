@@ -343,7 +343,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $configProperty->setValue($this->_condition, $configValueMock);
 
         $attrSetCollectionValueMock = $this
-            ->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection')
+            ->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection')
             ->setMethods(['setEntityTypeFilter', 'load', 'toOptionArray'])
             ->disableOriginalConstructor()
             ->getMock();

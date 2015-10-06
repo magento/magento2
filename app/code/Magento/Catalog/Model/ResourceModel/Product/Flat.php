@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Store\Model\Store;
-use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 
 /**
  * Catalog Product Flat resource model

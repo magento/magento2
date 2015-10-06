@@ -19,13 +19,13 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_regionsFactory;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
     ) {
         $this->_regionsFactory = $regionsFactory;

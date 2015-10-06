@@ -32,14 +32,14 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_cpCollectionInstance;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_eavAttSetCollection;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection
      * @param \Magento\Catalog\Model\Product\Type $catalogType
      * @param array $data
@@ -47,7 +47,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection,
         \Magento\Catalog\Model\Product\Type $catalogType,
         array $data = []

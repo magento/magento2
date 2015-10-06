@@ -22,7 +22,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
     /**
      * Set collection factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setColFactory;
 
@@ -35,14 +35,14 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         array $data = []
@@ -64,7 +64,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
         $product = $this->_coreRegistry->registry('product');
         $entityType = $product->getResource()->getEntityType();
         $labelPart = $this->_resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
         $collection = $this->_setColFactory->create();
         $collection->setEntityTypeFilter(
             $entityType->getId()
@@ -79,7 +79,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
             'label'
         )->setOrder(
             'attribute_set_name',
-            \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
         );
         return $collection->getData();
     }

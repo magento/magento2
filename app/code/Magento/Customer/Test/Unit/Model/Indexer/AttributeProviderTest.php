@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Indexer;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Indexer\AttributeProvider;
-use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 
 class AttributeProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,7 +55,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
@@ -158,7 +158,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
@@ -257,7 +257,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */

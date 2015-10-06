@@ -171,7 +171,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_attrSetColFactory;
 
@@ -316,7 +316,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
@@ -335,7 +335,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
         \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
@@ -1227,10 +1227,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Clean up already loaded attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $validTypes = array_keys($this->_productTypeModels);
         $validTypes = array_combine($validTypes, $validTypes);

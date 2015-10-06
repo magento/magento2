@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Eav Form Element Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Element getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Form\Element getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Element setTypeId(int $value)
  * @method int getFieldsetId()
@@ -65,13 +65,13 @@ class Element extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Element');
+        $this->_init('Magento\Eav\Model\ResourceModel\Form\Element');
     }
 
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Element
+     * @return \Magento\Eav\Model\ResourceModel\Form\Element
      * @codeCoverageIgnore
      */
     protected function _getResource()
@@ -82,7 +82,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource collection instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Element\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Element\Collection
      * @codeCoverageIgnore
      */
     public function getCollection()

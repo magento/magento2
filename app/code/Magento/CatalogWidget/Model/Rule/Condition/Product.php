@@ -39,7 +39,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
@@ -52,7 +52,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []

@@ -192,7 +192,7 @@ abstract class Form
     /**
      * Get EAV Entity Form Attribute Collection with applied filters
      *
-     * @return \Magento\Eav\Model\Resource\Form\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
      */
     protected function _getFilteredFormAttributeCollection()
     {

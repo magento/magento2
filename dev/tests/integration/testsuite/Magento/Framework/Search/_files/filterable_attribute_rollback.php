@@ -16,9 +16,9 @@ $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
 );
 $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
 
-/** @var $selectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+/** @var $selectOptions \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
 );
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 

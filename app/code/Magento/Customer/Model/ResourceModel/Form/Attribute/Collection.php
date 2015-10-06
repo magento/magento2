@@ -10,7 +10,7 @@ namespace Magento\Customer\Model\ResourceModel\Form\Attribute;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Eav\Model\Resource\Form\Attribute\Collection
+class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
 {
     /**
      * Current module pathname

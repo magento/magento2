@@ -10,7 +10,7 @@ namespace Magento\Customer\Model\ResourceModel\Form;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Eav\Model\Resource\Form\Attribute
+class Attribute extends \Magento\Eav\Model\ResourceModel\Form\Attribute
 {
     /**
      * Initialize connection and define main table

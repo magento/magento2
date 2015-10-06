@@ -87,7 +87,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
@@ -109,7 +109,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
         \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
@@ -218,10 +218,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Clean up attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $collection->load();
 

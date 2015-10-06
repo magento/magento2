@@ -38,7 +38,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $connection;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFac;
 
@@ -48,7 +48,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $prodAttrColFac;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollection;
 
@@ -145,14 +145,14 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
         $this->attrSetColFac = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->setCollection = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',

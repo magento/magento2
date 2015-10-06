@@ -18,7 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
-use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
@@ -179,7 +179,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 

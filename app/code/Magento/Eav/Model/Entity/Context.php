@@ -32,7 +32,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $resourceHelper;
 
@@ -56,7 +56,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Attribute\Set $attrSetEntity
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor $objectRelationProcessor
@@ -66,7 +66,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor $objectRelationProcessor
@@ -114,7 +114,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Eav\Model\Resource\Helper
+     * @return \Magento\Eav\Model\ResourceModel\Helper
      */
     public function getResourceHelper()
     {

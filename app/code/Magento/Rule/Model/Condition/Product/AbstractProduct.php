@@ -70,7 +70,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_productResource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_attrSetCollection;
 
@@ -86,7 +86,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
      */
@@ -97,7 +97,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = []
     ) {

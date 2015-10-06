@@ -10,7 +10,7 @@
 $productResource = $this->getObjectManager()->create('Magento\Catalog\Model\Product');
 $entityType = $productResource->getResource()->getEntityType();
 $sets = $this->getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection'
 )->setEntityTypeFilter(
     $entityType->getId()
 )->load();

@@ -22,7 +22,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
- * @method \Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface getResource()
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {

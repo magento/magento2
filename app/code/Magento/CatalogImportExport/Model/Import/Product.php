@@ -443,7 +443,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_resource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setColFactory;
 
@@ -583,7 +583,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
      * @param Product\OptionFactory $optionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param Product\Type\Factory $productTypeFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory
      * @param Proxy\ProductFactory $proxyProdFactory
@@ -623,7 +623,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
         \Magento\CatalogImportExport\Model\Import\Product\OptionFactory $optionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\CatalogImportExport\Model\Import\Product\Type\Factory $productTypeFactory,
         \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory,
         \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,

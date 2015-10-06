@@ -11,7 +11,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Attribute;
 
-class Collection extends \Magento\Eav\Model\Resource\Attribute\Collection
+class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
 {
     /**
      * Default attribute entity type code

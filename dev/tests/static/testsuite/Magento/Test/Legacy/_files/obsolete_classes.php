@@ -1281,7 +1281,7 @@ return [
     ['Magento\Core\Model\Resource\Transaction', 'Magento\Framework\DB\Transaction'],
     ['Magento\Catalog\Model\ResourceModel\Helper\Mysql4', 'Magento\Catalog\Model\ResourceModel\Helper'],
     ['Magento\Cron\Exception', 'Magento\Framework\Exception\CronException'],
-    ['Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'],
+    ['Magento\Eav\Model\ResourceModel\Helper\Mysql4', 'Magento\Eav\Model\ResourceModel\Helper'],
     [
         'Magento\Eav\Model\Entity\Attribute\Backend\Array',
         'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',

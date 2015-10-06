@@ -13,11 +13,11 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     protected $options;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $collectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $collectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product $product
     ) {
         $this->collectionFactory = $collectionFactory;

@@ -48,7 +48,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
 
@@ -148,7 +148,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->resourceHelper = $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false);
+        $this->resourceHelper = $this->getMock('Magento\Eav\Model\ResourceModel\Helper', [], [], '', false);
         $this->universalFactory = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->optionDataFactory = $this->getMock(
             'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
