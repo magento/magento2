@@ -44,6 +44,7 @@ class BatchConsumer implements ConsumerInterface
      * @var int
      */
     private $interval;
+    
     /**
      * @var Resource
      */
