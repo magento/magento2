@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Downloads;
 
-class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * Identifier field name

@@ -7,7 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product;
 
-class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * Link table name

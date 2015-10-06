@@ -198,7 +198,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             )->setMethods(['getProductAttribute'])
                 ->disableOriginalConstructor()
                 ->getMock();
-            $productAttributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+            $productAttributeMock = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
                 ->disableOriginalConstructor()
                 ->getMock();
             $productAttributeMock->expects($this->once())

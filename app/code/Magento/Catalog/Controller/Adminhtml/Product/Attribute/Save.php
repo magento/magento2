@@ -32,7 +32,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $productHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     protected $attributeFactory;
 
@@ -51,7 +51,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory
-     * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -65,7 +65,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory,
-        \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory,
+        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
@@ -117,7 +117,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
 
             $redirectBack = $this->getRequest()->getParam('back', false);
-            /* @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             $model = $this->attributeFactory->create();
 
             $attributeId = $this->getRequest()->getParam('attribute_id');

@@ -97,7 +97,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
         if ($filter->getField() === 'price') {
             $resultQuery = str_replace(

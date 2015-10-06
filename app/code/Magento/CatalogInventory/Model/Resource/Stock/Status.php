@@ -207,7 +207,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Add only is in stock products filter to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
      */
     public function addIsInStockFilterToCollection($collection)

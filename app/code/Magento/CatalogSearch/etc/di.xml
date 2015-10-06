@@ -45,7 +45,7 @@
     <type name="Magento\Store\Model\Resource\Group">
         <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Attribute">
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
@@ -119,7 +119,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory" type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\Collection</argument>
         </arguments>
@@ -136,7 +136,7 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollectionFactory" type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollection</argument>
         </arguments>
@@ -148,7 +148,7 @@
         </arguments>
     </virtualType>
     <virtualType name="Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory"
-                 type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+                 type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\Collection</argument>
         </arguments>

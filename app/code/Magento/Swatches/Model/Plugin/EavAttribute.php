@@ -5,7 +5,7 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
 
 /**

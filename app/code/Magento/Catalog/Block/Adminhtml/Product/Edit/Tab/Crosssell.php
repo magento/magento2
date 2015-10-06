@@ -156,7 +156,7 @@ class Crosssell extends Extended
      */
     protected function _prepareCollection()
     {
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Link\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
         $collection = $this->_linkFactory->create()->useCrossSellLinks()->getProductCollection()->setProduct(
             $this->getProduct()
         )->addAttributeToSelect(
@@ -374,7 +374,7 @@ class Crosssell extends Extended
     /**
      * Apply `position` filter to cross-sell grid.
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection $collection
      * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
      * @return $this
      */

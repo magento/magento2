@@ -113,7 +113,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Config factory
      *
-     * @var \Magento\Catalog\Model\Resource\ConfigFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
      */
     protected $_configFactory;
 
@@ -126,7 +126,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
      * @param \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
@@ -142,7 +142,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
+        \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,
         \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
@@ -167,7 +167,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Config');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Config');
     }
 
     /**
@@ -406,7 +406,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Retrieve resource model
      *
-     * @return \Magento\Catalog\Model\Resource\Config
+     * @return \Magento\Catalog\Model\ResourceModel\Config
      */
     protected function _getResource()
     {

@@ -19,7 +19,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $catalogUrl;
 
@@ -81,7 +81,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\Resource\Url')
+        $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Url')
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionFactory = $this->getMockBuilder('Magento\Wishlist\Model\Item\OptionFactory')

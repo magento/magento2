@@ -96,4 +96,6 @@ return [
     ['Magento\Backup\Model\Resource', 'Magento\Backup\Model\ResourceModel'],
     ['Magento\Bundle\Model\Resource', 'Magento\Bundle\Model\ResourceModel'],
     ['Magento\Captcha\Model\Resource', 'Magento\Captcha\Model\ResourceModel'],
+    ['Magento\Catalog\Model\Resource', 'Magento\Catalog\Model\ResourceModel'],
+    ['Magento\Catalog\Test\Unit\Model\Resource', 'Magento\Catalog\Test\Unit\Model\ResourceModel'],
 ];

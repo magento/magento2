@@ -88,7 +88,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $localeResolver;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -175,7 +175,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->resourceCollection = $this->getMockForAbstractClass(
             'Magento\Framework\Data\Collection\AbstractDb',
             [],

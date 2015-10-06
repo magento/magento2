@@ -20,24 +20,24 @@ class SuggestedSet
     /**
      * Catalog resource helper
      *
-     * @var \Magento\Catalog\Model\Resource\Helper
+     * @var \Magento\Catalog\Model\ResourceModel\Helper
      */
     protected $resourceHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $product;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product $product
+     * @param \Magento\Catalog\Model\ResourceModel\Product $product
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product $product,
+        \Magento\Catalog\Model\ResourceModel\Product $product,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
     ) {
         $this->attributeSetCollectionFactory = $attributeSetCollectionFactory;
         $this->resourceHelper = $resourceHelper;

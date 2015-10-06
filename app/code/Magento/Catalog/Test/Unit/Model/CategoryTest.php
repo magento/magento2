@@ -34,7 +34,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Catalog\Model\Resource\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
     protected $categoryTreeResource;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -108,9 +108,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
         $this->registry = $this->getMock('Magento\Framework\Registry');
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
+        $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Tree', [], [], '', false);
         $this->categoryTreeFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\TreeFactory',
+            'Magento\Catalog\Model\ResourceModel\Category\TreeFactory',
             ['create'],
             [],
             '',
@@ -125,7 +125,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->url = $this->getMock('Magento\Framework\UrlInterface');
         $this->productCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -151,7 +151,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->urlFinder = $this->getMock('Magento\UrlRewrite\Model\UrlFinderInterface');
         $this->resource = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category',
+            'Magento\Catalog\Model\ResourceModel\Category',
             [],
             [],
             '',

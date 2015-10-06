@@ -38,7 +38,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -51,7 +51,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -106,7 +106,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Add condition to collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
      */
     public function addToCollection($collection)
@@ -130,13 +130,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
      */
     protected function addGlobalAttribute(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\Resource\Product\Collection $collection
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
         $storeId =  $this->storeManager->getStore()->getId();
 
@@ -163,13 +163,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
      */
     protected function addNotGlobalAttribute(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\Resource\Product\Collection $collection
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
         $storeId =  $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);

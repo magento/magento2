@@ -17,7 +17,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Model\Resource\Product\Link|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Link|\PHPUnit_Framework_MockObject_MockObject */
     protected $link;
 
     /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
@@ -34,7 +34,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->link = $this->getMock('Magento\Catalog\Model\Resource\Product\Link', [], [], '', false);
+        $this->link = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Link', [], [], '', false);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->resource

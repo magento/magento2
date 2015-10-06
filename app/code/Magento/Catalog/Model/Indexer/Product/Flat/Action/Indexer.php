@@ -80,7 +80,7 @@ class Indexer
                         $keyColumns
                     );
 
-                    /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+                    /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                     foreach ($columns as $columnName => $attribute) {
                         if (isset($describe[$columnName])) {
                             $ids[$attribute->getId()] = $columnName;

@@ -38,7 +38,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $logger;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -53,7 +53,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $exportConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productFactory;
 
@@ -63,7 +63,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryColFactory;
 
@@ -73,12 +73,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeColFactory;
 
@@ -171,7 +171,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             [],
             [],
             '',
@@ -200,7 +200,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\ProductFactory',
+            'Magento\Catalog\Model\ResourceModel\ProductFactory',
             [
                 'create',
                 'getTypeId',
@@ -220,7 +220,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->categoryColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
             [
                 'create',
                 'addNameToResult',
@@ -237,14 +237,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->optionColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
             [],
             [],
             '',
             false
         );
         $this->attributeColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             [],
             [],
             '',

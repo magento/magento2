@@ -13,7 +13,7 @@ namespace Magento\Bundle\Model\ResourceModel;
 class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Relation
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
      */
     protected $_productRelation;
 
@@ -24,13 +24,13 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation
      * @param \Magento\Quote\Model\Resource\Quote $quoteResource
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Catalog\Model\Resource\Product\Relation $productRelation,
+        \Magento\Catalog\Model\ResourceModel\Product\Relation $productRelation,
         \Magento\Quote\Model\Resource\Quote $quoteResource,
         $connectionName = null
     ) {

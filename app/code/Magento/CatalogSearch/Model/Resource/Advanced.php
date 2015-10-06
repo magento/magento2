@@ -58,7 +58,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Prepare search condition for attribute
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param string|array $value
      * @return string|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

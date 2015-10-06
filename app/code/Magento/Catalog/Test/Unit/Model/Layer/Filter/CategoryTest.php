@@ -93,7 +93,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->state));
 
         $this->collection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Product\Collection'
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection'
         )
             ->disableOriginalConstructor()
             ->setMethods(['addCategoryFilter', 'getFacetedData', 'addCountToCategories'])

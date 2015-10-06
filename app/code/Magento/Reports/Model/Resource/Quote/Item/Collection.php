@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_map = ['fields' => ['store_id' => 'main_table.store_id']];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $productResource;
 
@@ -49,7 +49,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\Resource\Product\Collection $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Sales\Model\Resource\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,

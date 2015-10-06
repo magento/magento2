@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
  * Catalog view layer model
@@ -48,7 +48,7 @@ class Layer extends \Magento\Framework\DataObject
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_catalogProduct;
 
@@ -90,7 +90,7 @@ class Layer extends \Magento\Framework\DataObject
      * @param Layer\ContextInterface $context
      * @param Layer\StateFactory $layerStateFactory
      * @param AttributeCollectionFactory $attributeCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
+     * @param \Magento\Catalog\Model\ResourceModel\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
@@ -100,7 +100,7 @@ class Layer extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
         AttributeCollectionFactory $attributeCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product $catalogProduct,
+        \Magento\Catalog\Model\ResourceModel\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,
@@ -134,7 +134,7 @@ class Layer extends \Magento\Framework\DataObject
     /**
      * Retrieve current layer product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductCollection()
     {
@@ -152,7 +152,7 @@ class Layer extends \Magento\Framework\DataObject
     /**
      * Initialize product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\Layer
      */
     public function prepareProductCollection($collection)

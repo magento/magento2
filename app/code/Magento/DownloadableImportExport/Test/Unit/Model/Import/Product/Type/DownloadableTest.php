@@ -35,12 +35,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $attrSetColMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFacMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColMock;
 
@@ -121,7 +121,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
 
         // 2. $prodAttrColFac
         $this->prodAttrColFacMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
@@ -129,7 +129,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         );
 
         $attrCollection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
             [],
             [],
             '',

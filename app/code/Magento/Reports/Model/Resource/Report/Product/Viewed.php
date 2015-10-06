@@ -31,7 +31,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Product resource instance
      *
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
@@ -51,7 +51,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param string $connectionName
      */
@@ -62,7 +62,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
-        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
         $connectionName = null
     ) {

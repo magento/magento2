@@ -11,12 +11,12 @@
  */
 namespace Magento\Reports\Model\Resource\Review\Product;
 
-class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * Init Select
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _initSelect()
     {
@@ -80,7 +80,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return $this|\Magento\Catalog\Model\Resource\Product\Collection
+     * @return $this|\Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {

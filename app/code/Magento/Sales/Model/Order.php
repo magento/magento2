@@ -188,7 +188,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $productListFactory;
 
@@ -285,7 +285,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -314,7 +314,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []

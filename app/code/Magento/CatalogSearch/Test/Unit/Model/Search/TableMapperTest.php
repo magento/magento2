@@ -20,7 +20,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     const STORE_ID = 2514;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollection;
 
@@ -114,12 +114,12 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
         $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection'
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
         )
             ->disableOriginalConstructor()
             ->getMock();
         $attributeCollectionFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -574,7 +574,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $frontendInput = 'select',
         $positionInCollection = 0
     ) {
-        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->setMethods(['getBackendType', 'getBackendTable', 'getId', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();

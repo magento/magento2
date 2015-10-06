@@ -65,7 +65,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Make collection not to load products that are in specified quote
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param int $quoteId
      * @return $this
      */

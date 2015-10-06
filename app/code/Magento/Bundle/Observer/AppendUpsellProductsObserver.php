@@ -69,7 +69,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Link\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
         $collection = $observer->getEvent()->getCollection();
         $limit = $observer->getEvent()->getLimit();
         if (is_array($limit)) {
@@ -97,7 +97,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $bundleCollection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $bundleCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $bundleCollection = $product->getCollection()->addAttributeToSelect(
             $this->config->getProductAttributes()
         )->addStoreFilter()->addMinimalPrice()->addFinalPrice()->addTaxPercents()->setVisibility(

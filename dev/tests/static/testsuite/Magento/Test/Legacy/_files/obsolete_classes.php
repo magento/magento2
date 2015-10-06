@@ -44,7 +44,7 @@ return [
     ['Mage_Adminhtml_Block_Cache_Grid'],
     ['Mage_Adminhtml_Block_Catalog'],
     [
-        'Magento\Catalog\Model\Resource\Category\Attribute\Source\Mode',
+        'Magento\Catalog\Model\ResourceModel\Category\Attribute\Source\Mode',
         'Magento\Catalog\Model\Category\Attribute\Source\Mode',
     ],
     ['Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid'],
@@ -737,23 +737,23 @@ return [
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Type\Configurable\Attribute',
+        'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Attribute',
         'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Type\Configurable\Product\Collection',
+        'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
         'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+        'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
         'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Type\Configurable',
+        'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Indexer\Price\Configurable',
+        'Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Configurable',
         'Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable',
     ],
     [
@@ -773,7 +773,7 @@ return [
         'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
         'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable',
     ],
-    ['Magento\Catalog\Model\Resource\Product\Flat\Indexer'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer'],
     ['Magento\Catalog\Model\System\Config\Backend\Catalog\Product\Flat'],
     ['Mage_Checkout_Block_Links'],
     ['Mage_Core_Block_Flush'],
@@ -1279,7 +1279,7 @@ return [
     ['Magento\Core\Model\Resource\HelperFactory'],
     ['Magento\Core\Model\Resource\HelperPool'],
     ['Magento\Core\Model\Resource\Transaction', 'Magento\Framework\DB\Transaction'],
-    ['Magento\Catalog\Model\Resource\Helper\Mysql4', 'Magento\Catalog\Model\Resource\Helper'],
+    ['Magento\Catalog\Model\ResourceModel\Helper\Mysql4', 'Magento\Catalog\Model\ResourceModel\Helper'],
     ['Magento\Cron\Exception', 'Magento\Framework\Exception\CronException'],
     ['Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'],
     [
@@ -1903,7 +1903,7 @@ return [
     ['Magento\Core\Model\Session\Exception', 'Magento\Framework\Session\Exception'],
     ['Magento\Core\Model\Session\Context'],
     ['Magento\Core\Model\Session\AbstractSession', 'Magento\Framework\Session\SessionManager'],
-    ['Magento\Catalog\Model\Resource\Convert'],
+    ['Magento\Catalog\Model\ResourceModel\Convert'],
     ['Magento\Core\Model\ConfigInterface', 'Magento\Framework\App\Config\ScopeConfigInterface'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser'],
     [
@@ -1915,11 +1915,11 @@ return [
         'Magento\GroupedProduct\Model\Product\Type\Grouped\Price',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Indexer\Price\Grouped',
+        'Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Grouped',
         'Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped',
     ],
     [
-        'Magento\Catalog\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
+        'Magento\Catalog\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection',
         'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
     ],
     ['Magento\Catalog\Model\Product\Type\Grouped', 'Magento\GroupedProduct\Model\Product\Type\Grouped'],
@@ -2048,10 +2048,10 @@ return [
     ],
     ['Magento\Framework\Phrase\Renderer\Factory'],
     ['Magento\Catalog\Model\Category\Indexer\Product'],
-    ['Magento\Catalog\Model\Resource\Category\Indexer\Product'],
+    ['Magento\Catalog\Model\ResourceModel\Category\Indexer\Product'],
     ['Magento\Catalog\Model\Index'],
     ['Magento\Catalog\Model\Product\Status', 'Magento\Catalog\Model\Product\Attribute\Source\Status'],
-    ['Magento\Catalog\Model\Resource\Product\Status'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Status'],
     [
         'Magento\CatalogInventory\Block\Stockqty\Type\Configurable',
         'Magento\ConfigurableProduct\Block\Stockqty\Type\Configurable',
@@ -2078,10 +2078,10 @@ return [
     ],
     ['Magento\Sales\Block\Adminhtml\Items\Renderer\Configurable'],
     [
-        'Magento\Catalog\Model\Resource\Product\Collection\AssociatedProduct',
+        'Magento\Catalog\Model\ResourceModel\Product\Collection\AssociatedProduct',
         'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct',
     ],
-    ['Magento\Catalog\Model\Resource\Product\Collection\AssociatedProductUpdater'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Collection\AssociatedProductUpdater'],
     ['Magento\Core\Model\Image\Adapter\Config', 'Magento\Framework\Image\Adapter\Config'],
     ['Magento\Core\Model\AbstractShell', 'Magento\Framework\App\AbstractShell'],
     ['Magento\Core\Model\Calculator', 'Magento\Framework\Math\Calculator'],
@@ -2203,7 +2203,7 @@ return [
     ],
     ['Magento\Catalog\Helper\Product\Url', 'Magento\Framework\Filter\Translit'],
     ['Magento\Catalog\Model\Product\Indexer\Price'],
-    ['Magento\Catalog\Model\Resource\Product\Indexer\Price'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Indexer\Price'],
     ['Magento\PubSub'], // unused library code which was removed
     ['Magento\Outbound'], // unused library code which was removed
     ['Magento\Indexer\Model\Processor\CacheInvalidate', 'Magento\Indexer\Model\Processor\InvalidateCache'],
@@ -2766,7 +2766,7 @@ return [
     ['Magento\Framework\Error\Handler', 'Magento\Framework\App\ErrorHandler'],
     ['Magento\Framework\Error\HandlerInterface', 'Magento\Framework\App\ErrorHandler'],
     ['Magento\Index'],
-    ['Magento\Catalog\Model\Resource\Product\Indexer\Eav'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav'],
     ['\Magento\Framework\Api\Eav\AbstractObject', 'Magento\Framework\Api\AbstractExtensibleObject'],
     ['\Magento\Framework\Api\AbstractObject', 'Magento\Framework\Api\AbstractSimpleObject'],
     [
@@ -3100,7 +3100,7 @@ return [
     ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
     ['Magento\Framework\Module\DataSetup', 'Magento\Setup\Module\DataSetup'],
     ['Magento\Authorization\Model\ResourceModel\Setup', 'Magento\Authorization\Setup\AuthorizationFactory'],
-    ['Magento\Catalog\Model\Resource\Setup', 'Magento\Catalog\Setup\CategorySetup'],
+    ['Magento\Catalog\Model\ResourceModel\Setup', 'Magento\Catalog\Setup\CategorySetup'],
     ['Magento\Checkout\Model\Resource\Setup', 'Magento\Checkout\Setup\InstallData'],
     ['Magento\Cms\Model\Resource\Setup', 'Magento\Cms\Setup\InstallData'],
     ['Magento\Customer\Model\Resource\Setup', 'Magento\Customer\Setup\CustomerSetup'],
@@ -3854,7 +3854,7 @@ return [
     ['Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice'],
     ['Magento\Catalog\Model\Product\GroupPrice'],
     ['Magento\Catalog\Model\Product\GroupPriceManagement'],
-    ['Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice'],
+    ['Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice'],
     ['Magento\Catalog\Pricing\Price\GroupPrice'],
     ['Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice'],
 ];

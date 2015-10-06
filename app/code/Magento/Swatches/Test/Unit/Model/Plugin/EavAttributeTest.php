@@ -21,7 +21,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var EavAttribute */
     private $eavAttribute;
 
-    /** @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     private $attribute;
 
     /** @var \Magento\Swatches\Model\SwatchFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -56,7 +56,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->attribute = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
         $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', [], [], '', false);
         $this->swatch = $this->getMock('\Magento\Swatches\Model\Swatch', [], [], '', false);

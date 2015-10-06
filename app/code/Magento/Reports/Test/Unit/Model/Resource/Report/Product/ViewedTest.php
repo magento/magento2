@@ -50,7 +50,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
 
@@ -181,7 +181,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->attributeMock->expects($this->any())->method('getBackend')->willReturn($this->backendMock);
 
-        $this->productMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product')
+        $this->productMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);

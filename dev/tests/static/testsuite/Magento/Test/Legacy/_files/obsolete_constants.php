@@ -78,7 +78,7 @@ return [
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
     ['FALLBACK_MAP_DIR', 'Magento\Core\Model\Design\PackageInterface'],
-    ['GALLERY_IMAGE_TABLE', 'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media'],
+    ['GALLERY_IMAGE_TABLE', 'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media'],
     ['HASH_ALGO'],
     ['INIT_OPTION_DIRS', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_APP_DIRS'],
     ['INIT_OPTION_REQUEST', 'Magento\Core\Model\App'],
@@ -150,7 +150,7 @@ return [
     ['XML_NODE_RELATED_CACHE', 'Magento\CatalogRule\Model\Rule'],
     [
         'XML_NODE_ATTRIBUTE_NODES',
-        'Magento\Catalog\Model\Resource\Product\Flat\Indexer',
+        'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer',
         'XML_NODE_ATTRIBUTE_GROUPS',
     ],
     [
@@ -310,8 +310,8 @@ return [
     ['XML_NODE_ADD_FILTERABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_NODE_ADD_CHILD_DATA', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_PATH_CONTENT_TEMPLATE_FILTER', 'Magento\Catalog\Helper\Data'],
-    ['XML_NODE_MAX_INDEX_COUNT', 'Magento\Catalog\Model\Resource\Product\Flat\Indexer'],
-    ['XML_NODE_ATTRIBUTE_GROUPS', 'Magento\Catalog\Model\Resource\Product\Flat\Indexer'],
+    ['XML_NODE_MAX_INDEX_COUNT', 'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer'],
+    ['XML_NODE_ATTRIBUTE_GROUPS', 'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer'],
     ['XML_PATH_UNASSIGNABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_PRODUCT_TYPE_SWITCHER_LABEL', 'Magento\Catalog\Helper\Product'],

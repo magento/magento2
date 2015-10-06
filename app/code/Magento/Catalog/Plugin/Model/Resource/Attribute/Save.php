@@ -31,7 +31,7 @@ class Save
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
      * @param callable $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      * @return mixed
@@ -39,7 +39,7 @@ class Save
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Catalog\Model\Resource\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Attribute $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {

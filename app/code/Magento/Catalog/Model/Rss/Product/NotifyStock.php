@@ -52,13 +52,13 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductsCollection()
     {
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $product->getCollection();
         /** @var $resourceStock \Magento\CatalogInventory\Model\Resource\Stock */
         $resourceStock = $this->stockFactory->create();

@@ -127,7 +127,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetExcludeProductIds()
     {
-        $collection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Compare\Item\Collection')
+        $collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getEntityId'])
             ->getMock();

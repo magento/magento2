@@ -135,7 +135,7 @@ class AroundProductRepositorySave
             $configurableAttributes = $configurableProductType->getConfigurableAttributes($product);
             $attributeCodes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
-                /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $productAttribute */
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $productAttribute */
                 $productAttribute = $configurableAttribute->getProductAttribute();
                 $attributeCode = $productAttribute->getAttributeCode();
                 $attributeCodes[] = $attributeCode;
