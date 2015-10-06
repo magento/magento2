@@ -155,7 +155,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
      * @param array $data
@@ -170,7 +170,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
         array $data = []

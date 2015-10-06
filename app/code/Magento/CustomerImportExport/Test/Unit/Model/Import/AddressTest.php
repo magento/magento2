@@ -238,7 +238,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function _createCustomerStorageMock()
     {
         $customerStorage = $this->getMock(
-            'Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage',
+            'Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage',
             ['load'],
             [],
             '',
@@ -454,7 +454,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
             $this->getMock(
-                'Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory',
+                'Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory',
                 [],
                 [],
                 '',

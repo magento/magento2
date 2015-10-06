@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CustomerImportExport\Test\Unit\Model\Resource\Import\Customer;
+namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
 
-use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage(
+        $this->_model = new \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage(
             $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
                 ->disableOriginalConstructor()
                 ->getMock(),

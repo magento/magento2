@@ -5,7 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -66,7 +66,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_customerStorage;
 
     /**
-     * @var \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory
+     * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory
      */
     protected $_storageFactory;
 
@@ -92,7 +92,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -106,7 +106,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
