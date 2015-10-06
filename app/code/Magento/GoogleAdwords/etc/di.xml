@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\GoogleAdwords\Model\Observer">
+    <type name="Magento\GoogleAdwords\Observer\SetConversionValueObserver">
         <arguments>
             <argument name="collection" xsi:type="object">Magento\Sales\Model\Resource\Order\Collection\Proxy</argument>
         </arguments>
