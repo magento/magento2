@@ -32,6 +32,7 @@ define([
         confirm({
             'content': msg,
             'actions': {
+
                 /**
                  * 'Confirm' action handler.
                  */
