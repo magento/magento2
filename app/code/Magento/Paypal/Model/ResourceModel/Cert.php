@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Paypal\Model\Resource;
+namespace Magento\Paypal\Model\ResourceModel;
 
 /**
  * PayPal resource model for certificate based authentication

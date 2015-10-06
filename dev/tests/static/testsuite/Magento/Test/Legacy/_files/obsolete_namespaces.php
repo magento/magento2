@@ -120,4 +120,5 @@ return [
     ['Magento\OfflineShipping\Model\Resource', 'Magento\OfflineShipping\Model\ResourceModel'],
     ['Magento\Payment\Model\Resource', 'Magento\Payment\Model\ResourceModel'],
     ['Magento\Payment\Test\Unit\Model\Resource', 'Magento\Payment\Test\Unit\Model\ResourceModel'],
+    ['Magento\Paypal\Model\Resource', 'Magento\Paypal\Model\ResourceModel'],
 ];

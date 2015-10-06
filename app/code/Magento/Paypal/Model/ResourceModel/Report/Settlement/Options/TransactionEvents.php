@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Paypal\Model\Resource\Report\Settlement\Options;
+namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Options;
 
 /**
  * Transaction Events Types Options

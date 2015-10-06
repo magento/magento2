@@ -2964,7 +2964,7 @@ return [
     ['Magento\Paypal\Model\System\Config\Source\AuthorizationAmounts'],
     ['Magento\Paypal\Exception'],
     ['Magento\Paypal\UnavailableException'],
-    ['Magento\Paypal\Model\Resource\Setup', 'Magento\Paypal\Setup\InstallData'],
+    ['Magento\Paypal\Model\ResourceModel\Setup', 'Magento\Paypal\Setup\InstallData'],
     ['Magento\Paypal\Block\Standard\Form'],
     ['Magento\Paypal\Block\Standard\Redirect'],
     ['Magento\Paypal\Controller\Standard\Cancel'],

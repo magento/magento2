@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Model\Resource\Report\Settlement\Row;
+namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Row;
 
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -22,7 +22,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init(
             'Magento\Paypal\Model\Report\Settlement\Row',
-            'Magento\Paypal\Model\Resource\Report\Settlement\Row'
+            'Magento\Paypal\Model\ResourceModel\Report\Settlement\Row'
         );
     }
 

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Paypal\Model\Resource\Billing\Agreement;
+namespace Magento\Paypal\Model\ResourceModel\Billing\Agreement;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -15,9 +15,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddCustomerDetails()
     {
-        /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
+        /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         );
 
         $billingAgreementCollection->addCustomerDetails();
