@@ -104,4 +104,5 @@ return [
     ['Magento\CatalogSearch\Test\Unit\Model\Resource', 'Magento\CatalogSearch\Test\Unit\Model\ResourceModel'],
     ['Magento\CatalogUrlRewrite\Model\Resource', 'Magento\CatalogUrlRewrite\Model\ResourceModel'],
     ['Magento\Checkout\Model\Resource', 'Magento\Checkout\Model\ResourceModel'],
+    ['Magento\CheckoutAgreements\Model\Resource', 'Magento\CheckoutAgreements\Model\ResourceModel'],
 ];
