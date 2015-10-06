@@ -99,4 +99,5 @@ return [
     ['Magento\CustomerImportExport\Test\Unit\Model\Resource', 'Magento\CustomerImportExport\Test\Unit\Model\ResourceModel'],
     ['Magento\Directory\Model\Resource', 'Magento\Directory\Model\ResourceModel'],
     ['Magento\Directory\Test\Unit\Model\Resource', 'Magento\Directory\Test\Unit\Model\ResourceModel'],
+    ['Magento\Downloadable\Model\Resource', 'Magento\Downloadable\Model\ResourceModel'],
 ];

@@ -6,7 +6,7 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
-use Magento\Downloadable\Model\Resource\Link as Resource;
+use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 
 /**
  * Downloadable link model
@@ -87,7 +87,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Resource\Link');
+        $this->_init('Magento\Downloadable\Model\ResourceModel\Link');
         parent::_construct();
     }
 
