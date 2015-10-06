@@ -112,6 +112,7 @@ class TransactionServiceTest extends \PHPUnit_Framework_TestCase
 
         $httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $httpClientFactoryMock->expects(static::once())
