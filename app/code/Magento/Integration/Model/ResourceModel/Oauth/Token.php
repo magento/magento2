@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Resource\Oauth;
+namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
 

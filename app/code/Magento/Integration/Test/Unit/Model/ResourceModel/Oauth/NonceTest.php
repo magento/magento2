@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Resource\Oauth;
+namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 /**
- * Unit test for \Magento\Integration\Model\Resource\Oauth\Nonce
+ * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Nonce
  */
 class NonceTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Integration\Model\Resource\Oauth\Nonce
+     * @var \Magento\Integration\Model\ResourceModel\Oauth\Nonce
      */
     protected $nonceResource;
 
@@ -35,7 +35,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->nonceResource = new \Magento\Integration\Model\Resource\Oauth\Nonce($contextMock);
+        $this->nonceResource = new \Magento\Integration\Model\ResourceModel\Oauth\Nonce($contextMock);
     }
 
     public function testDeleteOldEntries()

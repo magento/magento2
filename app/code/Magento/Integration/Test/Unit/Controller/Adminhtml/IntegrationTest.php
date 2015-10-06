@@ -247,7 +247,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             $contextParameters
         );
 
-        $integrationCollection = $this->getMockBuilder('\Magento\Integration\Model\Resource\Integration\Collection')
+        $integrationCollection = $this->getMockBuilder('\Magento\Integration\Model\ResourceModel\Integration\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addUnsecureUrlsFilter', 'getSize'])
             ->getMock();

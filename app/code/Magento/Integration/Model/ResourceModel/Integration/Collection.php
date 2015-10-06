@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Resource\Integration;
+namespace Magento\Integration\Model\ResourceModel\Integration;
 
 /**
  * Integrations collection.
@@ -17,7 +17,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Integration', 'Magento\Integration\Model\Resource\Integration');
+        $this->_init('Magento\Integration\Model\Integration', 'Magento\Integration\Model\ResourceModel\Integration');
     }
 
     /**

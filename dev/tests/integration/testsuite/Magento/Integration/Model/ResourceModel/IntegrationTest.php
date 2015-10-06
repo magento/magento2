@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Resource;
+namespace Magento\Integration\Model\ResourceModel;
 
 /**
- * Integration test for \Magento\Integration\Model\Resource\Integration
+ * Integration test for \Magento\Integration\Model\ResourceModel\Integration
  */
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {

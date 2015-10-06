@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Resource\Oauth;
+namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 /**
- * Unit test for \Magento\Integration\Model\Resource\Oauth\Token
+ * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Token
  */
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Integration\Model\Resource\Oauth\Token
+     * @var \Magento\Integration\Model\ResourceModel\Oauth\Token
      */
     protected $tokenResource;
 
@@ -35,7 +35,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->tokenResource = new \Magento\Integration\Model\Resource\Oauth\Token(
+        $this->tokenResource = new \Magento\Integration\Model\ResourceModel\Oauth\Token(
             $contextMock,
             new \Magento\Framework\Stdlib\DateTime()
         );

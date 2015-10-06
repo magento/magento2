@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Model\Resource;
+namespace Magento\Integration\Model\ResourceModel;
 
 /**
  * Integration resource model

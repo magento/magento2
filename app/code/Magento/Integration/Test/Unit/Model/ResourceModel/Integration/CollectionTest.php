@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Resource\Integration;
+namespace Magento\Integration\Test\Unit\Model\ResourceModel\Integration;
 
 /**
- * Unit test for \Magento\Integration\Model\Resource\Integration\Collection
+ * Unit test for \Magento\Integration\Model\ResourceModel\Integration\Collection
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $select;
 
     /**
-     * @var \Magento\Integration\Model\Resource\Integration\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\ResourceModel\Integration\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -43,11 +43,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            'Magento\Integration\Model\Resource\Integration\Collection',
+            'Magento\Integration\Model\ResourceModel\Integration\Collection',
             ['resource' => $resource]
         );
 
-        $this->collection = $this->getMockBuilder('Magento\Integration\Model\Resource\Integration\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Integration\Model\ResourceModel\Integration\Collection')
             ->setConstructorArgs($arguments)
             ->setMethods(['addFilter', '_translateCondition', 'getMainTable'])
             ->getMock();
