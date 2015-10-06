@@ -59,7 +59,7 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement
      */
     protected $_agreementResource;
 
@@ -70,7 +70,7 @@ class View extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Paypal\Helper\Data $helper
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource
      * @param array $data
      */
     public function __construct(
@@ -80,7 +80,7 @@ class View extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Paypal\Helper\Data $helper,
-        \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource,
         array $data = []
     ) {
         $this->_helper = $helper;

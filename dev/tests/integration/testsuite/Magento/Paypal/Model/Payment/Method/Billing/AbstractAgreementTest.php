@@ -56,7 +56,7 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
         );
         $this->_model->setData('info_instance', $info);
         $billingAgreement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         )->getFirstItem();
         $data = [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()];
         $this->_model->assignData($data);

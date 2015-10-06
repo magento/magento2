@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Paypal\Model\Resource\Report;
+namespace Magento\Paypal\Model\ResourceModel\Report;
 
 /**
  * Report settlement resource model
