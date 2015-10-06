@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogRule\Model\Resource;
+namespace Magento\CatalogRule\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Model\AbstractModel;

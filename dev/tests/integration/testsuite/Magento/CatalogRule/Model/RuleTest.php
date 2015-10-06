@@ -19,7 +19,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resourceMock = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\Rule',
+            'Magento\CatalogRule\Model\ResourceModel\Rule',
             ['getIdFieldName', 'getRulesFromProduct'],
             [],
             '',

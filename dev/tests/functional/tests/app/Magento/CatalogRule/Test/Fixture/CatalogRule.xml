@@ -10,7 +10,7 @@
              module="Magento_CatalogRule"
              type="eav"
              entity_type="catalog_rule"
-             collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection"
+             collection="Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price\Collection"
              repository_class="Magento\CatalogRule\Test\Repository\CatalogRule"
              handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface"
              class="Magento\CatalogRule\Test\Fixture\CatalogRule">

@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogRule\Model\Resource\Rule\Product;
+namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product;
 
 class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -34,7 +34,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $websiteId
      * @param array $updateFields       the array of fields for compare with rule price and update
      * @param string $websiteDate
-     * @return \Magento\CatalogRule\Model\Resource\Rule\Product\Price
+     * @return \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price
      */
     public function applyPriceRuleToIndexTable(
         \Magento\Framework\DB\Select $select,

@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Model\Resource\Grid;
+namespace Magento\CatalogRule\Model\ResourceModel\Grid;
 
-class Collection extends \Magento\CatalogRule\Model\Resource\Rule\Collection
+class Collection extends \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
 {
     /**
      * @return $this

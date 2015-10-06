@@ -6,7 +6,7 @@
 namespace Magento\CatalogRule\Plugin\Indexer\Product;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
-use Magento\CatalogRule\Model\Resource\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\Framework\Message\ManagerInterface;

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Model\Resource\Rule;
+namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 
 class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
 {
@@ -28,7 +28,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogRule\Model\Rule', 'Magento\CatalogRule\Model\Resource\Rule');
+        $this->_init('Magento\CatalogRule\Model\Rule', 'Magento\CatalogRule\Model\ResourceModel\Rule');
     }
 
     /**
