@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Variable\Model\Resource;
+namespace Magento\Variable\Model\ResourceModel;
 
 /**
  * Custom variable resource model
@@ -116,7 +116,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select $select
      * @param integer $storeId
-     * @return \Magento\Variable\Model\Resource\Variable
+     * @return \Magento\Variable\Model\ResourceModel\Variable
      */
     protected function _addValueToSelect(
         \Magento\Framework\DB\Select $select,
