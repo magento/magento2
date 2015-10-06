@@ -62,27 +62,27 @@ class OrdersFixture extends Fixture
         );
         $salesOrderTableName = $this->getTableName(
             'sales_order',
-            'Magento\Sales\Model\Resource\Order'
+            'Magento\Sales\Model\ResourceModel\Order'
         );
         $salesOrderAddressTableName = $this->getTableName(
             'sales_order_address',
-            'Magento\Sales\Model\Resource\Order'
+            'Magento\Sales\Model\ResourceModel\Order'
         );
         $salesOrderGridTableName = $this->getTableName(
             'sales_order_grid',
-            'Magento\Sales\Model\Resource\Order\Grid'
+            'Magento\Sales\Model\ResourceModel\Order\Grid'
         );
         $salesOrderItemTableName = $this->getTableName(
             'sales_order_item',
-            'Magento\Sales\Model\Resource\Order\Item'
+            'Magento\Sales\Model\ResourceModel\Order\Item'
         );
         $salesOrderPaymentTableName = $this->getTableName(
             'sales_order_payment',
-            'Magento\Sales\Model\Resource\Order\Payment'
+            'Magento\Sales\Model\ResourceModel\Order\Payment'
         );
         $salesOrderStatusHistoryTableName = $this->getTableName(
             'sales_order_status_history',
-            'Magento\Sales\Model\Resource\Order\Status\History'
+            'Magento\Sales\Model\ResourceModel\Order\Status\History'
         );
         $eavEntityStoreTableName = $this->getTableName(
             'eav_entity_store',

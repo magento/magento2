@@ -20,7 +20,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
+    <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
         <arguments>
             <argument name="ignoredProductTypes" xsi:type="array">
                 <item name="grouped" xsi:type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</item>

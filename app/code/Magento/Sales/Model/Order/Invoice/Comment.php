@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment getResource()
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
@@ -67,7 +67,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Invoice\Comment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment');
     }
 
     /**

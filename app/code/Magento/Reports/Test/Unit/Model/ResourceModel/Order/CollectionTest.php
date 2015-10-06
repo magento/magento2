@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $managerMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -69,7 +69,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderFactoryMock;
 
@@ -117,7 +117,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\OrderFactory')
+        $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\OrderFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -219,7 +219,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($useAggregatedData);
 
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\Order')
+        $orderMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Order')
             ->disableOriginalConstructor()
             ->getMock();
 

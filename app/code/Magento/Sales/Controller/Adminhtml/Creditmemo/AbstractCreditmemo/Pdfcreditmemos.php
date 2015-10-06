@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
 
 /**
  * Class Pdfcreditmemos

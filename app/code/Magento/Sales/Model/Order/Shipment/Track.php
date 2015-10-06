@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -91,7 +91,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Track');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Track');
     }
 
     /**

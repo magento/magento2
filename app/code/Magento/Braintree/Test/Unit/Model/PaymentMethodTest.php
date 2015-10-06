@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use \Braintree_Result_Successful;
 use \Braintree_Result_Error;
@@ -134,7 +134,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesTransactionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -1699,7 +1699,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $numberOfTransactions
     ) {
         $transactionCollectionMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $transactionCollectionMock->expects($this->at(0))
@@ -1793,7 +1793,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $authTransaction
     ) {
         $authTransactionCollectionMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $authTransactionCollectionMock->expects($this->once())
@@ -2379,7 +2379,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     protected function setupTransactionIds($orderId, $transactionIds)
     {
         $transactionCollectionMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $transactionCollectionMock->expects($this->once())
@@ -2471,7 +2471,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $index = 1;
         foreach (array_keys($transactions) as $id) {
             $transactionCollectionMock = $this->getMockBuilder(
-                '\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+                '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
             )->disableOriginalConstructor()
                 ->getMock();
             $transactionCollectionMock->expects($this->at(0))

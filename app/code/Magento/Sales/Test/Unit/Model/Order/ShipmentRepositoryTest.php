@@ -22,7 +22,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Sales resource metadata.
      *
-     * @var \Magento\Sales\Model\Resource\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
@@ -36,7 +36,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->metadata = $this->getMock(
-            'Magento\Sales\Model\Resource\Metadata',
+            'Magento\Sales\Model\ResourceModel\Metadata',
             ['getNewInstance', 'getMapper'],
             [],
             '',
@@ -182,7 +182,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filterGroup]);
 
         $collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Shipment\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Shipment\Collection',
             ['addFieldToFilter'],
             [],
             '',

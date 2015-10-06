@@ -42,11 +42,11 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\ResourceModel\Quote\Payment',
             'Magento\Quote\Model\ResourceModel\Quote\Address\Rate',
             'Magento\Reports\Model\ResourceModel\Event',
-            'Magento\Sales\Model\Resource\Order',
-            'Magento\Sales\Model\Resource\Order\Grid',
-            'Magento\Sales\Model\Resource\Order\Item',
-            'Magento\Sales\Model\Resource\Order\Payment',
-            'Magento\Sales\Model\Resource\Order\Status\History',
+            'Magento\Sales\Model\ResourceModel\Order',
+            'Magento\Sales\Model\ResourceModel\Order\Grid',
+            'Magento\Sales\Model\ResourceModel\Order\Item',
+            'Magento\Sales\Model\ResourceModel\Order\Payment',
+            'Magento\Sales\Model\ResourceModel\Order\Status\History',
             '\Magento\Eav\Model\ResourceModel\Entity\Store'
         ];
         $mockObjects = [];
@@ -55,7 +55,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             $mockObject = $this->getMock($mockObjectName, ['getTable'], [], '', false);
             $path = explode('\\', $mockObjectName);
             $name = array_pop($path);
-            if (strcasecmp($mockObjectName, 'Magento\Sales\Model\Resource\Order') == 0) {
+            if (strcasecmp($mockObjectName, 'Magento\Sales\Model\ResourceModel\Order') == 0) {
                 $mockObject->expects($this->exactly(2))
                     ->method('getTable')
                     ->willReturn(strtolower($name) . '_table_name');

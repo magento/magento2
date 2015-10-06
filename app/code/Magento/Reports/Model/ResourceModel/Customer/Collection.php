@@ -67,7 +67,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
     protected $_quoteItemFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $orderResource;
 
@@ -85,7 +85,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory
-     * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
+     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param mixed $connection
      * @param string $modelName
      *
@@ -105,7 +105,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory,
-        \Magento\Sales\Model\Resource\Order\Collection $orderResource,
+        \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {

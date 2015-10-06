@@ -42,7 +42,7 @@ class Info extends \Magento\Framework\DataObject
     protected $_trackFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
      */
     protected $_trackCollectionFactory;
 

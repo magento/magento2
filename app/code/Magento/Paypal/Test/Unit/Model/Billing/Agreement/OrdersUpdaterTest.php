@@ -43,7 +43,7 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', [], [], '', false);
-        $argument = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
+        $argument = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
 
         $this->_registry->expects(
             $this->once()

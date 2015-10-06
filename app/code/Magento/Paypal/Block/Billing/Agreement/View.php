@@ -27,7 +27,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * Related orders collection
      *
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $_relatedOrders = null;
 
@@ -39,7 +39,7 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
 
@@ -66,7 +66,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Paypal\Helper\Data $helper
@@ -76,7 +76,7 @@ class View extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Paypal\Helper\Data $helper,
@@ -96,7 +96,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve related orders collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getRelatedOrders()
     {

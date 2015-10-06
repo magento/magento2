@@ -17,8 +17,8 @@ use Magento\Sales\Model\AbstractModel;
  * Tracks transaction history, allows to build transactions hierarchy
  * By default transactions are saved as closed.
  *
- * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
 
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -197,7 +197,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Payment\Transaction');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment\Transaction');
         parent::_construct();
     }
 

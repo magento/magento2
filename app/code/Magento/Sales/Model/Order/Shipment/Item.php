@@ -13,8 +13,8 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractModel implements ShipmentItemInterface
@@ -83,7 +83,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Item');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Item');
     }
 
     /**
