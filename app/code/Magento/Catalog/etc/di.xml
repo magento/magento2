@@ -163,16 +163,16 @@
             <argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Website">
+    <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Store">
+    <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
         <plugin name="productAttributesStoreViewSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>

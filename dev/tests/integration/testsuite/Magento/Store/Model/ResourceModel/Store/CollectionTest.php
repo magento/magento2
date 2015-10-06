@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Resource\Store;
+namespace Magento\Store\Model\ResourceModel\Store;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Model\Resource\Store\Collection
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection
      */
     protected $_collection;
 
     protected function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Store\Model\Resource\Store\Collection'
+            'Magento\Store\Model\ResourceModel\Store\Collection'
         );
     }
 
@@ -39,10 +39,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Resource\Store\Collection::addGroupFilter
-     * @covers \Magento\Store\Model\Resource\Store\Collection::addIdFilter
-     * @covers \Magento\Store\Model\Resource\Store\Collection::addWebsiteFilter
-     * @covers \Magento\Store\Model\Resource\Store\Collection::addCategoryFilter
+     * @covers \Magento\Store\Model\ResourceModel\Store\Collection::addGroupFilter
+     * @covers \Magento\Store\Model\ResourceModel\Store\Collection::addIdFilter
+     * @covers \Magento\Store\Model\ResourceModel\Store\Collection::addWebsiteFilter
+     * @covers \Magento\Store\Model\ResourceModel\Store\Collection::addCategoryFilter
      */
     public function testAddFilters()
     {

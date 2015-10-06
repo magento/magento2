@@ -48,7 +48,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Catalog\Block\Product\View">

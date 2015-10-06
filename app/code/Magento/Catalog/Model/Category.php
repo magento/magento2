@@ -188,7 +188,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Store collection factory
      *
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
@@ -232,7 +232,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
      * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTreeResource
      * @param \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param Config $catalogConfig
@@ -256,7 +256,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
         \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
         \Magento\Framework\UrlInterface $url,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Config $catalogConfig,

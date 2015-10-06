@@ -29,7 +29,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     public function testWalk()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Store\Model\Resource\Store\Collection'
+            'Magento\Store\Model\ResourceModel\Store\Collection'
         );
         $this->_model->walk($collection->getSelect(), [[$this, 'walkCallback']]);
         $this->assertGreaterThan(0, $this->_callbackCounter);

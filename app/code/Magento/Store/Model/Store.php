@@ -304,7 +304,7 @@ class Store extends AbstractExtensibleModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Store\Model\Resource\Store $resource
+     * @param \Magento\Store\Model\ResourceModel\Store $resource
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
@@ -332,7 +332,7 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Store\Model\Resource\Store $resource,
+        \Magento\Store\Model\ResourceModel\Store $resource,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
@@ -411,7 +411,7 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Store');
+        $this->_init('Magento\Store\Model\ResourceModel\Store');
     }
 
     /**
