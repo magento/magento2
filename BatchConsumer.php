@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\ConnectionLostException;
 
 /**
  * Class BatchConsumer
@@ -44,7 +45,7 @@ class BatchConsumer implements ConsumerInterface
      * @var int
      */
     private $interval;
-    
+
     /**
      * @var Resource
      */
@@ -134,6 +135,8 @@ class BatchConsumer implements ConsumerInterface
                 $this->dispatchMessage($mergedMessages);
                 $this->acknowledgeAll($queue, $messages);
                 $this->resource->getConnection()->commit();
+            } catch (ConnectionLostException $e) {
+                $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
                 $this->resource->getConnection()->rollBack();
                 $this->rejectAll($queue, $messages);
@@ -164,7 +167,7 @@ class BatchConsumer implements ConsumerInterface
             $this->dispatchMessage($mergedMessages);
             $this->acknowledgeAll($queue, $messages);
             $this->resource->getConnection()->commit();
-        } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
+        } catch (ConnectionLostException $e) {
             $this->resource->getConnection()->rollBack();
         } catch (\Exception $e) {
             $this->resource->getConnection()->rollBack();
@@ -222,7 +225,7 @@ class BatchConsumer implements ConsumerInterface
      * @param EnvelopeInterface[] $messages
      * @return void
      */
-    private function rejectAll($queue, $messages)
+    private function rejectAll($queue, array $messages)
     {
         foreach ($messages as $message) {
             $queue->reject($message);
