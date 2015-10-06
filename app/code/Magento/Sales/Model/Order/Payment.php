@@ -19,8 +19,8 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 /**
  * Order payment information
  *
- * @method \Magento\Sales\Model\Resource\Order\Payment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Payment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -167,7 +167,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Payment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
     }
 
     /**

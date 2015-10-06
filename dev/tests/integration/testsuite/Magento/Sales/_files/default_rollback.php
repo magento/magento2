@@ -12,7 +12,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $order \Magento\Sales\Model\Order */
-$orderCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Resource\Order\Collection');
+$orderCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\ResourceModel\Order\Collection');
 foreach ($orderCollection as $order) {
     $order->delete();
 }

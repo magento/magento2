@@ -15,7 +15,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {

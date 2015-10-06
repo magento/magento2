@@ -113,7 +113,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesTransactionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

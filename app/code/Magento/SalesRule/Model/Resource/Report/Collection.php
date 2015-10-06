@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\Resource\Report;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
      * Period format for report (day, month, year)
@@ -51,7 +51,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
-     * @param \Magento\Sales\Model\Resource\Report $resource
+     * @param \Magento\Sales\Model\ResourceModel\Report $resource
      * @param mixed $connection
      */
     public function __construct(
@@ -59,7 +59,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\Report $resource,
+        \Magento\Sales\Model\ResourceModel\Report $resource,
         \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -178,7 +178,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     /**
      * Apply collection custom filter
      *
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
      */
     protected function _applyCustomFilter()
     {

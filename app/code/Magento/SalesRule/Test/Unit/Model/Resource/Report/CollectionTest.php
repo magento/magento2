@@ -84,7 +84,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->reportResource = $this->getMock(
-            'Magento\Sales\Model\Resource\Report',
+            'Magento\Sales\Model\ResourceModel\Report',
             ['getConnection', 'getMainTable'],
             [],
             '',

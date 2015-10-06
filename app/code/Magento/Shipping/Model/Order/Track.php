@@ -9,8 +9,8 @@ namespace Magento\Shipping\Model\Order;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  * @method int getParentId()
  * @method float getWeight()
  * @method float getQty()

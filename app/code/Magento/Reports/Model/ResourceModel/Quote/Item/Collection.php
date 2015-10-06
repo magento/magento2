@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $customerResource;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $orderResource;
 
@@ -51,7 +51,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource
      * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
-     * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
+     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -62,7 +62,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource,
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
-        \Magento\Sales\Model\Resource\Order\Collection $orderResource,
+        \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {

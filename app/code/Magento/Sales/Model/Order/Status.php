@@ -58,7 +58,7 @@ class Status extends \Magento\Sales\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Status');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Status');
     }
 
     /**
@@ -72,7 +72,7 @@ class Status extends \Magento\Sales\Model\AbstractModel
      */
     public function assignState($state, $isDefault = false, $visibleOnFront = false)
     {
-        /** @var \Magento\Sales\Model\Resource\Order\Status $resource */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Status $resource */
         $resource = $this->_getResource();
         $resource->beginTransaction();
         try {

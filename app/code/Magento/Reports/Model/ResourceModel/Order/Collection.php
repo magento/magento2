@@ -14,7 +14,7 @@ use Magento\Framework\DB\Select;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection
+class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
     /**
      * Is live
@@ -61,7 +61,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Reports order factory
      *
-     * @var \Magento\Sales\Model\Resource\Report\OrderFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory
      */
     protected $_reportOrderFactory;
 
@@ -78,7 +78,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\OrderFactory $reportOrderFactory
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      *
@@ -95,7 +95,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
+        \Magento\Sales\Model\ResourceModel\Report\OrderFactory $reportOrderFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {

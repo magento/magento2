@@ -88,7 +88,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $constructArgs['resource'] = $resourceMock;
         $productResourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $constructArgs['productResource'] = $productResourceMock;
-        $orderResourceMock = $this->getMock('\Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
+        $orderResourceMock = $this->getMock('\Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
         $constructArgs['orderResource'] = $orderResourceMock;
 
         $collection = $this->getMock(

@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Pdf\Invoice;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {

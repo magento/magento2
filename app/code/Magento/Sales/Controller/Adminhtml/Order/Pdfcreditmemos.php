@@ -14,8 +14,8 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory;
-use Magento\Sales\Model\Resource\Order\Collection as OrderCollection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
 /**
  * Class Pdfcreditmemos

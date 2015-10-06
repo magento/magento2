@@ -12,8 +12,8 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 /**
  * Order Item Model
  *
- * @method \Magento\Sales\Model\Resource\Order\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Item getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
@@ -143,7 +143,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Item');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Item');
     }
 
     /**

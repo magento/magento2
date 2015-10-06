@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 
-class Collection extends \Magento\Sales\Model\Resource\Report\Bestsellers\Collection
+class Collection extends \Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection
 {
     /**
      * Tables per period

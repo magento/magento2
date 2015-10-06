@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Product;
 
-class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
+class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * Aggregation key daily

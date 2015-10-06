@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Braintree\Model\Vault;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 
 /**
  * Class PayPal
