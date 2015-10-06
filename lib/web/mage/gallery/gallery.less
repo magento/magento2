@@ -717,6 +717,12 @@
     z-index: @z-index-10;
 }
 
+.fotorama--fullscreen-icons {
+    .fotorama__fullscreen-icon {
+        display: none;
+    }
+}
+
 .fotorama__fullscreen-icon {
     &:focus {
         &:extend(.fotorama-focus);
@@ -727,6 +733,7 @@
 
 .fotorama--fullscreen {
     .fotorama__fullscreen-icon {
+        display: inline-block;
         background-position: (-@size-fotorama-block) 0;
     }
 }
@@ -1217,5 +1224,13 @@ body.fotorama__fullscreen {
     .magnify-fullimage {
         display: inline-block;
     }
-    .fotorama__stage__shaft {}
+
+    .magnify-lens {
+        display: none !important;
+    }
+    .fotorama__stage__shaft {
+        .fotorama__img {
+            display: none;
+        }
+    }
 }
