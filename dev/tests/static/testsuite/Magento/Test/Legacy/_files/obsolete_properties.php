@@ -68,7 +68,7 @@ return [
     ['_persistentCustomerGroupId'],
     ['_queriesHooked', 'Magento\Core\Model\Resource\Setup'],
     ['_quoteImporter', 'Magento\Paypal\Model\Express\Checkout'],
-    ['_ratingOptionTable', 'Magento\Review\Model\Resource\Rating\Option\Collection'],
+    ['_ratingOptionTable', 'Magento\Review\Model\ResourceModel\Rating\Option\Collection'],
     ['_readerFactory', 'Magento\Framework\App\ObjectManager\ConfigLoader'],
     ['_resourceConfig', 'Magento\Core\Model\Resource\Setup'],
     ['_saveTemplateFlag', 'Magento\Newsletter\Model\Queue'],

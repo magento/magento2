@@ -7,8 +7,8 @@ namespace Magento\Review\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Review\Model\Resource\Review\Product\Collection as ProductCollection;
-use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
+use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
+use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollection;
 
 /**
  * Review model
@@ -64,14 +64,14 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * Review product collection factory
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
      */
     protected $productCollectionFactory;
 
     /**
      * Review status collection factory
      *
-     * @var \Magento\Review\Model\Resource\Review\Status\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory
      */
     protected $_statusFactory;
 
@@ -113,9 +113,9 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productFactory
-     * @param \Magento\Review\Model\Resource\Review\Status\CollectionFactory $statusFactory
-     * @param \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory $statusFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory $summaryFactory
      * @param \Magento\Review\Model\Review\SummaryFactory $summaryModFactory
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -128,9 +128,9 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productFactory,
-        \Magento\Review\Model\Resource\Review\Status\CollectionFactory $statusFactory,
-        \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory,
+        \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productFactory,
+        \Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory $statusFactory,
+        \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -156,7 +156,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Review');
+        $this->_init('Magento\Review\Model\ResourceModel\Review');
     }
 
     /**
