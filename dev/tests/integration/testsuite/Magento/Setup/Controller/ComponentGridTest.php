@@ -129,9 +129,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $packageInfoFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
             $objectManagerProvider,
