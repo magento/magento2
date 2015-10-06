@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Test\Unit\Model\Resource;
+namespace Magento\Search\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class QueryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Search\Model\Resource\Query
+     * @var \Magento\Search\Model\ResourceModel\Query
      */
     private $model;
 
@@ -41,7 +41,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ->method('getResources')
             ->willReturn($resource);
 
-        $this->model = $objectManager->getObject('Magento\Search\Model\Resource\Query', ['context' => $context]);
+        $this->model = $objectManager->getObject('Magento\Search\Model\ResourceModel\Query', ['context' => $context]);
     }
 
     public function testSaveIncrementalPopularity()

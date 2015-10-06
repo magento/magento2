@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Search\Model\Resource;
+namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
