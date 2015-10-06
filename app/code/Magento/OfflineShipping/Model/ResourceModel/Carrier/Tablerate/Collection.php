@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Model\Resource\Carrier\Tablerate;
+namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
 /**
  * Shipping table rates collection
@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init(
             'Magento\OfflineShipping\Model\Carrier\Tablerate',
-            'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate'
+            'Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate'
         );
         $this->_countryTable = $this->getTable('directory_country');
         $this->_regionTable = $this->getTable('directory_country_region');
@@ -70,7 +70,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Add website filter to collection
      *
      * @param int $websiteId
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
      */
     public function setWebsiteFilter($websiteId)
     {
@@ -81,7 +81,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Add condition name (code) filter to collection
      *
      * @param string $conditionName
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
      */
     public function setConditionFilter($conditionName)
     {
@@ -92,7 +92,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Add country filter to collection
      *
      * @param string $countryId
-     * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection
+     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection
      */
     public function setCountryFilter($countryId)
     {

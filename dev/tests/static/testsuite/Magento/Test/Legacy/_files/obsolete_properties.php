@@ -76,7 +76,7 @@ return [
     ['_setAttributes', 'Magento\Catalog\Model\Product\Type\AbstractType'],
     ['_skipFieldsByModel'],
     ['_ship_id'],
-    ['_shipTable', 'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection'],
+    ['_shipTable', 'Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection'],
     [
         '_showTemplateHints',
         'Magento\Framework\View\Element\Template',
