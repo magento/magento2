@@ -13,8 +13,8 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 /**
  * Tax class model
  *
- * @method \Magento\Tax\Model\Resource\TaxClass _getResource()
- * @method \Magento\Tax\Model\Resource\TaxClass getResource()
+ * @method \Magento\Tax\Model\ResourceModel\TaxClass _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\TaxClass getResource()
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -79,7 +79,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\TaxClass');
+        $this->_init('Magento\Tax\Model\ResourceModel\TaxClass');
     }
 
     /**

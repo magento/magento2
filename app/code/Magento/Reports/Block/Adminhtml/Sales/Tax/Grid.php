@@ -69,8 +69,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function getResourceCollectionName()
     {
         return $this->getFilterData()->getData('report_type') == 'updated_at_order'
-            ? 'Magento\Tax\Model\Resource\Report\Updatedat\Collection'
-            : 'Magento\Tax\Model\Resource\Report\Collection';
+            ? 'Magento\Tax\Model\ResourceModel\Report\Updatedat\Collection'
+            : 'Magento\Tax\Model\ResourceModel\Report\Collection';
     }
 
     /**

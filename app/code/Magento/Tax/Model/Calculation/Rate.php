@@ -16,8 +16,8 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Tax Rate Model
  *
- * @method \Magento\Tax\Model\Resource\Calculation\Rate _getResource()
- * @method \Magento\Tax\Model\Resource\Calculation\Rate getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
@@ -110,7 +110,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\Calculation\Rate');
+        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rate');
     }
 
     /**
