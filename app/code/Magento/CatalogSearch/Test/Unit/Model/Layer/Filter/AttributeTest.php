@@ -22,7 +22,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|MockObject */
     private $frontend;
 
-    /** @var  \Magento\CatalogSearch\Model\Resource\Fulltext\Collection|MockObject */
+    /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject */
     private $fulltextCollection;
 
     /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
@@ -67,7 +67,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
-        $this->fulltextCollection = $this->getMockBuilder('\Magento\CatalogSearch\Model\Resource\Fulltext\Collection')
+        $this->fulltextCollection = $this->getMockBuilder('\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
             ->getMock();

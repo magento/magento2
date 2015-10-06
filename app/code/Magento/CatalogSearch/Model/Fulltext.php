@@ -15,8 +15,8 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Catalog advanced search model
  *
- * @method \Magento\CatalogSearch\Model\Resource\Fulltext _getResource()
- * @method \Magento\CatalogSearch\Model\Resource\Fulltext getResource()
+ * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext _getResource()
+ * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext getResource()
  * @method int getProductId()
  * @method \Magento\CatalogSearch\Model\Fulltext setProductId(int $value)
  * @method int getStoreId()
@@ -70,7 +70,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogSearch\Model\Resource\Fulltext');
+        $this->_init('Magento\CatalogSearch\Model\ResourceModel\Fulltext');
     }
 
     /**
