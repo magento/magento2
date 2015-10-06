@@ -118,7 +118,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectionInjectedForConsumer()
     {
-        $dispatchTypeName = 'Magento\Framework\Object';
+        $dispatchTypeName = 'Magento\Framework\DataObject';
 
         $this->queueConfigMock->expects($this->any())
             ->method('get')
@@ -138,7 +138,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
-        $consumerTypeName = 'Magento\MessageQueue\Model\TestConsumer';
+        $consumerTypeName = 'Magento\Framework\MessageQueue\Model\TestConsumer';
         $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')
             ->setMethods(['configure'])
             ->getMockForAbstractClass();
