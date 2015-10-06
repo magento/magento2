@@ -260,4 +260,5 @@ return [
     ['/app/code/Magento/DesignEditor'],
     ['/dev/tools/Magento/Tools/Migration'],
     ['/dev/shell/dependency.php'],
+    ['/dev/tests/performance'],
 ];
