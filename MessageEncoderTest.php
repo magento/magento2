@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\Object;
+use Magento\Framework\ObjectManagerInterface;
 
 class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 {
