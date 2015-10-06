@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Observer;
+namespace Magento\Sales\Cron;
 
 use Magento\Store\Model\StoresConfig;
 
@@ -72,7 +72,7 @@ class CleanExpiredQuotes
      *
      * @return array
      */
-    public function getExpireQuotesAdditionalFilterFields()
+    protected function getExpireQuotesAdditionalFilterFields()
     {
         return $this->expireQuotesFilterFields;
     }

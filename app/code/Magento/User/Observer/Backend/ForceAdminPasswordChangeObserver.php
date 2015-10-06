@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Model\Backend\Observer;
+namespace Magento\User\Observer\Backend;
 
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * User backend observer model for passwords
  */
-class PasswordObserver
+class ForceAdminPasswordChangeObserver implements ObserverInterface
 {
     /**
      * Backend configuration interface
@@ -26,13 +27,6 @@ class PasswordObserver
      * @var \Magento\Framework\AuthorizationInterface
      */
     protected $authorization;
-
-    /**
-     * Admin user resource model
-     *
-     * @var \Magento\User\Model\Resource\User
-     */
-    protected $userResource;
 
     /**
      * Backend url interface
@@ -56,13 +50,6 @@ class PasswordObserver
     protected $authSession;
 
     /**
-     * Encryption model
-     *
-     * @var \Magento\Framework\Encryption\EncryptorInterface
-     */
-    protected $encryptor;
-
-    /**
      * Action flag
      *
      * @var \Magento\Framework\App\ActionFlag
@@ -79,98 +66,28 @@ class PasswordObserver
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\Resource\User $userResource
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\Resource\User $userResource,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->authorization = $authorization;
         $this->observerConfig = $observerConfig;
-        $this->userResource = $userResource;
         $this->url = $url;
         $this->session = $session;
         $this->authSession = $authSession;
-        $this->encryptor = $encryptor;
         $this->actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
-    }
-
-    /**
-     * Harden admin password change.
-     *
-     * New password must be minimum 7 chars length and include alphanumeric characters
-     * The password is compared to at least last 4 previous passwords to prevent setting them again
-     *
-     * @param EventObserver $observer
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function checkAdminPasswordChange($observer)
-    {
-        /* @var $user \Magento\User\Model\User */
-        $user = $observer->getEvent()->getObject();
-
-        if ($user->getNewPassword()) {
-            $password = $user->getNewPassword();
-        } else {
-            $password = $user->getPassword();
-        }
-
-        if ($password && !$user->getForceNewPassword() && $user->getId()) {
-            if ($this->encryptor->isValidHash($password, $user->getOrigData('password'))) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Sorry, but this password has already been used. Please create another.')
-                );
-            }
-
-            // check whether password was used before
-            $resource = $this->userResource;
-            $passwordHash = $this->encryptor->getHash($password, false);
-            foreach ($resource->getOldPasswords($user) as $oldPasswordHash) {
-                if ($passwordHash === $oldPasswordHash) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Sorry, but this password has already been used. Please create another.')
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Save new admin password
-     *
-     * @param EventObserver $observer
-     * @return void
-     */
-    public function trackAdminNewPassword($observer)
-    {
-        /* @var $user \Magento\User\Model\User */
-        $user = $observer->getEvent()->getObject();
-        if ($user->getId()) {
-            $password = $user->getNewPassword();
-            $passwordLifetime = $this->observerConfig->getAdminPasswordLifetime();
-            if ($passwordLifetime && $password && !$user->getForceNewPassword()) {
-                $resource = $this->userResource;
-                $passwordHash = $this->encryptor->getHash($password, false);
-                $resource->trackPassword($user, $passwordHash, $passwordLifetime);
-                $this->messageManager->getMessages()->deleteMessageByIdentifier('magento_user_password_expired');
-                $this->authSession->unsPciAdminUserIsPasswordExpired();
-            }
-        }
     }
 
     /**
@@ -179,7 +96,7 @@ class PasswordObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function forceAdminPasswordChange($observer)
+    public function execute(EventObserver $observer)
     {
         if (!$this->observerConfig->isPasswordChangeForced()) {
             return;

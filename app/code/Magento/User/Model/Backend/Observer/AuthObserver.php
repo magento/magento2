@@ -8,13 +8,13 @@ namespace Magento\User\Model\Backend\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\User\Model\User;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * User backend observer model for authentication
  */
-class AuthObserver
+class AuthObserver implements ObserverInterface
 {
     /**
      * Backend configuration interface
@@ -99,7 +99,7 @@ class AuthObserver
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function adminAuthenticate($observer)
+    public function execute(EventObserver $observer)
     {
         $password = $observer->getEvent()->getPassword();
         /** @var User $user */

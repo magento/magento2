@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Observer;
+namespace Magento\Sales\Test\Unit\Cron;
 
-use \Magento\Sales\Model\Observer\CleanExpiredQuotes;
+use \Magento\Sales\Cron\CleanExpiredQuotes;
 
 /**
- * Tests Magento\Sales\Model\Observer\CleanExpiredQuotes
+ * Tests Magento\Sales\Cron\CleanExpiredQuotes
  */
 class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
     protected $quoteFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Observer\CleanExpiredQuotes
+     * @var \Magento\Sales\Cron\CleanExpiredQuotes
      */
     protected $observer;
 
