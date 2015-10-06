@@ -8,7 +8,8 @@ namespace Magento\Catalog\Model\CustomOptions;
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
-use Magento\Catalog\Api\Data\CustomOptionInterface;
+use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
+use Magento\Quote\Model\Quote\ProductOptionFactory;
 
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
@@ -24,37 +25,22 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /** @var CustomOptionFactory  */
     protected $customOptionFactory;
 
-    /** @var string  */
-    protected $quotePath = '/custom_options/quote';
-
-    /** @var \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor */
-    protected $fileProcessor;
-
-    /** @var \Magento\Catalog\Model\Product\OptionFactory */
-    protected $optionFactory;
-
     /**
      * @param DataObject\Factory $objectFactory
-     * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
-     * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
+     * @param ProductOptionFactory $productOptionFactory
+     * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
-     * @param \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor $fileProcessor
-     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory,
-        \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor $fileProcessor,
-        \Magento\Catalog\Model\Product\OptionFactory $optionFactory
+        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
-        $this->fileProcessor = $fileProcessor;
-        $this->optionFactory = $optionFactory;
     }
 
     /**
@@ -69,7 +55,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             if (!empty($customOptions) && is_array($customOptions)) {
                 $requestData = [];
                 foreach ($customOptions as $option) {
-                    $requestData['options'][$option->getOptionId()] = $this->getOptionValue($option);
+                    $requestData['options'][$option->getOptionId()] = $option->getOptionValue();
                 }
                 return $this->objectFactory->create($requestData);
             }
@@ -77,31 +63,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
         return null;
     }
 
-    /**
-     * @param CustomOptionInterface $option
-     * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     */
-    protected function getOptionValue (CustomOptionInterface $option)
-    {
-        $value = $option->getOptionValue();
-        if ($value == 'file') {
-            /** @var \Magento\Framework\Api\Data\ImageContentInterface $fileInfo */
-            $imageContent = $option->getExtensionAttributes()
-                ? $option->getExtensionAttributes()->getFileInfo()
-                : null;
-            if ($imageContent) {
-                $productCustomOption = $this->optionFactory->create();
-                $productCustomOption->load($option->getOptionId());
-                $value = $this->fileProcessor->processFileContent(
-                    $imageContent,
-                    $productCustomOption,
-                    $this->quotePath
-                );
-            }
-        }
-        return $value;
-    }
 
     /**
      * @inheritDoc
