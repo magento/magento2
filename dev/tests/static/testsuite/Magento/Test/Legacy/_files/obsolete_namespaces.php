@@ -90,4 +90,6 @@ return [
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
     ['Magento\DesignEditor'],
     ['Magento\Config\Model\Resource', 'Magento\Config\Model\ResourceModel'],
+    ['Magento\ConfigurableProduct\Model\Resource', 'Magento\ConfigurableProduct\Model\ResourceModel'],
+    ['Magento\ConfigurableProduct\Test\Unit\Model\Resource', 'Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel'],
 ];

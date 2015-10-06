@@ -738,23 +738,23 @@ return [
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Attribute',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute',
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Type\Configurable',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
     ],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Configurable',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable',
     ],
     [
         'Magento\Catalog\Model\Product\Type\Configurable\Price',
@@ -2058,7 +2058,7 @@ return [
     ],
     [
         'Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\Configurable',
-        'Magento\ConfigurableProduct\Model\Resource\Indexer\Stock\Configurable',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock\Configurable',
     ],
     [
         'Magento\ImportExport\Model\Export\Entity\Product\Type\Configurable',
@@ -2079,7 +2079,7 @@ return [
     ['Magento\Sales\Block\Adminhtml\Items\Renderer\Configurable'],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Collection\AssociatedProduct',
-        'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct',
+        'Magento\ConfigurableProduct\Model\ResourceModel\Product\Collection\AssociatedProduct',
     ],
     ['Magento\Catalog\Model\ResourceModel\Product\Collection\AssociatedProductUpdater'],
     ['Magento\Core\Model\Image\Adapter\Config', 'Magento\Framework\Image\Adapter\Config'],
@@ -3776,7 +3776,7 @@ return [
     ['Magento\Framework\Code\Minifier\Adapter\Js\JSMin'],
     ['Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier'],
     ['Magento\Framework\View\Asset\ModuleNotation\Resolver', 'Magento\Framework\View\Asset\NotationResolver\Module'],
-    ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
+    ['Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Price\Data'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
     [
@@ -3833,7 +3833,7 @@ return [
     ['Magento\Quote\Model\Quote\Address\Total\Custbalance'],
     ['Magento\Quote\Model\Quote\Address\Total\Tax'],
     ['Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet'],
-    ['Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'],
+    ['Magento\ConfigurableProduct\Model\ResourceModel\Product\Collection\AssociatedProduct'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Checkbox'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Filter\Inventory'],

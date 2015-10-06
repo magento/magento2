@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price;
+namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
@@ -33,7 +33,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      */
     public function reindexEntity($entityIds)
     {
@@ -43,7 +43,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
 
     /**
      * @param null|int|array $entityIds
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      */
     protected function reindex($entityIds = null)
     {
@@ -79,7 +79,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     /**
      * Prepare table structure for custom option temporary aggregation data
      *
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      */
     protected function _prepareConfigurableOptionAggregateTable()
     {
@@ -90,7 +90,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     /**
      * Prepare table structure for custom option prices data
      *
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      */
     protected function _prepareConfigurableOptionPriceTable()
     {
@@ -102,7 +102,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Calculate minimal and maximal prices for configurable product options
      * and apply it to final price
      *
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _applyConfigurableOption()

@@ -24,19 +24,19 @@ class AroundProductRepositorySave
     /**
      * Type configurable factory
      *
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory
      */
     protected $typeConfigurableFactory;
 
     /**
      * @param \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
+     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory $typeConfigurableFactory
      */
     public function __construct(
         \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory $typeConfigurableFactory
     ) {
         $this->optionRepository = $optionRepository;
         $this->productFactory = $productFactory;
