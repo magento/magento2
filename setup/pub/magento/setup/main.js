@@ -50,6 +50,12 @@ main.controller('navigationController',
             }
         };
 
+        $scope.goToState = function (stateId) {
+            $state.go(stateId)
+        }
+
+        $scope.state = $state;
+
         $scope.previousState = function () {
                 $scope.valid = true;
                 $state.go(navigationService.getPreviousState().id);
@@ -77,7 +83,7 @@ main.controller('navigationController',
         }
 
         $scope.goToStart = function() {
-            if ($state.current.type === 'install') {
+            if ($state.current.type === 'installer') {
                 $state.go('root.landing-installer');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
