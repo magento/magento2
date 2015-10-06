@@ -66,6 +66,13 @@ class Config implements \Magento\Framework\View\ConfigInterface
     protected $viewConfigFactory;
 
     /**
+     * File view factory
+     *
+     * @var \Magento\Framework\Config\ViewFactory
+     */
+    protected $viewFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader

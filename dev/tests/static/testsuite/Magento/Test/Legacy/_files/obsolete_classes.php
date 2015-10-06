@@ -3942,4 +3942,5 @@ return [
     ['Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice'],
     ['Magento\Catalog\Pricing\Price\GroupPrice'],
     ['Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice'],
+    ['Magento\Catalog\Model\App\Action\ContextPlugin'],
 ];

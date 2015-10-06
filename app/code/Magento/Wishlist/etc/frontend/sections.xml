@@ -21,12 +21,15 @@
     </action>
     <action name="wishlist/index/cart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
     <action name="wishlist/index/fromcart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
     <action name="wishlist/index/allcart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
 
     <action name="wishlist/shared/allcart">
@@ -34,15 +37,6 @@
         <section name="cart"/>
     </action>
     <action name="wishlist/shared/cart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/fromcart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/cart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/allcart">
         <section name="cart"/>
     </action>
 </config>
