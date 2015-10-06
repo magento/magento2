@@ -9,7 +9,7 @@
 /**
  * Directory Country Resource Collection
  */
-namespace Magento\Directory\Model\Resource\Country;
+namespace Magento\Directory\Model\ResourceModel\Country;
 
 /**
  * Class Collection
@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Directory\Model\Resource\CountryFactory
+     * @var \Magento\Directory\Model\ResourceModel\CountryFactory
      */
     protected $_countryFactory;
 
@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Directory\Model\Resource\CountryFactory $countryFactory
+     * @param \Magento\Directory\Model\ResourceModel\CountryFactory $countryFactory
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
@@ -75,7 +75,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Directory\Model\Resource\CountryFactory $countryFactory,
+        \Magento\Directory\Model\ResourceModel\CountryFactory $countryFactory,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
@@ -105,14 +105,14 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Country', 'Magento\Directory\Model\Resource\Country');
+        $this->_init('Magento\Directory\Model\Country', 'Magento\Directory\Model\ResourceModel\Country');
     }
 
     /**
      * Load allowed countries for current store
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function loadByStore($store = null)
     {
@@ -133,7 +133,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Loads Item By Id
      *
      * @param string $countryId
-     * @return \Magento\Directory\Model\Resource\Country
+     * @return \Magento\Directory\Model\ResourceModel\Country
      */
     public function getItemById($countryId)
     {

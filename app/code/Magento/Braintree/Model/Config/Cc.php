@@ -48,7 +48,7 @@ class Cc extends \Magento\Braintree\Model\Config
     protected $customerFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      */
     protected $countryFactory;
 

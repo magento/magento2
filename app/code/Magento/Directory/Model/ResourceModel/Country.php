@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Directory\Model\Resource;
+namespace Magento\Directory\Model\ResourceModel;
 
 /**
  * Directory Country Resource Model
@@ -25,7 +25,7 @@ class Country extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Directory\Model\Country $country
      * @param string $code
-     * @return \Magento\Directory\Model\Resource\Country
+     * @return \Magento\Directory\Model\ResourceModel\Country
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByCode(\Magento\Directory\Model\Country $country, $code)
