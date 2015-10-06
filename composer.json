@@ -74,6 +74,7 @@
         "lusitanian/oauth": "~0.3"
     },
     "replace": {
+        "magento/module-marketplace": "self.version",
         "magento/module-admin-notification": "self.version",
         "magento/module-advanced-pricing-import-export": "self.version",
         "magento/module-authorization": "self.version",
