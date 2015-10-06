@@ -10,8 +10,10 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
+use Magento\Framework\App\Resource;
 
 /**
  * A MessageQueue Consumer to handle receiving a message.
@@ -39,20 +41,28 @@ class Consumer implements ConsumerInterface
     private $queueRepository;
 
     /**
+     * @var Resource
+     */
+    private $resource;
+
+    /**
      * Initialize dependencies.
      *
      * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
+     * @param Resource $resource
      */
     public function __construct(
         MessageQueueConfig $messageQueueConfig,
         MessageEncoder $messageEncoder,
-        QueueRepository $queueRepository
+        QueueRepository $queueRepository,
+        Resource $resource
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
+        $this->resource = $resource;
     }
 
     /**
@@ -109,23 +119,19 @@ class Consumer implements ConsumerInterface
      * @param int $maxNumberOfMessages
      * @return void
      */
-    private function run($queue, $maxNumberOfMessages)
+    private function run(QueueInterface $queue, $maxNumberOfMessages)
     {
         $count = $maxNumberOfMessages
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
 
+        $transactionCallback = $this->getTransactionCallback($queue);
         for ($i = $count; $i > 0; $i--) {
             $message = $queue->dequeue();
             if ($message === null) {
                 break;
             }
-            try {
-                $this->dispatchMessage($message);
-                $queue->acknowledge($message);
-            } catch (\Exception $e) {
-                $queue->reject($message);
-            }
+            $transactionCallback($message);
         }
     }
 
@@ -135,9 +141,9 @@ class Consumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @return void
      */
-    private function runDaemonMode($queue)
+    private function runDaemonMode(QueueInterface $queue)
     {
-        $callback = [$this, 'dispatchMessage'];
+        $callback = $this->getTransactionCallback($queue);
 
         $queue->subscribe($callback);
     }
@@ -154,5 +160,26 @@ class Consumer implements ConsumerInterface
         $queue = $this->queueRepository->get($connectionName, $queueName);
 
         return $queue;
+    }
+
+    /**
+     * @param QueueInterface $queue
+     * @return \Closure
+     */
+    private function getTransactionCallback(QueueInterface $queue)
+    {
+        return function (EnvelopeInterface $message) use ($queue) {
+            try {
+                $this->resource->getConnection()->beginTransaction();
+                $this->dispatchMessage($message);
+                $queue->acknowledge($message);
+                $this->resource->getConnection()->commit();
+            } catch (ConnectionLostException $e) {
+                $this->resource->getConnection()->rollBack();
+            } catch (\Exception $e) {
+                $this->resource->getConnection()->rollBack();
+                $queue->reject($message);
+            }
+        };
     }
 }
