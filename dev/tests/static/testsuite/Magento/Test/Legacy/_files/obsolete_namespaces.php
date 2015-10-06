@@ -94,4 +94,6 @@ return [
     ['Magento\Weee\Test\Unit\Model\Resource', 'Magento\Weee\Test\Unit\Model\ResourceModel'],
     ['Magento\Widget\Model\Resource', 'Magento\Widget\Model\ResourceModel'],
     ['Magento\Widget\Test\Unit\Model\Resource', 'Magento\Widget\Test\Unit\Model\ResourceModel'],
+    ['Magento\Wishlist\Model\Resource', 'Magento\Wishlist\Model\ResourceModel'],
+    ['Magento\Wishlist\Test\Unit\Model\Resource', 'Magento\Wishlist\Test\Unit\Model\ResourceModel'],
 ];

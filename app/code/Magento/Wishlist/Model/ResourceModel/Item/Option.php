@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Model\Resource\Item;
+namespace Magento\Wishlist\Model\ResourceModel\Item;
 
 class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

@@ -29,12 +29,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $productTypeConfig;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -54,7 +54,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $optionFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemOptFactory;
 
@@ -88,17 +88,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->itemOptFactory = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory')
+        $this->itemOptFactory = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->productTypeConfig = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
             ->getMock();
         $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item')
+        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

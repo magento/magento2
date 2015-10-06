@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wishlist\Model\Resource\Item;
+namespace Magento\Wishlist\Model\ResourceModel\Item;
 
 /**
  * Wishlist item collection
@@ -108,7 +108,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_coreResource;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory
      */
     protected $_optionCollectionFactory;
 
@@ -144,11 +144,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\App\Resource $coreResource
-     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
-     * @param \Magento\Wishlist\Model\Resource\Item $resource
+     * @param \Magento\Wishlist\Model\ResourceModel\Item $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
@@ -166,11 +166,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\App\Resource $coreResource,
-        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
+        \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
-        \Magento\Wishlist\Model\Resource\Item $resource,
+        \Magento\Wishlist\Model\ResourceModel\Item $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -196,7 +196,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Item', 'Magento\Wishlist\Model\Resource\Item');
+        $this->_init('Magento\Wishlist\Model\Item', 'Magento\Wishlist\Model\ResourceModel\Item');
         $this->addFilterToMap('store_id', 'main_table.store_id');
     }
 
@@ -229,7 +229,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _assignOptions()
     {
         $itemIds = array_keys($this->_items);
-        /* @var $optionCollection \Magento\Wishlist\Model\Resource\Item\Option\Collection */
+        /* @var $optionCollection \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection */
         $optionCollection = $this->_optionCollectionFactory->create();
         $optionCollection->addItemFilter($itemIds);
 

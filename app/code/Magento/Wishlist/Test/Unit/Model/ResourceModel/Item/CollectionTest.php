@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Wishlist\Test\Unit\Model\Resource\Item;
+namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('\'TestProductName\''));
 
         $resource = $this->getMock(
-            'Magento\Wishlist\Model\Resource\Item',
+            'Magento\Wishlist\Model\ResourceModel\Item',
             ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
             [],
             '',
@@ -162,7 +162,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
 
         $this->collection = $this->objectManager->getObject(
-            'Magento\Wishlist\Model\Resource\Item\Collection',
+            'Magento\Wishlist\Model\ResourceModel\Item\Collection',
             [
                 'resource' => $resource,
                 'catalogConfFactory' => $catalogConfFactory,
