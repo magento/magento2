@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SendFriend\Model\Resource\SendFriend;
+namespace Magento\SendFriend\Model\ResourceModel\SendFriend;
 
 /**
  * SendFriend log resource collection
@@ -19,6 +19,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\SendFriend\Model\SendFriend', 'Magento\SendFriend\Model\Resource\SendFriend');
+        $this->_init('Magento\SendFriend\Model\SendFriend', 'Magento\SendFriend\Model\ResourceModel\SendFriend');
     }
 }
