@@ -478,7 +478,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/dev/tests/integration/framework/tests/unit/testsuite/',
                 '/dev/tests/integration/testsuite/',
                 '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-                '/dev/tests/performance/framework/',
                 '/dev/tests/static/framework/',
                 '/dev/tests/static/testsuite/',
                 '/setup/src/',
