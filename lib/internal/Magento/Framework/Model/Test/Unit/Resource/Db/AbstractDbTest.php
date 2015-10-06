@@ -491,7 +491,8 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that we only set/override id on object if PK autoincrement is enabled
      * @param bool $pkIncrement
-     * @dataProvider testSaveNewObjectDataProvider
+     * @dataProvider saveNewObjectDataProvider
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testSaveNewObject($pkIncrement)
     {
@@ -549,7 +550,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $reflectionMethod->invokeArgs($model, [$inputObject]);
     }
 
-    public function testSaveNewObjectDataProvider()
+    public function saveNewObjectDataProvider()
     {
         return [[true], [false]];
     }
