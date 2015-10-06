@@ -2240,7 +2240,7 @@ return [
     ['Magento\Backend\Model\Translate\Inline\ConfigFactory'],
     ['Magento\Framework\Translate\Inline\ConfigFactory'],
     ['Magento\Bundle\Model\Price\Index'],
-    ['Magento\Bundle\Model\Resource\Price\Index'],
+    ['Magento\Bundle\Model\ResourceModel\Price\Index'],
     ['Magento\Core\Model\Template', 'Magento\Email\Model\AbstractTemplate'],
     ['Magento\Core\Helper\Js'],
     ['Magento\Backend\Helper\Media\Js'],

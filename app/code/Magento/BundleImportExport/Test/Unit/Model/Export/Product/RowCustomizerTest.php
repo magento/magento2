@@ -33,7 +33,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionsCollection;
 
@@ -43,7 +43,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected $option;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectionsCollection;
 
@@ -91,7 +91,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getWeightType')->willReturn(1);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturnSelf();
         $this->optionsCollection = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option\Collection',
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection',
             ['setOrder', 'getIterator'],
             [],
             '',
@@ -125,7 +125,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->selection->expects($this->any())->method('getSelectionQty')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceType')->willReturn(1);
         $this->selectionsCollection = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Selection\Collection',
+            '\Magento\Bundle\Model\ResourceModel\Selection\Collection',
             ['getIterator', 'addAttributeToSort'],
             [],
             '',

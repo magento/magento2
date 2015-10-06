@@ -17,7 +17,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
     protected $bundleData;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection
+     * @var \Magento\Bundle\Model\ResourceModel\Selection
      */
     protected $bundleSelection;
 
@@ -35,13 +35,13 @@ class AppendUpsellProductsObserver implements ObserverInterface
      * @param \Magento\Bundle\Helper\Data $bundleData
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
+     * @param \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
      */
     public function __construct(
         \Magento\Bundle\Helper\Data $bundleData,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Bundle\Model\Resource\Selection $bundleSelection
+        \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
     ) {
         $this->bundleData = $bundleData;
         $this->productVisibility = $productVisibility;
@@ -80,7 +80,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             }
         }
 
-        /* @var $resource \Magento\Bundle\Model\Resource\Selection */
+        /* @var $resource \Magento\Bundle\Model\ResourceModel\Selection */
         $resource = $this->bundleSelection;
 
         $productIds = array_keys($collection->getItems());

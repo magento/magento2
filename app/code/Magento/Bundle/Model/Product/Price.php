@@ -350,7 +350,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Get Options with attached Selections collection
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions($product)
     {

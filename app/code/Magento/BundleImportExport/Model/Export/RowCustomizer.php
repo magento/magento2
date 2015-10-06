@@ -8,7 +8,7 @@ namespace Magento\BundleImportExport\Model\Export;
 use Magento\Catalog\Model\Resource\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
-use Magento\Bundle\Model\Resource\Selection\Collection as SelectionCollection;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\ImportExport\Controller\Adminhtml\Import;
 
 /**
@@ -176,7 +176,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getFormattedBundleOptionValues($product)
     {
-        /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+        /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
         $optionsCollection = $product->getTypeInstance()
             ->getOptionsCollection($product)
             ->setOrder('position', Collection::SORT_ORDER_ASC);
