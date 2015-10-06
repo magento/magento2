@@ -58,7 +58,7 @@ class OrdersFixture extends Fixture
         );
         $reportEventTableName = $this->getTableName(
             'report_event',
-            'Magento\Reports\Model\Resource\Event'
+            'Magento\Reports\Model\ResourceModel\Event'
         );
         $salesOrderTableName = $this->getTableName(
             'sales_order',

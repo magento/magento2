@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Model\Resource\Report\Rule;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
+class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * Resource Report Rule constructor

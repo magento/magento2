@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Resource\Report\Collection;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
+class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
      * Order status

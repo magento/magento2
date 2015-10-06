@@ -11,7 +11,7 @@
  */
 namespace Magento\Tax\Model\Resource\Report\Tax;
 
-class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
+class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * Resource initialization

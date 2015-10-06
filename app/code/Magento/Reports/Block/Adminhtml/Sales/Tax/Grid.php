@@ -33,7 +33,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $resourceFactory
+     * @param \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory
      * @param \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory
      * @param \Magento\Reports\Helper\Data $reportsData
      * @param \Magento\Sales\Model\Order\ConfigFactory $configFactory
@@ -42,7 +42,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Report\Collection\Factory $resourceFactory,
+        \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory,
         \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
         \Magento\Reports\Helper\Data $reportsData,
         \Magento\Sales\Model\Order\ConfigFactory $configFactory,

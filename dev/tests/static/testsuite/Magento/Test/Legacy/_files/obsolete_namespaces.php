@@ -125,4 +125,6 @@ return [
     ['Magento\ProductAlert\Model\Resource', 'Magento\ProductAlert\Model\ResourceModel'],
     ['Magento\Quote\Model\Resource', 'Magento\Quote\Model\ResourceModel'],
     ['Magento\Quote\Test\Unit\Model\Resource', 'Magento\Quote\Test\Unit\Model\ResourceModel'],
+    ['Magento\Reports\Model\Resource', 'Magento\Reports\Model\ResourceModel'],
+    ['Magento\Reports\Test\Unit\Model\Resource', 'Magento\Reports\Test\Unit\Model\ResourceModel'],
 ];

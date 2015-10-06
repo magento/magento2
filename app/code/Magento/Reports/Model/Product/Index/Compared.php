@@ -8,8 +8,8 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Catalog Compared Product Index Model
  *
- * @method \Magento\Reports\Model\Resource\Product\Index\Compared _getResource()
- * @method \Magento\Reports\Model\Resource\Product\Index\Compared getResource()
+ * @method \Magento\Reports\Model\ResourceModel\Product\Index\Compared _getResource()
+ * @method \Magento\Reports\Model\ResourceModel\Product\Index\Compared getResource()
  * @method \Magento\Reports\Model\Product\Index\Compared setVisitorId(int $value)
  * @method \Magento\Reports\Model\Product\Index\Compared setCustomerId(int $value)
  * @method int getProductId()
@@ -88,7 +88,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Resource\Product\Index\Compared');
+        $this->_init('Magento\Reports\Model\ResourceModel\Product\Index\Compared');
     }
 
     /**
