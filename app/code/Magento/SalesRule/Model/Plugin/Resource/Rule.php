@@ -8,14 +8,14 @@ namespace Magento\SalesRule\Model\Plugin\Resource;
 class Rule
 {
     /**
-     * @param \Magento\SalesRule\Model\Resource\Rule $subject
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoadCustomerGroupIds(
-        \Magento\SalesRule\Model\Resource\Rule $subject,
+        \Magento\SalesRule\Model\ResourceModel\Rule $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $object
     ) {
@@ -23,14 +23,14 @@ class Rule
     }
 
     /**
-     * @param \Magento\SalesRule\Model\Resource\Rule $subject
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoadWebsiteIds(
-        \Magento\SalesRule\Model\Resource\Rule $subject,
+        \Magento\SalesRule\Model\ResourceModel\Rule $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $object
     ) {

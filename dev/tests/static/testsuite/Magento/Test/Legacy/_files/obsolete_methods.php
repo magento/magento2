@@ -20,7 +20,7 @@ return [
     ['getAttributeCodes', 'Magento\Eav\Model\Entity\Type'],
     ['_loadTypeAttributes', 'Magento\Eav\Model\ResourceModel\Entity\Attribute'],
     ['preloadAttributes', 'Magento\Eav\Model\Entity\Type\Config'],
-    ['_aggregateByOrderCreatedAt', 'Magento\SalesRule\Model\Resource\Report\Rule'],
+    ['_aggregateByOrderCreatedAt', 'Magento\SalesRule\Model\ResourceModel\Report\Rule'],
     ['_amountByCookies', 'Magento\Sendfriend\Model\Sendfriend'],
     ['setCookie', 'Magento\Sendfriend\Model\Sendfriend'],
     ['getCookie', 'Magento\Sendfriend\Model\Sendfriend'],
