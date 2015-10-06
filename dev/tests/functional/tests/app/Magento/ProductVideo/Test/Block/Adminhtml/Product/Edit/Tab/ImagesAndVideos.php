@@ -66,14 +66,14 @@ class ImagesAndVideos extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (!array_key_exists('images', $fields['media_gallery']['value'])) {
             return $this;
         }
-        if ($fields['media_gallery']['value']['images'] == '')
-        {
+        if ($fields['media_gallery']['value']['images'] == '') {
             $fields['media_gallery']['value']['images'] = [];
         }
         $currentImages = $this->getImageIds();
@@ -140,6 +140,7 @@ class ImagesAndVideos extends Tab
      * @param array|null $tabFields
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($tabFields = null, SimpleElement $element = null)
     {
@@ -149,8 +150,7 @@ class ImagesAndVideos extends Tab
         if (empty($fields['value']) || !array_key_exists('images', $fields['value'])) {
             return '';
         }
-        if ($fields['value']['images'] == '')
-        {
+        if ($fields['value']['images'] == '') {
             $fields['value']['images'] = [];
         }
 
@@ -165,7 +165,7 @@ class ImagesAndVideos extends Tab
                 $image->click();
                 $videoDialog = $this->getVideoDialog();
                 $data = $videoDialog->getVideoInfo();
-                foreach(array_keys($fieldSet) as $field) {
+                foreach (array_keys($fieldSet) as $field) {
                     if (isset($data[$field])) {
                         $formData[$name]['images'][$keyRoot][$field] = $data[$field];
                     }
@@ -190,7 +190,7 @@ class ImagesAndVideos extends Tab
     protected function getImageSelector($id)
     {
         ++$id;
-        return $this->imageItem . ':nth-child('.$id.') .draggable-handle';
+        return $this->imageItem . ':nth-child(' . $id . ') .draggable-handle';
     }
 
     /**
@@ -225,5 +225,4 @@ class ImagesAndVideos extends Tab
         $this->_rootElement->find($this->getImageSelector(0))->click();
         return $this;
     }
-
 }
