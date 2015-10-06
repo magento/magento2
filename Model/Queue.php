@@ -5,8 +5,10 @@
  */
 namespace Magento\Amqp\Model;
 
+use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
+use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 
@@ -55,11 +57,11 @@ class Queue implements QueueInterface
         $envelope = null;
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
-        /** @var \PhpAmqpLib\Message\AMQPMessage $message */
+        /** @var AMQPMessage $message */
         try {
             $message = $channel->basic_get($this->queueName);
-        } catch(\PhpAmqpLib\Exception\AMQPProtocolConnectionException $e) {
-            throw new \Magento\Framework\MessageQueue\ConnectionLostException(
+        } catch (AMQPProtocolConnectionException $e) {
+            throw new ConnectionLostException(
                 $e->getMessage(),
                 $e->getCode(),
                 $e
@@ -76,6 +78,7 @@ class Queue implements QueueInterface
             );
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
         }
+
         // @codingStandardsIgnoreEnd
         return $envelope;
     }
@@ -90,8 +93,8 @@ class Queue implements QueueInterface
         // @codingStandardsIgnoreStart
         try {
             $channel->basic_ack($properties['delivery_tag']);
-        } catch(\PhpAmqpLib\Exception\AMQPProtocolConnectionException $e) {
-            throw new \Magento\Framework\MessageQueue\ConnectionLostException(
+        } catch (AMQPProtocolConnectionException $e) {
+            throw new ConnectionLostException(
                 $e->getMessage(),
                 $e->getCode(),
                 $e
@@ -117,12 +120,7 @@ class Queue implements QueueInterface
             // @codingStandardsIgnoreEnd
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
 
-            try {
-                call_user_func($callback, $envelope);
-                $this->acknowledge($envelope);
-            } catch (\Exception $e) {
-                $this->reject($envelope);
-            }
+            call_user_func($callback, $envelope);
         };
 
         $channel = $this->amqpConfig->getChannel();
