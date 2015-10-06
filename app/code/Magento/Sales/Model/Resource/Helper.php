@@ -11,18 +11,18 @@ namespace Magento\Sales\Model\Resource;
 class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Helper
+     * @var \Magento\Reports\Model\ResourceModel\Helper
      */
     protected $_reportsResourceHelper;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Reports\Model\Resource\Helper $reportsResourceHelper
+     * @param \Magento\Reports\Model\ResourceModel\Helper $reportsResourceHelper
      * @param string $modulePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Reports\Model\Resource\Helper $reportsResourceHelper,
+        \Magento\Reports\Model\ResourceModel\Helper $reportsResourceHelper,
         $modulePrefix = 'sales'
     ) {
         parent::__construct($resource, $modulePrefix);

@@ -41,7 +41,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\ResourceModel\Quote\Item\Option',
             'Magento\Quote\Model\ResourceModel\Quote\Payment',
             'Magento\Quote\Model\ResourceModel\Quote\Address\Rate',
-            'Magento\Reports\Model\Resource\Event',
+            'Magento\Reports\Model\ResourceModel\Event',
             'Magento\Sales\Model\Resource\Order',
             'Magento\Sales\Model\Resource\Order\Grid',
             'Magento\Sales\Model\Resource\Order\Item',

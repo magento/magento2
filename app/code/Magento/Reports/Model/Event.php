@@ -8,8 +8,8 @@ namespace Magento\Reports\Model;
 /**
  * Events model
  *
- * @method \Magento\Reports\Model\Resource\Event _getResource()
- * @method \Magento\Reports\Model\Resource\Event getResource()
+ * @method \Magento\Reports\Model\ResourceModel\Event _getResource()
+ * @method \Magento\Reports\Model\ResourceModel\Event getResource()
  * @method string getLoggedAt()
  * @method \Magento\Reports\Model\Event setLoggedAt(string $value)
  * @method int getEventTypeId()
@@ -79,7 +79,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Resource\Event');
+        $this->_init('Magento\Reports\Model\ResourceModel\Event');
     }
 
     /**

@@ -10,6 +10,6 @@ namespace Magento\Sales\Model\Resource\Report;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractReport extends \Magento\Reports\Model\Resource\Report\AbstractReport
+abstract class AbstractReport extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
 }

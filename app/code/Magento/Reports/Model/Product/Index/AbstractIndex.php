@@ -156,7 +156,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Reports\Model\Resource\Product\Index\AbstractIndex
+     * @return \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
      */
     protected function _getResource()
     {

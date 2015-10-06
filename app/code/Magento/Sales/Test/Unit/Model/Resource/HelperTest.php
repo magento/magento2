@@ -47,7 +47,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceHelper = $this->getMock(
-            'Magento\Reports\Model\Resource\Helper',
+            'Magento\Reports\Model\ResourceModel\Helper',
             [],
             [],
             '',

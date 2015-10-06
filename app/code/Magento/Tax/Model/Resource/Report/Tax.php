@@ -9,7 +9,7 @@
  */
 namespace Magento\Tax\Model\Resource\Report;
 
-class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
+class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * @var \Magento\Tax\Model\Resource\Report\Tax\CreatedatFactory

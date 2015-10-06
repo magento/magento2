@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\Resource\Report;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
+class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
      * @var \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory

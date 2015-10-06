@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Reports\Model\Resource\Customer\Collection">
+    <type name="Magento\Reports\Model\ResourceModel\Customer\Collection">
         <arguments>
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
         </arguments>
@@ -21,7 +21,7 @@
                 <item name="refunded" xsi:type="string">Magento\Sales\Model\Resource\Report\Refunded</item>
                 <item name="coupons" xsi:type="string">Magento\SalesRule\Model\Resource\Report\Rule</item>
                 <item name="bestsellers" xsi:type="string">Magento\Sales\Model\Resource\Report\Bestsellers</item>
-                <item name="viewed" xsi:type="string">Magento\Reports\Model\Resource\Report\Product\Viewed</item>
+                <item name="viewed" xsi:type="string">Magento\Reports\Model\ResourceModel\Report\Product\Viewed</item>
             </argument>
         </arguments>
     </type>
