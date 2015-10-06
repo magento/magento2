@@ -9,6 +9,8 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
  * Test for MySQL publisher class.
+ *
+ * @magentoDbIsolation disabled
  */
 class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +46,13 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX);
+        $this->consumeMessages('demoConsumerQueueTwo', PHP_INT_MAX);
+        $this->consumeMessages('demoConsumerQueueThree', PHP_INT_MAX);
+        $this->consumeMessages('demoConsumerQueueFour', PHP_INT_MAX);
+        $this->consumeMessages('demoConsumerQueueFive', PHP_INT_MAX);
+        $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX);
+
         $objectManagerConfiguration = [
             'Magento\Framework\MessageQueue\Config\Reader' => [
                 'arguments' => [
@@ -83,7 +92,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         /** There are total of 10 messages in the first queue, total expected consumption is 7, 3 then 0 */
         $this->consumeMessages('demoConsumerQueueOne', 7, 7, $outputPattern);
         /** Consumer all messages which left in this queue */
-        $this->consumeMessages('demoConsumerQueueOne', 999, 3, $outputPattern);
+        $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX, 3, $outputPattern);
         $this->consumeMessages('demoConsumerQueueOne', 7, 0, $outputPattern);
 
         /** Verify that messages were added correctly to second queue for update and create topics */
@@ -115,9 +124,9 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         }
         $outputPattern = '/(Processed \d+\s)/';
         for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; $i++) {
-            $this->consumeMessages('demoConsumerQueueOneWithException', 999, 0, $outputPattern);
+            $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX, 0, $outputPattern);
         }
-        $this->consumeMessages('demoConsumerQueueOne', 999, 0, $outputPattern);
+        $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX, 0, $outputPattern);
 
         /** Try consume messages for MAX_NUMBER_OF_TRIALS+1 and then consumer them without exception */
         for ($i = 0; $i < 5; $i++) {
@@ -126,10 +135,10 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         }
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
         for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS + 1; $i++) {
-            $this->consumeMessages('demoConsumerQueueOneWithException', 999, 0, $outputPattern);
+            $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX, 0, $outputPattern);
         }
         /** Make sure that messages are not accessible anymore after number of trials is exceeded */
-        $this->consumeMessages('demoConsumerQueueOne', 999, 0, $outputPattern);
+        $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX, 0, $outputPattern);
     }
 
     /**
@@ -149,7 +158,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 
         $outputPattern = "/Processed '{$object->getEntityId()}'; "
             . "Required param '{$requiredStringParam}'; Optional param '{$optionalIntParam}'/";
-        $this->consumeMessages('delayedOperationConsumer', 999, 1, $outputPattern);
+        $this->consumeMessages('delayedOperationConsumer', PHP_INT_MAX, 1, $outputPattern);
     }
 
     /**
@@ -157,14 +166,14 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $consumerName
      * @param int|null $messagesToProcess
-     * @param int $expectedNumberOfProcessedMessages
-     * @param string $outputPattern
+     * @param int|null $expectedNumberOfProcessedMessages
+     * @param string|null $outputPattern
      */
     protected function consumeMessages(
         $consumerName,
         $messagesToProcess,
-        $expectedNumberOfProcessedMessages,
-        $outputPattern
+        $expectedNumberOfProcessedMessages = null,
+        $outputPattern = null
     ) {
         /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
         $consumerFactory = $this->objectManager->create('Magento\Framework\MessageQueue\ConsumerFactory');
@@ -173,9 +182,11 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $consumer->process($messagesToProcess);
         $consumersOutput = ob_get_contents();
         ob_end_clean();
-        $this->assertEquals(
-            $expectedNumberOfProcessedMessages,
-            preg_match_all($outputPattern, $consumersOutput)
-        );
+        if ($outputPattern) {
+            $this->assertEquals(
+                $expectedNumberOfProcessedMessages,
+                preg_match_all($outputPattern, $consumersOutput)
+            );
+        }
     }
 }
