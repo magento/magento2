@@ -12,8 +12,8 @@ use Magento\Tax\Api\Data\TaxRuleInterface;
 /**
  * Tax Rule Model
  *
- * @method \Magento\Tax\Model\Resource\Calculation\Rule _getResource()
- * @method \Magento\Tax\Model\Resource\Calculation\Rule getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule getResource()
  */
 class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
 {
@@ -98,7 +98,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $resourceCollection,
             $data
         );
-        $this->_init('Magento\Tax\Model\Resource\Calculation\Rule');
+        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rule');
         $this->_taxClass = $taxClass;
     }
 

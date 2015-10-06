@@ -17,9 +17,9 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
-use Magento\Tax\Model\Resource\Calculation\Rule as Resource;
-use Magento\Tax\Model\Resource\Calculation\Rule\Collection;
-use Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule as Resource;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

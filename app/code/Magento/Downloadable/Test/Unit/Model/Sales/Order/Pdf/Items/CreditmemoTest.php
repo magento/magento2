@@ -56,7 +56,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'orderTaxCollectionFactory' => $this->getMock(
-                'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory',
+                'Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory',
                 [],
                 [],
                 '',
