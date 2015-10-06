@@ -108,4 +108,6 @@ return [
     ['Magento\GiftMessage\Model\Resource', 'Magento\GiftMessage\Model\ResourceModel'],
     ['Magento\GoogleOptimizer\Model\Resource', 'Magento\GoogleOptimizer\Model\ResourceModel'],
     ['Magento\GroupedProduct\Model\Resource', 'Magento\GroupedProduct\Model\ResourceModel'],
+    ['Magento\ImportExport\Model\Resource', 'Magento\ImportExport\Model\ResourceModel'],
+    ['Magento\ImportExport\Test\Unit\Model\Resource', 'Magento\ImportExport\Test\Unit\Model\ResourceModel'],
 ];

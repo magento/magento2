@@ -121,7 +121,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     /**
      * DB data source models
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data[]
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data[]
      */
     protected $_dataSourceModels;
 
@@ -152,7 +152,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
@@ -167,7 +167,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,

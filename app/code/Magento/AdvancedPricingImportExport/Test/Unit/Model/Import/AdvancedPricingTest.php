@@ -57,7 +57,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $tierPriceValidator;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
 
@@ -67,7 +67,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $connection;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataSourceModel;
 
@@ -140,7 +140,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $this->resourceHelper = $this->getMock(
-            '\Magento\ImportExport\Model\Resource\Helper',
+            '\Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',
@@ -161,7 +161,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->getMock(
-            '\Magento\ImportExport\Model\Resource\Import\Data',
+            '\Magento\ImportExport\Model\ResourceModel\Import\Data',
             [],
             [],
             '',

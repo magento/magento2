@@ -76,7 +76,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                'Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory',
                 [],
                 [],
                 '',

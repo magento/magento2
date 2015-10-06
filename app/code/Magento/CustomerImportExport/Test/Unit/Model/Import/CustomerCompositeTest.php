@@ -49,7 +49,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -140,7 +140,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         );
         $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper',
+            'Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',
@@ -665,7 +665,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Callback for \Magento\ImportExport\Model\Resource\Import\Data::saveBunch to verify correctness of data
+     * Callback for \Magento\ImportExport\Model\ResourceModel\Import\Data::saveBunch to verify correctness of data
      * for method CustomerComposite::_prepareRowForDb
      *
      * @param string $entityType

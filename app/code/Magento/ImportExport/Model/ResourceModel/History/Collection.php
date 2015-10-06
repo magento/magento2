@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ImportExport\Model\Resource\History;
+namespace Magento\ImportExport\Model\ResourceModel\History;
 
 use \Magento\ImportExport\Model\History;
 
@@ -26,14 +26,14 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\History', 'Magento\ImportExport\Model\Resource\History');
+        $this->_init('Magento\ImportExport\Model\History', 'Magento\ImportExport\Model\ResourceModel\History');
         $this->_linkTable = $this->getTable('admin_user');
     }
 
     /**
      * Init select
      *
-     * @return \Magento\ImportExport\Model\Resource\History\Collection
+     * @return \Magento\ImportExport\Model\ResourceModel\History\Collection
      */
     protected function _initSelect()
     {

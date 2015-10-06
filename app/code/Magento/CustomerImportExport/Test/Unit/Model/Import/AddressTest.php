@@ -380,7 +380,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // mock to imitate data source model
         $dataSourceMock = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Import\Data',
+            'Magento\ImportExport\Model\ResourceModel\Import\Data',
             ['getNextBunch', '__wakeup'],
             [],
             '',
@@ -441,7 +441,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->_stringLib,
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),
-            $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
+            $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock(
                 'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',

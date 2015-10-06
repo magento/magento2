@@ -39,7 +39,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -74,7 +74,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
         );
         $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper',
+            'Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',

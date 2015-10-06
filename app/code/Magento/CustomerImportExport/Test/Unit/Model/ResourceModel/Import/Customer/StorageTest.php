@@ -30,7 +30,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
                 ->disableOriginalConstructor()
                 ->getMock(),
-            $this->getMockBuilder('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
+            $this->getMockBuilder('Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory')
                 ->disableOriginalConstructor()
                 ->getMock(),
             $this->_getModelDependencies()

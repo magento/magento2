@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ImportExport\Test\Unit\Model\Resource;
+namespace Magento\ImportExport\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -18,7 +18,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\History|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $historyResourceModel;
 
@@ -28,7 +28,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->historyResourceModel = $this->getMock(
-            'Magento\ImportExport\Model\Resource\History',
+            'Magento\ImportExport\Model\ResourceModel\History',
             ['getConnection', 'getMainTable', 'getIdFieldName'],
             [],
             '',

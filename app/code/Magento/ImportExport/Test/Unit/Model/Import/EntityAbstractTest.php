@@ -58,7 +58,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false);
-        $resourceHelper = $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false);
+        $resourceHelper = $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false);
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
 
         $data = [
