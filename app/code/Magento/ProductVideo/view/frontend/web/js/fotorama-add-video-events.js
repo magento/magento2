@@ -30,9 +30,7 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
          * @param {String} srchref
          * @returns {{}}
          */
-        function _getYoutubeId(srchref) {
-            var srcid = srchref.search.split('v=')[1];
-
+        function _getYoutubeId(srcid) {
             if (srcid) {
                 ampersandPosition = srcid.indexOf('&');
 
@@ -278,7 +276,6 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
         _isVideoBase: function () {
             var allVideoData = this.options.VideoData,
                 videoItem,
-                videoSettings,
                 allVideoDataKeys,
                 key,
                 i;
@@ -288,10 +285,9 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
             for (i = 0; i < allVideoDataKeys.length; i++) {
                 key = allVideoDataKeys[i];
                 videoItem = allVideoData[key];
-                videoSettings = allVideoData[videoItem];
 
                 if (
-                    videoSettings.mediaType === this.VID && videoSettings.isBase &&
+                    videoItem.mediaType === this.VID && videoItem.isBase &&
                     this.options.VideoSettings[0].playIfBase
                 ) {
                     this.Base = true;
