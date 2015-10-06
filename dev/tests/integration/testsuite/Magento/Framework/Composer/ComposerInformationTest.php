@@ -118,7 +118,15 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetSuggestedPackages($composerDir)
     {
         $this->setupDirectory($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory(
+                    $this->composerJsonFinder,
+                    $this->directoryList
+                )
+            ]
+        );
         $actualSuggestedExtensions = $composerInfo->getSuggestedPackages();
         $this->assertArrayHasKey('psr/log', $actualSuggestedExtensions);
     }
