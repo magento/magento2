@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Shipping\Model\Resource\Order\Track;
+namespace Magento\Shipping\Model\ResourceModel\Order\Track;
 
 /**
  * Flat sales order shipment tracks collection

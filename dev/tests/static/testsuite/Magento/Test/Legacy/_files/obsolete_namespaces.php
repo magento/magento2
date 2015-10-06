@@ -140,4 +140,5 @@ return [
     ['Magento\Search\Model\Resource', 'Magento\Search\Model\ResourceModel'],
     ['Magento\Search\Test\Unit\Model\Resource', 'Magento\Search\Test\Unit\Model\ResourceModel'],
     ['Magento\SendFriend\Model\Resource', 'Magento\SendFriend\Model\ResourceModel'],
+    ['Magento\Shipping\Model\Resource', 'Magento\Shipping\Model\ResourceModel'],
 ];
