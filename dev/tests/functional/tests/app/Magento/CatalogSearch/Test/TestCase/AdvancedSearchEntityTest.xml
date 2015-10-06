@@ -111,5 +111,10 @@
             <data name="productSearch/data/price/value/price_to" xsi:type="string">50</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
         </variation>
+        <variation name="AdvancedSearchEntityTestVariation14">
+            <data name="description" xsi:type="string">Negative product search</data>
+            <data name="productSearch/data/name" xsi:type="string">Negative_product_search</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
+        </variation>
     </testCase>
 </config>
