@@ -119,7 +119,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Address');
+        $this->_init('Magento\Customer\Model\ResourceModel\Address');
     }
 
     /**

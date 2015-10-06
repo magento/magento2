@@ -8,7 +8,7 @@ namespace Magento\CustomerImportExport\Model\Export;
 /**
  * Export entity customer model
  *
- * @method \Magento\Customer\Model\Resource\Attribute\Collection getAttributeCollection() getAttributeCollection()
+ * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
 class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -29,7 +29,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Attribute\Collection';
 
     /**#@-*/
 
@@ -75,7 +75,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Customers whose data is exported
      *
-     * @var \Magento\Customer\Model\Resource\Customer\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
      */
     protected $_customerCollection;
 
@@ -86,7 +86,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory
+     * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory
      * @param array $data
      */
     public function __construct(
@@ -96,7 +96,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory,
         array $data = []
     ) {
         parent::__construct(
@@ -136,7 +136,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Get customers collection
      *
-     * @return \Magento\Customer\Model\Resource\Customer\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Customer\Collection
      */
     protected function _getEntityCollection()
     {

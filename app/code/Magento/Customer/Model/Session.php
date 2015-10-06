@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
-use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 
 /**
  * Customer session model

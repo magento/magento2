@@ -16,7 +16,7 @@ class Address extends AbstractCustomer
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
 
     /**#@-*/
 
@@ -171,14 +171,14 @@ class Address extends AbstractCustomer
     /**
      * Address attributes collection
      *
-     * @var \Magento\Customer\Model\Resource\Address\Attribute\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection
      */
     protected $_attributeCollection;
 
     /**
      * Collection of existent addresses
      *
-     * @var \Magento\Customer\Model\Resource\Address\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected $_addressCollection;
 
@@ -244,8 +244,8 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionColFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
-     * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
+     * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
+     * @param \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -265,8 +265,8 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionColFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
-        \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory,
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
+        \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         array $data = []
     ) {
@@ -277,7 +277,7 @@ class Address extends AbstractCustomer
         $this->dateTime = $dateTime;
 
         if (!isset($data['attribute_collection'])) {
-            /** @var $attributeCollection \Magento\Customer\Model\Resource\Address\Attribute\Collection */
+            /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
             $attributeCollection = $attributesFactory->create();
             $attributeCollection->addSystemHiddenFilter()->addExcludeHiddenFrontendFilter();
             $data['attribute_collection'] = $attributeCollection;
@@ -342,7 +342,7 @@ class Address extends AbstractCustomer
     protected function _getNextEntityId()
     {
         if (!$this->_nextEntityId) {
-            /** @var $addressResource \Magento\Customer\Model\Resource\Address */
+            /** @var $addressResource \Magento\Customer\Model\ResourceModel\Address */
             $addressResource = $this->_addressFactory->create()->getResource();
             $addressTable = $addressResource->getEntityTable();
             $this->_nextEntityId = $this->_resourceHelper->getNextAutoincrement($addressTable);

@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**

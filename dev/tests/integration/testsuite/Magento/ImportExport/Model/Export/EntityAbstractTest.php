@@ -80,7 +80,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     public function testFilterAttributeCollection()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
         );
         $collection = $this->_model->filterAttributeCollection($collection);
         /**

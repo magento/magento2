@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Customer collection factory
      *
-     * @var \Magento\Customer\Model\Resource\Customer\CollectionFactory
+     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
      */
     protected $_customerCollectionFactory;
 

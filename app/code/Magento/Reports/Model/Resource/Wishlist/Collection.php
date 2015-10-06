@@ -21,7 +21,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_wishlistTable;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer\CollectionFactory
+     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
      */
     protected $_customerResFactory;
 
@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerResFactory
+     * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerResFactory
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -39,7 +39,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerResFactory,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerResFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -89,7 +89,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getWishlistCustomerCount()
     {
-        /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $collection = $this->_customerResFactory->create();
 
         $customersSelect = $collection->getSelectCountSql();
@@ -119,7 +119,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getSharedCount()
     {
-        /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $collection = $this->_customerResFactory->create();
         $countSelect = $collection->getSelectCountSql();
         $countSelect->joinLeft(

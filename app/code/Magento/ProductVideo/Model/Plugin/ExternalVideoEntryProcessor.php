@@ -6,7 +6,7 @@
 
 namespace Magento\ProductVideo\Model\Plugin;
 
-use Magento\Customer\Model\Resource\Form\Attribute;
+use Magento\Customer\Model\ResourceModel\Form\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;

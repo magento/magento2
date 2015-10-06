@@ -12,7 +12,7 @@ namespace Magento\Reports\Model\Resource\Customer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
+class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
      * Add order statistics flag

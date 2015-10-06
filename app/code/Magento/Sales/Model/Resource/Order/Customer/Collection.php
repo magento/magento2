@@ -7,7 +7,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Customer;
 
-class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
+class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
      * @return $this
