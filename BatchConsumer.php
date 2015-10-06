@@ -109,7 +109,7 @@ class BatchConsumer implements ConsumerInterface
      * @return void
      * @throws LocalizedException
      */
-    private function dispatchMessage($messages)
+    private function dispatchMessage(array $messages)
     {
         $callback = $this->configuration->getCallback();
         foreach ($messages as $message) {
@@ -124,23 +124,12 @@ class BatchConsumer implements ConsumerInterface
      * @param MergerInterface $merger
      * @return void
      */
-    private function runDaemonMode($queue, $merger)
+    private function runDaemonMode(QueueInterface $queue, MergerInterface $merger)
     {
+        $transactionCallback = $this->getTransactionCallback($queue, $merger);
         while (true) {
-            try {
-                $this->resource->getConnection()->beginTransaction();
-                $messages = $this->getAllMessages($queue);
-                $decodedMessages = $this->decodeMessages($messages);
-                $mergedMessages = $merger->merge($decodedMessages);
-                $this->dispatchMessage($mergedMessages);
-                $this->acknowledgeAll($queue, $messages);
-                $this->resource->getConnection()->commit();
-            } catch (ConnectionLostException $e) {
-                $this->resource->getConnection()->rollBack();
-            } catch (\Exception $e) {
-                $this->resource->getConnection()->rollBack();
-                $this->rejectAll($queue, $messages);
-            }
+            $messages = $this->getAllMessages($queue);
+            $transactionCallback($messages);
             sleep($this->interval);
         }
     }
@@ -153,26 +142,15 @@ class BatchConsumer implements ConsumerInterface
      * @param int $maxNumberOfMessages
      * @return void
      */
-    private function run($queue, $merger, $maxNumberOfMessages)
+    private function run(QueueInterface $queue, MergerInterface $merger, $maxNumberOfMessages)
     {
         $count = $maxNumberOfMessages
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
 
-        try {
-            $this->resource->getConnection()->beginTransaction();
-            $messages = $this->getMessages($queue, $count);
-            $decodedMessages = $this->decodeMessages($messages);
-            $mergedMessages = $merger->merge($decodedMessages);
-            $this->dispatchMessage($mergedMessages);
-            $this->acknowledgeAll($queue, $messages);
-            $this->resource->getConnection()->commit();
-        } catch (ConnectionLostException $e) {
-            $this->resource->getConnection()->rollBack();
-        } catch (\Exception $e) {
-            $this->resource->getConnection()->rollBack();
-            $this->rejectAll($queue, $messages);
-        }
+        $messages = $this->getMessages($queue, $count);
+        $transactionCallback = $this->getTransactionCallback($queue, $merger);
+        $transactionCallback($messages);
     }
 
     /**
@@ -180,7 +158,7 @@ class BatchConsumer implements ConsumerInterface
      * @param EnvelopeInterface[] $messages
      * @return void
      */
-    private function acknowledgeAll($queue, $messages)
+    private function acknowledgeAll(QueueInterface $queue, array $messages)
     {
         foreach ($messages as $message) {
             $queue->acknowledge($message);
@@ -191,7 +169,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueInterface $queue
      * @return EnvelopeInterface[]
      */
-    private function getAllMessages($queue)
+    private function getAllMessages(QueueInterface $queue)
     {
         $messages = [];
         while ($message = $queue->dequeue()) {
@@ -206,7 +184,7 @@ class BatchConsumer implements ConsumerInterface
      * @param int $count
      * @return EnvelopeInterface[]
      */
-    private function getMessages($queue, $count)
+    private function getMessages(QueueInterface $queue, $count)
     {
         $messages = [];
         for ($i = $count; $i > 0; $i--) {
@@ -225,7 +203,7 @@ class BatchConsumer implements ConsumerInterface
      * @param EnvelopeInterface[] $messages
      * @return void
      */
-    private function rejectAll($queue, array $messages)
+    private function rejectAll(QueueInterface $queue, array $messages)
     {
         foreach ($messages as $message) {
             $queue->reject($message);
@@ -248,5 +226,29 @@ class BatchConsumer implements ConsumerInterface
         }
 
         return $decodedMessages;
+    }
+
+    /**
+     * @param QueueInterface $queue
+     * @param MergerInterface $merger
+     * @return \Closure
+     */
+    private function getTransactionCallback(QueueInterface $queue, MergerInterface $merger)
+    {
+        return function (array $messages) use ($queue, $merger) {
+            try {
+                $this->resource->getConnection()->beginTransaction();
+                $decodedMessages = $this->decodeMessages($messages);
+                $mergedMessages = $merger->merge($decodedMessages);
+                $this->dispatchMessage($mergedMessages);
+                $this->acknowledgeAll($queue, $messages);
+                $this->resource->getConnection()->commit();
+            } catch (ConnectionLostException $e) {
+                $this->resource->getConnection()->rollBack();
+            } catch (\Exception $e) {
+                $this->resource->getConnection()->rollBack();
+                $this->rejectAll($queue, $messages);
+            }
+        };
     }
 }
