@@ -37,7 +37,7 @@ class QueueManagement
     /**#@-*/
 
     /**
-     * @var \Magento\MysqlMq\Model\Resource\Queue
+     * @var \Magento\MysqlMq\Model\ResourceModel\Queue
      */
     private $messageResource;
 
@@ -52,20 +52,20 @@ class QueueManagement
     private $timezone;
 
     /**
-     * @var \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory
+     * @var \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory
      */
     private $messageStatusCollectionFactory;
 
     /**
-     * @param \Magento\MysqlMq\Model\Resource\Queue $messageResource
+     * @param \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory
+     * @param \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      */
     public function __construct(
-        \Magento\MysqlMq\Model\Resource\Queue $messageResource,
+        \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory,
+        \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
     ) {
         $this->messageResource = $messageResource;

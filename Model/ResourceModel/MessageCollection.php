@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MysqlMq\Model\Resource;
+namespace Magento\MysqlMq\Model\ResourceModel;
 
 /**
  * Message collection.
@@ -17,6 +17,6 @@ class MessageCollection extends \Magento\Framework\Model\Resource\Db\Collection\
      */
     protected function _construct()
     {
-        $this->_init('Magento\MysqlMq\Model\Message', 'Magento\MysqlMq\Model\Resource\Message');
+        $this->_init('Magento\MysqlMq\Model\Message', 'Magento\MysqlMq\Model\ResourceModel\Message');
     }
 }
