@@ -131,7 +131,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 34;
         $addressId = 53;
         $customerAddress = $this->getMockForAbstractClass('Magento\Customer\Api\Data\AddressInterface', [], '', false);
-        $addressCollection = $this->getMock('Magento\Customer\Model\ResourceModel\Address\Collection', [], [], '', false);
+        $addressCollection =
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\Collection', [], [], '', false);
         $customerAddress->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
@@ -213,7 +214,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function prepareMocksForInvalidAddressValidation()
     {
         $countryModel = $this->getMock('Magento\Directory\Model\Country', [], [], '', false);
-        $regionCollection = $this->getMock('Magento\Directory\Model\ResourceModel\Region\Collection', [], [], '', false);
+        $regionCollection = $this->getMock(
+            'Magento\Directory\Model\ResourceModel\Region\Collection',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->address->expects($this->once())
             ->method('getShouldIgnoreValidation')
@@ -371,7 +378,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $addressId = 12;
         $customerId = 43;
 
-        $addressCollection = $this->getMock('Magento\Customer\Model\ResourceModel\Address\Collection', [], [], '', false);
+        $addressCollection = $this->getMock(
+            'Magento\Customer\Model\ResourceModel\Address\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $customerAddress = $this->getMockForAbstractClass('Magento\Customer\Api\Data\AddressInterface', [], '', false);
         $customerAddress->expects($this->once())
             ->method('getId')
@@ -412,7 +425,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $addressCollection = $this->getMock('Magento\Customer\Model\ResourceModel\Address\Collection', [], [], '', false);
+        $addressCollection = $this->getMock(
+            'Magento\Customer\Model\ResourceModel\Address\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $this->addressRegistry->expects($this->once())
             ->method('retrieve')
             ->with($addressId)

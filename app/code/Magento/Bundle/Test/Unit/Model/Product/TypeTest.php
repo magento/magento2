@@ -74,7 +74,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->bundleCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory')
+        $this->bundleCollection =
+            $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

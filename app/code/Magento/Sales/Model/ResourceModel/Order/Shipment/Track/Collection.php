@@ -43,7 +43,10 @@ class Collection extends AbstractCollection implements ShipmentTrackSearchResult
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Shipment\Track', 'Magento\Sales\Model\ResourceModel\Order\Shipment\Track');
+        $this->_init(
+            'Magento\Sales\Model\Order\Shipment\Track',
+            'Magento\Sales\Model\ResourceModel\Order\Shipment\Track'
+        );
     }
 
     /**

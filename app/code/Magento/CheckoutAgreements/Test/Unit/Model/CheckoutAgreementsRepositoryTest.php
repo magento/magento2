@@ -74,7 +74,13 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->resourceMock = $this->getMock('Magento\CheckoutAgreements\Model\ResourceModel\Agreement', [], [], '', false);
+        $this->resourceMock = $this->getMock(
+            'Magento\CheckoutAgreements\Model\ResourceModel\Agreement',
+            [],
+            [],
+            '',
+            false
+        );
         $this->agrFactoryMock = $this->getMock(
             'Magento\CheckoutAgreements\Model\AgreementFactory',
             ['create'],

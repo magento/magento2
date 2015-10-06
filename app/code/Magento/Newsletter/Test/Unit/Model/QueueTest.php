@@ -38,7 +38,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     protected $subscribersCollection;
 
     /**
-     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subscribersCollectionFactory;
 
@@ -79,7 +79,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
             )
             ->getMock();
-        $this->subscribersCollection = $this->getMockBuilder('\Magento\Newsletter\Model\ResourceModel\Subscriber\Collection')
+        $this->subscribersCollection =
+            $this->getMockBuilder('\Magento\Newsletter\Model\ResourceModel\Subscriber\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource = $this->getMockBuilder('\Magento\Newsletter\Model\ResourceModel\Queue')

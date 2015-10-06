@@ -188,7 +188,8 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $pageSize = 4;
 
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $collectionMock = $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection', [], [], '', false);
+        $collectionMock =
+            $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection', [], [], '', false);
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);

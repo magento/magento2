@@ -30,7 +30,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
     protected $mediaDirectoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceEntryMediaGalleryMock;
 

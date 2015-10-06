@@ -232,8 +232,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected function _addProductAttributesAndPrices(\Magento\Catalog\Model\ResourceModel\Product\Collection $collection)
-    {
+    protected function _addProductAttributesAndPrices(
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+    ) {
         return $collection
             ->addMinimalPrice()
             ->addFinalPrice()

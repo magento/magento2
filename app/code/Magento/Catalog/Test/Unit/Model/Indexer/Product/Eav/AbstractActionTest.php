@@ -13,12 +13,12 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_eavDecimalFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_eavSourceFactoryMock;
 

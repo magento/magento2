@@ -42,7 +42,10 @@ class Factory
 
         if (!$indexerPrice instanceof \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('%1 doesn\'t extend \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice', $className)
+                __(
+                    '%1 doesn\'t extend \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice',
+                    $className
+                )
             );
         }
         return $indexerPrice;

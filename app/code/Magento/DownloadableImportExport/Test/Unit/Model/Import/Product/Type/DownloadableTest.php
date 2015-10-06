@@ -25,7 +25,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $select;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFacMock;
 
@@ -35,7 +35,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $attrSetColMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFacMock;
 

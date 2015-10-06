@@ -202,7 +202,7 @@ class Bestsellers extends AbstractReport
     /**
      * Update rating position
      *
-     * @param string $aggregation One of \Magento\Sales\Model\ResourceModel\Report\Bestsellers::AGGREGATION_XXX constants
+     * @param string $aggregation
      * @return $this
      */
     protected function _updateRatingPos($aggregation)

@@ -51,7 +51,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory')
+        $this->collectionFactoryMock =
+            $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -5,13 +5,14 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 /**
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class DefaultPrice extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer implements PriceInterface
+class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
     /**
      * Product type code

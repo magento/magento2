@@ -21,7 +21,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Review\Model\ResourceModel\Review\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $collection;
 
-    /** @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $collectionFactory;
 
     /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */

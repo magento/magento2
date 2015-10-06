@@ -56,7 +56,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->invoiceCommentResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment')
+        $this->invoiceCommentResourceMock =
+            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment')
             ->disableOriginalConstructor()
             ->setMethods(
                 [

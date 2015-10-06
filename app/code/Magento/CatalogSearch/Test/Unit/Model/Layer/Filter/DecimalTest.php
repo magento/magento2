@@ -84,7 +84,8 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->method('getProductCollection')
             ->will($this->returnValue($this->fulltextCollection));
 
-        $filterDecimalFactory = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory')
+        $filterDecimalFactory =
+            $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

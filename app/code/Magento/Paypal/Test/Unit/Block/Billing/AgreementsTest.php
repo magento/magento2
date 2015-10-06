@@ -102,7 +102,13 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBillingAgreements()
     {
-        $collection = $this->getMock('Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection', [], [], '', false);
+        $collection = $this->getMock(
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $this->agreementCollection->expects($this->once())->method('create')->willReturn($collection);
         $collection->expects($this->once())->method('addFieldToFilter')->willReturn($collection);
         $collection->expects($this->once())->method('setOrder')->willReturn($collection);

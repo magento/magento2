@@ -129,7 +129,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadData()
     {
-        $this->assertInstanceOf('\Magento\Reports\Model\ResourceModel\Report\Collection', $this->collection->loadData());
+        $this->assertInstanceOf(
+            '\Magento\Reports\Model\ResourceModel\Report\Collection',
+            $this->collection->loadData()
+        );
     }
 
     /**

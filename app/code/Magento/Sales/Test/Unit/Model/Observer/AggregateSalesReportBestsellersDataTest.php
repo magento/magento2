@@ -38,7 +38,8 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCas
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bestsellersFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\BestsellersFactory')
+        $this->bestsellersFactoryMock =
+            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\BestsellersFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

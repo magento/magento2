@@ -168,11 +168,15 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $connection = $this->getConnection();
         $oldAlias = [
             \Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS . '.',
-            $connection->quoteIdentifier(\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(
+                \Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS
+            ) . '.',
         ];
         $newAlias = [
             \Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS . '.',
-            $connection->quoteIdentifier(\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(
+                \Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS
+            ) . '.',
         ];
         return str_replace($oldAlias, $newAlias, $conditionString);
     }

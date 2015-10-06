@@ -126,7 +126,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         $this->errorHelperMock = $this->getMockBuilder('\Magento\Braintree\Helper\Error')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->countryFactoryMock = $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\CollectionFactory')
+        $this->countryFactoryMock =
+            $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

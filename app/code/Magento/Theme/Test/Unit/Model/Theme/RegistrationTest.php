@@ -32,7 +32,8 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->collectionFactory = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory')
+        $this->collectionFactory =
+            $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

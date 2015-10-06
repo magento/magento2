@@ -24,8 +24,9 @@ class Category implements \Magento\Framework\Option\ArrayInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
-    public function __construct(\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+    ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
     }
 

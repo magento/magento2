@@ -25,7 +25,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $stockHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $productCollection;
 

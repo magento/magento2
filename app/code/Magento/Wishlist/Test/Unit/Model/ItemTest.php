@@ -88,7 +88,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->itemOptFactory = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory')
+        $this->itemOptFactory =
+            $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

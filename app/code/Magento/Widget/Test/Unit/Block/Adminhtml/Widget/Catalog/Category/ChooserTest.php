@@ -60,7 +60,13 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->collection = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Collection', [], [], '', false);
+        $this->collection = $this->getMock(
+            'Magento\Catalog\Model\ResourceModel\Category\Collection',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->childNode = $this->getMock(
             'Magento\Framework\Data\Tree\Node',

@@ -52,7 +52,10 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->model = new \Magento\ConfigurableProduct\Model\ConfigurableProductManagement($this->attributeRepository, $this->productVariationBuilder);
+        $this->model = new \Magento\ConfigurableProduct\Model\ConfigurableProductManagement(
+            $this->attributeRepository,
+            $this->productVariationBuilder
+        );
     }
 
     public function testGenerateVariation()
