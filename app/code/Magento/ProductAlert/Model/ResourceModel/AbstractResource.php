@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ProductAlert\Model\Resource;
+namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
  * Product alert for back in abstract resource model

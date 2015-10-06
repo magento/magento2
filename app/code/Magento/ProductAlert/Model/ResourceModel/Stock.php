@@ -6,12 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\ProductAlert\Model\Resource;
+namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
- * Product alert for changed price resource model
+ * Product alert for back in stock resource model
  */
-class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
+class Stock extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
@@ -39,11 +39,11 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
      */
     protected function _construct()
     {
-        $this->_init('product_alert_price', 'alert_price_id');
+        $this->_init('product_alert_stock', 'alert_stock_id');
     }
 
     /**
-     * Before save process, check exists the same alert
+     * Before save action
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
@@ -53,16 +53,13 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
         if (is_null($object->getId()) && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
         ) {
             if ($row = $this->_getAlertRow($object)) {
-                $price = $object->getPrice();
                 $object->addData($row);
-                if ($price) {
-                    $object->setPrice($price);
-                }
                 $object->setStatus(0);
             }
         }
         if (is_null($object->getAddDate())) {
             $object->setAddDate($this->_dateFactory->create()->gmtDate());
+            $object->setStatus(0);
         }
         return parent::_beforeSave($object);
     }
