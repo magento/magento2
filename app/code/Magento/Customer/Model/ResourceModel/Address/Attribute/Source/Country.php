@@ -14,19 +14,19 @@ namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countriesFactory;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countriesFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countriesFactory
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
     ) {
         $this->_countriesFactory = $countriesFactory;
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
@@ -48,7 +48,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected function _createCountriesCollection()
     {

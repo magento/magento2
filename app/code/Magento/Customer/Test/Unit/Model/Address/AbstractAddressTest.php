@@ -60,7 +60,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $regionCollectionMock = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\Collection',
+            'Magento\Directory\Model\ResourceModel\Region\Collection',
             [],
             [],
             '',

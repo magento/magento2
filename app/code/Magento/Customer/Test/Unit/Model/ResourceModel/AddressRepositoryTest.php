@@ -213,7 +213,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function prepareMocksForInvalidAddressValidation()
     {
         $countryModel = $this->getMock('Magento\Directory\Model\Country', [], [], '', false);
-        $regionCollection = $this->getMock('Magento\Directory\Model\Resource\Region\Collection', [], [], '', false);
+        $regionCollection = $this->getMock('Magento\Directory\Model\ResourceModel\Region\Collection', [], [], '', false);
 
         $this->address->expects($this->once())
             ->method('getShouldIgnoreValidation')

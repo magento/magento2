@@ -461,7 +461,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Region\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\ResourceModel\Address\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory', [], [], '', false),

@@ -14,19 +14,19 @@ namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionsFactory;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
     ) {
         $this->_regionsFactory = $regionsFactory;
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
@@ -46,7 +46,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected function _createRegionsCollection()
     {

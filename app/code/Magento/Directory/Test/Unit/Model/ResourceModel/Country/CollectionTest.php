@@ -6,12 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Directory\Test\Unit\Model\Resource\Country;
+namespace Magento\Directory\Test\Unit\Model\ResourceModel\Country;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_model;
 
@@ -41,7 +41,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $countryFactory = $this->getMock(
-            'Magento\Directory\Model\Resource\CountryFactory',
+            'Magento\Directory\Model\ResourceModel\CountryFactory',
             [],
             [],
             '',
@@ -66,7 +66,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'resource' => $resource,
             'helperData' => $helperDataMock
         ];
-        $this->_model = $objectManager->getObject('Magento\Directory\Model\Resource\Country\Collection', $arguments);
+        $this->_model = $objectManager->getObject('Magento\Directory\Model\ResourceModel\Country\Collection', $arguments);
     }
 
     /**

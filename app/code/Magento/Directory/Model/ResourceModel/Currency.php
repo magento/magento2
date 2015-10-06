@@ -7,7 +7,7 @@
 /**
  * Directory Currency Resource Model
  */
-namespace Magento\Directory\Model\Resource;
+namespace Magento\Directory\Model\ResourceModel;
 
 class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

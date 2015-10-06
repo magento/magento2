@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Directory\Model\Resource\Country;
+namespace Magento\Directory\Model\ResourceModel\Country;
 
 /**
  * \Directory country format resource model
@@ -25,7 +25,7 @@ class Format extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Directory\Model\Resource\Country\Format
+     * @return \Magento\Directory\Model\ResourceModel\Country\Format
      */
     protected function _initUniqueFields()
     {

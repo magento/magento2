@@ -3105,7 +3105,7 @@ return [
     ['Magento\Cms\Model\ResourceModel\Setup', 'Magento\Cms\Setup\InstallData'],
     ['Magento\Customer\Model\ResourceModel\Setup', 'Magento\Customer\Setup\CustomerSetup'],
     ['Magento\Dhl\Model\Resource\Setup', 'Magento\Dhl\Setup\InstallData'],
-    ['Magento\Directory\Model\Resource\Setup', 'Magento\Directory\Setup\InstallData'],
+    ['Magento\Directory\Model\ResourceModel\Setup', 'Magento\Directory\Setup\InstallData'],
     ['Magento\Eav\Model\Entity\Setup', 'Magento\Eav\Setup\EavSetup'],
     ['Magento\GiftMessage\Model\Resource\Setup', 'Magento\GiftMessage\Setup\InstallData'],
     ['Magento\GoogleShopping\Model\Resource\Setup', 'Magento\GoogleShopping\Setup\InstallData'],
