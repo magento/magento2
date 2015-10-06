@@ -5,7 +5,7 @@
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 
-class Collection extends \Magento\Search\Model\Resource\Query\Collection
+class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
 {
     /**
      * Registry manager
