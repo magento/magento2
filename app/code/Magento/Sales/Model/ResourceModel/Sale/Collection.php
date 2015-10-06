@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_orderStateCondition = null;
 
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
@@ -59,7 +59,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -67,7 +67,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
         $this->_storeCollectionFactory = $storeCollectionFactory;

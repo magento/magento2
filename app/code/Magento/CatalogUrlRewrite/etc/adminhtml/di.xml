@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Store\Model\Resource\Store">
+    <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="store_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="group_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group"/>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Category">

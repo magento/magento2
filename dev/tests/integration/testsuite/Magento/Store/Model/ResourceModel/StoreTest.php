@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Resource;
+namespace Magento\Store\Model\ResourceModel;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
     public function testCountAll()
     {
-        /** @var $model \Magento\Store\Model\Resource\Store */
+        /** @var $model \Magento\Store\Model\ResourceModel\Store */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Store\Model\Resource\Store'
+            'Magento\Store\Model\ResourceModel\Store'
         );
         $this->assertEquals(1, $model->countAll());
         $this->assertEquals(1, $model->countAll(false));

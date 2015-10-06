@@ -7,8 +7,8 @@
 /**
  * Store group model
  *
- * @method \Magento\Store\Model\Resource\Group _getResource()
- * @method \Magento\Store\Model\Resource\Group getResource()
+ * @method \Magento\Store\Model\ResourceModel\Group _getResource()
+ * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 
@@ -43,7 +43,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Group Store collection array
      *
-     * @var \Magento\Store\Model\Resource\Store\Collection[]
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     protected $_stores;
 
@@ -114,7 +114,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -141,7 +141,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Group');
+        $this->_init('Magento\Store\Model\ResourceModel\Group');
     }
 
     /**
@@ -188,7 +188,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Retrieve new (not loaded) Store collection object with group filter
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection()
     {
@@ -198,7 +198,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Retrieve website store objects
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection[]
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     public function getStores()
     {

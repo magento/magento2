@@ -132,7 +132,7 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Store\Model\Resource\Website\Collection
+     * @return \Magento\Store\Model\ResourceModel\Website\Collection
      */
     public function getWebsiteCollection()
     {
@@ -218,7 +218,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @param int|\Magento\Store\Model\Website $website
-     * @return \Magento\Store\Model\Resource\Group\Collection
+     * @return \Magento\Store\Model\ResourceModel\Group\Collection
      */
     public function getGroupCollection($website)
     {
@@ -296,7 +296,7 @@ class Switcher extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Store\Model\Group|int $group
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection($group)
     {

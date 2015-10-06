@@ -142,4 +142,5 @@ return [
     ['Magento\SendFriend\Model\Resource', 'Magento\SendFriend\Model\ResourceModel'],
     ['Magento\Shipping\Model\Resource', 'Magento\Shipping\Model\ResourceModel'],
     ['Magento\Sitemap\Model\Resource', 'Magento\Sitemap\Model\ResourceModel'],
+    ['Magento\Store\Model\Resource', 'Magento\Store\Model\ResourceModel'],
 ];

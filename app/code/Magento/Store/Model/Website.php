@@ -8,8 +8,8 @@ namespace Magento\Store\Model;
 /**
  * Core Website model
  *
- * @method \Magento\Store\Model\Resource\Website _getResource()
- * @method \Magento\Store\Model\Resource\Website getResource()
+ * @method \Magento\Store\Model\ResourceModel\Website _getResource()
+ * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getName()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
@@ -137,7 +137,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_configDataResource;
 
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeListFactory;
 
@@ -168,7 +168,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -185,7 +185,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\GroupFactory $storeGroupFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -219,7 +219,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Website');
+        $this->_init('Magento\Store\Model\ResourceModel\Website');
     }
 
     /**
@@ -303,7 +303,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve new (not loaded) Group collection object with website filter
      *
-     * @return \Magento\Store\Model\Resource\Group\Collection
+     * @return \Magento\Store\Model\ResourceModel\Group\Collection
      */
     public function getGroupCollection()
     {
@@ -410,7 +410,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve new (not loaded) Store collection object with website filter
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection()
     {
