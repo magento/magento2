@@ -2386,10 +2386,10 @@ return [
     ['Magento\Checkout\Block\Adminhtml\Agreement\Grid', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Grid'],
     ['Magento\Checkout\Block\Agreements', 'Magento\CheckoutAgreements\Block\Agreements'],
     ['Magento\Checkout\Controller\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Controller\Adminhtml\Agreement'],
-    ['Magento\Checkout\Model\ResourceModel\Agreement', 'Magento\CheckoutAgreements\Model\Resource\Agreement'],
+    ['Magento\Checkout\Model\ResourceModel\Agreement', 'Magento\CheckoutAgreements\Model\ResourceModel\Agreement'],
     [
         'Magento\Checkout\Model\ResourceModel\Agreement\Collection',
-        'Magento\CheckoutAgreements\Model\Resource\Agreement\Collection',
+        'Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection',
     ],
     ['Magento\Sales\Block\Adminhtml\Invoice\Grid'],
     ['Magento\Sales\Block\Adminhtml\Shipment\Grid'],

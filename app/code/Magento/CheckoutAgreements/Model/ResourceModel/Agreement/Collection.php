@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CheckoutAgreements\Model\Resource\Agreement;
+namespace Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
 
 /**
  * Resource Model for Agreement Collection
@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init(
             'Magento\CheckoutAgreements\Model\Agreement',
-            'Magento\CheckoutAgreements\Model\Resource\Agreement'
+            'Magento\CheckoutAgreements\Model\ResourceModel\Agreement'
         );
     }
 
