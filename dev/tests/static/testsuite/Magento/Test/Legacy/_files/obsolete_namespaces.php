@@ -102,4 +102,5 @@ return [
     ['Magento\Downloadable\Model\Resource', 'Magento\Downloadable\Model\ResourceModel'],
     ['Magento\Eav\Model\Resource', 'Magento\Eav\Model\ResourceModel'],
     ['Magento\Eav\Test\Unit\Model\Resource', 'Magento\Eav\Test\Unit\Model\ResourceModel'],
+    ['Magento\Email\Model\Resource', 'Magento\Email\Model\ResourceModel'],
 ];
