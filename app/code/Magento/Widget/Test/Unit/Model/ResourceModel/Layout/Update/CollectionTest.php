@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Test\Unit\Model\Resource\Layout\Update;
+namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout\Update;
 
-class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\AbstractTestCase
+class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layout\AbstractTestCase
 {
     /**
      * Retrieve layout update collection instance
      *
      * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Widget\Model\Resource\Layout\Update\Collection
+     * @return \Magento\Widget\Model\ResourceModel\Layout\Update\Collection
      */
     protected function _getCollection(\Magento\Framework\DB\Select $select)
     {
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        return new \Magento\Widget\Model\Resource\Layout\Update\Collection(
+        return new \Magento\Widget\Model\ResourceModel\Layout\Update\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
@@ -49,7 +49,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\Abs
     }
 
     /**
-     * @covers \Magento\Widget\Model\Resource\Layout\Update\Collection::_joinWithLink
+     * @covers \Magento\Widget\Model\ResourceModel\Layout\Update\Collection::_joinWithLink
      */
     public function testJoinWithLink()
     {

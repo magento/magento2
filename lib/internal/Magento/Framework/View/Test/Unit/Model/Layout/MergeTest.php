@@ -80,7 +80,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $scopeResolver = $this->getMockForAbstractClass('Magento\Framework\Url\ScopeResolverInterface');
         $scopeResolver->expects($this->once())->method('getScope')->with(null)->will($this->returnValue($this->scope));
 
-        $this->_resource = $this->getMock('Magento\Widget\Model\Resource\Layout\Update', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Widget\Model\ResourceModel\Layout\Update', [], [], '', false);
 
         $this->_appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
 

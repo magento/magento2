@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Resource\Layout;
+namespace Magento\Widget\Model\ResourceModel\Layout;
 
 /**
  * Class Plugin
  *
- * @package Magento\Widget\Model\Resource\Layout
+ * @package Magento\Widget\Model\ResourceModel\Layout
  */
 class Plugin
 {
     /**
-     * @var \Magento\Widget\Model\Resource\Layout\Update
+     * @var \Magento\Widget\Model\ResourceModel\Layout\Update
      */
     private $update;
 
@@ -28,10 +28,10 @@ class Plugin
     private $store;
 
     /**
-     * @param \Magento\Widget\Model\Resource\Layout\Update $update
+     * @param \Magento\Widget\Model\ResourceModel\Layout\Update $update
      */
     public function __construct(
-        \Magento\Widget\Model\Resource\Layout\Update $update
+        \Magento\Widget\Model\ResourceModel\Layout\Update $update
     ) {
         $this->update = $update;
     }

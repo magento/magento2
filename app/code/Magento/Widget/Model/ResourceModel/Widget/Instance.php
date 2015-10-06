@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Widget\Model\Resource\Widget;
+namespace Magento\Widget\Model\ResourceModel\Widget;
 
 use Magento\Framework\Model\AbstractModel;
 
