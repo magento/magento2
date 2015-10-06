@@ -68,7 +68,9 @@ define([
             this.infoPopupDOM = $('[data-role=msrp-info-template]')[0];
 
             if (this.options.popupId) {
-                this.$popup = $(this.popupDOM.innerText).appendTo('body');
+                $('body').append($(this.popupDOM).html());
+                this.$popup = $($(this.popupDOM).html());
+
                 $(this.options.popupId).on('click', function (e) {
                     this.popUpOptions.position.of = $(e.target);
                     this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);

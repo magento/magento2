@@ -96,15 +96,17 @@
                     id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
-                        $form.dialog('close');
+                        $form.modal('closeModal');
                     }
                 }]
             })
             .find('input[name=affected-attribute-set]').on('change', function() {
-                $('#affected-attribute-set-new-name-container')[$(this).val() == 'new' ? 'show' : 'hide']();
+                var affectedAttributeSet = $(this).val();
+                newAttributeSetContainer[affectedAttributeSet == 'new' ? 'show' : 'hide']();
+                existingAttributeSetContainer[affectedAttributeSet == 'existing' ? 'show' : 'hide']();
                 resetValidation();
-                if ($(this).val() == 'new') {
-                    $form.find('input[name=new-attribute-set-name]').focus();
+                if (affectedAttributeSet == 'new') {
+                    newAttributeSetContainer.find('input[name=new-attribute-set-name]').focus();
                 }
             });
     });
