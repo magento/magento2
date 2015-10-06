@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Model\Resource;
+namespace Magento\Weee\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Condition\ConditionInterface;

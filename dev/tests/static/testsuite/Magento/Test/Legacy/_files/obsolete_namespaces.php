@@ -90,4 +90,6 @@ return [
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
     ['Magento\DesignEditor'],
     ['Magento\Variable\Model\Resource', 'Magento\Variable\Model\ResourceModel'],
+    ['Magento\Weee\Model\Resource', 'Magento\Weee\Model\ResourceModel'],
+    ['Magento\Weee\Test\Unit\Model\Resource', 'Magento\Weee\Test\Unit\Model\ResourceModel'],
 ];

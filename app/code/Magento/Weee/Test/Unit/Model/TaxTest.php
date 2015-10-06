@@ -118,7 +118,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $className = '\Magento\Tax\Helper\Data';
         $this->taxData = $this->getMock($className, [], [], '', false);
 
-        $className = '\Magento\Weee\Model\Resource\Tax';
+        $className = '\Magento\Weee\Model\ResourceModel\Tax';
         $this->resource = $this->getMock($className, [], [], '', false);
 
         $className = '\Magento\Weee\Model\Config';
