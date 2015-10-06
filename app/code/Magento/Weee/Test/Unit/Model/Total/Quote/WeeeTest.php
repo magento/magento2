@@ -172,6 +172,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 '__wakeup',
                 'getAllItems',
                 'getQuote',
+                'getCustomAttributesCodes'
             ],
             [],
             '',
@@ -187,6 +188,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
         $addressMock->expects($this->any())->method('getAllItems')->will($this->returnValue($items));
         $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+        $addressMock->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
 
         return $addressMock;
     }
