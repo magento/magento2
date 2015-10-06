@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sitemap\Model\Resource;
+namespace Magento\Sitemap\Model\ResourceModel;
 
 /**
  * Sitemap resource model
