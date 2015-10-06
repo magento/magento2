@@ -8,7 +8,6 @@
 
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -94,7 +93,8 @@ class Consumer implements ConsumerInterface
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
         if (isset($decodedMessage)) {
-            if ($this->messageQueueConfig->getMessageSchemaType($topicName) == MessageQueueConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
+            $messageSchemaType = $this->messageQueueConfig->getMessageSchemaType($topicName);
+            if ($messageSchemaType == MessageQueueConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
                 call_user_func_array($callback, $decodedMessage);
             } else {
                 call_user_func($callback, $decodedMessage);
