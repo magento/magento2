@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Resource;
+namespace Magento\Integration\Test\Unit\Model\ResourceModel;
 
 /**
- * Unit test for \Magento\Integration\Model\Resource\Integration
+ * Unit test for \Magento\Integration\Model\ResourceModel\Integration
  */
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Integration\Model\Resource\Integration
+     * @var \Magento\Integration\Model\ResourceModel\Integration
      */
     protected $integrationResourceModel;
 
@@ -50,7 +50,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->integrationResourceModel = new \Magento\Integration\Model\Resource\Integration($this->contextMock);
+        $this->integrationResourceModel = new \Magento\Integration\Model\ResourceModel\Integration($this->contextMock);
     }
 
     public function testSelectActiveIntegrationByConsumerId()

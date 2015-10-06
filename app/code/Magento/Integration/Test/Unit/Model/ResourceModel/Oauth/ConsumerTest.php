@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Resource\Oauth;
+namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 /**
- * Unit test for \Magento\Integration\Model\Resource\Oauth\Consumer
+ * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Consumer
  */
 class ConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     protected $consumerMock;
 
     /**
-     * @var \Magento\Integration\Model\Resource\Oauth\Consumer
+     * @var \Magento\Integration\Model\ResourceModel\Oauth\Consumer
      */
     protected $consumerResource;
 
@@ -47,7 +47,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-        $this->consumerResource = new \Magento\Integration\Model\Resource\Oauth\Consumer(
+        $this->consumerResource = new \Magento\Integration\Model\ResourceModel\Oauth\Consumer(
             $contextMock,
             new \Magento\Framework\Stdlib\DateTime()
         );
@@ -57,7 +57,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $this->consumerMock->expects($this->once())->method('setUpdatedAt');
         $this->assertInstanceOf(
-            'Magento\Integration\Model\Resource\Oauth\Consumer',
+            'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
             $this->consumerResource->_beforeSave($this->consumerMock)
         );
     }
@@ -66,7 +66,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $this->connectionMock->expects($this->exactly(2))->method('delete');
         $this->assertInstanceOf(
-            'Magento\Integration\Model\Resource\Oauth\Consumer',
+            'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
             $this->consumerResource->_afterDelete($this->consumerMock)
         );
     }

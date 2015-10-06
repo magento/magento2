@@ -3114,7 +3114,7 @@ return [
     ['Magento\Tax\Model\Resource\Setup', 'Magento\Tax\Setup\TaxSetup'],
     ['Magento\Theme\Model\Resource\Setup', 'Magento\Theme\Setup\InstallData'],
     ['Magento\Weee\Model\Resource\Setup', 'Magento\Weee\Setup\InstallData'],
-    ['Magento\Integration\Model\Resource\Setup'],
+    ['Magento\Integration\Model\ResourceModel\Setup'],
     ['Magento\Framework\Module\ResourceResolver'],
     ['Magento\Framework\Module\ResourceResolverInterface'],
     ['Magento\Setup\Module\SetupModule'],

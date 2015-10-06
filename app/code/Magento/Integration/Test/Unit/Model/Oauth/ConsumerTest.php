@@ -109,7 +109,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
 
         $this->resourceMock = $this->getMock(
-            'Magento\Integration\Model\Resource\Oauth\Consumer',
+            'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
             ['getTimeInSecondsSinceCreation', 'getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
             [],
             '',

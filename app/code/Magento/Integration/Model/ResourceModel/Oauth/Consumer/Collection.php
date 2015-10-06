@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Resource\Oauth\Nonce;
+namespace Magento\Integration\Model\ResourceModel\Oauth\Consumer;
 
 /**
- * OAuth nonce resource collection model
+ * OAuth Application resource collection model
  */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -17,6 +17,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Oauth\Nonce', 'Magento\Integration\Model\Resource\Oauth\Nonce');
+        $this->_init('Magento\Integration\Model\Oauth\Consumer', 'Magento\Integration\Model\ResourceModel\Oauth\Consumer');
     }
 }
