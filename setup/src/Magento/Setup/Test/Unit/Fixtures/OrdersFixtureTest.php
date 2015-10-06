@@ -35,12 +35,12 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $mockObjectNames = [
-            'Magento\Quote\Model\Resource\Quote',
-            'Magento\Quote\Model\Resource\Quote\Address',
-            'Magento\Quote\Model\Resource\Quote\Item',
-            'Magento\Quote\Model\Resource\Quote\Item\Option',
-            'Magento\Quote\Model\Resource\Quote\Payment',
-            'Magento\Quote\Model\Resource\Quote\Address\Rate',
+            'Magento\Quote\Model\ResourceModel\Quote',
+            'Magento\Quote\Model\ResourceModel\Quote\Address',
+            'Magento\Quote\Model\ResourceModel\Quote\Item',
+            'Magento\Quote\Model\ResourceModel\Quote\Item\Option',
+            'Magento\Quote\Model\ResourceModel\Quote\Payment',
+            'Magento\Quote\Model\ResourceModel\Quote\Address\Rate',
             'Magento\Reports\Model\Resource\Event',
             'Magento\Sales\Model\Resource\Order',
             'Magento\Sales\Model\Resource\Order\Grid',

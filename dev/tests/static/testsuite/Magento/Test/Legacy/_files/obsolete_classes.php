@@ -1383,7 +1383,7 @@ return [
     ['Magento\Sales\Model\Resource\Order\Creditmemo\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Invoice\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Shipment\Attribute\Backend\Parent'],
-    ['Magento\Quote\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
+    ['Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Backend\Parent'],
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Helper\Theme', 'Magento\Theme\Helper\Theme'],
     ['Magento\Core\Helper\Url', 'Magento\Framework\Url\Helper\Data'],

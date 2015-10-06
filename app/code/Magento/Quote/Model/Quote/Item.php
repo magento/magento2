@@ -12,8 +12,8 @@ use Magento\Quote\Api\Data\CartItemInterface;
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Quote\Model\Resource\Quote\Item _getResource()
- * @method \Magento\Quote\Model\Resource\Quote\Item getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -234,7 +234,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Item');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Item');
     }
 
     /**

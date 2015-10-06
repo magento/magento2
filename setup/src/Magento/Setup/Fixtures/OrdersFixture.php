@@ -34,27 +34,27 @@ class OrdersFixture extends Fixture
 
         $quoteTableName = $this->getTableName(
             'quote',
-            'Magento\Quote\Model\Resource\Quote'
+            'Magento\Quote\Model\ResourceModel\Quote'
         );
         $quoteAddressTableName = $this->getTableName(
             'quote_address',
-            'Magento\Quote\Model\Resource\Quote\Address'
+            'Magento\Quote\Model\ResourceModel\Quote\Address'
         );
         $quoteItemTableName = $this->getTableName(
             'quote_item',
-            'Magento\Quote\Model\Resource\Quote\Item'
+            'Magento\Quote\Model\ResourceModel\Quote\Item'
         );
         $quoteItemOptionTableName = $this->getTableName(
             'quote_item_option',
-            'Magento\Quote\Model\Resource\Quote\Item\Option'
+            'Magento\Quote\Model\ResourceModel\Quote\Item\Option'
         );
         $quotePaymentTableName = $this->getTableName(
             'quote_payment',
-            'Magento\Quote\Model\Resource\Quote\Payment'
+            'Magento\Quote\Model\ResourceModel\Quote\Payment'
         );
         $quoteAddressRateTableName = $this->getTableName(
             'quote_shipping_rate',
-            'Magento\Quote\Model\Resource\Quote\Address\Rate'
+            'Magento\Quote\Model\ResourceModel\Quote\Address\Rate'
         );
         $reportEventTableName = $this->getTableName(
             'report_event',

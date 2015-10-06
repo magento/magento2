@@ -80,7 +80,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Item\Collection');
         $constructArgs['eventManager'] = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $resourceMock = $this->getMock('\Magento\Quote\Model\Resource\Quote', [], [], '', false);
+        $resourceMock = $this->getMock('\Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
         $resourceMock
             ->expects($this->any())
             ->method('getConnection')

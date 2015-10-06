@@ -63,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
-        $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote')
+        $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())
