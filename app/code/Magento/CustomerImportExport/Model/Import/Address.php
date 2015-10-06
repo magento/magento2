@@ -240,7 +240,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionColFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -261,7 +261,7 @@ class Address extends AbstractCustomer
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionColFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,

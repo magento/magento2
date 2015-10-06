@@ -165,7 +165,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
@@ -181,7 +181,7 @@ class Customer extends AbstractCustomer
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         array $data = []

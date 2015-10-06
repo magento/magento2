@@ -95,4 +95,6 @@ return [
     ['Magento\Cron\Model\Resource', 'Magento\Cron\Model\ResourceModel'],
     ['Magento\Customer\Model\Resource', 'Magento\Customer\Model\ResourceModel'],
     ['Magento\Customer\Test\Unit\Model\Resource', 'Magento\Customer\Test\Unit\Model\ResourceModel'],
+    ['Magento\CustomerImportExport\Model\Resource', 'Magento\CustomerImportExport\Model\ResourceModel'],
+    ['Magento\CustomerImportExport\Test\Unit\Model\Resource', 'Magento\CustomerImportExport\Test\Unit\Model\ResourceModel'],
 ];

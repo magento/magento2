@@ -54,7 +54,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory
+     * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory
      */
     protected $_dataFactory;
 
@@ -147,7 +147,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_dataFactory = $this->getMock(
-            'Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory',
+            'Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory',
             [],
             [],
             '',
