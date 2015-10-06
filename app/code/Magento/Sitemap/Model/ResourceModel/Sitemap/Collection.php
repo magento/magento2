@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sitemap\Model\Resource\Sitemap;
+namespace Magento\Sitemap\Model\ResourceModel\Sitemap;
 
 /**
  * Sitemap resource model collection
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\Sitemap', 'Magento\Sitemap\Model\Resource\Sitemap');
+        $this->_init('Magento\Sitemap\Model\Sitemap', 'Magento\Sitemap\Model\ResourceModel\Sitemap');
     }
 
     /**
