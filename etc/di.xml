@@ -13,6 +13,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand</item>
+                <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand</item>
             </argument>
         </arguments>
     </type>
