@@ -103,4 +103,6 @@ return [
     ['Magento\Eav\Model\Resource', 'Magento\Eav\Model\ResourceModel'],
     ['Magento\Eav\Test\Unit\Model\Resource', 'Magento\Eav\Test\Unit\Model\ResourceModel'],
     ['Magento\Email\Model\Resource', 'Magento\Email\Model\ResourceModel'],
+    ['Magento\EncryptionKey\Model\Resource', 'Magento\EncryptionKey\Model\ResourceModel'],
+    ['Magento\EncryptionKey\Test\Unit\Model\Resource', 'Magento\EncryptionKey\Test\Unit\Model\ResourceModel'],
 ];

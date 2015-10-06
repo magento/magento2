@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\EncryptionKey\Test\Unit\Model\Resource\Key;
+namespace Magento\EncryptionKey\Test\Unit\Model\ResourceModel\Key;
 
 /**
- * Test Class For Magento\EncryptionKey\Model\Resource\Key\Change
+ * Test Class For Magento\EncryptionKey\Model\ResourceModel\Key\Change
  */
 class ChangeTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     protected $tansactionMock;
     /** @var \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
-    /** @var \Magento\EncryptionKey\Model\Resource\Key\Change */
+    /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
 
     public function setUp()
@@ -74,7 +74,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->model = $helper->getObject(
-            'Magento\EncryptionKey\Model\Resource\Key\Change',
+            'Magento\EncryptionKey\Model\ResourceModel\Key\Change',
             [
                 'filesystem' => $this->filesystemMock,
                 'structure' => $this->structureMock,

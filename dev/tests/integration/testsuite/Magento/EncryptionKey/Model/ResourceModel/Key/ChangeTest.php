@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\EncryptionKey\Model\Resource\Key;
+namespace Magento\EncryptionKey\Model\ResourceModel\Key;
 
 class ChangeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,9 +27,9 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         $writerMock = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
 
-        /** @var \Magento\EncryptionKey\Model\Resource\Key\Change $keyChangeModel */
+        /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
-            'Magento\EncryptionKey\Model\Resource\Key\Change',
+            'Magento\EncryptionKey\Model\ResourceModel\Key\Change',
             ['writer' => $writerMock]
         );
         $keyChangeModel->changeEncryptionKey();
@@ -52,9 +52,9 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->method('getFieldPathsByAttribute')
             ->will($this->returnValue([$testPath]));
 
-        /** @var \Magento\EncryptionKey\Model\Resource\Key\Change $keyChangeModel */
+        /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
-            'Magento\EncryptionKey\Model\Resource\Key\Change',
+            'Magento\EncryptionKey\Model\ResourceModel\Key\Change',
             ['structure' => $structureMock, 'writer' => $writerMock]
         );
 
