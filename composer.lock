@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3544fbc9568fdcc58279fcc2de51e6ec",
-    "content-hash": "963e7bfad082098b3a82bfb445c272d9",
+    "hash": "f3de00214a95a86e8eca7b4064f330e4",
+    "content-hash": "34ada96789d428b1a34fcbde33f2a85c",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -188,16 +188,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.magento.com/_packages/composer-1.0.1.zip",
+                "url": "https://packages.magento.com/_packages/composer-1.0.2.zip",
                 "reference": null,
-                "shasum": "a4ecd6bc55c6b53a74a75a3624d30b529710c4a3"
+                "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
-                "php": "~5.5.0|~5.6.0",
+                "php": "~5.5.0|~5.6.0|~7.0.0",
                 "symfony/console": "~2.3 <2.7"
             },
             "require-dev": {
@@ -2674,16 +2674,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414"
+                "reference": "4e710c294f41857752b370f16aeff52ba76d48b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/74a5a62457568176d9c1af41a900dd3389b70414",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/4e710c294f41857752b370f16aeff52ba76d48b9",
+                "reference": "4e710c294f41857752b370f16aeff52ba76d48b9",
                 "shasum": ""
             },
             "require": {
@@ -2737,7 +2737,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-24 00:18:45"
+            "time": "2015-09-30 23:32:37"
         },
         {
             "name": "pdepend/pdepend",
@@ -3157,16 +3157,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a"
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5e2645ad49d196e020b85598d7c97e482725786a",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983",
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983",
                 "shasum": ""
             },
             "require": {
@@ -3209,7 +3209,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-08-19 09:14:08"
+            "time": "2015-10-02 06:51:40"
         },
         {
             "name": "sebastian/comparator",

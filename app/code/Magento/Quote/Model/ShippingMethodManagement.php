@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -16,6 +13,7 @@ use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 /**
  * Shipping method read service.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingMethodManagement implements ShippingMethodManagementInterface
 {
@@ -41,20 +39,28 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $addressRepository;
 
     /**
+     * @var Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * Constructs a shipping method read service object.
      *
-     * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository Customer Address repository
+     * @param QuoteRepository $quoteRepository
+     * @param Cart\ShippingMethodConverter $converter
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param Quote\TotalsCollector $totalsCollector
      */
     public function __construct(
         QuoteRepository $quoteRepository,
         Cart\ShippingMethodConverter $converter,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
         $this->addressRepository = $addressRepository;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -121,10 +127,10 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * @param string $carrierCode The carrier code.
      * @param string $methodCode The shipping method code.
      * @return bool
-     * @throws \Magento\Framework\Exception\InputException The shipping method is not valid for an empty cart.
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The shipping method could not be saved.
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products and the shipping method is not applicable.
-     * @throws \Magento\Framework\Exception\StateException The billing or shipping address is not set.
+     * @throws InputException The shipping method is not valid for an empty cart.
+     * @throws CouldNotSaveException The shipping method could not be saved.
+     * @throws NoSuchEntityException Cart contains only virtual products. Shipping method is not applicable.
+     * @throws StateException The billing or shipping address is not set.
      */
     public function set($cartId, $carrierCode, $methodCode)
     {
@@ -220,7 +226,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->setRegionId($regionId);
         $shippingAddress->setRegion($region);
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals();
+        $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {

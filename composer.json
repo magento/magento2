@@ -74,6 +74,7 @@
         "lusitanian/oauth": "~0.3"
     },
     "replace": {
+        "magento/module-marketplace": "self.version",
         "magento/module-admin-notification": "self.version",
         "magento/module-advanced-pricing-import-export": "self.version",
         "magento/module-authorization": "self.version",
@@ -129,6 +130,7 @@
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
+        "magento/module-new-relic-reporting": "self.version",
         "magento/module-newsletter": "self.version",
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
@@ -178,7 +180,7 @@
         "magento/language-fr_fr": "self.version",
         "magento/language-nl_nl": "self.version",
         "magento/language-pt_br": "self.version",
-        "magento/language-zh_cn": "self.version",
+        "magento/language-zh_hans_cn": "self.version",
         "magento/framework": "self.version",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",

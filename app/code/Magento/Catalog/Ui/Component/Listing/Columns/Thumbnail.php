@@ -39,9 +39,9 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
@@ -58,6 +58,8 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
                 $item[$fieldName . '_orig_src'] = $origImageHelper->getUrl();
             }
         }
+
+        return $dataSource;
     }
 
     /**
