@@ -256,7 +256,7 @@ class AttributeMerger
         unset($attributeConfig['validation']['required-entry']);
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
-            $lines[] = [
+            $line = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -273,7 +273,12 @@ class AttributeMerger
                     )
                     : $attributeConfig['validation'],
                 'additionalClasses' => $isFirstLine ? : 'additional'
+
             ];
+            if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+                $line['value'] = $attributeConfig['default'];
+            }
+            $lines[] = $line;
         }
         return [
             'component' => 'Magento_Ui/js/form/components/group',
