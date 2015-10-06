@@ -19,66 +19,53 @@ class Processor
     /** @var ImageProcessor  */
     protected $imageProcessor;
 
-    /** @var ValidateFactory  */
-    protected $validateFactory;
-
     /** @var string */
-    protected $fileFullPath;
+    protected $destinationFolder = '/custom_options/quote';
 
     /**
      * @param Filesystem $filesystem
-     * @param ValidateFactory $validateFactory
      * @param ImageProcessor $imageProcessor
      */
     public function __construct(
         Filesystem $filesystem,
-        ValidateFactory $validateFactory,
         ImageProcessor $imageProcessor
     ) {
         $this->filesystem = $filesystem;
         $this->imageProcessor = $imageProcessor;
-        $this->validateFactory = $validateFactory;
     }
 
     /**
      * @param ImageContentInterface $imageContent
-     * @param string $destinationFolder
-     * @return void
+     * @return string
      */
-    protected function saveFile(ImageContentInterface $imageContent, $destinationFolder)
+    protected function saveFile(ImageContentInterface $imageContent)
     {
         $uri = $this->filesystem->getUri(DirectoryList::MEDIA);
-        $filePath = $this->imageProcessor->processImageContent($destinationFolder, $imageContent);
-        $this->fileFullPath = $uri . $destinationFolder . $filePath;
+        $filePath = $this->imageProcessor->processImageContent($this->destinationFolder, $imageContent);
+        return $uri . $this->destinationFolder . $filePath;
     }
 
     /**
      * @param ImageContentInterface $imageContent
-     * @param \Magento\Catalog\Model\Product\Option $option
-     * @param string $destinationFolder
-     * @return bool|array
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function processFileContent(ImageContentInterface $imageContent, $option, $destinationFolder)
+    public function processFileContent(ImageContentInterface $imageContent)
     {
-        $this->saveFile($imageContent, $destinationFolder);
+        $filePath = $this->saveFile($imageContent);
 
-        $fileAbsolutePath = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)
-            ->getAbsolutePath($this->fileFullPath);
+        $fileAbsolutePath = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath($filePath);
+        $fileHash = md5($this->filesystem->getDirectoryRead(DirectoryList::ROOT)->readFile($filePath));
         $imageSize = getimagesize($fileAbsolutePath);
-        $width = $imageSize ? $imageSize[0] : 0;
-        $height = $imageSize ? $imageSize[1] : 0;
-        $fileHash = md5($fileAbsolutePath);
         $result = [
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),
             'fullpath' => $fileAbsolutePath,
-            'quote_path' => $this->fileFullPath,
-            'order_path' => $this->fileFullPath,
+            'quote_path' => $filePath,
+            'order_path' => $filePath,
             'size' => filesize($fileAbsolutePath),
-            'width' => $width,
-            'height' => $height,
+            'width' => $imageSize ? $imageSize[0] : 0,
+            'height' => $imageSize ? $imageSize[1] : 0,
             'secret_key' => substr($fileHash, 0, 20),
         ];
         return $result;
