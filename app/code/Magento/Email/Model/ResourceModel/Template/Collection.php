@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Email\Model\Resource\Template;
+namespace Magento\Email\Model\ResourceModel\Template;
 
 /**
  * Templates collection
@@ -26,7 +26,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function _construct()
     {
-        $this->_init('Magento\Email\Model\Template', 'Magento\Email\Model\Resource\Template');
+        $this->_init('Magento\Email\Model\Template', 'Magento\Email\Model\ResourceModel\Template');
         $this->_templateTable = $this->getMainTable();
     }
 
