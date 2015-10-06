@@ -5,13 +5,13 @@
  */
 namespace Magento\MysqlMq\Model\Driver;
 
-use Magento\Framework\Amqp\EnvelopeInterface;
-use Magento\Framework\Amqp\QueueInterface;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\MysqlMq\Model\QueueManagement;
-use Magento\Framework\Amqp\EnvelopeFactory;
+use Magento\Framework\MessageQueue\EnvelopeFactory;
 
 /**
- * Queue based on Amqp protocol
+ * Queue based on MessageQueue protocol
  */
 class Queue implements QueueInterface
 {
