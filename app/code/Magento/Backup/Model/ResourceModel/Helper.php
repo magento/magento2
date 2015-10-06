@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Backup\Model\Resource;
+namespace Magento\Backup\Model\ResourceModel;
 
 class Helper extends \Magento\Framework\DB\Helper
 {

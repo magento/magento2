@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backup\Model\Resource;
+namespace Magento\Backup\Model\ResourceModel;
 
 /**
  * Database backup resource model
@@ -28,18 +28,18 @@ class Db
     /**
      * Backup resource helper
      *
-     * @var \Magento\Backup\Model\Resource\Helper
+     * @var \Magento\Backup\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
     /**
      * Initialize Backup DB resource model
      *
-     * @param \Magento\Backup\Model\Resource\HelperFactory $resHelperFactory
+     * @param \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory
      * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
-        \Magento\Backup\Model\Resource\HelperFactory $resHelperFactory,
+        \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory,
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceHelper = $resHelperFactory->create();

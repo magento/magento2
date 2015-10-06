@@ -1268,7 +1268,7 @@ return [
     ['Magento\CatalogSearch\Model\Resource\Helper\Mysql4', 'Magento\CatalogSearch\Model\Resource\Helper'],
     ['Magento\ImportExport\Model\Resource\Helper\Mysql4', 'Magento\ImportExport\Model\Resource\Helper'],
     ['Magento\Reports\Model\Resource\Helper\Mysql4', 'Magento\Reports\Model\Resource\Helper'],
-    ['Magento\Backup\Model\Resource\Helper\Mysql4', 'Magento\Backup\Model\Resource\Helper'],
+    ['Magento\Backup\Model\ResourceModel\Helper\Mysql4', 'Magento\Backup\Model\ResourceModel\Helper'],
     ['Magento\Sales\Model\CarrierFactory', 'Magento\Shipping\Model\CarrierFactory'],
     ['Magento\Sales\Model\Order\Pdf\Shipment\Packaging', 'Magento\Shipping\Model\Order\Pdf\Packaging'],
     ['Magento\Sales\Model\ResourceFactory'],
