@@ -100,10 +100,10 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->objectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->buyRequest);
-        $this->cartItem->expects($this->atLeastOnce())
+        $this->cartItem->expects($this->any())
             ->method('getProductOption')
             ->willReturn($this->productOption);
-        $this->productOption->expects($this->once())
+        $this->productOption->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensibleAttribute);
         $this->extensibleAttribute->expects($this->atLeastOnce())
@@ -115,15 +115,6 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->customOption->expects($this->once())
             ->method('getOptionValue')
             ->willReturn($optionValue);
-        $this->buyRequest->expects($this->once())
-            ->method('setData')
-            ->with(
-                [
-                    'options' => [
-                        $optionId => $optionValue
-                    ]
-                ]
-            );
 
         $this->assertSame($this->buyRequest, $this->processor->convertToBuyRequest($this->cartItem));
     }
