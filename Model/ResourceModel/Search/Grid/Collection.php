@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdvancedSearch\Model\Resource\Search\Grid;
+namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 
 class Collection extends \Magento\Search\Model\Resource\Query\Collection
 {
