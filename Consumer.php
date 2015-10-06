@@ -120,7 +120,7 @@ class Consumer implements ConsumerInterface
             if ($message === null) {
                 break;
             }
-            try{
+            try {
                 $this->dispatchMessage($message);
                 $queue->acknowledge($message);
             } catch (\Exception $e) {
