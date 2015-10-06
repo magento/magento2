@@ -5,12 +5,13 @@
 
 define([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'mage/translate'
-], function ($) {
+], function ($, confirm) {
     'use strict';
 
     /**
-     * @param {string} url
+     * @param {String} url
      * @returns {Object}
      */
     function getForm(url) {
@@ -28,10 +29,15 @@ define([
         var msg = $.mage.__('Are you sure you want to do this?'),
             url = $('#customer-edit-delete-button').data('url');
 
-        if (confirm(msg)) {
-            getForm(url).submit();
-        } else {
-            return false;
-        }
+        confirm({
+            'content': msg,
+            'actions': {
+                confirm: function () {
+                    getForm(url).appendTo('body').submit();
+                }
+            }
+        });
+
+        return false;
     });
 });
