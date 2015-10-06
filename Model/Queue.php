@@ -7,7 +7,6 @@ namespace Magento\Amqp\Model;
 
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use Magento\Framework\MessageQueue\Config\Data as AmqpConfig;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 
@@ -18,11 +17,6 @@ class Queue implements QueueInterface
 {
     /**
      * @var Config
-     */
-    private $amqpConfig;
-
-    /**
-     * @var AmqpConfig
      */
     private $amqpConfig;
 
@@ -40,17 +34,14 @@ class Queue implements QueueInterface
      * Initialize dependencies.
      *
      * @param Config $amqpConfig
-     * @param AmqpConfig $amqpConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
      */
     public function __construct(
         Config $amqpConfig,
-        AmqpConfig $amqpConfig,
         EnvelopeFactory $envelopeFactory,
         $queueName
     ) {
-        $this->amqpConfig = $amqpConfig;
         $this->amqpConfig = $amqpConfig;
         $this->queueName = $queueName;
         $this->envelopeFactory = $envelopeFactory;
