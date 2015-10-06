@@ -59,7 +59,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $storeManager;
 
     /**
-     * @var \Magento\Swatches\Model\Resource\Swatch\CollectionFactory
+     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
      */
     protected $swatchCollectionFactory;
 
@@ -87,7 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $swatchCollectionFactory
+     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory
      * @param \Magento\Catalog\Helper\Image $imageHelper
      */
     public function __construct(
@@ -96,7 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable,
         ProductRepositoryInterface $productRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $swatchCollectionFactory,
+        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory,
         \Magento\Catalog\Helper\Image $imageHelper
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
@@ -468,7 +468,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
-        /** @var \Magento\Swatches\Model\Resource\Swatch\Collection $swatchCollection */
+        /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
         $swatchCollection = $this->swatchCollectionFactory->create();
         $swatchCollection->addFilterByOptionsIds($optionIds);
 

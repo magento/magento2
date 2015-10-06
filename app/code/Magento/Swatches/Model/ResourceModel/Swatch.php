@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Swatches\Model\Resource;
+namespace Magento\Swatches\Model\ResourceModel;
 
 /**
  * @codeCoverageIgnore

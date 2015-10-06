@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Swatches\Model\Resource\Swatch;
+namespace Magento\Swatches\Model\ResourceModel\Swatch;
 
 /**
  * @codeCoverageIgnore
@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Swatches\Model\Swatch', 'Magento\Swatches\Model\Resource\Swatch');
+        $this->_init('Magento\Swatches\Model\Swatch', 'Magento\Swatches\Model\ResourceModel\Swatch');
     }
 
     /**

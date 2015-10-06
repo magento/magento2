@@ -28,7 +28,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\Resource\Swatch\CollectionFactory */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
     protected $swatchCollectionFactoryMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Eav\Attribute */
@@ -85,7 +85,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', [], [], '', false);
         $this->swatchCollectionFactoryMock = $this->getMock(
-            '\Magento\Swatches\Model\Resource\Swatch\CollectionFactory',
+            '\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory',
             ['create'],
             [],
             '',
@@ -645,7 +645,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $swatchMock->expects($this->at(2))->method('getData')->with('')->willReturn($optionsData[0]);
 
         $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            '\Magento\Swatches\Model\Resource\Swatch\Collection',
+            '\Magento\Swatches\Model\ResourceModel\Swatch\Collection',
             [
                 $swatchMock,
             ]
@@ -694,7 +694,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $swatchMock->expects($this->at(9))->method('getData')->with('')->willReturn($optionsData[1]);
 
         $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            '\Magento\Swatches\Model\Resource\Swatch\Collection',
+            '\Magento\Swatches\Model\ResourceModel\Swatch\Collection',
             [
                 $swatchMock,
                 $swatchMock,
@@ -730,7 +730,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $swatchMock->expects($this->at(4))->method('getData')->with('')->willReturn($optionsData);
 
         $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            '\Magento\Swatches\Model\Resource\Swatch\Collection',
+            '\Magento\Swatches\Model\ResourceModel\Swatch\Collection',
             [
                 $swatchMock,
             ]
