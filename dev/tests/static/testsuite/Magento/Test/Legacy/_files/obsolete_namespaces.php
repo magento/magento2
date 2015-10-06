@@ -135,4 +135,6 @@ return [
     ['Magento\Sales\Test\Unit\Model\Resource', 'Magento\Sales\Test\Unit\Model\ResourceModel'],
     ['Magento\SalesRule\Model\Resource', 'Magento\SalesRule\Model\ResourceModel'],
     ['Magento\SalesRule\Test\Unit\Model\Resource', 'Magento\SalesRule\Test\Unit\Model\ResourceModel'],
+    ['Magento\SalesSequence\Model\Resource', 'Magento\SalesSequence\Model\ResourceModel'],
+    ['Magento\SalesSequence\Test\Unit\Model\Resource', 'Magento\SalesSequence\Test\Unit\Model\ResourceModel'],
 ];

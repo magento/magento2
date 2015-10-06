@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource;
+namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\SalesSequence\Model\Meta as ModelMeta;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
