@@ -182,7 +182,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
         $this->authSessionMock->expects($this->once())->method('setPciAdminUserIsPasswordExpired');
         $this->encryptorMock->expects($this->once())->method('validateHashVersion')->willReturn(false);
 
-        $this->model->adminAuthenticate($eventObserverMock);
+        $this->model->execute($eventObserverMock);
     }
 
     public function testAdminAuthenticateThrowsException()
@@ -216,7 +216,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
         $userMock->expects($this->once())->method('getLockExpires')->willReturn($lockExpires);
 
         try {
-            $this->model->adminAuthenticate($eventObserverMock);
+            $this->model->execute($eventObserverMock);
         } catch (UserLockedException $expected) {
             return;
         }
@@ -262,6 +262,6 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
         $userMock->expects($this->once())->method('getFirstFailure')->willReturn($firstFailure);
         $this->userMock->expects($this->once())->method('updateFailure');
 
-        $this->model->adminAuthenticate($eventObserverMock);
+        $this->model->execute($eventObserverMock);
     }
 }

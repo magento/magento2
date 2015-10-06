@@ -43,10 +43,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'SalesOrderInvoiceSendEmailsObserver',
         'SalesOrderShipmentSendEmailsObserver',
         'SalesOrderCreditmemoSendEmailsObserver',
-        'Magento\Sales\Model\Observer\AggregateSalesReportShipmentData',
-        'Magento\Sales\Model\Observer\CleanExpiredQuotes',
-        'Magento\User\Model\Backend\Observer\AuthObserver',
-        'Magento\User\Model\Backend\Observer\PasswordObserver',
         'Magento\ProductVideo\Model\Observer',
     ];
 
