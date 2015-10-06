@@ -117,7 +117,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSuggestedPackages($composerDir)
     {
-        $this->setupDirectoryMock($composerDir);
+        $this->setupDirectory($composerDir);
         $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
         $actualSuggestedExtensions = $composerInfo->getSuggestedPackages();
         $this->assertArrayHasKey('psr/log', $actualSuggestedExtensions);
