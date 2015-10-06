@@ -92,4 +92,5 @@ return [
     ['Magento\AdminNotification\Model\Resource', 'Magento\AdminNotification\Model\ResourceModel'],
     ['Magento\Authorization\Model\Resource', 'Magento\Authorization\Model\ResourceModel'],
     ['Magento\Authorizenet\Model\Resource', 'Magento\Authorizenet\Model\ResourceModel'],
+    ['Magento\Backend\Model\Resource', 'Magento\Backend\Model\ResourceModel'],
 ];
