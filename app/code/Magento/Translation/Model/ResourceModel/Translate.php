@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Translation\Model\Resource;
+namespace Magento\Translation\Model\ResourceModel;
 
 class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
