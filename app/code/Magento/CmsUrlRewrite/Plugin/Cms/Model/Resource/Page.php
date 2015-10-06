@@ -11,7 +11,7 @@ use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Before save and around delete plugin for \Magento\Cms\Model\Resource\Page:
+ * Before save and around delete plugin for \Magento\Cms\Model\ResourceModel\Page:
  * - autogenerates url_key if the merchant didn't fill this field
  * - remove all url rewrites for cms page on delete
  */
@@ -42,14 +42,14 @@ class Page
     /**
      * Before save handler
      *
-     * @param \Magento\Cms\Model\Resource\Page $subject
+     * @param \Magento\Cms\Model\ResourceModel\Page $subject
      * @param \Magento\Framework\Model\AbstractModel $object
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
-        \Magento\Cms\Model\Resource\Page $subject,
+        \Magento\Cms\Model\ResourceModel\Page $subject,
         \Magento\Framework\Model\AbstractModel $object
     ) {
         /** @var $object \Magento\Cms\Model\Page */
@@ -62,15 +62,15 @@ class Page
     /**
      * On delete handler to remove related url rewrites
      *
-     * @param \Magento\Cms\Model\Resource\Page $subject
+     * @param \Magento\Cms\Model\ResourceModel\Page $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $page
-     * @return \Magento\Cms\Model\Resource\Page
+     * @return \Magento\Cms\Model\ResourceModel\Page
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Cms\Model\Resource\Page $subject,
+        \Magento\Cms\Model\ResourceModel\Page $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $page
     ) {

@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Model\Resource\Block;
+namespace Magento\Cms\Model\ResourceModel\Block;
 
-use \Magento\Cms\Model\Resource\AbstractCollection;
+use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
  * CMS Block Collection
@@ -36,7 +36,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Block', 'Magento\Cms\Model\Resource\Block');
+        $this->_init('Magento\Cms\Model\Block', 'Magento\Cms\Model\ResourceModel\Block');
         $this->_map['fields']['store'] = 'store_table.store_id';
     }
 

@@ -13,8 +13,8 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\Resource\Block as ResourceBlock;
-use Magento\Cms\Model\Resource\Block\CollectionFactory as BlockCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 
 /**
  * Class BlockRepository
@@ -124,7 +124,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Magento\Cms\Model\Resource\Block\Collection
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {

@@ -3,17 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Model\Resource\Page\Grid;
+namespace Magento\Cms\Model\ResourceModel\Block\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Magento\Cms\Model\Resource\Page\Collection as PageCollection;
+use Magento\Cms\Model\ResourceModel\Block\Collection as BlockCollection;
 
 /**
- * Class Collection
- * Collection for displaying grid of sales documents
+ * Collection for displaying grid of cms blocks
  */
-class Collection extends PageCollection implements SearchResultInterface
+class Collection extends BlockCollection implements SearchResultInterface
 {
     /**
      * @var AggregationInterface
@@ -26,14 +25,14 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param mixed|null $mainTable
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
-     * @param mixed $eventObject
-     * @param mixed $resourceModel
+     * @param string $mainTable
+     * @param string $eventPrefix
+     * @param string $eventObject
+     * @param string $resourceModel
      * @param string $model
-     * @param null $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
-     * 
+     * @param string|null $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

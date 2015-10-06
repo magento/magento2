@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Model\Resource;
+namespace Magento\Cms\Model\ResourceModel;
 
 /**
  * CMS block model
@@ -55,7 +55,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Process block data before deleting
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Cms\Model\Resource\Page
+     * @return \Magento\Cms\Model\ResourceModel\Page
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {

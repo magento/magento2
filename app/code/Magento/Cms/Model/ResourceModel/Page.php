@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Cms\Model\Resource;
+namespace Magento\Cms\Model\ResourceModel;
 
 /**
  * Cms page mysql resource
