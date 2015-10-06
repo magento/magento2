@@ -9,9 +9,9 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource\Queue\Grid;
+namespace Magento\Newsletter\Model\ResourceModel\Queue\Grid;
 
-class Collection extends \Magento\Newsletter\Model\Resource\Queue\Collection
+class Collection extends \Magento\Newsletter\Model\ResourceModel\Queue\Collection
 {
     /**
      * @return $this

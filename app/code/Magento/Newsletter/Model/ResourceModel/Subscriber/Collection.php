@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Newsletter\Model\Resource\Subscriber;
+namespace Magento\Newsletter\Model\ResourceModel\Subscriber;
 
 use Magento\Newsletter\Model\Queue as ModelQueue;
 
@@ -87,7 +87,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Newsletter\Model\Subscriber', 'Magento\Newsletter\Model\Resource\Subscriber');
+        $this->_init('Magento\Newsletter\Model\Subscriber', 'Magento\Newsletter\Model\ResourceModel\Subscriber');
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
         $this->_storeTable = $this->getTable('store');
 

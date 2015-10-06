@@ -4,21 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Newsletter\Model\Resource\Problem;
+namespace Magento\Newsletter\Model\ResourceModel\Problem;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Newsletter\Model\Resource\Problem\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection
      */
     protected $_collection;
 
     protected function setUp()
     {
         $this->_collection = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Resource\Problem\Collection');
+            ->create('Magento\Newsletter\Model\ResourceModel\Problem\Collection');
     }
 
     /**

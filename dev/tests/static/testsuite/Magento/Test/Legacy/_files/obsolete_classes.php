@@ -2334,7 +2334,7 @@ return [
     ['Magento\Core\Model\Resource\Setup\Context', 'Magento\Framework\Module\Setup\Context'],
     ['Magento\Core\Model\Resource\Setup\Migration', 'Magento\Framework\Module\Setup\Migration'],
     ['Magento\Core\Model\Resource\Setup\Generic'],
-    ['Magento\Newsletter\Model\Resource\Setup'],
+    ['Magento\Newsletter\Model\ResourceModel\Setup'],
     ['Magento\SalesRule\Model\Resource\Setup'],
     ['Magento\Core\Model\Session', 'Magento\Framework\Session\Generic'],
     ['Magento\Core\Model\Session\Config', 'Magento\Framework\Session\Config'],

@@ -11,14 +11,14 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource\Grid;
+namespace Magento\Newsletter\Model\ResourceModel\Grid;
 
-class Collection extends \Magento\Newsletter\Model\Resource\Problem\Collection
+class Collection extends \Magento\Newsletter\Model\ResourceModel\Problem\Collection
 {
     /**
      * Adds queue info to grid
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Newsletter\Model\Resource\Grid\Collection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Newsletter\Model\ResourceModel\Grid\Collection
      */
     protected function _initSelect()
     {
