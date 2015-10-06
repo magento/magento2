@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Persistent\Model\Resource;
+namespace Magento\Persistent\Model\ResourceModel;
 
 /**
  * Persistent Session Resource Model
