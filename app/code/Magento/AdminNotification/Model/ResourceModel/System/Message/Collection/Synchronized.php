@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Model\Resource\System\Message\Collection;
+namespace Magento\AdminNotification\Model\ResourceModel\System\Message\Collection;
 
-class Synchronized extends \Magento\AdminNotification\Model\Resource\System\Message\Collection
+class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
 {
     /**
      * Unread message list

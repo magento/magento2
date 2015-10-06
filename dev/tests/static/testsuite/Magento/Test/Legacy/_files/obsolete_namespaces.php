@@ -89,4 +89,5 @@ return [
     ['Magento\Framework\View\Asset\ModuleNotation'],
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
     ['Magento\DesignEditor'],
+    ['Magento\AdminNotification\Model\Resource', 'Magento\AdminNotification\Model\ResourceModel'],
 ];
