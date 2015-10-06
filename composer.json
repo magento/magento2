@@ -11,12 +11,10 @@
   "license": [
     "proprietary"
   ],
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Magento/MessageQueue"
-      ]
-    ]
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Magento\\MessageQueue\\": ""
+    }
   }
 }
