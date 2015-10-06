@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Widget\Model\Resource;
+namespace Magento\Widget\Model\ResourceModel;
 
 class Widget extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

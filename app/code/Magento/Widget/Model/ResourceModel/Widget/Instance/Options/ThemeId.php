@@ -8,7 +8,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Widget\Model\Resource\Widget\Instance\Options;
+namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
 class ThemeId implements \Magento\Framework\Option\ArrayInterface
 {

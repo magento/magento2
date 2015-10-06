@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Widget\Model\Resource\Widget\Instance;
+namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
 
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -28,7 +28,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Widget\Model\Widget\Instance', 'Magento\Widget\Model\Resource\Widget\Instance');
+        $this->_init('Magento\Widget\Model\Widget\Instance', 'Magento\Widget\Model\ResourceModel\Widget\Instance');
     }
 
     /**

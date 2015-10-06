@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Widget\Model\Resource\Layout;
+namespace Magento\Widget\Model\ResourceModel\Layout;
 
 /**
  * Layout update resource model

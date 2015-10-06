@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Resource\Layout;
+namespace Magento\Widget\Model\ResourceModel\Layout;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Resource\Layout\Update
+     * @var \Magento\Widget\Model\ResourceModel\Layout\Update
      */
     protected $_resourceModel;
 
     protected function setUp()
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Resource\Layout\Update'
+            'Magento\Widget\Model\ResourceModel\Layout\Update'
         );
     }
 
