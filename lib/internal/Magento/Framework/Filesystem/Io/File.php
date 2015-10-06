@@ -468,7 +468,7 @@ class File extends AbstractIo
             }
         } else {
             if (!is_writable(dirname($filename))) {
-                printf('The folder %s is not writable', dirname($filename));
+                printf('The directory %s is not writable', dirname($filename));
                 return false;
             }
         }
