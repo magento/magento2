@@ -50,6 +50,12 @@ main.controller('navigationController',
             }
         };
 
+        $scope.goToState = function (stateId) {
+            $state.go(stateId)
+        }
+
+        $scope.state = $state;
+
         $scope.previousState = function () {
                 $scope.valid = true;
                 $state.go(navigationService.getPreviousState().id);
