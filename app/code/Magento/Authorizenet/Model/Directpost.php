@@ -129,12 +129,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
-     * @param \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory
-     * @param \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory
+     * @param Directpost\Request\Factory $requestFactory
+     * @param Directpost\Response\Factory $responseFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
+     * @param OrderSender $orderSender
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource

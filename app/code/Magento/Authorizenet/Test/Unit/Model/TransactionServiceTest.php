@@ -122,11 +122,11 @@ class TransactionServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get body for xml request
-     * @param $transactionId
-     * @param $resultCode
-     * @param $resultStatus
-     * @param $responseStatus
-     * @param $responseCode
+     * @param string $transactionId
+     * @param int $resultCode
+     * @param string $resultStatus
+     * @param string $responseStatus
+     * @param string $responseCode
      * @return string
      */
     private function getResponseBody($transactionId, $resultCode, $resultStatus, $responseStatus, $responseCode)
