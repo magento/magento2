@@ -32,6 +32,11 @@ class Registrar implements ModuleRegistryInterface
         self::$modulePaths[$moduleName] = $path;
     }
 
+    public static function unregisterModule($moduleName)
+    {
+        unset(self::$modulePaths[$moduleName]);
+    }
+
     /**
      * {@inheritdoc}
      */
