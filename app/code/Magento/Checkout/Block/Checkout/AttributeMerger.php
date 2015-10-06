@@ -193,6 +193,8 @@ class AttributeMerger
 
         if (isset($attributeConfig['value']) && $attributeConfig['value'] != null) {
             $element['value'] = $attributeConfig['value'];
+        } elseif (isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+            $element['value'] = $attributeConfig['default'];
         } else {
             $defaultValue = $this->getDefaultValue($attributeCode);
             if (null !== $defaultValue) {
