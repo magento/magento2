@@ -118,4 +118,6 @@ return [
     ['Magento\MediaStorage\Test\Unit\Model\Resource', 'Magento\MediaStorage\Test\Unit\Model\ResourceModel'],
     ['Magento\Newsletter\Model\Resource', 'Magento\Newsletter\Model\ResourceModel'],
     ['Magento\OfflineShipping\Model\Resource', 'Magento\OfflineShipping\Model\ResourceModel'],
+    ['Magento\Payment\Model\Resource', 'Magento\Payment\Model\ResourceModel'],
+    ['Magento\Payment\Test\Unit\Model\Resource', 'Magento\Payment\Test\Unit\Model\ResourceModel'],
 ];

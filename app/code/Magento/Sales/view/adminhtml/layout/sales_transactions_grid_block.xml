@@ -76,8 +76,8 @@
                             <argument name="header" xsi:type="string" translate="true">Payment Method</argument>
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="index" xsi:type="string">method</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Payment\Model\Resource\Grid\TypeList"/>
-                            <argument name="option_groups" xsi:type="options" model="Magento\Payment\Model\Resource\Grid\GroupList"/>
+                            <argument name="options" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\TypeList"/>
+                            <argument name="option_groups" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\GroupList"/>
                             <argument name="header_css_class" xsi:type="string">col-method</argument>
                             <argument name="column_css_class" xsi:type="string">col-method</argument>
                         </arguments>
