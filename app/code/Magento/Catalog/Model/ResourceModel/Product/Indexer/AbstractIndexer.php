@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractResource
+abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
      * Eav config

@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model\Resource;
+namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
 
 class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub
+     * @var \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub
      */
     protected $model;
 
@@ -38,14 +38,14 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
-            '\Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
+            '\Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
             [
                 'resource' => $this->_resourceMock,
                 'tableStrategy' => $this->_tableStrategyInterface
             ]
         );
         $this->model = $objectManager->getObject(
-            '\Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
+            '\Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
             $arguments
         );
     }
@@ -93,7 +93,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
         $this->assertInstanceOf(
-            'Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
+            'Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
             $this->model->syncData()
         );
     }
@@ -171,7 +171,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             );
         }
         $this->assertInstanceOf(
-            'Magento\Indexer\Test\Unit\Model\Resource\AbstractResourceStub',
+            'Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
             $this->model->insertFromTable($sourceTable, $destTable, $readToIndex)
         );
     }

@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Model\Resource\Indexer;
+namespace Magento\Indexer\Test\Unit\Model\ResourceModel\Indexer;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State
      */
     protected $model;
 
@@ -23,11 +23,11 @@ class StateTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
-            '\Magento\Indexer\Model\Resource\Indexer\State',
+            '\Magento\Indexer\Model\ResourceModel\Indexer\State',
             ['resource' => $resourceMock]
         );
         $this->model = $objectManager->getObject(
-            '\Magento\Indexer\Model\Resource\Indexer\State',
+            '\Magento\Indexer\Model\ResourceModel\Indexer\State',
             $arguments
         );
         $this->assertEquals(
