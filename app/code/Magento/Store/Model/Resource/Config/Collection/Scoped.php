@@ -28,7 +28,7 @@ class Scoped extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCol
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Config\Model\Resource\Config\Data $resource
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $resource
      * @param string $scope
      * @param mixed $connection
      * @param mixed $scopeId
@@ -38,7 +38,7 @@ class Scoped extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCol
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Config\Model\Resource\Config\Data $resource,
+        \Magento\Config\Model\ResourceModel\Config\Data $resource,
         $scope,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $scopeId = null

@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Config\Model\Resource;
+namespace Magento\Config\Model\ResourceModel;
 
 /**
  * Core Resource Resource Model

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Resource\Config;
+namespace Magento\Config\Model\ResourceModel\Config;
 
 /**
  * Core config data resource model
