@@ -7,11 +7,9 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\Updater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -254,6 +252,7 @@ class StartUpdater extends AbstractActionController
 
             case 'upgrade':
             case 'update':
+            case 'install':
                 $cronTaskType = \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE;
                 break;
 
