@@ -5,10 +5,8 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache;
-use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Abstract class for jobs run by setup:cron:run command
@@ -16,12 +14,12 @@ use Magento\Setup\Model\ObjectManagerProvider;
 abstract class AbstractJob
 {
     /**
-     * @var AbstractSetupCommand
+     * @var \Magento\Setup\Console\Command\AbstractSetupCommand
      */
     protected $command;
 
     /**
-     * @var OutputInterface
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
 
@@ -54,16 +52,16 @@ abstract class AbstractJob
     /**
      * Constructor
      *
-     * @param OutputInterface $output
-     * @param Status $status
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Magento\Setup\Model\Cron\Status $status
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param string $name
      * @param array $params
      */
     public function __construct(
-        OutputInterface $output,
-        Status $status,
-        ObjectManagerProvider $objectManagerProvider,
+        \Symfony\Component\Console\Output\OutputInterface $output,
+        \Magento\Setup\Model\Cron\Status $status,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         $name,
         array $params = []
     ) {

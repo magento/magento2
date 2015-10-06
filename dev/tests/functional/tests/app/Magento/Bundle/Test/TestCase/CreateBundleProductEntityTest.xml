@@ -114,7 +114,6 @@
             <data name="product/data/weight" xsi:type="string">10</data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/description" xsi:type="string">Bundle Product Fixed</data>
-            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_20</data>
             <data name="product/data/price_view" xsi:type="string">As Low as</data>
             <data name="product/data/shipment_type" xsi:type="string">Separately</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">all_types_fixed</data>
@@ -217,7 +216,6 @@
             <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
             <data name="product/data/price_type" xsi:type="string">Dynamic</data>
             <data name="product/data/price/dataset" xsi:type="string">dynamic-32</data>
-            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_20</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">default_dynamic</data>
             <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">bundle_default</data>
