@@ -65,14 +65,14 @@ class Post extends \Magento\Contact\Controller\Index
             $this->messageManager->addSuccess(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
-            $this->_redirect('*/*/');
+            $this->_redirect('contact/index');
             return;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
-            $this->_redirect('*/*/');
+            $this->_redirect('contact/index');
             return;
         }
     }
