@@ -21,7 +21,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     /**
      * Backup resource model
      *
-     * @var \Magento\Backup\Model\Resource\Db
+     * @var \Magento\Backup\Model\ResourceModel\Db
      */
     protected $_resourceDb = null;
 
@@ -33,11 +33,11 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     protected $_resource = null;
 
     /**
-     * @param \Magento\Backup\Model\Resource\Db $resourceDb
+     * @param \Magento\Backup\Model\ResourceModel\Db $resourceDb
      * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
-        \Magento\Backup\Model\Resource\Db $resourceDb,
+        \Magento\Backup\Model\ResourceModel\Db $resourceDb,
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceDb = $resourceDb;
@@ -54,7 +54,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     /**
      * Retrieve resource model
      *
-     * @return \Magento\Backup\Model\Resource\Db
+     * @return \Magento\Backup\Model\ResourceModel\Db
      */
     public function getResource()
     {
