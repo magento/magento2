@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Test\Unit\Model\Resource;
+namespace Magento\UrlRewrite\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -35,7 +35,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
+     * @var \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
      */
     protected $collection;
 
@@ -81,7 +81,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_main_table'));
 
         $this->collection = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Model\Resource\UrlRewriteCollection',
+            'Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection',
             [
                 'storeManager' => $this->storeManager,
                 'resource' => $this->resource,
@@ -94,7 +94,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      * @param bool $withAdmin
      * @param array $condition
      * @dataProvider dataProviderForTestAddStoreIfStoreIsArray
-     * @covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
+     * @covers \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
      */
     public function testAddStoreFilterIfStoreIsArray($storeId, $withAdmin, $condition)
     {
@@ -121,7 +121,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      * @param bool $withAdmin
      * @param array $condition
      * @dataProvider dataProviderForTestAddStoreFilterIfStoreIsInt
-     * @covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
+     * @covers \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
      */
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {

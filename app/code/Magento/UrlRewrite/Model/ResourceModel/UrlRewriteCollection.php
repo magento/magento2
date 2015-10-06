@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Model\Resource;
+namespace Magento\UrlRewrite\Model\ResourceModel;
 
 class UrlRewriteCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -45,7 +45,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\Resource\Db\Collecti
      */
     protected function _construct()
     {
-        $this->_init('Magento\UrlRewrite\Model\UrlRewrite', 'Magento\UrlRewrite\Model\Resource\UrlRewrite');
+        $this->_init('Magento\UrlRewrite\Model\UrlRewrite', 'Magento\UrlRewrite\Model\ResourceModel\UrlRewrite');
     }
 
     /**
