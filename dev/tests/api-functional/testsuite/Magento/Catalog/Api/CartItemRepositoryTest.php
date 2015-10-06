@@ -170,9 +170,6 @@ class CartItemRepositoryTest extends WebapiAbstract
             case 'date_time':
                 $returnValue = '2015-09-09 07:16:00';
                 break;
-            case 'date':
-                $returnValue = '2015-09-09';
-                break;
             case 'drop_down':
                 $returnValue = '3-1-select';
                 break;
