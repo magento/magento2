@@ -17,7 +17,8 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
      */
     public function __construct($mapper = '')
     {
-        $this->mapperInterfaceName = $mapper ?: 'Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteriaMapper';
+        $this->mapperInterfaceName =
+            $mapper ?: 'Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteriaMapper';
         $this->data['initial_condition'] = true;
     }
 

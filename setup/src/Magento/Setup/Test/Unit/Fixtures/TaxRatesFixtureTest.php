@@ -32,7 +32,8 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $rateMock = $this->getMock('Magento\Tax\Model\Calculation\Rate', ['setId', 'delete'], [], '', false);
 
-        $collectionMock = $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection', [], [], '', false);
+        $collectionMock =
+            $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection', [], [], '', false);
         $collectionMock->expects($this->once())
             ->method('getAllIds')
             ->willReturn([1]);

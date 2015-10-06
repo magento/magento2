@@ -42,7 +42,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $collectionMock = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
+        $collectionMock =
+            $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
         $options = ['options'];
 
         $this->collectionFactoryMock->expects($this->once())

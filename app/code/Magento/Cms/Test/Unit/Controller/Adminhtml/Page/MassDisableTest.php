@@ -36,7 +36,13 @@ class MassDisableTest extends AbstractMassActionTest
             false
         );
 
-        $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\ResourceModel\Page\Collection', [], [], '', false);
+        $this->pageCollectionMock = $this->getMock(
+            'Magento\Cms\Model\ResourceModel\Page\Collection',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->massDisableController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Page\MassDisable',

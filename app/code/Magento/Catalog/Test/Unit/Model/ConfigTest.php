@@ -238,7 +238,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config->expects($this->any())->method('getAttributesUsedInListing')->will($this->returnValue($attributesData));
         $config->expects($this->any())->method('getAttributesUsedForSortBy')->will($this->returnValue($attributesData));
 
-        $configFactory = $this->getMock('\Magento\Catalog\Model\ResourceModel\ConfigFactory', ['create'], [], '', false);
+        $configFactory =
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\ConfigFactory', ['create'], [], '', false);
         $configFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($config));
 
         $eavConfig = $this->getMock(

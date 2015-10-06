@@ -118,7 +118,8 @@ class PaymentPluginTest extends \PHPUnit_Framework_TestCase
             ->with($transactionId)
             ->willReturn($transactionId);
 
-        $collectionMock = $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
+        $collectionMock =
+            $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionCollectionFactoryMock->expects($this->once())
@@ -179,7 +180,8 @@ class PaymentPluginTest extends \PHPUnit_Framework_TestCase
             ->with($transactionId)
             ->willReturn($transactionId);
 
-        $collectionMock = $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
+        $collectionMock =
+            $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionCollectionFactoryMock->expects($this->once())

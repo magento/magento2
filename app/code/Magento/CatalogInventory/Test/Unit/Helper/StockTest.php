@@ -50,7 +50,8 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statusFactoryMock = $this->getMockBuilder('Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory')
+        $this->statusFactoryMock =
+            $this->getMockBuilder('Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -114,7 +115,8 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $stockStatusMock->expects($this->once())
             ->method('getStockStatus')
             ->willReturn($status);
-        $productCollectionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection')
+        $productCollectionMock =
+            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection')
             ->disableOriginalConstructor()
             ->getMock();
         $productCollectionMock->expects($this->any())

@@ -61,7 +61,8 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
         $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', [], [], '', false);
         $this->swatch = $this->getMock('\Magento\Swatches\Model\Swatch', [], [], '', false);
         $this->resource = $this->getMock('Magento\Swatches\Model\ResourceModel\Swatch', [], [], '', false);
-        $this->collection = $this->getMock('\Magento\Swatches\Model\ResourceModel\Swatch\Collection', [], [], '', false);
+        $this->collection =
+            $this->getMock('\Magento\Swatches\Model\ResourceModel\Swatch\Collection', [], [], '', false);
         $this->collectionFactory = $this->getMock(
             '\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory',
             ['create'],

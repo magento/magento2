@@ -45,7 +45,8 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false, false);
-        $this->orderCollectionFactory = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\CollectionFactory')
+        $this->orderCollectionFactory =
+            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\CollectionFactory')
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')

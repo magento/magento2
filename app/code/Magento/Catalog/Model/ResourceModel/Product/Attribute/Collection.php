@@ -48,7 +48,10 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Eav\Attribute', 'Magento\Eav\Model\ResourceModel\Entity\Attribute');
+        $this->_init(
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute'
+        );
     }
 
     /**

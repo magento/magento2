@@ -28,7 +28,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionFactoryMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory')
+        $this->optionFactoryMock =
+            $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\System\Store')

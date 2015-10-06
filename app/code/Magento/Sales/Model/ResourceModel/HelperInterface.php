@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
+use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
+
 /**
  * Sales resource helper interface
  *
@@ -15,7 +17,7 @@ interface HelperInterface
     /**
      * Update rating position
      *
-     * @param string $aggregation One of \Magento\Sales\Model\ResourceModel\Report\Bestsellers::AGGREGATION_XXX constants
+     * @param string $aggregation One of BestsellersReport::AGGREGATION_XXX constants
      * @param array $aggregationAliases
      * @param string $mainTable
      * @param string $aggregationTable

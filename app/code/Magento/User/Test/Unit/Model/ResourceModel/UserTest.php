@@ -326,7 +326,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
-        $this->assertInstanceOf('\Magento\User\Model\ResourceModel\User', $this->model->deleteFromRole($methodUserMock));
+        $this->assertInstanceOf(
+            '\Magento\User\Model\ResourceModel\User',
+            $this->model->deleteFromRole($methodUserMock)
+        );
     }
 
     public function testRoleUserExists()

@@ -22,7 +22,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     private $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollectionFactory;
 

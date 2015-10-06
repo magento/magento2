@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $abstractCollection;
 

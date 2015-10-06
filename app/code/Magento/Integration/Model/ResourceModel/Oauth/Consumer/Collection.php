@@ -17,6 +17,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Oauth\Consumer', 'Magento\Integration\Model\ResourceModel\Oauth\Consumer');
+        $this->_init(
+            'Magento\Integration\Model\Oauth\Consumer',
+            'Magento\Integration\Model\ResourceModel\Oauth\Consumer'
+        );
     }
 }

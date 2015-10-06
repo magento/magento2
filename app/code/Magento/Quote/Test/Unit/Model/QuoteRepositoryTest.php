@@ -86,7 +86,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteCollectionMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote\Collection', [], [], '', false);
+        $this->quoteCollectionMock =
+            $this->getMock('Magento\Quote\Model\ResourceModel\Quote\Collection', [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock = $this->getMock(
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',

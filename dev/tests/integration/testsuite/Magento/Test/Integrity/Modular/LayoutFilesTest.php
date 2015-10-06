@@ -83,10 +83,11 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
 
         // Arguments, evaluation of which causes a run-time error, because of unsafe assumptions to the environment
         $typeAttr = \Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE;
+        $prCollection = 'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection';
         $ignoredArguments = [
             [
                 $typeAttr => 'object',
-                'value' => 'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection',
+                'value' => $prCollection,
             ],
             [$typeAttr => 'object', 'value' => 'Magento\Solr\Model\ResourceModel\Search\Grid\Collection'],
             [$typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid'],

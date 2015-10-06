@@ -32,7 +32,8 @@ class Factory
 
         if (!$instance instanceof AbstractCollection) {
             throw new \InvalidArgumentException(
-                $className . ' does not implement \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection'
+                $className .
+                ' does not implement \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection'
             );
         }
         return $instance;

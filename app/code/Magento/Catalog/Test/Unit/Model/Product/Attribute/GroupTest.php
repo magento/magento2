@@ -39,7 +39,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory');
+        $mockBuilder = $this->getMockBuilder(
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
+        );
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

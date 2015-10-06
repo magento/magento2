@@ -36,7 +36,8 @@ class MassDeleteTest extends AbstractMassActionTest
             false
         );
 
-        $this->blockCollectionMock = $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', [], [], '', false);
+        $this->blockCollectionMock =
+            $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', [], [], '', false);
 
         $this->massDeleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Block\MassDelete',

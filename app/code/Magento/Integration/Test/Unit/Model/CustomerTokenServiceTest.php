@@ -25,7 +25,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */

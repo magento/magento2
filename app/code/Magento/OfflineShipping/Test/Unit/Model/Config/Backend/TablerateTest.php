@@ -13,7 +13,7 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $tableateFactoryMock;
 

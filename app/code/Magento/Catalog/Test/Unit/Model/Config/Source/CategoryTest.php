@@ -36,7 +36,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject $categoryCollectionFactory */
+        /**
+         * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject $categoryCollectionFactory
+         */
         $categoryCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()

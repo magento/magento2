@@ -56,7 +56,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Rating\Option\Vote', 'Magento\Review\Model\ResourceModel\Rating\Option\Vote');
+        $this->_init(
+            'Magento\Review\Model\Rating\Option\Vote',
+            'Magento\Review\Model\ResourceModel\Rating\Option\Vote'
+        );
     }
 
     /**

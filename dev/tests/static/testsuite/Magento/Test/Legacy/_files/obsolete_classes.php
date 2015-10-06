@@ -1287,7 +1287,10 @@ return [
         'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
     ],
     ['Magento\Sales\Model\ResourceModel\Helper\HelperInterface', 'Magento\Sales\Model\ResourceModel\HelperInterface'],
-    ['Magento\Reports\Model\ResourceModel\Helper\HelperInterface', 'Magento\Reports\Model\ResourceModel\HelperInterface'],
+    [
+        'Magento\Reports\Model\ResourceModel\Helper\HelperInterface',
+        'Magento\Reports\Model\ResourceModel\HelperInterface'
+    ],
     ['Magento\Payment\Block\Form\Banktransfer', 'Magento\OfflinePayments\Block\Form\Banktransfer'],
     ['Magento\Payment\Block\Form\Cashondelivery', 'Magento\OfflinePayments\Block\Form\Cashondelivery'],
     ['Magento\Payment\Block\Form\Ccsave', 'Magento\OfflinePayments\Block\Form\Ccsave'],
@@ -2307,7 +2310,10 @@ return [
     ['Magento\Core\Model\Resource\Store\Group\Collection', 'Magento\Store\Model\ResourceModel\Group\Collection'],
     ['Magento\Core\Model\Resource\Website', 'Magento\Store\Model\ResourceModel\Website'],
     ['Magento\Core\Model\Resource\Website\Collection', 'Magento\Store\Model\ResourceModel\Website\Collection'],
-    ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\ResourceModel\Website\Grid\Collection'],
+    [
+        'Magento\Core\Model\Resource\Website\Grid\Collection',
+        'Magento\Store\Model\ResourceModel\Website\Grid\Collection'
+    ],
     ['Magento\Core\Model\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
     [
@@ -2359,7 +2365,10 @@ return [
         'Magento\Rating\Model\Resource\Rating\Option\Collection',
         'Magento\Review\Model\ResourceModel\Rating\Option\Collection',
     ],
-    ['Magento\Rating\Model\Resource\Rating\Grid\Collection', 'Magento\Review\Model\ResourceModel\Rating\Grid\Collection'],
+    [
+        'Magento\Rating\Model\Resource\Rating\Grid\Collection',
+        'Magento\Review\Model\ResourceModel\Rating\Grid\Collection'
+    ],
     ['Magento\Rating\Model\Resource\Rating\Collection', 'Magento\Review\Model\ResourceModel\Rating\Collection'],
     ['Magento\Rating\Model\Resource\Rating\Option\Vote', 'Magento\Review\Model\ResourceModel\Rating\Option\Vote'],
     ['Magento\Rating\Model\Rating\Option\Vote', 'Magento\Review\Model\Rating\Option\Vote'],
@@ -2403,7 +2412,10 @@ return [
     ],
     ['Magento\Backend\Model\Translate\Inline', 'Magento\Framework\Translate\Inline'],
     ['Magento\Backend\Model\ResourceModel\Translate', 'Magento\Translation\Model\ResourceModel\Translate'],
-    ['Magento\Backend\Model\ResourceModel\Translate\StringUtils', 'Magento\Translation\Model\ResourceModel\StringUtils'],
+    [
+        'Magento\Backend\Model\ResourceModel\Translate\StringUtils',
+        'Magento\Translation\Model\ResourceModel\StringUtils'
+    ],
     ['Magento\Core\Model\Layout', 'Magento\Framework\View\Layout'],
     ['Magento\Catalog\Block\Product\Price\Template'],
     ['Magento\Bundle\Block\Catalog\Product\View'],
@@ -3030,7 +3042,10 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link', 'Magento\Widget\Model\ResourceModel\Layout\Link'],
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\ResourceModel\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\ResourceModel\Layout\Update'],
-    ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\ResourceModel\Layout\Update\Collection'],
+    [
+        'Magento\Core\Model\Resource\Layout\Update\Collection',
+        'Magento\Widget\Model\ResourceModel\Layout\Update\Collection'
+    ],
     ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
     ['Zend_Controller_Router_Route'],
     ['Zend_Controller_Router_Route_Interface'],

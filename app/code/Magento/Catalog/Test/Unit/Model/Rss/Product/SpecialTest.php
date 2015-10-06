@@ -66,7 +66,8 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
+        $productCollection =
+            $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $this->product->expects($this->once())->method('getResourceCollection')->will(
             $this->returnValue($productCollection)
         );

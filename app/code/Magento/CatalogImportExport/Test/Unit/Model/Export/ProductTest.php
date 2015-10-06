@@ -59,7 +59,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFactory;
 
@@ -74,12 +74,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeColFactory;
 

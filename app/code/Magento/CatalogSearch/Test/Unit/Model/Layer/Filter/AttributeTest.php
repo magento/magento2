@@ -67,7 +67,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
-        $this->fulltextCollection = $this->getMockBuilder('\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection')
+        $this->fulltextCollection =
+            $this->getMockBuilder('\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
             ->getMock();

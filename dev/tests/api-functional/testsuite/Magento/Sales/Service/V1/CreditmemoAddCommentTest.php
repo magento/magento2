@@ -51,7 +51,8 @@ class CreditmemoAddCommentTest extends WebapiAbstract
     public function testCreditmemoAddComment()
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */
-        $creditmemoCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
+        $creditmemoCollection =
+            $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
         $creditmemo = $creditmemoCollection->getFirstItem();
 
         $commentData = [

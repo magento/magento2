@@ -93,7 +93,8 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->customerCollectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $this->customerCollectionMock =
+            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock =

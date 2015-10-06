@@ -401,7 +401,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnSelf());
 
-        $ruleCollectionFactoryMock = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory')
+        $ruleCollectionFactoryMock =
+            $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

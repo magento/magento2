@@ -45,7 +45,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $sampleResFactory = $this->getMock('Magento\Downloadable\Model\ResourceModel\SampleFactory', [], [], '', false);
         $linkResource = $this->getMock('Magento\Downloadable\Model\ResourceModel\Link', [], [], '', false);
-        $linksFactory = $this->getMock('Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory', [], [], '', false);
+        $linksFactory = $this->getMock(
+            'Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $samplesFactory = $this->getMock(
             'Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory',
             [],

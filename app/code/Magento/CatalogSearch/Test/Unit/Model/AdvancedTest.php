@@ -205,7 +205,8 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $advancedFactory->expects($this->once())->method('create')->willReturn($this->resource);
 
-        $productCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
+        $productCollectionFactory =
+            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

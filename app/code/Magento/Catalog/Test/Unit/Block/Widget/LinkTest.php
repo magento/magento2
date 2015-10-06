@@ -41,7 +41,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreManager')
             ->will($this->returnValue($this->storeManager));
 
-        $this->entityResource = $this->getMock('Magento\Catalog\Model\ResourceModel\AbstractResource', [], [], '', false);
+        $this->entityResource =
+            $this->getMock('Magento\Catalog\Model\ResourceModel\AbstractResource', [], [], '', false);
 
         $this->block = (new ObjectManager($this))->getObject('Magento\Catalog\Block\Widget\Link', [
             'context' => $context,
