@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="products_list" class="Magento\CatalogWidget\Block\Product\ProductsList" is_email_compatible="true"
             placeholder_image="Magento_CatalogWidget::images/products_list.png" ttl="86400">
         <label translate="true">Catalog Products List</label>
