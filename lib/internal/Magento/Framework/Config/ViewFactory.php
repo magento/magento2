@@ -29,10 +29,9 @@ class ViewFactory
      */
     public function create($configFiles)
     {
-        return new \Magento\Framework\Config\View(
-            $configFiles,
-            new \Magento\Framework\Config\Dom\UrnResolver(),
-            $this->objectManager->create('\Magento\Framework\View\Xsd\Media\TypeDataExtractorPool')
+        return $this->objectManager->create(
+            'Magento\Framework\Config\View',
+            ['configFiles' => $configFiles]
         );
     }
 }
