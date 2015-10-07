@@ -93,7 +93,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'postcode' => '78757',
             'country_id' => 'US',
             'telephone' => '(512) 999-9999',
-            'fax' => '',
             'save_in_address_book' => 1,
         ];
         $this->_model->saveShipping($data, null);

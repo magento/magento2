@@ -12,6 +12,11 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected $_adapterMock;
 
+    /**
+     * @var \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter
+     */
+    protected $_adapterReflection;
+
     protected function setUp()
     {
         $this->_adapterMock = $this->getMockForAbstractClass(
@@ -23,6 +28,11 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             true,
             ['_parse']
         );
+        $this->_adapterReflection = new \ReflectionMethod(
+            'Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter',
+            '_addPhrase'
+        );
+        $this->_adapterReflection->setAccessible(true);
     }
 
     public function testParse()
@@ -35,5 +45,26 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     public function getPhrases()
     {
         $this->assertInternalType('array', $this->_adapterMock->getPhrases());
+    }
+
+    public function testAddPhrase()
+    {
+        $phrase = 'test phrase';
+        $line = 2;
+        $expected = [
+            [
+                'phrase' => $phrase,
+                'file' => null,
+                'line' => $line,
+                'quote' => ''
+            ]
+        ];
+        $this->_adapterReflection->invoke($this->_adapterMock, $phrase, $line);
+        $actual = $this->_adapterMock->getPhrases();
+        $this->assertEquals($expected, $actual);
+
+        $this->_adapterReflection->invoke($this->_adapterMock, '', '');
+        $actual = $this->_adapterMock->getPhrases();
+        $this->assertEquals($expected, $actual);
     }
 }

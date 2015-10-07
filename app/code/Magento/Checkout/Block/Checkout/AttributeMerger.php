@@ -73,6 +73,13 @@ class AttributeMerger
     private $directoryHelper;
 
     /**
+     * List of codes of countries that must be shown on the top of country list
+     *
+     * @var array
+     */
+    private $topCountryCodes;
+
+    /**
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
@@ -88,6 +95,7 @@ class AttributeMerger
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
         $this->directoryHelper = $directoryHelper;
+        $this->topCountryCodes = $directoryHelper->getTopCountryCodes();
     }
 
     /**
@@ -177,7 +185,7 @@ class AttributeMerger
                 ? $additionalConfig['sortOrder']
                 : $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
-            'options' => isset($attributeConfig['options']) ? $attributeConfig['options'] : [],
+            'options' => $this->getFieldOptions($attributeCode, $attributeConfig),
             'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
@@ -317,5 +325,47 @@ class AttributeMerger
             }
         }
         return $this->customer;
+    }
+
+    /**
+     * Retrieve field options from attribute configuration
+     *
+     * @param string $attributeCode
+     * @param array $attributeConfig
+     * @return array
+     */
+    protected function getFieldOptions($attributeCode, array $attributeConfig)
+    {
+        $options = isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return ($attributeCode == 'country_id') ? $this->orderCountryOptions($options) : $options;
+    }
+
+    /**
+     * Order country options. Move top countries to the beginning of the list.
+     *
+     * @param array $countryOptions
+     * @return array
+     */
+    protected function orderCountryOptions(array $countryOptions)
+    {
+        if (empty($this->topCountryCodes)) {
+            return $countryOptions;
+        }
+
+        $headOptions = [];
+        $tailOptions = [[
+            'value' => 'delimiter',
+            'label' => '──────────',
+            'disabled' => true,
+        ]];
+        foreach ($countryOptions as $countryOption) {
+            if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
+                array_push($headOptions, $countryOption);
+            } else {
+                array_push($tailOptions, $countryOption);
+            }
+
+        }
+        return array_merge($headOptions, $tailOptions);
     }
 }

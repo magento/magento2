@@ -38,6 +38,9 @@
             @_icon-font-line-height: 1,
             @_icon-font-color: @field-tooltip-icon__color
         );
+        span {
+            &:extend(.abs-visually-hidden);
+        }
     }
     .admin__control-text:focus + .admin__field-tooltip-content,
     &:hover .admin__field-tooltip-content {
