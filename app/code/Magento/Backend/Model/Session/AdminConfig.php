@@ -30,14 +30,14 @@ class AdminConfig extends Config
     protected $_frontNameResolver;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Backend\App\BackendAppList
      */
     private $backendAppList;
+
+    /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    private $backendUrl;
 
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
@@ -49,7 +49,7 @@ class AdminConfig extends Config
      * @param string $scopeType
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -64,7 +64,7 @@ class AdminConfig extends Config
         $scopeType,
         \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
         $sessionName = self::SESSION_NAME_ADMIN
     ) {
@@ -79,8 +79,8 @@ class AdminConfig extends Config
             $lifetimePath
         );
         $this->_frontNameResolver = $frontNameResolver;
-        $this->_storeManager = $storeManager;
         $this->backendAppList = $backendAppList;
+        $this->backendUrl = $backendUrl;
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
@@ -95,7 +95,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
-        $baseUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = parse_url($this->backendUrl->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
             return $cookiePath;
