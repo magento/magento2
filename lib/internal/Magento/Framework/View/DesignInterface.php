@@ -32,7 +32,6 @@ interface DesignInterface
      *
      * @param string $area
      * @return DesignInterface
-     * @deprecated
      * @TODO MAGETWO-31474: Remove deprecated method setArea
      */
     public function setArea($area);
