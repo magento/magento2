@@ -18,9 +18,14 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryMock;
+    protected $fileReadFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileRead;
 
     /**
      * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
@@ -36,8 +41,9 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filePaths = ['/file1', '/file2'];
-        $this->directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
+        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
         $this->moduleDirResolverMock = $this->getMock(
             'Magento\Framework\Module\Dir\ReverseResolver',
             [],
@@ -47,7 +53,7 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
-            $this->directoryMock,
+            $this->fileReadFactory,
             $this->filePaths,
             $this->moduleDirResolverMock
         );
@@ -56,7 +62,6 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->fileIterator = null;
-        $this->directoryMock = null;
         $this->filePaths = null;
         $this->moduleDirResolverMock = null;
     }
@@ -69,21 +74,19 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
             '<template module="' . $moduleName . '" 123>',
             '<template module="' . $moduleName . '" 321>'
         ];
-        $directoryPath = 'directory/path';
         $index = 0;
         $dirIndex = 0;
         foreach ($this->filePaths as $filePath) {
-            $this->directoryMock->expects($this->at($dirIndex++))
-                ->method('getAbsolutePath')
-                ->with($filePath)
-                ->will($this->returnValue($directoryPath . $filePath));
             $this->moduleDirResolverMock->expects($this->at($index))
                 ->method('getModuleName')
-                ->with($directoryPath . $filePath)
-                ->will($this->returnValue($moduleName));
-            $this->directoryMock->expects($this->at($dirIndex++))
-                ->method('readFile')
                 ->with($filePath)
+                ->will($this->returnValue($moduleName));
+            $this->fileReadFactory->expects($this->at($dirIndex))
+                ->method('create')
+                ->with($filePath)
+                ->willReturn($this->fileRead);
+            $this->fileRead->expects($this->at($dirIndex++))
+                ->method('readAll')
                 ->will($this->returnValue($contents[$index++]));
         }
         $index = 0;
@@ -94,7 +97,6 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testIteratorNegative()
     {
-        $directoryPath = 'directory/path';
         $filePath = $this->filePaths[0];
 
         $this->setExpectedException(
@@ -102,16 +104,12 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
             sprintf("Unable to determine a module, file '%s' belongs to.", $filePath)
         );
 
-        $this->directoryMock->expects($this->at(0))
-            ->method('getAbsolutePath')
-            ->with($filePath)
-            ->will($this->returnValue($directoryPath . $filePath));
         $this->moduleDirResolverMock->expects($this->at(0))
             ->method('getModuleName')
-            ->with($directoryPath . $filePath)
+            ->with($filePath)
             ->will($this->returnValue(false));
-        $this->directoryMock->expects($this->never())
-            ->method('readFile');
+        $this->fileReadFactory->expects($this->never())->method('create');
+        $this->fileRead->expects($this->never())->method('readAll');
 
         $this->fileIterator->current();
     }

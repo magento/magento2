@@ -10,20 +10,17 @@
         "magento/module-backend": "1.0.0-beta",
         "magento/module-payment": "1.0.0-beta",
         "magento/module-catalog": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Authorizenet"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Authorizenet\\": ""
+        }
     }
 }
