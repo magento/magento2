@@ -18,8 +18,7 @@
         "magento/module-eav": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-ui": "1.0.0-beta",
-        "lib-libxml": "*",
-        "magento/magento-composer-installer": "*"
+        "lib-libxml": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "1.0.0-beta"
@@ -29,12 +28,10 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Paypal"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Paypal\\": ""
+        }
     }
 }

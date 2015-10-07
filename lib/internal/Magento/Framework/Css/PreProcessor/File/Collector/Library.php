@@ -6,12 +6,12 @@
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\Factory;
-use Magento\Framework\View\File\FileList\Factory as FileListFactory;
 
 /**
  * Source of base layout files introduced by modules
@@ -19,7 +19,7 @@ use Magento\Framework\View\File\FileList\Factory as FileListFactory;
 class Library implements CollectorInterface
 {
     /**
-     * @var Factory
+     * @var \Magento\Framework\View\File\Factory
      */
     protected $fileFactory;
 
@@ -29,29 +29,43 @@ class Library implements CollectorInterface
     protected $libraryDirectory;
 
     /**
-     * @var ReadInterface
-     */
-    protected $themesDirectory;
-
-    /**
-     * @var FileListFactory
+     * @var \Magento\Framework\View\File\FileList\Factory
      */
     protected $fileListFactory;
 
     /**
-     * @param FileListFactory $fileListFactory
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    private $readFactory;
+
+    /**
+     * Component registry
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * @param \Magento\Framework\View\File\FileList\Factory $fileListFactory
      * @param Filesystem $filesystem
-     * @param Factory $fileFactory
+     * @param \Magento\Framework\View\File\Factory $fileFactory
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
-        FileListFactory $fileListFactory,
+        \Magento\Framework\View\File\FileList\Factory $fileListFactory,
         Filesystem $filesystem,
-        Factory $fileFactory
+        \Magento\Framework\View\File\Factory $fileFactory,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->fileListFactory = $fileListFactory;
-        $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);
-        $this->themesDirectory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->libraryDirectory = $filesystem->getDirectoryRead(
+            DirectoryList::LIB_WEB
+        );
         $this->fileFactory = $fileFactory;
+        $this->readFactory = $readFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -69,8 +83,16 @@ class Library implements CollectorInterface
 
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
-            $files = $this->themesDirectory->search("{$themeFullPath}/web/{$filePath}");
-            $list->replace($this->createFiles($this->themesDirectory, $theme, $files));
+            $path = $this->componentRegistrar->getPath(
+                ComponentRegistrar::THEME,
+                $themeFullPath
+            );
+            if (empty($path)) {
+                continue;
+            }
+            $directoryRead = $this->readFactory->create($path);
+            $foundFiles = $directoryRead->search("web/{$filePath}");
+            $list->replace($this->createFiles($directoryRead, $theme, $foundFiles));
         }
         return $list->getAll();
     }
