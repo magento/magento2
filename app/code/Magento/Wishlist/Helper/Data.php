@@ -5,6 +5,7 @@
  */
 namespace Magento\Wishlist\Helper;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
@@ -273,12 +274,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for removing item from wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @param bool $addReferer
      * @return string
      */
-    public function getRemoveParams($item)
+    public function getRemoveParams($item, $addReferer = false)
     {
         $url = $this->_getUrl('wishlist/index/remove');
         $params = ['item' => $item->getWishlistItemId()];
+        if ($addReferer) {
+            $params = $this->addRefererToParams($params);
+        }
         return $this->_postDataHelper->getPostData($url, $params);
     }
 
@@ -381,14 +386,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve URL for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @param bool $addReferer
+     * @return string
      */
-    public function getAddToCartParams($item)
+    public function getAddToCartParams($item, $addReferer = false)
     {
+        $params = $this->_getCartUrlParameters($item);
+        if ($addReferer) {
+            $params = $this->addRefererToParams($params);
+        }
         return $this->_postDataHelper->getPostData(
             $this->_getUrlStore($item)->getUrl('wishlist/index/cart'),
-            $this->_getCartUrlParameters($item)
+            $params
         );
+    }
+
+    /**
+     * Add UENC referer to params
+     *
+     * @param array $params
+     * @return array
+     */
+    public function addRefererToParams(array $params)
+    {
+        $params[ActionInterface::PARAM_NAME_URL_ENCODED] =
+            $this->urlEncoder->encode($this->_getRequest()->getServer('HTTP_REFERER'));
+        return $params;
     }
 
     /**

@@ -85,6 +85,19 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Process collection after loading
+     *
+     * @return $this
+     */
+    protected function _afterLoadCollection()
+    {
+        foreach ($this->getCollection() as $item) {
+            $item->getCustomer() ?: $item->setCustomer('Guest');
+        }
+        return $this;
+    }
+
+    /**
      * Prepares page sizes for dashboard grid with las 5 orders
      *
      * @return void

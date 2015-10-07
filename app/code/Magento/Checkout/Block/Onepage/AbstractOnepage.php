@@ -188,7 +188,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Collection
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryCollection()
@@ -201,7 +200,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return RegionCollection
-     * @deprecated
      * @removeCandidate
      */
     public function getRegionCollection()
@@ -216,7 +214,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @deprecated
      * @removeCandidate
      */
     public function customerHasAddresses()
@@ -231,7 +228,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getAddressesHtmlSelect($type)
@@ -285,7 +281,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryHtmlSelect($type)
@@ -315,7 +310,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getRegionHtmlSelect($type)
@@ -341,7 +335,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return mixed
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryOptions()
@@ -363,7 +356,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * Get checkout steps codes
      *
      * @return string[]
-     * @deprecated
      * @removeCandidate
      */
     protected function _getStepCodes()
@@ -375,7 +367,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * Retrieve is allow and show block
      *
      * @return bool
-     * @deprecated
      * @removeCandidate
      */
     public function isShow()
@@ -388,7 +379,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getShippingPriceHtml(\Magento\Quote\Model\Quote\Address\Rate $rate)

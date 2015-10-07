@@ -10,18 +10,16 @@ namespace Magento\Store\Model;
  *
  * @method \Magento\Store\Model\ResourceModel\Website _getResource()
  * @method \Magento\Store\Model\ResourceModel\Website getResource()
- * @method string getName()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
  * @method int getGroupId()
  * @method int getWebsiteId()
  * @method bool hasWebsiteId()
- * @method \Magento\Store\Model\Website setName(string $value)
  * @method int getSortOrder()
- * @method \Magento\Store\Model\Website setSortOrder(int $value)
+ * @method \Magento\Store\Model\Website setSortOrder($value)
  * @method int getIsDefault()
- * @method \Magento\Store\Model\Website setIsDefault(int $value)
+ * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -526,6 +524,22 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function setCode($code)
     {
         return $this->setData('code', $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->_getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 
     /**

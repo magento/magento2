@@ -474,7 +474,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Get collection instance
      *
-     * @deprecated
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
@@ -496,7 +495,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Retrieve collection instance
      *
-     * @deprecated
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
      */
