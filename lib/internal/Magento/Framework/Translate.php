@@ -317,7 +317,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
-        $file = $this->_modulesReader->getModuleDir('i18n', $moduleName);
+        $file = $this->_modulesReader->getModuleDir(Module\Dir::MODULE_I18N_DIR, $moduleName);
         $file .= '/' . $locale . '.csv';
         return $file;
     }
