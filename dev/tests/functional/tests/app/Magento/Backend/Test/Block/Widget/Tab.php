@@ -11,8 +11,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Tab
- * Is used to represent any tab on the page
+ * Is used to represent any tab on the page.
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -23,24 +22,24 @@ class Tab extends AbstractForm
      *
      * @var string
      */
-    protected $mageErrorField = '//*[contains(@class,"field ")][.//*[@class="mage-error"]]';
+    protected $mageErrorField = '//fieldset/*[contains(@class,"field ")][.//*[contains(@class,"error")]]';
 
     /**
      * Fields label with mage error.
      *
      * @var string
      */
-    protected $mageErrorLabel = './label';
+    protected $mageErrorLabel = './/*[contains(@class,"label")]';
 
     /**
      * Mage error text.
      *
      * @var string
      */
-    protected $mageErrorText = './/*[@class="mage-error"]';
+    protected $mageErrorText = './/label[contains(@class,"error")]';
 
     /**
-     * Fill data to fields on tab
+     * Fill data to fields on tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -55,7 +54,7 @@ class Tab extends AbstractForm
     }
 
     /**
-     * Get data of tab
+     * Get data of tab.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -68,10 +67,11 @@ class Tab extends AbstractForm
     }
 
     /**
-     * Update data to fields on tab
+     * Update data to fields on tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element
+     * @return void
      */
     public function updateFormTab(array $fields, SimpleElement $element = null)
     {
