@@ -142,7 +142,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getDeleteButtonHtml()
     {
@@ -151,7 +150,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getSaveButtonHtml()
     {
@@ -163,7 +161,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getResetButtonHtml()
     {
