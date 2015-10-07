@@ -22,7 +22,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->createBlock(
             'Magento\Framework\View\Element\Template',
             '',
-            ['context' => $context, 'data' => ['module_name' => 'Magento_View']]
+            ['context' => $context]
         );
     }
 
