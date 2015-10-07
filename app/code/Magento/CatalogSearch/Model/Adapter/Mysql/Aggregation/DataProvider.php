@@ -48,13 +48,13 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @param Config $eavConfig
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
      */
     public function __construct(
         Config $eavConfig,
-        Resource $resource,
+        ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
         Session $customerSession
     ) {

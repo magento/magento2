@@ -20,9 +20,9 @@ class OrderStatus
     protected $_resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->_resource = $resource;
     }

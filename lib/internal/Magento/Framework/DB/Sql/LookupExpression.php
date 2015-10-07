@@ -46,14 +46,14 @@ class LookupExpression extends \Zend_Db_Expr
     protected $sortOrder;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param string $targetColumn
      * @param string $targetTable
      * @param array $referenceColumns
      * @param array $sortOrder
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         $targetColumn,
         $targetTable,
         array $referenceColumns = [],

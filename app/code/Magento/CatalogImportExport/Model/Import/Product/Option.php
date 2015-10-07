@@ -306,7 +306,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Store\Model\StoreManagerInterface $_storeManager
      * @param \Magento\Catalog\Model\ProductFactory $productFactory

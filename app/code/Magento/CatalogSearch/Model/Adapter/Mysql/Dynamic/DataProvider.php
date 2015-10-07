@@ -52,14 +52,14 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         Range $range,
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,

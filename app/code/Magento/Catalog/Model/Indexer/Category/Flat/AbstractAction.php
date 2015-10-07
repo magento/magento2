@@ -54,12 +54,12 @@ class AbstractAction
     protected $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
     ) {
