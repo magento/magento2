@@ -17,38 +17,34 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $rootDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $rootDirMock->expects($this->exactly(2))
-            ->method('getAbsolutePath')
-            ->will($this->returnCallback(function ($path) {
-                return 'schema_dir/' . $path;
-            }));
-        $fileSystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
+        $urnResolverMock = $this->getMock(
+            'Magento\Framework\Config\Dom\UrnResolver',
             [],
             [],
             '',
             false
         );
-        $fileSystemMock->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->will($this->returnValue($rootDirMock));
+        $urnResolverMock->expects($this->exactly(2))
+            ->method('getRealPath')
+            ->will($this->returnCallback(function ($urn) {
+                $urnParts = explode(':', $urn);
+                return 'schema_dir/' . $urnParts[3];
+            }));
 
         $this->model = new \Magento\Framework\DataObject\Copy\Config\SchemaLocator(
-            $fileSystemMock,
-            'schema.xsd',
-            'perFileSchema.xsd'
+            $urnResolverMock,
+            'urn:magento:framework:DataObject/etc/schema.xsd',
+            'urn:magento:framework:DataObject/etc/perFileSchema.xsd'
         );
     }
 
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/schema.xsd', $this->model->getSchema());
+        $this->assertEquals('schema_dir/DataObject/etc/schema.xsd', $this->model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals('schema_dir/perFileSchema.xsd', $this->model->getPerFileSchema());
+        $this->assertEquals('schema_dir/DataObject/etc/perFileSchema.xsd', $this->model->getPerFileSchema());
     }
 }

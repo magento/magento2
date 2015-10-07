@@ -75,7 +75,7 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
                 'items' => $dataSourceItems
             ]
         ];
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($expectedDataSourceItems, $dataSource['data']['items']);
     }
 

@@ -174,7 +174,7 @@ require(['jquery'], function(jQuery){
             if (confirm("<?php /* @escapeNotVerified */ echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>")) {
                 reload();
             } else {
-                obj.value = '<?php /* @escapeNotVerified */ echo $block->getStoreId() ?>';
+                obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
             }
             <?php else: ?>
                 reload();

@@ -54,7 +54,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ['collectionFactory' => $collectionFactoryMock, 'context' => $contextMock]
         );
         $model->setData('name', $itemName);
-        $model->prepareDataSource($dataSource);
+        $dataSource = $model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }
