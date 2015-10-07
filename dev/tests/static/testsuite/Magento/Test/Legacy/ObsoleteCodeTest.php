@@ -10,6 +10,10 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\TestFramework\Utility\ChangedFiles;
+
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**@#+
@@ -69,7 +73,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     protected static function _populateList(array &$list, array &$errors, $filePattern, $hasScope = true)
     {
         foreach (glob(__DIR__ . '/_files/' . $filePattern) as $file) {
-            foreach (self::_readList($file) as $row) {
+            $readList = include $file;
+            foreach ($readList as $row) {
                 list($item, $scope, $replacement, $isDeprecated) = self::_padRow($row, $hasScope);
                 $key = "{$item}|{$scope}";
                 if (isset($list[$key])) {
@@ -97,20 +102,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         return [$item, '', $replacement, ''];
     }
 
-    /**
-     * Isolate including a file into a method to reduce scope
-     *
-     * @param string $file
-     * @return array
-     */
-    protected static function _readList($file)
-    {
-        return include $file;
-    }
-
     public function testPhpFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
+        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
+        $blacklistFiles = $this->getBlacklistFiles();
+        foreach ($blacklistFiles as $blacklistFile) {
+            unset($changedFiles[$blacklistFile]);
+        }
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -125,24 +124,24 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
             },
-            \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*')
+            $changedFiles
         );
     }
 
     public function testClassFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $this->_testObsoletePaths($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getClassFiles()
+            Files::init()->getPhpFiles()
         );
     }
 
     public function testTemplateMageCalls()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -152,13 +151,17 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     "Static Method of 'Mage' class is obsolete."
                 );
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(false, false, true)
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::AS_DATA_SET
+            )
         );
     }
 
     public function testXmlFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -166,19 +169,19 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteNamespaces($content);
                 $this->_testObsoletePaths($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getXmlFiles()
+            Files::init()->getXmlFiles()
         );
     }
 
     public function testJsFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
                 $this->_testObsoletePropertySkipCalculate($content);
             },
-            \Magento\Framework\App\Utility\Files::init()->getJsFiles()
+            Files::init()->getJsFiles()
         );
     }
 
@@ -294,7 +297,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         foreach (self::$_paths as $row) {
             list($obsoletePath, , $replacementPath) = $row;
-            $relativePath = str_replace(\Magento\Framework\App\Utility\Files::init()->getPathToSource(), "", $file);
+            $relativePath = str_replace(Files::init()->getPathToSource(), "", $file);
             $message = $this->_suggestReplacement(
                 "Path '{$obsoletePath}' is obsolete.",
                 $replacementPath
@@ -318,7 +321,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testGetChildSpecialCase($content, $file)
     {
-        if (0 === strpos($file, \Magento\Framework\App\Utility\Files::init()->getPathToSource() . '/app/')) {
+        if (0 === strpos($file, Files::init()->getPathToSource() . '/app/')) {
             $this->_assertNotRegexp(
                 '/[^a-z\d_]getChild\s*\(/iS',
                 $content,
@@ -868,7 +871,18 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testMageMethodsObsolete()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $ignored = $this->getBlacklistFiles();
+        $files = Files::init()->getPhpFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_TESTS
+            | Files::INCLUDE_DEV_TOOLS
+            | Files::INCLUDE_LIBS
+        );
+        $files = array_map('realpath', $files);
+        $files = array_diff($files, $ignored);
+        $files = Files::composeDataSets($files);
+
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * Check absence of obsolete Mage class usages
@@ -882,30 +896,23 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     '"Mage" class methods are obsolete'
                 );
             },
-            $this->mageObsoleteDataProvider()
+            $files
         );
     }
 
     /**
+     * Reads list of blacklisted files
+     *
      * @return array
      */
-    public function mageObsoleteDataProvider()
+    private function getBlacklistFiles()
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
-        $appPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $appPath = Files::init()->getPathToSource();
         foreach ($blackList as $file) {
-            $ignored[] = realpath($appPath . '/' . $file);
+            $ignored = array_merge($ignored, glob($appPath . '/' . $file, GLOB_NOSORT));
         }
-        $files = \Magento\Framework\App\Utility\Files::init()->getClassFiles(
-            true,
-            true,
-            true,
-            true,
-            false
-        );
-        $files = array_map('realpath', $files);
-        $files = array_diff($files, $ignored);
-        return \Magento\Framework\App\Utility\Files::composeDataSets($files);
+        return $ignored;
     }
 }

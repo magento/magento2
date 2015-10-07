@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Sales\Api\Data\CreditmemoCommentInterface" type="Magento\Sales\Model\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection"/>
     <preference for="Magento\Sales\Api\Data\CreditmemoInterface" type="Magento\Sales\Model\Order\Creditmemo"/>
@@ -47,7 +47,7 @@
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
-    <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Api\Data\OrderItem\Repository"/>
+    <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Model\Order\ItemRepository"/>
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
@@ -670,6 +670,12 @@
             <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order</argument>
         </arguments>
     </virtualType>
+    <virtualType name="orderItemMetadata" type="Magento\Sales\Model\Resource\Metadata">
+        <arguments>
+            <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Item</argument>
+            <argument name="modelClassName" xsi:type="string">Magento\Sales\Model\Order\Item</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="invoiceMetadata" type="Magento\Sales\Model\Resource\Metadata">
         <arguments>
             <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\Resource\Order\Invoice</argument>
@@ -709,6 +715,11 @@
     <type name="Magento\Sales\Model\OrderRepository">
         <arguments>
             <argument name="metadata" xsi:type="object">orderMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ItemRepository">
+        <arguments>
+            <argument name="metadata" xsi:type="object">orderItemMetadata</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Model\Order\InvoiceRepository">
