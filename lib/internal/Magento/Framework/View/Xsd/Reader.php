@@ -74,7 +74,10 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function getListXsdFiles($filename)
     {
         return $this->iteratorFactory->create(
-            $this->componentDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/' . $filename)
+            array_merge(
+                $this->componentDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/' . $filename),
+                $this->componentDirSearch->collectFiles(ComponentRegistrar::LIBRARY, '*/etc/' . $filename)
+            )
         );
     }
 
@@ -108,9 +111,13 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function readXsdFiles($fileList, $baseXsd = null)
     {
         $baseXsd = new \DOMDocument();
-        $baseXsd->load($this->urnResolver->getRealPath($this->searchFilesPattern . $this->fileName));
+        $baseXsdPath = $this->urnResolver->getRealPath($this->searchFilesPattern . $this->fileName);
+        $baseXsd->load($baseXsdPath);
         $configMerge = null;
         foreach ($fileList as $key => $content) {
+            if ($key == $baseXsdPath) {
+                continue;
+            }
             try {
                 if (!empty($content)) {
                     if ($configMerge) {

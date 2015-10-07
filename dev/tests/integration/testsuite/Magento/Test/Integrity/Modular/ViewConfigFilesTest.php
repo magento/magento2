@@ -13,6 +13,7 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
+        /** @var \Magento\Framework\View\Xsd\Reader $reader */
         $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\Xsd\Reader'
         );
