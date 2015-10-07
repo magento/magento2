@@ -73,7 +73,7 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testDoOperationEmptyRepositories()
     {
         $data = [
-            'path' => 'path/to/app',
+            'paths' => ['path/to/app'],
             'filePatterns' => ['di' => 'di.xml'],
         ];
         $files = ['di' => []];
@@ -86,11 +86,11 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->classesScannerMock->expects($this->once())
             ->method('getList')
-            ->with($data['path']);
+            ->with($data['paths'][0]);
         $this->directoryScannerMock->expects($this->once())
             ->method('scan')
             ->with(
-                $data['path'],
+                $data['paths'][0],
                 $data['filePatterns']
             )->willReturn($files);
         $this->repositoryScannerMock->expects($this->once())
