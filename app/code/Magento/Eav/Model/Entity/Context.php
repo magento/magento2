@@ -17,7 +17,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -52,7 +52,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $objectRelationProcessor;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Attribute\Set $attrSetEntity
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -62,7 +62,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor $objectRelationProcessor
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
@@ -90,7 +90,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\App\Resource
+     * @return \Magento\Framework\App\ResourceConnection
      */
     public function getResource()
     {

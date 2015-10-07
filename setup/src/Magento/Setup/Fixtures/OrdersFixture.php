@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class OrdersFixture
@@ -316,7 +316,7 @@ class OrdersFixture extends Fixture
     public function getConnection()
     {
         return $this->fixtureModel->getObjectManager()->get(
-            'Magento\Framework\App\Resource'
+            'Magento\Framework\App\ResourceConnection'
         )->getConnection();
     }
 }

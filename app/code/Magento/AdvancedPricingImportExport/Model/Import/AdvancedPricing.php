@@ -8,7 +8,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class AdvancedPricing
@@ -153,7 +153,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
@@ -173,7 +173,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,

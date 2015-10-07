@@ -56,18 +56,18 @@ return [
     ],
     [
         'DEFAULT_READ_RESOURCE',
-        'Magento\Framework\App\Resource',
+        'Magento\Framework\App\ResourceConnection',
     ],
     [
         'DEFAULT_WRITE_RESOURCE',
-        'Magento\Framework\App\Resource',
+        'Magento\Framework\App\ResourceConnection',
     ],
     [
         'DEFAULT_SETUP_CONNECTION',
-        '\Magento\Framework\App\Resource\Config',
+        '\Magento\Framework\App\ResourceConnection\Config',
     ],
-    ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
-    ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
+    ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\ResourceConnection\Config'],
+    ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\ResourceConnection\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\PackageInterface'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
@@ -162,7 +162,7 @@ return [
     ['XML_PATH_BACKEND_FRONTNAME', 'Mage_Backend_Helper_Data'],
     ['XML_PATH_CACHE_BETA_TYPES'],
     ['XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'],
-    ['XML_PATH_CONNECTION_TYPE', 'Magento\Framework\App\Resource\Config'],
+    ['XML_PATH_CONNECTION_TYPE', 'Magento\Framework\App\ResourceConnection\Config'],
     ['XML_PATH_CONNECTION_TYPE', 'Magento\Core\Helper\Data'],
     ['XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'],
     [

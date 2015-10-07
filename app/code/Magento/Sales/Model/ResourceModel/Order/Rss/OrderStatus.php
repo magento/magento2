@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Rss;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Order Rss Resource Model
@@ -35,7 +35,7 @@ class OrderStatus
      */
     public function getAllCommentCollection($orderId)
     {
-        /** @var $resource \Magento\Framework\App\Resource */
+        /** @var $resource \Magento\Framework\App\ResourceConnection */
         $resource = $this->_resource;
         $read = $resource->getConnection();
 

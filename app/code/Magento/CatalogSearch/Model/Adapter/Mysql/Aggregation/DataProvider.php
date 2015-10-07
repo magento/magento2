@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;

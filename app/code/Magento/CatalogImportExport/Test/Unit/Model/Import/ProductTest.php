@@ -35,7 +35,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dataSourceModel;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\ImportExport\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject */
@@ -178,7 +178,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resource =
-            $this->getMockBuilder('\Magento\Framework\App\Resource')
+            $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resourceHelper =

@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;

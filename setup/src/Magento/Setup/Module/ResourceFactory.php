@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Module\Setup\ResourceConfig;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

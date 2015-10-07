@@ -23,7 +23,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -150,7 +150,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         );
         $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

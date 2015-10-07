@@ -31,9 +31,9 @@ class ConnectionFactory implements ConnectionFactoryInterface
      */
     public function create(array $connectionConfig)
     {
-        /** @var \Magento\Framework\App\Resource\ConnectionAdapterInterface $adapterInstance */
+        /** @var \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface $adapterInstance */
         $adapterInstance = $this->objectManager->create(
-            \Magento\Framework\App\Resource\ConnectionAdapterInterface::class,
+            \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface::class,
             ['config' => $connectionConfig]
         );
 

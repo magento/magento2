@@ -23,7 +23,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $resource;
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
     /**
@@ -77,7 +77,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $this->orderItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Item',

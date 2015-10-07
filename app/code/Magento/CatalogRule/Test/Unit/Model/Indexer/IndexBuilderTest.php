@@ -18,7 +18,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $indexBuilder;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -116,7 +116,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

@@ -12,7 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_model;
 
@@ -36,7 +36,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Resource');
+            ->create('Magento\Framework\App\ResourceConnection');
     }
 
     /**
@@ -67,8 +67,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->_getConnection();
 
-        /** @var \Magento\Framework\App\Resource $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
         $testTableName = $resource->getTableName('setup_module');
         $selectQuery = sprintf($selectQuery, $testTableName);
 
@@ -133,8 +133,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
             $this->fail("Expected exception didn't thrown!");
         }
 
-        /** @var \Magento\Framework\App\Resource $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
         $testTableName = $resource->getTableName('setup_module');
         $connection->query('SELECT * FROM ' . $testTableName);
 

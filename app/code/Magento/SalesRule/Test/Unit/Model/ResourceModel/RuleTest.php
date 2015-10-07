@@ -39,7 +39,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $connectionName = 'test';
-        $resources = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resources = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())

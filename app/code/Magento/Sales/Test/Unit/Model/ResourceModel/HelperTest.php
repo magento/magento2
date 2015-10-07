@@ -39,7 +39,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->appResource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

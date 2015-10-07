@@ -62,9 +62,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
 
-        /** @var $resourceModelMock \Magento\Framework\App\Resource */
+        /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

@@ -33,7 +33,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreResourceMock;
 
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->coreResourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

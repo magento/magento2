@@ -8,11 +8,11 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
+use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
-class Resource
+class ResourceConnection
 {
     const AUTO_UPDATE_ONCE = 0;
 

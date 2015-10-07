@@ -9,7 +9,7 @@ use Magento\Customer\Model\ResourceModel\Customer\Grid;
 
 class GridTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
@@ -35,7 +35,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
         $this->flatScopeResolver = $this->getMock(
             'Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver',

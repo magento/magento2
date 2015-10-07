@@ -45,7 +45,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreResourceMock;
 
@@ -95,7 +95,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->coreResourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

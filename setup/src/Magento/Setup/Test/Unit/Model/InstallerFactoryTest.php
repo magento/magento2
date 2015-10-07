@@ -97,7 +97,7 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
         $resourceFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
+            ->will($this->returnValue($this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false)));
         $installerFactory = new InstallerFactory($serviceLocatorMock, $resourceFactoryMock);
         $installer = $installerFactory->create($log);
         $this->assertInstanceOf('Magento\Setup\Model\Installer', $installer);

@@ -45,7 +45,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);

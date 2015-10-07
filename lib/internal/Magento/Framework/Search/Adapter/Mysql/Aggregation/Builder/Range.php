@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;

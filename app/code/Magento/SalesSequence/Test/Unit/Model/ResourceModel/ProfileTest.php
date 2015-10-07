@@ -81,7 +81,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Resource;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource\Config
+     * @var \Magento\Framework\App\ResourceConnection\Config
      */
     protected $_model;
 
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
 
         $this->_readerMock =
-            $this->getMock('Magento\Framework\App\Resource\Config\Reader', [], [], '', false);
+            $this->getMock('Magento\Framework\App\ResourceConnection\Config\Reader', [], [], '', false);
 
         $this->_resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -71,7 +71,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with('resource')
             ->willReturn($this->_initialResources);
 
-        $this->_model = new \Magento\Framework\App\Resource\Config(
+        $this->_model = new \Magento\Framework\App\ResourceConnection\Config(
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
@@ -101,7 +101,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with('resource')
             ->willReturn(['validResource' => ['somekey' => 'validConnectionName']]);
 
-        new \Magento\Framework\App\Resource\Config(
+        new \Magento\Framework\App\ResourceConnection\Config(
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
@@ -120,7 +120,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['resourceName' => 'mainResourceName', 'connectionName' => 'anotherConnection'],
             [
                 'resourceName' => 'brokenResourceName',
-                'connectionName' => \Magento\Framework\App\Resource::DEFAULT_CONNECTION
+                'connectionName' => \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION
             ],
             ['resourceName' => 'extendedResourceName', 'connectionName' => 'validConnectionName'],
             ['resourceName' => 'validResource', 'connectionName' => 'validConnectionName']

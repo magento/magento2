@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class AbstractAction
 {

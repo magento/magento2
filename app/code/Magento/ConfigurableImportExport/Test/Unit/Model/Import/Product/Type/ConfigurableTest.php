@@ -63,7 +63,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      */
     protected $_entityModel;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
@@ -211,7 +211,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->_connection->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
 
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [
                 'getConnection',
                 'getTableName',

@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\Model\Resource\Type\Db\Pdo;
 
-use Magento\Framework\App\Resource\ConnectionAdapterInterface;
+use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\Stdlib;
 

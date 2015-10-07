@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;

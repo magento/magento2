@@ -62,7 +62,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected $_storeId = null;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_coreResource;
 
@@ -93,7 +93,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param \Magento\Catalog\Model\ResourceModel\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory
@@ -102,7 +102,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         \Magento\Catalog\Model\ResourceModel\Category $catalogCategory,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory

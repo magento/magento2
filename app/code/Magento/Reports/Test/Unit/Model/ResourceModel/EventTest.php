@@ -36,7 +36,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -72,7 +72,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock

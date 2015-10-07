@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;

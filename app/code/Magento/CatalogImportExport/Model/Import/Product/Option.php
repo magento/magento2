@@ -9,7 +9,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -275,7 +275,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_importFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -323,7 +323,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function __construct(
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Store\Model\StoreManagerInterface $_storeManager,
         \Magento\Catalog\Model\ProductFactory $productFactory,

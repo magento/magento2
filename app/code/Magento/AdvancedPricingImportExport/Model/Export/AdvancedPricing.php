@@ -38,7 +38,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_entityTypeCode;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnectionConnection
      */
     protected $_resource;
 
@@ -81,7 +81,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnectionConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
@@ -103,7 +103,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnectionConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,

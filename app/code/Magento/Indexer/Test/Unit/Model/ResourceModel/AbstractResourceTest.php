@@ -13,7 +13,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -25,7 +25,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->_resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
 

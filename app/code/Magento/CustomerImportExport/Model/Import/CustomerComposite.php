@@ -153,7 +153,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
@@ -168,7 +168,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,

@@ -36,11 +36,11 @@ class Db
      * Initialize Backup DB resource model
      *
      * @param \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
         \Magento\Backup\Model\ResourceModel\HelperFactory $resHelperFactory,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->_resourceHelper = $resHelperFactory->create();
         $this->connection = $resource->getConnection('backup');

@@ -15,7 +15,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource\ConnectionFactory
+     * @var \Magento\Framework\App\ResourceConnection\ConnectionFactory
      */
     protected $model;
 
@@ -31,7 +31,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\App\Resource\ConnectionFactory',
+            'Magento\Framework\App\ResourceConnection\ConnectionFactory',
             ['objectManager' => $this->objectManagerMock]
         );
     }
@@ -44,7 +44,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerMock = $this->getMockBuilder('Magento\Framework\DB\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionAdapterMock = $this->getMockBuilder('Magento\Framework\App\Resource\ConnectionAdapterInterface')
+        $connectionAdapterMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
@@ -60,7 +60,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($connectionMock));
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\App\Resource\ConnectionAdapterInterface')
+            ->with('Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface')
             ->will($this->returnValue($connectionAdapterMock));
         $poolMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\FrontendPool')
             ->disableOriginalConstructor()

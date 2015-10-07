@@ -15,7 +15,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $resourceMock = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

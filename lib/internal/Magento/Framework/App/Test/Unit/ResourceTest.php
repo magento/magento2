@@ -6,18 +6,18 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
+    const RESOURCE_NAME = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
     const CONNECTION_NAME = 'connection-name';
     const TABLE_PREFIX = 'prefix_';
 
     /**
-     * @var \Magento\Framework\App\Resource\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
 
@@ -32,7 +32,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -46,7 +46,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder('Magento\Framework\App\Resource\ConfigInterface')
+        $this->config = $this->getMockBuilder('Magento\Framework\App\ResourceConnection\ConfigInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getConnectionName'])
             ->getMock();

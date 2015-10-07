@@ -51,7 +51,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $sequence;
 
     /**
-     * @var \Magento\Framework\App\Resource | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
 
@@ -88,7 +88,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

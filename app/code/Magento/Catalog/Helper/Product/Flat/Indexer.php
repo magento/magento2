@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Catalog Product Flat Indexer Helper
@@ -28,7 +28,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -124,7 +124,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
@@ -138,7 +138,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,

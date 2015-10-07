@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Resource;
+namespace Magento\Framework\App\ResourceConnection;
 
 class SourceFactory
 {
@@ -32,7 +32,7 @@ class SourceFactory
         $source = $this->objectManager->create($className);
         if (!$source instanceof SourceProviderInterface) {
             throw new \InvalidArgumentException(
-                $className . ' doesn\'t implement \Magento\Framework\App\Resource\SourceProviderInterface'
+                $className . ' doesn\'t implement \Magento\Framework\App\ResourceConnection\SourceProviderInterface'
             );
         }
 

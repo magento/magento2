@@ -21,7 +21,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -56,7 +56,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

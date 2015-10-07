@@ -148,7 +148,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
         $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
 
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
 
         $model = new \Magento\Framework\App\Cache\Frontend\Factory(
             $objectManager,

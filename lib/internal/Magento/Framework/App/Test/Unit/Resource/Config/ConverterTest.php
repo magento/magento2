@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Resource\Config;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource\Config\Converter
+     * @var \Magento\Framework\App\ResourceConnection\Config\Converter
      */
     protected $_model;
 
@@ -26,7 +26,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_filePath = __DIR__ . '/_files/';
         $this->_source = new \DOMDocument();
-        $this->_model = new \Magento\Framework\App\Resource\Config\Converter();
+        $this->_model = new \Magento\Framework\App\ResourceConnection\Config\Converter();
     }
 
     public function testConvert()

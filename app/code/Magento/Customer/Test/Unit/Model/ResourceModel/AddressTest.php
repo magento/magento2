@@ -122,7 +122,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare resource mock object
      *
-     * @return \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareResource()
     {
@@ -151,7 +151,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $dbAdapter->expects($this->any())->method('lastInsertId');
         $dbAdapter->expects($this->any())->method('select')->willReturn($dbSelect);
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
 

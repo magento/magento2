@@ -80,7 +80,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn('table_name');
 
-        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $resourceMock->expects($this->exactly(15))
             ->method('getConnection')
             ->willReturn($connectionInterfaceMock);
@@ -186,7 +186,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
             ['Magento\Catalog\Model\Category', $categoryMock],
             ['Magento\Catalog\Model\Product', $productMock],
-            ['Magento\Framework\App\Resource', $resourceMock],
+            ['Magento\Framework\App\ResourceConnection', $resourceMock],
             ['Magento\Catalog\Model\ResourceModel\Product\Collection', [], $collectionMock]
         );
 
@@ -224,7 +224,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $connectionMock->expects($this->never())
             ->method('query');
 
-        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $resourceMock->expects($this->never())
             ->method('getConnection')
             ->with($this->equalTo('write'))
@@ -233,7 +233,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('get')
-            ->with($this->equalTo('Magento\Framework\App\Resource'))
+            ->with($this->equalTo('Magento\Framework\App\ResourceConnection'))
             ->willReturn($resourceMock);
 
         $this->fixtureModelMock

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Helper\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Fulltext
 {

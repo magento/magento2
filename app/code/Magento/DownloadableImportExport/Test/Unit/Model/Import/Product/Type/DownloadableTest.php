@@ -44,7 +44,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      */
     protected $prodAttrColMock;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
     /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
@@ -141,7 +141,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
 
         // 3. $resource
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

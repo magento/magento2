@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;

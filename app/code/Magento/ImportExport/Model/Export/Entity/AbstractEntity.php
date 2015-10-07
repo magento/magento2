@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**

@@ -15,7 +15,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $attribute;
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $appResourceMock;
     /**
@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

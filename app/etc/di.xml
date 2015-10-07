@@ -60,7 +60,7 @@
     <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Framework\View\Model\Layout\Merge" />
     <preference for="Magento\Framework\View\Url\ConfigInterface" type="Magento\Framework\View\Url\Config" />
     <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config" />
-    <preference for="Magento\Framework\App\Resource\ConfigInterface" type="Magento\Framework\App\Resource\Config\Proxy" />
+    <preference for="Magento\Framework\App\ResourceConnection\ConfigInterface" type="Magento\Framework\App\ResourceConnection\Config\Proxy" />
     <preference for="Magento\Framework\Oauth\OauthInterface" type="Magento\Framework\Oauth\Oauth"/>
     <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual" />
@@ -94,7 +94,7 @@
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Quiet"/>
-    <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
+    <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
@@ -226,7 +226,7 @@
                     <item name="class" xsi:type="string">Magento\Framework\Cache\Frontend\Decorator\Logger</item>
                 </item>
             </argument>
-            <argument name="resource" xsi:type="object">Magento\Framework\App\Resource\Proxy</argument>
+            <argument name="resource" xsi:type="object">Magento\Framework\App\ResourceConnection\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\App\Area\FrontNameResolver">
@@ -305,18 +305,18 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Resource">
+    <type name="Magento\Framework\App\ResourceConnection">
         <arguments>
-            <argument name="connectionFactory" xsi:type="object">Magento\Framework\App\Resource\ConnectionFactory</argument>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\App\ResourceConnection\ConnectionFactory</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Resource\Config">
+    <type name="Magento\Framework\App\ResourceConnection\Config">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\App\Resource\Config\Reader\Proxy</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\ResourceConnection\Config\Reader\Proxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Resource\Config\Reader">
+    <type name="Magento\Framework\App\ResourceConnection\Config\Reader">
         <arguments>
             <argument name="fileResolver" xsi:type="object">Magento\Framework\App\Config\FileResolver\Proxy</argument>
         </arguments>

@@ -442,7 +442,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
+            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
             $this->getMock(
                 'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
                 [],

@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Customer;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Customer\Model\Customer;

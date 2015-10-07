@@ -21,7 +21,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     protected $writerMock;
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $adapterMock;
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     protected $selectMock;
@@ -54,7 +54,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
