@@ -27,18 +27,10 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
      */
     protected $blackList;
 
-    /**
-     * Are the Phrase objects are parsed as well
-     *
-     * @var bool
-     */
-    protected $includeObjects = true;
-
     protected function setUp()
     {
         $this->_phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
-            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer(),
-            $this->includeObjects
+            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
 
         $rootDir = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
