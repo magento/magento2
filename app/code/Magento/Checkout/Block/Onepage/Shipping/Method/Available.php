@@ -12,7 +12,6 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * One page checkout status
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
  * @removeCandidate
  */
 class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
