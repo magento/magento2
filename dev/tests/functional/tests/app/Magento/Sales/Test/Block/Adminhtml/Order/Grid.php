@@ -67,7 +67,7 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $purchasePointFilter = '[name="filters[store_id]"]';
+    protected $purchasePointFilter = '[name="store_id"]';
 
     /**
      * Order Id td selector.
