@@ -8,7 +8,7 @@ namespace Magento\Framework\Acl\Test\Unit\Resource\Config;
 class XsdTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Acl\Resource\Config\SchemaLocator
+     * @var \Magento\Framework\Acl\AclResource\Config\SchemaLocator
      */
     protected $_schemaLocator;
 
@@ -25,7 +25,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaLocator = new \Magento\Framework\Acl\Resource\Config\SchemaLocator();
+        $this->_schemaLocator = new \Magento\Framework\Acl\AclResource\Config\SchemaLocator();
         $this->_xsdSchema = $this->_schemaLocator->getSchema();
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }

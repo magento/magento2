@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Acl\Resource\Config\Reader;
+namespace Magento\Framework\Acl\AclResource\Config\Reader;
 
 class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -17,7 +17,7 @@ class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Framework\Config\ConverterInterface $converter
-     * @param \Magento\Framework\Acl\Resource\Config\SchemaLocator $schemaLocator
+     * @param \Magento\Framework\Acl\AclResource\Config\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
@@ -27,7 +27,7 @@ class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
         \Magento\Framework\Config\ConverterInterface $converter,
-        \Magento\Framework\Acl\Resource\Config\SchemaLocator $schemaLocator,
+        \Magento\Framework\Acl\AclResource\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'acl.xml',
         $idAttributes = [],

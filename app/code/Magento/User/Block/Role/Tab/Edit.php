@@ -42,7 +42,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Acl resource provider
      *
-     * @var \Magento\Framework\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $_aclResourceProvider;
 
@@ -54,7 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever
-     * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
+     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
      */
@@ -63,7 +63,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever,
-        \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
+        \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = []
     ) {

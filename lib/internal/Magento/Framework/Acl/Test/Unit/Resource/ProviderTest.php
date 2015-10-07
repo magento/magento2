@@ -8,7 +8,7 @@ namespace Magento\Framework\Acl\Test\Unit\Resource;
 class ProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Acl\Resource\Provider
+     * @var \Magento\Framework\Acl\AclResource\Provider
      */
     protected $_model;
 
@@ -26,13 +26,13 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_configReaderMock = $this->getMock('Magento\Framework\Config\ReaderInterface');
         $this->_treeBuilderMock = $this->getMock(
-            'Magento\Framework\Acl\Resource\TreeBuilder',
+            'Magento\Framework\Acl\AclResource\TreeBuilder',
             [],
             [],
             '',
             false
         );
-        $this->_model = new \Magento\Framework\Acl\Resource\Provider($this->_configReaderMock, $this->_treeBuilderMock);
+        $this->_model = new \Magento\Framework\Acl\AclResource\Provider($this->_configReaderMock, $this->_treeBuilderMock);
     }
 
     public function testGetIfAclResourcesExist()

@@ -8,9 +8,9 @@
 namespace Magento\Framework\Acl\Loader;
 
 use Magento\Framework\Acl;
-use Magento\Framework\Acl\Resource as AclResource;
-use Magento\Framework\Acl\Resource\ProviderInterface;
-use Magento\Framework\Acl\ResourceFactory;
+use Magento\Framework\Acl\AclResource as AclResource;
+use Magento\Framework\Acl\AclResource\ProviderInterface;
+use Magento\Framework\Acl\AclResourceFactory;
 
 class Resource implements \Magento\Framework\Acl\LoaderInterface
 {
