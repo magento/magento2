@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Module\Dir\Reader;
+
 /**
  * Class with simple substitution parameters to values
  */
@@ -30,8 +34,10 @@ class Simple implements RuleInterface
      * @param string $pattern
      * @param array $optionalParams
      */
-    public function __construct($pattern, array $optionalParams = [])
-    {
+    public function __construct(
+        $pattern,
+        array $optionalParams = []
+    ) {
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
     }
