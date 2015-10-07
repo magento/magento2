@@ -118,12 +118,7 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         }
         return array_diff(
             array_unique($observerClasses),
-            self::$blackList,
-            // MAGETWO-43598
-            [
-                'Magento\Versi' . 'onsCms\Model\Backend\Observer',
-                'Magento\Versi' . 'onsCms\Model\Backend\PrepareFormObserver'
-            ]
+            self::$blackList
         );
     }
 }
