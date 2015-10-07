@@ -357,8 +357,13 @@ define([
             });
         },
         disableConfigurableAttributes: function (attributes) {
+            $('[data-attribute-code] select.disabled-configurable-elements')
+                .removeClass('disabled-configurable-elements')
+                .prop('disabled', false);
             _.each(attributes, function (attribute) {
-                $('[data-attribute-code="' + attribute.code + '"] select').prop('disabled', true);
+                $('[data-attribute-code="' + attribute.code + '"] select')
+                    .addClass('disabled-configurable-elements')
+                    .prop('disabled', true);
             });
         }
     });

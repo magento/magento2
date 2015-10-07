@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,10 +21,10 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
-        $modulesDir = $filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
-
-        $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
-
+        $modulesDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
+        $fileList = $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/adminhtml/system.xml');
         $configMock = $this->getMock(
             'Magento\Framework\Module\Dir\Reader',
             ['getConfigurationFiles', 'getModuleDir'],
@@ -40,7 +41,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
             'etc',
             'Magento_Backend'
         )->will(
-            $this->returnValue($modulesDir . '/Magento/Backend/etc')
+            $this->returnValue($modulesDir->getAbsolutePath() . '/app/code/Magento/Backend/etc')
         );
         try {
             $objectManager->create(
