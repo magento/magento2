@@ -62,7 +62,7 @@ class BatchConsumer implements ConsumerInterface
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param int $interval
      */
     public function __construct(
@@ -70,7 +70,7 @@ class BatchConsumer implements ConsumerInterface
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
-        Resource $resource,
+        ResourceConnection $resource,
         $interval = 5
     ) {
         $this->amqpConfig = $amqpConfig;
