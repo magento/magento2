@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SampleData\Test\Unit\Model;
+namespace Magento\Framework\Setup\Test\SampleData;
 
 /**
  * Class StateTest
@@ -11,7 +11,7 @@ namespace Magento\SampleData\Test\Unit\Model;
 class StateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SampleData\Model\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $state;
 
@@ -47,7 +47,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->state = $objectManager->getObject(
-            'Magento\SampleData\Model\State',
+            'Magento\Framework\Setup\SampleData\State',
             ['filesystem' => $this->filesystem]
         );
     }
@@ -71,7 +71,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->writeInterface->expects($this->any())->method('close');
         $this->writeInterface->expects($this->any())->method('isExist')->willReturn(true);
         $this->writeInterface->expects($this->any())->method('read')
-            ->willReturn(\Magento\SampleData\Model\State::ERROR);
+            ->willReturn(\Magento\Framework\Setup\SampleData\State::ERROR);
         $this->state->setError();
         $this->assertTrue($this->state->hasError());
     }

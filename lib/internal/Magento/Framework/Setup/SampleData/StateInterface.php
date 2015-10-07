@@ -11,6 +11,12 @@ namespace Magento\Framework\Setup\SampleData;
 interface StateInterface
 {
     /**
+     * Current state
+     */
+    const ERROR = 'error';
+    const INSTALLED = 'installed';
+
+    /**
      * Set error flag to Sample Data state
      *
      * @return void

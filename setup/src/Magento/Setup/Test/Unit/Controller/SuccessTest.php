@@ -17,7 +17,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $sampleDataState = $this->getMock('Magento\SampleData\Model\State', ['hasError'], [], '', false);
+        $sampleDataState = $this->getMock('Magento\Framework\Setup\SampleData\State', ['hasError'], [], '', false);
         $objectManager->expects($this->once())->method('get')->willReturn($sampleDataState);
         /** @var $controller Success */
         $controller = new Success($moduleList, $objectManagerProvider);

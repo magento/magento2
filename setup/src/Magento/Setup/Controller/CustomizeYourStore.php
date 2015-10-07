@@ -50,8 +50,8 @@ class CustomizeYourStore extends AbstractActionController
     {
         $sampleDataDeployed = $this->moduleList->has('Magento_SampleData');
         if ($sampleDataDeployed) {
-            /** @var \Magento\Framework\Setup\SampleData\StateInterface $sampleData */
-            $sampleData = $this->objectManagerProvider->get()->get('Magento\Framework\Setup\SampleData\StateInterface');
+            /** @var \Magento\Framework\Setup\SampleData\State $sampleData */
+            $sampleData = $this->objectManagerProvider->get()->get('Magento\Framework\Setup\SampleData\State');
             $isSampleDataInstalled = $sampleData->isInstalled();
             $isSampleDataErrorInstallation = $sampleData->hasError();
         } else {
