@@ -61,7 +61,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
@@ -69,7 +69,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
         CollectionFactory $collectionFactory,
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
