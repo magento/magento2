@@ -10,7 +10,7 @@ namespace Magento\AdminNotification\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Inbox extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {
     /**
      * AdminNotification Resource initialization

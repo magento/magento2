@@ -25,9 +25,9 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     protected $selectMock;
-    /** @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface */
+    /** @var \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface */
     protected $tansactionMock;
-    /** @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
     /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
@@ -62,11 +62,11 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->tansactionMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface')
+        $this->tansactionMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->objRelationMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
+        $this->objRelationMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

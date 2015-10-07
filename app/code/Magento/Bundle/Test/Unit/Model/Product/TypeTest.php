@@ -2093,7 +2093,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getResourceCollection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection')
+        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection')
             ->setMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2615,7 +2615,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option = $this->getMockBuilder('\Magento\Bundle\Model\Option')
             ->disableOriginalConstructor()
             ->getMock();
-        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection')
+        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection')
             ->setMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -2739,7 +2739,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection')
+        $dbResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();

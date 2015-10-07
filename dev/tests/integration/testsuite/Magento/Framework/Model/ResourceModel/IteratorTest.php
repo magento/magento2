@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Model\ResourceModel;
+namespace Magento\Framework\Model\ModelResource;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Iterator
+     * @var \Magento\Framework\Model\ModelResource\Iterator
      */
     protected $_model;
 
@@ -22,7 +22,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Model\ResourceModel\Iterator'
+            'Magento\Framework\Model\ModelResource\Iterator'
         );
     }
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ModelResource\Db\AbstractDb;
 
 /**
  * QuoteIdMask Resource model

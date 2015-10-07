@@ -6,12 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Model\ResourceModel\Db;
+namespace Magento\Framework\Model\ModelResource\Db;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     protected $_model;
 
@@ -19,10 +19,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Model\ResourceModel\Db\Context',
+            '\Magento\Framework\Model\ModelResource\Db\Context',
             ['resource' => $resource]
         );
-        $this->_model = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $this->_model = $this->getMockForAbstractClass('Magento\Framework\Model\ModelResource\Db\AbstractDb',
             ['context' => $context]
         );
     }
@@ -59,11 +59,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ['tablePrefix' => 'prefix_']
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Model\ResourceModel\Db\Context',
+            '\Magento\Framework\Model\ModelResource\Db\Context',
             ['resource' => $resource]
         );
 
-        $model = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $model = $this->getMockForAbstractClass('Magento\Framework\Model\ModelResource\Db\AbstractDb',
             ['context' => $context]
         );
 

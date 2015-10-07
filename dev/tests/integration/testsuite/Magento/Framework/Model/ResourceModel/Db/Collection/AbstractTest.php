@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Model\ResourceModel\Db\Collection;
+namespace Magento\Framework\Model\ModelResource\Db\Collection;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
      */
     protected $_model = null;
 
@@ -17,12 +17,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\App\ResourceConnection');
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Model\ResourceModel\Db\Context',
+            '\Magento\Framework\Model\ModelResource\Db\Context',
             ['resource' => $resourceModel]
         );
 
         $resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
             [$context],
             '',
             true,
@@ -52,7 +52,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Psr\Log\LoggerInterface');
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
+            'Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection',
             [$entityFactory, $logger, $fetchStrategy, $eventManager, null, $resource]
         );
     }

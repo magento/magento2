@@ -19,7 +19,7 @@ return [
     ['CACHE_TAG', 'Magento\Framework\AppInterface'],
     [
         'CACHE_TAG',
-        'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
+        'Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG',
     ],
     ['CACHE_TAG', 'Magento\Framework\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'],

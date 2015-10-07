@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
+namespace Magento\Framework\Model\ModelResource\Type\Db\Pdo;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,9 +23,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             'dbname' => $db->getSchema(),
             'active' => true,
         ];
-        /** @var \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql $object */
+        /** @var \Magento\Framework\Model\ModelResource\Type\Db\Pdo\Mysql $object */
         $object = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql',
+            'Magento\Framework\Model\ModelResource\Type\Db\Pdo\Mysql',
             ['config' => $config]
         );
 
