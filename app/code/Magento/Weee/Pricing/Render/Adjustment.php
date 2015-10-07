@@ -53,10 +53,24 @@ class Adjustment extends AbstractAdjustment
     {
         if ($this->typeOfDisplay([Tax::DISPLAY_EXCL, Tax::DISPLAY_EXCL_DESCR_INCL])) {
             $this->finalAmount = $this->amountRender->getDisplayValue();
-            $this->amountRender->setDisplayValue(
-                $this->amountRender->getDisplayValue() -
-                $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
-            );
+
+            if ($this->typeOfDisplay([Tax::DISPLAY_EXCL])) {
+                $this->amountRender->setDisplayValue(
+                    $this->amountRender->getDisplayValue() -
+                    $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                );
+            } else {
+                $weeeTaxAmount = 0;
+                $attributes = $this->weeeHelper->getProductWeeeAttributes($this->getSaleableItem(), null, null, null, true);
+                foreach ($attributes as $attribute) {
+                    $weeeTaxAmount += $attribute->getData('tax_amount');
+                }
+                $this->amountRender->setDisplayValue(
+                    $this->amountRender->getDisplayValue() -
+                    $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode()) -
+                    $weeeTaxAmount
+                );
+            }
         }
         return $this->toHtml();
     }
@@ -148,6 +162,17 @@ class Adjustment extends AbstractAdjustment
     public function renderWeeeTaxAttribute(\Magento\Framework\DataObject $attribute)
     {
         return $this->convertAndFormatCurrency($attribute->getData('amount'));
+    }
+
+    /**
+     * Render Weee tax attributes value
+     *
+     * @param \Magento\Framework\DataObject $attribute
+     * @return string
+     */
+    public function renderWeeeTaxAttributeWithTax(\Magento\Framework\DataObject $attribute)
+    {
+        return $this->convertAndFormatCurrency($attribute->getData('amount') + $attribute->getData('tax_amount'));
     }
 
     /**

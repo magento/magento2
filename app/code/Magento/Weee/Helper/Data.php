@@ -397,7 +397,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $store = $product->getStore();
 
         if ($this->isEnabled($store)) {
-            return $this->getProductWeeeAttributes($product, null, null, null, $this->typeOfDisplay(1));
+            $calculateTax = ($this->typeOfDisplay(1) || $this->typeOfDisplay(2)) ? 1 : 0;
+            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax);
         }
         return [];
     }
