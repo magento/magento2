@@ -78,8 +78,7 @@ class View extends \Magento\Framework\Config\AbstractXml
                 $result[$varName] = $this->parseVarElement($varNode);
             }
         }
-        if (!count($result))
-        {
+        if (!count($result)) {
             $result = $node->nodeValue;
         }
 
