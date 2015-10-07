@@ -89,7 +89,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $logInHistory = true;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory
      */
     protected $_resourceFactory;
 
@@ -158,7 +158,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
@@ -178,7 +178,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
+        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,
         \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,

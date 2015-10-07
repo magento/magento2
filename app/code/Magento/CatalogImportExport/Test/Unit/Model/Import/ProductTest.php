@@ -86,9 +86,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var \Magento\ImportExport\Model\Import\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_importConfig;
 
-    // @codingStandardsIgnoreStart
-    /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
-    // @codingStandardsIgnoreEnd
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_resourceFactory;
 
     // @codingStandardsIgnoreStart
@@ -214,7 +212,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_resourceFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
+            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory',
             ['create'],
             [],
             '',
@@ -619,7 +617,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $attribute->expects($this->once())->method('getId')->willReturn($expectedId);
-        $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource')
+        $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel')
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
