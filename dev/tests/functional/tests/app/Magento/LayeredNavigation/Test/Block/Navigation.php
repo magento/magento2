@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Navigation extends Block
 {
     /**
+     * Locator for loaded "narrow-by-list" block.
+     *
+     * @var string
+     */
+    protected $loadedNarrowByList = '#narrow-by-list[role="tablist"]';
+
+    /**
      * Locator value for "Clear All" link.
      *
      * @var string
@@ -59,11 +66,14 @@ class Navigation extends Block
      */
     public function getFilters()
     {
+        $this->waitForElementVisible($this->loadedNarrowByList);
+
         $options = $this->_rootElement->getElements(sprintf($this->optionTitle, ''), Locator::SELECTOR_XPATH);
         $data = [];
         foreach ($options as $option) {
             $data[] = strtoupper($option->getText());
         }
+
         return $data;
     }
 
@@ -80,6 +90,7 @@ class Navigation extends Block
         $expandFilterButton = sprintf($this->optionTitle, $filter);
         $links = sprintf($this->filterLink, $filter);
 
+        $this->waitForElementVisible($this->loadedNarrowByList);
         if (!$this->_rootElement->find($links, Locator::SELECTOR_XPATH)->isVisible()) {
             $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
         }
