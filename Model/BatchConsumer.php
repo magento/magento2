@@ -14,7 +14,7 @@ use Magento\Framework\Amqp\MergerInterface;
 use Magento\Framework\Amqp\MessageEncoder;
 use Magento\Framework\Amqp\QueueInterface;
 use Magento\Framework\Amqp\QueueRepository;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
