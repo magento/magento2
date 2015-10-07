@@ -62,7 +62,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->resourceMock = $this->getMock('Magento\Framework\Flag\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\Flag\FlagResource', [], [], '', false);
 
         $this->resourceMock
             ->expects($this->any())
@@ -110,7 +110,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
                 'fetchStrategy' => $this->fetchStrategyMock,
                 'eventManager' => $this->managerMock,
                 'connection' => $this->connectionMock,
-                // Magento\Framework\Flag\Resource extends Magento\Framework\Model\ResourceModel\Db\AbstractDb
+                // Magento\Framework\Flag\FlagResource extends Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'resource' => $this->resourceMock,
             ]
         );

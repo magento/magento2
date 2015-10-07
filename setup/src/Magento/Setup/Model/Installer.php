@@ -747,7 +747,7 @@ class Installer
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        $resource = new \Magento\Framework\Module\Resource($this->context);
+        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -1185,7 +1185,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\Resource $resource
+     * @param \Magento\Framework\Module\ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws \Magento\Setup\Exception

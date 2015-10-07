@@ -17,7 +17,7 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
-use Magento\Tax\Model\ResourceModel\Calculation\Rule as Resource;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule as ResourceRule;
 use Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection;
 use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 
@@ -47,7 +47,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected $collectionFactory;
 
     /**
-     * @var Resource
+     * @var ResourceRule
      */
     protected $resource;
 
@@ -61,7 +61,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
-     * @param ResourceConnection $resource
+     * @param ResourceRule $resource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
@@ -69,7 +69,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
         CollectionFactory $collectionFactory,
-        ResourceConnection $resource,
+        ResourceRule $resource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
