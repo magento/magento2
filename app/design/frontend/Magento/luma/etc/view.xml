@@ -187,7 +187,7 @@
 
         <!-- Gallery and magnifier theme settings. Start -->
         <var name="gallery">
-            <var name="navigation">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+            <var name="nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
             <var name="loop">true</var> <!-- Gallery navigation loop (true/false) -->
             <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
             <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
@@ -201,7 +201,7 @@
                 <var name="duration">500</var> <!-- Sets transition duration in ms -->
             </var>
             <var name="fullscreen">
-                <var name="navigation">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
+                <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
                 <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
                 <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
                 <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
@@ -235,7 +235,7 @@
                 </var>
                 <var name="options">
                     <var name="options">
-                        <var name="navigation">dots</var>
+                        <var name="nav">dots</var>
                     </var>
                     <var name="magnifierOpts">
                         <var name="enabled">false</var>
