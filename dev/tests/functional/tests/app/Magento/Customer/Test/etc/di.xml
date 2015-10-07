@@ -41,4 +41,19 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendBackButton">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendDuplicateErrorMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
 </config>

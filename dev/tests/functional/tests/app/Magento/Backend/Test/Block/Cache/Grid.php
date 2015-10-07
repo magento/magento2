@@ -14,9 +14,10 @@ use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 class Grid extends ParentGrid
 {
     /**
-     * Search for item and select it
+     * Search for item and select it.
      *
      * @param array $filter
+     * @return void
      * @throws \Exception
      */
     public function searchAndSelect(array $filter)
