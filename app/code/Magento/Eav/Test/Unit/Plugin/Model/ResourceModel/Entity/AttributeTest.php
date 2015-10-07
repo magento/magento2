@@ -46,7 +46,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeId = 1;
         $attributes = ['k' => 'v'];
-        $cacheId = \Magento\Eav\Plugin\Model\Resource\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
+        $cacheId = \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(serialize($attributes));
 
         $this->assertEquals(
@@ -62,7 +62,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreLabelsByAttributeIdWithCacheSave()
     {
         $attributeId = 1;
-        $cacheId = \Magento\Eav\Plugin\Model\Resource\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
+        $cacheId = \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
         $this->cache->expects($this->any())->method('save')->with(
             serialize([$attributeId]),
@@ -85,14 +85,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $cacheEnabledFlag
-     * @return \Magento\Eav\Plugin\Model\Resource\Entity\Attribute
+     * @return \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute
      */
     protected function getAttribute($cacheEnabledFlag)
     {
         $this->cacheState->expects($this->any())->method('isEnabled')
             ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)->willReturn($cacheEnabledFlag);
         return (new ObjectManager($this))->getObject(
-            'Magento\Eav\Plugin\Model\Resource\Entity\Attribute',
+            'Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute',
             [
                 'cache' => $this->cache,
                 'cacheState' => $this->cacheState

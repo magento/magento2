@@ -43,7 +43,7 @@
         </arguments>
     </type>
     <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
-        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\Resource\Entity\Attribute" />
+        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
     </type>
     <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
         <arguments>
