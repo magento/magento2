@@ -29,12 +29,12 @@ class ConcatExpression extends \Zend_Db_Expr
     protected $separator;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param array $columns
      * @param string $separator
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         array $columns,
         $separator = ' '
     ) {
