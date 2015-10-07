@@ -874,13 +874,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
 
                     if ($this->_attributeTypes[$code] !== 'multiselect') {
-                        if (is_scalar($attrValue)) {
-                            if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
-                                $additionalAttributes[$fieldName] = $fieldName .
-                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
-                            }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                        if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
+                            $additionalAttributes[$fieldName] = $fieldName .
+                                ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                         }
+                        $data[$itemId][$storeId][$fieldName] = $attrValue;
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
                         if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
