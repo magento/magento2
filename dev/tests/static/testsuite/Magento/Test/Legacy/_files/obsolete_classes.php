@@ -2506,7 +2506,7 @@ return [
     ],
     [
         'Magento\ImportExport\Model\Import\Proxy\Product\Resource',
-        'Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource',
+        'Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel',
     ],
     [
         'Magento\ImportExport\Model\Import\Uploader',
