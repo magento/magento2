@@ -450,7 +450,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Config">
-        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\Resource\Config" />
+        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
     </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="\Magento\Catalog\Model\ProductLink\Attribute" />

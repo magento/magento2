@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Catalog\Plugin\Model\Resource\Config */
+    /** @var \Magento\Catalog\Plugin\Model\ResourceModel\Config */
     protected $config;
 
     /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -49,7 +49,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\Resource\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
             . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(serialize($attributes));
 
@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\Resource\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
             . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
         $this->cache->expects($this->any())->method('save')->with(
@@ -110,7 +110,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\Resource\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
             . $entityTypeId . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(serialize($attributes));
 
@@ -130,7 +130,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\Resource\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
             . $entityTypeId . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
         $this->cache->expects($this->any())->method('save')->with(
@@ -153,14 +153,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $cacheEnabledFlag
-     * @return \Magento\Catalog\Plugin\Model\Resource\Config
+     * @return \Magento\Catalog\Plugin\Model\ResourceModel\Config
      */
     protected function getConfig($cacheEnabledFlag)
     {
         $this->cacheState->expects($this->any())->method('isEnabled')
             ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)->willReturn($cacheEnabledFlag);
         return (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Plugin\Model\Resource\Config',
+            'Magento\Catalog\Plugin\Model\ResourceModel\Config',
             [
                 'cache' => $this->cache,
                 'cacheState' => $this->cacheState

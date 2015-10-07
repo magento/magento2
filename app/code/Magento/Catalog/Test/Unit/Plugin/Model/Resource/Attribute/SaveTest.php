@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Resource\Attribute;
 
-use \Magento\Catalog\Plugin\Model\Resource\Attribute\Save;
+use \Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Catalog\Plugin\Model\Resource\Attribute\Save */
+    /** @var \Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save */
     protected $save;
 
     /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */

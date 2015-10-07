@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Plugin\Model\Resource\Attribute;
+namespace Magento\Catalog\Plugin\Model\ResourceModel\Attribute;
 
 class Save
 {
