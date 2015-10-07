@@ -60,11 +60,11 @@
     &.field-video_image .admin__field-control {
         position: relative;
         &:after {
-            color: #000;
+            color: @color-black;
             content: 'Role';
-            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-family: 'Open Sans', @font-family__sans-serif;
+            font-size: @font-size__s + 0.2;
+            font-weight: @font-weight__semibold;
             height: 20px;
             position: absolute;
             right: 50px;
@@ -90,37 +90,32 @@
         }
     }
     .gallery .image .action-make-base {
-        background: transparent;
-        border: 0;
+        .lib-button(
+            @_button-background: transparent,
+            @_button-border: none,
+            @_button-background-hover: transparent,
+            @_button-border-hover: none,
+            @_button-background-active: transparent,
+            @_button-border-active: none,
+            @_button-font-content: '\e63b',
+            @_button-icon-use: true,
+            @_button-icon-font: 'Admin Icons',
+            @_button-icon-font-text-hide: true,
+            @_button-icon-font-size: @font-size__xl,
+            @_button-icon-font-color: @color-gray62,
+            @_button-icon-font-color-hover: @color-gray52,
+            @_button-icon-font-color-active: @color-gray52,
+            @_button-margin: 0
+        );
         bottom: 9px;
-        height: 0;
         left: auto;
-        margin: 0;
         position: absolute;
         right: 9px;
         width: 0 !important;
-        &:after {
-            color: #9e9e9e;
-            content: '\e63b';
-            display: inline-block;
-            font-family: 'Admin Icons';
-            font-size: 1.8rem;
-            font-weight: normal;
-            left: -4px;
-            line-height: inherit;
-            overflow: hidden;
+        &:before {
+            left: 16px;
             position: absolute;
-            text-align: center;
-            top: -7px;
-            vertical-align: middle;
-            -webkit-font-smoothing: antialiased;
-            speak: none;
-        }
-        &:hover:after {
-            color: #7d7d7d;
-        }
-        span {
-            display: none;
+            top: -2px;
         }
     }
     .base-image .image-label {
@@ -183,25 +178,25 @@
         margin-bottom: 7px;
         display: none;
         &:after {
-            content: " "; /* Older browser do not support empty content */
+            content: "";
             visibility: hidden;
             display: block;
             height: 0;
             clear: both;
         }
         label {
-            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-family: 'Open Sans', @font-family__sans-serif;
+            font-size: @font-size__s + 0.2;
+            font-weight: @font-weight__semibold;
             display: block;
             width: 25%;
             float: left;
             text-align: right;
         }
         span {
-            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 1.4rem;
-            font-weight: 300;
+            font-family: 'Open Sans', @font-family__sans-serif;
+            font-size: @font-size__s + 0.2;
+            font-weight: @font-weight__light;
             display: block;
             width: 74.9999%;
             float: left;
