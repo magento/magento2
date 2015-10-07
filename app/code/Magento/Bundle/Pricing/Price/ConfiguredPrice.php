@@ -28,11 +28,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     protected $calculator;
 
     /**
-     * @var DiscountCalculator
-     */
-    protected $discountCalculator;
-
-    /**
      * @var null|ItemInterface
      */
     protected $item;
@@ -42,7 +37,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param DiscountCalculator $discountCalculator
      * @param ItemInterface $item
      */
     public function __construct(
@@ -50,7 +44,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $quantity,
         BundleCalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        DiscountCalculator $discountCalculator,
         ItemInterface $item = null
     ) {
         $this->item = $item;

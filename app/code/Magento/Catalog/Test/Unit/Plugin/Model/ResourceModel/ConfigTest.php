@@ -49,7 +49,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
+            . $entityTypeId
             . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(serialize($attributes));
 
@@ -69,7 +70,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $attributes = ['attributes'];
         $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
         $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $entityTypeId
+        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
+            . $entityTypeId
             . '_' . $storeId;
         $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
         $this->cache->expects($this->any())->method('save')->with(

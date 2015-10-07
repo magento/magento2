@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+
 /**
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id

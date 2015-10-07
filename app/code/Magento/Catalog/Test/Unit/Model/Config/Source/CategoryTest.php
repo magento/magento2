@@ -39,7 +39,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject $categoryCollectionFactory
          */
-        $categoryCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
+        $categoryCollectionFactory =
+            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

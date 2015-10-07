@@ -65,7 +65,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $itemCollection = $this->getMockBuilder('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection')
+        $itemCollection =
+            $this->getMockBuilder('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter'])
             ->getMock();
