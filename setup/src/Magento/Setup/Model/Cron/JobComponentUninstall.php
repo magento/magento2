@@ -5,14 +5,15 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Updater;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Job to remove a component. Run by Setup Cron Task
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class JobComponentUninstall extends AbstractJob
 {
@@ -36,12 +37,12 @@ class JobComponentUninstall extends AbstractJob
     /**#@-*/
 
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var Updater
+     * @var \Magento\Setup\Model\Updater
      */
     private $updater;
 
@@ -61,15 +62,21 @@ class JobComponentUninstall extends AbstractJob
     private $themeUninstall;
 
     /**
+     * @var \Magento\Setup\Model\Cron\Queue
+     */
+    private $queue;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param Helper\ModuleUninstall $moduleUninstall
      * @param Helper\ThemeUninstall $themeUninstall
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param OutputInterface $output
-     * @param Status $status
-     * @param Updater $updater
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Magento\Setup\Model\Cron\Queue $queue
+     * @param \Magento\Setup\Model\Cron\Status $status
+     * @param \Magento\Setup\Model\Updater $updater
      * @param string $name
      * @param array $params
      */
@@ -77,10 +84,11 @@ class JobComponentUninstall extends AbstractJob
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         Helper\ModuleUninstall $moduleUninstall,
         Helper\ThemeUninstall $themeUninstall,
-        ObjectManagerProvider $objectManagerProvider,
-        OutputInterface $output,
-        Status $status,
-        Updater $updater,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Symfony\Component\Console\Output\OutputInterface $output,
+        \Magento\Setup\Model\Cron\Queue $queue,
+        \Magento\Setup\Model\Cron\Status $status,
+        \Magento\Setup\Model\Updater $updater,
         $name,
         $params = []
     ) {
@@ -89,6 +97,7 @@ class JobComponentUninstall extends AbstractJob
         $this->themeUninstall = $themeUninstall;
         $this->objectManager = $objectManagerProvider->get();
         $this->updater = $updater;
+        $this->queue = $queue;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
@@ -108,7 +117,9 @@ class JobComponentUninstall extends AbstractJob
         foreach ($components as $component) {
             $this->executeComponent($component);
         }
-        $this->cleanUp();
+        $this->queue->addJobs(
+            [['name' => JobFactory::JOB_STATIC_REGENERATE, 'params' => []]]
+        );
         $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
         if ($errorMessage) {
             $this->status->toggleUpdateError(true);
@@ -162,24 +173,5 @@ class JobComponentUninstall extends AbstractJob
                 $this->themeUninstall->uninstall($this->output, $componentName);
                 break;
         }
-    }
-
-    /**
-     * Perform cleanup
-     *
-     * @return void
-     */
-    private function cleanUp()
-    {
-        $this->output->writeln('Cleaning cache');
-        /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
-        $cache->clean();
-        /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->output->writeln('Cleaning generated files');
-        $cleanupFiles->clearCodeGeneratedClasses();
-        $this->output->writeln('Cleaning static view files');
-        $cleanupFiles->clearMaterializedViewFiles();
     }
 }

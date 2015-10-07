@@ -108,7 +108,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
         $data = $this->getTestData();
         $this->config->expects($this->once())
-            ->method('getImages')
+            ->method('getMediaEntities')
             ->with('Magento_Catalog')
             ->willReturn($data);
 

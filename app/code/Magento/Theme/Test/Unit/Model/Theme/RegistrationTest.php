@@ -25,11 +25,6 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemCollection;
 
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystem;
-
     public function setUp()
     {
         $this->collectionFactory =
@@ -40,14 +35,10 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $this->filesystemCollection = $this->getMockBuilder('Magento\Theme\Model\Theme\Data\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->model = new Registration(
             $this->collectionFactory,
-            $this->filesystemCollection,
-            $this->filesystem
+            $this->filesystemCollection
         );
     }
 
@@ -59,7 +50,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     public function testRegister()
     {
         $image = 'preview.jpg';
-        $themeFilePath = 'app/design';
+        $themeFilePath = 'any/path';
         $parentId = 1;
         $fullPath = '/full/path';
         $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
@@ -116,8 +107,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
         $this->filesystemCollection->expects($this->once())
-            ->method('addDefaultPattern')
-            ->with('*');
+            ->method('clear');
         $this->filesystemCollection->expects($this->once())
             ->method('hasTheme')
             ->with($themeFromCollection)

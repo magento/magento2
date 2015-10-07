@@ -188,8 +188,6 @@ class Payment extends Info implements OrderPaymentInterface
      * Retrieve order model object
      *
      * @codeCoverageIgnore
-     * @deprecated
-     *
      * @return Order
      */
     public function getOrder()

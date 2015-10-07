@@ -82,7 +82,7 @@ class CartItemProcessor implements CartItemProcessorInterface
      * @param CartItemInterface $cartItem
      * @return CartItemInterface
      */
-    public function processProductOptions(CartItemInterface $cartItem)
+    public function processOptions(CartItemInterface $cartItem)
     {
         $downloadableLinkIds = [];
         $option = $cartItem->getOptionByCode('downloadable_link_ids');

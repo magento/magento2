@@ -427,7 +427,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Load order by system increment identifier
      *
-     * @deprecated
      * @param string $incrementId
      * @return \Magento\Sales\Model\Order
      */

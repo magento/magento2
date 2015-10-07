@@ -226,11 +226,12 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         /** @var \Magento\Tax\Model\Calculation $calculator */
         $calculator = $this->_calculationFactory->create();
 
+        $customerId = $this->_customerSession->getCustomerId();
         if ($shipping && $shipping->getCountryId()) {
             $customerTaxClass = $shipping->getQuote()->getCustomerTaxClassId();
         } else {
             // if customer logged use it default shipping and billing address
-            if ($customerId = $this->_customerSession->getCustomerId()) {
+            if ($customerId) {
                 $shipping = $this->accountManagement->getDefaultShippingAddress($customerId);
                 $billing = $this->accountManagement->getDefaultBillingAddress($customerId);
                 $customerTaxClass = null;
@@ -251,7 +252,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             $shipping,
             $billing,
             $customerTaxClass,
-            $store
+            $store,
+            $customerId
         );
         $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 

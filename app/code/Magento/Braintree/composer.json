@@ -16,8 +16,7 @@
     "magento/module-directory": "1.0.0-beta",
     "magento/module-theme": "1.0.0-beta",
     "magento/framework": "1.0.0-beta",
-    "braintree/braintree_php": "2.39.0",
-    "magento/magento-composer-installer": "*"
+    "braintree/braintree_php": "2.39.0"
   },
   "suggest": {
     "magento/module-checkout-agreements": "1.0.0-beta"
@@ -27,12 +26,10 @@
   "license": [
     "proprietary"
   ],
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Magento/Braintree"
-      ]
-    ]
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Magento\\Braintree\\": ""
+    }
   }
 }
