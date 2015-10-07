@@ -250,6 +250,17 @@ define([
                 var res = [];
                 nestedOptionsLevel++;
 
+                if (!nestedOptionsLevel) { // zero level
+                    // If caption is included, add it to the array
+                    if (allBindings.has('optionsCaption')) {
+                        captionValue = ko.utils.unwrapObservable(allBindings.get('optionsCaption'));
+                        // If caption value is null or undefined, don't show a caption
+                        if (captionValue !== null && captionValue !== undefined && captionValue !== false) {
+                            res.push(captionPlaceholder);
+                        }
+                    }
+                }
+
                 ko.utils.arrayForEach(options, function (option) {
                     var value = applyToObject(option, optionsValue, option),
                         label = applyToObject(option, optionsText, value) || '',
