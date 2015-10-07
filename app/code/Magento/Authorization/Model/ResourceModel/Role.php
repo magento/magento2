@@ -111,6 +111,7 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $role)
     {

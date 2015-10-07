@@ -13,7 +13,9 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
     private $context;
 
     /**
+     * @codingStandardsIgnoreStart
      * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @codingStandardsIgnoreEnd
      */
     private $agreementCollection;
 
