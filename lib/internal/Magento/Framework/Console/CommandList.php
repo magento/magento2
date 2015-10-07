@@ -9,7 +9,7 @@ namespace Magento\Framework\Console;
 /**
  * Class CommandList has a list of commands, which can be extended via DI configuration.
  */
-class CommandList
+class CommandList implements CommandListInterface
 {
     /**
      * @var string[]
@@ -27,9 +27,7 @@ class CommandList
     }
 
     /**
-     * Gets list of command instances
-     *
-     * @return \Symfony\Component\Console\Command\Command[]
+     * {@inheritdoc}
      */
     public function getCommands()
     {
