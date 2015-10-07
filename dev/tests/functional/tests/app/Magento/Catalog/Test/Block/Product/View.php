@@ -305,9 +305,11 @@ class View extends AbstractConfigureBlock
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
-        return $this->hasRender($typeId)
-            ? $this->callRender($typeId, 'getOptions', ['product' => $product])
-            : $this->getCustomOptionsBlock()->getOptions($product);
+        return $this->hasRender($typeId) ? $this->callRender(
+            $typeId,
+            'getOptions',
+            ['product' => $product]
+        ) : $this->getCustomOptionsBlock()->getOptions($product);
     }
 
     /**

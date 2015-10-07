@@ -7,6 +7,8 @@
 namespace Magento\Test\Integrity\App\Language;
 
 use Magento\Framework\App\Language\Config;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 class CircularDependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,13 +22,12 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencies()
     {
-        $package = new Package();
-        $rootDirectory = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
-        $declaredLanguages = $package->readDeclarationFiles($rootDirectory);
+        $componentRegistrar = new ComponentRegistrar();
+        $declaredLanguages = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
+        $urnResolver = new UrnResolver();
         $packs = [];
         foreach ($declaredLanguages as $language) {
-            $filePath = reset($language);
-            $languageConfig = new Config(file_get_contents($filePath));
+            $languageConfig = new Config(file_get_contents($language . '/language.xml'), $urnResolver);
             $this->packs[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
             $packs[] = $languageConfig;
         }
