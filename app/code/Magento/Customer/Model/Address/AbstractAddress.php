@@ -453,7 +453,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string $type
      * @return string|null
-     * @deprecated
      */
     public function format($type)
     {
@@ -490,7 +489,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param int|null $defaultBillingAddressId
      * @param int|null $defaultShippingAddressId
      * @return AddressInterface
-     * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
