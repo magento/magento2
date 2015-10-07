@@ -49,7 +49,7 @@ class SubSelect extends \Zend_Db_Expr
     protected $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param string $connectionName
      * @param string $table
      * @param string[] $columns
@@ -57,12 +57,12 @@ class SubSelect extends \Zend_Db_Expr
      * @param string $targetColumn
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         $table,
         array $columns,
         $originColumn,
         $targetColumn,
-        $connectionName = Resource::DEFAULT_CONNECTION
+        $connectionName = ResourceConnection::DEFAULT_CONNECTION
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
