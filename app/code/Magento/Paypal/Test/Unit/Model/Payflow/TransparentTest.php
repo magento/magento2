@@ -118,7 +118,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     protected function initializationAuthorizeMock()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->setMethods([
                 'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
                 'getId', 'getIncrementId'

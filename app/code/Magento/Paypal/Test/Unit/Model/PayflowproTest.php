@@ -264,7 +264,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->method('getParentTransactionId')
             ->willReturn(false);
 
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::exactly(2))
             ->method('getOrder')
             ->willReturn($orderMock);
 
@@ -283,7 +283,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getPaymentMock();
         $orderMock = $this->getOrderMock();
 
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::exactly(2))
             ->method('getOrder')
             ->willReturn($orderMock);
 
@@ -433,7 +433,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects(static::once())
             ->method('getId')
             ->willReturn($orderData['id']);
-        $orderMock->expects(static::exactly(2))
+        $orderMock->expects(static::once())
             ->method('getBaseCurrencyCode')
             ->willReturn($orderData['currency']);
         $orderMock->expects(static::atLeastOnce())

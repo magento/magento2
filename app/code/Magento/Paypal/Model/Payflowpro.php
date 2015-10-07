@@ -15,6 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -362,6 +363,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         $request = $this->_buildPlaceRequest($payment, $amount);
+        $this->addRequestOrderInfo($request, $payment->getOrder());
         $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -413,6 +415,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request = $this->_buildPlaceRequest($payment, $amount);
             $request->setTrxtype(self::TRXTYPE_SALE);
         }
+        $this->addRequestOrderInfo($request, $payment->getOrder());
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -580,7 +583,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param Object|Payment $payment
      * @param float $amount
-     * @return Object
+     * @return DataObject
      */
     protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
@@ -591,17 +594,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();
-        if (!empty($order)) {
-            $request->setCurrency($order->getBaseCurrencyCode());
-
-            $orderIncrementId = $order->getIncrementId();
-            $request->setCurrency($order->getBaseCurrencyCode())
-                ->setCustref($orderIncrementId)
-                ->setInvnum($orderIncrementId)
-                ->setPonum($order->getId())
-                ->setComment1($orderIncrementId);
-            $request = $this->fillCustomerContacts($order, $request);
-        }
+        $request->setCurrency($order->getBaseCurrencyCode());
+        $request = $this->fillCustomerContacts($order, $request);
         return $request;
     }
 
@@ -839,5 +833,24 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             return $request;
         }
         return $request;
+    }
+
+    /**
+     * Add order details to payment request
+     * @param DataObject $request
+     * @param Order $order
+     * @return void
+     */
+    protected function addRequestOrderInfo(DataObject $request, Order $order)
+    {
+        $id = $order->getId();
+        // for auth request order id is not exists yet
+        if (!empty($id)) {
+            $request->setPonum($id);
+        }
+        $orderIncrementId = $order->getIncrementId();
+        $request->setCustref($orderIncrementId)
+            ->setInvnum($orderIncrementId)
+            ->setComment1($orderIncrementId);
     }
 }

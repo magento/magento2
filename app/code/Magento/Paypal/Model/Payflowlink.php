@@ -413,38 +413,19 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected function _buildTokenRequest(\Magento\Sales\Model\Order\Payment $payment)
     {
         $request = $this->buildBasicRequest();
-        $request->setCreatesecuretoken(
-            'Y'
-        )->setSecuretokenid(
-            $this->mathRandom->getUniqueHash()
-        )->setTrxtype(
-            $this->_getTrxTokenType()
-        )->setAmt(
-            sprintf('%.2F', $payment->getOrder()->getBaseTotalDue())
-        )->setCurrency(
-            $payment->getOrder()->getBaseCurrencyCode()
-        )->setInvnum(
-            $payment->getOrder()->getIncrementId()
-        )->setCustref(
-            $payment->getOrder()->getIncrementId()
-        )->setPonum(
-            $payment->getOrder()->getId()
-        );
+        $request->setCreatesecuretoken('Y')
+            ->setSecuretokenid($this->mathRandom->getUniqueHash())
+            ->setTrxtype($this->_getTrxTokenType());
 
         $order = $payment->getOrder();
         if (empty($order)) {
             return $request;
         }
+        $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
+            ->setCurrency($order->getBaseCurrencyCode());
+        $this->addRequestOrderInfo($request, $order);
 
-        $billing = $order->getBillingAddress();
-        if (!empty($billing)) {
-            $request = $this->setBilling($request, $billing);
-            $request->setEmail($order->getCustomerEmail());
-        }
-        $shipping = $order->getShippingAddress();
-        if (!empty($shipping)) {
-            $request = $this->setShipping($request, $shipping);
-        }
+        $request = $this->fillCustomerContacts($order, $request);
         //pass store Id to request
         $request->setData('USER1', $order->getStoreId());
         $request->setData('USER2', $this->_getSecureSilentPostHash($payment));
