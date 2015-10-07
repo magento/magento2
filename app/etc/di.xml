@@ -1066,8 +1066,7 @@
         <arguments>
             <argument name="fileName" xsi:type="string">view.xsd</argument>
             <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="searchPattern" xsi:type="string">/*/*/etc/</argument>
-            <argument name="searchFilesPattern" xsi:type="string">/../..//Config/etc/</argument>
+            <argument name="searchFilesPattern" xsi:type="string">urn:magento:framework:Config/etc/</argument>
         </arguments>
     </type>
 </config>

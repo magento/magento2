@@ -9,12 +9,13 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\View\Xsd\Reader;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolver;
 
     /**
@@ -28,20 +29,28 @@ class View extends \Magento\Framework\Config\AbstractXml
     protected $xpath;
 
     /**
+     * @var Reader
+     */
+    private $xsdReader;
+
+    /**
      * @param array $configFiles
-     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
-     * @param array $xpath
+     * @param Reader $xsdReader
+     * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
+     * @param array $xpath
      */
     public function __construct(
         $configFiles,
-        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        Reader $xsdReader,
+        UrnResolver $urnResolver,
         TypeDataExtractorPool $extractorPool,
         $xpath = []
     ) {
         $this->xpath = $xpath;
         $this->extractorPool = $extractorPool;
         $this->urnResolver = $urnResolver;
+        $this->xsdReader = $xsdReader;
         parent::__construct($configFiles);
     }
     
@@ -52,7 +61,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
+        $configXsd = $this->xsdReader->read();
+        return $configXsd;
     }
 
     /**
