@@ -15,10 +15,14 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $this->_validateConfigFile(
-            $file,
-            'urn:magento:framework:Config/etc/view.xsd'
+        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\Xsd\Reader'
         );
+        $mergeXsd = $reader->read();
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $errors = [];
+        $result = $domConfig->validate($mergeXsd, $errors);
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
     /**
@@ -67,10 +71,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testThemeConfigFileSchema($file)
     {
-        $this->_validateConfigFile(
-            $file,
-            'urn:magento:framework:Config/etc/theme.xsd'
-        );
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $errors = [];
+        $result = $domConfig->validate('urn:magento:framework:Config/etc/theme.xsd', $errors);
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
     /**
@@ -101,21 +105,5 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
             $result[$file] = [$file];
         }
         return $result;
-    }
-
-    /**
-     * Perform test whether a configuration file is valid
-     *
-     * @param string $file
-     * @param string $schema
-     * @throws \PHPUnit_Framework_AssertionFailedError if file is invalid
-     */
-    protected function _validateConfigFile($file, $schema)
-    {
-        $this->markTestSkipped('MAGETWO-43738: validates against incorrect scheme');
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
-        $errors = [];
-        $result = $domConfig->validate($schema, $errors);
-        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 }
