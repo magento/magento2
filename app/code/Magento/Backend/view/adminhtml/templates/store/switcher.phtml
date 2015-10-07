@@ -182,7 +182,7 @@ require([
                         reload();
                     },
                     cancel: function() {
-                        obj.value = '<?php /* @escapeNotVerified */ echo $block->getStoreId() ?>';
+                        obj.value = '<?php echo $block->getStoreId() ?>';
                     }
                 }
             });
