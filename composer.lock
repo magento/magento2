@@ -5,7 +5,6 @@
         "This file is @generated automatically"
     ],
     "hash": "1de4f3f96c81c1ff19a057f4c6121927",
-    "content-hash": "05d5894f85b00df1148fd6ca99e33b82",
     "packages": [
         {
             "name": "braintree/braintree_php",
