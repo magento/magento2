@@ -37,7 +37,7 @@
         "zendframework/zend-serializer": "~2.4.6",
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
-        "magento/zendframework1": "1.12.13",
+        "magento/zendframework1": "1.12.16",
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
@@ -217,8 +217,13 @@
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/"
-        }
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/"
+        },
+        "psr-0": {
+            "": "app/code/"
+        },
+        "files": ["app/etc/NonComposerComponentRegistration.php"]
     },
     "autoload-dev": {
         "psr-4": {

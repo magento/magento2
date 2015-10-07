@@ -11,7 +11,6 @@ namespace Magento\CatalogSearch\Model\Resource\Search;
 /**
  * Search collection
  *
- * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
