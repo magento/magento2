@@ -15,7 +15,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\ResourceModel\Group */
     protected $groupResourceModel;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\Customer\Model\Vat|\PHPUnit_Framework_MockObject_MockObject */
@@ -35,7 +35,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->customerVat = $this->getMock('Magento\Customer\Model\Vat', [], [], '', false);
         $this->customersFactory = $this->getMock(
             'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',

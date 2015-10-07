@@ -17,7 +17,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $catalogProductType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')

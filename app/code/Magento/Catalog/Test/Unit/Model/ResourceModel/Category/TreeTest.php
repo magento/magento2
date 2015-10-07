@@ -37,7 +37,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->once())->method('from')->with('catalog_category_entity');
         $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_resource->expects(
             $this->once()
         )->method(
@@ -141,7 +141,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $connection->expects($this->any())->method('fetchCol')->will($this->returnValue([]));
 
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 

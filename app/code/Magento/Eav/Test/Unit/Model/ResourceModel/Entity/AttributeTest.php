@@ -282,9 +282,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        /** @var $resource \Magento\Framework\App\Resource */
+        /** @var $resource \Magento\Framework\App\ResourceConnection */
         $resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

@@ -18,12 +18,12 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
     protected $_reportsResourceHelper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Reports\Model\ResourceModel\Helper $reportsResourceHelper
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Reports\Model\ResourceModel\Helper $reportsResourceHelper,
         $modulePrefix = 'sales'
     ) {

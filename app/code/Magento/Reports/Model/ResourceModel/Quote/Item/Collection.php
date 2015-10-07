@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Collection of Magento\Quote\Model\Quote\Item

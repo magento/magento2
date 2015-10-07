@@ -65,7 +65,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -131,7 +131,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->any())->method('query')->willReturn($this->zendDbMock);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);

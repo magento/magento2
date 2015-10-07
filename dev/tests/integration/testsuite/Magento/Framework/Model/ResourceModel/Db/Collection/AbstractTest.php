@@ -15,7 +15,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Resource');
+            ->get('Magento\Framework\App\ResourceConnection');
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             '\Magento\Framework\Model\ResourceModel\Db\Context',
             ['resource' => $resourceModel]

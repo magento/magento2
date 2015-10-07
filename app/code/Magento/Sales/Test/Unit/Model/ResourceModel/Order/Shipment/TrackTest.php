@@ -21,7 +21,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     protected $trackModelMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $appResourceMock;
 
@@ -52,7 +52,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

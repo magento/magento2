@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Resource;
+namespace Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactory as ModelConnectionFactory;
 use Magento\Framework\DB\Adapter\DdlCache;

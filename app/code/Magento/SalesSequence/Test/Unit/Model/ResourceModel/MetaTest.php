@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\SalesSequence\Model\ResourceModel\Meta;
 
 /**
@@ -94,7 +94,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

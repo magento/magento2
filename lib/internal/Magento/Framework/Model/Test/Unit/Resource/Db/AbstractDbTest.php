@@ -16,7 +16,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resourcesMock;
 
@@ -33,7 +33,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourcesMock = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

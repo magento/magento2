@@ -10,7 +10,7 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
 use Magento\Framework\Api\ExtensionAttribute\JoinData;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
@@ -72,7 +72,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->appResource = $objectManager->get('Magento\Framework\App\Resource');
+        $this->appResource = $objectManager->get('Magento\Framework\App\ResourceConnection');
 
         $this->joinProcessorHelper = $objectManager->create(
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper',

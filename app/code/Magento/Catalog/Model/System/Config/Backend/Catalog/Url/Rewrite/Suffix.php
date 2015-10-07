@@ -13,7 +13,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -43,7 +43,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Resource $appResource
+     * @param \Magento\Framework\App\ResourceConnection $appResource
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -54,7 +54,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Resource $appResource,
+        \Magento\Framework\App\ResourceConnection $appResource,
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,

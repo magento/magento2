@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
 
 class Subscription implements SubscriptionInterface

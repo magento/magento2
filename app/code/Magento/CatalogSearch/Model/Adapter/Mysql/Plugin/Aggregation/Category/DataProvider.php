@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category;
 
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;

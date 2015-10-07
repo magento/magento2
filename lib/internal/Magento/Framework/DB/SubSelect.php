@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
@@ -34,7 +34,7 @@ class SubSelect extends \Zend_Db_Expr
     protected $targetColumn;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 

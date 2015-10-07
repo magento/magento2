@@ -24,10 +24,10 @@ class Helper extends \Magento\Framework\DB\Helper
     // The coefficient of useful data from maximum packet length
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'importexport')
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'importexport')
     {
         parent::__construct($resource, $modulePrefix);
     }

@@ -17,5 +17,5 @@ return [
     'Magento\Framework\Interception\ObjectManager\Config' =>
         'Magento\TestFramework\ObjectManager\Config',
     'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
-    'Magento\Framework\App\Resource\ConnectionAdapterInterface' => 'Magento\TestFramework\Db\ConnectionAdapter',
+    'Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface' => 'Magento\TestFramework\Db\ConnectionAdapter',
 ];

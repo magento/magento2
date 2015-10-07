@@ -50,7 +50,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -79,7 +79,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->method('getTableName')

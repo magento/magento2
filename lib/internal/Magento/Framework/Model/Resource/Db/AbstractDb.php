@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Resource\AbstractResource;
@@ -22,7 +22,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Cached resources singleton
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resources;
 
@@ -31,7 +31,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @var string
      */
-    protected $connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
+    protected $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
     /**
      * Connections cache for this resource model
@@ -166,7 +166,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function __wakeup()
     {
-        $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\Resource');
+        $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\ResourceConnection');
     }
 
     /**

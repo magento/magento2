@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Processing db operations for import entity of grouped product type

@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -81,7 +81,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->entityFactoryMock2 = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Helper', [], [], '', false);
         $entity = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);

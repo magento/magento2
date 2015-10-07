@@ -32,7 +32,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
 
-        $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);

@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Indexer
 {
@@ -25,11 +25,11 @@ class Indexer
      */
     protected $_connection;
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
     ) {
         $this->_productIndexerHelper = $productHelper;

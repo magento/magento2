@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Resource;
+namespace Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
@@ -52,7 +52,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      */
     public function getConnectionName($resourceName)
     {
-        $connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
+        $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
         $resourceName = preg_replace("/_setup$/", '', $resourceName);
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Customer log data logger.

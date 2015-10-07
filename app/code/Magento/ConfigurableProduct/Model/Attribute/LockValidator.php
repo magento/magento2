@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class LockValidator implements LockValidatorInterface
 {

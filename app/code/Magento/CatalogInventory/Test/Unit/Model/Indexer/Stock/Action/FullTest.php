@@ -20,7 +20,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
 

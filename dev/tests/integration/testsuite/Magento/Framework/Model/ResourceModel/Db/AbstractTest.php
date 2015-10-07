@@ -17,7 +17,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             '\Magento\Framework\Model\ResourceModel\Db\Context',
             ['resource' => $resource]
@@ -31,7 +31,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resources');
         $resourceProperty->setAccessible(true);
-        $this->assertInstanceOf('Magento\Framework\App\Resource', $resourceProperty->getValue($this->_model));
+        $this->assertInstanceOf('Magento\Framework\App\ResourceConnection', $resourceProperty->getValue($this->_model));
     }
 
     public function testSetMainTable()
@@ -55,7 +55,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $tableNameOrig = 'store_website';
         $tableSuffix = 'suffix';
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['tablePrefix' => 'prefix_']
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

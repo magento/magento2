@@ -32,7 +32,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Framework\App\Resource $coreResource
+     * @param \Magento\Framework\App\ResourceConnection $coreResource
      * @param \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory
@@ -55,7 +55,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Framework\App\Resource $coreResource,
+        \Magento\Framework\App\ResourceConnection $coreResource,
         \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory,

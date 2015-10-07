@@ -6,7 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Store view service
@@ -25,7 +25,7 @@ class StoreViewService
 
     /**
      * @param Config $eavConfig
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
         Config $eavConfig,

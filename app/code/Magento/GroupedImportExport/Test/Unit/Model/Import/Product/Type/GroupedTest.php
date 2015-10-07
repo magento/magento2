@@ -39,7 +39,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -138,7 +138,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue($entityAttributes));
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

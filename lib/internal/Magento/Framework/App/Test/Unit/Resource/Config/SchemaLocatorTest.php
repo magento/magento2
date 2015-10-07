@@ -13,14 +13,14 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected $_expected;
 
     /**
-     * @var \Magento\Framework\App\Resource\Config\SchemaLocator
+     * @var \Magento\Framework\App\ResourceConnection\Config\SchemaLocator
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_expected = str_replace('\\', '/', BP) . '/lib/internal/Magento/Framework/App/etc/resources.xsd';
-        $this->_model = new \Magento\Framework\App\Resource\Config\SchemaLocator();
+        $this->_model = new \Magento\Framework\App\ResourceConnection\Config\SchemaLocator();
     }
 
     public function testGetSchema()

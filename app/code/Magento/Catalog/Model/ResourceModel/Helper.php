@@ -11,10 +11,10 @@ namespace Magento\Catalog\Model\ResourceModel;
 class Helper extends \Magento\Eav\Model\ResourceModel\Helper
 {
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'Magento_Catalog')
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'Magento_Catalog')
     {
         parent::__construct($resource, $modulePrefix);
     }

@@ -19,7 +19,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     public function testCreateSearchPostCodeTemplates($postalCode, $exactPostalcode)
     {
         // create the mocks
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
         $taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPostCodeSubStringLength'], [], '', false);

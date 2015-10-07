@@ -9,7 +9,7 @@
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
 use Magento\Catalog\Model\Category;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Abstract action reindex class

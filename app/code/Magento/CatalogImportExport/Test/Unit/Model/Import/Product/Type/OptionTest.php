@@ -234,7 +234,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
+            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false),
             $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),

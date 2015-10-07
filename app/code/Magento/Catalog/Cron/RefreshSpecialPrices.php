@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Cron;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class RefreshSpecialPrices
 {

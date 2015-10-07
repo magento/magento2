@@ -16,7 +16,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -42,7 +42,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
-        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);

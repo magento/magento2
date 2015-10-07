@@ -12,7 +12,7 @@ namespace Magento\Framework\Model\Resource\Db;
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resources;
 
@@ -27,12 +27,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $objectRelationProcessor;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param TransactionManagerInterface $transactionManager
      * @param ObjectRelationProcessor $objectRelationProcessor
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         TransactionManagerInterface $transactionManager,
         ObjectRelationProcessor $objectRelationProcessor
     ) {
@@ -42,7 +42,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\App\Resource
+     * @return \Magento\Framework\App\ResourceConnection
      */
     public function getResources()
     {

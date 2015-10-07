@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Model\Resource\Db\Collection;
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 /**
  * Abstract Resource Collection

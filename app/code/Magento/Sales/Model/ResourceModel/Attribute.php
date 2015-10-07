@@ -7,14 +7,14 @@
 namespace Magento\Sales\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\AbstractModel;
 
 class Attribute
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 

@@ -15,11 +15,11 @@ class Helper extends \Magento\Framework\DB\Helper
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      * @codeCoverageIgnore
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'Magento_Eav')
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'Magento_Eav')
     {
         parent::__construct($resource, $modulePrefix);
     }

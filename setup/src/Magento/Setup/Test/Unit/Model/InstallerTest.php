@@ -230,7 +230,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $table->expects($this->any())->method('setComment')->willReturn($table);
         $table->expects($this->any())->method('addIndex')->willReturn($table);
         $connection->expects($this->any())->method('newTable')->willReturn($table);
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
