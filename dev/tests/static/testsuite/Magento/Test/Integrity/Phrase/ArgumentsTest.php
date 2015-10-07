@@ -50,7 +50,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
             }
             $this->_phraseCollector->parse($file);
             foreach ($this->_phraseCollector->getPhrases() as $phrase) {
-                if (empty(trim($phrase['phrase'], '\'\"\t\n\r\0\x0B'))) {
+                if (empty(trim($phrase['phrase'], "'\"\t\n\r\0\x0B"))) {
                     $missedPhraseErrors[] = $this->_createMissedPhraseError($phrase);
                 }
                 if (preg_match_all('/%(\d+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
