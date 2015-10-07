@@ -8,7 +8,7 @@ namespace Magento\MysqlMq\Model\ResourceModel;
 /**
  * Resource model for message status.
  */
-class MessageStatus extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class MessageStatus extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Model initialization

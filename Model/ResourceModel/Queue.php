@@ -10,7 +10,7 @@ use Magento\MysqlMq\Model\QueueManagement;
 /**
  * Resource model for queue.
  */
-class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Model initialization
