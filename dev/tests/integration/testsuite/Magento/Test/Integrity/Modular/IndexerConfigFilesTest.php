@@ -55,17 +55,6 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function indexerConfigFileDataProvider()
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        $fileList = glob(
-            $filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath() . '/*/*/*/etc/indexer.xml'
-        );
-        $dataProviderResult = [];
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = [$file];
-        }
-        return $dataProviderResult;
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('indexer.xml');
     }
 }
