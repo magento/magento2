@@ -88,11 +88,11 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
-     * Column header locator
+     * Column header locator.
      *
      * @var string
      */
-    protected $columnHeader = "//th/span[.='%s']";
+    protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
 
     /**
      * @var string

@@ -500,7 +500,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      * @return void
      *
      * Now deleting old captcha images make crontab script
-     * @see \Magento\Captcha\Model\Observer::deleteExpiredImages
+     * @see \Magento\Captcha\Cron\DeleteExpiredImages::execute
      */
     protected function _gc()
     {
