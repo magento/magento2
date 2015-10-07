@@ -9,6 +9,14 @@ use Magento\Framework\Config\SchemaLocatorInterface;
 
 class SchemaLocator implements SchemaLocatorInterface
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
+    {
+        $this->urnResolver = $urnResolver;
+    }
+
     /**
      * Get path to merged config schema
      *
@@ -16,7 +24,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return realpath(__DIR__ . '/../etc/') . '/indexer_merged.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd');
     }
 
     /**
@@ -26,6 +34,6 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return realpath(__DIR__ . '/../etc/') . '/indexer.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
     }
 }
