@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
@@ -211,6 +212,13 @@ class Installer
     protected $sampleDataState;
 
     /**
+     * Component Registrar
+     *
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -232,6 +240,7 @@ class Installer
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
      * @param SampleData\Model\State $sampleDataState
+     * @param ComponentRegistrar $componentRegistrar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -254,7 +263,8 @@ class Installer
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
-        SampleData\Model\State $sampleDataState
+        SampleData\Model\State $sampleDataState,
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -276,6 +286,7 @@ class Installer
         $this->setupFactory = $setupFactory;
         $this->dataSetupFactory = $dataSetupFactory;
         $this->sampleDataState = $sampleDataState;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
