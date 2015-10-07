@@ -22,7 +22,11 @@ define([
             }
         },
 
-        getLabel: function(id) {
+        /**
+         * @param {Integer} id
+         * @returns {*}
+         */
+        getLabel: function (id) {
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
         },
 
@@ -47,30 +51,33 @@ define([
          * Sets the ids for preselected elements
          * @returns void
          */
-        setDefaultSelections: function() {
-            var positionCacheValid = registry.get('position_cache_valid');
-            if (this.selected().length != this.selectedData.length && !positionCacheValid) {
-                // Check selected data
-                for (var key in this.selectedData) {
-                    if (this.selected().indexOf(key) === -1) {
-                        this.selected.push(key);
-                    }
-                }
-                // Uncheck unselected data
-                for (var i = 0; i < this.selected().length; i++) {
-                    var key = this.selected()[i];
-                    if(!this.selectedData.hasOwnProperty(key)) {
-                        this.selected.splice(this.selected().indexOf(key), 1);
-                    }
+        setDefaultSelections: function () {
+            var positionCacheValid = registry.get('position_cache_valid'),
+                key,
+                i;
+
+            registry.set('position_cache_valid', true);
+
+            if (this.selected().length === this.selectedData.length || positionCacheValid) {
+                return;
+            }
+            // Check selected data
+            for (key in this.selectedData) {
+                if (this.selectedData.hasOwnProperty(key) && this.selected().indexOf(key) === -1) {
+                    this.selected.push(key);
                 }
             }
-            registry.set('position_cache_valid', true);
+            // Uncheck unselected data
+            for (i = 0; i < this.selected().length; i++) {
+                key = this.selected()[i];
+                this.selectedData.hasOwnProperty(key) || this.selected.splice(this.selected().indexOf(key), 1);
+            }
         },
 
         /**
          * Show/hide action in the massaction menu
-         * @param actionId
-         * @returns {boolean}
+         * @param {Integer} actionId
+         * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
             var relevant = true;
@@ -95,19 +102,20 @@ define([
          * @returns {Multiselect} Chainable.
          */
         updateState: function () {
-            var totalRecords = this.totalRecords();
+            var totalRecords    = this.totalRecords(),
+                selected        = this.selected().length,
+                excluded        = this.excluded().length,
+                totalSelected   = this.totalSelected(),
+                allSelected;
 
             // When filters are enabled then totalRecords is unknown
             if (this.getFiltering()) {
-                if (this.getFiltering().search !== "") {
+                if (this.getFiltering().search !== '') {
                     totalRecords = -1;
                 }
             }
 
-            var selected        = this.selected().length,
-                excluded        = this.excluded().length,
-                totalSelected   = this.totalSelected(),
-                allSelected     = totalRecords && totalSelected === totalRecords;
+            allSelected = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords) {
