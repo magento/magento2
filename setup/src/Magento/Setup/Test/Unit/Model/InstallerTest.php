@@ -122,6 +122,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $dataSetupFactory;
 
     /**
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -167,6 +172,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
         $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
         $this->dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
+        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -206,7 +212,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->cleanupFiles,
             $this->dbValidator,
             $this->setupFactory,
-            $this->dataSetupFactory
+            $this->dataSetupFactory,
+            $this->componentRegistrar
         );
     }
 
