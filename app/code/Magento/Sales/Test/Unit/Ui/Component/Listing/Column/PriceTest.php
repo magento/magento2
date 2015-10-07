@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($newItemValue);
 
         $this->model->setData('name', $itemName);
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }
