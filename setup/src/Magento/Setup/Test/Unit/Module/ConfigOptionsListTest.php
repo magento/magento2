@@ -47,7 +47,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
         $this->assertSame('Encryption key', $options[0]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[1]);
-        $this->assertSame('Session save location', $options[1]->getDescription());
+        $this->assertSame('Session save handler', $options[1]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
         $this->assertSame('Type of definitions used by Object Manager', $options[2]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[3]);
@@ -106,23 +106,50 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(8, count($configData));
     }
 
-    public function testValidate()
+    public function testValidateSuccess()
     {
         $options = [
             ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => 'prefix',
+            ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'files',
             ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => false,
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'name',
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST => 'host',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'user',
             ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass'
         ];
-        $configDataMock = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
-        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
-        $result = $this->object->validate($options, $this->deploymentConfig);
-        $this->assertEquals([], $result);
+        $this->prepareValidationMocks();
+        $this->assertEquals([], $this->object->validate($options, $this->deploymentConfig));
     }
 
+    public function testValidateInvalidSessionHandler()
+    {
+        $invalidSaveHandler = 'clay-tablet';
+
+        $options = [
+            ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => 'prefix',
+            ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => $invalidSaveHandler,
+            ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => false,
+            ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'name',
+            ConfigOptionsListConstants::INPUT_KEY_DB_HOST => 'host',
+            ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'user',
+            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass'
+        ];
+        $this->prepareValidationMocks();
+        $this->assertEquals(
+            ["Invalid session handler '$invalidSaveHandler'"],
+            $this->object->validate($options, $this->deploymentConfig)
+        );
+    }
+
+    private function prepareValidationMocks()
+    {
+        $configDataMock = $this->getMockBuilder('Magento\Framework\Config\Data\ConfigData')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
+    }
+    
     /**
      * @param string $hosts
      * @param bool $expectedError
