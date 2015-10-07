@@ -146,7 +146,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attributeEntity = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\AbstractResourceAbstractEntity',
+            '\Magento\Framework\Model\ModelResource\AbstractResourceAbstractEntity',
             ['checkAttributeUniqueValue']
         );
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));

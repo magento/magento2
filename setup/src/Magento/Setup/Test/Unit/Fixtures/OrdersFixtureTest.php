@@ -132,9 +132,9 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getStores')
             ->willReturn([$storeMock]);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            '\Magento\Framework\Model\ModelResource\Db\AbstractDb',
             [$contextMock],
             '',
             true,

@@ -25,7 +25,7 @@ interface MapperInterface
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     public function getResource();
 

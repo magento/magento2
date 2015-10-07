@@ -58,7 +58,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\AbstractResource',
+            '\Magento\Framework\Model\ModelResource\AbstractResource',
             [
                 'updateAttributes',
                 'getConnection',
