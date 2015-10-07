@@ -12,7 +12,8 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb implements
+    \Magento\SalesRule\Model\Spi\CouponResourceInterface
 {
     /**
      * Constructor adds unique fields
@@ -57,7 +58,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
     {
-        $read = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         if ($rule instanceof \Magento\SalesRule\Model\Rule) {
             $ruleId = $rule->getId();
@@ -65,7 +66,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $ruleId = (int)$rule;
         }
 
-        $select = $read->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'rule_id = :rule_id'
@@ -73,7 +74,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'is_primary = :is_primary'
         );
 
-        $data = $read->fetchRow($select, [':rule_id' => $ruleId, ':is_primary' => 1]);
+        $data = $connection->fetchRow($select, [':rule_id' => $ruleId, ':is_primary' => 1]);
 
         if (!$data) {
             return false;
@@ -93,12 +94,12 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function exists($code)
     {
-        $read = $this->_getReadAdapter();
-        $select = $read->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($this->getMainTable(), 'code');
         $select->where('code = :code');
 
-        if ($read->fetchOne($select, ['code' => $code]) === false) {
+        if ($connection->fetchOne($select, ['code' => $code]) === false) {
             return false;
         }
         return true;
@@ -133,7 +134,7 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (!empty($updateArray)) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getTable('salesrule_coupon'),
                 $updateArray,
                 ['rule_id = ?' => $rule->getId()]

@@ -136,7 +136,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Render total
      *
-     * @param \Magento\Framework\Object $total
+     * @param \Magento\Framework\DataObject $total
      * @param string|null $area
      * @param int $colspan
      * @return mixed

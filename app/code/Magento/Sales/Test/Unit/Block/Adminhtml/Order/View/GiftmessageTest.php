@@ -9,7 +9,7 @@ class GiftmessageTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetSaveButtonHtml()
     {
-        $item = new \Magento\Framework\Object();
+        $item = new \Magento\Framework\DataObject();
         $expectedHtml = 'some_value';
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage */
@@ -20,7 +20,7 @@ class GiftmessageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $block->setEntity(new \Magento\Framework\Object());
+        $block->setEntity(new \Magento\Framework\DataObject());
         $block->expects($this->once())->method('getChildBlock')->with('save_button')->will($this->returnValue($item));
         $block->expects(
             $this->once()

@@ -48,7 +48,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
-     * @param \Zend_Db_Adapter_Abstract|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -61,7 +61,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         \Magento\Quote\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -219,7 +219,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         );
         $this->_eventManager->dispatch(
             'sales_quote_item_collection_products_after_load',
-            ['product_collection' => $productCollection]
+            ['collection' => $productCollection]
         );
 
         $recollectQuote = false;

@@ -21,6 +21,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      * Get allowed chars
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getAllowedChars()
     {

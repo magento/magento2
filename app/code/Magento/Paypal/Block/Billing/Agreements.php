@@ -102,7 +102,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve item value by key
      *
-     * @param \Magento\Framework\Object|\Magento\Paypal\Model\Billing\Agreement $item
+     * @param \Magento\Framework\DataObject|\Magento\Paypal\Model\Billing\Agreement $item
      * @param string $key
      * @return string
      */

@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Filter\Test\Unit\Object;
 
-use \Magento\Framework\Filter\Object\Grid;
+use \Magento\Framework\Filter\DataObject\Grid;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class GridTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,19 +24,19 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $entityFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->with('Magento\Framework\Object', [])
+            ->with('Magento\Framework\DataObject', [])
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Object();
+                        return new DataObject();
                     }
                 )
             );
 
         $gridFilter = new Grid($entityFactoryMock);
         $grid = [
-            new Object(['field1' => 'value11', 'field2' => 'value12']),
-            new Object(['field3' => 'value23', 'field2' => 'value22']),
+            new DataObject(['field1' => 'value11', 'field2' => 'value12']),
+            new DataObject(['field3' => 'value23', 'field2' => 'value22']),
         ];
 
         /** @var \Zend_Filter_Interface $filterMock */

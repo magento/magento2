@@ -64,7 +64,7 @@ interface QueryParamsResolverInterface
      * Unset data from the object.
      *
      * @param null|string|array $key
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function unsetData($key = null);
 }

@@ -5,7 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\Checkout\Model\Agreements\AgreementsProviderInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -13,22 +12,31 @@ use Magento\Store\Model\ScopeInterface;
  */
 class AgreementsProvider implements AgreementsProviderInterface
 {
-    /** Path to config node */
+    /**
+     * Path to config node
+     */
     const PATH_ENABLED = 'checkout/options/enable_agreements';
 
-    /** @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory */
+    /**
+     * @var Resource\Agreement\CollectionFactory
+     */
     protected $agreementCollectionFactory;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**
      * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
@@ -47,13 +55,14 @@ class AgreementsProvider implements AgreementsProviderInterface
      */
     public function getRequiredAgreementIds()
     {
-        if (!$this->scopeConfig->isSetFlag(self::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
-            return [];
-        } else {
-            return $this->agreementCollectionFactory->create()
-                ->addStoreFilter($this->storeManager->getStore()->getId())
-                ->addFieldToFilter('is_active', 1)
-                ->getAllIds();
+        $agreementIds = [];
+        if ($this->scopeConfig->isSetFlag(self::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+            $agreementCollection = $this->agreementCollectionFactory->create();
+            $agreementCollection->addStoreFilter($this->storeManager->getStore()->getId());
+            $agreementCollection->addFieldToFilter('is_active', 1);
+            $agreementCollection->addFieldToFilter('mode', AgreementModeOptions::MODE_MANUAL);
+            $agreementIds = $agreementCollection->getAllIds();
         }
+        return $agreementIds;
     }
 }

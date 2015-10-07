@@ -24,7 +24,7 @@
         </fields>
     </integration_info>
     <api>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Integration\Test\Block\Adminhtml\Integration\Edit\Tab\Api</class>
         <selector>#integration_edit_tabs_api_section</selector>
         <strategy>css selector</strategy>
         <fields>

@@ -22,7 +22,7 @@ class Option extends Widget
     protected $_productInstance;
 
     /**
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_values;
 
@@ -270,7 +270,7 @@ class Option extends Widget
     }
 
     /**
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -299,7 +299,7 @@ class Option extends Widget
                 $value['id'] = $option->getOptionId();
                 $value['item_count'] = $this->getItemCount();
                 $value['option_id'] = $option->getOptionId();
-                $value['title'] = $this->escapeHtml($option->getTitle());
+                $value['title'] = $option->getTitle();
                 $value['type'] = $option->getType();
                 $value['is_require'] = $option->getIsRequire();
                 $value['sort_order'] = $option->getSortOrder();
@@ -323,13 +323,13 @@ class Option extends Widget
                             'item_count' => max($itemCount, $_value->getOptionTypeId()),
                             'option_id' => $_value->getOptionId(),
                             'option_type_id' => $_value->getOptionTypeId(),
-                            'title' => $this->escapeHtml($_value->getTitle()),
+                            'title' => $_value->getTitle(),
                             'price' => $showPrice ? $this->getPriceValue(
                                 $_value->getPrice(),
                                 $_value->getPriceType()
                             ) : '',
                             'price_type' => $showPrice ? $_value->getPriceType() : 0,
-                            'sku' => $this->escapeHtml($_value->getSku()),
+                            'sku' => $_value->getSku(),
                             'sort_order' => $_value->getSortOrder(),
                         ];
 
@@ -364,7 +364,7 @@ class Option extends Widget
                         $option->getPriceType()
                     ) : '';
                     $value['price_type'] = $option->getPriceType();
-                    $value['sku'] = $this->escapeHtml($option->getSku());
+                    $value['sku'] = $option->getSku();
                     $value['max_characters'] = $option->getMaxCharacters();
                     $value['file_extension'] = $option->getFileExtension();
                     $value['image_size_x'] = $option->getImageSizeX();
@@ -380,7 +380,7 @@ class Option extends Widget
                         $value['scopePriceDisabled'] = is_null($option->getStorePrice()) ? 'disabled' : null;
                     }
                 }
-                $values[] = new \Magento\Framework\Object($value);
+                $values[] = new \Magento\Framework\DataObject($value);
             }
             $this->_values = $values;
         }

@@ -171,7 +171,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->storeValues);
 
         $this->field = $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
-        $this->config = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $this->config = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $this->fieldSet = $this->getMock('Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);

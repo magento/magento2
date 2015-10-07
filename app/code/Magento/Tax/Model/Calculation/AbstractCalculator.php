@@ -95,7 +95,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     private $addressRateRequest = null;
 
@@ -139,7 +139,7 @@ abstract class AbstractCalculator
      * @param Calculation $calculationTool
      * @param \Magento\Tax\Model\Config $config
      * @param int $storeId
-     * @param \Magento\Framework\Object $addressRateRequest
+     * @param \Magento\Framework\DataObject $addressRateRequest
      */
     public function __construct(
         TaxClassManagementInterface $taxClassService,
@@ -149,7 +149,7 @@ abstract class AbstractCalculator
         Calculation $calculationTool,
         \Magento\Tax\Model\Config $config,
         $storeId,
-        \Magento\Framework\Object $addressRateRequest = null
+        \Magento\Framework\DataObject $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
         $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
@@ -254,7 +254,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getAddressRateRequest()
     {

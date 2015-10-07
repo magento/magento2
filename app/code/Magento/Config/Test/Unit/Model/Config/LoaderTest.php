@@ -74,7 +74,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'getItems'
         )->will(
             $this->returnValue(
-                [new \Magento\Framework\Object(['path' => 'section', 'value' => 10, 'config_id' => 20])]
+                [new \Magento\Framework\DataObject(['path' => 'section', 'value' => 10, 'config_id' => 20])]
             )
         );
     }

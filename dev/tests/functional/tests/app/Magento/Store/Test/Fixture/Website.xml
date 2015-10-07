@@ -6,29 +6,20 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="website" module="Magento_Store" type="flat" entity_type="store_website" collection="Magento\Store\Model\Resource\Website\Collection" identifier="code" repository_class="Magento\Store\Test\Repository\Website" handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface" class="Magento\Store\Test\Fixture\Website">
-        <dataset name="default">
-            <field name="name" xsi:type="string">Main Website</field>
-            <field name="code" xsi:type="string">base</field>
-            <field name="website_id" xsi:type="string">1</field>
-        </dataset>
-        <field name="website_id" is_required="1">
-            <default_value xsi:type="string">1</default_value>
-        </field>
-        <field name="code" is_required="">
-            <default_value xsi:type="string">base</default_value>
-        </field>
-        <field name="name" is_required="">
-            <default_value xsi:type="string">Main Website</default_value>
-        </field>
-        <field name="sort_order" is_required="">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="default_group_id" is_required="">
-            <default_value xsi:type="number">0</default_value>
-        </field>
-        <field name="is_default" is_required="">
-            <default_value xsi:type="number">0</default_value>
-        </field>
+    <fixture name="website"
+             module="Magento_Store"
+             type="flat"
+             entity_type="store_website"
+             collection="Magento\Store\Model\Resource\Website\Collection"
+             identifier="code"
+             repository_class="Magento\Store\Test\Repository\Website"
+             handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface"
+             class="Magento\Store\Test\Fixture\Website">
+        <field name="website_id" is_required="1" />
+        <field name="code" is_required="" />
+        <field name="name" is_required="" />
+        <field name="sort_order" is_required="" />
+        <field name="default_group_id" is_required="" />
+        <field name="is_default" is_required="" />
     </fixture>
 </config>

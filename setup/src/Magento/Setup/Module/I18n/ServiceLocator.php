@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n;
 
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  *  Service Locator (instead DI container)
@@ -53,6 +54,7 @@ class ServiceLocator
             $phraseCollector = new Parser\Adapter\Php\Tokenizer\PhraseCollector(new Parser\Adapter\Php\Tokenizer());
             $adapters = [
                 'php' => new Parser\Adapter\Php($phraseCollector),
+                'html' => new Parser\Adapter\Html(),
                 'js' => new Parser\Adapter\Js(),
                 'xml' => new Parser\Adapter\Xml(),
             ];
@@ -111,7 +113,7 @@ class ServiceLocator
     private static function _getContext()
     {
         if (null === self::$_context) {
-            self::$_context = new Context();
+            self::$_context = new Context(new ComponentRegistrar());
         }
         return self::$_context;
     }

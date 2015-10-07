@@ -11,13 +11,12 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 /**
  * One page checkout status
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
  * @removeCandidate
  */
 class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
-     * Sales Qoute Shipping Address instance
+     * Sales Quote Shipping Address instance
      *
      * @var \Magento\Quote\Model\Quote\Address
      */

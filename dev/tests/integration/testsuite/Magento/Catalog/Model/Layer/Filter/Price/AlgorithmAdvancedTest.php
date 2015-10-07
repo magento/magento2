@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -62,7 +62,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
                 'Magento\Catalog\Model\Layer\Filter\Price',
                 ['layer' => $layer, 'resource' => $priceResource, 'priceAlgorithm' => $model]
             );
-        $filter->setLayer($layer)->setAttributeModel(new Object(['attribute_code' => 'price']));
+        $filter->setLayer($layer)->setAttributeModel(new DataObject(['attribute_code' => 'price']));
         if ($request !== null) {
             $filter->apply(
                 $request,

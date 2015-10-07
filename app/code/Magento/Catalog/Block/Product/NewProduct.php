@@ -13,7 +13,7 @@ use Magento\Customer\Model\Context as CustomerContext;
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\Framework\Object\IdentityInterface
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Default value for products count that will be shown

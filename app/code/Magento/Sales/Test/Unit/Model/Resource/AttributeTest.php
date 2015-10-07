@@ -27,9 +27,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $modelMock;
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     public function setUp()
     {
@@ -58,19 +58,19 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             true,
             ['__wakeup', 'getId', 'getEventPrefix', 'getEventObject']
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'rollback', 'commit'],
             [],
             '',
             false
         );
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('insert');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->attribute = new \Magento\Sales\Model\Resource\Attribute(
             $this->appResourceMock,
@@ -85,7 +85,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
             ->will($this->returnValue('event_prefix'));
@@ -106,9 +106,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'object' => $this->modelMock,
                 'attribute' => ['attribute']
             ]);
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('commit');
         $this->assertEquals($this->attribute, $this->attribute->saveAttribute($this->modelMock, 'attribute'));
     }
@@ -128,14 +128,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('event_object'));
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
         $exception  = new \Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')
             ->will($this->throwException($exception));
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('rollback');
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')

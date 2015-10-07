@@ -11,7 +11,6 @@ namespace Magento\CatalogSearch\Model\Resource\Search;
 /**
  * Search collection
  *
- * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
@@ -58,7 +57,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -83,7 +82,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         parent::__construct(
@@ -266,7 +265,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
             $selects[] = "SELECT * FROM ({$sql}) AS inoptionsql"; // inherent unions may be inside
         }
 
-        $sql = $this->getConnection()->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+        $sql = $this->getConnection()->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
         return $sql;
     }
 
@@ -361,7 +360,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
             }
         }
 
-        $sql = $this->getConnection()->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
+        $sql = $this->getConnection()->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
         return $sql;
     }
 }

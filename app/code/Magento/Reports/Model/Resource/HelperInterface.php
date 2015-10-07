@@ -24,12 +24,12 @@ interface HelperInterface
     /**
      * Update rating position
      *
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $type
      * @param string $column
      * @param string $mainTable
      * @param string $aggregationTable
      * @return $this
      */
-    public function updateReportRatingPos($adapter, $type, $column, $mainTable, $aggregationTable);
+    public function updateReportRatingPos($connection, $type, $column, $mainTable, $aggregationTable);
 }

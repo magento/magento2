@@ -28,6 +28,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
@@ -36,10 +37,11 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
+        array $layoutProcessors = [],
         array $data = []
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $layoutProcessors, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -50,7 +52,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function includeTax()
     {
-        if ($this->getTotal()->getAddress()->getGrandTotal()) {
+        if ($this->getTotal()->getValue()) {
             return $this->_taxConfig->displayCartTaxWithGrandTotal($this->getStore());
         }
         return false;
@@ -63,7 +65,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getTotalExclTax()
     {
-        $excl = $this->getTotal()->getAddress()->getGrandTotal() - $this->getTotal()->getAddress()->getTaxAmount();
+        $excl = $this->getTotal()->getValue() - $this->_totals['tax']->getValue();
         $excl = max($excl, 0);
         return $excl;
     }

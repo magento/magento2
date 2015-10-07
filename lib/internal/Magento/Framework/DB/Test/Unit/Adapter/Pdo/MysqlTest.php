@@ -12,6 +12,7 @@
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $string = $this->getMock('Magento\Framework\Stdlib\String');
+        $string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $this->_mockAdapter = $this->getMock(
@@ -155,7 +156,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $select = new \Zend_Db_Select($this->_mockAdapter);
+        $select = new Select($this->_mockAdapter);
         $select->from('user');
         try {
             $this->_mockAdapter->query($select);
@@ -202,6 +203,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             ['TRUNCATE table user'],
             ['RENAME table user'],
             ['DROP table user'],
+            ["\n\r  \t aLTeR  \t \n \r table \t\r\n\n user  "],
         ];
     }
 
@@ -518,15 +520,15 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddColumn($options, $expectedQuery)
     {
-        $adapter = $this->getMock(
+        $connectionMock = $this->getMock(
             '\Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
         );
 
-        $adapter->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
-        $adapter->expects($this->any())->method('quote')->will($this->returnArgument(0));
-        $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
-        $adapter->addColumn('tableName', 'columnName', $options);
+        $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
+        $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
+        $connectionMock->addColumn('tableName', 'columnName', $options);
     }
 
     /**

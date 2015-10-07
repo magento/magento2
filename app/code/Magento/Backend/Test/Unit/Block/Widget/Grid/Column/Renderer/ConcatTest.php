@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class ConcatTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($method, $getters)
     {
-        $object = new Object(['test' => 'a', 'best' => 'b']);
+        $object = new DataObject(['test' => 'a', 'best' => 'b']);
         $column = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
             ->disableOriginalConstructor()
             ->setMethods([$method, 'getSeparator'])

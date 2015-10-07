@@ -90,7 +90,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
     ) {
         $this->product = $fixtureFactory->createByCode(
             'downloadableProduct',
-            ['dataSet' => 'default']
+            ['dataset' => 'default']
         );
         $this->product->persist();
         $this->catalogProductIndex = $catalogProductIndexNewPage;

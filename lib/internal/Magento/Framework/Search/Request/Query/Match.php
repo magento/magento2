@@ -50,6 +50,7 @@ class Match implements QueryInterface
      * @param string $value
      * @param int|null $boost
      * @param array $matches
+     * @codeCoverageIgnore
      */
     public function __construct($name, $value, $boost, array $matches)
     {
@@ -69,6 +70,7 @@ class Match implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -77,6 +79,7 @@ class Match implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -85,6 +88,7 @@ class Match implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getBoost()
     {
@@ -95,6 +99,7 @@ class Match implements QueryInterface
      * Get Matches
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getMatches()
     {

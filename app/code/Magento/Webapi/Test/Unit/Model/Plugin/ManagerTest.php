@@ -123,7 +123,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
         $firstInegrationId = 1;
 
-        $integrationsData1 = new \Magento\Framework\Object(
+        $integrationsData1 = new \Magento\Framework\DataObject(
             [
                 'id' => $firstInegrationId,
                 Integration::NAME => 'TestIntegration1',
@@ -134,7 +134,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $secondIntegrationId = 2;
-        $integrationsData2 = new \Magento\Framework\Object(
+        $integrationsData2 = new \Magento\Framework\DataObject(
             [
                 'id' => $secondIntegrationId,
                 Integration::NAME => 'TestIntegration2',

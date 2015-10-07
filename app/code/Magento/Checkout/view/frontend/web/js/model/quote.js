@@ -16,9 +16,6 @@ define(
         var storeCode = window.checkoutConfig.storeCode;
         var totalsData = window.checkoutConfig.totalsData;
         var totals = ko.observable(totalsData);
-        var shippingCustomOptions = ko.observable(null);
-        var formattedShippingAddress = ko.observable(null);
-        var formattedBillingAddress = ko.observable(null);
         var collectedTotals = ko.observable({});
         return {
             totals: totals,
@@ -55,18 +52,6 @@ define(
                 totals(totalsData);
                 this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
             },
-            setFormattedBillingAddress: function (address) {
-                formattedBillingAddress(address);
-            },
-            getFormattedBillingAddress: function() {
-                return formattedBillingAddress;
-            },
-            setFormattedShippingAddress: function (address) {
-                formattedShippingAddress(address);
-            },
-            getFormattedShippingAddress: function() {
-                return formattedShippingAddress;
-            },
             setPaymentMethod: function(paymentMethodCode) {
                 paymentMethod(paymentMethodCode);
             },
@@ -75,12 +60,6 @@ define(
             },
             getStoreCode: function() {
                 return storeCode;
-            },
-            setShippingCustomOptions: function(customOptions) {
-                shippingCustomOptions(customOptions);
-            },
-            getShippingCustomOptions: function() {
-                return shippingCustomOptions;
             },
             setCollectedTotals: function(code, value) {
                 var totals = collectedTotals();

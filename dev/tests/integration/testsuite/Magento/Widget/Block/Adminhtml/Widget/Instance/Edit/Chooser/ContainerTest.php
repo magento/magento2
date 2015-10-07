@@ -39,10 +39,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAvailableContainers()
     {
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+        $themeToTest = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            '\Magento\Theme\Model\Theme'
         );
-        $this->block->setTheme($design->getDesignTheme()->getId());
+        $themeId = $themeToTest->load('Magento/blank', 'code')
+            ->getId();
+        $this->block->setTheme($themeId);
         $this->assertContains('<option value="before.body.end" >', $this->block->toHtml());
     }
 }

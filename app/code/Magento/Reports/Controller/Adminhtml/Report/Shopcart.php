@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-class Shopcart extends \Magento\Backend\App\Action
+abstract class Shopcart extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory

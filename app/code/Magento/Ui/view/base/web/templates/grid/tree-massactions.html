@@ -1,0 +1,36 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div
+    class="action-select-wrap"
+    data-bind="css: {'_active': opened}, outerClick: close.bind($data)">
+    <button
+            class="action-select"
+            data-bind="title: $t('Select Items'), click: toggleOpened">
+        <span data-bind="text: $t('Actions')"></span>
+    </button>
+    <div class="action-menu-items">
+        <ul
+            class="action-menu"
+            data-bind="css: {'_active': opened},
+                foreach: {data: actions, as: 'action'}">
+            <li
+                    data-bind="css: {
+                        '_visible': $data.visible,
+                        '_parent': $data.actions}">
+                <span
+                    class="action-menu-item"
+                    data-bind="text: label,
+                        click: $parent.applyAction.bind($parent, type)">
+                </span>
+                <!-- ko if: $data.actions -->
+                    <!-- ko template: {name: $parent.submenuTemplate, data: $parent} -->
+                    <!-- /ko -->
+                <!-- /ko-->
+            </li>
+        </ul>
+    </div>
+</div>

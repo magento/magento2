@@ -33,24 +33,32 @@ class Helper
     protected $jsHelper;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     */
+    protected $dateFilter;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
-        \Magento\Backend\Helper\Js $jsHelper
+        \Magento\Backend\Helper\Js $jsHelper,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
+        $this->dateFilter = $dateFilter;
     }
 
     /**
@@ -83,6 +91,19 @@ class Helper
             $product->unlockAttribute('media');
             $wasLockedMedia = true;
         }
+
+        $dateFieldFilters = [];
+        $attributes = $product->getAttributes();
+        foreach ($attributes as $attrKey => $attribute) {
+            if ($attribute->getBackend()->getType() == 'datetime') {
+                if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
+                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                }
+            }
+        }
+
+        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
+        $productData = $inputFilter->getUnescaped();
 
         $product->addData($productData);
 

@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
@@ -72,7 +73,7 @@ class Config implements ConfigInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_stringHelper;
 
@@ -104,7 +105,7 @@ class Config implements ConfigInterface
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Filesystem $filesystem
      * @param DeploymentConfig $deploymentConfig
@@ -115,7 +116,7 @@ class Config implements ConfigInterface
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\String $stringHelper,
+        \Magento\Framework\Stdlib\StringUtils $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
         Filesystem $filesystem,
         DeploymentConfig $deploymentConfig,
@@ -128,15 +129,25 @@ class Config implements ConfigInterface
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
 
+        /**
+         * Session handler
+         *
+         * Save handler may be set to custom value in deployment config, which will override everything else.
+         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
+         */
+        $defaultSaveHandler = $this->getStorageOption('session.save_handler')
+            ?: SaveHandlerInterface::DEFAULT_HANDLER;
         $saveMethod = $deploymentConfig->get(
             self::PARAM_SESSION_SAVE_METHOD,
-            \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER
+            $defaultSaveHandler
         );
+        $saveMethod = $saveMethod === 'db' ? 'user' : $saveMethod;
+        $this->setSaveHandler($saveMethod);
+
+        /**
+         * Session path
+         */
         $savePath = $deploymentConfig->get(self::PARAM_SESSION_SAVE_PATH);
-        $cacheLimiter = $deploymentConfig->get(self::PARAM_SESSION_CACHE_LIMITER);
-
-        $this->setSaveHandler($saveMethod === 'db' ? 'user' : $saveMethod);
-
         if (!$savePath && !ini_get('session.save_path')) {
             $sessionDir = $filesystem->getDirectoryWrite(DirectoryList::SESSION);
             $savePath = $sessionDir->getAbsolutePath();
@@ -145,10 +156,18 @@ class Config implements ConfigInterface
         if ($savePath) {
             $this->setSavePath($savePath);
         }
+
+        /**
+         * Session cache limiter
+         */
+        $cacheLimiter = $deploymentConfig->get(self::PARAM_SESSION_CACHE_LIMITER);
         if ($cacheLimiter) {
             $this->setOption('session.cache_limiter', $cacheLimiter);
         }
 
+        /**
+         * Cookie settings: lifetime, path, domain, httpOnly. These govern settings for the session cookie.
+         */
         $lifetime = $this->_scopeConfig->getValue($lifetimePath, $this->_scopeType);
         $this->setCookieLifetime($lifetime, self::COOKIE_LIFETIME_DEFAULT);
 

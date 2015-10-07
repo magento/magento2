@@ -46,11 +46,11 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_PAYMENT === $transaction->getTxnType() &&
             ($id = $transaction->getId())
         ) {
-            $adapter = $this->_getWriteAdapter();
+            $connection = $this->getConnection();
 
             // verify such transaction exists, determine payment and order id
-            $verificationRow = $adapter->fetchRow(
-                $adapter->select()->from(
+            $verificationRow = $connection->fetchRow(
+                $connection->select()->from(
                     $this->getMainTable(),
                     ['payment_id', 'order_id']
                 )->where(
@@ -65,13 +65,13 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
             // inject
             $where = [
-                $adapter->quoteIdentifier($this->getIdFieldName()) . '!=?' => $id,
+                $connection->quoteIdentifier($this->getIdFieldName()) . '!=?' => $id,
                 new \Zend_Db_Expr('parent_id IS NULL'),
                 'payment_id = ?' => (int)$paymentId,
                 'order_id = ?' => (int)$orderId,
                 'parent_txn_id = ?' => $txnId,
             ];
-            $adapter->update($this->getMainTable(), ['parent_id' => $id], $where);
+            $connection->update($this->getMainTable(), ['parent_id' => $id], $where);
         }
     }
 
@@ -91,7 +91,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $txnId
     ) {
         $select = $this->_getLoadByUniqueKeySelect($orderId, $paymentId, $txnId);
-        $data = $this->_getWriteAdapter()->fetchRow($select);
+        $data = $this->getConnection()->fetchRow($select);
         if (!$data) {
             return $transaction;
         }
@@ -110,9 +110,9 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      */
     public function getOrderWebsiteId($orderId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = [':entity_id' => $orderId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['so' => $this->getTable('sales_order')],
             'cs.website_id'
         )->joinInner(
@@ -121,7 +121,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         )->where(
             'so.entity_id = :entity_id'
         );
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**
@@ -181,9 +181,9 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             $select->where('txn_type = ?', $txnType);
         }
         if ($isRow) {
-            return $this->_getWriteAdapter()->fetchRow($select);
+            return $this->getConnection()->fetchRow($select);
         }
-        return $this->_getWriteAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -197,7 +197,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      */
     private function _getLoadByUniqueKeySelect($orderId, $paymentId, $txnId, $columns = '*')
     {
-        return $this->_getWriteAdapter()->select()->from(
+        return $this->getConnection()->select()->from(
             $this->getMainTable(),
             $columns
         )->where(

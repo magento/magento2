@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -65,18 +66,18 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
-        $basePath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $basePath = Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
 
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir = $this->_tmpDir . '/generation';
         if (!file_exists($this->_generationDir)) {
-            mkdir($this->_generationDir, 0777, true);
+            mkdir($this->_generationDir, 0770, true);
         }
         $this->_compilationDir = $this->_tmpDir . '/di';
         if (!file_exists($this->_compilationDir)) {
-            mkdir($this->_compilationDir, 0777, true);
+            mkdir($this->_compilationDir, 0770, true);
         }
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile-multi-tenant --generation=%s --di=%s';
@@ -86,10 +87,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $argumentInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\String($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
-                'object' => new \Magento\Framework\Data\Argument\Interpreter\Object($booleanUtils),
+                'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
                 'const' => $constInterpreter,
                 'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
             ],
@@ -194,19 +195,13 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _phpClassesDataProvider()
     {
-        $basePath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $basePath = Files::init()->getPathToSource();
 
         $libPath = 'lib\\internal';
         $appPath = 'app\\code';
         $generationPathPath = str_replace('/', '\\', str_replace($basePath . '/', '', $this->_generationDir));
 
-        $files = \Magento\Framework\App\Utility\Files::init()->getClassFiles(
-            true,
-            false,
-            false,
-            true,
-            false
-        );
+        $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
 
         $patterns = [
             '/' . preg_quote($libPath) . '/',
@@ -222,7 +217,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $file = str_replace('/', '\\', $file);
             $filePath = preg_replace($patterns, $replacements, $file);
             $className = substr($filePath, 0, -4);
-            if (class_exists($className)) {
+            if (class_exists($className, false)) {
                 $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
                 $classes[$file] = $className;
             }
@@ -263,7 +258,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parent = $class->getParentClass();
         $file = false;
         if ($parent) {
-            $basePath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+            $basePath = Files::init()->getPathToSource();
             $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
             $basePath = str_replace('\\', DIRECTORY_SEPARATOR, $basePath);
             $file = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file);
@@ -307,7 +302,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $this->_validateFile($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getDiConfigs(true)
+            Files::init()->getDiConfigs(true)
         );
     }
 
@@ -371,7 +366,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $module = \Magento\Framework\App\Utility\Classes::getClassModuleName($type);
-            if (\Magento\Framework\App\Utility\Files::init()->isModuleExists($module)) {
+            if (Files::init()->isModuleExists($module)) {
                 $this->pluginValidator->validate($plugin, $type);
             }
         } catch (\Magento\Framework\Exception\ValidatorException $exception) {
@@ -386,7 +381,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected function pluginDataProvider()
     {
-        $files = \Magento\Framework\App\Utility\Files::init()->getDiConfigs();
+        $files = Files::init()->getDiConfigs();
         $plugins = [];
         foreach ($files as $file) {
             $dom = new \DOMDocument();

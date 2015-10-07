@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Widget\Test\Repository\Widget">
+        <dataset name="default">
+            <field name="code" xsi:type="string">CMS Page Link</field>
+            <field name="title" xsi:type="string">Cms Page Link %isolation%</field>
+            <field name="theme_id" xsi:type="string">Magento Luma</field>
+            <field name="store_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="widget_instance" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                    <item name="block" xsi:type="string">Main Content Area</item>
+                    <item name="template" xsi:type="string">CMS Page Link Block Template</item>
+                </item>
+            </field>
+            <field name="parameters" xsi:type="array">
+                <item name="dataset" xsi:type="string">cmsPageLink</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

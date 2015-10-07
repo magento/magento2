@@ -75,8 +75,13 @@ class Interception implements OperationInterface
         }
 
         $classesList = [];
-        foreach ($this->data['intercepted_paths'] as $path) {
-            $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+        foreach ($this->data['intercepted_paths'] as $paths) {
+            if (!is_array($paths)) {
+                $paths = (array)$paths;
+            }
+            foreach ($paths as $path) {
+                $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+            }
         }
 
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
@@ -93,5 +98,15 @@ class Interception implements OperationInterface
         );
         $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration($classesList);
         $generator->generateList($configuration);
+    }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Interceptors generation';
     }
 }

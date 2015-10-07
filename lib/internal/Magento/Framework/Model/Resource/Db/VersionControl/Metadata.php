@@ -18,18 +18,18 @@ class Metadata
     /**
      * Returns list of entity fields that are applicable for persistence operations
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getFields(\Magento\Framework\Object $entity)
+    public function getFields(\Magento\Framework\DataObject $entity)
     {
         $entityClass = get_class($entity);
         if (!isset($this->metadataInfo[$entityClass])) {
             $this->metadataInfo[$entityClass] =
                 array_fill_keys(
                     array_keys(
-                        $entity->getResource()->getReadConnection()->describeTable(
+                        $entity->getResource()->getConnection()->describeTable(
                             $entity->getResource()->getMainTable()
                         )
                     ),

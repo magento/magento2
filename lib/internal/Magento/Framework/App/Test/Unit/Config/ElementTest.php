@@ -33,8 +33,8 @@ class ElementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClassName()
     {
-        $this->assertEquals('Magento\Catalog\Model\Observer', $this->model->class_test->getClassName());
-        $this->assertEquals('Magento\Catalog\Model\Observer', $this->model->model_test->getClassName());
+        $this->assertEquals('Magento\ModuleName\Model\ClassName', $this->model->class_test->getClassName());
+        $this->assertEquals('Magento\ModuleName\Model\ClassName', $this->model->model_test->getClassName());
         $this->assertFalse($this->model->no_classname_test->getClassName());
     }
 }

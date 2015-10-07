@@ -168,7 +168,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * Instantiate state and set it to state object
      *
      * @param string $paymentAction
-     * @param \Magento\Framework\Object $stateObject
+     * @param \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -219,7 +219,8 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     protected function _buildFormUrlRequest(\Magento\Payment\Model\InfoInterface $payment)
     {
-        $request = $this->_buildBasicRequest()->setOrder($payment->getOrder())->setPaymentMethod($this);
+        $order = $payment->getOrder();
+        $request = $this->_buildBasicRequest()->setOrder($order)->setPaymentMethod($this)->setAmount($order);
 
         return $request;
     }

@@ -19,9 +19,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
     /**
@@ -54,9 +58,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         $factory->setObjectManager($realObjectManager);
         $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock->expects($this->any())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Validator/etc/validation.xsd')
+            ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'));
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
-            ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]
+            [
+                'configFiles' => $configFiles,
+                'builderFactory' => $universalFactory,
+                'urnResolver' => $urnResolverMock
+            ]
         );
     }
 
@@ -150,13 +164,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         // Case 1. Pass check alnum and int properties are not empty and have valid value
         $entityName = 'test_entity_a';
         $groupName = 'check_alnum_and_int_not_empty_and_have_valid_value';
-        $value = new \Magento\Framework\Object(['int' => 1, 'alnum' => 'abc123']);
+        $value = new \Magento\Framework\DataObject(['int' => 1, 'alnum' => 'abc123']);
         $expectedResult = true;
         $expectedMessages = [];
         $result[] = [$entityName, $groupName, $value, $expectedResult, $expectedMessages];
 
         // Case 2. Fail check alnum is not empty
-        $value = new \Magento\Framework\Object(['int' => 'abc123', 'alnum' => null]);
+        $value = new \Magento\Framework\DataObject(['int' => 'abc123', 'alnum' => null]);
         $expectedResult = false;
         $expectedMessages = [
             'alnum' => [
@@ -169,13 +183,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         // Case 3. Pass check alnum has valid value
         $groupName = 'check_alnum';
-        $value = new \Magento\Framework\Object(['int' => 'abc123', 'alnum' => 'abc123']);
+        $value = new \Magento\Framework\DataObject(['int' => 'abc123', 'alnum' => 'abc123']);
         $expectedResult = true;
         $expectedMessages = [];
         $result[] = [$entityName, $groupName, $value, $expectedResult, $expectedMessages];
 
         // Case 4. Fail check alnum has valid value
-        $value = new \Magento\Framework\Object(['int' => 'abc123', 'alnum' => '[abc123]']);
+        $value = new \Magento\Framework\DataObject(['int' => 'abc123', 'alnum' => '[abc123]']);
         $expectedResult = false;
         $expectedMessages = [
             'alnum' => ['notAlnum' => '\'[abc123]\' contains characters which are non alphabetic and no digits'],
@@ -295,6 +309,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'),
+            $this->_config->getSchemaFile()
+        );
         $this->assertFileExists($this->_config->getSchemaFile());
     }
 }

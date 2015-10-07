@@ -8,9 +8,8 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -18,12 +17,15 @@ use Magento\Mtf\Client\Locator;
  */
 class Config extends Tab
 {
+    /** @var string */
+    protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
+
     /**
      * Selector for trigger show/hide "Variations" tab.
      *
      * @var string
      */
-    protected $variationsTabTrigger = '[data-target="#super_config-content"][data-toggle="collapse"] span';
+    protected $variationsTabTrigger = '[data-tab=super_config] [data-role=trigger]';
 
     /**
      * Selector for content "Variations" tab.
@@ -33,11 +35,11 @@ class Config extends Tab
     protected $variationsTabContent = '#super_config-content';
 
     /**
-     * Selector for button "Generate Variations".
+     * Selector for button "Generate Products".
      *
      * @var string
      */
-    protected $generateVariations = '[data-ui-id="product-variations-generator-generate"]';
+    protected $generateVariations = '[data-role=step-wizard-next] button';
 
     /**
      * Selector for variations matrix.
@@ -52,13 +54,6 @@ class Config extends Tab
      * @var string
      */
     protected $template = './ancestor::body';
-
-    /**
-     * Selector for variations tab wrapper.
-     *
-     * @var string
-     */
-    protected $variationsTabWrapper = '#super_config-wrapper';
 
     /**
      * Attribute element selector.
@@ -103,6 +98,7 @@ class Config extends Tab
         foreach ($attributesValue as $key => $value) {
             $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
+        $this->_rootElement->find($this->createConfigurationsButton)->click();
         $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
@@ -121,7 +117,6 @@ class Config extends Tab
     {
         $content = $this->_rootElement->find($this->variationsTabContent);
         if (!$content->isVisible()) {
-            $this->_rootElement->find($this->variationsTabWrapper)->click();
             $this->_rootElement->find($this->variationsTabTrigger)->click();
             $this->waitForElementVisible($this->variationsTabContent);
         }
@@ -134,7 +129,7 @@ class Config extends Tab
      */
     public function generateVariations()
     {
-        $this->_rootElement->find($this->generateVariations)->click();
+        $this->browser->find($this->generateVariations)->click();
         $this->getTemplateBlock()->waitLoader();
     }
 
@@ -191,7 +186,6 @@ class Config extends Tab
         $data = [];
 
         $this->showContent();
-        $data['attributes_data'] = $this->getAttributeBlock()->getAttributesData();
         $data['matrix'] = $this->getVariationsBlock()->getVariationsData();
 
         return ['configurable_attributes_data' => $data];

@@ -25,7 +25,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -108,7 +108,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->aggregationContainer->expects($this->any())->method('get')->willReturn($this->bucketBuilder);
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['fetchAssoc'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -131,7 +131,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->adapter);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $this->builder = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder',
@@ -150,20 +150,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $fetchResult = ['name' => ['some', 'result']];
-        $documents = [
-            [
-                'product_id' => 1,
-                'sku' => 'Product',
-            ],
-        ];
+
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->bucket->expects($this->once())->method('getName')->willReturn('name');
-        $this->entityMetadata->expects($this->once())->method('getEntityId')->willReturn('product_id');
         $this->request->expects($this->once())->method('getAggregation')->willReturn([$this->bucket]);
         $this->request->expects($this->once())->method('getDimensions')->willReturn([]);
         $this->bucketBuilder->expects($this->once())->method('build')->willReturn($fetchResult['name']);
 
-        $result = $this->builder->build($this->request, $documents);
+        $result = $this->builder->build($this->request, $table);
 
         $this->assertEquals($result, $fetchResult);
     }

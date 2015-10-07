@@ -41,7 +41,7 @@ class Rate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteAllRates()
     {
-        $this->_getWriteAdapter()->delete($this->getMainTable());
+        $this->getConnection()->delete($this->getMainTable());
         return $this;
     }
 
@@ -53,14 +53,14 @@ class Rate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function isInRule($rateId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('tax_calculation'),
             ['tax_calculation_rate_id']
         )->where(
             'tax_calculation_rate_id = ?',
             $rateId
         );
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 }

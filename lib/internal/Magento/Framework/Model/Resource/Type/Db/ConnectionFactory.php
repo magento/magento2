@@ -31,15 +31,12 @@ class ConnectionFactory implements ConnectionFactoryInterface
      */
     public function create(array $connectionConfig)
     {
-        if (!$connectionConfig || !isset($connectionConfig['active']) || !$connectionConfig['active']) {
-            return null;
-        }
-
+        /** @var \Magento\Framework\App\Resource\ConnectionAdapterInterface $adapterInstance */
         $adapterInstance = $this->objectManager->create(
-            'Magento\Framework\App\Resource\ConnectionAdapterInterface',
+            \Magento\Framework\App\Resource\ConnectionAdapterInterface::class,
             ['config' => $connectionConfig]
         );
 
-        return $adapterInstance->getConnection($this->objectManager->get('Magento\Framework\DB\LoggerInterface'));
+        return $adapterInstance->getConnection($this->objectManager->get(\Magento\Framework\DB\LoggerInterface::class));
     }
 }

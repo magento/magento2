@@ -51,10 +51,10 @@ class Relation implements RelationInterface
             }
 
             if ($changedAddresses) {
-                $customer->getResource()->getWriteConnection()->update(
+                $customer->getResource()->getConnection()->update(
                     $customer->getResource()->getTable('customer_entity'),
                     $changedAddresses,
-                    $customer->getResource()->getWriteConnection()->quoteInto('entity_id = ?', $customer->getId())
+                    $customer->getResource()->getConnection()->quoteInto('entity_id = ?', $customer->getId())
                 );
             }
         }

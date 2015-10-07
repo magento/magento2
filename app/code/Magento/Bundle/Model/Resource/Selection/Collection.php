@@ -70,13 +70,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function joinPrices($websiteId)
     {
-        $adapter = $this->getConnection();
-        $priceType = $adapter->getCheckSql(
+        $connection = $this->getConnection();
+        $priceType = $connection->getCheckSql(
             'price.selection_price_type IS NOT NULL',
             'price.selection_price_type',
             'selection.selection_price_type'
         );
-        $priceValue = $adapter->getCheckSql(
+        $priceValue = $connection->getCheckSql(
             'price.selection_price_value IS NOT NULL',
             'price.selection_price_value',
             'selection.selection_price_value'

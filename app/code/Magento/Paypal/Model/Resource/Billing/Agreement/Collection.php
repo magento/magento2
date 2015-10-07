@@ -54,7 +54,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Eav\Helper\Data $eavHelper,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

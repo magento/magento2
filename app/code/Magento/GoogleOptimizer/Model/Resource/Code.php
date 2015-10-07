@@ -30,9 +30,9 @@ class Code extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByEntityType($object, $entityId, $entityType, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['t_def' => $this->getMainTable()],
             ['entity_id', 'entity_type', 'experiment_script', 'code_id']
         )->where(
@@ -50,7 +50,7 @@ class Code extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
 
         if ($data) {
             $object->setData($data);

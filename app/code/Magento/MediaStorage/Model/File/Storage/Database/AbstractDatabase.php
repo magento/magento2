@@ -49,7 +49,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param string|null $connectionName
+     * @param string $connectionName
      * @param array $data
      */
     public function __construct(
@@ -119,7 +119,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
     /**
      * Specify connection name
      *
-     * @param  string $connectionName
+     * @param string $connectionName
      * @return $this
      */
     public function setConnectionName($connectionName)

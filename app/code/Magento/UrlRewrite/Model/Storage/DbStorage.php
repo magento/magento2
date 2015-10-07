@@ -42,7 +42,7 @@ class DbStorage extends AbstractStorage
         DataObjectHelper $dataObjectHelper,
         Resource $resource
     ) {
-        $this->connection = $resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
+        $this->connection = $resource->getConnection();
         $this->resource = $resource;
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);

@@ -33,9 +33,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $quoteItemMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
@@ -59,7 +59,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
                 'describeTable',
@@ -132,7 +132,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
@@ -152,7 +152,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
@@ -172,7 +172,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapterMock);
+            ->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }

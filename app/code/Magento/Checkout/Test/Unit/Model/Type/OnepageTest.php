@@ -63,7 +63,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $orderFactoryMock;
 
-    /** @var \Magento\Framework\Object\Copy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject */
     protected $copyMock;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -97,6 +97,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $totalsCollectorMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -141,7 +144,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
         $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
+        $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
 
         $this->customerFormFactoryMock = $this->getMock(
@@ -195,6 +198,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('toFlatArray')
             ->will($this->returnValue([]));
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
         $this->onepage = $this->objectManagerHelper->getObject(
             'Magento\Checkout\Model\Type\Onepage',
             [
@@ -222,7 +226,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
-                'quoteManagement' => $this->quoteManagementMock
+                'quoteManagement' => $this->quoteManagementMock,
+                'totalsCollector' => $this->totalsCollectorMock
             ]
         );
     }
@@ -492,8 +497,17 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('setCollectShippingRates')
             ->will($this->returnSelf());
 
-        $shippingAddressMock->expects($useForShipping ? $this->once() : $this->never())
-            ->method('collectTotals');
+        if ($useForShipping === \Magento\Checkout\Model\Type\Onepage::USE_FOR_SHIPPING) {
+            $this->totalsCollectorMock
+                ->expects($this->once())
+                ->method('collectAddressTotals')
+                ->with($quoteMock, $shippingAddressMock);
+        } else {
+            $this->totalsCollectorMock
+                ->expects($this->never())
+                ->method('collectAddressTotals')
+                ->with($quoteMock, $shippingAddressMock);
+        }
 
         $quoteMock->expects($this->any())->method('setPasswordHash')->with($passwordHash);
         $quoteMock->expects($this->any())->method('getCheckoutMethod')->will($this->returnValue($checkoutMethod));

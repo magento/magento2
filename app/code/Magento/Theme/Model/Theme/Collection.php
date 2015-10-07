@@ -5,7 +5,9 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -15,9 +17,23 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Collection extends \Magento\Framework\Data\Collection implements ListInterface
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read
+     * Area constraint type
      */
-    protected $_directory;
+    const CONSTRAINT_AREA = 'area';
+
+    /**
+     * Vendor constraint type
+     *
+     * For example, "Magento" part for theme "frontend/Magento/blank"
+     */
+    const CONSTRAINT_VENDOR = 'vendor';
+
+    /**
+     * Theme name constraint type
+     *
+     * For example, "blank" part for theme "frontend/Magento/blank"
+     */
+    const CONSTRAINT_THEME_NAME = 'theme_name';
 
     /**
      * Model of collection item
@@ -27,84 +43,98 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     protected $_itemObjectClass = 'Magento\Theme\Model\Theme';
 
     /**
-     * Target directory
-     *
-     * @var array
-     */
-    protected $_targetDirs = [];
-
-    /**
      * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory
      */
     protected $themeConfigFactory;
 
     /**
+     * Constraints for the collection loading
+     *
+     * @var array
+     */
+    private $constraints = [
+        self::CONSTRAINT_AREA => [],
+        self::CONSTRAINT_VENDOR => [],
+        self::CONSTRAINT_THEME_NAME => [],
+    ];
+
+    /**
+     * Theme package list
+     *
+     * @var ThemePackageList
+     */
+    private $themePackageList;
+
+    /**
+     * Factory for read directory
+     *
+     * @var ReadFactory
+     */
+    private $dirReadFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\ThemeFactory $themeConfigFactory
+     * @param ThemePackageList $themePackageList
+     * @param ReadFactory $dirReadFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Config\ThemeFactory $themeConfigFactory
+        \Magento\Framework\Config\ThemeFactory $themeConfigFactory,
+        ThemePackageList $themePackageList,
+        ReadFactory $dirReadFactory
     ) {
         parent::__construct($entityFactory);
-        $this->_directory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
         $this->themeConfigFactory = $themeConfigFactory;
+        $this->themePackageList = $themePackageList;
+        $this->dirReadFactory = $dirReadFactory;
     }
 
     /**
-     * Add default pattern to themes configuration
+     * Add constraint for the collection loading
      *
-     * @param string $area
-     * @return $this
-     */
-    public function addDefaultPattern($area = \Magento\Framework\App\Area::AREA_FRONTEND)
-    {
-        $this->addTargetPattern(implode('/', [$area, '{*/*,*/}', 'theme.xml']));
-        return $this;
-    }
-
-    /**
-     * Target directory setter. Adds directory to be scanned
+     * See CONSTRAINT_* constants for supported types
      *
-     * @param string $relativeTarget
-     * @return $this
+     * @param string $type
+     * @param string $value
+     * @return void
      */
-    public function addTargetPattern($relativeTarget)
+    public function addConstraint($type, $value)
     {
+        if (!isset($this->constraints[$type])) {
+            throw new \UnexpectedValueException("Constraint '$type' is not supported");
+        }
         if ($this->isLoaded()) {
             $this->clear();
         }
-        $this->_targetDirs[] = $relativeTarget;
-        return $this;
+        $this->constraints[$type][] = $value;
+        $this->constraints[$type] = array_unique($this->constraints[$type]);
     }
 
     /**
-     * Clear target patterns
+     * Reset constraints for the collection loading
      *
-     * @return $this
+     * @return void
      */
-    public function clearTargetPatterns()
+    public function resetConstraints()
     {
-        $this->_targetDirs = [];
-        return $this;
-    }
-
-    /**
-     * Return target dir for themes with theme configuration file
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return array|string
-     */
-    public function getTargetPatterns()
-    {
-        if (empty($this->_targetDirs)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please specify at least one target pattern to theme config file.')
-            );
+        foreach (array_keys($this->constraints) as $key) {
+            $this->constraints[$key] = [];
         }
-        return $this->_targetDirs;
+    }
+
+    /**
+     * Check value against constraint
+     *
+     * @param string $constraintType
+     * @param string $value
+     * @return bool
+     */
+    private function isAcceptable($constraintType, $value)
+    {
+        return empty($this->constraints[$constraintType]) || in_array($value, $this->constraints[$constraintType]);
     }
 
     /**
@@ -121,18 +151,21 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             return $this;
         }
 
-        $pathsToThemeConfig = [];
-        foreach ($this->getTargetPatterns() as $directoryPath) {
-            $themeConfigs = $this->_directory->search($directoryPath);
-            foreach ($themeConfigs as &$relPathToTheme) {
-                $relPathToTheme = $this->_directory->getAbsolutePath($relPathToTheme);
+        $themes = [];
+        foreach ($this->themePackageList->getThemes() as $themePackage) {
+            if ($this->isAcceptable(self::CONSTRAINT_AREA, $themePackage->getArea())
+                && $this->isAcceptable(self::CONSTRAINT_VENDOR, $themePackage->getVendor())
+                && $this->isAcceptable(self::CONSTRAINT_THEME_NAME, $themePackage->getName())
+            ) {
+                $themes[] = $themePackage;
             }
-            $pathsToThemeConfig = array_merge($pathsToThemeConfig, $themeConfigs);
         }
 
-        $this->_loadFromFilesystem(
-            $pathsToThemeConfig
-        )->clearTargetPatterns()->_updateRelations()->_renderFilters()->_clearFilters();
+        $this->_loadFromFilesystem($themes);
+        $this->resetConstraints();
+        $this->_updateRelations()
+            ->_renderFilters()
+            ->_clearFilters();
 
         return $this;
     }
@@ -145,7 +178,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     protected function _updateRelations()
     {
         $themeItems = $this->getItems();
-        /** @var $theme \Magento\Framework\Object|ThemeInterface */
+        /** @var $theme \Magento\Framework\DataObject|ThemeInterface */
         foreach ($themeItems as $theme) {
             $parentThemePath = $theme->getData('parent_theme_path');
             if ($parentThemePath) {
@@ -159,15 +192,15 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     }
 
     /**
-     * Load themes collection from file system by file list
+     * Load themes collection from file system
      *
-     * @param array $themeConfigPaths
+     * @param ThemePackage[] $themes
      * @return $this
      */
-    protected function _loadFromFilesystem(array $themeConfigPaths)
+    protected function _loadFromFilesystem(array $themes)
     {
-        foreach ($themeConfigPaths as $themeConfigPath) {
-            $theme = $this->getNewEmptyItem()->addData($this->_prepareConfigurationData($themeConfigPath));
+        foreach ($themes as $themePackage) {
+            $theme = $this->getNewEmptyItem()->addData($this->_prepareConfigurationData($themePackage));
             $this->addItem($theme);
         }
         $this->_setIsLoaded();
@@ -178,28 +211,29 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Return default path related data
      *
-     * @param string $configPath
+     * @param ThemePackage $themePackage
      * @return array
      */
-    protected function _preparePathData($configPath)
+    protected function _preparePathData($themePackage)
     {
-        $themeDirectory = dirname($configPath);
-        $fullPath = trim(substr($themeDirectory, strlen($this->_directory->getAbsolutePath())), '/');
-        $pathPieces = explode('/', $fullPath);
-        $area = array_shift($pathPieces);
-        return ['area' => $area, 'theme_path_pieces' => $pathPieces];
+        return [
+            'theme_path_pieces' => [
+                $themePackage->getVendor(),
+                $themePackage->getName(),
+            ]
+        ];
     }
 
     /**
      * Return default configuration data
      *
-     * @param string $configPath
+     * @param ThemePackage $themePackage
      * @return array
      */
-    public function _prepareConfigurationData($configPath)
+    protected function _prepareConfigurationData($themePackage)
     {
-        $themeConfig = $this->_getConfigModel($configPath);
-        $pathData = $this->_preparePathData($configPath);
+        $themeConfig = $this->_getConfigModel($themePackage);
+        $pathData = $this->_preparePathData($themePackage);
         $media = $themeConfig->getMedia();
 
         $parentPathPieces = $themeConfig->getParentTheme();
@@ -216,7 +250,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         return [
             'parent_id' => null,
             'type' => ThemeInterface::TYPE_PHYSICAL,
-            'area' => $pathData['area'],
+            'area' => $themePackage->getArea(),
             'theme_path' => $themePath,
             'code' => $themeCode,
             'theme_title' => $themeConfig->getThemeTitle(),
@@ -260,26 +294,29 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     }
 
     /**
-     * Return configuration model for themes
+     * Return configuration model for the theme
      *
-     * @param string $configPath
+     * @param ThemePackage $themePackage
      * @return \Magento\Framework\Config\Theme
      */
-    protected function _getConfigModel($configPath)
+    protected function _getConfigModel($themePackage)
     {
-        $relativeConfigPath = $this->_directory->getRelativePath($configPath);
-        $configContent = $this->_directory->isExist($relativeConfigPath) ?
-            $this->_directory->readFile($relativeConfigPath) : null;
+        $themeDir = $this->dirReadFactory->create($themePackage->getPath());
+        if ($themeDir->isExist('theme.xml')) {
+            $configContent = $themeDir->readFile('theme.xml');
+        } else {
+            $configContent = '';
+        }
         return $this->themeConfigFactory->create(['configContent' => $configContent]);
     }
 
     /**
      * Retrieve item id
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    protected function _getItemId(\Magento\Framework\Object $item)
+    protected function _getItemId(\Magento\Framework\DataObject $item)
     {
         return $item->getFullPath();
     }
@@ -317,7 +354,8 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     public function getThemeByFullPath($fullPath)
     {
         list($area, $themePath) = explode('/', $fullPath, 2);
-        $this->addDefaultPattern($area)->addFilter('theme_path', $themePath);
+        $this->addConstraint(self::CONSTRAINT_AREA, $area);
+        $this->addFilter('theme_path', $themePath);
 
         return $this->getFirstItem();
     }

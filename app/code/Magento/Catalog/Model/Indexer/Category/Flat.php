@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
-class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory
@@ -17,18 +17,18 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      */
     protected $rowsActionFactory;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
      * @param Flat\Action\FullFactory $fullActionFactory
      * @param Flat\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         Flat\Action\FullFactory $fullActionFactory,
         Flat\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
         $this->fullActionFactory = $fullActionFactory;
         $this->rowsActionFactory = $rowsActionFactory;

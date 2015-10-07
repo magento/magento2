@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerResFactory,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -105,7 +105,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $count = $collection->count();
         $resultSelect = $this->getConnection()->select()->union(
             [$customersSelect, $count],
-            \Zend_Db_Select::SQL_UNION_ALL
+            \Magento\Framework\DB\Select::SQL_UNION_ALL
         );
         list($customers, $count) = $this->getConnection()->fetchCol($resultSelect);
 
@@ -131,6 +131,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         )->group(
             'wt.wishlist_id'
         );
-        return $countSelect->getAdapter()->fetchOne($countSelect);
+        return $countSelect->getConnection()->fetchOne($countSelect);
     }
 }

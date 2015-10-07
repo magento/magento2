@@ -28,6 +28,13 @@ class ConfigurableOptions extends CustomOptions
     protected $optionSelector = '//*[./label[contains(.,"%s")]]//select';
 
     /**
+     * Selector for price block.
+     *
+     * @var string
+     */
+    protected $priceBlock = '//*[@class="product-info-main"]//*[contains(@class,"price-box")]';
+
+    /**
      * Get configurable product options
      *
      * @param FixtureInterface|null $product [optional]
@@ -61,11 +68,39 @@ class ConfigurableOptions extends CustomOptions
                 ? 'Yes'
                 : 'No';
 
+            foreach ($optionData['options'] as $key => $value) {
+                $optionData['options'][$key]['price'] = $this->getOptionPrice($title, $value['title']);
+            }
             $result[$title] = $optionData;
-            $this->_rootElement->find(sprintf($this->optionSelector, $title), Locator::SELECTOR_XPATH, 'select')
-                ->setValue($optionData['options'][0]['title']);
         }
 
         return $result;
+    }
+
+    /**
+     * Get option price
+     *
+     * @param $attributeTitle
+     * @param $optionTitle
+     * @return null|string
+     */
+    protected function getOptionPrice($attributeTitle, $optionTitle)
+    {
+        $this->_rootElement->find(sprintf($this->optionSelector, $attributeTitle), Locator::SELECTOR_XPATH, 'select')
+            ->setValue($optionTitle);
+        return $this->getPriceBlock()->getPrice();
+    }
+
+    /**
+     * Get block price.
+     *
+     * @return \Magento\Catalog\Test\Block\Product\Price
+     */
+    protected function getPriceBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Price',
+            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

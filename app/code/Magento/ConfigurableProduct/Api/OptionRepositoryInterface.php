@@ -6,6 +6,11 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
+/**
+ * Manage options of configurable product
+ *
+ * @api
+ */
 interface OptionRepositoryInterface
 {
     /**

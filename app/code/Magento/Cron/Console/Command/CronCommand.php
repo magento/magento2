@@ -11,10 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
-use Magento\Cron\Model\Observer;
+use Magento\Cron\Observer\ProcessCronQueueObserver;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Shell\ComplexParameter;
 
@@ -29,11 +28,11 @@ class CronCommand extends Command
     const INPUT_KEY_GROUP = 'group';
 
     /**
-     * Object Manager
+     * Object manager factory
      *
-     * @var ObjectManagerInterface
+     * @var ObjectManagerFactory
      */
-    protected $objectManager;
+    private $objectManagerFactory;
 
     /**
      * Constructor
@@ -42,10 +41,7 @@ class CronCommand extends Command
      */
     public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
-        $params = $_SERVER;
-        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-        $params[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
-        $this->objectManager = $objectManagerFactory->create($params);
+        $this->objectManagerFactory = $objectManagerFactory;
         parent::__construct();
     }
 
@@ -59,8 +55,7 @@ class CronCommand extends Command
                 self::INPUT_KEY_GROUP,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Run jobs only from specified group',
-                'default'
+                'Run jobs only from specified group'
             ),
             new InputOption(
                 Cli::INPUT_KEY_BOOTSTRAP,
@@ -80,21 +75,26 @@ class CronCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $omParams = $_SERVER;
+        $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
+        $omParams[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
+        $objectManager = $this->objectManagerFactory->create($omParams);
+
         $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
-        $params[Observer::STANDALONE_PROCESS_STARTED] = '0';
+        $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = '0';
         $bootstrap = $input->getOption(Cli::INPUT_KEY_BOOTSTRAP);
         if ($bootstrap) {
             $bootstrapProcessor = new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP);
             $bootstrapOptionValues = $bootstrapProcessor->getFromString(
                 '--' . Cli::INPUT_KEY_BOOTSTRAP . '=' . $bootstrap
             );
-            $bootstrapOptionValue = $bootstrapOptionValues[Observer::STANDALONE_PROCESS_STARTED];
+            $bootstrapOptionValue = $bootstrapOptionValues[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED];
             if ($bootstrapOptionValue) {
-                $params[Observer::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
+                $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
             }
         }
         /** @var \Magento\Framework\App\Cron $cronObserver */
-        $cronObserver = $this->objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
+        $cronObserver = $objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
     }

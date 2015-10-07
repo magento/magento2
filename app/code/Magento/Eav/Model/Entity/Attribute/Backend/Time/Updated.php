@@ -17,6 +17,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime $dateTime)
     {
@@ -26,7 +27,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * Set modified date
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)

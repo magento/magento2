@@ -30,8 +30,8 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadLatestNotice(\Magento\AdminNotification\Model\Inbox $object)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->order(
             $this->getIdFieldName() . ' DESC'
@@ -42,7 +42,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->limit(
             1
         );
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
 
         if ($data) {
             $object->setData($data);
@@ -62,8 +62,8 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             [
                 'severity' => 'severity',
@@ -78,7 +78,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'is_read=?',
             0
         );
-        $return = $adapter->fetchPairs($select);
+        $return = $connection->fetchPairs($select);
         return $return;
     }
 
@@ -92,9 +92,9 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         foreach ($data as $item) {
-            $select = $adapter->select()->from($this->getMainTable())->where('title = ?', $item['title']);
+            $select = $connection->select()->from($this->getMainTable())->where('title = ?', $item['title']);
 
             if (empty($item['url'])) {
                 $select->where('url IS NULL');
@@ -106,11 +106,11 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $row = false;
                 unset($item['internal']);
             } else {
-                $row = $adapter->fetchRow($select);
+                $row = $connection->fetchRow($select);
             }
 
             if (!$row) {
-                $adapter->insert($this->getMainTable(), $item);
+                $connection->insert($this->getMainTable(), $item);
             }
         }
     }

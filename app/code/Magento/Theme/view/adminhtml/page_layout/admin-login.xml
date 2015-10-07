@@ -5,8 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <container name="root" htmlTag="section" htmlClass="page-wrapper">
+        <container name="after.body.start" as="after.body.start" label="Page Top" before="-"/>
         <container name="login.header" htmlTag="header" htmlClass="login-header"/>
         <container name="login.content" htmlTag="div" htmlClass="login-content"/>
         <container name="login.footer" htmlTag="footer" htmlClass="login-footer"/>

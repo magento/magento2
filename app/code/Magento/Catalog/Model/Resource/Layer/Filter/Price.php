@@ -43,7 +43,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -51,13 +51,13 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
         $this->storeManager = $storeManager;
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -84,7 +84,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select->columns(['range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
 
-        return $this->_getReadAdapter()->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -107,13 +107,13 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         // reset columns, order and limitation conditions
-        $select->reset(\Zend_Db_Select::COLUMNS);
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
         // remove join with main table
-        $fromPart = $select->getPart(\Zend_Db_Select::FROM);
+        $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset(
                 $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS]
             ) || !isset(
@@ -126,22 +126,22 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // processing FROM part
         $priceIndexJoinPart = $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS];
         $priceIndexJoinConditions = explode('AND', $priceIndexJoinPart['joinCondition']);
-        $priceIndexJoinPart['joinType'] = \Zend_Db_Select::FROM;
+        $priceIndexJoinPart['joinType'] = \Magento\Framework\DB\Select::FROM;
         $priceIndexJoinPart['joinCondition'] = null;
         $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS] = $priceIndexJoinPart;
         unset($fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS]);
-        $select->setPart(\Zend_Db_Select::FROM, $fromPart);
+        $select->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         foreach ($fromPart as $key => $fromJoinItem) {
             $fromPart[$key]['joinCondition'] = $this->_replaceTableAlias($fromJoinItem['joinCondition']);
         }
-        $select->setPart(\Zend_Db_Select::FROM, $fromPart);
+        $select->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
 
         // processing WHERE part
-        $wherePart = $select->getPart(\Zend_Db_Select::WHERE);
+        $wherePart = $select->getPart(\Magento\Framework\DB\Select::WHERE);
         foreach ($wherePart as $key => $wherePartItem) {
             $wherePart[$key] = $this->_replaceTableAlias($wherePartItem);
         }
-        $select->setPart(\Zend_Db_Select::WHERE, $wherePart);
+        $select->setPart(\Magento\Framework\DB\Select::WHERE, $wherePart);
         $excludeJoinPart = \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.entity_id';
         foreach ($priceIndexJoinConditions as $condition) {
             if (strpos($condition, $excludeJoinPart) !== false) {
@@ -165,14 +165,14 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($conditionString === null) {
             return null;
         }
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $oldAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
         ];
         $newAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
+            $connection->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
         ];
         return str_replace($oldAlias, $newAlias, $conditionString);
     }
@@ -246,7 +246,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($lowerPrice !== null) {
             $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice));
         }
-        $offset = $this->_getReadAdapter()->fetchOne($select);
+        $offset = $this->getConnection()->fetchOne($select);
         if (!$offset) {
             return false;
         }
@@ -276,7 +276,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $select->order("{$priceExpression} ASC")->limit($limit, $offset);
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -302,7 +302,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($upperPrice !== null) {
             $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice));
         }
-        $offset = $this->_getReadAdapter()->fetchOne($select);
+        $offset = $this->getConnection()->fetchOne($select);
         if (!$offset) {
             return false;
         }
@@ -317,7 +317,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $pricesSelect->order("{$priceExpression} DESC")->limit($rightIndex - $offset + 1, $offset - 1);
 
-        return array_reverse($this->_getReadAdapter()->fetchCol($pricesSelect));
+        return array_reverse($this->getConnection()->fetchCol($pricesSelect));
     }
 
     /**

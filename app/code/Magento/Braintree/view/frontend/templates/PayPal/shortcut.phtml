@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Braintree\Block\PayPal\Shortcut $block */
+$containerId = $block->getContainerId();
+$submitFormId = $block->getSubmitFormId();
+$paymentMethodNonceId = $block->getPaymentMethodNonceId();
+$paymentDetailsId = $block->getPaymentDetailsId();
+?>
+<div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
+     class="paypal checkout <?php echo $block->escapeHtml($block->getShowOrPosition()) ?> paypal-logo"
+    >
+    <fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
+        <div
+            id="<?php /* @noEscape */ echo $containerId ?>"
+            data-mage-init='{
+                "braintreePayPalShortcut":{
+                    "clientToken":"<?php echo $block->escapeHtml($block->getClientToken()) ?>",
+                    "amount":"<?php /* @noEscape */ echo $block->getAmount() ?>",
+                    "currency":"<?php /* @noEscape */ echo $block->getCurrency() ?>",
+                    "locale":"<?php /* @noEscape */ echo $block->getLocale() ?>",
+                    "merchantName":"<?php echo $block->escapeHtml($block->getMerchantName()) ?>",
+                    "container":"<?php /* @noEscape */ echo $containerId ?>",
+                    "submitFormId":"<?php /* @noEscape */ echo $submitFormId ?>",
+                    "enableBillingAddress":"<?php /* @noEscape */ echo $block->enableBillingAddress() ?>",
+                    "paymentMethodNonceId":"<?php /* @noEscape */ echo $paymentMethodNonceId ?>",
+                    "paymentDetailsId":"<?php /* @noEscape */ echo $paymentDetailsId ?>"
+                }
+            }'
+            >
+        </div>
+        <form id="<?php /* @noEscape */ echo $submitFormId ?>" action="<?php echo $block->escapeUrl($block->getReviewPageUrl()) ?>" method="post" >
+            <input id="<?php /* @noEscape */ echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
+            <input id="<?php /* @noEscape */ echo $paymentDetailsId ?>" type="hidden" name="details" />
+        </form>
+    </fieldset>
+</div>

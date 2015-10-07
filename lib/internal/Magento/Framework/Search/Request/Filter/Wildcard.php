@@ -22,6 +22,7 @@ class Wildcard extends AbstractKeyValuePair implements FilterInterface
      * @param string $name
      * @param string|array $value
      * @param string $field
+     * @codeCoverageIgnore
      */
     public function __construct($name, $value, $field)
     {
@@ -41,6 +42,7 @@ class Wildcard extends AbstractKeyValuePair implements FilterInterface
      * Get Field
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getField()
     {

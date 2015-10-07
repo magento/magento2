@@ -11,39 +11,41 @@
  * @see \Magento\Tax\Block\Checkout\Shipping
  */
 ?>
-<?php if ($block->displayBoth()):?>
-<tr class="totals shipping excl">
-    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
-        <?php echo $block->getExcludeTaxLabel() ?>
-    </th>
-    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getExcludeTaxLabel()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
-    </td>
-</tr>
-<tr class="totals shipping incl">
-    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
-        <?php echo $block->getIncludeTaxLabel() ?>
-    </th>
-    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getIncludeTaxLabel()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
-    </td>
-</tr>
-<?php elseif ($block->displayIncludeTax()) : ?>
-<tr class="totals shipping incl">
-    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
-        <?php echo $block->getTotal()->getTitle() ?>
-    </th>
-    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
-    </td>
-</tr>
-<?php else:?>
-<tr class="totals shipping excl">
-    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
-        <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
-    </th>
-    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
-    </td>
-</tr>
-<?php endif;?>
+<?php if ($block->displayShipping()):?>
+    <?php if ($block->displayBoth()):?>
+    <tr class="totals shipping excl">
+        <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
+            <?php /* @escapeNotVerified */ echo $block->getExcludeTaxLabel() ?>
+        </th>
+        <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getExcludeTaxLabel()); ?>">
+            <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
+        </td>
+    </tr>
+    <tr class="totals shipping incl">
+        <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
+            <?php /* @escapeNotVerified */ echo $block->getIncludeTaxLabel() ?>
+        </th>
+        <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getIncludeTaxLabel()); ?>">
+            <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
+        </td>
+    </tr>
+    <?php elseif ($block->displayIncludeTax()) : ?>
+    <tr class="totals shipping incl">
+        <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
+            <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
+        </th>
+        <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+            <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
+        </td>
+    </tr>
+    <?php else:?>
+    <tr class="totals shipping excl">
+        <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
+            <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        </th>
+        <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+            <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
+        </td>
+    </tr>
+    <?php endif;?>
+<?php endif; ?>

@@ -50,7 +50,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
         );
         $this->attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('datetime'));
 
-        $this->model = new \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime($this->booleanFactoryMock, $this->localeDateMock);
+        $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);
         $this->model->setAttribute($this->attributeMock);
     }
 
@@ -58,7 +58,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeValue = '11-11-2011';
         $date = new \DateTime($attributeValue);
-        $object = new \Magento\Framework\Object(['datetime' => $attributeValue]);
+        $object = new \Magento\Framework\DataObject(['datetime' => $attributeValue]);
         $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
             ->will($this->returnValue('text'));
 

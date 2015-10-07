@@ -182,6 +182,25 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     }
 
     /**
+     * Get database backup size
+     *
+     * @return int
+     */
+    public function getDBBackupSize()
+    {
+        $tables = $this->getResource()->getTables();
+        $ignoreDataTablesList = $this->getIgnoreDataTablesList();
+        $size = 0;
+        foreach ($tables as $table) {
+            $tableStatus = $this->getResource()->getTableStatus($table);
+            if ($tableStatus->getRows() && !in_array($table, $ignoreDataTablesList)) {
+                $size += $tableStatus->getDataLength() + $tableStatus->getIndexLength();
+            }
+        }
+        return $size;
+    }
+
+    /**
      * Returns the list of tables which data should not be backed up
      *
      * @return string[]

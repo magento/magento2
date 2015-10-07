@@ -79,7 +79,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
-                        $this->assertInstanceOf('Magento\Framework\Object', $redirect);
+                        $this->assertInstanceOf('Magento\Framework\DataObject', $redirect);
                         $redirect->setRedirectUrl(self::REDIRECT_URL);
                         return true;
                     }
@@ -108,7 +108,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
-                        $this->assertInstanceOf('Magento\Framework\Object', $redirect);
+                        $this->assertInstanceOf('Magento\Framework\DataObject', $redirect);
                         $redirect->setArguments(self::REDIRECT_ARGUMENTS);
                         $redirect->setPath(self::REDIRECT_PATH);
                         $redirect->setRedirect(self::REDIRECT_URL);

@@ -11,7 +11,7 @@
     <block name="cartEmptyBlock" class="Magento\Checkout\Test\Block\Cart\CartEmpty" locator=".cart-empty" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector"/>
     <block name="shippingBlock" class="Magento\Checkout\Test\Block\Cart\Shipping" locator=".block.shipping" strategy="css selector"/>
-    <block name="totalsBlock" class="Magento\Checkout\Test\Block\Cart\Totals" locator="#shopping-cart-totals-table" strategy="css selector"/>
+    <block name="totalsBlock" class="Magento\Checkout\Test\Block\Cart\Totals" locator="#cart-totals" strategy="css selector"/>
     <block name="crosssellBlock" class="Magento\Catalog\Test\Block\Product\ProductList\Crosssell" locator="//div[contains(@class, 'block')][contains(@class, 'crosssell')]" strategy="xpath"/>
     <block name="discountCodesBlock" class="Magento\Checkout\Test\Block\Cart\DiscountCodes" locator=".block.discount" strategy="css selector"/>
     <block name="proceedToCheckoutBlock" class="Magento\Checkout\Test\Block\Onepage\Link" locator="ul.checkout-methods-items button.primary.checkout" strategy="css selector"/>

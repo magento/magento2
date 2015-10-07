@@ -4,41 +4,30 @@
  */
 
 define([
-    'Magento_Ui/js/grid/controls/bookmarks/storage',
-    'Magento_Ui/js/lib/storage'
-], function (bookmarkStorage,storage) {
+    'Magento_Ui/js/grid/controls/bookmarks/storage'
+], function (storage) {
     'use strict';
 
     describe('ui/js/grid/controls/bookmarks/storage', function () {
+        var storageObj;
 
-        it('has getter method', function () {
-            spyOn(storage, 'get');
-            bookmarkStorage.get();
-            expect(storage.get).toHaveBeenCalled();
-            bookmarkStorage.get(1, 2, 3);
-            expect(storage.get).toHaveBeenCalledWith(1, 2, 3);
-            bookmarkStorage.get('string');
-            expect(storage.get).toHaveBeenCalledWith('string');
+        beforeEach(function(){
+            storageObj = new storage();
         });
-
         it('has setter method', function () {
-            spyOn(storage, 'set');
-            bookmarkStorage.set();
-            expect(storage.set).toHaveBeenCalled();
-            bookmarkStorage.set(1,2);
-            expect(storage.set).toHaveBeenCalledWith(1,2);
-            bookmarkStorage.set('path', 'value');
-            expect(storage.set).toHaveBeenCalledWith('path', 'value');
+            spyOn(storageObj, 'set');
+            storageObj.set();
+            expect(storageObj.set).toHaveBeenCalled();
+        });
+        it('has getter method', function () {
+            spyOn(storageObj, 'get');
+            storageObj.get();
+            expect(storageObj.get).toHaveBeenCalled();
         });
         it('has remove method', function () {
-            spyOn(storage, 'remove');
-            bookmarkStorage.remove();
-            expect(storage.remove).toHaveBeenCalled();
-            bookmarkStorage.remove(1,2);
-            expect(storage.remove).toHaveBeenCalledWith(1,2);
-            bookmarkStorage.remove('path');
-            expect(storage.remove).toHaveBeenCalledWith('path');
+            spyOn(storageObj, 'remove');
+            storageObj.remove();
+            expect(storageObj.remove).toHaveBeenCalled();
         });
-
     });
 });

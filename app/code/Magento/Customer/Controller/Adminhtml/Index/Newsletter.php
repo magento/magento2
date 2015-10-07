@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Customer\Controller\RegistryConstants;
-
 class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -16,8 +14,7 @@ class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_initCustomer();
-        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $customerId = $this->initCurrentCustomer();
         /** @var  \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->_objectManager
             ->create('Magento\Newsletter\Model\Subscriber')

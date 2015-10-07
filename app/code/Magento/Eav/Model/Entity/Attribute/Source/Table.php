@@ -27,6 +27,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -152,7 +153,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
             []
         );
-        $valueExpr = $collection->getSelect()->getAdapter()->getCheckSql(
+        $valueExpr = $collection->getSelect()->getConnection()->getCheckSql(
             "{$valueTable2}.value_id > 0",
             "{$valueTable2}.value",
             "{$valueTable1}.value"

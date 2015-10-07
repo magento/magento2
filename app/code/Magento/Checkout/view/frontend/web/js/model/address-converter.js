@@ -6,11 +6,12 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/model/new-customer-address',
+        'Magento_Customer/js/customer-data',
         'mage/utils/objects'
     ],
-    function($, address, mageUtils) {
+    function($, address, customerData, mageUtils) {
         'use strict';
-        var countryData = window.checkoutConfig.countryData;
+        var countryData = customerData.get('directory-data');
 
         return {
             /**
@@ -21,20 +22,23 @@ define(
             formAddressDataToQuoteAddress: function(formData) {
                 // clone address form data to new object
                 var addressData = $.extend(true, {}, formData),
-                    region;
-
+                    region,
+                    regionName = addressData.region;
                 if (mageUtils.isObject(addressData.street)) {
                     addressData.street = this.objectToArray(addressData.street);
                 }
 
                 addressData.region = {
-                    region_id: null,
-                    region_code: null,
-                    region: null
+                    region_id: addressData.region_id,
+                    region_code: addressData.region_code,
+                    region: regionName
                 };
 
-                if (addressData.region_id) {
-                    region = countryData[addressData.country_id]['regions'][addressData.region_id];
+                if (addressData.region_id
+                    && countryData()[addressData.country_id]
+                    && countryData()[addressData.country_id]['regions']
+                ) {
+                    region = countryData()[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
                         addressData.region.region_code = region['code'];
@@ -44,6 +48,35 @@ define(
                 delete addressData.region_id;
 
                 return address(addressData);
+            },
+
+            /**
+             * Convert Address object to address form data
+             * @param {Object} address
+             * @returns {Object}
+             */
+            quoteAddressToFormAddressData: function (address) {
+                var self = this;
+                var output = {};
+
+                if ($.isArray(address.street)) {
+                    var streetObject = {};
+                    address.street.forEach(function(value, index) {
+                        streetObject[index] = value;
+                    });
+                    address.street = streetObject;
+                }
+
+                $.each(address, function (key) {
+                    if (address.hasOwnProperty(key) && !$.isFunction(address[key])) {
+                        output[self.toUnderscore(key)] = address[key];
+                    }
+                });
+                return output;
+            },
+
+            toUnderscore: function (string) {
+                return string.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();});
             },
 
             formDataProviderToFlatData: function(formProviderData, formIndex) {
@@ -79,6 +112,16 @@ define(
                 });
 
                 return convertedArray.slice(0);
+            },
+
+            addressToEstimationAddress: function (address) {
+                var estimatedAddressData = {
+                    country_id: address.countryId,
+                    region: address.region,
+                    region_id: address.regionId,
+                    postcode: address.postcode
+                };
+               return this.formAddressDataToQuoteAddress(estimatedAddressData);
             }
         };
     }

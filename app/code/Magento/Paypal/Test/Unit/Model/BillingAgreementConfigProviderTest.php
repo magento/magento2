@@ -45,8 +45,8 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $agreements = [
-            new \Magento\Framework\Object(['id' => 1, 'reference_id' => 'DFG123ER']),
-            new \Magento\Framework\Object(['id' => 2, 'reference_id' => 'JKT153ER']),
+            new \Magento\Framework\DataObject(['id' => 1, 'reference_id' => 'DFG123ER']),
+            new \Magento\Framework\DataObject(['id' => 2, 'reference_id' => 'JKT153ER']),
         ];
 
         $expected = [

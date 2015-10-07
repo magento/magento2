@@ -16,10 +16,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
     /**
      * Renders column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $actions = [];
 

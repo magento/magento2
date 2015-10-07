@@ -10,7 +10,7 @@ use Magento\Payment\Model\Method\Logger;
 /**
  * Abstract class for Paypal API wrappers
  */
-abstract class AbstractApi extends \Magento\Framework\Object
+abstract class AbstractApi extends \Magento\Framework\DataObject
 {
     /**
      * Config instance
@@ -285,25 +285,25 @@ abstract class AbstractApi extends \Magento\Framework\Object
     /**
      * Import $this public data to specified object or array
      *
-     * @param array|\Magento\Framework\Object $to
+     * @param array|\Magento\Framework\DataObject $to
      * @param array $publicMap
-     * @return array|\Magento\Framework\Object
+     * @return array|\Magento\Framework\DataObject
      */
     public function import($to, array $publicMap = [])
     {
-        return \Magento\Framework\Object\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $to, $publicMap);
+        return \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $to, $publicMap);
     }
 
     /**
      * Export $this public data from specified object or array
      *
-     * @param array|\Magento\Framework\Object $from
+     * @param array|\Magento\Framework\DataObject $from
      * @param array $publicMap
      * @return $this
      */
     public function export($from, array $publicMap = [])
     {
-        \Magento\Framework\Object\Mapper::accumulateByMap($from, [$this, 'setDataUsingMethod'], $publicMap);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($from, [$this, 'setDataUsingMethod'], $publicMap);
         return $this;
     }
 
@@ -366,7 +366,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 $map[$this->_globalMap[$key]] = $key;
             }
         }
-        $result = \Magento\Framework\Object\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
+        $result = \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
         foreach ($privateRequestMap as $key) {
             if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
                 $callback = $this->_exportToRequestFilters[$key];
@@ -397,7 +397,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 $response[$key] = call_user_func([$this, $callback], $response[$key], $key, $map[$key]);
             }
         }
-        \Magento\Framework\Object\Mapper::accumulateByMap($response, [$this, 'setDataUsingMethod'], $map);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($response, [$this, 'setDataUsingMethod'], $map);
     }
 
     /**
@@ -532,10 +532,10 @@ abstract class AbstractApi extends \Magento\Framework\Object
     /**
      * region_id workaround: PayPal requires state code, try to find one in the address
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return string
      */
-    protected function _lookupRegionCodeFromAddress(\Magento\Framework\Object $address)
+    protected function _lookupRegionCodeFromAddress(\Magento\Framework\DataObject $address)
     {
         $regionId = $address->getData('region_id');
         if ($regionId) {
@@ -551,11 +551,11 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * Street address workaround: divides address lines into parts by specified keys
      * (keys should go as 3rd, 4th[...] parameters)
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param array $to
      * @return void
      */
-    protected function _importStreetFromAddress(\Magento\Framework\Object $address, array &$to)
+    protected function _importStreetFromAddress(\Magento\Framework\DataObject $address, array &$to)
     {
         $keys = func_get_args();
         array_shift($keys);

@@ -51,16 +51,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
 
-        /** @var $adapterMock \Magento\Framework\DB\Adapter\Pdo\Mysql */
-        $adapterMock = $this->getMock(
+        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'from', 'order', 'query'],
             [],
             '',
             false
         );
-        $adapterMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $adapterMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
+        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
 
         /** @var $resourceModelMock \Magento\Framework\App\Resource */
         $resourceModelMock = $this->getMock(
@@ -70,7 +70,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resourceModelMock->expects($this->any())->method('getConnection')->will($this->returnValue($adapterMock));
+        $resourceModelMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
 
         $data = ['resource' => $resourceModelMock, 'entity_type' => $entityType];
 

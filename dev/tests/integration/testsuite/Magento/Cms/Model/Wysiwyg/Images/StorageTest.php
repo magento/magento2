@@ -25,7 +25,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Helper\Wysiwyg\Images'
         )->getCurrentPath() . 'MagentoCmsModelWysiwygImagesStorageTest';
         if (!file_exists(self::$_baseDir)) {
-            mkdir(self::$_baseDir, 0777);
+            mkdir(self::$_baseDir, 0770);
         }
         touch(self::$_baseDir . '/1.swf');
     }
@@ -54,7 +54,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $collection = $model->getFilesCollection(self::$_baseDir, 'media');
         $this->assertInstanceOf('Magento\Cms\Model\Wysiwyg\Images\Storage\Collection', $collection);
         foreach ($collection as $item) {
-            $this->assertInstanceOf('Magento\Framework\Object', $item);
+            $this->assertInstanceOf('Magento\Framework\DataObject', $item);
             $this->assertStringEndsWith('/1.swf', $item->getUrl());
             $this->assertStringMatchesFormat(
                 'http://%s/static/adminhtml/%s/%s/Magento_Cms/images/placeholder_thumbnail.jpg',

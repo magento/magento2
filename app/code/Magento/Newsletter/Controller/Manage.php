@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Customers newsletter subscription controller
  */
-class Manage extends \Magento\Framework\App\Action\Action
+abstract class Manage extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer session
@@ -39,7 +39,7 @@ class Manage extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_customerSession->authenticate($this)) {
+        if (!$this->_customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);

@@ -15,7 +15,7 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     /**
      * Perform operation before save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      */
     public function beforeSave($object)
@@ -29,7 +29,7 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     /**
      * Perform operation after save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      */
     public function afterSave($object)

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
@@ -71,6 +69,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,

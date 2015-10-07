@@ -98,7 +98,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilder->expects($this->exactly(2))->method('create')->willReturn($filter);
         $this->searchCriteriaBuilder
             ->expects($this->exactly(2))
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$filter])
             ->willReturnSelf();
 

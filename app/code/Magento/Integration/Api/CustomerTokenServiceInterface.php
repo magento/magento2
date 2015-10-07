@@ -6,8 +6,6 @@
 
 namespace Magento\Integration\Api;
 
-use Magento\Framework\Exception\AuthenticationException;
-
 /**
  * Interface providing token generation for Customers
  *
@@ -21,7 +19,7 @@ interface CustomerTokenServiceInterface
      * @param string $username
      * @param string $password
      * @return string Token created
-     * @throws AuthenticationException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function createCustomerAccessToken($username, $password);
 

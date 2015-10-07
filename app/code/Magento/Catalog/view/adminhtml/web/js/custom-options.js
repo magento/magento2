@@ -132,6 +132,11 @@ define([
                             at: 'center top',
                             of: 'body'
                         },
+                        create: function (event, ui) {
+                            $(document).on('click', '#productGrid_massaction-form button', function () {
+                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                            });
+                        },
                         open: function () {
                             $(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
@@ -195,17 +200,12 @@ define([
                             }]
                     });
                     importContainer.load(
-                        this.options.productGridUrl, {
-                            form_key: this.options.formKey
-                        },
+                        this.options.productGridUrl,
+                        {form_key: this.options.formKey},
                         function () {
                             importContainer.dialog('open');
                         }
                     );
-                },
-
-                'click #productGrid_massaction-form button': function () {
-                    $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
                 },
 
                 /**

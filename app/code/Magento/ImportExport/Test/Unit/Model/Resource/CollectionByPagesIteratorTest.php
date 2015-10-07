@@ -40,7 +40,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
 
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
 
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
 
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMock('Psr\Log\LoggerInterface');
@@ -72,7 +72,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             for ($rowNumber = 1; $rowNumber <= $pageSize; $rowNumber++) {
                 $itemId = ($pageNumber - 1) * $pageSize + $rowNumber;
-                $item = new \Magento\Framework\Object(['id' => $itemId]);
+                $item = new \Magento\Framework\DataObject(['id' => $itemId]);
                 $collectionMock->addItem($item);
 
                 $callbackMock->expects($this->at($itemId - 1))->method('callback')->with($item);

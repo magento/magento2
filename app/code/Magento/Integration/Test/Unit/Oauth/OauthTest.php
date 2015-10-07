@@ -210,7 +210,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         )->method(
             'loadByKey'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object())
+            $this->returnValue(new \Magento\Framework\DataObject())
         );
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
@@ -253,7 +253,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             )->method(
                 'load'
             )->will(
-                $this->returnValue(new \Magento\Framework\Object())
+                $this->returnValue(new \Magento\Framework\DataObject())
             );
         }
 
@@ -355,7 +355,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         )->method(
             'loadByKey'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object())
+            $this->returnValue(new \Magento\Framework\DataObject())
         );
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);

@@ -18,7 +18,7 @@ interface CartInterface
      * Add product to shopping cart (quote)
      *
      * @param int|\Magento\Catalog\Model\Product $productInfo
-     * @param array|float|int|\Magento\Framework\Object|null $requestInfo
+     * @param array|float|int|\Magento\Framework\DataObject|null $requestInfo
      * @return $this
      */
     public function addProduct($productInfo, $requestInfo = null);

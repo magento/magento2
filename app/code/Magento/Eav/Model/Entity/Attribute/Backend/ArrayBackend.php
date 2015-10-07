@@ -15,7 +15,7 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
     /**
      * Prepare data for save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function beforeSave($object)

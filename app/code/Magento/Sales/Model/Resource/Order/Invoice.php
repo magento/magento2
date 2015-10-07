@@ -37,7 +37,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)

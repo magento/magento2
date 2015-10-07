@@ -16,6 +16,11 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 interface ContextInterface
 {
     /**
+     * Filter variable name
+     */
+    const FILTER_VAR = 'filters';
+
+    /**
      * Add components definition
      *
      * @param string $name
@@ -83,6 +88,22 @@ interface ContextInterface
      * @return mixed
      */
     public function getRequestParam($key, $defaultValue = null);
+
+    /**
+     * Get filters params
+     *
+     * @return array
+     */
+    public function getFiltersParams();
+
+    /**
+     * Get filter params according to the key
+     *
+     * @param string $key
+     * @param null|string $defaultValue
+     * @return mixed|null
+     */
+    public function getFilterParam($key, $defaultValue = null);
 
     /**
      * Get root layout

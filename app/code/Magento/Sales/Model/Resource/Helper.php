@@ -44,10 +44,10 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
         $mainTable,
         $aggregationTable
     ) {
-        $adapter = $this->_resource->getConnection('sales_write');
+        $connection = $this->_resource->getConnection('sales');
         if ($aggregation == $aggregationAliases['monthly']) {
             $this->_reportsResourceHelper->updateReportRatingPos(
-                $adapter,
+                $connection,
                 'month',
                 'qty_ordered',
                 $mainTable,
@@ -55,7 +55,7 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
             );
         } elseif ($aggregation == $aggregationAliases['yearly']) {
             $this->_reportsResourceHelper->updateReportRatingPos(
-                $adapter,
+                $connection,
                 'year',
                 'qty_ordered',
                 $mainTable,
@@ -63,7 +63,7 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
             );
         } else {
             $this->_reportsResourceHelper->updateReportRatingPos(
-                $adapter,
+                $connection,
                 'day',
                 'qty_ordered',
                 $mainTable,

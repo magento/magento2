@@ -35,6 +35,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@-*/
 
     /**
+     * Path to config value that contains codes of the most used countries.
+     * Such countries can be shown on the top of the country list.
+     */
+    const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+
+    /**
      * Country collection
      *
      * @var \Magento\Directory\Model\Resource\Country\Collection
@@ -138,12 +144,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve country collection
      *
+     * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\Resource\Country\Collection
      */
-    public function getCountryCollection()
+    public function getCountryCollection($store = null)
     {
         if (!$this->_countryCollection->isLoaded()) {
-            $this->_countryCollection->loadByStore();
+            $this->_countryCollection->loadByStore($store);
         }
         return $this->_countryCollection;
     }
@@ -334,5 +341,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ];
         }
         return $regions;
+    }
+
+    /**
+     * Retrieve list of codes of the most used countries
+     *
+     * @return array
+     */
+    public function getTopCountryCodes()
+    {
+        $configValue = (string)$this->scopeConfig->getValue(
+            self::XML_PATH_TOP_COUNTRIES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return !empty($configValue) ? explode(',', $configValue) : [];
     }
 }

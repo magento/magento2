@@ -88,12 +88,10 @@ class Observer
     /**
      * Generate sitemaps
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function scheduledGenerateSitemaps($schedule)
+    public function scheduledGenerateSitemaps()
     {
         $errors = [];
 
@@ -133,8 +131,8 @@ class Observer
                 )
             )->setTemplateOptions(
                 [
-                    'area' => \Magento\Framework\App\Area::AREA_ADMIN,
-                    'store' => $this->_storeManager->getStore()->getId(),
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )->setTemplateVars(
                 ['warnings' => join("\n", $errors)]

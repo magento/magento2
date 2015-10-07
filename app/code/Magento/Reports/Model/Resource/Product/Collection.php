@@ -113,7 +113,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\Resource\Quote\Collection $quoteResource,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
@@ -237,7 +237,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function _joinFields()
     {
-        $this->_totals = new \Magento\Framework\Object();
+        $this->_totals = new \Magento\Framework\DataObject();
 
         $this->addAttributeToSelect('entity_id')->addAttributeToSelect('name')->addAttributeToSelect('price');
 
@@ -247,7 +247,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Get select count sql
      *
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
@@ -265,12 +265,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->columns("count(DISTINCT e.entity_id)");
 
         return $countSelect;

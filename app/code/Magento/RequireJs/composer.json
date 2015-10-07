@@ -2,22 +2,19 @@
     "name": "magento/module-require-js",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/framework": "0.74.0-beta16",
-        "magento/magento-composer-installer": "*"
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta16",
+    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/RequireJs"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\RequireJs\\": ""
+        }
     }
 }

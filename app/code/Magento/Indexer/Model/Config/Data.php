@@ -13,13 +13,13 @@ class Data extends \Magento\Framework\Config\Data
     protected $stateCollection;
 
     /**
-     * @param \Magento\Indexer\Model\Config\Reader $reader
+     * @param \Magento\Framework\Indexer\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection
      * @param string $cacheId
      */
     public function __construct(
-        \Magento\Indexer\Model\Config\Reader $reader,
+        \Magento\Framework\Indexer\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection,
         $cacheId = 'indexer_config'

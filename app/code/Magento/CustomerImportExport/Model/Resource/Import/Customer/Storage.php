@@ -94,10 +94,10 @@ class Storage
     /**
      * Add customer to array
      *
-     * @param \Magento\Framework\Object|\Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
      */
-    public function addCustomer(\Magento\Framework\Object $customer)
+    public function addCustomer(\Magento\Framework\DataObject $customer)
     {
         $email = strtolower(trim($customer->getEmail()));
         if (!isset($this->_customerIds[$email])) {

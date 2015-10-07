@@ -15,7 +15,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
      */
     public function execute()
     {
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         try {
             $this->_initData();
 

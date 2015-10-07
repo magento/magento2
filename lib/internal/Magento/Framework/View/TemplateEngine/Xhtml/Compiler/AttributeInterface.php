@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Interface AttributeInterface
@@ -16,8 +16,8 @@ interface AttributeInterface
      * Compiles the Element node
      *
      * @param \DOMAttr $node
-     * @param Object $processedObject
+     * @param DataObject $processedObject
      * @return void
      */
-    public function compile(\DOMAttr $node, Object $processedObject);
+    public function compile(\DOMAttr $node, DataObject $processedObject);
 }

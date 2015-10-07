@@ -40,7 +40,7 @@ require([
     * with this form, we surely delete same category in the tree and at backend
     */
     function categoryDelete(url) {
-        if (confirm('<?php echo __('Are you sure you want to delete this category?') ?>')){
+        if (confirm('<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this category?') ?>')){
             location.href = url;
         }
     }

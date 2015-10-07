@@ -465,7 +465,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getProductOptions()
     {
-        $data = $this->_getData(OrderItemInterface::PRODUCT_OPTIONS);
+        $data = $this->_getData('product_options');
         return is_string($data) ? unserialize($data) : $data;
     }
 
@@ -643,7 +643,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
@@ -651,7 +651,7 @@ class Item extends AbstractModel implements OrderItemInterface
         if (!$option) {
             $option = [];
         }
-        $buyRequest = new \Magento\Framework\Object($option);
+        $buyRequest = new \Magento\Framework\DataObject($option);
         $buyRequest->setQty($this->getQtyOrdered() * 1);
         return $buyRequest;
     }
@@ -2339,6 +2339,22 @@ class Item extends AbstractModel implements OrderItemInterface
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
         return $this->setData(OrderItemInterface::BASE_WEEE_TAX_ROW_DISPOSITION, $baseWeeeTaxRowDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductOption()
+    {
+        return $this->getData(self::KEY_PRODUCT_OPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption)
+    {
+        return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
 
     /**

@@ -9,9 +9,10 @@
 ?>
 <script type="text/x-magento-init">
 <?php
-    echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
+    /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
         '*' => ['Magento_Customer/js/section-config' => [
             'sections' => $block->getSections(),
+            'clientSideSections' => $block->getClientSideSections(),
             'baseUrls' => array_unique([
                 $block->getUrl(null, ['_secure' => true]),
                 $block->getUrl(null, ['_secure' => false]),

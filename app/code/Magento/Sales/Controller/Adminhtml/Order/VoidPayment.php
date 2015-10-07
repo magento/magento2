@@ -18,7 +18,8 @@ class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $order->getPayment()->void(new \Magento\Framework\Object()); // workaround for backwards compatibility
+                // workaround for backwards compatibility
+                $order->getPayment()->void(new \Magento\Framework\DataObject());
                 $order->save();
                 $this->messageManager->addSuccess(__('The payment has been voided.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

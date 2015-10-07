@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Customer reviews controller
  */
-class Customer extends Action
+abstract class Customer extends Action
 {
     /**
      * Customer session model
@@ -42,7 +42,7 @@ class Customer extends Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->customerSession->authenticate($this)) {
+        if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
         return parent::dispatch($request);

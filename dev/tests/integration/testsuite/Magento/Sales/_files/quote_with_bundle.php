@@ -121,7 +121,7 @@ foreach ($optionCollection as $option) {
     }
 }
 
-$buyRequest = new \Magento\Framework\Object(
+$buyRequest = new \Magento\Framework\DataObject(
     ['qty' => 1, 'bundle_option' => $bundleOptions, 'bundle_option_qty' => $bundleOptionsQty]
 );
 $product->setSkipCheckRequiredOption(true);

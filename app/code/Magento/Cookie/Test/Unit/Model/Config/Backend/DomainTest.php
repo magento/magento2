@@ -40,8 +40,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\Resource\AbstractResource',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 'getIdFieldName',
                 'beginTransaction',
                 'save',

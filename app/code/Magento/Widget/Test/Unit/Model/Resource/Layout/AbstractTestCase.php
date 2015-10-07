@@ -50,10 +50,10 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Retrieve resource model instance
      *
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getResource(\Zend_Db_Select $select)
+    protected function _getResource(\Magento\Framework\DB\Select $select)
     {
         $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
@@ -66,9 +66,9 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         return $resource;
@@ -76,20 +76,20 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @abstract
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
-    abstract protected function _getCollection(\Zend_Db_Select $select);
+    abstract protected function _getCollection(\Magento\Framework\DB\Select $select);
 
     public function testAddUpdatedDaysBeforeFilter()
     {
-        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->any())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
-        $connection = $collection->getResource()->getReadConnection();
+        $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(

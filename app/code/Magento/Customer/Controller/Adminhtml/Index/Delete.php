@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Customer\Controller\RegistryConstants;
 use Magento\Framework\Controller\ResultFactory;
 
 class Delete extends \Magento\Customer\Controller\Adminhtml\Index
@@ -17,8 +16,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_initCustomer();
-        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $customerId = $this->initCurrentCustomer();
         if (!empty($customerId)) {
             try {
                 $this->_customerRepository->deleteById($customerId);

@@ -32,22 +32,14 @@ abstract class AbstractStorage extends \Magento\Framework\Model\Resource\Db\Abst
     /**
      * Retrieve connection for read data
      *
+     * @todo: make method protected
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getReadAdapter()
+    public function getConnection()
     {
         return $this->_getConnection($this->_connectionName);
     }
 
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getWriteAdapter()
-    {
-        return $this->_getConnection($this->_connectionName);
-    }
 
     /**
      * Get connection by name or type

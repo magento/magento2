@@ -48,13 +48,7 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
             ->method('getRule')
             ->with('type')
             ->will($this->returnValue($this->rule));
-        $cache = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface'
-        );
-        $cache->expects($this->any())
-            ->method('getFromCache')
-            ->will($this->returnValue(false));
-        $this->object = new Alternative($filesystem, $rulePool, $cache, ['css' => ['less']]);
+        $this->object = new Alternative($filesystem, $rulePool, ['css' => ['less']]);
     }
 
     /**
@@ -69,10 +63,7 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
 
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
-        $cache = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface'
-        );
-        new Alternative($filesystem, $rulePool, $cache, $alternativeExtensions);
+        new Alternative($filesystem, $rulePool, $alternativeExtensions);
     }
 
     /**

@@ -17,15 +17,20 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         $order = $this->_initOrder();
         if ($order) {
             try {
-                $this->_objectManager->create('Magento\Sales\Model\OrderNotifier')->notify($order);
+                $this->orderManagement->notify($order->getEntityId());
                 $this->messageManager->addSuccess(__('You sent the order email.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We can\'t send the email order right now.'));
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->logger->critical($e);
             }
-            return $this->resultRedirectFactory->create()->setPath('sales/order/view', ['order_id' => $order->getId()]);
+            return $this->resultRedirectFactory->create()->setPath(
+                'sales/order/view',
+                [
+                    'order_id' => $order->getEntityId()
+                ]
+            );
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
     }

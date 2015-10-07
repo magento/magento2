@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * @see \Magento\Paypal\Block\Payflow\Link\Iframe
  */
@@ -12,10 +14,10 @@
 <head>
 </head>
 <body>
-<form id="token_form" method="POST" action="<?php echo $block->getTransactionUrl() ?>">
-    <input type="hidden" name="SECURETOKEN" value="<?php echo $block->getSecureToken(); ?>"/>
-    <input type="hidden" name="SECURETOKENID" value="<?php echo $block->getSecureTokenId(); ?>"/>
-    <input type="hidden" name="MODE" value="<?php echo $block->isTestMode() ? 'TEST' : 'LIVE'; ?>"/>
+<form id="token_form" method="POST" action="<?php /* @escapeNotVerified */ echo $block->getTransactionUrl() ?>">
+    <input type="hidden" name="SECURETOKEN" value="<?php /* @escapeNotVerified */ echo $block->getSecureToken(); ?>"/>
+    <input type="hidden" name="SECURETOKENID" value="<?php /* @escapeNotVerified */ echo $block->getSecureTokenId(); ?>"/>
+    <input type="hidden" name="MODE" value="<?php /* @escapeNotVerified */ echo $block->isTestMode() ? 'TEST' : 'LIVE'; ?>"/>
 </form>
 <script>
     document.getElementById('token_form').submit();

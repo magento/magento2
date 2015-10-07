@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <preference for="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" type="Magento\TestModuleMSC\Model\AllSoapAndRest" />
 
@@ -30,7 +30,7 @@
             <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
         </arguments>
     </type>
-        <virtualType name="CustomAttributeMap" type="Magento\Framework\Object">
+        <virtualType name="CustomAttributeMap" type="Magento\Framework\DataObject">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="customAttributeDataObjectInterface" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface</item>

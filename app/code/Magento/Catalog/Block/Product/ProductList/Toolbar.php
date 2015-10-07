@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 
 /**
@@ -632,7 +631,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Framework\Object) {
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
@@ -672,16 +671,17 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getWidgetOptionsJson(array $customOptions = [])
     {
-        $postData = $this->_postDataHelper->getPostData(
-            $this->getPagerUrl(),
-            [\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl()]
-        );
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
         $options = [
-            'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,
-            'directionCookie' => ToolbarModel::DIRECTION_COOKIE_NAME,
-            'orderCookie' => ToolbarModel::ORDER_COOKIE_NAME,
-            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME,
-            'postData' => json_decode($postData),
+            'mode' => ToolbarModel::MODE_PARAM_NAME,
+            'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
+            'order' => ToolbarModel::ORDER_PARAM_NAME,
+            'limit' => ToolbarModel::LIMIT_PARAM_NAME,
+            'modeDefault' => $defaultMode,
+            'directionDefault' => \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION,
+            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'url' => $this->getPagerUrl(),
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Magento Admin</title>
         <script src="prototype/prototype.js"/>
@@ -22,10 +22,10 @@
         <block class="Magento\Framework\View\Element\Text" as="no_name"/>
     </block>
     <update handle="layout_test_handle_sample"/>
-    <remove name="header"/>
-    <remove name="menu"/>
-    <remove name="some_element_1"/>
-    <remove name="some_element_2"/>
+    <referenceBlock name="header" remove="true"/>
+    <referenceBlock name="menu" remove="true"/>
+    <referenceBlock name="some_element_1" remove="true"/>
+    <referenceBlock name="some_element_2" remove="true"/>
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">popup.phtml</argument>
@@ -33,7 +33,7 @@
     </referenceBlock>
     <referenceBlock name="some_element_1"/>
     <block class="Magento\Framework\View\Element\Text\ListText" name="test.nonexisting.block"/>
-    <remove name="test.nonexisting.block"/>
+    <referenceBlock name="test.nonexisting.block" remove="true"/>
     <referenceBlock name="test.nonexisting.block">
         <action method="getSomething"/>
     </referenceBlock>

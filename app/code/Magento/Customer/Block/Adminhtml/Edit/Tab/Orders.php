@@ -27,16 +27,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory
+     * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
      */
-    protected $_collectionFactory;
+    protected $collectionFactory;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory
      * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -44,7 +42,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory,
+        \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory,
         \Magento\Sales\Helper\Reorder $salesReorder,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
@@ -73,7 +71,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create()->addFieldToSelect(
+        $collection = $this->_collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
             'entity_id'
         )->addFieldToSelect(
             'increment_id'
@@ -94,8 +92,6 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
         )->addFieldToFilter(
             'customer_id',
             $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )->setIsCustomerMode(
-            true
         );
 
         $this->setCollection($collection);
@@ -154,7 +150,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Retrieve the Url for a specified sales order row.
      *
-     * @param \Magento\Sales\Model\Order|\Magento\Framework\Object $row
+     * @param \Magento\Sales\Model\Order|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

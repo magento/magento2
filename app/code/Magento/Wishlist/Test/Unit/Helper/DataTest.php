@@ -6,16 +6,22 @@
 namespace Magento\Wishlist\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Registry;
-use Magento\Framework\UrlInterface\Proxy as UrlInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Wishlist\Helper\Data */
@@ -48,6 +54,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  Wishlist |\PHPUnit_Framework_MockObject_MockObject */
     protected $wishlist;
 
+    /** @var  EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $urlEncoderMock;
+
+    /** @var  RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $requestMock;
+
     /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
@@ -69,9 +81,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface\Proxy')
+        $this->urlEncoderMock = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
+            ->getMock();
+
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getServer'])
+            ->getMockForAbstractClass();
+
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
@@ -80,6 +100,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilder);
+        $this->context->expects($this->once())
+            ->method('getUrlEncoder')
+            ->willReturn($this->urlEncoderMock);
+        $this->context->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
 
         $this->wishlistProvider = $this->getMockBuilder('Magento\Wishlist\Controller\WishlistProviderInterface')
             ->disableOriginalConstructor()
@@ -143,6 +169,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
+        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $wishlistItem */
         $wishlistItem = $this->getMock(
             'Magento\Wishlist\Model\Item',
             ['getWishlistItemId', 'getProductId'],
@@ -205,6 +232,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
+        $this->requestMock->expects($this->never())
+            ->method('getServer');
+
+        $this->urlEncoderMock->expects($this->never())
+            ->method('encode');
+
         $this->store->expects($this->once())
             ->method('getUrl')
             ->with('wishlist/index/cart')
@@ -216,6 +249,113 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem));
+    }
+
+    public function testGetAddToCartParamsWithReferer()
+    {
+        $url = 'result url';
+        $storeId = 1;
+        $wishlistItemId = 1;
+        $referer = 'referer';
+        $refererEncoded = 'referer_encoded';
+
+        $this->wishlistItem->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->product);
+        $this->wishlistItem->expects($this->once())
+            ->method('getWishlistItemId')
+            ->willReturn($wishlistItemId);
+
+        $this->product->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
+            ->willReturn(true);
+        $this->product->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->requestMock->expects($this->once())
+            ->method('getServer')
+            ->with('HTTP_REFERER')
+            ->willReturn($referer);
+
+        $this->urlEncoderMock->expects($this->once())
+            ->method('encode')
+            ->with($referer)
+            ->willReturn($refererEncoded);
+
+        $this->store->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/cart')
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => $refererEncoded])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem, true));
+    }
+
+    public function testGetRemoveParams()
+    {
+        $url = 'result url';
+        $wishlistItemId = 1;
+
+        $this->wishlistItem->expects($this->once())
+            ->method('getWishlistItemId')
+            ->willReturn($wishlistItemId);
+
+        $this->requestMock->expects($this->never())
+            ->method('getServer');
+
+        $this->urlEncoderMock->expects($this->never())
+            ->method('encode');
+
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/remove', [])
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url, ['item' => $wishlistItemId])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getRemoveParams($this->wishlistItem));
+    }
+
+    public function testGetRemoveParamsWithReferer()
+    {
+        $url = 'result url';
+        $wishlistItemId = 1;
+        $referer = 'referer';
+        $refererEncoded = 'referer_encoded';
+
+        $this->wishlistItem->expects($this->once())
+            ->method('getWishlistItemId')
+            ->willReturn($wishlistItemId);
+
+        $this->requestMock->expects($this->once())
+            ->method('getServer')
+            ->with('HTTP_REFERER')
+            ->willReturn($referer);
+
+        $this->urlEncoderMock->expects($this->once())
+            ->method('encode')
+            ->with($referer)
+            ->willReturn($refererEncoded);
+
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/remove', [])
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => $refererEncoded])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getRemoveParams($this->wishlistItem, true));
     }
 
     public function testGetSharedAddToCartUrl()

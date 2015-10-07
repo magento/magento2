@@ -31,7 +31,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory
      * @param \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -42,7 +42,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory,
         \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         parent::__construct(
             $context,
@@ -51,7 +51,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $reportsFlagFactory,
             $dateTime,
             $timezoneValidator,
-            $resourcePrefix
+            $connectionName
         );
         $this->_createdatFactory = $createdatFactory;
         $this->_updatedatFactory = $updatedatFactory;
@@ -90,9 +90,9 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     public function getUniqRulesNamesList()
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $tableName = $this->getTable('salesrule_coupon_aggregated');
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $tableName,
             new \Zend_Db_Expr('DISTINCT rule_name')
         )->where(
@@ -104,7 +104,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
             'rule_name ASC'
         );
 
-        $rulesNames = $adapter->fetchAll($select);
+        $rulesNames = $connection->fetchAll($select);
 
         $result = [];
 

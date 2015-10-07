@@ -37,6 +37,6 @@ $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $product->load(1);
 $optionId = key($product->getOptions());
 
-$requestInfo = new \Magento\Framework\Object(['qty' => 1, 'options' => [$optionId => 'test']]);
+$requestInfo = new \Magento\Framework\DataObject(['qty' => 1, 'options' => [$optionId => 'test']]);
 
 require __DIR__ . '/../../Checkout/_files/cart.php';

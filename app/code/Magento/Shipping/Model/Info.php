@@ -10,7 +10,7 @@ namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
 
-class Info extends \Magento\Framework\Object
+class Info extends \Magento\Framework\DataObject
 {
     /**
      * Tracking info
@@ -32,9 +32,9 @@ class Info extends \Magento\Framework\Object
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var \Magento\Sales\Model\Order\ShipmentRepository
      */
-    protected $_shipmentFactory;
+    protected $shipmentRepository;
 
     /**
      * @var \Magento\Shipping\Model\Order\TrackFactory
@@ -49,7 +49,7 @@ class Info extends \Magento\Framework\Object
     /**
      * @param \Magento\Shipping\Helper\Data $shippingData
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
+     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
      * @param \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory
      * @param array $data
@@ -57,14 +57,14 @@ class Info extends \Magento\Framework\Object
     public function __construct(
         \Magento\Shipping\Helper\Data $shippingData,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
+        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Shipping\Model\Order\TrackFactory $trackFactory,
         \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory,
         array $data = []
     ) {
         $this->_shippingData = $shippingData;
         $this->_orderFactory = $orderFactory;
-        $this->_shipmentFactory = $shipmentFactory;
+        $this->shipmentRepository = $shipmentRepository;
         $this->_trackFactory = $trackFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         parent::__construct($data);
@@ -131,8 +131,7 @@ class Info extends \Magento\Framework\Object
     protected function _initShipment()
     {
         /* @var $model Shipment */
-        $model = $this->_shipmentFactory->create();
-        $ship = $model->load($this->getShipId());
+        $ship = $this->shipmentRepository->get($this->getShipId());
         if (!$ship->getEntityId() || $this->getProtectCode() != $ship->getProtectCode()) {
             return false;
         }

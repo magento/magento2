@@ -26,16 +26,10 @@
 
 & when (@media-common = true) {
     .gift-message {
-        .actions-toolbar {
-            .action-cancel {
-                &:extend(.abs-action-button-as-link all);
-                display: none;
-            }
-        }
         .field {
             .label {
-                .css(color, @gift-message-field-label__color);
-                .css(font-weight, @font-weight__regular);
+                .lib-css(color, @gift-message-field-label__color);
+                .lib-css(font-weight, @font-weight__regular);
             }
         }
     }
@@ -43,7 +37,7 @@
     .cart.table-wrapper {
         .item-gift {
             &._active {
-                .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+                .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
             }
             .action {
                 margin-right: 0;
@@ -52,11 +46,17 @@
     }
 
     .gift-options {
-        &:extend(.abs-add-clearfix all);
+        margin: @indent__base 0;
+        .actions-toolbar {
+            .action-cancel {
+                &:extend(.abs-action-button-as-link all);
+                display: none;
+            }
+        }
     }
 
     .gift-options-title {
-        .css(font-weight, @font-weight__semibold);
+        .lib-css(font-weight, @font-weight__semibold);
         margin: 0 0 @indent__base;
     }
 
@@ -79,7 +79,7 @@
         .action-edit,
         .action-delete {
             &:extend(.abs-action-button-as-link all);
-            .icon-font(
+            .lib-icon-font(
             @icon-edit,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -90,7 +90,7 @@
             );
         }
         .action-delete {
-            .icon-font-symbol(
+            .lib-icon-font-symbol(
             @_icon-font-content: @icon-trash
             );
         }
@@ -118,7 +118,8 @@
             padding: @indent__base 0;
             width: 100%;
             &._active {
-                display: block;
+                display: table;
+                table-layout: fixed;
             }
         }
     }
@@ -128,20 +129,20 @@
     //  ---------------------------------------------
 
     .gift-item-block {
-        .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
+        .lib-css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
         margin: 0;
         &._active {
             .title {
                 &:after {
-                    .css(content, @gift-item-block-title-icon__active__content);
+                    .lib-css(content, @gift-item-block-title-icon__active__content);
                 }
             }
         }
 
         .title {
-            .css(color, @gift-item-block-title__color);
+            .lib-css(color, @gift-item-block-title__color);
             cursor: pointer;
-            .icon-font(
+            .lib-icon-font(
             @gift-item-block-title-icon__content,
             @_icon-font-size: @gift-item-block-title-icon__font-size,
             @_icon-font-line-height: @gift-item-block-title-icon__line-height,
@@ -184,7 +185,7 @@
             }
             .item-options {
                 dt {
-                    .css(font-weight, @font-weight__regular);
+                    .lib-css(font-weight, @font-weight__regular);
                     margin: @indent__s 0;
                 }
             }
@@ -222,7 +223,7 @@
     .gift-message {
         .actions-toolbar {
             .action-update {
-                .font-size(20);
+                .lib-font-size(20);
                 padding: 15px;
                 width: 100%;
             }
@@ -231,10 +232,10 @@
 
     .gift-item-block {
         border-bottom: 0;
-        .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+        .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
         .title {
             &:after {
-                .font-size(12);
+                .lib-font-size(12);
                 position: absolute;
                 right: 20px;
                 top: 10px;
@@ -252,7 +253,7 @@
 
     .cart.table-wrapper {
         .action-gift {
-            .icon-font(
+            .lib-icon-font(
             @icon-present,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -295,8 +296,21 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .gift-message {
+        .field {
+            &:extend(.abs-clearfix all);
+            .lib-form-field-type-revert(
+            @_type: inline,
+            @_type-inline-label-align: left
+            );
+        }
+    }
+    .gift-options {
+        position: relative;
+        z-index: 1;
         .actions-toolbar {
+            clear: both;
             padding: 0;
+            position: static;
             .secondary {
                 float: right;
                 .action {
@@ -310,18 +324,24 @@
                     margin-top: 6px;
                 }
             }
-        }
-        .field {
-            &:extend(.abs-clearfix all);
-            .form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
+            &:nth-child(3) {
+                &:before {
+                    .lib-css(border-left, 1px solid @gift-item-block__border-color);
+                    bottom: 5rem;
+                    content: "";
+                    display: block;
+                    left: 50%;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                }
+            }
         }
     }
     .gift-options-title {
-        .css(font-weight, @font-weight__light);
-        .font-size(18);
+        .lib-css(font-weight, @font-weight__light);
+        .lib-font-size(18);
     }
 
     .gift-item-block {
@@ -344,7 +364,7 @@
     .cart.table-wrapper {
         .action-gift {
             float: left;
-            .icon-font(
+            .lib-icon-font(
             @icon-down,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -358,6 +378,13 @@
                 &:after {
                     content: @icon-up;
                 }
+            }
+        }
+        .gift-options {
+            .actions-toolbar {
+                clear: both;
+                padding: 0;
+                position: static;
             }
         }
     }

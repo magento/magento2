@@ -7,7 +7,6 @@
 /*jshint browser:true*/
 /*global alert*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([
@@ -24,7 +23,7 @@ define([
         options: {
             payment: {
                 form: '#co-payment-form',
-                continueSelector: '#opc-payment [data-role=opc-continue]',
+                continueSelector: '#payment [data-role=opc-continue]',
                 methodsContainer: '#checkout-payment-method-load',
                 freeInput: {
                     tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">',

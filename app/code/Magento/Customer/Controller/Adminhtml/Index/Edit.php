@@ -20,7 +20,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $customerId = $this->_initCustomer();
+        $customerId = $this->initCurrentCustomer();
 
         $customerData = [];
         $customerData['account'] = [];

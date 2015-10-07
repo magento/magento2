@@ -47,6 +47,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -55,7 +56,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -83,6 +84,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      * Get default attribute entity type code
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getEntityTypeCode()
     {
@@ -214,6 +216,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      * @param  int $type
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function setEntityTypeFilter($type)
     {
@@ -224,6 +227,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      * Specify filter by "is_visible" field
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addVisibleFilter()
     {
@@ -271,6 +275,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      * Add exclude hidden frontend input attribute filter to collection
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addExcludeHiddenFrontendFilter()
     {

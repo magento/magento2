@@ -6,6 +6,7 @@
 namespace Magento\Payment\Gateway\Helper;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Framework\DataObject;
 
 class SubjectReader
 {
@@ -50,9 +51,39 @@ class SubjectReader
     public static function readField(array $subject)
     {
         if (!isset($subject['field']) || !is_string($subject['field'])) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Field does not exist');
         }
 
         return $subject['field'];
+    }
+
+    /**
+     * Reads response NVP from subject
+     *
+     * @param array $subject
+     * @return array
+     */
+    public static function readResponse(array $subject)
+    {
+        if (!isset($subject['response']) || !is_array($subject['response'])) {
+            throw new \InvalidArgumentException('Response does not exist');
+        }
+
+        return $subject['response'];
+    }
+
+    /**
+     * Read state object from subject
+     *
+     * @param array $subject
+     * @return DataObject
+     */
+    public static function readStateObject(array $subject)
+    {
+        if (!isset($subject['stateObject']) || !$subject['stateObject'] instanceof DataObject) {
+            throw new \InvalidArgumentException('State object does not exist');
+        }
+
+        return $subject['stateObject'];
     }
 }

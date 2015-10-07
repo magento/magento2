@@ -14,7 +14,7 @@ namespace Magento\Tax\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
-class Rule extends \Magento\Backend\App\Action
+abstract class Rule extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

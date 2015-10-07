@@ -30,16 +30,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addWebsiteFilter($website)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ($website === null || $website == 0) {
             return $this;
         }
         if (is_array($website)) {
-            $condition = $adapter->quoteInto('website_id IN(?)', $website);
+            $condition = $connection->quoteInto('website_id IN(?)', $website);
         } elseif ($website instanceof \Magento\Store\Model\Website) {
-            $condition = $adapter->quoteInto('website_id=?', $website->getId());
+            $condition = $connection->quoteInto('website_id=?', $website->getId());
         } else {
-            $condition = $adapter->quoteInto('website_id=?', $website);
+            $condition = $connection->quoteInto('website_id=?', $website);
         }
         $this->addFilter('website_id', $condition, 'string');
         return $this;

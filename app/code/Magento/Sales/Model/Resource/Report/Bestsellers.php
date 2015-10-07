@@ -46,7 +46,7 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Sales\Model\Resource\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -58,7 +58,7 @@ class Bestsellers extends AbstractReport
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Sales\Model\Resource\Helper $salesResourceHelper,
-        $resourcePrefix = null,
+        $connectionName = null,
         array $ignoredProductTypes = []
     ) {
         parent::__construct(
@@ -68,7 +68,7 @@ class Bestsellers extends AbstractReport
             $reportsFlagFactory,
             $dateTime,
             $timezoneValidator,
-            $resourcePrefix
+            $connectionName
         );
         $this->_productResource = $productResource;
         $this->_salesResourceHelper = $salesResourceHelper;
@@ -96,8 +96,8 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        $adapter = $this->_getWriteAdapter();
-        //$this->_getWriteAdapter()->beginTransaction();
+        $connection = $this->getConnection();
+        //$this->getConnection()->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -114,7 +114,7 @@ class Bestsellers extends AbstractReport
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $this->getTable('sales_order')],
                     'source_table.created_at',
@@ -122,7 +122,7 @@ class Bestsellers extends AbstractReport
                     $to
                 )
             );
-            $select = $adapter->select();
+            $select = $connection->select();
 
             $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
 
@@ -159,7 +159,7 @@ class Bestsellers extends AbstractReport
             $select->useStraightJoin();
             // important!
             $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
 
             $columns = [
                 'period' => 'period',
@@ -185,7 +185,7 @@ class Bestsellers extends AbstractReport
 
             $select->group(['period', 'product_id']);
             $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
 
             // update rating
             $this->_updateRatingPos(self::AGGREGATION_DAILY);

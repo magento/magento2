@@ -5,14 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="Magento_Catalog">
         <var name="product_image_white_borders">1</var>
-        <var name="product_thumbnail_image_sidebar_size">50</var>   <!-- Product thumbnail image size in sidebar -->
-        <var name="product_thumbnail_image_size">75</var>           <!-- Main size for product thumbnail image -->
-        <var name="product_small_image_sidebar_size">85</var>       <!-- Size for small product image in sidebar -->
-        <var name="product_small_image_size">135</var>              <!-- Main size for small product image -->
-        <var name="product_base_image_icon_size">56</var>             <!-- Big/base product image icon size -->
-        <var name="product_base_image_size">265</var>                <!-- Main size for big/base product image -->
     </vars>
 </view>

@@ -19,10 +19,10 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
      */
     public function saveGroupedLinks($product, $data)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         // check for change relations
         $bind = ['product_id' => (int)$product->getId(), 'link_type_id' => self::LINK_TYPE_GROUPED];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['linked_product_id']
         )->where(
@@ -30,7 +30,7 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
         )->where(
             'link_type_id = :link_type_id'
         );
-        $old = $adapter->fetchCol($select, $bind);
+        $old = $connection->fetchCol($select, $bind);
         $new = array_keys($data);
 
         if (array_diff($old, $new) || array_diff($new, $old)) {
@@ -58,10 +58,10 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
      */
     public function getChildrenIds($parentId, $typeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $childrenIds = [];
         $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['l' => $this->getMainTable()],
             ['linked_product_id']
         )->where(
@@ -77,7 +77,7 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
         );
 
         $childrenIds[$typeId] = [];
-        $result = $adapter->fetchAll($select, $bind);
+        $result = $connection->fetchAll($select, $bind);
         foreach ($result as $row) {
             $childrenIds[$typeId][$row['linked_product_id']] = $row['linked_product_id'];
         }

@@ -151,6 +151,12 @@ class Config extends AbstractConfig
 
     const EC_BA_SIGNUP_NEVER = 'never';
 
+    /**
+     * Paypal setting
+     */
+    const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
+    const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
+
     /**#@-*/
 
     /**
@@ -691,7 +697,11 @@ class Config extends AbstractConfig
      */
     public function getMerchantCountry()
     {
-        $countryCode = $this->_scopeConfig->getValue($this->_mapGeneralFieldset('merchant_country'));
+        $countryCode = $this->_scopeConfig->getValue(
+            $this->_mapGeneralFieldset('merchant_country'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
         if (!$countryCode) {
             $countryCode = $this->directoryHelper->getDefaultCountry($this->_storeId);
         }
@@ -971,7 +981,7 @@ class Config extends AbstractConfig
             case self::PAYMENT_MARK_LARGE:
                 break;
             default:
-                $staticSize = self::PAYMENT_MARK_SMALL;
+                $staticSize = self::PAYMENT_MARK_MEDIUM;
         }
 
         return sprintf(
@@ -1311,10 +1321,10 @@ class Config extends AbstractConfig
     /**
      * Export page style current settings to specified object
      *
-     * @param \Magento\Framework\Object $to
+     * @param \Magento\Framework\DataObject $to
      * @return void
      */
-    public function exportExpressCheckoutStyleSettings(\Magento\Framework\Object $to)
+    public function exportExpressCheckoutStyleSettings(\Magento\Framework\DataObject $to)
     {
         foreach ($this->_ecStyleConfigMap as $key => $exportKey) {
             $configValue = $this->getValue($key);

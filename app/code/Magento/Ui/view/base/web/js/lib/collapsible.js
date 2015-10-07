@@ -14,9 +14,9 @@ define([
         },
 
         /**
-         * Initializes 'opened' observable, calls 'initObservable' of parent
+         * Initializes observable properties.
          *
-         * @return {Object} - reference to instance
+         * @returns {Collapsible} Chainable.
          */
         initObservable: function () {
             this._super()
@@ -26,21 +26,39 @@ define([
         },
 
         /**
-         * Toggles 'active' observable, triggers 'active' event
+         * Toggles value of the 'opened' property.
          *
-         * @return {Object} - reference to instance
+         * @returns {Collapsible} Chainable.
          */
         toggleOpened: function () {
+            this.opened() ?
+                this.close() :
+                this.open();
+
+            return this;
+        },
+
+        /**
+         * Sets 'opened' flag to false.
+         *
+         * @returns {Collapsible} Chainable.
+         */
+        close: function () {
             if (this.collapsible) {
-                this.opened(!this.opened());
+                this.opened(false);
             }
 
             return this;
         },
 
-        close: function () {
+        /**
+         * Sets 'opened' flag to true.
+         *
+         * @returns {Collapsible} Chainable.
+         */
+        open: function () {
             if (this.collapsible) {
-                this.opened(false);
+                this.opened(true);
             }
 
             return this;

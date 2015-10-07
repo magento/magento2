@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\MoveShoppingCartProductsOnOrderPageTest">
+    <testCase name="Magento\Sales\Test\TestCase\MoveShoppingCartProductsOnOrderPageTest" summary="Add Products to Order from Shopping Cart " ticketId="MAGETWO-28540">
         <variation name="MoveShoppingCartProductsOnOrderPageTestVariation1">
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />

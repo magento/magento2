@@ -9,7 +9,7 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\QuoteRepository;
 
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -404,8 +404,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function getListSuccessDataProvider()
     {
         return [
-            'asc' => [SearchCriteria::SORT_ASC, 'ASC'],
-            'desc' => [SearchCriteria::SORT_DESC, 'DESC']
+            'asc' => [SortOrder::SORT_ASC, 'ASC'],
+            'desc' => [SortOrder::SORT_DESC, 'DESC']
         ];
     }
 }

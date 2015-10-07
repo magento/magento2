@@ -5,10 +5,14 @@
  */
 namespace Magento\Payment\Gateway\Data\Quote;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
+/**
+ * Class QuoteAdapter
+ */
 class QuoteAdapter implements OrderAdapterInterface
 {
     /**
@@ -66,25 +70,33 @@ class QuoteAdapter implements OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->quote->getBillingAddress()]
-        );
+        if ($this->quote->getBillingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->quote->getBillingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->quote->getShippingAddress()]
-        );
+        if ($this->quote->getShippingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->quote->getShippingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**
@@ -113,6 +125,26 @@ class QuoteAdapter implements OrderAdapterInterface
      * @return null
      */
     public function getGrandTotalAmount()
+    {
+        return null;
+    }
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return \Magento\Quote\Api\Data\CartItemInterface[]|null
+     */
+    public function getItems()
+    {
+        return $this->quote->getItems();
+    }
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp()
     {
         return null;
     }

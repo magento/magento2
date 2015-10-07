@@ -21,7 +21,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Return empty row url for disabling JS click events
      *
-     * @param Product|\Magento\Framework\Object $row
+     * @param Product|\Magento\Framework\DataObject $row
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

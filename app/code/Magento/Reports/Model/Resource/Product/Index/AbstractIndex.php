@@ -31,15 +31,15 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
     }
@@ -58,8 +58,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
         if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from($this->getMainTable())
             ->where('visitor_id = ?', $object->getVisitorId());
 
@@ -69,7 +69,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                customer for current product.
                */
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
                 'customer_id = ?',
@@ -78,14 +78,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 'product_id = ?',
                 $row['product_id']
             );
-            $idx = $adapter->fetchRow($select);
+            $idx = $connection->fetchRow($select);
 
             if ($idx) {
                 /**
                  * If we are here it means that we have two rows: one with known customer and second with guest visitor
                  * One row should be updated with customer_id, second should be deleted
                  */
-                $adapter->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
+                $connection->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
                 $where = ['index_id = ?' => $idx['index_id']];
                 $data = [
                     'visitor_id' => $object->getVisitorId(),
@@ -101,7 +101,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 ];
             }
 
-            $adapter->update($this->getMainTable(), $data, $where);
+            $connection->update($this->getMainTable(), $data, $where);
         }
         return $this;
     }
@@ -123,7 +123,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
 
         $bind = ['visitor_id' => null];
         $where = ['customer_id = ?' => (int)$object->getCustomerId()];
-        $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
+        $this->getConnection()->update($this->getMainTable(), $bind, $where);
 
         return $this;
     }
@@ -165,11 +165,11 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
     public function clean()
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['main_table' => $this->getMainTable()],
                 [$this->getIdFieldName()]
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'main_table.visitor_id = visitor_table.visitor_id',
                 []
             )->where(
@@ -180,15 +180,15 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             )->limit(
                 100
             );
-            $indexIds = $this->_getReadAdapter()->fetchCol($select);
+            $indexIds = $this->getConnection()->fetchCol($select);
 
             if (!$indexIds) {
                 break;
             }
 
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $indexIds)
+                $this->getConnection()->quoteInto($this->getIdFieldName() . ' IN(?)', $indexIds)
             );
         }
         return $this;
@@ -197,11 +197,11 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
     /**
      * Add information about product ids to visitor/customer
      *
-     * @param \Magento\Framework\Object|\Magento\Reports\Model\Product\Index\AbstractIndex $object
+     * @param \Magento\Framework\DataObject|\Magento\Reports\Model\Product\Index\AbstractIndex $object
      * @param int[] $productIds
      * @return $this
      */
-    public function registerIds(\Magento\Framework\Object $object, $productIds)
+    public function registerIds(\Magento\Framework\DataObject $object, $productIds)
     {
         $row = [
             'visitor_id' => $object->getVisitorId(),

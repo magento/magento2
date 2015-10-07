@@ -26,6 +26,7 @@ class Labels extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,6 +71,7 @@ class Labels extends \Magento\Backend\Block\Template
      * Retrieve attribute object from registry
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     private function getAttributeObject()
     {

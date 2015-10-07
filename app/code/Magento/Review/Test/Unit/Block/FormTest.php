@@ -80,7 +80,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStore'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object(['id' => $storeId]))
+            $this->returnValue(new \Magento\Framework\DataObject(['id' => $storeId]))
         );
 
         $this->requestMock->expects($this->once())

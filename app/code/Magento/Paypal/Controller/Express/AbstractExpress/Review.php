@@ -30,12 +30,15 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
             $this->_view->renderLayout();
             return;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
         } catch (\Exception $e) {
-            $this->messageManager->addError(
+            $this->messageManager->addExceptionMessage(
+                $e,
                 __('We can\'t initialize Express Checkout review.')
             );
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

@@ -21,15 +21,15 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -50,7 +50,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchOne($select)
     {
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -62,7 +62,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function isWeeeInLocation($countryId, $regionId, $websiteId)
     {
         // Check if there is a weee_tax for the country and region
-        $attributeSelect = $this->getReadConnection()->select();
+        $attributeSelect = $this->getConnection()->select();
         $attributeSelect->from(
             $this->getTable('weee_tax'),
             'value'
@@ -79,11 +79,63 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
 
-        $value = $this->getReadConnection()->fetchOne($attributeSelect);
+        $value = $this->getConnection()->fetchOne($attributeSelect);
         if ($value) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param int $countryId
+     * @param int $regionId
+     * @param int $websiteId
+     * @param int $storeId
+     * @param int $entityId
+     * @return array[]
+     */
+    public function fetchWeeeTaxCalculationsByEntity($countryId, $regionId, $websiteId, $storeId, $entityId)
+    {
+        $attributeSelect = $this->getConnection()->select();
+        $attributeSelect->from(
+            ['eavTable' => $this->getTable('eav_attribute')],
+            ['eavTable.attribute_code', 'eavTable.attribute_id', 'eavTable.frontend_label']
+        )->joinLeft(
+            ['eavLabel' => $this->getTable('eav_attribute_label')],
+            'eavLabel.attribute_id = eavTable.attribute_id and eavLabel.store_id = ' .((int) $storeId),
+            'eavLabel.value as label_value'
+        )->joinInner(
+            ['weeeTax' => $this->getTable('weee_tax')],
+            'weeeTax.attribute_id = eavTable.attribute_id',
+            'weeeTax.value as weee_value'
+        )->where(
+            'eavTable.frontend_input = ?',
+            'weee'
+        )->where(
+            'weeeTax.website_id IN(?)',
+            [$websiteId, 0]
+        )->where(
+            'weeeTax.country = ?',
+            $countryId
+        )->where(
+            'weeeTax.state IN(?)',
+            [$regionId, 0]
+        )->where(
+            'weeeTax.entity_id = ?',
+            (int)$entityId
+        );
+
+        $order = ['weeeTax.state ' . \Magento\Framework\DB\Select::SQL_DESC,
+            'weeeTax.website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
+        $attributeSelect->order($order);
+
+        $values = $this->getConnection()->fetchAll($attributeSelect);
+
+        if ($values) {
+            return $values;
+        }
+
+        return [];
     }
 }

@@ -20,18 +20,18 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?php echo $block->getMerchantCountryField(); ?>').value,
-            vat: $('<?php echo $block->getMerchantVatNumberField(); ?>').value
+            country: $('<?php /* @escapeNotVerified */ echo $block->getMerchantCountryField(); ?>').value,
+            vat: $('<?php /* @escapeNotVerified */ echo $block->getMerchantVatNumberField(); ?>').value
         };
 
-        new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+        new Ajax.Request('<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>', {
             parameters: params,
             onSuccess: function(response) {
-                result = '<?php echo __('Please enter a valid VAT number.') ?>';
+                result = '<?php /* @escapeNotVerified */ echo __('Please enter a valid VAT number.') ?>';
                 try {
                     response = response.responseText;
                     if (response == 1) {
-                        result = '<?php echo __('VAT Number is valid.') ?>';
+                        result = '<?php /* @escapeNotVerified */ echo __('VAT Number is valid.') ?>';
                         validationMessage.removeClassName('hidden').addClassName('success')
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('error')

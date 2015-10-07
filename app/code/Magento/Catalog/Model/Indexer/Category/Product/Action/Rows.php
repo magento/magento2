@@ -57,7 +57,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function removeEntries()
     {
         $removalCategoryIds = array_diff($this->limitationByCategories, $this->getRootCategoryIds());
-        $this->getWriteAdapter()->delete($this->getMainTable(), ['category_id IN (?)' => $removalCategoryIds]);
+        $this->connection->delete($this->getMainTable(), ['category_id IN (?)' => $removalCategoryIds]);
     }
 
     /**

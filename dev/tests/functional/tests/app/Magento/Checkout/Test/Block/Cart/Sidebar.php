@@ -55,7 +55,21 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $counterQty = './/div[@class="minicart-wrapper"]//span[@class="counter qty"]';
+    protected $counterQty = '.minicart-wrapper .counter.qty';
+
+    /**
+     * Locator value for Mini Shopping Cart wrapper.
+     *
+     * @var string
+     */
+    protected $counterNumberWrapper = '.minicart-wrapper';
+
+    /**
+     * Loading masc.
+     *
+     * @var string
+     */
+    protected $loadingMask = '.loading-mask';
 
     /**
      * Open mini cart.
@@ -81,7 +95,7 @@ class Sidebar extends Block
         $selector = $this->counterQty;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);
+                $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
         );
@@ -126,5 +140,32 @@ class Sidebar extends Block
         }
 
         return $cartItem;
+    }
+
+    /**
+     * Wait for init minicart.
+     *
+     * @return void
+     */
+    public function waitInit()
+    {
+        $browser = $this->browser;
+        $selector = $this->counterNumberWrapper;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $counterQty = $browser->find($selector);
+                return $counterQty->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for loader is not visible.
+     *
+     * @return void
+     */
+    public function waitLoader()
+    {
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 }

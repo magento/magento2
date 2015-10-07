@@ -48,11 +48,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceDataMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $productInterfaceMock;
 
     /**
@@ -73,9 +68,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->priceDataMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'
-        )->disableOriginalConstructor()->getMock();
         $this->productInterfaceMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -98,7 +90,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             [
                 'optionRepository' => $this->productOptionRepositoryMock,
                 'productFactory' => $this->productFactoryMock,
-                'priceData' => $this->priceDataMock,
                 'typeConfigurableFactory' => $this->configurableTypeFactoryMock
             ]
         );
@@ -141,9 +132,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->productExtensionMock->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn(null);
-
-        $this->priceDataMock->expects($this->never())
-            ->method('setProductPrice');
 
         $this->assertEquals(
             $this->productMock,
@@ -258,14 +246,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $configurableTypeMock->expects($this->once())
             ->method('saveProducts')
             ->with($this->productMock, $links);
-
-        $productId = 3;
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
-        $this->priceDataMock->expects($this->once())
-            ->method('setProductPrice')
-            ->with($productId, null);
 
         $productSku = 'configurable-sku';
         $this->productMock->expects($this->any())
@@ -476,14 +456,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($configurableProductTypeMock);
-
-        $productId = 3;
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($productId);
-        $this->priceDataMock->expects($this->once())
-            ->method('setProductPrice')
-            ->with($productId, null);
 
         $newProductMock = $this->setupReload($productSku);
 

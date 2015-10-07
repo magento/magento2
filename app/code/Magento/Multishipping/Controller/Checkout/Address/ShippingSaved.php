@@ -61,7 +61,7 @@ class ShippingSaved extends Address
         $filter = $this->filterBuilder->setField('parent_id')->setValue($this->_getCheckout()->getCustomer()->getId())
             ->setConditionType('eq')->create();
         $addresses = (array)($this->addressRepository->getList(
-            $this->searchCriteriaBuilder->addFilter([$filter])->create()
+            $this->searchCriteriaBuilder->addFilters([$filter])->create()
         )->getItems());
 
         /**

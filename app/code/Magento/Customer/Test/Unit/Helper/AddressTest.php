@@ -326,7 +326,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getFormatByCode')
             ->with($code)
             ->will($this->returnValue(
-                new \Magento\Framework\Object($result !== null ? ['renderer' => $result] : [])
+                new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
             ));
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
@@ -359,7 +359,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getFormatByCode')
             ->with($code)
             ->will($this->returnValue(
-                new \Magento\Framework\Object(!empty($result) ? ['renderer' => $renderer] : [])
+                new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
             ));
 
         $this->assertEquals($result, $this->helper->getFormat($code));

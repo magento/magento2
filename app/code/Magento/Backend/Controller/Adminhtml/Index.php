@@ -10,7 +10,7 @@ use Magento\Backend\App\AbstractAction;
 /**
  * Index backend controller
  */
-class Index extends AbstractAction
+abstract class Index extends AbstractAction
 {
     /**
      * Check if user has permissions to access this controller

@@ -57,6 +57,11 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     */
+    protected $defaultAttributes;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -65,6 +70,7 @@ class Product extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -78,6 +84,7 @@ class Product extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
+        \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -85,14 +92,14 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
+        $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
             $storeManager,
             $modelFactory,
             $data
         );
-        $this->_read  = 'catalog_read';
-        $this->_write = 'catalog_write';
+        $this->connectionName  = 'catalog';
     }
 
     /**
@@ -142,7 +149,7 @@ class Product extends AbstractResource
      */
     protected function _getDefaultAttributes()
     {
-        return ['entity_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
+        return $this->defaultAttributes->getDefaultAttributes();
     }
 
     /**
@@ -153,7 +160,7 @@ class Product extends AbstractResource
      */
     public function getWebsiteIds($product)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         if ($product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product->getId();
@@ -161,7 +168,7 @@ class Product extends AbstractResource
             $productId = $product;
         }
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getProductWebsiteTable(),
             'website_id'
         )->where(
@@ -169,7 +176,7 @@ class Product extends AbstractResource
             (int)$productId
         );
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -180,7 +187,7 @@ class Product extends AbstractResource
      */
     public function getWebsiteIdsByProductIds($productIds)
     {
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getProductWebsiteTable(),
             ['product_id', 'website_id']
         )->where(
@@ -188,7 +195,7 @@ class Product extends AbstractResource
             $productIds
         );
         $productsWebsites = [];
-        foreach ($this->_getWriteAdapter()->fetchAll($select) as $productInfo) {
+        foreach ($this->getConnection()->fetchAll($select) as $productInfo) {
             $productId = $productInfo['product_id'];
             if (!isset($productsWebsites[$productId])) {
                 $productsWebsites[$productId] = [];
@@ -207,9 +214,9 @@ class Product extends AbstractResource
      */
     public function getCategoryIds($product)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getProductCategoryTable(),
             'category_id'
         )->where(
@@ -217,7 +224,7 @@ class Product extends AbstractResource
             (int)$product->getId()
         );
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -228,22 +235,22 @@ class Product extends AbstractResource
      */
     public function getIdBySku($sku)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from($this->getEntityTable(), 'entity_id')->where('sku = :sku');
+        $select = $connection->select()->from($this->getEntityTable(), 'entity_id')->where('sku = :sku');
 
         $bind = [':sku' => (string)$sku];
 
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**
      * Process product data before save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Object $object)
+    protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
         /**
          * Check if declared category ids in object data.
@@ -266,10 +273,10 @@ class Product extends AbstractResource
     /**
      * Save data related with product
      *
-     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\DataObject $product
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Object $product)
+    protected function _afterSave(\Magento\Framework\DataObject $product)
     {
         $this->_saveWebsiteIds($product)->_saveCategories($product);
         return parent::_afterSave($product);
@@ -301,7 +308,7 @@ class Product extends AbstractResource
 
         $product->setIsChangedWebsites(false);
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         $oldWebsiteIds = $this->getWebsiteIds($product);
 
@@ -313,14 +320,14 @@ class Product extends AbstractResource
             foreach ($insert as $websiteId) {
                 $data[] = ['product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId];
             }
-            $adapter->insertMultiple($this->getProductWebsiteTable(), $data);
+            $connection->insertMultiple($this->getProductWebsiteTable(), $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
                 $condition = ['product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId];
 
-                $adapter->delete($this->getProductWebsiteTable(), $condition);
+                $connection->delete($this->getProductWebsiteTable(), $condition);
             }
         }
 
@@ -334,11 +341,11 @@ class Product extends AbstractResource
     /**
      * Save product category relations
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _saveCategories(\Magento\Framework\Object $object)
+    protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
         /**
          * If category ids data is not declared we haven't do manipulations
@@ -354,7 +361,7 @@ class Product extends AbstractResource
         $insert = array_diff($categoryIds, $oldCategoryIds);
         $delete = array_diff($oldCategoryIds, $categoryIds);
 
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if (!empty($insert)) {
             $data = [];
             foreach ($insert as $categoryId) {
@@ -368,7 +375,7 @@ class Product extends AbstractResource
                 ];
             }
             if ($data) {
-                $write->insertMultiple($this->getProductCategoryTable(), $data);
+                $connection->insertMultiple($this->getProductCategoryTable(), $data);
             }
         }
 
@@ -376,7 +383,7 @@ class Product extends AbstractResource
             foreach ($delete as $categoryId) {
                 $where = ['product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId];
 
-                $write->delete($this->getProductCategoryTable(), $where);
+                $connection->delete($this->getProductCategoryTable(), $where);
             }
         }
 
@@ -421,7 +428,7 @@ class Product extends AbstractResource
     {
         // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
         // fetching all parent IDs, including those are higher on the tree
-        $select = $this->_getReadAdapter()->select()->distinct()->from(
+        $select = $this->getConnection()->select()->distinct()->from(
             $this->getTable('catalog_category_product_index'),
             ['category_id']
         )->where(
@@ -432,7 +439,7 @@ class Product extends AbstractResource
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
         );
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -454,7 +461,7 @@ class Product extends AbstractResource
      */
     public function canBeShowInCategory($product, $categoryId)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_category_product_index'),
             'product_id'
         )->where(
@@ -465,7 +472,7 @@ class Product extends AbstractResource
             (int)$categoryId
         );
 
-        return $this->_getReadAdapter()->fetchOne($select);
+        return $this->getConnection()->fetchOne($select);
     }
 
     /**
@@ -478,18 +485,18 @@ class Product extends AbstractResource
     public function duplicate($oldId, $newId)
     {
         $eavTables = ['datetime', 'decimal', 'int', 'text', 'varchar'];
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         // duplicate EAV store values
         foreach ($eavTables as $suffix) {
             $tableName = $this->getTable(['catalog_product_entity', $suffix]);
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $tableName,
                 [
                     'attribute_id',
                     'store_id',
-                    'entity_id' => new \Zend_Db_Expr($adapter->quote($newId)),
+                    'entity_id' => new \Zend_Db_Expr($connection->quote($newId)),
                     'value'
                 ]
             )->where(
@@ -500,8 +507,8 @@ class Product extends AbstractResource
                 0
             );
 
-            $adapter->query(
-                $adapter->insertFromSelect(
+            $connection->query(
+                $connection->insertFromSelect(
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', 'entity_id', 'value'],
@@ -515,9 +522,9 @@ class Product extends AbstractResource
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
         $updateCond[] = 'store_id > 0';
-        $updateCond[] = $adapter->quoteInto('entity_id = ?', $newId);
-        $updateCond[] = $adapter->quoteInto('attribute_id = ?', $statusAttributeId);
-        $adapter->update(
+        $updateCond[] = $connection->quoteInto('entity_id = ?', $newId);
+        $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
+        $connection->update(
             $statusAttributeTable,
             ['value' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED],
             $updateCond
@@ -534,14 +541,14 @@ class Product extends AbstractResource
      */
     public function getProductsSku(array $productIds)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_entity'),
             ['entity_id', 'sku']
         )->where(
             'entity_id IN (?)',
             $productIds
         );
-        return $this->_getReadAdapter()->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
@@ -552,7 +559,7 @@ class Product extends AbstractResource
      */
     public function getProductsIdsBySkus(array $productSkuList)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_entity'),
             ['sku', 'entity_id']
         )->where(
@@ -561,7 +568,7 @@ class Product extends AbstractResource
         );
 
         $result = [];
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
             $result[$row['sku']] = $row['entity_id'];
         }
         return $result;
@@ -582,10 +589,10 @@ class Product extends AbstractResource
             $columns = $this->_getDefaultAttributes();
         }
 
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from($this->getTable('catalog_product_entity'), $columns);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getTable('catalog_product_entity'), $columns);
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
     /**
@@ -603,8 +610,8 @@ class Product extends AbstractResource
         }
 
         $mainTable = $product->getResource()->getAttribute('image')->getBackend()->getTable();
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['images' => $mainTable],
             ['value as filepath', 'store_id']
         )->joinLeft(
@@ -622,7 +629,7 @@ class Product extends AbstractResource
             ['small_image', 'thumbnail', 'image']
         );
 
-        $images = $read->fetchAll($select);
+        $images = $connection->fetchAll($select);
         return $images;
     }
 
@@ -633,10 +640,10 @@ class Product extends AbstractResource
      */
     public function countAll()
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)');
-        $result = (int)$adapter->fetchOne($select);
+        $result = (int)$connection->fetchOne($select);
         return $result;
     }
 

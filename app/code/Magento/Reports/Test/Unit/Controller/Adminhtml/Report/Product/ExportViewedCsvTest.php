@@ -55,10 +55,14 @@ class ExportViewedCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
 
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
-        $this->exportViewedCsv = new ExportViewedCsv(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->exportViewedCsv = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedCsv',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 

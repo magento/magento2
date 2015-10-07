@@ -10,7 +10,7 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 
-class AbstractProductGrid extends Product
+abstract class AbstractProductGrid extends Product
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory

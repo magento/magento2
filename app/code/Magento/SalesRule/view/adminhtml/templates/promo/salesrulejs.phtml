@@ -8,7 +8,7 @@
 require(['jquery', "prototype"], function(jQuery){
 
 //<![CDATA[
-var couponTypeSpecific = '<?php echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
+var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
     tmpButtonsActionsStorage = [];
 
 function disableEnableCouponsTabContent(disable) {
@@ -67,7 +67,12 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
 
     var params = Form.serializeElements(elements, true);
     params.form_key = FORM_KEY;
-    $('messages').update();
+    if ($$('#'+idPrefix + 'information_fieldset .messages')) {
+        $$('#'+idPrefix + 'information_fieldset .messages')[0].update();
+    }
+    if ($('messages')) {
+        $('messages').update();
+    }
     var couponCodesGrid = eval(grid);
     new Ajax.Request(generateUrl, {
         parameters :params,
@@ -81,7 +86,11 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 couponCodesGrid.reload();
             }
             if (response && response.messages) {
-                $('messages').update(response.messages);
+                if ($$('#'+idPrefix + 'information_fieldset .messages')) {
+                    $$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
+                } else if ($('messages')) {
+                    $('messages').update(response.messages);
+                }
             }
             if (response && response.error) {
                 alert(response.error);

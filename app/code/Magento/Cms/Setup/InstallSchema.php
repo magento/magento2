@@ -9,6 +9,7 @@ namespace Magento\Cms\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
@@ -72,6 +73,14 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['nullable' => false, 'default' => '1'],
             'Is Block Active'
+        )->addIndex(
+            $setup->getIdxName(
+                $installer->getTable('cms_block'),
+                ['title', 'identifier', 'content'],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            ['title', 'identifier', 'content'],
+            ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'CMS Block Table'
         );
@@ -230,6 +239,14 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('cms_page', ['identifier']),
             ['identifier']
+        )->addIndex(
+            $setup->getIdxName(
+                $installer->getTable('cms_page'),
+                ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
+            ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'CMS Page Table'
         );
@@ -273,6 +290,5 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();
-
     }
 }

@@ -103,8 +103,8 @@ abstract class AbstractProductPromotedProductsTest extends Injectable
         $list = array_map('trim', explode(',', $products));
 
         foreach ($list as $item) {
-            list($productName, $fixtureCode, $dataSet) = array_map('trim', explode('::', $item));
-            $product = $this->fixtureFactory->createByCode($fixtureCode, ['dataSet' => $dataSet]);
+            list($productName, $fixtureCode, $dataset) = array_map('trim', explode('::', $item));
+            $product = $this->fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
 
             $product->persist();
             $this->products[$productName] = $product;

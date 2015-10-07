@@ -14,8 +14,9 @@ use Magento\Persistent\Helper\Session as SessionHelper;
 
 /**
  * Persistent front controller
+ * @codeCoverageIgnore
  */
-class Index extends Action
+abstract class Index extends Action
 {
     /**
      * Persistent observer

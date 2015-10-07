@@ -5,7 +5,7 @@
 define(['underscore'], function (_) {
     'use strict';
 
-    var baseUrls, sections;
+    var baseUrls, sections, clientSideSections;
 
     var canonize = function(url){
         var route = url;
@@ -21,15 +21,29 @@ define(['underscore'], function (_) {
     return {
         getAffectedSections: function (url) {
             var route = canonize(url);
-            var actions = _.find(sections, function(val, section){
+            var actions = _.find(sections, function(val, section) {
+                if (section.indexOf('*') >= 0) {
+                    section = section.replace(/\*/g, '[^/]+') + '$';
+                    var matched = route.match(section);
+                    return matched && matched[0] == route;
+                }
                 return (route.indexOf(section) === 0);
             });
 
             return _.union(_.toArray(actions), _.toArray(sections['*']));
         },
+
+        filterClientSideSections: function (sections) {
+            if (_.isArray(sections)) {
+                return _.difference(sections, clientSideSections);
+            }
+            return sections;
+        },
+
         'Magento_Customer/js/section-config': function(options) {
             baseUrls = options.baseUrls;
             sections = options.sections;
+            clientSideSections = options.clientSideSections;
         }
     };
 });

@@ -17,23 +17,35 @@ var app = angular.module(
         'customize-your-store',
         'create-admin-account',
         'install',
-        'success'
+        'success',
+        'component-grid',
+        'install-extension-grid',
+        'create-backup',
+        'complete-backup',
+        'data-option',
+        'start-updater',
+        'select-version',
+        'updater-success',
+        'home',
+        'auth-dialog',
+        'system-config'
     ]);
 
 app.config(function ($stateProvider) {
     app.stateProvider = $stateProvider;
 })
-.config(function($provide) {
-    $provide.decorator('$state', function($delegate, $stateParams) {
-        $delegate.forceReload = function() {
-            return $delegate.go($delegate.current, $stateParams, {
-                reload: true,
-                inherit: false,
-                notify: true
-            });
-        };
-        return $delegate;
+    .config(function($provide) {
+        $provide.decorator('$state', function($delegate, $stateParams) {
+            $delegate.forceReload = function() {
+                return $delegate.go($delegate.current, $stateParams, {
+                    reload: true,
+                    inherit: false,
+                    notify: true
+                });
+            };
+            return $delegate;
+        });
+    })
+    .run(function ($rootScope, $state) {
+        $rootScope.$state = $state;
     });
-}).run(function ($rootScope, $state) {
-    $rootScope.$state = $state;
-});

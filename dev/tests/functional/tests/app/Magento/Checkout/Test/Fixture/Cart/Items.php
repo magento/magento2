@@ -6,34 +6,20 @@
 
 namespace Magento\Checkout\Test\Fixture\Cart;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Item
- * Data for verify cart item block on checkout page
+ * Data for verify cart item block on checkout page.
  *
  * Data keys:
  *  - product (fixture data for verify)
  */
-class Items implements FixtureInterface
+class Items extends DataSource
 {
     /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Prepared dataSet data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * List fixture products
+     * List fixture products.
      *
      * @var FixtureInterface[]
      */
@@ -58,7 +44,7 @@ class Items implements FixtureInterface
     }
 
     /**
-     * Get module name from fixture
+     * Get module name from fixture.
      *
      * @param FixtureInterface $product
      * @return string
@@ -70,40 +56,7 @@ class Items implements FixtureInterface
     }
 
     /**
-     * Persist fixture
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return string
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Get source products
+     * Get source products.
      *
      * @return array
      */

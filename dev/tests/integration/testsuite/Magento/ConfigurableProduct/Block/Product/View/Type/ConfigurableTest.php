@@ -69,7 +69,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
         }
     }
-    
+
     /**
      * @magentoAppIsolation enabled
      */
@@ -79,7 +79,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals(1, $config['productId']);
-        $this->assertArrayHasKey('baseImage', $config);
         $this->assertArrayHasKey('attributes', $config);
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);

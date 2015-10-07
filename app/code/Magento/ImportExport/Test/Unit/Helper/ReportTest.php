@@ -152,7 +152,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', [], [], '', false);
+        $indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
         $importHistoryModel = $this->getMock('Magento\ImportExport\Model\History', [], [], '', false);
         $localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
         $import = new \Magento\ImportExport\Model\Import(

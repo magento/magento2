@@ -30,7 +30,7 @@ class ObjectFactory
      *
      * @param string $className
      * @param array $arguments
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function create($className, array $arguments)
     {

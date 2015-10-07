@@ -73,6 +73,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $this->taxCalculationMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Proxy')
             ->disableOriginalConstructor()
+            ->setMethods(['getTaxRates'])
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
@@ -157,7 +158,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                     ->with('tax_rates', [], 0);
             }
 
-            $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+            $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
             $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
             $expectedResult = 'expectedResult';
             $proceed = function ($request) use ($expectedResult) {

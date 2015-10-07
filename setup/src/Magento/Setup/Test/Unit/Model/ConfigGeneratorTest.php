@@ -38,4 +38,24 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $configData = $this->model->createXFrameConfig();
         $this->assertSame('SAMEORIGIN', $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT]);
     }
+
+    public function testCreateCacheHostsConfig()
+    {
+        $data = [ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => 'localhost:8080, website.com, 120.0.0.1:90'];
+        $expectedData = [
+            0 => [
+                'host' => 'localhost',
+                'port' => '8080',
+            ],
+            1 => [
+                'host' => 'website.com',
+            ],
+            2 => [
+                'host' => '120.0.0.1',
+                'port' => '90',
+            ],
+        ];
+        $configData = $this->model->createCacheHostsConfig($data);
+        $this->assertEquals($expectedData, $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS]);
+    }
 }

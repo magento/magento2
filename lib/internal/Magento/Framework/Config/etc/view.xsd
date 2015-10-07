@@ -29,7 +29,8 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-                <xs:element name="exclude" minOccurs="0" maxOccurs="1" type="excludeType"/>
+                <xs:element name="exclude" minOccurs="0" type="excludeType"/>
+                <xs:element name="media" minOccurs="0" type="mediaType"/>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
@@ -37,6 +38,9 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
+    <xs:complexType name="mediaType" mixed="true">
+        <xs:all />
+    </xs:complexType>
     <xs:complexType name="excludeType">
         <xs:sequence>
             <xs:element name="item" type="itemType" maxOccurs="unbounded"/>

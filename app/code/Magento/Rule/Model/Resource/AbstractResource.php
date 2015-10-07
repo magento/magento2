@@ -72,16 +72,16 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function bindRuleToEntity($ruleIds, $entityIds, $entityType)
     {
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->getConnection()->beginTransaction();
 
         try {
             $this->_multiplyBunchInsert($ruleIds, $entityIds, $entityType);
         } catch (\Exception $e) {
-            $this->_getWriteAdapter()->rollback();
+            $this->getConnection()->rollback();
             throw $e;
         }
 
-        $this->_getWriteAdapter()->commit();
+        $this->getConnection()->commit();
 
         return $this;
     }
@@ -116,7 +116,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
                 ];
                 $count++;
                 if ($count % 1000 == 0) {
-                    $this->_getWriteAdapter()->insertOnDuplicate(
+                    $this->getConnection()->insertOnDuplicate(
                         $this->getTable($entityInfo['associations_table']),
                         $data,
                         [$entityInfo['rule_id_field']]
@@ -126,19 +126,19 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
             }
         }
         if (!empty($data)) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getTable($entityInfo['associations_table']),
                 $data,
                 [$entityInfo['rule_id_field']]
             );
         }
 
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getTable($entityInfo['associations_table']),
-            $this->_getWriteAdapter()->quoteInto(
+            $this->getConnection()->quoteInto(
                 $entityInfo['rule_id_field'] . ' IN (?) AND ',
                 $ruleIds
-            ) . $this->_getWriteAdapter()->quoteInto(
+            ) . $this->getConnection()->quoteInto(
                 $entityInfo['entity_id_field'] . ' NOT IN (?)',
                 $entityIds
             )
@@ -156,7 +156,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
-        $writeAdapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
         if (!is_array($entityIds)) {
@@ -168,13 +168,13 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
 
         $where = [];
         if (!empty($ruleIds)) {
-            $where[] = $writeAdapter->quoteInto($entityInfo['rule_id_field'] . ' IN (?)', $ruleIds);
+            $where[] = $connection->quoteInto($entityInfo['rule_id_field'] . ' IN (?)', $ruleIds);
         }
         if (!empty($entityIds)) {
-            $where[] = $writeAdapter->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $entityIds);
+            $where[] = $connection->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $entityIds);
         }
 
-        $writeAdapter->delete($this->getTable($entityInfo['associations_table']), implode(' AND ', $where));
+        $connection->delete($this->getTable($entityInfo['associations_table']), implode(' AND ', $where));
 
         return $this;
     }
@@ -190,7 +190,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     {
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable($entityInfo['associations_table']),
             [$entityInfo['entity_id_field']]
         )->where(
@@ -198,7 +198,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
             $ruleId
         );
 
-        return $this->_getReadAdapter()->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**

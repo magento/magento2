@@ -33,7 +33,7 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      */
     public function initTotals()
     {
-        $total = new \Magento\Framework\Object(
+        $total = new \Magento\Framework\DataObject(
             [
                 'code' => $this->getNameInLayout(),
                 'block_name' => $this->getNameInLayout(),

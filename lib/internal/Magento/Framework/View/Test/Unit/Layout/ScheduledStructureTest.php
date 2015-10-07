@@ -13,16 +13,16 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var array
      */
-    protected $_scheduledData = [];
+    protected $scheduledData = [];
 
     protected function setUp()
     {
-        $this->_scheduledData = [
+        $this->scheduledData = [
             'scheduledStructure' => [
                 'element1' => ['data', 'of', 'element', '1'],
                 'element2' => ['data', 'of', 'element', '2'],
@@ -62,7 +62,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'path4' => 'path 4',
             ],
         ];
-        $this->_model = new \Magento\Framework\View\Layout\ScheduledStructure($this->_scheduledData);
+        $this->model = new \Magento\Framework\View\Layout\ScheduledStructure($this->scheduledData);
     }
 
     /**
@@ -74,7 +74,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          * Only elements that are present in elements list and specified in list to move can be moved
          */
         $expected = ['element1', 'element4'];
-        $this->assertEquals($expected, $this->_model->getListToMove());
+        $this->assertEquals($expected, $this->model->getListToMove());
     }
 
     /**
@@ -86,13 +86,13 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          * Only elements that are present in elements list and specified in list to remove can be removed
          */
         $expected = ['element2', 'element3'];
-        $this->assertEquals($expected, $this->_model->getListToRemove());
+        $this->assertEquals($expected, $this->model->getListToRemove());
     }
 
     public function testGetIfconfigList()
     {
         $expected = ['element1', 'element4'];
-        $this->assertEquals($expected, $this->_model->getIfconfigList());
+        $this->assertEquals($expected, $this->model->getIfconfigList());
     }
 
     /**
@@ -100,7 +100,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetElements()
     {
-        $this->assertEquals($this->_scheduledData['scheduledElements'], $this->_model->getElements());
+        $this->assertEquals($this->scheduledData['scheduledElements'], $this->model->getElements());
     }
 
     /**
@@ -108,11 +108,11 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetElement()
     {
-        $expected = $this->_scheduledData['scheduledElements']['element2'];
-        $this->assertEquals($expected, $this->_model->getElement('element2'));
+        $expected = $this->scheduledData['scheduledElements']['element2'];
+        $this->assertEquals($expected, $this->model->getElement('element2'));
 
         $default = ['some', 'default', 'value'];
-        $this->assertEquals($default, $this->_model->getElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getElement('not_existing_element', $default));
     }
 
     /**
@@ -120,9 +120,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsElementsEmpty()
     {
-        $this->assertFalse($this->_model->isElementsEmpty());
-        $this->_model->flushScheduledStructure();
-        $this->assertTrue($this->_model->isElementsEmpty());
+        $this->assertFalse($this->model->isElementsEmpty());
+        $this->model->flushScheduledStructure();
+        $this->assertTrue($this->model->isElementsEmpty());
     }
 
     /**
@@ -133,14 +133,14 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $data = ['some', 'new', 'data'];
 
         /** Test add new element */
-        $this->assertFalse($this->_model->hasElement('new_element'));
-        $this->_model->setElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getElement('new_element'));
+        $this->assertFalse($this->model->hasElement('new_element'));
+        $this->model->setElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getElement('new_element'));
 
         /** Test override existing element */
-        $this->assertTrue($this->_model->hasElement('element1'));
-        $this->_model->setElement('element1', $data);
-        $this->assertEquals($data, $this->_model->getElement('element1'));
+        $this->assertTrue($this->model->hasElement('element1'));
+        $this->model->setElement('element1', $data);
+        $this->assertEquals($data, $this->model->getElement('element1'));
     }
 
     /**
@@ -148,8 +148,8 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasElement()
     {
-        $this->assertFalse($this->_model->hasElement('not_existing_element'));
-        $this->assertTrue($this->_model->hasElement('element1'));
+        $this->assertFalse($this->model->hasElement('not_existing_element'));
+        $this->assertTrue($this->model->hasElement('element1'));
     }
 
     /**
@@ -157,9 +157,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnsetElement()
     {
-        $this->assertTrue($this->_model->hasElement('element1'));
-        $this->_model->unsetElement('element1');
-        $this->assertFalse($this->_model->hasElement('element1'));
+        $this->assertTrue($this->model->hasElement('element1'));
+        $this->model->unsetElement('element1');
+        $this->assertFalse($this->model->hasElement('element1'));
     }
 
     /**
@@ -168,21 +168,21 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     public function testGetElementToMove()
     {
         $this->assertEquals(
-            $this->_scheduledData['scheduledMoves']['element1'],
-            $this->_model->getElementToMove('element1')
+            $this->scheduledData['scheduledMoves']['element1'],
+            $this->model->getElementToMove('element1')
         );
         $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getElementToMove('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getElementToMove('not_existing_element', $default));
     }
 
     public function getIfconfigElement()
     {
         $this->assertEquals(
-            $this->_scheduledData['scheduledIfconfig']['element1'],
-            $this->_model->getIfconfigElement('element1')
+            $this->scheduledData['scheduledIfconfig']['element1'],
+            $this->model->getIfconfigElement('element1')
         );
         $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getIfconfigElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getIfconfigElement('not_existing_element', $default));
     }
 
     /**
@@ -193,14 +193,14 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $data = ['some', 'new', 'data', 'element', 'to', 'move'];
 
         /** Test add new element */
-        $this->assertFalse($this->_model->hasElement('new_element'));
-        $this->_model->setElementToMove('new_element', $data);
-        $this->assertEquals($data, $this->_model->getElementToMove('new_element'));
+        $this->assertFalse($this->model->hasElement('new_element'));
+        $this->model->setElementToMove('new_element', $data);
+        $this->assertEquals($data, $this->model->getElementToMove('new_element'));
 
         /** Test override existing element */
-        $this->assertNotEquals($data, $this->_model->getElementToMove('element1'));
-        $this->_model->setElementToMove('element1', $data);
-        $this->assertEquals($data, $this->_model->getElementToMove('element1'));
+        $this->assertNotEquals($data, $this->model->getElementToMove('element1'));
+        $this->model->setElementToMove('element1', $data);
+        $this->assertEquals($data, $this->model->getElementToMove('element1'));
     }
 
     /**
@@ -208,9 +208,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnsetElementFromListToRemove()
     {
-        $this->assertContains('element2', $this->_model->getListToRemove());
-        $this->_model->unsetElementFromListToRemove('element2');
-        $this->assertNotContains('element2', $this->_model->getListToRemove());
+        $this->assertContains('element2', $this->model->getListToRemove());
+        $this->model->unsetElementFromListToRemove('element2');
+        $this->assertNotContains('element2', $this->model->getListToRemove());
     }
 
     /**
@@ -218,23 +218,23 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetElementToRemoveList()
     {
-        $this->assertNotContains('element1', $this->_model->getListToRemove());
-        $this->_model->setElementToRemoveList('element1');
-        $this->assertContains('element1', $this->_model->getListToRemove());
+        $this->assertNotContains('element1', $this->model->getListToRemove());
+        $this->model->setElementToRemoveList('element1');
+        $this->assertContains('element1', $this->model->getListToRemove());
     }
 
     public function testUnsetElementFromIfconfigList()
     {
-        $this->assertContains('element4', $this->_model->getIfconfigList());
-        $this->_model->unsetElementFromIfconfigList('element4');
-        $this->assertNotContains('element4', $this->_model->getIfconfigList());
+        $this->assertContains('element4', $this->model->getIfconfigList());
+        $this->model->unsetElementFromIfconfigList('element4');
+        $this->assertNotContains('element4', $this->model->getIfconfigList());
     }
 
     public function testSetElementToIfconfigList()
     {
-        $this->assertNotContains('element5', $this->_model->getIfconfigList());
-        $this->_model->setElementToIfconfigList('element5', 'config_path', 'scope');
-        $this->assertContains('element5', $this->_model->getIfconfigList());
+        $this->assertNotContains('element5', $this->model->getIfconfigList());
+        $this->model->setElementToIfconfigList('element5', 'config_path', 'scope');
+        $this->assertContains('element5', $this->model->getIfconfigList());
     }
 
     /**
@@ -242,7 +242,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStructure()
     {
-        $this->assertEquals($this->_scheduledData['scheduledStructure'], $this->_model->getStructure());
+        $this->assertEquals($this->scheduledData['scheduledStructure'], $this->model->getStructure());
     }
 
     /**
@@ -250,11 +250,11 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStructureElement()
     {
-        $expected = $this->_scheduledData['scheduledStructure']['element2'];
-        $this->assertEquals($expected, $this->_model->getStructureElement('element2'));
+        $expected = $this->scheduledData['scheduledStructure']['element2'];
+        $this->assertEquals($expected, $this->model->getStructureElement('element2'));
 
         $default = ['some', 'default', 'value'];
-        $this->assertEquals($default, $this->_model->getStructureElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getStructureElement('not_existing_element', $default));
     }
 
     /**
@@ -262,9 +262,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsStructureEmpty()
     {
-        $this->assertFalse($this->_model->isStructureEmpty());
-        $this->_model->flushScheduledStructure();
-        $this->assertTrue($this->_model->isStructureEmpty());
+        $this->assertFalse($this->model->isStructureEmpty());
+        $this->model->flushScheduledStructure();
+        $this->assertTrue($this->model->isStructureEmpty());
     }
 
     /**
@@ -272,8 +272,8 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasStructureElement()
     {
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->assertFalse($this->_model->hasStructureElement('not_existing_element'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->assertFalse($this->model->hasStructureElement('not_existing_element'));
     }
 
     /**
@@ -284,14 +284,14 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $data = ['some', 'new', 'data', 'structure', 'element'];
 
         /** Test add new structure element */
-        $this->assertFalse($this->_model->hasStructureElement('new_element'));
-        $this->_model->setStructureElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getStructureElement('new_element'));
+        $this->assertFalse($this->model->hasStructureElement('new_element'));
+        $this->model->setStructureElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getStructureElement('new_element'));
 
         /** Test override existing structure element */
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->_model->setStructureElement('element1', $data);
-        $this->assertEquals($data, $this->_model->getStructureElement('element1'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->model->setStructureElement('element1', $data);
+        $this->assertEquals($data, $this->model->getStructureElement('element1'));
     }
 
     /**
@@ -299,9 +299,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnsetStructureElement()
     {
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->_model->unsetStructureElement('element1');
-        $this->assertFalse($this->_model->hasStructureElement('element1'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->model->unsetStructureElement('element1');
+        $this->assertFalse($this->model->hasStructureElement('element1'));
     }
 
     /**
@@ -309,7 +309,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPaths()
     {
-        $this->assertEquals($this->_scheduledData['scheduledPaths'], $this->_model->getPaths());
+        $this->assertEquals($this->scheduledData['scheduledPaths'], $this->model->getPaths());
     }
 
     /**
@@ -317,9 +317,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPath()
     {
-        $this->assertEquals($this->_scheduledData['scheduledPaths']['path1'], $this->_model->getPath('path1'));
+        $this->assertEquals($this->scheduledData['scheduledPaths']['path1'], $this->model->getPath('path1'));
         $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getPath('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getPath('not_existing_element', $default));
     }
 
     /**
@@ -327,8 +327,8 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasPath()
     {
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->assertFalse($this->_model->hasPath('not_existing_element'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->assertFalse($this->model->hasPath('not_existing_element'));
     }
 
     /**
@@ -339,14 +339,14 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $data = ['some', 'new', 'data', 'path'];
 
         /** Test add new structure element */
-        $this->assertFalse($this->_model->hasPath('new_element'));
-        $this->_model->setPathElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getPath('new_element'));
+        $this->assertFalse($this->model->hasPath('new_element'));
+        $this->model->setPathElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getPath('new_element'));
 
         /** Test override existing structure element */
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->_model->setPathElement('path1', $data);
-        $this->assertEquals($data, $this->_model->getPath('path1'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->model->setPathElement('path1', $data);
+        $this->assertEquals($data, $this->model->getPath('path1'));
     }
 
     /**
@@ -354,9 +354,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnsetPathElement()
     {
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->_model->unsetPathElement('path1');
-        $this->assertFalse($this->_model->hasPath('path1'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->model->unsetPathElement('path1');
+        $this->assertFalse($this->model->hasPath('path1'));
     }
 
     /**
@@ -364,9 +364,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlushPaths()
     {
-        $this->assertNotEmpty($this->_model->getPaths());
-        $this->_model->flushPaths();
-        $this->assertEmpty($this->_model->getPaths());
+        $this->assertNotEmpty($this->model->getPaths());
+        $this->model->flushPaths();
+        $this->assertEmpty($this->model->getPaths());
     }
 
     /**
@@ -374,15 +374,15 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlushScheduledStructure()
     {
-        $this->assertNotEmpty($this->_model->getPaths());
-        $this->assertNotEmpty($this->_model->getElements());
-        $this->assertNotEmpty($this->_model->getStructure());
+        $this->assertNotEmpty($this->model->getPaths());
+        $this->assertNotEmpty($this->model->getElements());
+        $this->assertNotEmpty($this->model->getStructure());
 
-        $this->_model->flushScheduledStructure();
+        $this->model->flushScheduledStructure();
 
-        $this->assertEmpty($this->_model->getPaths());
-        $this->assertEmpty($this->_model->getElements());
-        $this->assertEmpty($this->_model->getStructure());
+        $this->assertEmpty($this->model->getPaths());
+        $this->assertEmpty($this->model->getElements());
+        $this->assertEmpty($this->model->getStructure());
     }
 
     /**
@@ -393,13 +393,13 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     {
         $element = 'element9';
         $expectedToRemove = ['element2', 'element3'];
-        $expectedToRemoveWithBroken = ['element2', 'element3'];
-        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
+        $expectedToRemoveWithBroken = ['element2', 'element3', 'element9'];
+        $this->assertEquals($expectedToRemove, $this->model->getListToRemove());
 
-        $this->_model->setElementToBrokenParentList($element);
-        $this->assertEquals($expectedToRemoveWithBroken, $this->_model->getListToRemove());
+        $this->model->setElementToBrokenParentList($element);
+        $this->assertEquals($expectedToRemoveWithBroken, $this->model->getListToRemove());
 
-        $this->_model->unsetElementFromBrokenParentList($element);
-        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
+        $this->model->unsetElementFromBrokenParentList($element);
+        $this->assertEquals($expectedToRemove, $this->model->getListToRemove());
     }
 }

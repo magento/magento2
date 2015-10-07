@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\CreateCustomOrderStatusEntityTest">
+    <testCase name="Magento\Sales\Test\TestCase\CreateCustomOrderStatusEntityTest" summary="Create Custom Order Status Entity" ticketId="MAGETWO-23412">
         <variation name="CreateCustomOrderStatusEntityTestVariation1">
             <data name="orderStatus/data/status" xsi:type="string">order_status%isolation%</data>
             <data name="orderStatus/data/label" xsi:type="string">orderLabel%isolation%</data>

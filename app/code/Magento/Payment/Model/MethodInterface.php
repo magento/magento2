@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Payment\Model;
+
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Payment interface
@@ -236,7 +237,7 @@ interface MethodInterface
     /**
      * Order payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -246,7 +247,7 @@ interface MethodInterface
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -256,7 +257,7 @@ interface MethodInterface
     /**
      * Capture payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -266,7 +267,7 @@ interface MethodInterface
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -276,7 +277,7 @@ interface MethodInterface
     /**
      * Cancel payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @api
      */
@@ -285,7 +286,7 @@ interface MethodInterface
     /**
      * Void payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @api
      */
@@ -331,7 +332,7 @@ interface MethodInterface
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\Object $data
+     * @param array|\Magento\Framework\DataObject $data
      * @return $this
      * @api
      * @deprecated
@@ -341,10 +342,10 @@ interface MethodInterface
     /**
      * Check whether payment method can be used
      *
-     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+     * @param CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null);
+    public function isAvailable(CartInterface $quote = null);
 
     /**
      * Is active

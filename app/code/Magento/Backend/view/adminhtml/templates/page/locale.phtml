@@ -8,8 +8,8 @@
 
 ?>
 <div class="locale-switcher col-m-5">
-    <label class="label" for="footer_interface_locale"><span><?php echo __('Interface Locale'); ?></span></label>
-    <?php echo $block->getLocaleSelect(); ?>
+    <label class="label" for="footer_interface_locale"><span><?php /* @escapeNotVerified */ echo __('Interface Locale'); ?></span></label>
+    <?php /* @escapeNotVerified */ echo $block->getLocaleSelect(); ?>
     <script>
         (function () {
             'use strict';
@@ -17,7 +17,7 @@
             var elem = document.getElementById('footer_interface_locale');
 
             function onChange() {
-                window.location.href = '<?php echo $block->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php echo $block->getUrlForReferer() ?>';
+                window.location.href = '<?php /* @escapeNotVerified */ echo $block->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php /* @escapeNotVerified */ echo $block->getUrlForReferer() ?>';
             }
 
             elem.addEventListener('change', onChange);

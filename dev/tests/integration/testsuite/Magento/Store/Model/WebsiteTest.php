@@ -20,14 +20,21 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->_model->load(1);
     }
 
-    public function testLoad()
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testLoadById()
     {
-        /* Test loading by id */
         $this->assertEquals(1, $this->_model->getId());
         $this->assertEquals('base', $this->_model->getCode());
         $this->assertEquals('Main Website', $this->_model->getName());
+    }
 
-        /* Test loading by code */
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testLoadByCode()
+    {
         $this->_model->load('admin');
         $this->assertEquals(0, $this->_model->getId());
         $this->assertEquals('admin', $this->_model->getCode());

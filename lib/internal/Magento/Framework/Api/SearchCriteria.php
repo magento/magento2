@@ -27,7 +27,8 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
      */
     public function getFilterGroups()
     {
-        return $this->_get(self::FILTER_GROUPS);
+        $filterGroups = $this->_get(self::FILTER_GROUPS);
+        return is_array($filterGroups) ? $filterGroups : [];
     }
 
     /**

@@ -70,7 +70,7 @@ class OauthUserContextTest extends \PHPUnit_Framework_TestCase
 
         $this->oauthRequestHelper = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest'])
+            ->setMethods(['prepareRequest', 'getRequestUrl'])
             ->getMock();
 
         $this->oauthService = $this->getMockBuilder('Magento\Framework\Oauth\Oauth')

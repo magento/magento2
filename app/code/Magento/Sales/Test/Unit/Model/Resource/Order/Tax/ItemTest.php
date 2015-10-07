@@ -11,9 +11,9 @@ namespace Magento\Sales\Test\Unit\Model\Resource\Order\Tax;
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
@@ -46,7 +46,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxItem = $objectManager->getObject(
@@ -78,7 +78,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->adapterMock->expects($this->once())->method('select')->willReturn($select);
+        $this->connectionMock->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['item' => 'sales_order_tax_item'],
             [
@@ -100,7 +100,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             'tax.order_id = ?',
             $orderId
         )->willReturnSelf();
-        $this->adapterMock->expects($this->once())->method('fetchAll')->with($select)->willReturn($taxItems);
+        $this->connectionMock->expects($this->once())->method('fetchAll')->with($select)->willReturn($taxItems);
         $this->assertEquals($taxItems, $this->taxItem->getTaxItemsByOrderId($orderId));
     }
 }

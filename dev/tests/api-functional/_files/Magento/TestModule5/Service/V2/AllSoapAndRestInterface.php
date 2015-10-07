@@ -5,6 +5,10 @@
  */
 namespace Magento\TestModule5\Service\V2;
 
+/**
+ * Both SOAP and REST Version TWO
+ * @package Magento\TestModule5\Service\V2
+ */
 interface AllSoapAndRestInterface
 {
     /**

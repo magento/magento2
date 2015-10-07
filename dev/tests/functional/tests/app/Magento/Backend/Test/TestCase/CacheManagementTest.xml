@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\CacheManagementTest" summary="Additional Cache Management" ticketId="MAGETWO-34052">
+        <variation name="FlushCatalogImagesCacheTest">
+            <data name="flushButtonName" xsi:type="string">Flush Catalog Images Cache</data>
+            <data name="successMessage" xsi:type="string">The image cache was cleaned.</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertCacheManagementAction" />
+        </variation>
+        <variation name="FlushJavaScriptCSSCacheTest">
+            <data name="flushButtonName" xsi:type="string">Flush JavaScript/CSS Cache</data>
+            <data name="successMessage" xsi:type="string">The JavaScript/CSS cache has been cleaned.</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertCacheManagementAction" />
+        </variation>
+        <variation name="FlushStaticFilesCacheTest">
+            <data name="flushButtonName" xsi:type="string">Flush Static Files Cache</data>
+            <data name="successMessage" xsi:type="string">The static files cache has been cleaned.</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertCacheManagementAction" />
+        </variation>
+    </testCase>
+</config>

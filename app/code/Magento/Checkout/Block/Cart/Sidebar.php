@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Store\Model\ScopeInterface;
@@ -21,23 +18,24 @@ class Sidebar extends AbstractCart
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\View
+     * @var \Magento\Catalog\Helper\Image
      */
-    protected $imageView;
+    protected $imageHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Product\Image\View $imageView
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Product\Image\View $imageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
@@ -49,7 +47,7 @@ class Sidebar extends AbstractCart
         }
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
-        $this->imageView = $imageView;
+        $this->imageHelper = $imageHelper;
     }
 
     /**
@@ -65,8 +63,6 @@ class Sidebar extends AbstractCart
             'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
             'removeItemUrl' => $this->getRemoveItemUrl(),
             'imageTemplate' => $this->getImageHtmlTemplate(),
-            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
-            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
             'baseUrl' => $this->getBaseUrl()
         ];
     }
@@ -76,7 +72,7 @@ class Sidebar extends AbstractCart
      */
     public function getImageHtmlTemplate()
     {
-        return $this->imageView->isWhiteBorders()
+        return $this->imageHelper->getFrame()
             ? 'Magento_Catalog/product/image'
             : 'Magento_Catalog/product/image_with_borders';
     }
@@ -84,6 +80,7 @@ class Sidebar extends AbstractCart
     /**
      * Get one page checkout page url
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getCheckoutUrl()
@@ -92,9 +89,10 @@ class Sidebar extends AbstractCart
     }
 
     /**
-     * Get shoppinc cart page url
+     * Get shopping cart page url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getShoppingCartUrl()
     {
@@ -105,26 +103,29 @@ class Sidebar extends AbstractCart
      * Get update cart item url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getUpdateItemQtyUrl()
     {
-        return $this->getUrl('checkout/sidebar/updateItemQty');
+        return $this->getUrl('checkout/sidebar/updateItemQty', ['_secure' => $this->getRequest()->isSecure()]);
     }
 
     /**
      * Get remove cart item url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRemoveItemUrl()
     {
-        return $this->getUrl('checkout/sidebar/removeItem');
+        return $this->getUrl('checkout/sidebar/removeItem', ['_secure' => $this->getRequest()->isSecure()]);
     }
 
     /**
      * Define if Mini Shopping Cart Pop-Up Menu enabled
      *
      * @return bool
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNeedToDisplaySideBar()
@@ -152,6 +153,7 @@ class Sidebar extends AbstractCart
     /**
      * Retrieve subtotal block html
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getTotalsHtml()
@@ -160,28 +162,9 @@ class Sidebar extends AbstractCart
     }
 
     /**
-     * Get customer register url
-     *
-     * @return string
-     */
-    public function getCustomerRegisterUrlUrl()
-    {
-        return $this->getUrl('customer/account/create');
-    }
-
-    /**
-     * Get customer forgot password url
-     *
-     * @return string
-     */
-    public function getCustomerForgotPasswordUrl()
-    {
-        return $this->getUrl('customer/account/forgotpassword');
-    }
-
-    /**
      * Return base url.
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getBaseUrl()

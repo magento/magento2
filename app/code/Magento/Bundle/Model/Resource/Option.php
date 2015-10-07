@@ -20,14 +20,14 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Bundle\Model\Option\Validator $validator
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Bundle\Model\Option\Validator $validator,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->validator = $validator;
     }
 
@@ -56,15 +56,15 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'store_id = ? OR store_id = 0' => $object->getStoreId()
         ];
 
-        $write = $this->_getWriteAdapter();
-        $write->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
+        $connection = $this->getConnection();
+        $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setOptionId($object->getId())
             ->setStoreId($object->getStoreId())
             ->setTitle($object->getTitle());
 
-        $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
         /**
          * also saving default value if this store view scope
@@ -73,7 +73,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($object->getStoreId()) {
             $data->setStoreId(0);
             $data->setTitle($object->getDefaultTitle());
-            $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         }
 
         return $this;
@@ -89,7 +89,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         parent::_afterDelete($object);
 
-        $this->_getWriteAdapter()
+        $this->getConnection()
             ->delete(
                 $this->getTable('catalog_product_bundle_option_value'),
                 ['option_id = ?' => $object->getId()]
@@ -107,15 +107,15 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSearchableData($productId, $storeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $title = $adapter->getCheckSql(
+        $title = $connection->getCheckSql(
             'option_title_store.title IS NOT NULL',
             'option_title_store.title',
             'option_title_default.title'
         );
         $bind = ['store_id' => $storeId, 'product_id' => $productId];
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from(
                 ['opt' => $this->getMainTable()],
                 []
@@ -133,7 +133,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where(
                 'opt.parent_id=:product_id'
             );
-        if (!($searchData = $adapter->fetchCol($select, $bind))) {
+        if (!($searchData = $connection->fetchCol($select, $bind))) {
             $searchData = [];
         }
 

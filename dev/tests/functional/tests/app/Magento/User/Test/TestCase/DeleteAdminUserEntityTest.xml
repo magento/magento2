@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\User\Test\TestCase\DeleteAdminUserEntityTest">
+    <testCase name="Magento\User\Test\TestCase\DeleteAdminUserEntityTest" summary="Delete Admin User" ticketId="MAGETWO-23416">
         <variation name="DeleteAdminUserEntityTestVariation1">
             <data name="isDefaultUser" xsi:type="string">0</data>
             <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnAccount" />

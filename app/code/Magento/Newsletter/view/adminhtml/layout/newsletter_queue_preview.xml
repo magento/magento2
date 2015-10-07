@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <attribute name="id" value="html-body"/>
         <attribute name="class" value="preview-window"/>
-        <remove name="backend.page"/>
+        <referenceContainer name="backend.page" remove="true"/>
         <referenceContainer name="root">
             <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Newsletter::preview/iframeswitcher.phtml">
                 <block class="Magento\Newsletter\Block\Adminhtml\Queue\Preview\Form" name="preview_form"/>

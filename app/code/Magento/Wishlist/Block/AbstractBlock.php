@@ -288,17 +288,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getImageUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'small_image')->resize($this->getImageSize());
-    }
-
-    /**
-     * Product image size getter
-     *
-     * @return int
-     */
-    public function getImageSize()
-    {
-        return $this->getVar('product_image_size', 'Magento_Wishlist');
+        return $this->_imageHelper->init($product, 'wishlist_small_image')->getUrl();
     }
 
     /**

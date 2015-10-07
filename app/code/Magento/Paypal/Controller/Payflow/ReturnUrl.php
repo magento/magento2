@@ -6,8 +6,19 @@
  */
 namespace Magento\Paypal\Controller\Payflow;
 
-class ReturnUrl extends \Magento\Paypal\Controller\Payflow
+use Magento\Paypal\Controller\Payflow;
+use Magento\Sales\Model\Order;
+
+class ReturnUrl extends Payflow
 {
+    /**
+     * @var array of allowed order states on frontend
+     */
+    protected $allowedOrderStates = [
+        Order::STATE_PROCESSING,
+        Order::STATE_COMPLETE,
+    ];
+
     /**
      * When a customer return to website from payflow gateway.
      *
@@ -16,23 +27,20 @@ class ReturnUrl extends \Magento\Paypal\Controller\Payflow
     public function execute()
     {
         $this->_view->loadLayout(false);
+        /** @var \Magento\Checkout\Block\Onepage\Success $redirectBlock */
         $redirectBlock = $this->_view->getLayout()->getBlock($this->_redirectBlockName);
 
         if ($this->_checkoutSession->getLastRealOrderId()) {
+            /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
 
-            if ($order && $order->getIncrementId() == $this->_checkoutSession->getLastRealOrderId()) {
-                $allowedOrderStates = [
-                    \Magento\Sales\Model\Order::STATE_PROCESSING,
-                    \Magento\Sales\Model\Order::STATE_COMPLETE,
-                ];
-                if (in_array($order->getState(), $allowedOrderStates)) {
-                    $this->_checkoutSession->unsLastRealOrderId();
-                    $redirectBlock->setGotoSuccessPage(true);
+            if ($order->getIncrementId()) {
+                if (in_array($order->getState(), $this->allowedOrderStates)) {
+                    $redirectBlock->setData('goto_success_page', true);
                 } else {
                     $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
-                    $redirectBlock->setGotoSection($gotoSection);
-                    $redirectBlock->setErrorMsg(__('Your payment has been declined. Please try again.'));
+                    $redirectBlock->setData('goto_section', $gotoSection);
+                    $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
                 }
             }
         }

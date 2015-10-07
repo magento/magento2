@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Helper;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Paypal Backend helper
  */
@@ -18,21 +20,29 @@ class Backend extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Config\Model\Config
      */
-    protected $_backendConfig;
+    protected $backendConfig;
+
+    /**
+     * @var \Magento\Config\Model\Config\ScopeDefiner
+     */
+    protected $scopeDefiner;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Config\Model\Config $backendConfig
+     * @param \Magento\Config\Model\Config\ScopeDefiner $scopeDefiner
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Config\Model\Config $backendConfig
+        \Magento\Config\Model\Config $backendConfig,
+        \Magento\Config\Model\Config\ScopeDefiner $scopeDefiner
     ) {
         parent::__construct($context);
         $this->directoryHelper = $directoryHelper;
-        $this->_backendConfig = $backendConfig;
+        $this->backendConfig = $backendConfig;
+        $this->scopeDefiner = $scopeDefiner;
     }
 
     /**
@@ -44,7 +54,11 @@ class Backend extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $countryCode  = $this->_request->getParam(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY);
         if ($countryCode === null || preg_match('/^[a-zA-Z]{2}$/', $countryCode) == 0) {
-            $countryCode = $this->_backendConfig->getConfigDataValue(
+            $scope = $this->scopeDefiner->getScope();
+            if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+                $this->backendConfig->setData($scope, $this->_request->getParam($scope));
+            }
+            $countryCode = $this->backendConfig->getConfigDataValue(
                 \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::FIELD_CONFIG_PATH
             );
         }

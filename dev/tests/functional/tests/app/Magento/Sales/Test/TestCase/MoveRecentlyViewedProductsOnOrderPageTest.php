@@ -23,7 +23,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * 5. Check product in Recently Viewed Products section.
  * 6. Click Update Changes.
  * 7. Click Configure.
- * 8. Fill data from dataSet.
+ * 8. Fill data from dataset.
  * 9. Click OK.
  * 10. Click Update Items and Qty's button.
  * 11. Perform all assertions.

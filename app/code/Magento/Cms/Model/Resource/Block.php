@@ -28,15 +28,15 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_storeManager = $storeManager;
         $this->_date = $date;
     }
@@ -61,7 +61,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $condition = ['block_id = ?' => (int)$object->getId()];
 
-        $this->_getWriteAdapter()->delete($this->getTable('cms_block_store'), $condition);
+        $this->getConnection()->delete($this->getTable('cms_block_store'), $condition);
 
         return parent::_beforeDelete($object);
     }
@@ -106,7 +106,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($delete) {
             $where = ['block_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete];
 
-            $this->_getWriteAdapter()->delete($table, $where);
+            $this->getConnection()->delete($table, $where);
         }
 
         if ($insert) {
@@ -116,7 +116,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $data[] = ['block_id' => (int)$object->getId(), 'store_id' => (int)$storeId];
             }
 
-            $this->_getWriteAdapter()->insertMultiple($table, $data);
+            $this->getConnection()->insertMultiple($table, $data);
         }
 
         return parent::_afterSave($object);
@@ -162,7 +162,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Cms\Model\Block $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -206,7 +206,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $stores = (array)$object->getData('stores');
         }
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['cb' => $this->getMainTable()]
         )->join(
             ['cbs' => $this->getTable('cms_block_store')],
@@ -224,7 +224,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('cb.block_id <> ?', $object->getId());
         }
 
-        if ($this->_getReadAdapter()->fetchRow($select)) {
+        if ($this->getConnection()->fetchRow($select)) {
             return false;
         }
 
@@ -239,9 +239,9 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function lookupStoreIds($id)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('cms_block_store'),
             'store_id'
         )->where(
@@ -250,6 +250,6 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $binds = [':block_id' => (int)$id];
 
-        return $adapter->fetchCol($select, $binds);
+        return $connection->fetchCol($select, $binds);
     }
 }

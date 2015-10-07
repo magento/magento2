@@ -40,7 +40,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $registry
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -63,7 +63,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
         \Magento\Wishlist\Model\Resource\Item $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $registry,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_registryManager = $registry;
         parent::__construct(

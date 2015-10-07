@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -299,14 +299,14 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSearchCustomers($filters, $filterGroup, $expectedResult)
     {
-        /** @var \Magento\Framework\Api\SearchCriteriBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
-            $searchBuilder->addFilter([$filter]);
+            $searchBuilder->addFilters([$filter]);
         }
         if ($filterGroup !== null) {
-            $searchBuilder->addFilter($filterGroup);
+            $searchBuilder->addFilters($filterGroup);
         }
 
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
@@ -338,12 +338,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setConditionType('like')
             ->setValue('First%')
             ->create();
-        $searchBuilder->addFilter([$firstnameFilter]);
+        $searchBuilder->addFilters([$firstnameFilter]);
         // Search ascending order
         $sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField('lastname')
-            ->setDirection(SearchCriteriaInterface::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());
@@ -355,7 +355,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         // Search descending order
         $sortOrder = $sortOrderBuilder
             ->setField('lastname')
-            ->setDirection(SearchCriteriaInterface::SORT_DESC)
+            ->setDirection(SortOrder::SORT_DESC)
             ->create();
         $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->customerRepository->getList($searchBuilder->create());

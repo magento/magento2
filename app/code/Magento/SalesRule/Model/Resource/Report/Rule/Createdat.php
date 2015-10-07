@@ -51,9 +51,9 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
     {
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
-        $salesAdapter = $this->_resources->getConnection('sales_read');
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $salesAdapter = $this->_resources->getConnection('sales');
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -65,7 +65,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $this->_clearTableByDateRange($table, $from, $to, $subSelect, false, $salesAdapter);
 
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery($sourceTable, $aggregationField, $from, $to, null, $salesAdapter)
             );
 
@@ -76,65 +76,65 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'coupon_code' => 'coupon_code',
                 'rule_name' => 'coupon_rule_name',
                 'coupon_uses' => 'COUNT(entity_id)',
-                'subtotal_amount' => $adapter->getIfNullSql(
-                    'SUM((base_subtotal - ' . $adapter->getIfNullSql(
+                'subtotal_amount' => $connection->getIfNullSql(
+                    'SUM((base_subtotal - ' . $connection->getIfNullSql(
                         'base_subtotal_canceled',
                         0
                     ) . ') * base_to_global_rate)',
                     0
                 ),
-                'discount_amount' => $adapter->getIfNullSql(
-                    'SUM((ABS(base_discount_amount) - ' . $adapter->getIfNullSql(
+                'discount_amount' => $connection->getIfNullSql(
+                    'SUM((ABS(base_discount_amount) - ' . $connection->getIfNullSql(
                         'base_discount_canceled',
                         0
                     ) . ') * base_to_global_rate)',
                     0
                 ),
-                'total_amount' => $adapter->getIfNullSql(
-                    'SUM((base_subtotal - ' . $adapter->getIfNullSql(
+                'total_amount' => $connection->getIfNullSql(
+                    'SUM((base_subtotal - ' . $connection->getIfNullSql(
                         'base_subtotal_canceled',
                         0
-                    ) . ' - ' . $adapter->getIfNullSql(
-                        'ABS(base_discount_amount) - ABS(' . $adapter->getIfNullSql('base_discount_canceled', 0) . ')',
+                    ) . ' - ' . $connection->getIfNullSql(
+                        'ABS(base_discount_amount) - ABS(' . $connection->getIfNullSql('base_discount_canceled', 0) . ')',
                         0
-                    ) . ' + ' . $adapter->getIfNullSql(
-                        'base_tax_amount - ' . $adapter->getIfNullSql('base_tax_canceled', 0),
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_tax_amount - ' . $connection->getIfNullSql('base_tax_canceled', 0),
                         0
                     ) . ')
                         * base_to_global_rate)',
                     0
                 ),
-                'subtotal_amount_actual' => $adapter->getIfNullSql(
-                    'SUM((base_subtotal_invoiced - ' . $adapter->getIfNullSql(
+                'subtotal_amount_actual' => $connection->getIfNullSql(
+                    'SUM((base_subtotal_invoiced - ' . $connection->getIfNullSql(
                         'base_subtotal_refunded',
                         0
                     ) . ') * base_to_global_rate)',
                     0
                 ),
-                'discount_amount_actual' => $adapter->getIfNullSql(
-                    'SUM((base_discount_invoiced - ' . $adapter->getIfNullSql(
+                'discount_amount_actual' => $connection->getIfNullSql(
+                    'SUM((base_discount_invoiced - ' . $connection->getIfNullSql(
                         'base_discount_refunded',
                         0
                     ) . ')
                         * base_to_global_rate)',
                     0
                 ),
-                'total_amount_actual' => $adapter->getIfNullSql(
-                    'SUM((base_subtotal_invoiced - ' . $adapter->getIfNullSql(
+                'total_amount_actual' => $connection->getIfNullSql(
+                    'SUM((base_subtotal_invoiced - ' . $connection->getIfNullSql(
                         'base_subtotal_refunded',
                         0
-                    ) . ' - ' . $adapter->getIfNullSql(
-                        'ABS(base_discount_invoiced) - ABS(' . $adapter->getIfNullSql('base_discount_refunded', 0) . ')',
+                    ) . ' - ' . $connection->getIfNullSql(
+                        'ABS(base_discount_invoiced) - ABS(' . $connection->getIfNullSql('base_discount_refunded', 0) . ')',
                         0
-                    ) . ' + ' . $adapter->getIfNullSql(
-                        'base_tax_invoiced - ' . $adapter->getIfNullSql('base_tax_refunded', 0),
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_tax_invoiced - ' . $connection->getIfNullSql('base_tax_refunded', 0),
                         0
                     )   . ') * base_to_global_rate)',
                     0
                 ),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(['source_table' => $sourceTable], $columns)->where('coupon_code IS NOT NULL');
 
             if ($subSelect !== null) {
@@ -148,7 +148,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $aggregatedData = $salesAdapter->fetchAll($select);
 
             if ($aggregatedData) {
-                $adapter->insertOnDuplicate($table, $aggregatedData, array_keys($columns));
+                $connection->insertOnDuplicate($table, $aggregatedData, array_keys($columns));
             }
 
             $select->reset();
@@ -176,10 +176,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 
             $select->group(['period', 'order_status', 'coupon_code']);
 
-            $adapter->query($select->insertFromSelect($table, array_keys($columns)));
-            $adapter->commit();
+            $connection->query($select->insertFromSelect($table, array_keys($columns)));
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 

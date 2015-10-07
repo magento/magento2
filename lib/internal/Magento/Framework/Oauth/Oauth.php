@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Oauth;
 
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 
 class Oauth implements OauthInterface
@@ -196,7 +197,7 @@ class Oauth implements OauthInterface
             $requestUrl
         );
 
-        if ($calculatedSign != $params['oauth_signature']) {
+        if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
             throw new Exception(new Phrase('Invalid signature'));
         }
     }

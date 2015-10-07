@@ -5,8 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../magento2ce/lib/internal/Magento/Framework/App/etc/resources.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/resources.xsd">
     <resource name="sales_setup" extends="core_setup" />
-    <resource name="sales_read" extends="sales_setup" />
-    <resource name="sales_write" extends="sales_setup" />
+    <resource name="sales" extends="core" />
 </config>

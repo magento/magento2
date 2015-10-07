@@ -8,12 +8,13 @@
 
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 /**
  * Sftp client interface
  *
  * @link        http://www.php.net/manual/en/function.ssh2-connect.php
  */
-require_once 'phpseclib/Net/SFTP.php';
 class Sftp extends AbstractIo
 {
     const REMOTE_TIMEOUT = 10;
@@ -75,8 +76,9 @@ class Sftp extends AbstractIo
      * No rollback is performed.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mkdir($dir, $mode = 0777, $recursive = true)
+    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
     {
         if ($recursive) {
             $no_errors = true;
@@ -231,6 +233,7 @@ class Sftp extends AbstractIo
      * @param null $grep ignored parameter
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function ls($grep = null)
     {

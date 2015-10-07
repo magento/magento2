@@ -27,6 +27,7 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collec
      * @param \Magento\Framework\Registry $registryManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -34,7 +35,7 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collec
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Registry $registryManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_registryManager = $registryManager;

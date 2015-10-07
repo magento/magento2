@@ -88,7 +88,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $dbAdapter = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->resource->expects($this->once())->method('getConnection')->will($this->returnValue($dbAdapter));
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($dbAdapter));
 
         $customer = $this->getMock(
             'Magento\Customer\Model\Customer',

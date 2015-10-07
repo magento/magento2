@@ -6,6 +6,7 @@
 namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Io
 {
@@ -14,11 +15,6 @@ class Io
      * Should correspond the value from \Magento\Framework\Filesystem
      */
     const DEFAULT_DIRECTORY = 'var/generation';
-
-    /**
-     * \Directory permission for created directories
-     */
-    const DIRECTORY_PERMISSION = 0777;
 
     /**
      * Path to directory where new file must be created
@@ -161,7 +157,7 @@ class Io
         }
         try {
             if (!$this->filesystemDriver->isDirectory($directory)) {
-                $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
+                $this->filesystemDriver->createDirectory($directory, DriverInterface::WRITEABLE_DIRECTORY_MODE);
             }
             return true;
         } catch (FileSystemException $e) {

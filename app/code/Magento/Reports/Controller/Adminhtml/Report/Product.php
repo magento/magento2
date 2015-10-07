@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-class Product extends AbstractReport
+abstract class Product extends AbstractReport
 {
     /**
      * Add report/products breadcrumbs

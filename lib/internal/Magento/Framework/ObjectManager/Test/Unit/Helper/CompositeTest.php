@@ -31,12 +31,12 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterAndSortDeclaredComponents()
     {
-        $firstComponent = new \Magento\Framework\Object();
-        $secondComponent = new \Magento\Framework\Object();
-        $thirdComponent = new \Magento\Framework\Object();
+        $firstComponent = new \Magento\Framework\DataObject();
+        $secondComponent = new \Magento\Framework\DataObject();
+        $thirdComponent = new \Magento\Framework\DataObject();
         $contexts = [
             [
-                'type' => new \Magento\Framework\Object(),
+                'type' => new \Magento\Framework\DataObject(),
             ],
             [
                 'sortOrder' => 50,

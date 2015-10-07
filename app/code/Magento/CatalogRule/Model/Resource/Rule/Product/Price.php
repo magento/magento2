@@ -71,8 +71,8 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         foreach ($updateFields as $priceField) {
-            $priceCond = $this->_getWriteAdapter()->quoteIdentifier([$indexAlias, $priceField]);
-            $priceExpr = $this->_getWriteAdapter()->getCheckSql(
+            $priceCond = $this->getConnection()->quoteIdentifier([$indexAlias, $priceField]);
+            $priceExpr = $this->getConnection()->getCheckSql(
                 "rp.rule_price < {$priceCond}",
                 'rp.rule_price',
                 $priceCond
@@ -81,7 +81,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $query = $select->crossUpdateFromSelect($indexTable);
-        $this->_getWriteAdapter()->query($query);
+        $this->getConnection()->query($query);
 
         return $this;
     }

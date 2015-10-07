@@ -918,7 +918,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $optionMock = $this->getMockBuilder('Magento\Framework\Object')
+        $optionMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
@@ -1094,7 +1094,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $origin = 'origin';
         $code = 1;
         $message = "message";
-        $additionalData = new \Magento\Framework\Object();
+        $additionalData = new \Magento\Framework\DataObject();
         $additionalData->setTemp(true);
 
         $this->errorInfos->expects($this->once())

@@ -49,7 +49,7 @@
     <xs:attributeGroup name="tabAttributeGroup">
         <xs:attribute name="id" type="typeId" use="required" />
         <xs:attribute name="translate" type="xs:string" use="optional" />
-        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:float" use="optional" />
         <xs:attribute name="class" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
@@ -57,7 +57,7 @@
         <xs:attribute name="id" type="typeId" use="required" />
         <xs:attribute name="translate" type="xs:string" use="optional" />
         <xs:attribute name="type" type="xs:string" use="optional" />
-        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:float" use="optional" />
         <xs:attribute name="showInDefault" type="xs:int" use="optional" />
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />
@@ -427,7 +427,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
+            <xs:pattern value="([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
             <xs:minLength value="8" />
         </xs:restriction>
     </xs:simpleType>
@@ -443,7 +443,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9/.]{1,}" />
+            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9/.]{1,}" />
             <xs:minLength value="8" />
         </xs:restriction>
     </xs:simpleType>
@@ -455,7 +455,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}" />
+            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>

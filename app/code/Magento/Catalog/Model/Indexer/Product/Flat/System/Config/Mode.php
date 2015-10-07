@@ -66,7 +66,7 @@ class Mode extends \Magento\Framework\App\Config\Value
         if ((bool)$this->getValue() != (bool)$this->getOldValue()) {
             if ((bool)$this->getValue()) {
                 $this->indexerState->loadByIndexer(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID);
-                $this->indexerState->setStatus(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
+                $this->indexerState->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
                 $this->indexerState->save();
             } else {
                 $this->_productFlatIndexerProcessor->getIndexer()->setScheduled(false);

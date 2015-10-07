@@ -6,32 +6,17 @@
 
 namespace Magento\Review\Test\Fixture\Review;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Review\Test\Fixture\Rating;
 
 /**
- * Class Ratings
- * Source for product ratings fixture
+ * Source for product ratings fixture.
  */
-class Ratings implements FixtureInterface
+class Ratings extends DataSource
 {
     /**
-     * Configuration settings of fixture
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Data of the created ratings
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * List of the created ratings
+     * List of the created ratings.
      *
      * @var array
      */
@@ -50,8 +35,8 @@ class Ratings implements FixtureInterface
         $fixtureRating = null;
 
         foreach ($data as $rating) {
-            if (isset($rating['dataSet'])) {
-                $fixtureRating = $fixtureFactory->createByCode('rating', ['dataSet' => $rating['dataSet']]);
+            if (isset($rating['dataset'])) {
+                $fixtureRating = $fixtureFactory->createByCode('rating', ['dataset' => $rating['dataset']]);
                 if (!$fixtureRating->hasData('rating_id')) {
                     $fixtureRating->persist();
                 }
@@ -70,40 +55,7 @@ class Ratings implements FixtureInterface
     }
 
     /**
-     * Persist data
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key [optional]
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Get ratings
+     * Get ratings.
      *
      * @return array
      */

@@ -8,15 +8,18 @@
      data-bind="mageInit: {'collapsible':{'openedState': '_active'}}">
     <div class="payment-option-title field choice" data-role="title">
         <span class="action action-toggle" id="block-discount-heading" role="heading" aria-level="2">
-            <!-- ko text: $t('Apply Promo Code')--><!-- /ko -->
+            <!-- ko i18n: 'Apply Discount Code'--><!-- /ko -->
         </span>
     </div>
     <div class="payment-option-content" data-role="content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <form class="form form-discount" id="discount-form" data-bind="blockLoader: isLoading">
             <div class="payment-option-inner">
                 <div class="field">
                     <label class="label" for="discount-code">
-                        <span data-bind="text: $t('Enter promo code')"></span>
+                        <span data-bind="i18n: 'Enter discount code'"></span>
                     </label>
                     <div class="control">
                         <input class="input-text"
@@ -24,20 +27,20 @@
                                id="discount-code"
                                name="discount_code"
                                data-validate="{'required-entry':true}"
-                               data-bind="value: couponCode, attr:{placeholder: $t('Enter promo code')} " />
+                               data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
                     </div>
                 </div>
             </div>
             <div class="actions-toolbar">
                 <div class="primary">
                     <!-- ko ifnot: isApplied() -->
-                        <button class="action action-apply" type="submit" data-bind="'value': $t('Apply'), click: apply">
-                            <span><!-- ko text: $t('Apply')--><!-- /ko --></span>
+                        <button class="action action-apply" type="submit" data-bind="'value': $t('Apply Discount'), click: apply">
+                            <span><!-- ko i18n: 'Apply Discount'--><!-- /ko --></span>
                         </button>
                     <!-- /ko -->
                     <!-- ko if: isApplied() -->
                         <button class="action action-cancel" type="submit" data-bind="'value': $t('Cancel'), click: cancel">
-                            <span><!-- ko text: $t('Cancel coupon')--><!-- /ko --></span>
+                            <span><!-- ko i18n: 'Cancel coupon'--><!-- /ko --></span>
                         </button>
                     <!-- /ko -->
                 </div>

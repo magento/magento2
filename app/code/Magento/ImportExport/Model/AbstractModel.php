@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractModel extends \Magento\Framework\Object
+abstract class AbstractModel extends \Magento\Framework\DataObject
 {
     /**
      * Enable loging

@@ -23,10 +23,14 @@ class Wishlist implements SectionSourceInterface
      */
     protected $wishlistHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\View */
-    protected $productImageView;
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $imageHelper;
 
-    /** @var \Magento\Framework\App\ViewInterface */
+    /**
+     * @var \Magento\Framework\App\ViewInterface
+     */
     protected $view;
 
     /**
@@ -37,17 +41,17 @@ class Wishlist implements SectionSourceInterface
     /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
-     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\App\ViewInterface $view
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
-        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\App\ViewInterface $view
     ) {
         $this->wishlistHelper = $wishlistHelper;
-        $this->productImageView = $productImageView;
+        $this->imageHelper = $imageHelper;
         $this->block = $block;
         $this->view = $view;
     }
@@ -100,16 +104,16 @@ class Wishlist implements SectionSourceInterface
         $collection->clear()->setPageSize(self::SIDEBAR_ITEMS_NUMBER)
             ->setInStockFilter(true)->setOrder('added_at');
         $items = [];
+        /** @var \Magento\Wishlist\Model\Item $wishlistItem */
         foreach ($collection as $wishlistItem) {
-            /** @var \Magento\Catalog\Model\Product $product */
             $product = $wishlistItem->getProduct();
-            $this->productImageView->init($product, 'wishlist_sidebar_block', 'Magento_Catalog');
+            $this->imageHelper->init($product, 'wishlist_sidebar_block');
             $items[] = [
                 'image' => [
-                    'src' => $this->productImageView->getUrl(),
-                    'alt' => $this->productImageView->getLabel(),
-                    'width' => $this->productImageView->getWidth(),
-                    'height' => $this->productImageView->getHeight(),
+                    'src' => $this->imageHelper->getUrl(),
+                    'alt' => $this->imageHelper->getLabel(),
+                    'width' => $this->imageHelper->getWidth(),
+                    'height' => $this->imageHelper->getHeight(),
                 ],
                 'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
                 'product_name' => $product->getName(),
@@ -121,8 +125,8 @@ class Wishlist implements SectionSourceInterface
                 ),
                 'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
                 'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
-                'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
-                'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
+                'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem, true),
+                'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem, true),
             ];
         }
         return $items;

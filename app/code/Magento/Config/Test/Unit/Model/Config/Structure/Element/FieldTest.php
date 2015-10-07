@@ -383,7 +383,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'multiselect'],
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Framework\Object', ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->getMock('Magento\Framework\DataObject', ['setPath', 'retrieveElements']);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(
@@ -405,7 +405,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'select'],
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Framework\Object', ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->getMock('Magento\Framework\DataObject', ['setPath', 'retrieveElements']);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

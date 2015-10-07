@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
 use Magento\Framework\App\RequestInterface;
+use Magento\Catalog\Model\Product\Edit\WeightResolver;
 
 /**
  * Plugin for product type transition manager
@@ -21,11 +22,18 @@ class Downloadable
     protected $request;
 
     /**
-     * @param RequestInterface $request
+     * @var \Magento\Catalog\Model\Product\Edit\WeightResolver
      */
-    public function __construct(RequestInterface $request)
+    protected $weightResolver;
+
+    /**
+     * @param RequestInterface $request
+     * @param WeightResolver $weightResolver
+     */
+    public function __construct(RequestInterface $request, WeightResolver $weightResolver)
     {
         $this->request = $request;
+        $this->weightResolver = $weightResolver;
     }
 
     /**
@@ -57,12 +65,12 @@ class Downloadable
                 foreach ($data as $rowData) {
                     if (empty($rowData['is_delete'])) {
                         $hasDownloadableData = true;
-                        break;
+                        break 2;
                     }
                 }
             }
         }
-        if ($isTypeCompatible && $hasDownloadableData && $product->hasIsVirtual()) {
+        if ($isTypeCompatible && $hasDownloadableData && !$this->weightResolver->resolveProductHasWeight($product)) {
             $product->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
             return;
         }

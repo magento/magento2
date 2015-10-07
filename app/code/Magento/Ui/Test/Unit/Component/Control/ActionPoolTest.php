@@ -7,7 +7,7 @@ namespace Magento\Ui\Test\Unit\Component\Control;
 
 use \Magento\Ui\Component\Control\ActionPool;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;

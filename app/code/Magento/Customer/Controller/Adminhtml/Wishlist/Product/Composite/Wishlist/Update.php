@@ -18,11 +18,11 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Com
     public function execute()
     {
         // Update wishlist item
-        $updateResult = new \Magento\Framework\Object();
+        $updateResult = new \Magento\Framework\DataObject();
         try {
             $this->_initData();
 
-            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
+            $buyRequest = new \Magento\Framework\DataObject($this->getRequest()->getParams());
 
             $this->_wishlist->updateItem($this->_wishlistItem->getId(), $buyRequest)->save();
 

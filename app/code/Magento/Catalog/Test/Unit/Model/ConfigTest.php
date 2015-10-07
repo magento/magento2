@@ -181,7 +181,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSourceOptionId($expected, $data, $search)
     {
-        $object = $this->getMock('\Magento\Framework\Object', ['getAllOptions'], [], '', false);
+        $object = $this->getMock('\Magento\Framework\DataObject', ['getAllOptions'], [], '', false);
         $object->expects($this->once())->method('getAllOptions')->will($this->returnValue($data));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject('Magento\Catalog\Model\Config');

@@ -157,7 +157,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($pluginSettings);
 
         $config = $this->wysiwygConfig->getConfig($data);
-        $this->assertInstanceOf('Magento\Framework\Object', $config);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $config);
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
         $this->assertEquals($expectedResults[1], $config->getData('wysiwygPluginSettings'));
         $this->assertEquals($expectedResults[2], $config->getData('pluginSettings'));

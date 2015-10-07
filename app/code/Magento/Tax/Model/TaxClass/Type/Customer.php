@@ -61,7 +61,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
     public function isAssignedToObjects()
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(
+            ->addFilters(
                 [
                     $this->filterBuilder->setField(CustomerGroup::TAX_CLASS_ID)->setValue($this->getId())->create(),
                 ]

@@ -45,7 +45,7 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
         $resultItems = [];
 
         foreach ($this->_salesModel->getAllItems() as $item) {
-            $resultItems[] = new \Magento\Framework\Object(
+            $resultItems[] = new \Magento\Framework\DataObject(
                 [
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),

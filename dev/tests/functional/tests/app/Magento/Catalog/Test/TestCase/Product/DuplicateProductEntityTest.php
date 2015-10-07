@@ -111,11 +111,11 @@ class DuplicateProductEntityTest extends Injectable
      */
     protected function createProduct($productType)
     {
-        list($fixture, $dataSet) = explode('::', $productType);
+        list($fixture, $dataset) = explode('::', $productType);
         $product = $this->fixtureFactory->createByCode(
             $fixture,
             [
-                'dataSet' => $dataSet,
+                'dataset' => $dataset,
                 'data' => [
                     'category_ids' => [
                         'category' => $this->category,

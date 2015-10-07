@@ -33,16 +33,13 @@ class CatalogPrice implements CatalogPriceInterface
     }
 
     /**
-     * Minimal price for "regular" user
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|\Magento\Store\Model\Store $store Store view
-     * @param bool $inclTax
-     * @throws \UnexpectedValueException
-     * @return null|float
+     * {@inheritdoc}
      */
-    public function getCatalogPrice(\Magento\Catalog\Model\Product $product, $store = null, $inclTax = false)
-    {
+    public function getCatalogPrice(
+        \Magento\Catalog\Model\Product $product,
+        \Magento\Store\Api\Data\StoreInterface $store = null,
+        $inclTax = false
+    ) {
         if (array_key_exists($product->getTypeId(), $this->priceModelPool)) {
             $catalogPriceModel = $this->priceModelFactory->create($this->priceModelPool[$product->getTypeId()]);
             return $catalogPriceModel->getCatalogPrice($product, $store, $inclTax);

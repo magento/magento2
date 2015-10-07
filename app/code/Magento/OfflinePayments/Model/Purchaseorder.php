@@ -41,13 +41,13 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\Object|mixed $data
+     * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      */
     public function assignData($data)
     {
-        if (!$data instanceof \Magento\Framework\Object) {
-            $data = new \Magento\Framework\Object($data);
+        if (!$data instanceof \Magento\Framework\DataObject) {
+            $data = new \Magento\Framework\DataObject($data);
         }
 
         $this->getInfoInstance()->setPoNumber($data->getPoNumber());

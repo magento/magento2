@@ -36,11 +36,11 @@ class Snapshot
     /**
      * Register snapshot of entity data, for tracking changes
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function registerSnapshot(\Magento\Framework\Object $entity)
+    public function registerSnapshot(\Magento\Framework\DataObject $entity)
     {
         $metaData = $this->metadata->getFields($entity);
         $filteredData = array_intersect_key($entity->getData(), $metaData);
@@ -51,10 +51,10 @@ class Snapshot
     /**
      * Check is current entity has changes, by comparing current object state with stored snapshot
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return bool
      */
-    public function isModified(\Magento\Framework\Object $entity)
+    public function isModified(\Magento\Framework\DataObject $entity)
     {
         if (!$entity->getId()) {
             return true;

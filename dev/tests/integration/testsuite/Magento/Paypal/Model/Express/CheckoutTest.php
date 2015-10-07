@@ -108,43 +108,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Verify that an order placed with a new unconfirmed customer alerts the user that they must confirm the account.
-     *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     * @magentoConfigFixture current_store customer/create_account/confirm true
-     */
-    public function testPrepareNewCustomerQuoteConfirmationRequired()
-    {
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerService */
-        $customerService = $this->_objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
-
-        /** @var Quote $quote */
-        $quote = $this->_getFixtureQuote();
-        $this->quoteInitialization($quote);
-
-        $checkout = $this->_getCheckout($quote);
-        $checkout->place('token');
-        $customer = $customerService->getById($quote->getCustomerId());
-        $this->assertEquals('user@example.com', $customer->getEmail());
-        $this->assertEquals('11111111', $customer->getAddresses()[0]->getTelephone());
-
-        /** @var \Magento\Framework\Message\ManagerInterface $messageManager */
-        $messageManager = $this->_objectManager->get('Magento\Framework\Message\ManagerInterface');
-        $confirmationText = sprintf(
-            'customer/account/confirmation/email/%s/key/',
-            $customer->getEmail()
-        );
-        /** @var \Magento\Framework\Message\MessageInterface $message */
-        $message = $messageManager->getMessages()->getLastAddedMessage();
-        $this->assertInstanceOf('\Magento\Framework\Message\MessageInterface', $message);
-        $this->assertTrue(
-            strpos($message->getText(), $confirmationText) !== false
-        );
-    }
-
-    /**
      * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
@@ -270,7 +233,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      * Prepare fixture for exported address
      *
      * @param array $addressData
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getExportedAddressFixture(array $addressData)
     {
@@ -281,7 +244,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 $result[$key] = 'exported' . $addressData[$key];
             }
         }
-        $fixture = new \Magento\Framework\Object($result);
+        $fixture = new \Magento\Framework\DataObject($result);
         $fixture->setExportedKeys($addressDataKeys);
         $fixture->setData('note', 'note');
         return $fixture;

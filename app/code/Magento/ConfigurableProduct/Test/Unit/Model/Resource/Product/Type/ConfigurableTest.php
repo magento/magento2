@@ -32,10 +32,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
 
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($adapter));
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->relation = $this->getMock('Magento\Catalog\Model\Resource\Product\Relation', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -51,7 +51,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProducts()
     {
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', '_getWriteAdapter'])
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
@@ -68,7 +68,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProductsForDuplicate()
     {
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', '_getWriteAdapter'])
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,7 +87,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
             [
                 'getTable',
-                '_getReadAdapter',
+                'getConnection',
             ],
             [
                 $this->resource,
@@ -111,7 +111,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('getId value');
 
-        $configurable->expects($this->exactly(7))
+        $configurable->expects($this->exactly(6))
             ->method('getTable')
             ->will(
                 $this->returnValueMap(
@@ -121,7 +121,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         ['eav_attribute', 'eav_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
                         ['eav_attribute_option_value', 'eav_attribute_option_value value'],
-                        ['catalog_product_super_attribute_pricing', 'catalog_product_super_attribute_pricing value'],
                         ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value']
                     ]
                 )
@@ -147,8 +146,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'product_id' => 'super_attribute.product_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
-                    'pricing_value' => 'attribute_pricing.pricing_value',
-                    'pricing_is_percent' => 'attribute_pricing.is_percent',
                     'super_attribute_label' =>  'attribute_label.value'
                 ]
             )
@@ -207,7 +204,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $select->expects($this->exactly(3))
+        $select->expects($this->exactly(2))
             ->method('joinLeft')
             ->will($this->returnSelf())
             ->withConsecutive(
@@ -218,17 +215,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         [
                             'option_value.option_id = entity_value.value',
                             'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                        ]
-                    ),
-                    []
-                ],
-                [
-                    ['attribute_pricing' => 'catalog_product_super_attribute_pricing value'],
-                    implode(
-                        ' AND ',
-                        [
-                            'super_attribute.product_super_attribute_id = attribute_pricing.product_super_attribute_id',
-                            'entity_value.value = attribute_pricing.value_index'
                         ]
                     ),
                     []
@@ -269,7 +255,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn('fetchAll value');
 
         $configurable->expects($this->exactly(2))
-            ->method('_getReadAdapter')
+            ->method('getConnection')
             ->willReturn($readerAdapter);
         $expectedAttributesOptionsData = [
             'getAttributeId value' => 'fetchAll value',

@@ -15,10 +15,10 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * If integration endpoint URL is unsecure then add error message to integration name.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         /** @var \Magento\Integration\Model\Integration $row */
         $text = parent::render($row);

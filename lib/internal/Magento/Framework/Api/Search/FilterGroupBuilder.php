@@ -52,7 +52,7 @@ class FilterGroupBuilder extends AbstractSimpleObjectBuilder
      * @param \Magento\Framework\Api\Filter[] $filters
      * @return $this
      */
-    public function setFilters($filters)
+    public function setFilters(array $filters)
     {
         return $this->_set(FilterGroup::FILTERS, $filters);
     }

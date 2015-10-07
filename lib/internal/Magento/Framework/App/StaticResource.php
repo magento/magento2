@@ -55,11 +55,6 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $configLoader;
 
     /**
-     * @var \Magento\Framework\View\Asset\MinifyService
-     */
-    protected $minifyService;
-
-    /**
      * @param State $state
      * @param Response\FileInterface $response
      * @param Request\Http $request
@@ -68,7 +63,6 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigLoaderInterface $configLoader
-     * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      */
     public function __construct(
         State $state,
@@ -78,8 +72,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ConfigLoaderInterface $configLoader,
-        \Magento\Framework\View\Asset\MinifyService $minifyService
+        ConfigLoaderInterface $configLoader
     ) {
         $this->state = $state;
         $this->response = $response;
@@ -89,7 +82,6 @@ class StaticResource implements \Magento\Framework\AppInterface
         $this->moduleList = $moduleList;
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
-        $this->minifyService = $minifyService;
     }
 
     /**
@@ -113,7 +105,6 @@ class StaticResource implements \Magento\Framework\AppInterface
             $file = $params['file'];
             unset($params['file']);
             $asset = $this->assetRepo->createAsset($file, $params);
-            $asset = $this->minifyService->getAssets([$asset], true)[0];
             $this->response->setFilePath($asset->getSourceFile());
             $this->publisher->publish($asset);
         }

@@ -6,7 +6,13 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="install" module="Magento_Install" type="virtual" entity_type="install" repository_class="Magento\Install\Test\Repository\Install" handler_interface="Magento\Install\Test\Handler\Install\InstallInterface" class="Magento\Install\Test\Fixture\Install">
+    <fixture name="install"
+             module="Magento_Install"
+             type="virtual"
+             entity_type="install"
+             repository_class="Magento\Install\Test\Repository\Install"
+             handler_interface="Magento\Install\Test\Handler\Install\InstallInterface"
+             class="Magento\Install\Test\Fixture\Install">
         <field name="dbHost" />
         <field name="dbUser" />
         <field name="dbPassword" />

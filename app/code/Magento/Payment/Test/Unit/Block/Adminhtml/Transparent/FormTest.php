@@ -6,7 +6,7 @@
 namespace Magento\Payment\Test\Unit\Block\Adminhtml\Transparent;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Model\Method\TransparentInterface;

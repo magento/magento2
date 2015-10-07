@@ -10,7 +10,7 @@ define(
         'Magento_Checkout/js/model/quote'
     ],
     function(ko, quote) {
-
+        'use strict';
         return {
             totals: quote.totals,
             isLoading: ko.observable(false),

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class AbstractCriteria
@@ -123,7 +123,7 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
                 )
             );
         }
-        $filter = new Object();
+        $filter = new DataObject();
         // implements ArrayAccess
         $filter['name'] = $name;
         $filter['field'] = $field;

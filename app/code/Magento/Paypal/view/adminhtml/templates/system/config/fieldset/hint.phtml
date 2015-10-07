@@ -16,14 +16,14 @@
     if ($block->getHelpLink()):
 ?>
 <div class="paypal-payment-notice">
-    <?php echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
+    <?php /* @escapeNotVerified */ echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
 </div>
 <?php
     endif;
 ?>
 <script>
 require(['jquery', 'prototype'], function(jQuery){
-    paypalToggleSolution = function(id, url) {
+    window.paypalToggleSolution = function (id, url) {
         var doScroll = false;
         Fieldset.toggleCollapse(id, url);
         if ($(this).hasClassName("open")) {

@@ -1,0 +1,32 @@
+{
+    "name": "magento/module-swatches",
+    "description": "Add Swatches to Products",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/module-catalog": "1.0.0-beta",
+        "magento/module-configurable-product": "1.0.0-beta",
+        "magento/module-eav": "1.0.0-beta",
+        "magento/module-customer": "1.0.0-beta",
+        "magento/module-store": "1.0.0-beta",
+        "magento/module-backend": "1.0.0-beta",
+        "magento/module-media-storage": "1.0.0-beta",
+        "magento/module-config": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
+        "magento/framework": "1.0.0-beta"
+    },
+    "suggest": {
+        "magento/module-layered-navigation": "1.0.0-beta",
+        "magento/module-swatches-sample-data": "Sample Data version:1.0.0-beta"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0-beta",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Swatches\\": ""
+        }
+    }
+}

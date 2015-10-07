@@ -27,8 +27,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function addSummary()
     {
-        $adapter = $this->getConnection();
-        $linkExpr = $adapter->getIfNullSql('l_store.title', 'l.title');
+        $connection = $this->getConnection();
+        $linkExpr = $connection->getIfNullSql('l_store.title', 'l.title');
 
         $this->getSelect()->joinInner(
             ['d' => $this->getTable('downloadable_link_purchased_item')],
@@ -43,14 +43,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             ['l.link_id']
         )->joinLeft(
             ['l_store' => $this->getTable('downloadable_link_title')],
-            $adapter->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int)$this->getStoreId()),
+            $connection->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int)$this->getStoreId()),
             ['link_title' => $linkExpr]
         )->where(
             implode(
                 ' OR ',
                 [
-                    $adapter->quoteInto('d.number_of_downloads_bought > ?', 0),
-                    $adapter->quoteInto('d.number_of_downloads_used > ?', 0)
+                    $connection->quoteInto('d.number_of_downloads_bought > ?', 0),
+                    $connection->quoteInto('d.number_of_downloads_used > ?', 0)
                 ]
             )
         )->group(

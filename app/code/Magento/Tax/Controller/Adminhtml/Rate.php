@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rate extends \Magento\Backend\App\Action
+abstract class Rate extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Registry
@@ -61,7 +61,7 @@ class Rate extends \Magento\Backend\App\Action
             if (is_array($value)) {
                 $result[$key] = $this->_processRateData($value);
             } else {
-                $result[$key] = trim(strip_tags($value));
+                $result[$key] = trim($value);
             }
         }
         return $result;

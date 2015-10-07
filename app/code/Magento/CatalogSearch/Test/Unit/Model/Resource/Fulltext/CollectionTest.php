@@ -77,16 +77,16 @@ class CollectionTest extends PHPUnit_Framework_TestCase
      */
     protected function getUniversalFactory()
     {
-        $connection = $this->getMockBuilder('Zend_Db_Adapter_Abstract')
+        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
-            ->setMethods(['getReadConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
+            ->setMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->willReturn($connection);
         $entity->expects($this->exactly(2))
             ->method('getTable')
@@ -139,7 +139,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ->withConsecutive(['price_dynamic_algorithm', 1]);
         $requestBuilder->expects($this->once())
             ->method('setRequestName')
-            ->withConsecutive(['quick_search_container'])
+            ->withConsecutive(['catalog_view_container'])
             ->willThrowException(new \Exception('setRequestName', 333));
 
         return $requestBuilder;

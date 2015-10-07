@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
     /**
@@ -16,28 +18,27 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      */
     protected function _getReaderClassName()
     {
-        return 'Magento\Framework\Object\Copy\Config\Reader';
+        return 'Magento\Framework\DataObject\Copy\Config\Reader';
     }
 
     /**
-     * Returns a string that represents the path to the config file, starting in the app directory.
-     *
-     * Format is glob, so * is allowed.
+     * Returns a string that represents the path to the config file
      *
      * @return string
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/fieldset.xml';
+        return 'etc/fieldset.xml';
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
     protected function _getXsdPath()
     {
-        return '/../../lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+        . '/DataObject/etc/fieldset_file.xsd';
     }
 }

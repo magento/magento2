@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+    $creditCard = $block->creditCard();
+    $token = $creditCard->token;
+?>
+<?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml();?>
+<form action="<?php /* @escapeNotVerified */ echo $block->getDeleteConfirmUrl() ?>" method="post" id="delete-form"
+      xmlns="http://www.w3.org/1999/html">
+    <fieldset class="fieldset info">
+        <legend class="legend"><?php /* @escapeNotVerified */ echo __('Please confirm that you want to delete this credit card') ?></legend>
+        <div class="field">
+            <ul>
+                <li>
+                    <b><?php /* @escapeNotVerified */ echo __('Credit Card Number');?></b>
+                </li>
+                <li>
+                    <?php /* @escapeNotVerified */ echo $creditCard->maskedNumber;?>
+                </li>
+                <li>
+                    <b><?php /* @escapeNotVerified */ echo __('Expiration Date');?></b>
+                </li>
+                <li>
+                    <?php /* @escapeNotVerified */ echo $creditCard->expirationDate; ?>
+                </li>
+                <li>
+                    <b><?php /* @escapeNotVerified */ echo __('Cardholder Name');?></b>
+                </li>
+                <li>
+                    <?php /* @escapeNotVerified */ echo $creditCard->cardholderName;?>
+                </li>
+            </ul>
+        </div>
+    </fieldset>
+    <input type="hidden" name="token" value="<?php /* @escapeNotVerified */ echo $token ?>">
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" id="opc-submit" data-role="opc-submit" class="action save primary"
+                    title="<?php /* @escapeNotVerified */ echo __('Delete') ?>" ><?php /* @escapeNotVerified */ echo __('Delete') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>"><span><span><small>&laquo; </small>
+                        <?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
+        </div>
+    </div>
+
+</form>

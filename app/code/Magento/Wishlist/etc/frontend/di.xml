@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <virtualType name="Magento\Wishlist\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">wishlist</argument>
@@ -33,6 +33,18 @@
     <type name="Magento\Wishlist\Controller\Index\Send">
         <arguments>
             <argument name="wishlistSession" xsi:type="object">Magento\Wishlist\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addProductSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Wishlist::messages/addProductSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -23,6 +23,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
+     * @codeCoverageIgnore
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -63,7 +64,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
                 return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('checkout/cart');
             }
 
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());

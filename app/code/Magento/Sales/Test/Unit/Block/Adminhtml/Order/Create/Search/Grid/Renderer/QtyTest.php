@@ -26,7 +26,7 @@ class QtyTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->rowMock = $this->getMock('Magento\Framework\Object', ['getTypeId', 'getIndex'], [], '', false);
+        $this->rowMock = $this->getMock('Magento\Framework\DataObject', ['getTypeId', 'getIndex'], [], '', false);
         $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
         $this->renderer = $helper->getObject(
             'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',

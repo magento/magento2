@@ -14,7 +14,7 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Versio
      * Retrieve item by id
      *
      * @param   mixed $id
-     * @return  \Magento\Framework\Object
+     * @return  \Magento\Framework\DataObject
      */
     public function getItemById($id)
     {
@@ -31,6 +31,6 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Versio
      */
     protected function _construct()
     {
-        return $this->_init('Magento\Framework\Object', 'test_entity_model');
+        return $this->_init('Magento\Framework\DataObject', 'test_entity_model');
     }
 }

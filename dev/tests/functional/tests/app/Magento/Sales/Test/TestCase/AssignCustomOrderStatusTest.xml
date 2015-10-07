@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\AssignCustomOrderStatusTest">
+    <testCase name="Magento\Sales\Test\TestCase\AssignCustomOrderStatusTest" summary="Assign Custom Order Status" ticketId="MAGETWO-29382">
         <variation name="AssignCustomOrderStatusTestVariation1">
             <data name="orderStatusState/state" xsi:type="string">Pending</data>
             <data name="orderStatusState/is_default" xsi:type="string">No</data>

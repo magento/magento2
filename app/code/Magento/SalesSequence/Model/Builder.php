@@ -246,9 +246,9 @@ class Builder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
-            $adapter = $this->appResource->getConnection('sales_write');
-            if (!$adapter->isTableExists($this->data['sequence_table'])) {
-                $adapter->query(
+            $connection = $this->appResource->getConnection('sales');
+            if (!$connection->isTableExists($this->data['sequence_table'])) {
+                $connection->query(
                     $this->ddlSequence->getCreateSequenceDdl(
                         $this->data['sequence_table'],
                         $this->data['start_value']

@@ -19,6 +19,11 @@ class Cart
     protected $checkoutHelper;
 
     /**
+     * @var \Magento\Tax\Block\Item\Price\Renderer
+     */
+    protected $itemPriceRenderer;
+
+    /**
      * @var \Magento\Quote\Model\Quote|null
      */
     protected $quote = null;
@@ -31,13 +36,16 @@ class Cart
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Helper\Data $checkoutHelper
+        \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
+        $this->itemPriceRenderer = $itemPriceRenderer;
     }
 
     /**
@@ -52,6 +60,17 @@ class Cart
     {
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
+
+        $items =$this->getQuote()->getAllVisibleItems();
+        if (is_array($result['items'])) {
+            foreach ($result['items'] as $key => $itemAsArray) {
+                if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
+                    $this->itemPriceRenderer->setItem($item);
+                    $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
+                    $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                }
+            }
+        }
         return $result;
     }
 
@@ -110,5 +129,25 @@ class Cart
             $this->quote = $this->checkoutSession->getQuote();
         }
         return $this->quote;
+    }
+
+    /**
+     * Find item by id in items haystack
+     *
+     * @param int $id
+     * @param array $itemsHaystack
+     * @return \Magento\Quote\Model\Quote\Item | bool
+     */
+    protected function findItemById($id, $itemsHaystack)
+    {
+        if (is_array($itemsHaystack)) {
+            foreach ($itemsHaystack as $item) {
+                /** @var $item \Magento\Quote\Model\Quote\Item */
+                if ((int)$item->getItemId() == $id) {
+                    return $item;
+                }
+            }
+        }
+        return false;
     }
 }

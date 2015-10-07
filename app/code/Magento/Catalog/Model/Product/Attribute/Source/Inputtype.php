@@ -50,7 +50,7 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
             ['value' => 'media_image', 'label' => __('Media Image')],
         ];
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', ['response' => $response]);
         $_hiddenFields = [];

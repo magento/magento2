@@ -11,7 +11,7 @@ angular.module('web-configuration', ['ngStorage'])
                 base_url: '',
                 auto_base_url: '',
                 actual_base_url: '',
-                admin: 'admin'
+                admin: ''
             },
             https: {
                 front: false,
@@ -40,13 +40,13 @@ angular.module('web-configuration', ['ngStorage'])
 
         $scope.updateOnExpand = function(obj) {
             obj.expanded = !obj.expanded;
-        }
+        };
 
         $scope.fillBaseURL = function() {
             if (angular.equals($scope.config.address.base_url, '')) {
                 $scope.config.address.base_url = $scope.config.address.auto_base_url;
             }
-        }
+        };
 
         $scope.$watch('config.address.base_url', function() {
             if (angular.equals($scope.config.address.base_url, '')) {
@@ -74,11 +74,11 @@ angular.module('web-configuration', ['ngStorage'])
 
         $scope.showEncryptKey = function() {
             return angular.equals($scope.config.encrypt.type, 'user');
-        }
+        };
 
         $scope.showHttpsField = function() {
             return ($scope.config.https.front || $scope.config.https.admin);
-        }
+        };
 
         $scope.addSlash = function() {
             if (angular.isUndefined($scope.config.address.base_url)) {
@@ -107,7 +107,7 @@ angular.module('web-configuration', ['ngStorage'])
                 $scope.$emit('validation-response', false);
                 $scope.webconfig.submitted = true;
             }
-        }
+        };
 
         // Update 'submitted' flag
         $scope.$watch(function() { return $scope.webconfig.$valid }, function(valid) {

@@ -23,8 +23,6 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
     /**
      * @param Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
@@ -33,8 +31,6 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
@@ -43,8 +39,6 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         parent::__construct(
             $context,
             $checkoutSession,
-            $customerSession,
-            $orderFactory,
             $orderConfig,
             $httpContext,
             $data
@@ -56,21 +50,29 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * Return true if order(s) has one or more downloadable products
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getOrderHasDownloadable()
+    private function orderHasDownloadableProducts()
     {
-        $hasDownloadableFlag = $this->_checkoutSession->getHasDownloadableProducts(true);
-        if (!$this->isOrderVisible()) {
-            return false;
-        }
-        /**
-         * if use guest checkout
-         */
-        if (!$this->currentCustomer->getCustomerId()) {
-            return false;
-        }
-        return $hasDownloadableFlag;
+        return $this->isVisible($this->_checkoutSession->getLastRealOrder())
+                && $this->currentCustomer->getCustomerId()
+            ? $this->_checkoutSession->getHasDownloadableProducts(true)
+            : false;
+    }
+
+    /**
+     * Prepares block data
+     *
+     * @return void
+     */
+    protected function prepareBlockData()
+    {
+        parent::prepareBlockData();
+
+        $this->addData(
+            [
+                'order_has_downloadable' => $this->orderHasDownloadableProducts()
+            ]
+        );
     }
 
     /**

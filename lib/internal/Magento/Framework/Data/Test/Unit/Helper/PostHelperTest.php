@@ -12,11 +12,11 @@ class PostHelperTest extends \PHPUnit_Framework_TestCase
     public function testGetPostData()
     {
         $url = '/controller/sample/action/url/';
-        $product = ['product' => new \Magento\Framework\Object(['id' => 1])];
+        $product = ['product' => new \Magento\Framework\DataObject(['id' => 1])];
         $expected = json_encode([
             'action' => $url,
             'data' => [
-                'product' => new \Magento\Framework\Object(['id' => 1]),
+                'product' => new \Magento\Framework\DataObject(['id' => 1]),
                 Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($url . 'for_uenc'), '+/=', '-_,'),
             ],
         ]);

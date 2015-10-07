@@ -34,7 +34,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemMock = $this->getMock('Magento\Framework\Object', ['getProduct'], [], '', false);
+        $this->itemMock = $this->getMock('Magento\Framework\DataObject', ['getProduct'], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->subjectMock = $this->getMock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar',

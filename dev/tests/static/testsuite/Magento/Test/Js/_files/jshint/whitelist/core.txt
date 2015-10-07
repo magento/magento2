@@ -1,0 +1,18 @@
+module Magento_Authorizenet /
+module Magento_Bundle /
+module Magento_Captcha /
+module Magento_Catalog /
+module Magento_CatalogSearch /
+module Magento_Checkout /
+module Magento_Customer /
+module Magento_Downloadable /
+module Magento_GiftMessage /
+module Magento_Newsletter /
+module Magento_OfflinePayments /
+module Magento_Payment /
+module Magento_Persistent /
+module Magento_Sales /
+module Magento_Theme /
+module Magento_Wishlist /
+dev/tests/js
+lib/web/mage

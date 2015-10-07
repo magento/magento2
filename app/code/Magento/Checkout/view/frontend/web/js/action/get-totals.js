@@ -39,6 +39,10 @@ define(
                     deferred.reject();
                     errorProcessor.process(response);
                 }
+            ).always(
+                function () {
+                    totals.isLoading(false);
+                }
             );
 
         };

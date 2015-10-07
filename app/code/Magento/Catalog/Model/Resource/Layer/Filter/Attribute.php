@@ -34,7 +34,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $collection = $filter->getLayer()->getProductCollection();
         $attribute = $filter->getAttributeModel();
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $tableAlias = $attribute->getAttributeCode() . '_idx';
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
@@ -64,12 +64,12 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // clone select from collection with filters
         $select = clone $filter->getLayer()->getProductCollection()->getSelect();
         // reset columns, order and limitation conditions
-        $select->reset(\Zend_Db_Select::COLUMNS);
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $attribute = $filter->getAttributeModel();
         $tableAlias = sprintf('%s_idx', $attribute->getAttributeCode());
         $conditions = [

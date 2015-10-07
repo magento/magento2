@@ -34,10 +34,10 @@ class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Prepare link to display in grid
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $time = date('Y-m-d H:i:s', strtotime($row->getSitemapTime()) + $this->_date->getGmtOffset());
         return $time;

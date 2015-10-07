@@ -381,9 +381,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $request = new \Magento\Framework\Object();
+        $request = new \Magento\Framework\DataObject();
         $result = $this->_model->processBuyRequest($request);
-        $this->assertInstanceOf('Magento\Framework\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
         $this->assertArrayHasKey('errors', $result->getData());
     }
 

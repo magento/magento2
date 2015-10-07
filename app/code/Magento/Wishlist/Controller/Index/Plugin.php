@@ -62,7 +62,7 @@ class Plugin
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
-        if ($this->authenticationState->isEnabled() && !$this->customerSession->authenticate($subject)) {
+        if ($this->authenticationState->isEnabled() && !$this->customerSession->authenticate()) {
             $subject->getActionFlag()->set('', 'no-dispatch', true);
             if (!$this->customerSession->getBeforeWishlistUrl()) {
                 $this->customerSession->setBeforeWishlistUrl($this->redirector->getRefererUrl());

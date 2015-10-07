@@ -9,6 +9,8 @@
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\Resource;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -304,7 +306,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Store\Model\StoreManagerInterface $_storeManager
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -313,7 +315,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -328,6 +332,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_resource = $resource;
@@ -343,7 +348,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['connection'])) {
             $this->_connection = $data['connection'];
         } else {
-            $this->_connection = $resource->getConnection('write');
+            $this->_connection = $resource->getConnection();
         }
 
         if (isset($data['resource_helper'])) {
@@ -357,6 +362,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } else {
             $this->_isPriceGlobal = $this->_catalogData->isPriceGlobal();
         }
+
+        $this->errorAggregator = $errorAggregator;
 
         $this->_initSourceEntities($data)->_initTables($data)->_initStores($data);
 
@@ -375,32 +382,32 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // @codingStandardsIgnoreStart
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_STORE,
-            __('Please enter a correct value for "store."')
+            __('Value for \'price\' sub attribute in \'store\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_TYPE,
-            __('Please enter a correct value for "type."')
+            __('Value for \'type\' sub attribute in \'custom_options\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\'')
         );
         $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_PRICE,
-            __('Please enter a correct value for "price."')
+            __('Value for \'price\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_MAX_CHARACTERS,
-            __('Please enter a correct value for "maximum characters."')
+            __('Value for \'maximum characters\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_SORT_ORDER,
-            __('Please enter a correct value for "sort order."')
+            __('Value for \'sort order\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_PRICE,
-            __('Please enter a correct value for "value price."')
+            __('Value for \'value price\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_SORT,
-            __('Please enter a correct value for "sort order."')
+            __('Value for \'sort order\' sub attribute in \'custom_options\' attribute contains incorrect value')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_NEW_NAMES,
@@ -1044,7 +1051,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         // Parse custom options.
         $rowData = $this->_parseCustomOptions($rowData);
-        $multiRow = array();
+        $multiRow = [];
         if (empty($rowData['custom_options'])) {
             return $multiRow;
         }
@@ -1054,7 +1061,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
             foreach ($customOption as $rowOrder => $optionRow) {
-                $row = array(
+                $row = [
                     self::COLUMN_STORE => '',
                     self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
                     self::COLUMN_TITLE => $name,
@@ -1064,7 +1071,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     self::COLUMN_ROW_SKU => $optionRow['sku'],
                     self::COLUMN_ROW_SORT => $rowOrder,
                     self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
-                );
+                ];
 
                 $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
                 $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
@@ -1748,7 +1755,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $rowData;
         }
         $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
-        $options = array();
+        $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;
         $name = '';

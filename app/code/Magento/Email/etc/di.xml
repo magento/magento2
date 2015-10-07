@@ -5,10 +5,20 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Mail\TemplateInterface" type="Magento\Email\Model\Template" />
     <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
     <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Framework\Mail\Transport" />
     <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
     <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
+    <type name="Magento\Email\Model\BackendTemplate">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Email\Model\Template">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
 </config>

@@ -103,11 +103,11 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve inline giftmessage edit form for specified entity
      *
      * @param string $type
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @param bool $dontDisplayContainer
      * @return string
      */
-    public function getInline($type, \Magento\Framework\Object $entity, $dontDisplayContainer = false)
+    public function getInline($type, \Magento\Framework\DataObject $entity, $dontDisplayContainer = false)
     {
         if (!$this->skipPage($type) && !$this->isMessagesAllowed($type, $entity)) {
             return '';
@@ -132,12 +132,12 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if giftmessages is allowed for specified entity.
      *
      * @param string $type
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function isMessagesAllowed($type, \Magento\Framework\Object $entity, $store = null)
+    public function isMessagesAllowed($type, \Magento\Framework\DataObject $entity, $store = null)
     {
         if ($type == 'items') {
             $items = $entity->getAllItems();
@@ -213,10 +213,10 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve escaped and preformated gift message text for specified entity
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return string|null
      */
-    public function getEscapedGiftMessage(\Magento\Framework\Object $entity)
+    public function getEscapedGiftMessage(\Magento\Framework\DataObject $entity)
     {
         $message = $this->getGiftMessageForEntity($entity);
         if ($message) {
@@ -228,10 +228,10 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve gift message for entity. If message not exists return null
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return \Magento\GiftMessage\Model\Message
      */
-    public function getGiftMessageForEntity(\Magento\Framework\Object $entity)
+    public function getGiftMessageForEntity(\Magento\Framework\DataObject $entity)
     {
         if ($entity->getGiftMessageId() && !$entity->getGiftMessage()) {
             $message = $this->getGiftMessage($entity->getGiftMessageId());

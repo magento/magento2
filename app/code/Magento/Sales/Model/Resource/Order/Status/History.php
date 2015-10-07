@@ -29,7 +29,7 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param Validator $validator
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -38,7 +38,7 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         Validator $validator,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->validator = $validator;
         parent::__construct(
@@ -47,7 +47,7 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
             $entityRelationComposite,
             $attribute,
             $sequenceManager,
-            $resourcePrefix
+            $connectionName
         );
     }
 

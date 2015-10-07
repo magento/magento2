@@ -134,7 +134,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testcritical()
     {
         $exception = new \Exception('error message');
-        $expected = "%aEXCEPTION%a'Exception'%a'error message'%a";
+        $expected = "%aEXCEPTION%aException%aerror message%a";
 
         $this->stream->expects($this->once())
             ->method('write')

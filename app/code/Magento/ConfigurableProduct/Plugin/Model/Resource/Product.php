@@ -14,14 +14,14 @@ class Product
      * We need reset attribute set id to attribute after related simple product was saved
      *
      * @param \Magento\Catalog\Model\Resource\Product $subject
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         \Magento\Catalog\Model\Resource\Product $subject,
-        \Magento\Framework\Object $object
+        \Magento\Framework\DataObject $object
     ) {
         /** @var \Magento\Catalog\Model\Product $object */
         if ($object->getTypeId() == Configurable::TYPE_CODE) {

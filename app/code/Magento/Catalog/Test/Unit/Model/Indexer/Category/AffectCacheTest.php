@@ -16,12 +16,12 @@ class AffectCacheTest extends \PHPUnit_Framework_TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Indexer\Model\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Indexer\Model\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -30,9 +30,9 @@ class AffectCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->subjectMock = $this->getMockForAbstractClass('Magento\Indexer\Model\ActionInterface',
+        $this->subjectMock = $this->getMockForAbstractClass('Magento\Framework\Indexer\ActionInterface',
             [], '', false, true, true, []);
-        $this->contextMock = $this->getMock('Magento\Indexer\Model\CacheContext',
+        $this->contextMock = $this->getMock('Magento\Framework\Indexer\CacheContext',
             [], [], '', false);
         $this->plugin = new \Magento\Catalog\Model\Indexer\Category\AffectCache($this->contextMock);
     }
