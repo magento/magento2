@@ -58,6 +58,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
 
     const CHECK_ZERO_TOTAL = 'zero_total';
 
+    const GROUP_OFFLINE = 'offline';
+
     /**
      * @var string
      */

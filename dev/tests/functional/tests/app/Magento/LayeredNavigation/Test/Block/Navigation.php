@@ -15,63 +15,87 @@ use Magento\Mtf\Client\Locator;
 class Navigation extends Block
 {
     /**
-     * 'Clear All' link.
+     * Locator for loaded "narrow-by-list" block.
+     *
+     * @var string
+     */
+    protected $loadedNarrowByList = '#narrow-by-list[role="tablist"]';
+
+    /**
+     * Locator value for "Clear All" link.
      *
      * @var string
      */
     protected $clearAll = '.action.clear';
 
     /**
-     * Attribute option title selector.
+     * Locator value for correspondent Attribute filter option.
      *
      * @var string
      */
-    protected $optionTitle = '.filter-options-title';
+    protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
     /**
-     * Filter link locator.
+     * Locator value for correspondent "Filter" link.
      *
      * @var string
      */
-    protected $filterLink = './/dt[contains(text(),"%s")]/following-sibling::dd//a';
+    protected $filterLink = './/div[@class="filter-options-title" and contains(text(),"%s")]/following-sibling::div//a';
 
     /**
-     * Click on 'Clear All' link.
+     * Locator value for "Expand Filter" button.
+     *
+     * @var string
+     */
+    protected $expandFilterButton = '[data]';
+
+    /**
+     * Remove all applied filters.
      *
      * @return void
      */
     public function clearAll()
     {
-        $this->_rootElement->find($this->clearAll, locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->clearAll)->click();
     }
 
     /**
-     * Get array of available filters.
+     * Get all available filters.
      *
      * @return array
      */
     public function getFilters()
     {
-        $options = $this->_rootElement->getElements($this->optionTitle);
+        $this->waitForElementVisible($this->loadedNarrowByList);
+
+        $options = $this->_rootElement->getElements(sprintf($this->optionTitle, ''), Locator::SELECTOR_XPATH);
         $data = [];
         foreach ($options as $option) {
-            $data[] = $option->getText();
+            $data[] = strtoupper($option->getText());
         }
+
         return $data;
     }
 
     /**
-     * Click filter link.
+     * Apply Layerd Navigation filter.
      *
      * @param string $filter
      * @param string $linkPattern
      * @return void
      * @throws \Exception
      */
-    public function clickFilterLink($filter, $linkPattern)
+    public function applyFilter($filter, $linkPattern)
     {
-        $links = $this->_rootElement->getElements(sprintf($this->filterLink, $filter), Locator::SELECTOR_XPATH);
+        $expandFilterButton = sprintf($this->optionTitle, $filter);
+        $links = sprintf($this->filterLink, $filter);
 
+        $this->waitForElementVisible($this->loadedNarrowByList);
+        if (!$this->_rootElement->find($links, Locator::SELECTOR_XPATH)->isVisible()) {
+            $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
+        }
+
+        $links = $this->_rootElement->getElements($links, Locator::SELECTOR_XPATH);
         foreach ($links as $link) {
             if (preg_match($linkPattern, trim($link->getText()))) {
                 $link->click();

@@ -19,7 +19,7 @@ class Additional extends Block
      *
      * @var string
      */
-    protected $flushButton = './/div/button[normalize-space(.)= "%s"]';
+    protected $flushButton = './/button[normalize-space(.)= "%s"]';
 
     /**
      * Flush cache in 'Additional Cache Management'.
@@ -30,5 +30,17 @@ class Additional extends Block
     public function clickFlushCache($flushButtonName)
     {
         $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Check if button is visible in 'Additional Cache Management'.
+     *
+     * @param string $flushButtonName
+     * @return bool
+     */
+    public function isFlushCacheButtonVisible($flushButtonName)
+    {
+        return $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)
+            ->isVisible();
     }
 }

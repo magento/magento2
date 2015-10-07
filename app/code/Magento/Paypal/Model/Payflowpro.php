@@ -608,7 +608,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Return request object with basic information for gateway request
      *
-     * @return Object
+     * @return DataObject
      */
     public function buildBasicRequest()
     {

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
@@ -51,7 +51,7 @@
     <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config" />
     <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState" />
     <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList" />
-    <preference for="Magento\Framework\Module\ModuleRegistryInterface" type="Magento\Framework\Module\Registrar" />
+    <preference for="Magento\Framework\Component\ComponentRegistrarInterface" type="Magento\Framework\Component\ComponentRegistrar"/>
     <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
     <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
     <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList" />
@@ -961,8 +961,8 @@
     </type>
     <type name="Magento\Framework\DataObject\Copy\Config\SchemaLocator">
         <arguments>
-            <argument name="schema" xsi:type="string">lib/internal/Magento/Framework/DataObject/etc/fieldset.xsd</argument>
-            <argument name="perFileSchema" xsi:type="string">lib/internal/Magento/Framework/DataObject/etc/fieldset_file.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:framework:DataObject/etc/fieldset.xsd</argument>
+            <argument name="perFileSchema" xsi:type="string">urn:magento:framework:DataObject/etc/fieldset_file.xsd</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\DataObject\Copy\Config\Data">
@@ -1048,6 +1048,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Server\Reflection" shared="false" />
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="extensionAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\ExtensionAttributesProcessor\Proxy</argument>
+            <argument name="customAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\CustomAttributesProcessor\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url\Decoder">
         <arguments>
             <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>
@@ -1055,4 +1062,11 @@
     </type>
     <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
     <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
+    <type name="Magento\Framework\View\Xsd\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">view.xsd</argument>
+            <argument name="defaultScope" xsi:type="string">global</argument>
+            <argument name="searchFilesPattern" xsi:type="string">urn:magento:framework:Config/etc/</argument>
+        </arguments>
+    </type>
 </config>

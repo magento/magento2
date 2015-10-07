@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="qwerty">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="qwerty">
     <head>
         <title>Swagger UI</title>
 
@@ -37,9 +37,8 @@
     </head>
     <body>
         <!--Remove Magento page content-->
-        <remove name="page.wrapper"/>
-        <remove name="after.body.start"/>
-        <remove name="page.bottom"/>
+        <referenceContainer name="page.wrapper" remove="true"/>
+        <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
             <block name="swaggerUiContent" class="Magento\Framework\View\Element\Template" template="Magento_Swagger::swagger-ui/index.phtml"/>
         </referenceContainer>
