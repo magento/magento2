@@ -5,11 +5,18 @@
 define([
     'ko',
     './observable_source',
-    '../../renderer/renderer'
+    './renderer'
 ], function (ko, Source, Renderer) {
     'use strict';
 
-    var sources = {};
+    var RemoteTemplateEngine,
+        NativeTemplateEngine = ko.nativeTemplateEngine,
+        sources = {};
+
+    /**
+     * Remote template engine class. Is used to be able to load remote templates via knockout template binding.
+     */
+    RemoteTemplateEngine = function () {};
 
     /**
      * Creates unique template identifier based on template name and it's extenders (optional)
@@ -20,12 +27,6 @@ define([
         return templateName;
     }
 
-    /**
-     * Remote template engine class. Is used to be able to load remote templates via knockout template binding.
-     */
-    var RemoteTemplateEngine = function () {};
-    var NativeTemplateEngine = ko.nativeTemplateEngine;
-
     RemoteTemplateEngine.prototype = new NativeTemplateEngine;
     RemoteTemplateEngine.prototype.constructor = RemoteTemplateEngine;
 
@@ -34,7 +35,7 @@ define([
      * Caches template after it's unique name and renders in once.
      * If template name is not typeof string, delegates work to knockout.templateSources.anonymousTemplate.
      * @param  {*} template
-     * @return {TemplateSource} - object with methods 'nodes' and 'data'.
+     * @returns {TemplateSource} Object with methods 'nodes' and 'data'.
      */
     RemoteTemplateEngine.prototype.makeTemplateSource = function (template) {
         var source,
@@ -54,11 +55,13 @@ define([
             }
 
             return source;
-        } else if ((template.nodeType == 1) || (template.nodeType == 8)) {
-            return new ko.templateSources.anonymousTemplate(template);
-        } else {
-            throw new Error("Unknown template type: " + template);
+        } else if (template.nodeType === 1 || template.nodeType === 8) {
+            source = new ko.templateSources.anonymousTemplate(template);
+
+            return source;
         }
+
+        throw new Error('Unknown template type: ' + template);
     };
 
     /**

@@ -7,7 +7,7 @@ define([
     'mageUtils',
     'uiRegistry',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Ui/js/modal/confirm'
 ], function (_, utils, registry, Component, layout, confirm) {
     'use strict';
@@ -68,6 +68,7 @@ define([
 
             return this;
         },
+
         /**
          * Creates new item of collection, based on incoming 'index'.
          * If not passed creates one with 'new_' prefix.

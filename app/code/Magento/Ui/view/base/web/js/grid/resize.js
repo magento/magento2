@@ -10,11 +10,11 @@ define([
     'mageUtils',
     'uiRegistry',
     'Magento_Ui/js/lib/ko/extender/bound-nodes',
-    'uiComponent'
-], function ($, ko, _, utils, registry, boundedNodes, Component) {
+    'uiElement'
+], function ($, ko, _, utils, registry, boundedNodes, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
             tableSelector: '${ $.rootSelector } -> table.data-grid',
@@ -544,7 +544,7 @@ define([
                 nextElemData = this.hasColumn(nextElemModel, false, true);
 
             if (nextElemData) {
-                if (nextElemModel.visible()) {
+                if (nextElemModel.visible) {
                     return nextElemData;
                 }
 

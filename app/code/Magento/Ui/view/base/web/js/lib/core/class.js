@@ -34,6 +34,7 @@ define([
         var constr = consturctor;
 
         if (!constr) {
+
             /**
              * Default constructor function.
              */
@@ -57,6 +58,7 @@ define([
     }
 
     Class = createConstructor({
+
         /**
          * Entry point to the initialization of consturctors' instance.
          *
