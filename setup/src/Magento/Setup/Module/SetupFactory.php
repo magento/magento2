@@ -31,10 +31,10 @@ class SetupFactory
     /**
      * Creates setup
      *
-     * @param Resource $appResource
+     * @param ResourceConnection $appResource
      * @return Setup
      */
-    public function create(Resource $appResource = null)
+    public function create(ResourceConnection $appResource = null)
     {
         $objectManager = $this->objectManagerProvider->get();
         if ($appResource === null) {
