@@ -8,13 +8,13 @@ namespace Magento\Framework\Acl\Test\Unit\Resource\Config\Converter;
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Acl\Resource\Config\Converter\Dom
+     * @var \Magento\Framework\Acl\AclResource\Config\Converter\Dom
      */
     protected $_converter;
 
     protected function setUp()
     {
-        $this->_converter = new \Magento\Framework\Acl\Resource\Config\Converter\Dom();
+        $this->_converter = new \Magento\Framework\Acl\AclResource\Config\Converter\Dom();
     }
 
     /**

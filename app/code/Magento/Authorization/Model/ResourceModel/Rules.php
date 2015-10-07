@@ -104,7 +104,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
                     $acl = $this->_aclBuilder->getAcl();
-                    /** @var $resource \Magento\Framework\Acl\Resource */
+                    /** @var $resource \Magento\Framework\Acl\AclResource */
                     foreach ($acl->getResources() as $resourceId) {
                         $row['permission'] = in_array($resourceId, $postedResources) ? 'allow' : 'deny';
                         $row['resource_id'] = $resourceId;

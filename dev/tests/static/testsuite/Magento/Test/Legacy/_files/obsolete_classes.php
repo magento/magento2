@@ -11,7 +11,7 @@ return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
     ['Mage_Admin_Model_Acl', 'Magento_Acl'],
     ['Mage_Admin_Model_Acl_Role'],
-    ['Mage_Admin_Model_Acl_Resource', 'Magento\Framework\Acl\Resource'],
+    ['Mage_Admin_Model_Acl_Resource', 'Magento\Framework\Acl\AclResource'],
     ['Mage_Admin_Model_Acl_Role_Registry', 'Magento\Framework\Acl\Role\Registry'],
     ['Mage_Admin_Model_Acl_Role_Generic', 'Magento\Authorization\Model\Acl\Role\Generic'],
     ['Mage_Admin_Model_Acl_Role_Group', 'Magento\Authorization\Model\Acl\Role\Group'],
@@ -1989,7 +1989,7 @@ return [
     ['Magento\Catalog\Helper\Category\Flat'],
     ['Magento\Catalog\Model\Category\Indexer\Flat'],
     ['Magento\Framework\Config\Dom\Converter\ArrayConverter'],
-    ['Magento\Framework\Acl\Resource\Config\Dom'],
+    ['Magento\Framework\Acl\AclResource\Config\Dom'],
     ['Magento\Validator\Composite\VarienObject', 'Magento\Framework\Validator\DataObject'],
     ['Magento\GoogleShopping\Helper\Price', 'Magento\Catalog\Model\Product\CatalogPrice'],
     [

@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Acl\Resource;
+namespace Magento\Framework\Acl\AclResource;
 
 class Provider implements ProviderInterface
 {

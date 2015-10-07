@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 class ResourceFactory
 {
-    const RESOURCE_CLASS_NAME = 'Magento\Framework\Acl\Resource';
+    const RESOURCE_CLASS_NAME = 'Magento\Framework\Acl\AclResource';
 
     /**
      * @var ObjectManagerInterface
