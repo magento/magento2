@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\Resource;
+namespace Magento\Framework\App\Test\Unit\ResourceConnection;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection\Config
+     * @var \Magento\Framework\App\\Config
      */
     protected $_model;
 

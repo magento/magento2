@@ -39,7 +39,7 @@ class TableCollection extends AbstractCollection
         array $fixture = []
     ) {
         $this->setModel('Magento\Framework\DataObject');
-        $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\Resource');
+        $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\RepositoryResource');
 
         $resource = $this->getResource();
         $resource->setFixture($fixture);
@@ -50,7 +50,7 @@ class TableCollection extends AbstractCollection
     /**
      * Get resource instance
      *
-     * @return \Magento\Mtf\Util\Generate\Repository\Resource
+     * @return \Magento\Mtf\Util\Generate\Repository\RepositoryResource
      */
     public function getResource()
     {

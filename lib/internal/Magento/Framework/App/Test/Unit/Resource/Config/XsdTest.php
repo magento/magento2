@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\Resource\Config;
+namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
 {

@@ -10,7 +10,7 @@ namespace Magento\Mtf\Util\Generate\Repository;
  * Class Resource
  *
  */
-class Resource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class RepositoryResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Set fixture entity_type

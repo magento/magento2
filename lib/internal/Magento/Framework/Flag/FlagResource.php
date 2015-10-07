@@ -8,7 +8,7 @@ namespace Magento\Framework\Flag;
 /**
  * Flag Resource model
  */
-class Resource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class FlagResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

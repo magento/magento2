@@ -58,7 +58,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $dbContextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $dbContextMock->expects($this->once())->method('getResources')->willReturn($appResource);
         $resource = $this->getMock(
-            '\Magento\Framework\Flag\Resource',
+            '\Magento\Framework\Flag\FlagResource',
             ['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'],
             ['context' => $dbContextMock],
             '',

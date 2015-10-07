@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\TestModuleMSC\Model\Resource;
+namespace Magento\TestModule4\Model\ResourceModel;
 
 /**
  * Sample resource model
