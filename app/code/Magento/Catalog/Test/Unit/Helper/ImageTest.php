@@ -149,8 +149,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $configViewMock->expects($this->once())
-            ->method('getImageAttributes')
-            ->with('Magento_Catalog', $imageId)
+            ->method('getMediaAttributes')
+            ->with('Magento_Catalog', 'images', $imageId)
             ->willReturn($data);
 
         $this->viewConfig->expects($this->once())

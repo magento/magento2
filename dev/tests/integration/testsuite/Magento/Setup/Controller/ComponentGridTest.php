@@ -8,7 +8,10 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Model\UpdatePackagesCache;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConnectManager;
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
@@ -22,6 +25,21 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * @var UpdatePackagesCache|\PHPUnit_Framework_MockObject_MockObject
      */
     private $updatePackagesCacheMock;
+
+    /**
+     * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fullModuleListMock;
+
+    /**
+     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $enabledModuleListMock;
+
+    /**
+     * @var PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packageInfoFactoryMock;
 
     /**
      * Module package info
@@ -62,7 +80,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
                     'type' => 'magento2-module',
                     'version' => '1.0.0'
                 ]
-            ]
+            ],
+            'countOfInstall' => 0,
+            'countOfUpdate' => 1
         ];
         $this->componentData = [
             'magento/sample-module-one' => [
@@ -124,6 +144,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentsAction()
     {
+        $this->fullModuleListMock->expects($this->once())
+            ->method('getNames')
+            ->willReturn(['magento/sample-module1']);
         $this->packageInfo->expects($this->once())
             ->method('getModuleName')
             ->willReturn('Sample_Module');
@@ -133,6 +156,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->packageInfo->expects($this->exactly(2))
             ->method('getVersion')
             ->willReturn($this->componentData['magento/sample-module-one']['version']);
+        $this->enabledModuleListMock->expects($this->once())
+            ->method('has')
+            ->willReturn(true);
         $this->composerInformationMock->expects($this->once())
             ->method('getInstalledMagentoPackages')
             ->willReturn($this->componentData);
