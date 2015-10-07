@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Api\Data\ProductInterface" type="Magento\Catalog\Model\Product" />
     <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Magento\Catalog\Model\ProductRepository" />
     <preference for="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" type="Magento\Catalog\Model\Category\AttributeRepository" />
@@ -42,6 +42,7 @@
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
+    <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
     <type name="Magento\Customer\Model\Resource\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
