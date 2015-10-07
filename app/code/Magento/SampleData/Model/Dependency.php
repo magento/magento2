@@ -5,8 +5,8 @@
  */
 namespace Magento\SampleData\Model;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
@@ -37,18 +37,26 @@ class Dependency
     private $packageFactory;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
+     * @param ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
-        PackageFactory $packageFactory
+        PackageFactory $packageFactory,
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->composerInformation = $composerInformation;
         $this->filesystem = $filesystem;
         $this->packageFactory = $packageFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -77,12 +85,11 @@ class Dependency
     protected function getSuggestsFromModules()
     {
         $suggests = [];
-        $directoryRead = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-        $path = $directoryRead->getAbsolutePath();
-        $modulesJson = $directoryRead->search('*/*/composer.json');
-        foreach ($modulesJson as $file) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $file = $moduleDir . '/composer.json';
+
             /** @var Package $package */
-            $package = $this->getModuleComposerPackage($path . $file);
+            $package = $this->getModuleComposerPackage($file);
             $suggest = json_decode(json_encode($package->get('suggest')), true);
             if (!empty($suggest)) {
                 $suggests += $suggest;
