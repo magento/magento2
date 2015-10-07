@@ -30,7 +30,7 @@ class AclResourceFactory
      * Return new ACL resource model
      *
      * @param array $arguments
-     * @return Resource
+     * @return AclResource
      */
     public function createResource(array $arguments = [])
     {
