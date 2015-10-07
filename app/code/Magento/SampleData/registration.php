@@ -5,7 +5,7 @@
  */
 
 \Magento\Framework\Component\ComponentRegistrar::register(
-        \Magento\Framework\Component\ComponentRegistrar::MODULE,
-        'Magento_SampleData',
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Magento_SampleData',
     __DIR__
 );
