@@ -123,11 +123,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request = $this->buildBasicRequest();
 
         $order = $payment->getOrder();
-        $orderIncrementId = $order->getIncrementId();
-        $request->setCustref($orderIncrementId)
-            ->setInvnum($orderIncrementId)
-            ->setPonum($order->getId())
-            ->setComment1($orderIncrementId);
+        $this->addRequestOrderInfo($request, $order);
         $request = $this->fillCustomerContacts($order, $request);
 
         $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
