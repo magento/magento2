@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Model\ResourceModel;
 /**
  * Class History
  */
-class History extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class History extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

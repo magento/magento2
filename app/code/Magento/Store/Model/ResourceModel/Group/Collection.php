@@ -8,7 +8,7 @@ namespace Magento\Store\Model\ResourceModel\Group;
 /**
  * Store group collection
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model

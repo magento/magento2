@@ -12,7 +12,7 @@ namespace Magento\Framework\Module;
 /**
  * Resource Model
  */
-class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \Magento\Framework\Module\ResourceInterface
+class Resource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \Magento\Framework\Module\ResourceInterface
 {
     /**
      * Database versions

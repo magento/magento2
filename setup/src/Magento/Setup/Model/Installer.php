@@ -14,7 +14,7 @@ use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Model\Resource\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;

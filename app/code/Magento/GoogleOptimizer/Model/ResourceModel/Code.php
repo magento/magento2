@@ -7,7 +7,7 @@
  */
 namespace Magento\GoogleOptimizer\Model\ResourceModel;
 
-class Code extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

@@ -7,7 +7,7 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\DesignInterface;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**

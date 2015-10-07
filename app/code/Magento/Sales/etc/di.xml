@@ -223,7 +223,7 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <virtualType name="OrderRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="OrderRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Relation</item>
@@ -235,7 +235,7 @@
             <argument name="entityRelationComposite" xsi:type="object">OrderRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="InvoiceRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="InvoiceRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Relation</item>
@@ -247,7 +247,7 @@
             <argument name="entityRelationComposite" xsi:type="object">InvoiceRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="ShipmentRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="ShipmentRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment\Relation</item>
@@ -259,7 +259,7 @@
             <argument name="entityRelationComposite" xsi:type="object">ShipmentRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="CreditmemoRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="CreditmemoRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>

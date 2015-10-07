@@ -149,7 +149,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param CartFactory $cartFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -169,7 +169,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Paypal\Model\CartFactory $cartFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

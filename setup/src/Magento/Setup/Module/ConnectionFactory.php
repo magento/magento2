@@ -7,11 +7,11 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ConnectionFactory implements \Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface
+class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
 {
     /**
      * @var ServiceLocatorInterface

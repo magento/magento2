@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product\Condition\ConditionInterface;
 /**
  * Wee tax resource model
  */
-class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -19,12 +19,12 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {

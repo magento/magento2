@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Address;
 
-use Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Quote address item resource model

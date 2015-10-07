@@ -11,7 +11,7 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
-class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @return void
