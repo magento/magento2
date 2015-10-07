@@ -11,6 +11,10 @@ namespace Magento\Framework\Css\PreProcessor\File\Collector;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
+ * @magentoDbIsolation enabled
+ */
 class AggregatedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -31,13 +35,15 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     DirectoryList::LIB_WEB => [
                         DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/lib/web',
                     ],
-                    DirectoryList::THEMES => [
-                        DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/design',
-                    ],
                 ],
             ]
         );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         /** @var \Magento\Framework\Filesystem $filesystem */
@@ -48,14 +54,6 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     'Magento\Framework\App\Filesystem\DirectoryList',
                     [
                         'root' => BP,
-                        'config' => [
-                            DirectoryList::MODULES => [
-                                DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/code',
-                            ],
-                            DirectoryList::THEMES => [
-                                DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/design',
-                            ],
-                        ]
                     ]
                 )
             ]
@@ -76,13 +74,13 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Framework/Css/PreProcessor/_files/themes.php
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      * @param string $path
      * @param string $themeName
      * @param string[] $expectedFiles
      * @dataProvider getFilesDataProvider
+     * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/design
      */
     public function testGetFiles($path, $themeName, array $expectedFiles)
     {
@@ -113,7 +111,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
         return [
             'file in theme and parent theme' => [
                 '1.file',
-                'Test/default',
+                'FrameworkCssTest/default',
                 [
                     str_replace(
                         '\\',
@@ -123,18 +121,18 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/Test/parent/Magento_Second/web/1.file"
+                        "$fixtureDir/_files/design/frontend/Test/parent/MagentoFrameworkCssTest_Second/web/1.file"
                     ),
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/Test/default/Magento_Module/web/1.file"
+                        "$fixtureDir/_files/design/frontend/Test/default/MagentoFrameworkCssTest_Module/web/1.file"
                     ),
                 ],
             ],
             'file in library' => [
                 '2.file',
-                'Test/default',
+                'FrameworkCssTest/default',
                 [
                     str_replace(
                         '\\',
@@ -145,12 +143,12 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             ],
             'non-existing file' => [
                 'doesNotExist',
-                'Test/default',
+                'FrameworkCssTest/default',
                 [],
             ],
             'file in library, module, and theme' => [
                 '3.less',
-                'Test/default',
+                'FrameworkCssTest/default',
                 [
                     str_replace(
                         '\\',
@@ -165,7 +163,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/Test/default/Magento_Third/web/3.less"
+                        "$fixtureDir/_files/design/frontend/Test/default/MagentoFrameworkCssTest_Third/web/3.less"
                     )
                 ],
             ],
