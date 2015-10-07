@@ -14,14 +14,6 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/SampleData"
-            ]
-        ]
-    },
     "autoload": {
         "files": [
             "cli_commands.php",
