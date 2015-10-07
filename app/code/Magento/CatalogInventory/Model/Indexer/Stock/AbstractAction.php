@@ -67,14 +67,14 @@ abstract class AbstractAction
 
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,

@@ -41,12 +41,12 @@ class Links
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link $productLink
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Link $productLink,
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\ImportExport\Model\ImportFactory $importFactory
     ) {
         $this->productLink = $productLink;

@@ -35,13 +35,13 @@ class Builder
     private $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param DataProviderContainer $dataProviderContainer
      * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         DataProviderContainer $dataProviderContainer,
         AggregationContainer $aggregationContainer,
         EntityMetadata $entityMetadata

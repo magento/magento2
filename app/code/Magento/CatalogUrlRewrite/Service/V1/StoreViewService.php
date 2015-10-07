@@ -29,7 +29,7 @@ class StoreViewService
      */
     public function __construct(
         Config $eavConfig,
-        Resource $resource
+        ResourceConnection $resource
     ) {
         $this->eavConfig = $eavConfig;
         $this->connection = $resource->getConnection();

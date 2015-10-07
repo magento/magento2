@@ -286,7 +286,7 @@ abstract class AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        Resource $resource,
+        ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {

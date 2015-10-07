@@ -75,7 +75,7 @@ class Mapper
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Builder $filterBuilder
      * @param ConditionManager $conditionManager
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param EntityMetadata $entityMetadata
      * @param QueryContainerFactory $queryContainerFactory
      * @param Query\Builder\Match $matchBuilder
@@ -86,7 +86,7 @@ class Mapper
         ScoreBuilderFactory $scoreBuilderFactory,
         Builder $filterBuilder,
         ConditionManager $conditionManager,
-        Resource $resource,
+        ResourceConnection $resource,
         EntityMetadata $entityMetadata,
         QueryContainerFactory $queryContainerFactory,
         Match $matchBuilder,

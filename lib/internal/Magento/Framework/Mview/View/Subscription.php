@@ -58,7 +58,7 @@ class Subscription implements SubscriptionInterface
     protected $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Framework\Mview\View\CollectionInterface $viewCollection
      * @param \Magento\Framework\Mview\ViewInterface $view
@@ -66,7 +66,7 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory,
         \Magento\Framework\Mview\View\CollectionInterface $viewCollection,
         \Magento\Framework\Mview\ViewInterface $view,

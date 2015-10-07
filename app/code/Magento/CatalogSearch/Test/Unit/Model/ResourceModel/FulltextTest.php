@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
-
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -63,7 +62,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource->expects($this->once())
             ->method('getTableName')
-            ->with('search_query', Resource::DEFAULT_CONNECTION)
+            ->with('search_query', ResourceConnection::DEFAULT_CONNECTION)
             ->willReturn('table_name_search_query');
         $this->connection->expects($this->once())
             ->method('update')

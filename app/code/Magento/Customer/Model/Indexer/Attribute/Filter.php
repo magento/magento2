@@ -23,12 +23,12 @@ class Filter
     protected $indexerRegistry;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         FlatScopeResolver $flatScopeResolver,
         IndexerRegistry $indexerRegistry
     ) {

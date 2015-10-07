@@ -149,13 +149,13 @@ abstract class AbstractEntity
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_localeDate = $localeDate;

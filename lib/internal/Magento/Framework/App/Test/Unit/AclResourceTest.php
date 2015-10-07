@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class AclResourceTest extends \PHPUnit_Framework_TestCase
 {
     const RESOURCE_NAME = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
     const CONNECTION_NAME = 'connection-name';
@@ -83,7 +83,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->will($this->returnArgument(0));
 
-        $this->resource = new Resource(
+        $this->resource = new ResourceConnection(
             $this->config,
             $this->connectionFactory,
             $this->deploymentConfig

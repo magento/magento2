@@ -40,7 +40,7 @@ class DbStorage extends AbstractStorage
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
-        Resource $resource
+        ResourceConnection $resource
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;

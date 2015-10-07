@@ -20,7 +20,7 @@ class ConditionManager
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->connection = $resource->getConnection();
     }

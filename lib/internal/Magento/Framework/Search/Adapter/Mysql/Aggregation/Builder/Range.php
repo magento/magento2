@@ -36,9 +36,9 @@ class Range implements BucketInterface
 
     /**
      * @param Metrics $metricsBuilder
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Metrics $metricsBuilder, Resource $resource)
+    public function __construct(Metrics $metricsBuilder, ResourceConnection $resource)
     {
         $this->metricsBuilder = $metricsBuilder;
         $this->resource = $resource;

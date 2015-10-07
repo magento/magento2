@@ -36,12 +36,12 @@ class GridStructure implements IndexStructureInterface
     ];
 
     /**
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         FlatScopeResolver $flatScopeResolver,
         array $columnTypesMap = []
     ) {

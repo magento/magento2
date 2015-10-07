@@ -38,13 +38,13 @@ class IndexStructure implements IndexStructureInterface
     ];
 
     /**
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param IndexScopeResolver $indexScopeResolver
      * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         IndexScopeResolver $indexScopeResolver,
         FlatScopeResolver $flatScopeResolver,
         array $columnTypesMap = []

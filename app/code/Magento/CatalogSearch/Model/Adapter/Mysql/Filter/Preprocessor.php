@@ -60,7 +60,7 @@ class Preprocessor implements PreprocessorInterface
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
      */
@@ -68,7 +68,7 @@ class Preprocessor implements PreprocessorInterface
         ConditionManager $conditionManager,
         ScopeResolverInterface $scopeResolver,
         Config $config,
-        Resource $resource,
+        ResourceConnection $resource,
         TableMapper $tableMapper,
         $attributePrefix
     ) {
