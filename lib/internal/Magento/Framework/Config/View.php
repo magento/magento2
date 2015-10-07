@@ -9,15 +9,14 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\View\Xsd\Reader;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
-    /**
-     * @var \Magento\Framework\View\Xsd\Reader
-     */
-    protected $xsdReader;
+    /** @var UrnResolver */
+    protected $urnResolver;
 
     /**
      * @var \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
@@ -30,23 +29,31 @@ class View extends \Magento\Framework\Config\AbstractXml
     protected $xpath;
 
     /**
+     * @var Reader
+     */
+    private $xsdReader;
+
+    /**
      * @param array $configFiles
-     * @param array $xpath
      * @param Reader $xsdReader
+     * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
+     * @param array $xpath
      */
     public function __construct(
         $configFiles,
         Reader $xsdReader,
+        UrnResolver $urnResolver,
         TypeDataExtractorPool $extractorPool,
         $xpath = []
     ) {
-        $this->xsdReader = $xsdReader;
         $this->xpath = $xpath;
         $this->extractorPool = $extractorPool;
+        $this->urnResolver = $urnResolver;
+        $this->xsdReader = $xsdReader;
         parent::__construct($configFiles);
     }
-
+    
     /**
      * Merged file view.xsd
      *
