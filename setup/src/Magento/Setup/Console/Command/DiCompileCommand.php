@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
@@ -49,6 +50,11 @@ class DiCompileCommand extends Command
     private $fileDriver;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
@@ -57,6 +63,7 @@ class DiCompileCommand extends Command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Filesystem $filesystem
      * @param DriverInterface $fileDriver
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -64,7 +71,8 @@ class DiCompileCommand extends Command
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
-        DriverInterface $fileDriver
+        DriverInterface $fileDriver,
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
@@ -72,6 +80,7 @@ class DiCompileCommand extends Command
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
         $this->fileDriver       = $fileDriver;
+        $this->componentRegistrar  = $componentRegistrar;
         parent::__construct();
     }
 
@@ -127,19 +136,27 @@ class DiCompileCommand extends Command
             return;
         }
 
-        $appCodePath = $this->directoryList->getPath(DirectoryList::MODULES);
-        $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
+        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
 
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
-            'application' => $appCodePath,
-            'library' => $libraryPath . '/Magento/Framework',
+            'application' => $modulePaths,
+            'library' => $libraryPaths,
             'generated_helpers' => $generationPath
         ];
+        $excludedModulePaths = [];
+        foreach ($modulePaths as $appCodePath) {
+            $excludedModulePaths[] = '#^' . $appCodePath . '/Test#';
+        }
+        $excludedLibraryPaths = [];
+        foreach ($libraryPaths as $libraryPath) {
+            $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
+        }
         $this->excludedPathsList = [
-            'application' => '#^' . $appCodePath . '/[\\w]+/[\\w]+/Test#',
-            'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+            'application' => $excludedModulePaths,
+            'framework' => $excludedLibraryPaths
         ];
         $dataAttributesIncludePattern = [
             'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'
@@ -276,11 +293,11 @@ class DiCompileCommand extends Command
     ) {
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [

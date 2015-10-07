@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -61,24 +62,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->rootDirMock->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
-        $appDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $themesDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $themesDirMock->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnValue('themedir'));
 
         $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, DriverPool::FILE, $themesDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::APP, DriverPool::FILE, $appDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, DriverPool::FILE, $this->rootDirMock],
-                [
-                    \Magento\Framework\App\Filesystem\DirectoryList::TEMPLATE_MINIFICATION_DIR, DriverPool::FILE,
-                    $this->rootDirMock
-                ],
-            ]));
+            ->with(DirectoryList::ROOT, DriverPool::FILE)
+            ->will($this->returnValue($this->rootDirMock));
 
         $this->_templateEngine = $this->getMock(
             'Magento\Framework\View\TemplateEnginePool',
