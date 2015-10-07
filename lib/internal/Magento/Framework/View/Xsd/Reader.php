@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\View\Xsd;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Reader implements \Magento\Framework\Config\ReaderInterface
 {
@@ -22,46 +23,35 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     protected $fileName;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var DirSearch
      */
-    protected $directoryRead;
-
-    /**
-     * @var \Magento\Framework\Config\FileIteratorFactory
-     */
-    protected $iteratorFactory;
-
-    /**
-     * @var string
-     */
-    protected $searchPattern;
+    protected $componentDirSearch;
 
     /**
      * @var string
      */
     protected $searchFilesPattern;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     /**
-     * @param Filesystem $filesystem
-     * @param FileIteratorFactory $iteratorFactory
+     * @param DirSearch $dirSearch,
      * @param string $fileName
      * @param string $defaultScope
-     * @param string $searchPattern
      * @param string $searchFilesPattern
      */
     public function __construct(
-        Filesystem $filesystem,
-        FileIteratorFactory $iteratorFactory,
+        DirSearch $dirSearch,
+        UrnResolver $urnResolver,
         $fileName,
         $defaultScope,
-        $searchPattern,
         $searchFilesPattern
     ) {
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MODULES);
-        $this->iteratorFactory = $iteratorFactory;
+        $this->componentDirSearch = $dirSearch;
+        $this->urnResolver = $urnResolver;
         $this->fileName = $fileName;
         $this->defaultScope = $defaultScope;
-        $this->searchPattern = $searchPattern;
         $this->searchFilesPattern = $searchFilesPattern;
     }
 
@@ -69,22 +59,18 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * Get list of xsd files
      *
      * @param string $filename
-     * @return \Magento\Framework\Config\FileIterator
+     * @return array
      */
     public function getListXsdFiles($filename)
     {
-        $iterator = $this->iteratorFactory->create(
-            $this->directoryRead,
-            $this->directoryRead->search($this->searchPattern . $filename)
-        );
-        return $iterator;
+        return  $this->componentDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/' . $filename);
     }
 
     /**
      * Read xsd files from list
      *
      * @param null $scope
-     * @return array|\Magento\Framework\Config\FileIterator
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -110,7 +96,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function readXsdFiles($fileList, $baseXsd = null)
     {
         $baseXsd = new \DOMDocument();
-        $baseXsd->load(__DIR__ . $this->searchFilesPattern . $this->fileName);
+        $baseXsd->load($this->urnResolver->getRealPath($this->searchFilesPattern . $this->fileName));
         $configMerge = null;
         foreach ($fileList as $key => $content) {
             try {
