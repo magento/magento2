@@ -13,7 +13,7 @@ namespace Magento\Sales\Model\Order\Pdf\Total;
  *
  * @method \Magento\Sales\Model\Order getOrder()
  */
-class DefaultTotal extends \Magento\Framework\Object
+class DefaultTotal extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -145,7 +145,7 @@ class DefaultTotal extends \Magento\Framework\Object
     public function canDisplay()
     {
         $amount = $this->getAmount();
-        return $this->getDisplayZero() || $amount != 0;
+        return $this->getDisplayZero() === 'true' || $amount != 0;
     }
 
     /**

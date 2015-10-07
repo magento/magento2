@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Review\Test\TestCase\ManageProductReviewFromCustomerPageTest">
+    <testCase name="Magento\Review\Test\TestCase\ManageProductReviewFromCustomerPageTest" summary="Manage Product Review from Customer Page" ticketId="MAGETWO-27625">
         <variation name="ManageProductReviewFromCustomerPageTestVariation1">
             <data name="review/data/status_id" xsi:type="string">Approved</data>
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>

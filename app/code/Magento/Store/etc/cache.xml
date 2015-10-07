@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Cache/etc/cache.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
     <type name="config" translate="label,description" instance="Magento\Framework\App\Cache\Type\Config">
         <label>Configuration</label>
         <description>Various XML configurations that were collected across modules and merged.</description>
@@ -18,17 +18,13 @@
         <label>Blocks HTML output</label>
         <description>Page blocks HTML.</description>
     </type>
-    <type name="view_files_fallback" translate="label,description" instance="Magento\Framework\View\Design\FileResolution\Fallback\Cache">
-        <label>View files fallback</label>
-        <description>Paths to view files (e.g., PHTML templates, images, CSS, JS files).</description>
-    </type>
-    <type name="view_files_preprocessing" translate="label,description" instance="Magento\Framework\View\Asset\PreProcessor\Cache">
-        <label>View files pre-processing</label>
-        <description>Paths to pre-processed view files (e.g, CSS files with fixed paths or generated from LESS files).</description>
-    </type>
     <type name="collections" translate="label,description" instance="Magento\Framework\App\Cache\Type\Collection">
         <label>Collections Data</label>
         <description>Collection data files.</description>
+    </type>
+    <type name="reflection" translate="label,description" instance="Magento\Framework\App\Cache\Type\Reflection">
+        <label>Reflection Data</label>
+        <description>API interfaces reflection data.</description>
     </type>
     <type name="db_ddl" translate="label,description" instance="Magento\Framework\DB\Adapter\DdlCache">
         <label>Database DDL operations</label>

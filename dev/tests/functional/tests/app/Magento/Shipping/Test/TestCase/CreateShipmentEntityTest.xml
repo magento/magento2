@@ -6,10 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Shipping\Test\TestCase\CreateShipmentEntityTest">
+    <testCase name="Magento\Shipping\Test\TestCase\CreateShipmentEntityTest" summary="Create Shipment for Offline Payment Methods" ticketId="MAGETWO-28708">
         <variation name="CreateShipmentEntityTestVariation1">
             <data name="description" xsi:type="string">shipment with tracking number</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
@@ -26,7 +26,7 @@
         </variation>
         <variation name="CreateShipmentEntityTestVariation2">
             <data name="description" xsi:type="string">partial shipment</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
             <data name="data/items_data/0/qty" xsi:type="string">1</data>

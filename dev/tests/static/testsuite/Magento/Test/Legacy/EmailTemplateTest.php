@@ -22,7 +22,13 @@ class EmailTemplateTest extends \PHPUnit_Framework_TestCase
                 $this->assertNotRegExp(
                     '/\{\{htmlescape.*?\}\}/i',
                     file_get_contents($file),
-                    'Directive {{htmlescape}} is obsolete. Use {{escapehtml}} instead.'
+                    'Directive {{htmlescape}} is obsolete. Use {{var}} instead.'
+                );
+
+                $this->assertNotRegExp(
+                    '/\{\{escapehtml.*?\}\}/i',
+                    file_get_contents($file),
+                    'Directive {{escapehtml}} is obsolete. Use {{var}} instead.'
                 );
             },
             \Magento\Framework\App\Utility\Files::init()->getEmailTemplates()

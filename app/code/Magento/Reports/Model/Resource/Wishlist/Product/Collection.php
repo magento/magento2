@@ -71,11 +71,11 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     public function getSelectCountSql()
     {
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->columns("COUNT(*)");
 
         return $countSelect;

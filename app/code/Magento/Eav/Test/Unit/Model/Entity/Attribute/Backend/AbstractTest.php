@@ -42,7 +42,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setAttribute($attribute);
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $this->_model->setValueId($valueId);
 
         $this->assertEquals(

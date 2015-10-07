@@ -10,8 +10,7 @@ define(
     function(addressConverter) {
         "use strict";
         return function(addressData) {
-            var address = addressConverter.formAddressDataToQuoteAddress(addressData);
-            return address;
+            return addressConverter.formAddressDataToQuoteAddress(addressData);
         };
     }
 );

@@ -88,7 +88,7 @@ class CustomerReviewReportEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_unique']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_unique']);
         $customer->persist();
 
         return ['customer' => $customer];

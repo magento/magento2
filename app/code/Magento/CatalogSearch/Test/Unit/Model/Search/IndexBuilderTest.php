@@ -14,8 +14,17 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var  \Magento\CatalogSearch\Model\Search\TableMapper|MockObject */
+    private $tableMapper;
+
+    /** @var  \Magento\Framework\Search\Adapter\Mysql\ConditionManager|MockObject */
+    private $conditionManager;
+
+    /** @var  \Magento\Search\Model\IndexScopeResolver|MockObject */
+    private $scopeResolver;
+
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject */
-    private $adapter;
+    private $connection;
 
     /** @var \Magento\Framework\DB\Select|MockObject */
     private $select;
@@ -29,7 +38,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Search\RequestInterface|MockObject */
     private $request;
 
-    /** @var \Magento\Framework\App\Resource|MockObject */
+    /** @var \Magento\Search\Model\IndexScopeResolver|MockObject */
     private $resource;
 
     /**
@@ -44,11 +53,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['from', 'joinLeft', 'where', 'joinInner'])
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->setMethods(['select', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->adapter->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->select));
 
@@ -58,12 +67,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
-            ->will($this->returnValue($this->adapter));
+            ->will($this->returnValue($this->connection));
 
         $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getIndex'])
+            ->setMethods(['getIndex', 'getDimensions', 'getQuery'])
             ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
@@ -73,20 +81,61 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
 
+        $this->scopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
+            ->setMethods(['combineQueries', 'wrapBrackets', 'generateCondition'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->conditionManager->expects($this->any())
+            ->method('combineQueries')
+            ->willReturnCallback(
+                function (array $queries, $expression) {
+                    return implode(' ' . $expression . ' ', $queries);
+                }
+            );
+        $this->conditionManager->expects($this->any())
+            ->method('wrapBrackets')
+            ->willReturnCallback(
+                function ($expression) {
+                    return '(' . $expression . ')';
+                }
+            );
+        $this->conditionManager->expects($this->any())
+            ->method('generateCondition')
+            ->willReturnCallback(
+                function ($left, $operator, $right) {
+                    return $left . $operator . $right;
+                }
+            );
+
+        $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->tableMapper->expects($this->once())
+            ->method('addTables')
+            ->with($this->select, $this->request)
+            ->willReturnArgument(0);
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Search\IndexBuilder',
             [
                 'resource' => $this->resource,
                 'config' => $this->config,
-                'storeManager' => $this->storeManager
+                'storeManager' => $this->storeManager,
+                'conditionManager' => $this->conditionManager,
+                'scopeResolver' => $this->scopeResolver,
+                'tableMapper' => $this->tableMapper,
             ]
         );
     }
 
     public function testBuildWithOutOfStock()
     {
-        $tableSuffix = 'index_default';
+        $tableSuffix = '';
         $index = 'test_name_of_index';
 
         $this->mockBuild($index, $tableSuffix);
@@ -96,37 +145,54 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('cataloginventory/options/show_out_of_stock')
             ->will($this->returnValue(true));
 
+        $this->request->expects($this->exactly(2))
+            ->method('getDimensions')
+            ->willReturn([]);
+
         $result = $this->target->build($this->request);
         $this->assertSame($this->select, $result);
     }
 
     public function testBuildWithoutOutOfStock()
     {
-        $tableSuffix = 'index_default';
+        $scopeId = '113';
+        $tableSuffix = 'scope113_someNamesomeValue';
         $index = 'test_index_name';
 
-        $this->mockBuild($index, $tableSuffix);
+        $dimensions = [
+            $this->createDimension('scope', $scopeId),
+            $this->createDimension('someName', 'someValue'),
+        ];
+
+        $this->request->expects($this->exactly(2))
+            ->method('getDimensions')
+            ->willReturn($dimensions);
+
+        $this->mockBuild($index, $tableSuffix, false);
 
         $this->config->expects($this->once())
             ->method('isSetFlag')
             ->with('cataloginventory/options/show_out_of_stock')
             ->will($this->returnValue(false));
-        $this->adapter->expects($this->once())->method('quoteInto')
+        $this->connection->expects($this->once())->method('quoteInto')
             ->with(' AND stock_index.website_id = ?', 1)->willReturn(' AND stock_index.website_id = 1');
         $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
         $website->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
-
-        $this->select->expects($this->at(4))
+        $this->select->expects($this->at(2))
+            ->method('where')
+            ->with('(someName=someValue)')
+            ->willReturnSelf();
+        $this->select->expects($this->at(3))
             ->method('joinLeft')
             ->with(
                 ['stock_index' => 'cataloginventory_stock_status'],
-                'search_index.product_id = stock_index.product_id'
+                'search_index.entity_id = stock_index.product_id'
                 . ' AND stock_index.website_id = 1',
                 []
             )
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
+            ->willReturnSelf();
+        $this->select->expects($this->at(4))
             ->method('where')
             ->with('stock_index.stock_status = ?', 1)
             ->will($this->returnSelf());
@@ -135,9 +201,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->select, $result);
     }
 
-    protected function mockBuild($index, $tableSuffix)
+    protected function mockBuild($index, $tableSuffix, $hasFilters = false)
     {
-        $this->request->expects($this->once())
+        $this->request->expects($this->atLeastOnce())
             ->method('getIndex')
             ->will($this->returnValue($index));
 
@@ -151,39 +217,73 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->select->expects($this->once())
+        $this->scopeResolver->expects($this->any())
+            ->method('resolve')
+            ->will(
+                $this->returnCallback(
+                    function ($index, $dimensions) {
+                        $tableNameParts = [];
+                        foreach ($dimensions as $dimension) {
+                            $tableNameParts[] = $dimension->getName() . $dimension->getValue();
+                        }
+                        return $index . '_' . implode('_', $tableNameParts);
+                    }
+                )
+            );
+
+        $this->select->expects($this->at(0))
             ->method('from')
             ->with(
-                ['search_index' => $index . $tableSuffix],
-                ['entity_id' => 'product_id']
+                ['search_index' => $index . '_' . $tableSuffix],
+                ['entity_id' => 'entity_id']
             )
             ->will($this->returnSelf());
 
         $this->select->expects($this->at(1))
             ->method('joinLeft')
             ->with(
-                ['category_index' => 'catalog_category_product_index'],
-                'search_index.product_id = category_index.product_id'
-                . ' AND search_index.store_id = category_index.store_id',
-                []
-            )
-            ->will($this->returnSelf());
-
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
                 ['cea' => 'catalog_eav_attribute'],
                 'search_index.attribute_id = cea.attribute_id',
-                ['search_weight']
-            )
-            ->will($this->returnSelf());
-        $this->select->expects($this->at(3))
-            ->method('joinLeft')
-            ->with(
-                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
                 []
             )
-            ->willReturnSelf();
+            ->will($this->returnSelf());
+        if ($hasFilters) {
+            $this->select->expects($this->at(2))
+                ->method('joinLeft')
+                ->with(
+                    ['category_index' => 'catalog_category_product_index'],
+                    'search_index.entity_id = category_index.product_id',
+                    []
+                )
+                ->will($this->returnSelf());
+            $this->select->expects($this->at(3))
+                ->method('joinLeft')
+                ->with(
+                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                    []
+                )
+                ->willReturnSelf();
+        }
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @return MockObject
+     */
+    private function createDimension($name, $value)
+    {
+        $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
+            ->setMethods(['getName', 'getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dimension->expects($this->any())
+            ->method('getName')
+            ->willReturn($name);
+        $dimension->expects($this->any())
+            ->method('getValue')
+            ->willReturn($value);
+        return $dimension;
     }
 }

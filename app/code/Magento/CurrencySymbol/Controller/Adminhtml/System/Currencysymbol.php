@@ -11,7 +11,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
-class Currencysymbol extends \Magento\Backend\App\Action
+abstract class Currencysymbol extends \Magento\Backend\App\Action
 {
     /**
      * Check the permission to run it

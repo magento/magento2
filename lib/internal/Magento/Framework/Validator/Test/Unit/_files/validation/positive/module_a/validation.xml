@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/internal/Magento/Framework/Validator/etc/validation.xsd">
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
     <entity name="test_entity_a">
         <rules>
             <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
@@ -15,16 +15,16 @@
                         <constraint class="Magento\Framework\Validator\Test\Unit\Test\Alnum"/>
                     </property>
                     <property name="int">
-                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\Int"/>
+                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\IsInt"/>
                     </property>
                 </property_constraints>
                 <entity_constraints>
-                    <constraint class="Magento\Framework\Validator\Test\Unit\Test\True"/>
+                    <constraint class="Magento\Framework\Validator\Test\Unit\Test\IsTrue"/>
                 </entity_constraints>
             </rule>
             <rule name="always_true">
                 <entity_constraints>
-                    <constraint alias="alias" class="Magento\Framework\Validator\Test\Unit\Test\True"/>
+                    <constraint alias="alias" class="Magento\Framework\Validator\Test\Unit\Test\IsTrue"/>
                 </entity_constraints>
             </rule>
         </rules>

@@ -63,14 +63,14 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
             'Magento\Framework\Api\SearchCriteriaBuilder',
-            ['create', 'addFilter'],
+            ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
             'Magento\Framework\Api\FilterBuilder',
-            ['setField', 'setValue', 'create'],
+            ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
@@ -97,26 +97,12 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Run test cancel method
+     * @expectedExceptionMessage You can not cancel Credit Memo
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCancel()
     {
-        $id = 10;
-        $creditmemoMock = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo',
-            ['cancel'],
-            [],
-            '',
-            false
-        );
-        $this->creditmemoRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($id)
-            ->will($this->returnValue($creditmemoMock));
-        $creditmemoMock->expects($this->once())
-            ->method('cancel')
-            ->will($this->returnValue(true));
-
-        $this->assertTrue($this->creditmemoService->cancel($id));
+        $this->assertTrue($this->creditmemoService->cancel(1));
     }
 
     /**
@@ -151,11 +137,15 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->with($id)
             ->will($this->returnSelf());
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->will($this->returnSelf());
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($filterMock));
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $filterMock]);
+            ->method('addFilters')
+            ->with([$filterMock]);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($searchCriteriaMock));

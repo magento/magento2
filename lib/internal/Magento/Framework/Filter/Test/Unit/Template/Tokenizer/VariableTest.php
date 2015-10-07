@@ -38,7 +38,33 @@ class VariableTest extends \PHPUnit_Framework_TestCase
                 "invoke(arg1, arg2, 2, 2.7, -1, 'Mike\\'s')",
                 [['type' => 'method', 'name' => 'invoke', 'args' => ['arg1', 'arg2', 2, 2.7, -1, "Mike's"]]]
             ],
-            ["  ", []]
+            [
+                'var.method("value_1", [ _param_1:$bogus.prop,
+                    _param_2:$foo.bar,_param_3:12345,
+                    call:$var.method("param"),
+                    id:foobar,
+                    [123, foobar],
+                    bar:["foo", 1234, $foo.bar],
+                    "foo:bar":[bar, "1234", \'$foo.bar\'],
+                ])',
+                [
+                    ['type' => 'variable', 'name' => 'var'],
+                    ['type' => 'method', 'name' => 'method', 'args' => [
+                        'value_1',
+                        [
+                            '_param_1' => '$bogus.prop',
+                            '_param_2' => '$foo.bar',
+                            '_param_3' => 12345,
+                            'call' => '$var.method("param")',
+                            'id' => 'foobar',
+                            0 => [123, 'foobar'],
+                            'bar' => ['foo', 1234, '$foo.bar'],
+                            'foo:bar' => ['bar', "1234", '$foo.bar'],
+                        ],
+                    ]],
+                ],
+            ],
+            ["  ", []],
         ];
     }
 }

@@ -13,7 +13,12 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Magento\Sales\Model\Service\InvoiceService;
 
+/**
+ * Class UpdateQty
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
@@ -32,12 +37,18 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
     protected $resultRawFactory;
 
     /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      * @param JsonFactory $resultJsonFactory
      * @param RawFactory $resultRawFactory
+     * @param InvoiceService $invoiceService
      */
     public function __construct(
         Context $context,
@@ -45,11 +56,13 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory,
-        RawFactory $resultRawFactory
+        RawFactory $resultRawFactory,
+        InvoiceService $invoiceService
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->invoiceService = $invoiceService;
         parent::__construct($context, $registry, $resultForwardFactory);
     }
 
@@ -76,9 +89,7 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
                 );
             }
 
-            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(

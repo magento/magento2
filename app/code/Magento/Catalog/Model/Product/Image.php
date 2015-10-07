@@ -57,7 +57,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var bool
      */
-    protected $_constrainOnly = false;
+    protected $_constrainOnly = true;
 
     /**
      * @var int[]
@@ -544,6 +544,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function getNewFile()
     {
         return $this->_newFile;
+    }
+
+    /**
+     * Retrieve 'true' if image is a base file placeholder
+     *
+     * @return bool
+     */
+    public function isBaseFilePlaceholder()
+    {
+        return (bool)$this->_isBaseFilePlaceholder;
     }
 
     /**

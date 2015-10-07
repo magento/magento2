@@ -46,4 +46,11 @@ interface OrderPaymentRepositoryInterface
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface Order payment interface.
      */
     public function save(\Magento\Sales\Api\Data\OrderPaymentInterface $entity);
+
+    /**
+     * Creates new Order Payment instance.
+     *
+     * @return \Magento\Sales\Api\Data\OrderPaymentInterface Transaction interface.
+     */
+    public function create();
 }

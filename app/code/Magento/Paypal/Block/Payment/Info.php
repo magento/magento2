@@ -47,8 +47,8 @@ class Info extends \Magento\Payment\Block\Info\Cc
     /**
      * Prepare PayPal-specific payment information
      *
-     * @param \Magento\Framework\Object|array|null $transport
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject|array|null $transport
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareSpecificInformation($transport = null)
     {

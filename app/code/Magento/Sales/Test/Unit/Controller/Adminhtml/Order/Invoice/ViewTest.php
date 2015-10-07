@@ -225,14 +225,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
+
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
 
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $this->resultPageMock->expects($this->once())->method('setActiveMenu')->with('Magento_Sales::sales_order');
 
@@ -251,18 +255,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
-        $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('load')
+        $invoiceRepository->expects($this->any())
+            ->method('get')
             ->willReturn(null);
 
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()

@@ -30,7 +30,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="subscriptions" type="subscriptionsType">
+            <xs:element minOccurs="0" name="subscriptions" type="subscriptionsType">
                 <xs:unique name="uniqueSubscriptionsTable">
                     <xs:annotation>
                         <xs:documentation>

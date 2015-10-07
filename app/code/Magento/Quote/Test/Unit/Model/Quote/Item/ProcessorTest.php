@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\App\State;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Tests for Magento\Quote\Model\Service\Quote\Processor
@@ -72,7 +72,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',
-            ['getId', 'setOptions', '__wakeup', 'setProduct', 'addQty', 'setCustomPrice', 'setOriginalCustomPrice'],
+            [
+                'getId',
+                'setOptions',
+                '__wakeup',
+                'setProduct',
+                'addQty',
+                'setCustomPrice',
+                'setOriginalCustomPrice',
+                'setData'
+            ],
             [],
             '',
             false
@@ -109,13 +118,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getCustomOptions', '__wakeup', 'getParentProductId', 'getCartQty'],
+            ['getCustomOptions', '__wakeup', 'getParentProductId', 'getCartQty', 'getStickWithinParent'],
             [],
             '',
             false
         );
         $this->objectMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getResetCount', 'getId', 'getCustomPrice'],
             [],
             '',
@@ -148,8 +157,12 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($itemId));
         $this->itemMock->expects($this->any())
             ->method('setData')
-            ->with($this->equalTo('qty'), $this->equalTo(0));
-
+            ->willReturnMap(
+                [
+                    ['store_id', $storeId],
+                    ['qty', 0],
+                ]
+            );
 
         $this->storeMock->expects($this->any())
             ->method('getId')
@@ -177,7 +190,6 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getParentProductId')
             ->will($this->returnValue(true));
 
-
         $this->itemMock->expects($this->never())->method('setOptions');
         $this->itemMock->expects($this->never())->method('setProduct');
 
@@ -185,7 +197,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($itemId));
 
-        $this->itemMock->expects($this->never())->method('setData');
+        $this->itemMock->expects($this->any())
+            ->method('setData')
+            ->willReturnMap(
+                [
+                    ['store_id', $storeId],
+                ]
+            );
 
         $this->storeMock->expects($this->any())
             ->method('getId')
@@ -222,7 +240,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($itemId));
 
-        $this->itemMock->expects($this->never())->method('setData');
+        $this->itemMock->expects($this->any())
+            ->method('setData')
+            ->willReturnMap(
+                [
+                    ['store_id', $storeId],
+                ]
+            );
 
         $this->storeMock->expects($this->any())
             ->method('getId')
@@ -238,58 +262,171 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $qty = 3000000000;
         $customPrice = 400000000;
+        $itemId = 1;
+        $requestItemId = 1;
 
         $this->productMock->expects($this->any())
             ->method('getCartQty')
             ->will($this->returnValue($qty));
+        $this->productMock->expects($this->any())
+            ->method('getStickWithinParent')
+            ->will($this->returnValue(false));
 
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('addQty')
             ->with($qty);
+        $this->itemMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($itemId));
+        $this->itemMock->expects($this->never())
+            ->method('setData');
 
         $this->objectMock->expects($this->any())
             ->method('getCustomPrice')
             ->will($this->returnValue($customPrice));
+        $this->objectMock->expects($this->any())
+            ->method('getResetCount')
+            ->will($this->returnValue(false));
+        $this->objectMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($requestItemId));
 
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('setCustomPrice')
             ->will($this->returnValue($customPrice));
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('setOriginalCustomPrice')
             ->will($this->returnValue($customPrice));
 
         $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
     }
 
-    public function testPrepareResetCount()
+    public function testPrepareWithResetCountAndStick()
     {
         $qty = 3000000000;
         $customPrice = 400000000;
+        $itemId = 1;
+        $requestItemId = 1;
+
+        $this->productMock->expects($this->any())
+            ->method('getCartQty')
+            ->will($this->returnValue($qty));
+        $this->productMock->expects($this->any())
+            ->method('getStickWithinParent')
+            ->will($this->returnValue(true));
+
+        $this->itemMock->expects($this->once())
+            ->method('addQty')
+            ->with($qty);
+        $this->itemMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($itemId));
+        $this->itemMock->expects($this->never())
+            ->method('setData');
+
+        $this->objectMock->expects($this->any())
+            ->method('getCustomPrice')
+            ->will($this->returnValue($customPrice));
+        $this->objectMock->expects($this->any())
+            ->method('getResetCount')
+            ->will($this->returnValue(true));
+        $this->objectMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($requestItemId));
+
+        $this->itemMock->expects($this->once())
+            ->method('setCustomPrice')
+            ->will($this->returnValue($customPrice));
+        $this->itemMock->expects($this->once())
+            ->method('setOriginalCustomPrice')
+            ->will($this->returnValue($customPrice));
+
+        $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
+    }
+
+    public function testPrepareWithResetCountAndNotStickAndOtherItemId()
+    {
+        $qty = 3000000000;
+        $customPrice = 400000000;
+        $itemId = 1;
+        $requestItemId = 2;
+
+        $this->productMock->expects($this->any())
+            ->method('getCartQty')
+            ->will($this->returnValue($qty));
+        $this->productMock->expects($this->any())
+            ->method('getStickWithinParent')
+            ->will($this->returnValue(false));
+
+        $this->itemMock->expects($this->once())
+            ->method('addQty')
+            ->with($qty);
+        $this->itemMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($itemId));
+        $this->itemMock->expects($this->never())
+            ->method('setData');
+
+        $this->objectMock->expects($this->any())
+            ->method('getCustomPrice')
+            ->will($this->returnValue($customPrice));
+        $this->objectMock->expects($this->any())
+            ->method('getResetCount')
+            ->will($this->returnValue(true));
+        $this->objectMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($requestItemId));
+
+        $this->itemMock->expects($this->once())
+            ->method('setCustomPrice')
+            ->will($this->returnValue($customPrice));
+        $this->itemMock->expects($this->once())
+            ->method('setOriginalCustomPrice')
+            ->will($this->returnValue($customPrice));
+
+        $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
+    }
+
+    public function testPrepareWithResetCountAndNotStickAndSameItemId()
+    {
+        $qty = 3000000000;
+        $customPrice = 400000000;
+        $itemId = 1;
+        $requestItemId = 1;
 
         $this->objectMock->expects($this->any())
             ->method('getResetCount')
             ->will($this->returnValue(true));
 
         $this->itemMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($itemId));
+        $this->itemMock->expects($this->once())
             ->method('setData')
             ->with(CartItemInterface::KEY_QTY, 0);
 
         $this->productMock->expects($this->any())
             ->method('getCartQty')
             ->will($this->returnValue($qty));
+        $this->productMock->expects($this->any())
+            ->method('getStickWithinParent')
+            ->will($this->returnValue(false));
 
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('addQty')
             ->with($qty);
 
         $this->objectMock->expects($this->any())
             ->method('getCustomPrice')
             ->will($this->returnValue($customPrice));
+        $this->objectMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($requestItemId));
 
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('setCustomPrice')
             ->will($this->returnValue($customPrice));
-        $this->itemMock->expects($this->any())
+        $this->itemMock->expects($this->once())
             ->method('setOriginalCustomPrice')
             ->will($this->returnValue($customPrice));
 

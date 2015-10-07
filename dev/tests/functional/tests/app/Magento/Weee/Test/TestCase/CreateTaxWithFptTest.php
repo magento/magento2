@@ -64,17 +64,13 @@ class CreateTaxWithFptTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
-    public function __prepare(
-        FixtureFactory $fixtureFactory
-    ) {
-        $this->markTestIncomplete("Epic: MAGETWO-30073. FPC issue.");
+    public function __prepare(FixtureFactory $fixtureFactory)
+    {
         $this->fixtureFactory = $fixtureFactory;
-        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_with_addresses']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_with_addresses']);
         $customer->persist();
-        $taxRule = $fixtureFactory->createByCode('taxRule', ['dataSet' => 'tax_rule_default']);
-        $taxRule->persist();
         $productTemplate = $this->fixtureFactory
-            ->createByCode('catalogAttributeSet', ['dataSet' => 'custom_attribute_set_with_fpt']);
+            ->createByCode('catalogAttributeSet', ['dataset' => 'custom_attribute_set_with_fpt']);
         $productTemplate->persist();
         return [
             'customer' => $customer,
@@ -111,9 +107,10 @@ class CreateTaxWithFptTest extends Injectable
         Customer $customer,
         CatalogAttributeSet $productTemplate
     ) {
+        $this->fixtureFactory->createByCode('taxRule', ['dataset' => 'tax_rule_default'])->persist();
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $productTemplate]]]
+            ['dataset' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $productTemplate]]]
         );
         $product->persist();
         $this->objectManager->create(
@@ -121,6 +118,7 @@ class CreateTaxWithFptTest extends Injectable
             ['configData' => $configData]
         )->run();
         $this->loginCustomer($customer);
+
         return ['product' => $product];
     }
 

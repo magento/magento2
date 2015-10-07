@@ -1,5 +1,6 @@
 **/var
 /composer.lock
+/etc/config.xml
 /generated
 /lib/Magento/Mtf/Util/Generate/testcase.xml
 /vendor

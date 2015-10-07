@@ -78,7 +78,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexAll()
     {
-        /** @var  $indexer \Magento\Indexer\Model\IndexerInterface */
+        /** @var  $indexer \Magento\Framework\Indexer\IndexerInterface */
         $indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );

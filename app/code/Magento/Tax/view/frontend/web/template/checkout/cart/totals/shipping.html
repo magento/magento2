@@ -1,0 +1,54 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: isCalculated() && quoteIsVirtual == 0 -->
+    <!-- ko if: isBothPricesDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: $t(title) + ' ' + $t(excludingTaxMessage)"></span>
+            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: $t(getExcludingValue()), attr: {'data-th': $t(excludingTaxMessage)}"></span>
+        </td>
+    </tr>
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: $t(title) + ' ' + $t(includingTaxMessage)"></span>
+            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title) + ' ' + $t(excludingTaxMessage)}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isIncludingDisplayed() -->
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: $t(title)"></span>
+            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title)}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isExcludingDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: $t(title)"></span>
+            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+<!-- /ko -->

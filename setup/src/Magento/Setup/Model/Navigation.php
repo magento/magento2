@@ -10,17 +10,52 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Navigation
 {
-    /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+    /**#@+
+     * Types of wizards
      */
-    protected $serviceLocator;
+    const NAV_INSTALLER = 'navInstaller';
+    const NAV_UPDATER = 'navUpdater';
+    /**#@- */
+
+    /**
+     * @var array
+     */
+    private $navStates;
+
+    /**
+     * @var string
+     */
+    private $navType;
+
+    /**
+     * @var string
+     */
+    private $titles;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ObjectManagerProvider $objectManagerProvider)
     {
-        $this->serviceLocator = $serviceLocator;
+        $objectManager = $objectManagerProvider->get();
+        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
+            $this->navType = self::NAV_UPDATER;
+            $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];
+        } else {
+            $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
+            $this->navType = self::NAV_INSTALLER;
+            $this->titles = $serviceLocator->get('config')[self::NAV_INSTALLER . 'Titles'];
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->navType;
     }
 
     /**
@@ -28,24 +63,24 @@ class Navigation
      */
     public function getData()
     {
-        return $this->serviceLocator->get('config')['nav'];
+        return $this->navStates;
     }
 
     /**
      * Retrieve array of menu items
      *
-     * Returns only items with 'nav-bar' equal to TRUE
+     * Returns only items with 'nav' equal to TRUE
      *
      * @return array
      */
     public function getMenuItems()
     {
-        return array_filter(
-            $this->serviceLocator->get('config')['nav'],
+        return array_values(array_filter(
+            $this->navStates,
             function ($value) {
-                return isset($value['nav-bar']) && (bool)$value['nav-bar'];
+                return isset($value['nav']) && (bool)$value['nav'];
             }
-        );
+        ));
     }
 
     /**
@@ -57,12 +92,22 @@ class Navigation
      */
     public function getMainItems()
     {
-        $result = array_filter(
-            $this->serviceLocator->get('config')['nav'],
+        $result = array_values(array_filter(
+            $this->navStates,
             function ($value) {
                 return isset($value['main']) && (bool)$value['main'];
             }
-        );
+        ));
         return $result;
+    }
+
+    /**
+     * Returns titles of the navigation pages
+     *
+     * @return array
+     */
+    public function getTitles()
+    {
+        return $this->titles;
     }
 }

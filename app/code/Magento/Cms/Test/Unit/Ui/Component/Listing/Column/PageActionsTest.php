@@ -50,8 +50,8 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'href' => 'test/url/delete',
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete "${ $.$data.title }"'),
-                            'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
+                            'title' => __('Delete ${ $.$data.title }'),
+                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
                         ],
                     ]
                 ],
@@ -81,7 +81,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
             );
 
         $model->setName($name);
-        $model->prepareDataSource($items);
+        $items = $model->prepareDataSource($items);
         // Run test
         $this->assertEquals($expectedItems, $items['data']['items']);
     }

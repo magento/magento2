@@ -37,10 +37,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $actions = $this->getColumn()->getActions();
         if (empty($actions) || !is_array($actions)) {
@@ -72,12 +72,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as dropdown option html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toOptionHtml($action, \Magento\Framework\Object $row)
+    protected function _toOptionHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
@@ -91,12 +91,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as link html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toLinkHtml($action, \Magento\Framework\Object $row)
+    protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
@@ -117,12 +117,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param array &$action
      * @param string &$actionCaption
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\Object $row)
+    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\DataObject $row)
     {
         foreach ($action as $attribute => $value) {
             if (isset($action[$attribute]) && !is_array($action[$attribute])) {

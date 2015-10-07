@@ -17,12 +17,6 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
      */
     protected $_block;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_appConfig;
-
-    /** @var \Magento\Framework\Locale\CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_locale;
-
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -30,7 +24,6 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_appConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->stockRegistryMock = $this->getMockForAbstractClass(
@@ -44,13 +37,10 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
         );
 
         $context = $objectHelper->getObject(
-            'Magento\Backend\Block\Template\Context',
-            ['scopeConfig' => $this->_appConfig]
+            'Magento\Backend\Block\Template\Context'
         );
-        $this->_locale = $this->getMock('Magento\Framework\Locale\CurrencyInterface', [], [], '', false);
         $data = [
             'context' => $context,
-            'localeCurrency' => $this->_locale,
             'formFactory' => $this->getMock('Magento\Framework\Data\FormFactory', [], [], '', false),
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'stockRegistry' => $this->stockRegistryMock,
@@ -61,23 +51,6 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
             $data
         );
-    }
-
-    public function testRenderPrice()
-    {
-        $this->_appConfig->expects($this->once())->method('getValue')->will($this->returnValue('USD'));
-        $currency = $this->getMock('Zend_Currency', [], [], '', false);
-        $currency->expects($this->once())->method('toCurrency')->with('100.0000')->will($this->returnValue('$100.00'));
-        $this->_locale->expects(
-            $this->once()
-        )->method(
-            'getCurrency'
-        )->with(
-            'USD'
-        )->will(
-            $this->returnValue($currency)
-        );
-        $this->assertEquals('$100.00', $this->_block->renderPrice(100));
     }
 
     /**
@@ -133,5 +106,35 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($qty));
 
         $this->assertEquals($qty, $this->_block->getProductStockQty($productMock));
+    }
+
+    /**
+     * @dataProvider getVariationWizardDataProvider
+     * @param string $wizardBlockName
+     * @param string $wizardHtml
+     */
+    public function testGetVariationWizard($wizardBlockName, $wizardHtml)
+    {
+        $initData = ['some-key' => 'some-value'];
+
+        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $wizardBlock = $this->getMock('Magento\Ui\Block\Component\StepsWizard', [], [], '', false);
+        $layout->expects($this->any())->method('getChildName')->with(null, 'variation-steps-wizard')
+            ->willReturn($wizardBlockName);
+        $layout->expects($this->any())->method('getBlock')->with($wizardBlockName)->willReturn($wizardBlock);
+        $wizardBlock->expects($this->any())->method('setInitData')->with($initData);
+        $wizardBlock->expects($this->any())->method('toHtml')->willReturn($wizardHtml);
+
+        $this->_block->setLayout($layout);
+
+        $this->assertEquals($wizardHtml, $this->_block->getVariationWizard($initData));
+    }
+
+    /**
+     * @return array
+     */
+    public function getVariationWizardDataProvider()
+    {
+        return [['WizardBlockName', 'WizardHtml'], ['', '']];
     }
 }

@@ -7,18 +7,30 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class Edit extends \Magento\Customer\Controller\Account
+class Edit extends Action implements AccountInterface
 {
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;
 
     /** @var DataObjectHelper */
     protected $dataObjectHelper;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
@@ -34,9 +46,11 @@ class Edit extends \Magento\Customer\Controller\Account
         CustomerRepositoryInterface $customerRepository,
         DataObjectHelper $dataObjectHelper
     ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->customerRepository = $customerRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**
@@ -54,8 +68,8 @@ class Edit extends \Magento\Customer\Controller\Account
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
 
-        $data = $this->_getSession()->getCustomerFormData(true);
-        $customerId = $this->_getSession()->getCustomerId();
+        $data = $this->session->getCustomerFormData(true);
+        $customerId = $this->session->getCustomerId();
         $customerDataObject = $this->customerRepository->getById($customerId);
         if (!empty($data)) {
             $this->dataObjectHelper->populateWithArray(
@@ -64,8 +78,8 @@ class Edit extends \Magento\Customer\Controller\Account
                 '\Magento\Customer\Api\Data\CustomerInterface'
             );
         }
-        $this->_getSession()->setCustomerData($customerDataObject);
-        $this->_getSession()->setChangePassword($this->getRequest()->getParam('changepass') == 1);
+        $this->session->setCustomerData($customerDataObject);
+        $this->session->setChangePassword($this->getRequest()->getParam('changepass') == 1);
 
         $resultPage->getConfig()->getTitle()->set(__('Account Information'));
         $resultPage->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);

@@ -28,7 +28,11 @@ class Matrix extends Form
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'sku' => [
-            'selector' => 'td[data-column="sku"] > span',
+            'selector' => 'td[data-column="sku"]',
+            'strategy' => Locator::SELECTOR_CSS,
+        ],
+        'price' => [
+            'selector' => 'td[data-column="price"]',
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'quantity_and_stock_status' => [
@@ -77,13 +81,6 @@ class Matrix extends Form
     // @codingStandardsIgnoreEnd
 
     /**
-     * Title of variation matrix css selector.
-     *
-     * @var string
-     */
-    protected $matrixTitle = 'h3.title';
-
-    /**
      * Selector for template block.
      *
      * @var string
@@ -98,7 +95,6 @@ class Matrix extends Form
      */
     public function fillVariations(array $matrix)
     {
-        $this->_rootElement->find($this->matrixTitle)->click();
         $count = 1;
         foreach ($matrix as $variation) {
             $variationRow = $this->_rootElement->find(
@@ -147,8 +143,7 @@ class Matrix extends Form
         foreach ($variationRows as $key => $variationRow) {
             /** @var SimpleElement $variationRow */
             if ($variationRow->isVisible()) {
-                $data[$key] = $this->_getData($this->dataMapping(), $variationRow);
-                $data[$key] += $this->getOptionalFields($variationRow, $this->mappingGetFields);
+                $data[$key] = $this->getDataFields($variationRow, $this->mappingGetFields);
             }
         }
 
@@ -156,19 +151,19 @@ class Matrix extends Form
     }
 
     /**
-     * Get optional fields
+     * Get variation fields.
      *
      * @param SimpleElement $context
      * @param array $fields
      * @return array
      */
-    protected function getOptionalFields(SimpleElement $context, array $fields)
+    protected function getDataFields(SimpleElement $context, array $fields)
     {
         $data = [];
 
         foreach ($fields as $name => $params) {
             if (isset($params['composite']) && $params['composite']) {
-                $data[$name] = $this->getOptionalFields($context, $params['fields']);
+                $data[$name] = $this->getDataFields($context, $params['fields']);
             } else {
                 $data[$name] = $context->find($params['selector'], $params['strategy'])->getText();
             }

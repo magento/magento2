@@ -90,8 +90,8 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
             'product_option_<%- data.id %>_select_<%- data.select_id %>_price_type'
         )->setName(
             'product[options][<%- data.id %>][values][<%- data.select_id %>][price_type]'
-        )->setExtraParams($extraParams);
+        );
 
-        return parent::getPriceTypeSelectHtml();
+        return parent::getPriceTypeSelectHtml($extraParams);
     }
 }

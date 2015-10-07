@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
@@ -60,7 +60,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $mock = $mockBuilder->disableOriginalConstructor()
             ->getMock();
 
-        $item = new Object();
+        $item = new DataObject();
         $item->setIsUserDefine(false);
 
         $mock->expects($this->any())

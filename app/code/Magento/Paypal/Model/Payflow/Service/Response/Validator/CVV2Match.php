@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 
 /**
@@ -48,10 +48,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Validate data
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    public function validate(Object $response)
+    public function validate(DataObject $response)
     {
         if ($this->isValidationOff()) {
             return true;
@@ -87,10 +87,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Matching card CVV (positive)
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isMatchCvv(Object $response)
+    protected function isMatchCvv(DataObject $response)
     {
         $cvvMatch = strtolower((string) $response->getData(static::CVV2MATCH));
         return $cvvMatch === static::RESPONSE_YES || $cvvMatch === static::RESPONSE_NOT_SUPPORTED;
@@ -99,10 +99,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Matching card CVV (negative)
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isNotMatchCvv(Object $response)
+    protected function isNotMatchCvv(DataObject $response)
     {
         return strtolower((string) $response->getData(static::CVV2MATCH)) === static::RESPONSE_NO;
     }
@@ -110,10 +110,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Checking that the CVV does not exist in the response
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isCvvDoNotExists(Object $response)
+    protected function isCvvDoNotExists(DataObject $response)
     {
         return $response->getData(static::CVV2MATCH) == '';
     }

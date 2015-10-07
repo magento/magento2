@@ -41,8 +41,23 @@ class ApplicationCodeGenerator implements OperationInterface
             return;
         }
 
-        foreach ($this->data as $path) {
-            $this->classesScanner->getList($path);
+        foreach ($this->data as $paths) {
+            if (!is_array($paths)) {
+                $paths = (array)$paths;
+            }
+            foreach ($paths as $path) {
+                $this->classesScanner->getList($path);
+            }
         }
+    }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Application code generator';
     }
 }

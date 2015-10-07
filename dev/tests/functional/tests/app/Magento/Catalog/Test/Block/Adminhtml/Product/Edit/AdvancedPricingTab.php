@@ -20,7 +20,6 @@ class AdvancedPricingTab extends ProductTab
      * @var array
      */
     protected $childrenForm = [
-        'group_price' => 'AdvancedPricingTab\OptionGroup',
         'tier_price' => 'AdvancedPricingTab\OptionTier',
     ];
 
@@ -67,6 +66,7 @@ class AdvancedPricingTab extends ProductTab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {

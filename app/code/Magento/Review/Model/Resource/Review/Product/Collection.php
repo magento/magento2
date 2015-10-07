@@ -6,6 +6,7 @@
 namespace Magento\Review\Model\Resource\Review\Product;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Select;
 
 /**
  * Review Product Collection
@@ -105,7 +106,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_voteFactory = $voteFactory;
@@ -213,12 +214,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Applies all store filters in one place to prevent multiple joins in select
      *
-     * @param null|\Zend_Db_Select $select
+     * @param Select $select
      * @return $this
      */
-    protected function _applyStoresFilterToSelect(\Zend_Db_Select $select = null)
+    protected function _applyStoresFilterToSelect(Select $select = null)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $storesIds = $this->_storesIds;
         if (null === $select) {
             $select = $this->getSelect();
@@ -229,7 +230,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         if (is_array($storesIds) && !empty($storesIds)) {
-            $inCond = $adapter->prepareSqlCondition('store.store_id', ['in' => $storesIds]);
+            $inCond = $connection->prepareSqlCondition('store.store_id', ['in' => $storesIds]);
             $select->join(
                 ['store' => $this->_reviewStoreTable],
                 'rt.review_id=store.review_id AND ' . $inCond,
@@ -240,7 +241,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         } else {
             $select->join(
                 ['store' => $this->_reviewStoreTable],
-                $adapter->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
+                $connection->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
                 []
             );
         }
@@ -370,14 +371,15 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param null|int|string $limit
      * @param null|int|string $offset
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllIds($limit = null, $offset = null)
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(Select::ORDER);
+        $idsSelect->reset(Select::LIMIT_COUNT);
+        $idsSelect->reset(Select::LIMIT_OFFSET);
+        $idsSelect->reset(Select::COLUMNS);
         $idsSelect->columns('rt.review_id');
         return $this->getConnection()->fetchCol($idsSelect);
     }
@@ -390,10 +392,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getResultingIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
+        $idsSelect->reset(Select::LIMIT_COUNT);
+        $idsSelect->reset(Select::LIMIT_OFFSET);
+        $idsSelect->reset(Select::COLUMNS);
+        $idsSelect->reset(Select::ORDER);
         $idsSelect->columns('rt.review_id');
         return $this->getConnection()->fetchCol($idsSelect);
     }
@@ -406,7 +408,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
-        $select->reset(\Zend_Db_Select::COLUMNS)->columns('COUNT(e.entity_id)')->reset(\Zend_Db_Select::HAVING);
+        $select->reset(Select::COLUMNS)->columns('COUNT(e.entity_id)')->reset(Select::HAVING);
 
         return $select;
     }
@@ -534,21 +536,21 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function _addStoreData()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         //$this->_getConditionSql('rdt.customer_id', array('null' => null));
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = [];
         if (count($reviewsIds) > 0) {
             $reviewIdCondition = $this->_getConditionSql('review_id', ['in' => $reviewsIds]);
             $storeIdCondition = $this->_getConditionSql('store_id', ['gt' => 0]);
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->_reviewStoreTable
             )->where(
                 $reviewIdCondition
             )->where(
                 $storeIdCondition
             );
-            $result = $adapter->fetchAll($select);
+            $result = $connection->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {
                     $storesToReviews[$row['review_id']] = [];

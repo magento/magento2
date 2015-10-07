@@ -84,7 +84,7 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
                 return $resultRedirect;
             }
 
-            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
+            $buyRequest = new \Magento\Framework\DataObject($this->getRequest()->getParams());
 
             $wishlist->updateItem($id, $buyRequest)->save();
 

@@ -7,6 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Catalog\Test\Repository\CatalogProductAttribute">
+        <dataset name="default">
+            <field name="frontend_label" xsi:type="string">attribute_label%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+        </dataset>
+
         <dataset name="attribute_type_text_field">
             <field name="frontend_label" xsi:type="string">attribute_text%isolation%</field>
             <field name="attribute_code" xsi:type="string">attribute_text%isolation%</field>
@@ -86,6 +92,31 @@
                     <item name="is_default" xsi:type="string">No</item>
                     <item name="admin" xsi:type="string">white</item>
                     <item name="view" xsi:type="string">white_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="color_for_promo_rules">
+            <field name="frontend_label" xsi:type="string">color_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">color_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">red</item>
+                    <item name="view" xsi:type="string">red_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">green</item>
+                    <item name="view" xsi:type="string">green_%isolation%</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">blue</item>
+                    <item name="view" xsi:type="string">blue_%isolation%</item>
                 </item>
             </field>
         </dataset>

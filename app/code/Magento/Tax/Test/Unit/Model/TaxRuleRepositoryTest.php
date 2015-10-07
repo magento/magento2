@@ -5,9 +5,8 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
+use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxRuleRepository;
-
-use Magento\Framework\Api\SearchCriteria as SearchCriteria;
 
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -215,7 +214,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);

@@ -17,6 +17,7 @@ class Configurator implements \Magento\Framework\ObjectManager\DynamicConfigInte
         return [
             'preferences' => [
                 'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
+                'Magento\Store\Model\StoreManagerInterface' => 'Magento\TestFramework\Store\StoreManager',
             ]
         ];
     }

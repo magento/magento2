@@ -59,6 +59,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -67,7 +68,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -100,6 +101,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * If realization doesn't demand this functionality, let this function just return null
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     protected function _getEavWebsiteTable()
     {
@@ -111,6 +113,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStore($store)
     {
@@ -136,6 +139,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param \Magento\Eav\Model\Entity\Type|string|int $entityType
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntityType($entityType)
     {
@@ -161,6 +165,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addFormCodeFilter($code)
     {

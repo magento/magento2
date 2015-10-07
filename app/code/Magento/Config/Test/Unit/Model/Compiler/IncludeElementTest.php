@@ -5,8 +5,6 @@
  */
 namespace Magento\Config\Test\Unit\Model\Compiler;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * Class IncludeElementTest
  */
@@ -23,9 +21,9 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
     protected $moduleReaderMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystemMock;
+    protected $readFactoryMock;
 
     /**
      * Set up
@@ -37,13 +35,13 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
         $this->moduleReaderMock = $this->getMockBuilder('Magento\Framework\Module\Dir\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->readFactoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->includeElement = new \Magento\Config\Model\Config\Compiler\IncludeElement(
             $this->moduleReaderMock,
-            $this->filesystemMock
+            $this->readFactoryMock
         );
     }
 
@@ -59,7 +57,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
         $compilerMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface')
             ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $processedObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +82,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The file "relative/path/to/file.xml" does not exist
+     * @expectedExceptionMessage The file "adminhtml/path/to/file.xml" does not exist
      */
     public function testCompileException()
     {
@@ -95,7 +93,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
         $compilerMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface')
             ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $processedObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -118,26 +116,20 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContentStep($check = true)
     {
-        $resultPath = 'relative/path/to/file.xml';
+        $resultPath = 'adminhtml/path/to/file.xml';
         $includeXmlContent = '<config><item id="1"><test/></item><item id="2"></item></config>';
 
         $modulesDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
             ->getMockForAbstractClass();
 
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::MODULES)
+        $this->readFactoryMock->expects($this->once())
+            ->method('create')
             ->willReturn($modulesDirectoryMock);
 
         $this->moduleReaderMock->expects($this->once())
             ->method('getModuleDir')
             ->with('etc', 'Module_Name')
             ->willReturn('path/in/application/module');
-
-        $modulesDirectoryMock->expects($this->once())
-            ->method('getRelativePath')
-            ->with('path/in/application/module/adminhtml/path/to/file.xml')
-            ->willReturn($resultPath);
 
         $modulesDirectoryMock->expects($this->once())
             ->method('isExist')

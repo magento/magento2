@@ -56,7 +56,7 @@ interface StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @param int|float $qty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQtyIncrements(StockItemInterface $stockItem, $qty);
 

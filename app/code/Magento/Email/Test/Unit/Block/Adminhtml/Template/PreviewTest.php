@@ -58,7 +58,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         ];
         $template->expects($this->atLeastOnce())
             ->method('getDesignConfig')
-            ->will($this->returnValue(new \Magento\Framework\Object(
+            ->will($this->returnValue(new \Magento\Framework\DataObject(
                 $designConfigData
             )));
         $emailFactory = $this->getMock('Magento\Email\Model\TemplateFactory', ['create'], [], '', false);

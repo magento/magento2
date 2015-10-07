@@ -16,9 +16,9 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -41,11 +41,11 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->any())->method('from')->will($this->returnValue($this->selectMock));
         $this->selectMock->expects($this->any())->method('where')->will($this->returnValue($this->selectMock));
 
-        $this->adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->adapterMock->expects($this->any())->method('select')->willReturn($this->selectMock);
+        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
@@ -56,7 +56,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     public function testSelectActiveIntegrationByConsumerId()
     {
         $consumerId = 1;
-        $this->adapterMock->expects($this->once())->method('fetchRow')->with($this->selectMock);
+        $this->connectionMock->expects($this->once())->method('fetchRow')->with($this->selectMock);
         $this->integrationResourceModel->selectActiveIntegrationByConsumerId($consumerId);
     }
 }

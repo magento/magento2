@@ -225,7 +225,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $filter = $this->filterBuilder->setField($taxClassNameField)
             ->setValue($taxClassName)
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
@@ -273,8 +273,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
          * (class_name == 'Retail Customer' || class_name == 'Taxable Goods)
          * && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT')
          */
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3, $filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -301,8 +301,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         );
 
         /** class_name == 'Retail Customer' && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT') */
-        $this->searchCriteriaBuilder->addFilter([$filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3, $filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];

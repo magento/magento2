@@ -9,12 +9,13 @@
     data-bind='
         attr: {id: getBillingAgreementCode(), name: "payment[" + getBillingAgreementCode() + "]"},
         checked: billingAgreement
-        enable: isActive($parent) && getBillingAgreementCode()'
+        enable: isActive($parent) && getBillingAgreementCode(),
+        click: selectPaymentMethod'
     value="1" class="checkbox">
 <label
     data-bind='
         attr: {for: getBillingAgreementCode()}'
     class="label">
-    <span><!-- ko text: $t('Sign a billing agreement to streamline further purchases with PayPal.') --><!-- /ko --></span>
+    <span><!-- ko i18n: 'Sign a billing agreement to streamline further purchases with PayPal.' --><!-- /ko --></span>
 </label>
 <!-- /ko -->

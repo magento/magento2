@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Log in to backend as Admin.
  * 2. Go to the Marketing-> SEO & Search->URL Rewrites.
  * 3. Click Category URL Rewrite from grid.
- * 4. Edit test value(s) according to dataSet.
+ * 4. Edit test value(s) according to dataset.
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
@@ -55,7 +55,7 @@ class UpdateCategoryUrlRewriteEntityTest extends Injectable
     protected $urlRewriteEdit;
 
     /**
-     * Prepare dataSets and pages
+     * Prepare datasets and pages
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -75,7 +75,7 @@ class UpdateCategoryUrlRewriteEntityTest extends Injectable
         $categoryRedirect = $fixtureFactory->createByCode(
             'urlRewrite',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => ['target_path' => $category->getUrlKey() . '.html']
             ]
         );

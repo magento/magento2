@@ -231,11 +231,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected function _afterLoad()
     {
+        $this->loadCouponCode();
+        return parent::_afterLoad();
+    }
+
+    /**
+     * @return void
+     */
+    public function loadCouponCode()
+    {
         $this->setCouponCode($this->getPrimaryCoupon()->getCode());
-        if ($this->getUsesPerCoupon() !== null && !$this->getUseAutoGeneration()) {
+        if ($this->getUsesPerCoupon() == null && !$this->getUseAutoGeneration()) {
             $this->setUsesPerCoupon($this->getPrimaryCoupon()->getUsageLimit());
         }
-        return parent::_afterLoad();
     }
 
     /**
@@ -419,7 +427,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon'),
             ];
-            $transport = new \Magento\Framework\Object(
+            $transport = new \Magento\Framework\DataObject(
                 ['coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false]
             );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', ['transport' => $transport]);

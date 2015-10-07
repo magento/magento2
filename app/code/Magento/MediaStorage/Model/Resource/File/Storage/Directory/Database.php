@@ -27,13 +27,13 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function createDatabaseScheme()
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $table = $this->getMainTable();
-        if ($adapter->isTableExists($table)) {
+        if ($connection->isTableExists($table)) {
             return $this;
         }
 
-        $ddlTable = $adapter->newTable(
+        $ddlTable = $connection->newTable(
             $table
         )->addColumn(
             'directory_id',
@@ -66,7 +66,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             ['nullable' => true, 'default' => null, 'unsigned' => true],
             'Parent \Directory Id'
         )->addIndex(
-            $adapter->getIndexName(
+            $connection->getIndexName(
                 $table,
                 ['name', 'parent_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -74,10 +74,10 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             ['name', 'parent_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $adapter->getIndexName($table, ['parent_id']),
+            $connection->getIndexName($table, ['parent_id']),
             ['parent_id']
         )->addForeignKey(
-            $adapter->getForeignKeyName($table, 'parent_id', $table, 'directory_id'),
+            $connection->getForeignKeyName($table, 'parent_id', $table, 'directory_id'),
             'parent_id',
             $table,
             'directory_id',
@@ -86,7 +86,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             'Directory Storage'
         );
 
-        $adapter->createTable($ddlTable);
+        $connection->createTable($ddlTable);
         return $this;
     }
 
@@ -99,7 +99,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function loadByPath(\Magento\MediaStorage\Model\File\Storage\Directory\Database $object, $path)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $name = basename($path);
         $path = dirname($path);
@@ -107,16 +107,16 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $path = '';
         }
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()]
         )->where(
             'name = ?',
             $name
         )->where(
-            $adapter->prepareSqlCondition('path', ['seq' => $path])
+            $connection->prepareSqlCondition('path', ['seq' => $path])
         );
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
         if ($data) {
             $object->setData($data);
             $this->_afterLoad($object);
@@ -133,7 +133,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function getParentId($path)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $name = basename($path);
         $path = dirname($path);
@@ -141,17 +141,17 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $path = '';
         }
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             ['directory_id']
         )->where(
             'name = ?',
             $name
         )->where(
-            $adapter->prepareSqlCondition('path', ['seq' => $path])
+            $connection->prepareSqlCondition('path', ['seq' => $path])
         );
 
-        return $adapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -161,8 +161,8 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function clearDirectories()
     {
-        $adapter = $this->_getWriteAdapter();
-        $adapter->delete($this->getMainTable());
+        $connection = $this->getConnection();
+        $connection->delete($this->getMainTable());
 
         return $this;
     }
@@ -176,9 +176,9 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function exportDirectories($offset, $count = 100)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             ['name', 'path']
         )->order(
@@ -188,7 +188,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             $offset
         );
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
     /**
@@ -200,18 +200,18 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
     public function getSubdirectories($directory)
     {
         $directory = trim($directory, '/');
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             ['name', 'path']
         )->where(
-            $adapter->prepareSqlCondition('path', ['seq' => $directory])
+            $connection->prepareSqlCondition('path', ['seq' => $directory])
         )->order(
             'directory_id'
         );
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
     /**
@@ -223,11 +223,11 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     public function deleteDirectory($name, $path)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         $where = ['name = ?' => $name];
-        $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('path', ['seq' => $path]));
+        $where[] = new \Zend_Db_Expr($connection->prepareSqlCondition('path', ['seq' => $path]));
 
-        $adapter->delete($this->getMainTable(), $where);
+        $connection->delete($this->getMainTable(), $where);
     }
 }

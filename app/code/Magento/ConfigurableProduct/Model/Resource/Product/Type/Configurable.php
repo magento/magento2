@@ -19,15 +19,15 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -68,14 +68,14 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if (!empty($delete)) {
             $where = ['parent_id = ?' => $mainProductId, 'product_id IN(?)' => $delete];
-            $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+            $this->getConnection()->delete($this->getMainTable(), $where);
         }
         if (!empty($insert)) {
             $data = [];
             foreach ($insert as $childId) {
                 $data[] = ['product_id' => (int)$childId, 'parent_id' => (int)$mainProductId];
             }
-            $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $data);
+            $this->getConnection()->insertMultiple($this->getMainTable(), $data);
         }
 
         // configurable product relations should be added to relation table
@@ -90,15 +90,14 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *   group => array(ids)
      * )
      *
-     * @param int $parentId
+     * @param int|array $parentId
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $childrenIds = [];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['l' => $this->getMainTable()],
             ['product_id', 'parent_id']
         )->join(
@@ -106,12 +105,12 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'e.entity_id = l.product_id AND e.required_options = 0',
             []
         )->where(
-            'parent_id = ?',
+            'parent_id IN (?)',
             $parentId
         );
 
         $childrenIds = [0 => []];
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
             $childrenIds[0][$row['product_id']] = $row['product_id'];
         }
 
@@ -128,14 +127,14 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $parentIds = [];
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['product_id', 'parent_id']
         )->where(
             'product_id IN(?)',
             $childId
         );
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
             $parentIds[] = $row['parent_id'];
         }
 
@@ -153,16 +152,14 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $attributesOptionsData = [];
         foreach ($attributes as $superAttribute) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
                 [
                     'sku' => 'entity.sku',
                     'product_id' => 'super_attribute.product_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
-                    'pricing_value' => 'attribute_pricing.pricing_value',
-                    'pricing_is_percent' => 'attribute_pricing.is_percent',
-                    'super_attribute_label' =>  'attribute_label.value'
+                    'super_attribute_label' => 'attribute_label.value',
                 ]
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
@@ -198,16 +195,6 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ),
                 []
             )->joinLeft(
-                ['attribute_pricing' => $this->getTable('catalog_product_super_attribute_pricing')],
-                implode(
-                    ' AND ',
-                    [
-                        'super_attribute.product_super_attribute_id = attribute_pricing.product_super_attribute_id',
-                        'entity_value.value = attribute_pricing.value_index'
-                    ]
-                ),
-                []
-            )->joinLeft(
                 ['attribute_label' => $this->getTable('catalog_product_super_attribute_label')],
                 implode(
                     ' AND ',
@@ -222,7 +209,7 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $product->getId()
             );
 
-            $attributesOptionsData[$superAttribute->getAttributeId()] = $this->_getReadAdapter()->fetchAll($select);
+            $attributesOptionsData[$superAttribute->getAttributeId()] = $this->getConnection()->fetchAll($select);
         }
         return $attributesOptionsData;
     }

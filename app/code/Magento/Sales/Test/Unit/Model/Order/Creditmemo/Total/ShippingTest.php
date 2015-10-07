@@ -78,7 +78,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('format')
             ->with($allowedShippingAmount, null, false)
             ->willReturn($allowedShippingAmount);
-        $order = new \Magento\Framework\Object(
+        $order = new \Magento\Framework\DataObject(
             [
                 'base_shipping_amount' => $orderShippingAmount,
                 'base_shipping_refunded' => $orderShippingRefunded,
@@ -122,7 +122,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $expectedGrandTotal = $grandTotalBefore + $allowedShippingAmount;
         $expectedBaseGrandTtoal = $baseGrandTotalBefore + $baseAllowedShippingAmount;
 
-        $order = new \Magento\Framework\Object(
+        $order = new \Magento\Framework\DataObject(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingRefunded,
@@ -209,7 +209,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $expectedGrandTotal = $grandTotalBefore + $expectedShippingAmount;
         $expectedBaseGrandTtoal = $baseGrandTotalBefore + $expectedBaseShippingAmount;
 
-        $order = new \Magento\Framework\Object(
+        $order = new \Magento\Framework\DataObject(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingAmountRefunded,

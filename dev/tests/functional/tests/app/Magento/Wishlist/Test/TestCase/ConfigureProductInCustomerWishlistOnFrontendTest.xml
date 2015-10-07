@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Wishlist\Test\TestCase\ConfigureProductInCustomerWishlistOnFrontendTest">
+    <testCase name="Magento\Wishlist\Test\TestCase\ConfigureProductInCustomerWishlistOnFrontendTest" summary="Configure Products in Customer Wishlist on Frontend" ticketId="MAGETWO-29507">
         <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation1">
             <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />

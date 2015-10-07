@@ -114,7 +114,7 @@ class Save extends \Magento\Backend\App\Action
             $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-            $responseAjax = new \Magento\Framework\Object();
+            $responseAjax = new \Magento\Framework\DataObject();
             $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
             if ($isNeedCreateLabel) {

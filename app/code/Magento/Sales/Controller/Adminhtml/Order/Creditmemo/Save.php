@@ -92,9 +92,6 @@ class Save extends \Magento\Backend\App\Action
                     $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
                 }
 
-                if (isset($data['do_refund'])) {
-                    $creditmemo->setRefundRequested(true);
-                }
                 if (isset($data['do_offline'])) {
                     //do not allow online refund for Refund to Store Credit
                     if (!$data['do_offline'] && !empty($data['refund_customerbalance_return_enable'])) {
@@ -102,23 +99,11 @@ class Save extends \Magento\Backend\App\Action
                             __('Cannot create online refund for Refund to Store Credit.')
                         );
                     }
-                    $creditmemo->setOfflineRequested((bool)(int)$data['do_offline']);
                 }
-
-                $creditmemo->register();
-
-                $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-                $transactionSave = $this->_objectManager->create(
-                    'Magento\Framework\DB\Transaction'
-                )->addObject(
-                    $creditmemo
-                )->addObject(
-                    $creditmemo->getOrder()
+                $creditmemoManagement = $this->_objectManager->create(
+                    'Magento\Sales\Api\CreditmemoManagementInterface'
                 );
-                if ($creditmemo->getInvoice()) {
-                    $transactionSave->addObject($creditmemo->getInvoice());
-                }
-                $transactionSave->save();
+                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline'], !empty($data['send_email']));
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);

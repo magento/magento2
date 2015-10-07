@@ -26,11 +26,6 @@ class Renderer implements RendererInterface
     protected $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\MinifyService
-     */
-    protected $assetMinifyService;
-
-    /**
      * @var \Magento\Framework\View\Asset\MergeService
      */
     protected $assetMergeService;
@@ -41,7 +36,7 @@ class Renderer implements RendererInterface
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -57,24 +52,21 @@ class Renderer implements RendererInterface
 
     /**
      * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Config $pageConfig,
-        \Magento\Framework\View\Asset\MinifyService $assetMinifyService,
         \Magento\Framework\View\Asset\MergeService $assetMergeService,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageConfig = $pageConfig;
-        $this->assetMinifyService = $assetMinifyService;
         $this->assetMergeService = $assetMergeService;
         $this->urlBuilder = $urlBuilder;
         $this->escaper = $escaper;
@@ -240,8 +232,7 @@ class Renderer implements RendererInterface
      */
     protected function renderAssetGroup(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
-        $groupAssets = $this->assetMinifyService->getAssets($group->getAll());
-        $groupAssets = $this->processMerge($groupAssets, $group);
+        $groupAssets = $this->processMerge($group->getAll(), $group);
 
         $attributes = $this->getGroupAttributes($group);
         $attributes = $this->addDefaultAttributes(

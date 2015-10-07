@@ -53,7 +53,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'column_2',
                 'column_3',
                 'configurable_variations',
-                'configurable_variation_prices',
                 'configurable_variation_labels',
             ],
             $this->_model->addHeaderColumns(
@@ -150,7 +149,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
                     'configurable_variations' => $data['configurable_variations'],
-                    'configurable_variation_prices' => $data['configurable_variation_prices'],
                     'configurable_variation_labels' => $data['configurable_variation_labels'],
                 ],
                 '$data' => [
@@ -267,23 +265,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                         . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
                             'code_of_attribute_2=Option Title 2',
                         ])
-                ]),
-                'configurable_variation_prices' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, [
-                    //1
-                    'name=code_of_attribute'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'value=Option Title' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price=112345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price_type=percent',
-                    //2
-                    'name=code_of_attribute'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'value=Option Title' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price=212345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price_type=fixed',
-                    //3
-                    'name=code_of_attribute_2'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'value=Option Title 2' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price=312345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
-                    'price_type=fixed',
                 ]),
                 'configurable_variation_labels' => implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
                     'code_of_attribute' => 'code_of_attribute=Super attribute label',

@@ -203,7 +203,6 @@ class Currencysymbol
 
         // reinit configuration
         $this->_coreConfig->reinit();
-        $this->_storeManager->reinitStores();
 
         $this->clearCache();
         //Reset symbols cache since new data is added

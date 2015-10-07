@@ -52,7 +52,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
-        $objectConverter = $objectManager->get('Magento\Framework\Convert\Object');
+        $objectConverter = $objectManager->get('Magento\Framework\Convert\DataObject');
         $groups = $groups = $groupRepository->getList($searchCriteria->create())
             ->getItems();
         $expected = $objectConverter->toOptionArray($groups, 'id', 'code');

@@ -27,14 +27,14 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(\Magento\Framework\Stdlib\String $string)
+    public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
     {
         $this->string = $string;
     }
@@ -106,8 +106,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
     {
-        $adapter = $this->getAttribute()->getEntity()->getReadConnection();
-        $select = $adapter->select();
+        $connection = $this->getAttribute()->getEntity()->getConnection();
+        $select = $connection->select();
         $value = $object->getData($attribute->getAttributeCode());
         $bind = ['attribute_code' => trim($value) . '-%'];
 
@@ -121,7 +121,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         )->limit(
             1
         );
-        $data = $adapter->fetchOne($select, $bind);
+        $data = $connection->fetchOne($select, $bind);
         return abs((int)str_replace($value, '', $data));
     }
 }

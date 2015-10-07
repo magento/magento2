@@ -14,10 +14,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for AddProductsToShoppingCartEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. All type products is created
  *

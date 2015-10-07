@@ -35,7 +35,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
+     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -49,7 +49,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
+        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -61,7 +61,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
             $extensionFactory,
             $customAttributeFactory,
             $storeManager,
-            $shipmentFactory,
+            $shipmentRepository,
             $resource,
             $resourceCollection,
             $data

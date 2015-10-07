@@ -41,7 +41,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_object = new \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended($context, $this->_converter);
+        $this->_object = new Extended($context, $this->_converter);
         $this->_object->setColumn($this->_column);
     }
 
@@ -57,7 +57,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         $this->_column->expects($this->once())->method('getIndex')->will($this->returnValue('label'));
         $this->_column->expects($this->once())->method('getHtmlName')->will($this->returnValue('test[]'));
         $this->_converter->expects($this->never())->method('toFlatArray');
-        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\Object($rowData)));
+        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }
 
     public function renderDataProvider()

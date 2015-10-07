@@ -12,7 +12,7 @@ use Magento\Framework\Registry;
 /**
  * Admin ratings controller
  */
-class Rating extends Action
+abstract class Rating extends Action
 {
     /**
      * Core registry

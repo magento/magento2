@@ -11,6 +11,8 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
     /**
@@ -24,18 +26,26 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        DateTimeFormatterInterface $dateTimeFormatter
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
         $this->_dateFilter = $dateFilter;
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -73,7 +83,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     /**
      * Report action init operations
      *
-     * @param array|\Magento\Framework\Object $blocks
+     * @param array|\Magento\Framework\DataObject $blocks
      * @return $this
      */
     public function _initReportAction($blocks)
@@ -94,7 +104,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         );
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
 
         foreach ($requestData as $key => $value) {
             if (!empty($value)) {
@@ -124,7 +134,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $updatedAt =  \IntlDateFormatter::formatObject(
+            $updatedAt =  $this->dateTimeFormatter->formatObject(
                 $this->_objectManager->get(
                     'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
                 )->scopeDate(

@@ -34,11 +34,11 @@ class TableCollection extends AbstractCollection
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null,
         array $fixture = []
     ) {
-        $this->setModel('Magento\Framework\Object');
+        $this->setModel('Magento\Framework\DataObject');
         $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\Resource');
 
         $resource = $this->getResource();

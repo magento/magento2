@@ -13,7 +13,7 @@ use Magento\Framework\Data\Tree\Node\Collection;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Node extends \Magento\Framework\Object
+class Node extends \Magento\Framework\DataObject
 {
     /**
      * Parent node

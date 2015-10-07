@@ -42,7 +42,7 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
             ->method('unsCompositeProductResult');
         $session->expects($this->atLeastOnce())
             ->method('getCompositeProductResult')
-            ->willReturn(new \Magento\Framework\Object());
+            ->willReturn(new \Magento\Framework\DataObject());
 
         return $session;
     }

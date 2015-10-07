@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
+?>
+<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
+    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 4: Summary') ?></h2>
+
+    <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
+        <!-- ko if: gridNew().length -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridNew,
+                id: getGridId(),
+                title: $t('New Product Review'),
+                note: $t('Here are the products you\'re about to create.')
+            }} --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: gridExisting().length -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridExisting,
+                id: getGridId(),
+                title: $t('Associated Products'),
+                note: $t('You created these products for this configuration.')
+            }} --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: gridDeleted().length -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridDeleted,
+                id: getGridId(),
+                title: $t('Disassociated Products'),
+                note: $t('These products are not associated.')
+            }} --><!-- /ko -->
+        <!-- /ko -->
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
+                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
+                        "variationsComponent": "configurableVariations"
+                    }
+                }
+            }
+        }
+    }
+</script>

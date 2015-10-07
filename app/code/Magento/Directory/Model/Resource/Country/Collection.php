@@ -79,7 +79,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -111,12 +111,18 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Load allowed countries for current store
      *
-     * @param mixed $store
+     * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\Resource\Country\Collection
      */
     public function loadByStore($store = null)
     {
-        $allowCountries = explode(',', (string)$this->_scopeConfig->getValue('general/country/allow', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store));
+        $allowCountries = explode(',',
+            (string)$this->_scopeConfig->getValue(
+                'general/country/allow',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )
+        );
         if (!empty($allowCountries)) {
             $this->addFieldToFilter("country_id", ['in' => $allowCountries]);
         }

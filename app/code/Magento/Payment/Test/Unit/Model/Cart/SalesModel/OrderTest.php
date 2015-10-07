@@ -52,18 +52,18 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testGetAllItems()
     {
         $items = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['parent_item' => 'parent item 1', 'name' => 'name 1', 'qty_ordered' => 1, 'base_price' => 0.1]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['parent_item' => 'parent item 2', 'name' => 'name 2', 'qty_ordered' => 2, 'base_price' => 1.2]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['parent_item' => 'parent item 3', 'name' => 'name 3', 'qty_ordered' => 3, 'base_price' => 2.3]
             ),
         ];
         $expected = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'parent_item' => 'parent item 1',
                     'name' => 'name 1',
@@ -72,7 +72,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                     'original_item' => $items[0],
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'parent_item' => 'parent item 2',
                     'name' => 'name 2',
@@ -81,7 +81,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                     'original_item' => $items[1],
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'parent_item' => 'parent item 3',
                     'name' => 'name 3',

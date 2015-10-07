@@ -50,8 +50,8 @@ class Refunded extends AbstractReport
     {
         $table = $this->getTable('sales_refunded_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -62,7 +62,7 @@ class Refunded extends AbstractReport
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to)
             );
             $columns = [
@@ -75,7 +75,7 @@ class Refunded extends AbstractReport
                 'offline_refunded' => new \Zend_Db_Expr('SUM(base_total_offline_refunded * base_to_global_rate)'),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(
                 $sourceTable,
                 $columns
@@ -94,7 +94,7 @@ class Refunded extends AbstractReport
             $select->group([$periodExpr, 'store_id', 'status']);
             $select->having('orders_count > 0');
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
             $select->reset();
 
             $columns = [
@@ -115,10 +115,10 @@ class Refunded extends AbstractReport
 
             $select->group(['period', 'order_status']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
-            $adapter->commit();
+            $connection->query($insertQuery);
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 
@@ -139,8 +139,8 @@ class Refunded extends AbstractReport
         $table = $this->getTable('sales_refunded_aggregated');
         $sourceTable = $this->getTable('sales_creditmemo');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
-        $adapter->beginTransaction();
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -159,7 +159,7 @@ class Refunded extends AbstractReport
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $sourceTable],
                     'source_table.created_at',
@@ -184,20 +184,20 @@ class Refunded extends AbstractReport
                 ),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(
                 ['source_table' => $sourceTable],
                 $columns
             )->joinInner(
                 ['order_table' => $orderTable],
-                'source_table.order_id = order_table.entity_id AND ' . $adapter->quoteInto(
+                'source_table.order_id = order_table.entity_id AND ' . $connection->quoteInto(
                     'order_table.state != ?',
                     \Magento\Sales\Model\Order::STATE_CANCELED
                 ) . ' AND order_table.base_total_refunded > 0',
                 []
             );
 
-            $filterSubSelect = $adapter->select();
+            $filterSubSelect = $connection->select();
             $filterSubSelect->from(
                 ['filter_source_table' => $sourceTable],
                 new \Zend_Db_Expr('MAX(filter_source_table.entity_id)')
@@ -216,7 +216,7 @@ class Refunded extends AbstractReport
             $select->having('orders_count > 0');
 
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
             $select->reset();
 
             $columns = [
@@ -237,12 +237,12 @@ class Refunded extends AbstractReport
 
             $select->group(['period', 'order_status']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
-        $adapter->commit();
+        $connection->commit();
         return $this;
     }
 }

@@ -12,17 +12,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for DeleteProductRatingEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Simple product is created.
  * 2. Product rating is created.
  *
  * Steps:
  * 1. Login to backend.
- * 2. Navigate to Stores->Attributes->Rating.
+ * 2. Navigate to Stores > Attributes > Rating.
  * 3. Search product rating in grid by given data.
  * 4. Open this product rating by clicking.
  * 5. Click 'Delete Rating' button.
@@ -39,31 +35,35 @@ class DeleteProductRatingEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Product rating grid page.
+     *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
+     * Product rating edit page.
+     *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'default']);
+        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
         $product->persist();
 
         return ['product' => $product];
     }
 
     /**
-     * Inject data
+     * Inject data.
      *
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
@@ -76,7 +76,7 @@ class DeleteProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Runs delete product Rating entity test
+     * Runs delete product Rating entity test.
      *
      * @param Rating $productRating
      * @return void

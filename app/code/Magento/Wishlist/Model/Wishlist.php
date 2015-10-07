@@ -24,7 +24,7 @@ use Magento\Wishlist\Model\Resource\Wishlist\Collection;
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Cache tag
@@ -367,7 +367,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Returns new item or string on error.
      *
      * @param int|\Magento\Catalog\Model\Product $product
-     * @param \Magento\Framework\Object|array|string|null $buyRequest
+     * @param \Magento\Framework\DataObject|array|string|null $buyRequest
      * @param bool $forciblySetQty
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return Item|string
@@ -400,14 +400,14 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
         }
 
-        if ($buyRequest instanceof \Magento\Framework\Object) {
+        if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\Object(unserialize($buyRequest));
+            $_buyRequest = new \Magento\Framework\DataObject(unserialize($buyRequest));
         } elseif (is_array($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\Object($buyRequest);
+            $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
-            $_buyRequest = new \Magento\Framework\Object();
+            $_buyRequest = new \Magento\Framework\DataObject();
         }
 
         /* @var $product \Magento\Catalog\Model\Product */
@@ -589,16 +589,16 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * It's passed to \Magento\Catalog\Helper\Product->addParamsToBuyRequest() to compose resulting buyRequest.
      *
      * Basically it can hold
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest
+     *   that configures product in this item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
      * so they won't intersect with other submitted options
      *
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
      * @param int|Item $itemId
-     * @param \Magento\Framework\Object $buyRequest
-     * @param null|array|\Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param null|array|\Magento\Framework\DataObject $params
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -622,9 +622,9 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $productId = $product->getId();
         if ($productId) {
             if (!$params) {
-                $params = new \Magento\Framework\Object();
+                $params = new \Magento\Framework\DataObject();
             } elseif (is_array($params)) {
-                $params = new \Magento\Framework\Object($params);
+                $params = new \Magento\Framework\DataObject($params);
             }
             $params->setCurrentConfig($item->getBuyRequest());
             $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);

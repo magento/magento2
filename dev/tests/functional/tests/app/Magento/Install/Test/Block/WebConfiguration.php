@@ -9,6 +9,7 @@ namespace Magento\Install\Test\Block;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Web configuration block.
@@ -28,6 +29,13 @@ class WebConfiguration extends Form
      * @var string
      */
     protected $advancedOptions = "[ng-click*='advanced']";
+
+    /**
+     * Admin URI check.
+     *
+     * @var string
+     */
+    protected $adminUriCheck = '#admin';
 
     /**
      * Fill web configuration form.
@@ -69,5 +77,10 @@ class WebConfiguration extends Form
     public function clickAdvancedOptions()
     {
         $this->_rootElement->find($this->advancedOptions)->click();
+    }
+
+    public function getAdminUriCheck()
+    {
+        return $this->_rootElement->find($this->adminUriCheck)->getAttribute('ng-init');
     }
 }

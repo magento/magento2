@@ -11,7 +11,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
-class Queue extends \Magento\Backend\App\Action
+abstract class Queue extends \Magento\Backend\App\Action
 {
     /**
      * Check if user has enough privileges

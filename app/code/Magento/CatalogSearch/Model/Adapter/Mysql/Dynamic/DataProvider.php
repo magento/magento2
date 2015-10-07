@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as MysqlDataProviderInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
@@ -46,6 +47,11 @@ class DataProvider implements DataProviderInterface
     private $intervalFactory;
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @param Resource $resource
      * @param Range $range
      * @param Session $customerSession
@@ -60,6 +66,7 @@ class DataProvider implements DataProviderInterface
         IntervalFactory $intervalFactory
     ) {
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->range = $range;
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
@@ -77,26 +84,27 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getAggregations(array $entityIds)
+    public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
         $aggregation = [
-            'count' => 'count(DISTINCT entity_id)',
+            'count' => 'count(DISTINCT main_table.entity_id)',
             'max' => 'MAX(min_price)',
             'min' => 'MIN(min_price)',
-            'std' => 'STDDEV_SAMP(min_price)'
+            'std' => 'STDDEV_SAMP(min_price)',
         ];
 
         $select = $this->getSelect();
 
         $tableName = $this->resource->getTableName('catalog_product_index_price');
-        $select->from($tableName, [])
-            ->where('entity_id IN (?)', $entityIds)
+        /** @var Table $table */
+        $table = $entityStorage->getSource();
+        $select->from(['main_table' => $tableName], [])
+            ->joinInner(['entities' => $table->getName()], 'main_table.entity_id  = entities.entity_id', [])
             ->columns($aggregation);
 
         $select = $this->setCustomerGroupId($select);
 
-        $result = $this->getConnection()
-            ->fetchRow($select);
+        $result = $this->connection->fetchRow($select);
 
         return $result;
     }
@@ -104,10 +112,12 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getInterval(BucketInterface $bucket, array $dimensions, array $entityIds)
-    {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions);
-        $select->where('main_table.entity_id IN (?)', $entityIds);
+    public function getInterval(
+        BucketInterface $bucket,
+        array $dimensions,
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
+    ) {
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
 
         return $this->intervalFactory->create(['select' => $select]);
     }
@@ -115,24 +125,25 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getAggregation(BucketInterface $bucket, array $dimensions, $range, array $entityIds)
-    {
-        $select = $this->dataProvider->getDataSet($bucket, $dimensions);
+    public function getAggregation(
+        BucketInterface $bucket,
+        array $dimensions,
+        $range,
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
+    ) {
+        $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
-            $this->getConnection()
-                ->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
+            $this->connection->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
         );
 
         $select
             ->columns(['range' => $rangeExpr])
             ->columns(['metrix' => 'COUNT(*)'])
-            ->where('main_table.entity_id in (?)', $entityIds)
             ->group('range')
             ->order('range');
-        $result = $this->getConnection()
-            ->fetchPairs($select);
+        $result = $this->connection->fetchPairs($select);
 
         return $result;
     }
@@ -154,7 +165,7 @@ class DataProvider implements DataProviderInterface
                 $data[] = [
                     'from' => $fromPrice,
                     'to' => $toPrice,
-                    'count' => $count
+                    'count' => $count,
                 ];
             }
         }
@@ -167,16 +178,7 @@ class DataProvider implements DataProviderInterface
      */
     private function getSelect()
     {
-        return $this->getConnection()
-            ->select();
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        return $this->connection->select();
     }
 
     /**

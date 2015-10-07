@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Scenario;
  *
  * Preconditions:
  * 1. Enable Gift Messages (Order/Items level)
- * 2. Create Product according dataSet
+ * 2. Create Product according dataset
  *
  * Steps:
  * 1. Login as registered customer

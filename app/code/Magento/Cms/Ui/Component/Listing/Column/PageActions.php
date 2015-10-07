@@ -27,12 +27,18 @@ class PageActions extends Column
     protected $urlBuilder;
 
     /**
+     * @var string
+     */
+    private $editUrl;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlBuilder $actionUrlBuilder
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @param string $editUrl
      */
     public function __construct(
         ContextInterface $context,
@@ -40,10 +46,12 @@ class PageActions extends Column
         UrlBuilder $actionUrlBuilder,
         UrlInterface $urlBuilder,
         array $components = [],
-        array $data = []
+        array $data = [],
+        $editUrl = self::CMS_URL_PATH_EDIT
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
+        $this->editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -51,24 +59,24 @@ class PageActions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_EDIT, ['page_id' => $item['page_id']]),
+                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete "${ $.$data.title }"'),
-                            'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
+                            'title' => __('Delete ${ $.$data.title }'),
+                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
                         ]
                     ];
                 }
@@ -84,5 +92,7 @@ class PageActions extends Column
                 }
             }
         }
+
+        return $dataSource;
     }
 }

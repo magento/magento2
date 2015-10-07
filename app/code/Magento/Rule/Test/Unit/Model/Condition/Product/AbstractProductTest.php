@@ -21,7 +21,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Framework object
      *
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_object;
 
@@ -64,7 +64,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMock('Magento\Framework\Model\AbstractModel', ["getAttribute"], [], '', false);
         $this->_condition->setAttribute('category_ids');
-        $product->setAvailableInCategories(new \Magento\Framework\Object());
+        $product->setAvailableInCategories(new \Magento\Framework\DataObject());
         $this->assertFalse($this->_condition->validate($product));
     }
 
@@ -116,7 +116,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $attribute = new \Magento\Framework\Object();
+        $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('datetime');
 
         $newResource = $this->getMock('\Magento\Catalog\Model\Resource\Product', ['getAttribute'], [], '', false);
@@ -168,7 +168,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false)
         );
 
-        $attribute = new \Magento\Framework\Object();
+        $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('datetime');
 
         $newResource = $this->getMock('\Magento\Catalog\Model\Resource\Product', ['getAttribute'], [], '', false);
@@ -228,7 +228,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $attribute = new \Magento\Framework\Object();
+        $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType('multiselect');
 
         $newResource = $this->getMock('\Magento\Catalog\Model\Resource\Product', ['getAttribute'], [], '', false);
@@ -253,7 +253,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->_condition->validate($product));
 
-        $attribute = new \Magento\Framework\Object();
+        $attribute = new \Magento\Framework\DataObject();
         $attribute->setBackendType(null);
         $attribute->setFrontendInput('multiselect');
 

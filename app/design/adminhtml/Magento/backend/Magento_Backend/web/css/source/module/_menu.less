@@ -23,7 +23,8 @@
 
 @menu-item__color: @color-gray65-lighten;
 @menu-item__font-size: 1rem;
-@menu-item__active__background-color: @color-brownie-almost;
+@menu-item__hover__background-color: @color-brownie-almost;
+@menu-item__active__background-color: darken(@menu-item__hover__background-color, 3%);
 @menu-item__active__color: @color-ivory;
 @menu-item-icon__height: 2.2rem;
 
@@ -46,6 +47,37 @@
 @submenu-section-label__color: @color-gray65-almost;
 @submenu-heading-group__indent-bottom: 3.8rem;
 @submenu-action-close__indent-right: 2.8rem;
+
+//
+//  Utilities
+//  ---------------------------------------------
+
+.admin__menu-link() {
+    color: @menu-item__color;
+    display: block;
+    font-size: @menu-item__font-size;
+    letter-spacing: .025em;
+    min-height: 6.2rem;
+    padding: 1.2rem .5rem .5rem;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color .1s linear;
+    word-wrap: break-word;
+    z-index: @menu__z-index;
+    &:focus {
+        box-shadow: none;
+    }
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-menu-item__content;
+        display: block;
+        font-size: 2.2rem;
+        height: @menu-item-icon__height;
+        margin-bottom: .3rem;
+    }
+}
 
 //
 //  Menu wrapper
@@ -103,7 +135,7 @@
         &:hover {
             .logo-img {
                 -webkit-filter: brightness(1.1);
-                        filter: brightness(1.1);
+                filter: brightness(1.1);
             }
         }
         &:active {
@@ -114,8 +146,8 @@
         .logo-img {
             height: @menu-logo-img__height;
             transition: -webkit-filter .2s linear,
-                                filter .2s linear,
-                        transform .1s linear;
+            filter .2s linear,
+            transform .1s linear;
             width: @menu-logo-img__width;
         }
     }
@@ -124,6 +156,20 @@
 //
 //  First menu level
 //  ---------------------------------------------
+
+.abs-menu-separator {
+    @_menu-separator__width: 68%;
+
+    background-color: @menu-line-before__background-color;
+    content: '';
+    display: block;
+    height: @menu-line-before__height;
+    left: 0;
+    margin-left: (100% - @_menu-separator__width) / 2;
+    position: absolute;
+    top: 0;
+    width: @_menu-separator__width;
+}
 
 .admin__menu {
     li {
@@ -135,17 +181,7 @@
                 position: relative;
                 //  Separator between logo and menu
                 &:after {
-                    @_menu-separator__width: 68%;
-
-                    background-color: @menu-line-before__background-color;
-                    content: '';
-                    display: block;
-                    height: @menu-line-before__height;
-                    left: 0;
-                    margin-left: (100% - @_menu-separator__width) / 2;
-                    position: absolute;
-                    top: 0;
-                    width: @_menu-separator__width;
+                    &:extend(.abs-menu-separator);
                 }
             }
             &._active {
@@ -160,36 +196,21 @@
         &._active,
         &:hover {
             > a {
-                background-color: @menu-item__active__background-color;
                 color: @menu-item__active__color;
             }
         }
+        &._active {
+            > a {
+                background-color: @menu-item__hover__background-color;
+            }
+        }
+        &:hover {
+            > a {
+                background-color: @menu-item__active__background-color;
+            }
+        }
         > a {
-            color: @menu-item__color;
-            display: block;
-            font-size: @menu-item__font-size;
-            letter-spacing: .025em;
-            min-height: 6.2rem;
-            padding: 1.2rem .5rem .5rem;
-            position: relative;
-            text-align: center;
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: background-color .1s linear;
-            word-wrap: break-word;
-            z-index: @menu__z-index;
-            &:focus {
-                box-shadow: none;
-            }
-            &:before {
-                &:extend(.abs-icon all);
-                content: @icon-menu-item__content;
-                display: block;
-                font-family: @icons-admin__font-name;
-                font-size: 2.2rem;
-                height: @menu-item-icon__height;
-                margin-bottom: .3rem;
-            }
+            .admin__menu-link();
         }
     }
 
@@ -212,13 +233,6 @@
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
-            &._overlap {
-                overflow-y: auto;
-                height: 100%;
-                &::-webkit-scrollbar {
-                    width: 0;
-                }
-            }
         }
         &._show  {
             > .submenu {
@@ -418,6 +432,18 @@
         > a {
             &:before {
                 content: @icon-systems__content;
+            }
+        }
+    }
+
+    .item-partners {
+        > a {
+            padding-bottom: 1rem;
+            &:before {
+                content: @icon-lego__content;
+            }
+            &:after {
+                &:extend(.abs-menu-separator);
             }
         }
     }

@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\Resource;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
@@ -49,10 +50,11 @@ class DataProvider
 
     /**
      * @param \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $subject
-     * @param callable $proceed
+     * @param callable|\Closure $proceed
      * @param BucketInterface $bucket
      * @param Dimension[] $dimensions
      *
+     * @param Table $entityIdsTable
      * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -60,50 +62,40 @@ class DataProvider
         \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $subject,
         \Closure $proceed,
         BucketInterface $bucket,
-        array $dimensions
+        array $dimensions,
+        Table $entityIdsTable
     ) {
         if ($bucket->getField() == 'category_ids') {
             $currentScope = $dimensions['scope']->getValue();
             $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
-            $currenCategory = $this->layer->getCurrentCategory();
+            $currentCategory = $this->layer->getCurrentCategory();
 
-            $derivedTable = $this->getSelect();
+            $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
                 ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
                 [
                     'entity_id' => 'product_id',
-                    'value' => 'category_id'
+                    'value' => 'category_id',
                 ]
             )->where('main_table.store_id = ?', $currentScopeId);
+            $derivedTable->joinInner(
+                ['entities' => $entityIdsTable->getName()],
+                'main_table.product_id  = entities.entity_id',
+                []
+            );
 
-            if (!empty($currenCategory)) {
+            if (!empty($currentCategory)) {
                 $derivedTable->join(
                     ['category' => $this->resource->getTableName('catalog_category_entity')],
                     'main_table.category_id = category.entity_id',
                     []
-                )->where('`category`.`path` LIKE ?', $currenCategory->getPath() . '%')
-                ->where('`category`.`level` > ?', $currenCategory->getLevel());
+                )->where('`category`.`path` LIKE ?', $currentCategory->getPath() . '%')
+                    ->where('`category`.`level` > ?', $currentCategory->getLevel());
             }
-            $select = $this->getSelect();
+            $select = $this->resource->getConnection()->select();
             $select->from(['main_table' => $derivedTable]);
             return $select;
         }
-        return $proceed($bucket, $dimensions);
-    }
-
-    /**
-     * @return Select
-     */
-    private function getSelect()
-    {
-        return $this->getConnection()->select();
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        return $proceed($bucket, $dimensions, $entityIdsTable);
     }
 }

@@ -93,7 +93,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $intLookupData1 = new \Magento\Framework\Object(
+        $intLookupData1 = new \Magento\Framework\DataObject(
             ['id' => 1, Integration::NAME => 'TestIntegration1', Integration::SETUP_TYPE => 1]
         );
 
@@ -130,7 +130,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->with(
             'TestIntegration2'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object([]))
+            $this->returnValue(new \Magento\Framework\DataObject([]))
         );
         $this->_integrationServiceMock->expects($this->once())->method('update')->with($intUpdateData1);
 

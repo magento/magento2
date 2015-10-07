@@ -6,14 +6,13 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Cms Page Model
  *
  * @method \Magento\Cms\Model\Resource\Page _getResource()
  * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method int[] getStores()
  */
 class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
@@ -79,6 +78,16 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function noRoutePage()
     {
         return $this->load(self::NOROUTE_PAGE_ID, $this->getIdFieldName());
+    }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
     }
 
     /**

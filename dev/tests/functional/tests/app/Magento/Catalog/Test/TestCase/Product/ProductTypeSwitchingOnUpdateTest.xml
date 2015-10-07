@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest" summary="Product Type Switching on Editing" ticketId="MAGETWO-29633">
         <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>

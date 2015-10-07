@@ -28,16 +28,16 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $coreHelper
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      * @param array $arguments
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        $resourcePrefix = null,
+        $connectionName = null,
         array $arguments = []
     ) {
-        parent::__construct($context, $jsonHelper, $resourcePrefix);
+        parent::__construct($context, $jsonHelper, $connectionName);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];

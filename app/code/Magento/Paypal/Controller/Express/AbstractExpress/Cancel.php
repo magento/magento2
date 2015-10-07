@@ -31,15 +31,18 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->unsLastSuccessQuoteId()
                     ->unsLastOrderId()
                     ->unsLastRealOrderId();
-                $this->messageManager->addSuccess(__('Express Checkout and Order have been canceled.'));
+                $this->messageManager->addSuccessMessage(
+                    __('Express Checkout and Order have been canceled.')
+                );
             } else {
-                $this->messageManager->addSuccess(__('Express Checkout has been canceled.'));
+                $this->messageManager->addSuccessMessage(
+                    __('Express Checkout has been canceled.')
+                );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Unable to cancel Express Checkout'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage($e, __('Unable to cancel Express Checkout'));
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

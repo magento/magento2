@@ -19,7 +19,7 @@ use Magento\Framework\Url\RouteParamsResolverInterface;
  * @method $this setSecure(bool $isForced)
  * @method bool getSecure()
  */
-class RouteParamsResolver extends \Magento\Framework\Object implements RouteParamsResolverInterface
+class RouteParamsResolver extends \Magento\Framework\DataObject implements RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface

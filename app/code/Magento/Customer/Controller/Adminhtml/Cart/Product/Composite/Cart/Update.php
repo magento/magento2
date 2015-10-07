@@ -15,11 +15,11 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
      */
     public function execute()
     {
-        $updateResult = new \Magento\Framework\Object();
+        $updateResult = new \Magento\Framework\DataObject();
         try {
             $this->_initData();
 
-            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
+            $buyRequest = new \Magento\Framework\DataObject($this->getRequest()->getParams());
             $this->_quote->updateItem($this->_quoteItem->getId(), $buyRequest);
             $this->_quote->collectTotals();
             $this->quoteRepository->save($this->_quote);

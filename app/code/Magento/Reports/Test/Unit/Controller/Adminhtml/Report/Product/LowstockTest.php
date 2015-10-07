@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
 use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
 class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
@@ -33,10 +33,14 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lowstock = new Lowstock(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->lowstock = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 
@@ -58,8 +62,8 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
             ->expects($this->once())
             ->method('getPage')
             ->willReturn(
-                new Object(
-                    ['config' => new Object(
+                new DataObject(
+                    ['config' => new DataObject(
                         ['title' => $titleMock]
                     )]
                 )

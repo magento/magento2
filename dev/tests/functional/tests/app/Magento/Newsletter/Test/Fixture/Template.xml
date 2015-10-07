@@ -6,49 +6,26 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="template" module="Magento_Newsletter" type="flat" entity_type="newsletter_template" collection="Magento\Newsletter\Model\Resource\Template\Collection" identifier="template_id" repository_class="Magento\Newsletter\Test\Repository\Template" handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface" class="Magento\Newsletter\Test\Fixture\Template">
-    <dataset name="default">
-        <field name="code" xsi:type="string">TemplateName%isolation%</field>
-        <field name="subject" xsi:type="string">TemplateSubject%isolation%</field>
-        <field name="sender_name" xsi:type="string">SenderName%isolation%</field>
-        <field name="sender_email" xsi:type="string">SenderName%isolation%@example.com</field>
-        <field name="text" xsi:type="string">Some text %isolation%</field>
-    </dataset>
-    <field name="id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="code" is_required="">
-      <default_value xsi:type="string">TemplateName%isolation%</default_value>
-    </field>
-    <field name="text" is_required="">
-      <default_value xsi:type="string">Some text %isolation%</default_value>
-    </field>
-    <field name="text_preprocessed" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="styles" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="type" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="subject" is_required="">
-      <default_value xsi:type="string">TemplateSubject%isolation%</default_value>
-    </field>
-    <field name="sender_name" is_required="">
-      <default_value xsi:type="string">SenderName%isolation%</default_value>
-    </field>
-    <field name="sender_email" is_required="">
-      <default_value xsi:type="string">SenderName%isolation%@example.com</default_value>
-    </field>
-    <field name="actual" is_required="">
-      <default_value xsi:type="string">1</default_value>
-    </field>
-    <field name="added_at" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="modified_at" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-  </fixture>
+    <fixture name="template"
+             module="Magento_Newsletter"
+             type="flat"
+             entity_type="newsletter_template"
+             collection="Magento\Newsletter\Model\Resource\Template\Collection"
+             identifier="template_id"
+             repository_class="Magento\Newsletter\Test\Repository\Template"
+             handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface"
+             class="Magento\Newsletter\Test\Fixture\Template">
+        <field name="id" is_required="1" />
+        <field name="code" is_required="" />
+        <field name="text" is_required="" />
+        <field name="text_preprocessed" is_required="" />
+        <field name="styles" is_required="" />
+        <field name="type" is_required="" />
+        <field name="subject" is_required="" />
+        <field name="sender_name" is_required="" />
+        <field name="sender_email" is_required="" />
+        <field name="actual" is_required="" />
+        <field name="added_at" is_required="" />
+        <field name="modified_at" is_required="" />
+    </fixture>
 </config>

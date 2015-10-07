@@ -13,7 +13,7 @@ namespace Magento\Store\Model\App;
 
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
-class Emulation extends \Magento\Framework\Object
+class Emulation extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -55,7 +55,7 @@ class Emulation extends \Magento\Framework\Object
     /**
      * Ini
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     private $initialEnvironmentInfo;
 
@@ -188,7 +188,7 @@ class Emulation extends \Magento\Framework\Object
      */
     public function storeCurrentEnvironmentInfo()
     {
-        $this->initialEnvironmentInfo = new \Magento\Framework\Object();
+        $this->initialEnvironmentInfo = new \Magento\Framework\DataObject();
         $this->initialEnvironmentInfo->setInitialTranslateInline(
             $this->inlineTranslation->isEnabled()
         )->setInitialDesign(

@@ -433,7 +433,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $row
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

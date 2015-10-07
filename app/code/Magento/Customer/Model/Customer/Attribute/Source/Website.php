@@ -37,7 +37,7 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->_store->getWebsiteValuesForForm(false, true);
+            $this->_options = $this->_store->getWebsiteValuesForForm();
         }
 
         return $this->_options;

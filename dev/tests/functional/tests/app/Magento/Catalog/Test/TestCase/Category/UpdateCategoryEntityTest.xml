@@ -6,9 +6,9 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityTest" summary="Update Category" ticketId="MAGETWO-23290">
         <variation name="UpdateCategoryEntityTestVariation1">
-            <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
@@ -23,7 +23,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation2">
-            <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
@@ -40,7 +40,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation3">
-            <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />

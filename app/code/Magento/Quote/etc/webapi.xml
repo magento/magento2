@@ -6,7 +6,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
 
     <!-- Managing Cart -->
     <route url="/V1/carts/:cartId" method="GET">
@@ -249,7 +249,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items" method="POST">
@@ -258,7 +258,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
@@ -267,7 +267,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="DELETE">
@@ -276,7 +276,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
 

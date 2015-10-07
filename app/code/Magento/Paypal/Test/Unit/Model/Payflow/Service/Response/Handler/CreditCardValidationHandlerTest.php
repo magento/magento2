@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler;
 
@@ -26,7 +26,7 @@ class CreditCardValidationHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
             ->getMock();
-        $responseMock = $this->getMockBuilder('Magento\Framework\Object')
+        $responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -7,6 +7,7 @@ namespace Magento\Authorization\Model\Acl\Loader;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
+use Magento\Framework\App\Resource;
 
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
@@ -49,11 +50,11 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
         $roleTableName = $this->_resource->getTableName('authorization_role');
-        $adapter = $this->_resource->getConnection('core_read');
+        $connection = $this->_resource->getConnection();
 
-        $select = $adapter->select()->from($roleTableName)->order('tree_level');
+        $select = $connection->select()->from($roleTableName)->order('tree_level');
 
-        foreach ($adapter->fetchAll($select) as $role) {
+        foreach ($connection->fetchAll($select) as $role) {
             $parent = $role['parent_id'] > 0 ? $role['parent_id'] : null;
             switch ($role['role_type']) {
                 case RoleGroup::ROLE_TYPE:

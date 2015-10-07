@@ -12,26 +12,26 @@ namespace Magento\Catalog\Model\Indexer\Product;
 class AffectCache
 {
     /**
-     * @var \Magento\Indexer\Model\CacheContext $context
+     * @var \Magento\Framework\Indexer\CacheContext $context
      */
     protected $context;
 
     /**
-     * @param \Magento\Indexer\Model\CacheContext $context
+     * @param \Magento\Framework\Indexer\CacheContext $context
      */
     public function __construct(
-        \Magento\Indexer\Model\CacheContext $context
+        \Magento\Framework\Indexer\CacheContext $context
     ) {
         $this->context = $context;
     }
 
     /**
-     * @param \Magento\Indexer\Model\ActionInterface $subject
+     * @param \Magento\Framework\Indexer\ActionInterface $subject
      * @param array $ids
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Indexer\Model\ActionInterface $subject, $ids)
+    public function beforeExecute(\Magento\Framework\Indexer\ActionInterface $subject, $ids)
     {
         $this->context->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
         return [$ids];

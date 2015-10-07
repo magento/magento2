@@ -7,21 +7,28 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
-    'mage/url'
-], function (Component, customerData, $, ko, url) {
+    'sidebar'
+], function (Component, customerData, $, ko) {
     'use strict';
 
     var sidebarInitialized = false;
-    url.setBaseUrl(window.checkout.baseUrl);
+    var addToCartCalls = 0;
+
+    var minicart = $("[data-block='minicart']");
+    minicart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
 
     function initSidebar() {
-        var minicart = $("[data-block='minicart']");
+        if (!$('[data-role=product-item]').length) {
+            return false;
+        }
         minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
         }
         sidebarInitialized = true;
-        minicart.mage('sidebar', {
+        minicart.sidebar({
             "targetElement": "div.block.block-minicart",
             "url": {
                 "checkout": window.checkout.checkoutUrl,
@@ -49,7 +56,7 @@ define([
                 "button": ":button.update-cart-item"
             },
             "confirmMessage": $.mage.__(
-                'Are you sure you want to remove this item from your Compare Products list?'
+                'Are you sure you would like to remove this item from the shopping cart?'
             )
         });
     }
@@ -57,14 +64,23 @@ define([
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
+            var self = this;
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
+                addToCartCalls--;
+                this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
+                initSidebar();
+            }, this);
+            $('[data-block="minicart"]').on('contentLoading', function(event) {
+                addToCartCalls++;
+                self.isLoading(true);
             });
         },
-        initSidebar: ko.observable(initSidebar),
-        closeSidebar: function(element) {
+        isLoading: ko.observable(false),
+        initSidebar: initSidebar,
+        closeSidebar: function() {
             var minicart = $('[data-block="minicart"]');
             minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();

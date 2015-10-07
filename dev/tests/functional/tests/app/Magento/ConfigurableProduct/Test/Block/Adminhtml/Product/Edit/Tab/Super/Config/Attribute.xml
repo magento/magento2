@@ -8,7 +8,7 @@
 <mapping strict="0">
     <fields>
         <label>
-            <selector>[name$="[label]"]</selector>
+            <selector>[name=label]</selector>
         </label>
         <pricing_value>
             <selector>[name$="[pricing_value]"]</selector>

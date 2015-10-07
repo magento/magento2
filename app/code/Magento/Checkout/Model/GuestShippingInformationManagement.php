@@ -13,17 +13,18 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     protected $quoteIdMaskFactory;
 
     /**
-     * @var ShippingInformationManagement
+     * @var \Magento\Checkout\Api\ShippingInformationManagementInterface
      */
     protected $shippingInformationManagement;
 
     /**
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param ShippingInformationManagement $shippingInformationManagement
+     * @param \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        \Magento\Checkout\Model\ShippingInformationManagement $shippingInformationManagement
+        \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->shippingInformationManagement = $shippingInformationManagement;

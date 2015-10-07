@@ -52,9 +52,9 @@ class Invoiced extends AbstractReport
         $table = $this->getTable('sales_invoiced_aggregated');
         $sourceTable = $this->getTable('sales_invoice');
         $orderTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
 
         try {
             if ($from !== null || $to !== null) {
@@ -73,7 +73,7 @@ class Invoiced extends AbstractReport
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
             // convert dates to current admin timezone
-            $periodExpr = $adapter->getDatePartSql(
+            $periodExpr = $connection->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $sourceTable],
                     'source_table.created_at',
@@ -99,20 +99,20 @@ class Invoiced extends AbstractReport
                 ),
             ];
 
-            $select = $adapter->select();
+            $select = $connection->select();
             $select->from(
                 ['source_table' => $sourceTable],
                 $columns
             )->joinInner(
                 ['order_table' => $orderTable],
-                $adapter->quoteInto(
+                $connection->quoteInto(
                     'source_table.order_id = order_table.entity_id AND order_table.state <> ?',
                     \Magento\Sales\Model\Order::STATE_CANCELED
                 ),
                 []
             );
 
-            $filterSubSelect = $adapter->select();
+            $filterSubSelect = $connection->select();
             $filterSubSelect->from(
                 ['filter_source_table' => $sourceTable],
                 'MAX(filter_source_table.entity_id)'
@@ -131,7 +131,7 @@ class Invoiced extends AbstractReport
 
             $select->having('orders_count > 0');
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
+            $connection->query($insertQuery);
             $select->reset();
 
             $columns = [
@@ -153,10 +153,10 @@ class Invoiced extends AbstractReport
 
             $select->group(['period', 'order_status']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-            $adapter->query($insertQuery);
-            $adapter->commit();
+            $connection->query($insertQuery);
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollBack();
+            $connection->rollBack();
             throw $e;
         }
 
@@ -174,7 +174,7 @@ class Invoiced extends AbstractReport
     {
         $table = $this->getTable('sales_invoiced_aggregated_order');
         $sourceTable = $this->getTable('sales_order');
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect($sourceTable, 'created_at', 'updated_at', $from, $to);
@@ -184,7 +184,7 @@ class Invoiced extends AbstractReport
 
         $this->_clearTableByDateRange($table, $from, $to, $subSelect);
         // convert dates to current admin timezone
-        $periodExpr = $adapter->getDatePartSql($this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to));
+        $periodExpr = $connection->getDatePartSql($this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to));
 
         $columns = [
             'period' => $periodExpr,
@@ -192,33 +192,33 @@ class Invoiced extends AbstractReport
             'order_status' => 'status',
             'orders_count' => new \Zend_Db_Expr('COUNT(base_total_invoiced)'),
             'orders_invoiced' => new \Zend_Db_Expr(
-                sprintf('SUM(%s)', $adapter->getCheckSql('base_total_invoiced > 0', 1, 0))
+                sprintf('SUM(%s)', $connection->getCheckSql('base_total_invoiced > 0', 1, 0))
             ),
             'invoiced' => new \Zend_Db_Expr(
                 sprintf(
                     'SUM(%s * %s)',
-                    $adapter->getIfNullSql('base_total_invoiced', 0),
-                    $adapter->getIfNullSql('base_to_global_rate', 0)
+                    $connection->getIfNullSql('base_total_invoiced', 0),
+                    $connection->getIfNullSql('base_to_global_rate', 0)
                 )
             ),
             'invoiced_captured' => new \Zend_Db_Expr(
                 sprintf(
                     'SUM(%s * %s)',
-                    $adapter->getIfNullSql('base_total_paid', 0),
-                    $adapter->getIfNullSql('base_to_global_rate', 0)
+                    $connection->getIfNullSql('base_total_paid', 0),
+                    $connection->getIfNullSql('base_to_global_rate', 0)
                 )
             ),
             'invoiced_not_captured' => new \Zend_Db_Expr(
                 sprintf(
                     'SUM((%s - %s) * %s)',
-                    $adapter->getIfNullSql('base_total_invoiced', 0),
-                    $adapter->getIfNullSql('base_total_paid', 0),
-                    $adapter->getIfNullSql('base_to_global_rate', 0)
+                    $connection->getIfNullSql('base_total_invoiced', 0),
+                    $connection->getIfNullSql('base_total_paid', 0),
+                    $connection->getIfNullSql('base_to_global_rate', 0)
                 )
             ),
         ];
 
-        $select = $adapter->select();
+        $select = $connection->select();
         $select->from($sourceTable, $columns)->where('state <> ?', \Magento\Sales\Model\Order::STATE_CANCELED);
 
         if ($subSelect !== null) {
@@ -229,7 +229,7 @@ class Invoiced extends AbstractReport
         $select->having('orders_count > 0');
 
         $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-        $adapter->query($insertQuery);
+        $connection->query($insertQuery);
         $select->reset();
 
         $columns = [
@@ -251,7 +251,7 @@ class Invoiced extends AbstractReport
 
         $select->group(['period', 'order_status']);
         $insertQuery = $select->insertFromSelect($table, array_keys($columns));
-        $adapter->query($insertQuery);
+        $connection->query($insertQuery);
         return $this;
     }
 }

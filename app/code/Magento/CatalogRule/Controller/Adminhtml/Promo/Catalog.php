@@ -16,7 +16,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 
-class Catalog extends Action
+abstract class Catalog extends Action
 {
     /**
      * Dirty rules notice message

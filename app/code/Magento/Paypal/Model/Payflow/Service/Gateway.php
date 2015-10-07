@@ -11,7 +11,7 @@ use Magento\Framework\Math\Random;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Gateway Service
@@ -51,15 +51,15 @@ class Gateway implements GatewayInterface
     /**
      * Post request into gateway
      *
-     * @param Object $request
+     * @param DataObject $request
      * @param ConfigInterface $config
      *
-     * @return Object
+     * @return DataObject
      * @throws \Exception
      */
-    public function postRequest(Object $request, ConfigInterface $config)
+    public function postRequest(DataObject $request, ConfigInterface $config)
     {
-        $result = new Object();
+        $result = new DataObject();
 
         $clientConfig = [
             'maxredirects' => 5,

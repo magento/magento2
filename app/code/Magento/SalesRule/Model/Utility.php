@@ -41,7 +41,7 @@ class Utility
     protected $customerFactory;
 
     /**
-     * @var \Magento\Framework\ObjectFactory
+     * @var \Magento\Framework\DataObjectFactory
      */
     protected $objectFactory;
 
@@ -54,14 +54,14 @@ class Utility
      * @param Resource\Coupon\UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
-     * @param \Magento\Framework\ObjectFactory $objectFactory
+     * @param \Magento\Framework\DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\Framework\ObjectFactory $objectFactory,
+        \Magento\Framework\DataObjectFactory $objectFactory,
         PriceCurrencyInterface $priceCurrency
     ) {
         $this->couponFactory = $couponFactory;

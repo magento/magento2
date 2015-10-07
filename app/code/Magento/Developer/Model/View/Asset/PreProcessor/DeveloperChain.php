@@ -14,19 +14,20 @@ class DeveloperChain extends Chain
      * @param LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
-     * @param null $origAssetPath
+     * @param string $origAssetPath
      * @codeCoverageIgnore
      */
     public function __construct(
         LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath = null
+        $origAssetPath
     ) {
         parent::__construct(
             $asset,
             $origContent,
-            $origContentType
+            $origContentType,
+            $origAssetPath
         );
 
         $this->targetContentType = $this->origContentType;

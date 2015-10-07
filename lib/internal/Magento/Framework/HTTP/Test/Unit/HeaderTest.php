@@ -18,7 +18,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_converter;
 
@@ -34,7 +34,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_converter = $this->getMock('\Magento\Framework\Stdlib\String', ['cleanString']);
+        $this->_converter = $this->getMock('\Magento\Framework\Stdlib\StringUtils', ['cleanString']);
     }
 
     /**

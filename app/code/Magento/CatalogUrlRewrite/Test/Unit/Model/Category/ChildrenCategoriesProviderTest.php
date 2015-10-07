@@ -41,7 +41,7 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
         $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Category')
             ->disableOriginalConstructor()->getMock();
         $this->category->expects($this->any())->method('getResource')->willReturn($categoryResource);
-        $categoryResource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
+        $categoryResource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->connection->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->select->expects($this->any())->method('from')->willReturnSelf();

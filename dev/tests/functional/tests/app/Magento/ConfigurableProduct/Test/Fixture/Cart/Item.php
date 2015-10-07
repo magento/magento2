@@ -10,8 +10,7 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Item
- * Data for verify cart item block on checkout page
+ * Data for verify cart item block on checkout page.
  *
  * Data keys:
  *  - product (fixture data for verify)
@@ -42,11 +41,11 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 
             $checkoutConfigurableOptions[$key] = [
                 'title' => isset($attributesData[$attribute]['label'])
-                        ? $attributesData[$attribute]['label']
-                        : $attribute,
+                    ? $attributesData[$attribute]['label']
+                    : $attribute,
                 'value' => isset($attributesData[$attribute]['options'][$option]['label'])
-                        ? $attributesData[$attribute]['options'][$option]['label']
-                        : $option,
+                    ? $attributesData[$attribute]['options'][$option]['label']
+                    : $option,
             ];
         }
 
@@ -54,38 +53,5 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             ? $cartItem['options'] + $checkoutConfigurableOptions
             : $checkoutConfigurableOptions;
         $this->data = $cartItem;
-    }
-
-    /**
-     * Persist fixture
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return string
-     */
-    public function getDataConfig()
-    {
-        //
     }
 }

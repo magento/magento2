@@ -32,7 +32,7 @@ class StoreId extends DataSource
     {
         $this->params = $params;
 
-        $storeData =  isset($data['dataSet']) ? ['dataSet' => $data['dataSet']] : [];
+        $storeData =  isset($data['dataset']) ? ['dataset' => $data['dataset']] : [];
         if (isset($data['data'])) {
             $storeData = array_replace_recursive($storeData, $data);
         }

@@ -22,12 +22,12 @@ class CreditmemoNotifierTest extends \PHPUnit_Framework_TestCase
     protected $historyCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\CreditmemoNotifier
+     * @var CreditmemoNotifier
      */
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemo;
 

@@ -129,7 +129,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->will($this->returnArgument(0));
 
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->setMethods(['strlen'])
             ->getMock();

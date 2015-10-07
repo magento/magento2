@@ -107,7 +107,8 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
         if ($quote->isVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->isMessagesAllowed('quote', $quote, $this->storeManager->getStore())) {
+        $messageText = $giftMessage->getMessage();
+        if ($messageText && !$this->helper->isMessagesAllowed('quote', $quote, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
         $this->giftMessageManager->setMessage($quote, 'quote', $giftMessage);

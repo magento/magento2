@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Test backend controller for the theme
- */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,6 +41,39 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     protected $view;
 
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $messageManager;
+
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $resultFactory;
+
+    /** @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject */
+    protected $assetRepo;
+
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    protected $appFileSystem;
+
+    /** @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $fileFactory;
+
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    protected $response;
+
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $redirect;
+
+    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    protected $session;
+
+    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
+    protected $actionFlag;
+
+    /** @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    protected $backendHelper;
+
+    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $coreRegistry;
+
     protected function setUp()
     {
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -48,6 +81,33 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->_request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->eventManager = $this->getMock('\Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
+        $this->messageManager = $this->getMockForAbstractClass(
+            'Magento\Framework\Message\ManagerInterface',
+            [],
+            '',
+            false
+        );
+        $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
+        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->appFileSystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->fileFactory = $this->getMock('Magento\Framework\App\Response\Http\FileFactory', [], [], '', false);
+        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->redirect = $this->getMockForAbstractClass(
+            'Magento\Framework\App\Response\RedirectInterface',
+            [],
+            '',
+            false
+        );
+        $this->session = $this->getMock(
+            'Magento\Backend\Model\Session',
+            ['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData'],
+            [],
+            '',
+            false
+        );
+        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
+        $this->backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $this->coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
@@ -55,9 +115,19 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'request' => $this->_request,
                 'objectManager' => $this->_objectManagerMock,
-                'response' => $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false),
+                'response' => $this->response,
                 'eventManager' => $this->eventManager,
                 'view' => $this->view,
+                'messageManager' => $this->messageManager,
+                'resultFactory' => $this->resultFactory,
+                'assetRepo' => $this->assetRepo,
+                'appFileSystem' => $this->appFileSystem,
+                'fileFactory' => $this->fileFactory,
+                'redirect' => $this->redirect,
+                'session' => $this->session,
+                'actionFlag' => $this->actionFlag,
+                'helper' => $this->backendHelper,
+                'coreRegistry' => $this->coreRegistry
             ]
         );
     }

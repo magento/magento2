@@ -7,7 +7,7 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
 use Magento\Backend\App\Action;
 
-class Widget extends Action
+abstract class Widget extends Action
 {
     /**
      * @return bool

@@ -11,10 +11,6 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for SalesRefundsReportEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Open Backend
  * 2. Go to Reports > Sales > Refunds
@@ -29,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Go to backend
  * 2. Go to Reports > Sales > Refunds
- * 3. Fill data from dataSet
+ * 3. Fill data from dataset
  * 4. Click button Show Report
  * 5. Perform Asserts
  *
@@ -44,14 +40,14 @@ class SalesRefundsReportEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Refunds report page
+     * Refunds report page.
      *
      * @var RefundsReport
      */
     protected $refundsReport;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param RefundsReport $refundsReport
      * @return void
@@ -62,7 +58,7 @@ class SalesRefundsReportEntityTest extends Injectable
     }
 
     /**
-     * Refunds report
+     * Refunds report.
      *
      * @param OrderInjectable $order
      * @param array $refundsReport

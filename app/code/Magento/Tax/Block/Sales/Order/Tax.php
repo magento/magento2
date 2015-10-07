@@ -26,7 +26,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected $_order;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_source;
 
@@ -57,7 +57,7 @@ class Tax extends \Magento\Framework\View\Element\Template
     /**
      * Get data (totals) source model
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getSource()
     {
@@ -98,7 +98,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _addTax($after = 'discount')
     {
-        $taxTotal = new \Magento\Framework\Object(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
     }
@@ -151,7 +151,7 @@ class Tax extends \Magento\Framework\View\Element\Template
 
             $subtotalIncl = max(0, $subtotalIncl);
             $baseSubtotalIncl = max(0, $baseSubtotalIncl);
-            $totalExcl = new \Magento\Framework\Object(
+            $totalExcl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'subtotal_excl',
                     'value' => $subtotal,
@@ -159,7 +159,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Subtotal (Excl.Tax)'),
                 ]
             );
-            $totalIncl = new \Magento\Framework\Object(
+            $totalIncl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'subtotal_incl',
                     'value' => $subtotalIncl,
@@ -218,7 +218,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                 $baseShippingIncl = $baseShipping + (double)$this->_source->getBaseShippingTaxAmount();
             }
 
-            $totalExcl = new \Magento\Framework\Object(
+            $totalExcl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $shipping,
@@ -226,7 +226,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Shipping & Handling (Excl.Tax)'),
                 ]
             );
-            $totalIncl = new \Magento\Framework\Object(
+            $totalIncl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping_incl',
                     'value' => $shippingIncl,
@@ -287,7 +287,7 @@ class Tax extends \Magento\Framework\View\Element\Template
             $baseGrandtotalExcl = $baseGrandtotal - $this->_source->getBaseTaxAmount();
             $grandtotalExcl = max($grandtotalExcl, 0);
             $baseGrandtotalExcl = max($baseGrandtotalExcl, 0);
-            $totalExcl = new \Magento\Framework\Object(
+            $totalExcl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'grand_total',
                     'strong' => true,
@@ -296,7 +296,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Grand Total (Excl.Tax)'),
                 ]
             );
-            $totalIncl = new \Magento\Framework\Object(
+            $totalIncl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'grand_total_incl',
                     'strong' => true,

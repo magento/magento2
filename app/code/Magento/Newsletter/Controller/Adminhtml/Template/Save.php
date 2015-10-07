@@ -6,6 +6,9 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
@@ -46,10 +49,10 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
             );
 
             if (!$template->getId()) {
-                $template->setTemplateType(\Magento\Newsletter\Model\Template::TYPE_HTML);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_HTML);
             }
             if ($this->getRequest()->getParam('_change_type_flag')) {
-                $template->setTemplateType(\Magento\Newsletter\Model\Template::TYPE_TEXT);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_TEXT);
                 $template->setTemplateStyles('');
             }
             if ($this->getRequest()->getParam('_save_as_flag')) {
@@ -63,7 +66,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 
             $this->_redirect('*/template');
             return;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {

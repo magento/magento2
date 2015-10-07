@@ -13,7 +13,7 @@ define([], function() {
         var identifier = Date.now();
         return {
             email: addressData.email,
-            countryId: addressData.country_id,
+            countryId: (addressData.country_id) ? addressData.country_id : window.checkoutConfig.defaultCountryId,
             regionId: (addressData.region) ? addressData.region.region_id : null,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
@@ -30,7 +30,6 @@ define([], function() {
             prefix: addressData.prefix,
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
-            sameAsBilling: addressData.same_as_billing,
             saveInAddressBook: addressData.save_in_address_book,
             isDefaultShipping: function() {
                 return addressData.default_shipping;

@@ -25,9 +25,9 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getReadConnection'])
+            ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
-        $resource->method('getReadConnection')->willReturn($connection);
+        $resource->method('getConnection')->willReturn($connection);
 
         $this->collection = new \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection(
             $entityFactory,

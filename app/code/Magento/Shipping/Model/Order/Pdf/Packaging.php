@@ -36,7 +36,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
@@ -55,7 +55,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
@@ -177,8 +177,8 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $page->drawText($packageText, 525, $this->y, 'UTF-8');
             $packageNum++;
 
-            $package = new \Magento\Framework\Object($package);
-            $params = new \Magento\Framework\Object($package->getParams());
+            $package = new \Magento\Framework\DataObject($package);
+            $params = new \Magento\Framework\DataObject($package->getParams());
             $dimensionUnits = $this->_carrierHelper->getMeasureDimensionName($params->getDimensionUnits());
 
             $typeText = __('Type') . ' : ' . $packaging->getContainerTypeByCode($params->getContainer());
@@ -299,7 +299,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
             $i = 0;
             foreach ($package->getItems() as $itemId => $item) {
-                $item = new \Magento\Framework\Object($item);
+                $item = new \Magento\Framework\DataObject($item);
                 $i = 0;
 
                 $page->setFillColor(new \Zend_Pdf_Color_GrayScale(1));

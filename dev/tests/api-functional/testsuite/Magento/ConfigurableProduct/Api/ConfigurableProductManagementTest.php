@@ -47,7 +47,6 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                     'values' => [
                         [
                             'value_index' => $attributeOptionValue,
-                            'pricing_value' => 100.0
                         ]
                     ]
                 ]
@@ -59,7 +58,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
         $expectedItems = [
             [
                 'sku' => 'test-',
-                'price' => 110.0,
+                'price' => 10.0,
                 'name' => '-',
                 'store_id' => 1,
                 'status' => 1,
@@ -72,7 +71,6 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                         'value' => $attributeOptionValue
                     ]
                 ],
-                'group_prices' => [],
                 'tier_prices' => []
             ]
         ];

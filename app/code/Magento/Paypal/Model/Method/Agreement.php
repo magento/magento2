@@ -278,7 +278,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     /**
      * Authorize payment
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      */
@@ -290,7 +290,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     /**
      * Void payment
      *
-     * @param \Magento\Framework\Object|InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|InfoInterface|Payment $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -303,7 +303,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     /**
      * Capture payment
      *
-     * @param \Magento\Framework\Object|InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      */
@@ -318,7 +318,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     /**
      * Refund capture
      *
-     * @param \Magento\Framework\Object|InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -332,7 +332,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     /**
      * Cancel payment
      *
-     * @param \Magento\Framework\Object|InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|InfoInterface|Payment $payment
      * @return $this
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)

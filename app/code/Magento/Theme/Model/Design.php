@@ -8,7 +8,7 @@ namespace Magento\Theme\Model;
 use Magento\Framework\App\DesignInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\AbstractResource;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Design settings change model

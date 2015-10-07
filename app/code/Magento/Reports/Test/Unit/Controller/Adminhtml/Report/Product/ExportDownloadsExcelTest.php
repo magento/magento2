@@ -31,10 +31,14 @@ class ExportDownloadsExcelTest extends \Magento\Reports\Test\Unit\Controller\Adm
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->exportDownloadsExcel = new ExportDownloadsExcel(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->exportDownloadsExcel = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsExcel',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 

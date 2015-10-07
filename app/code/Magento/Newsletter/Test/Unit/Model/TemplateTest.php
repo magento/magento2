@@ -3,7 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Test\Unit\Model;
+
+use Magento\Framework\App\TemplateTypesInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,6 +69,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $templateFactory;
 
     /**
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterManager;
+
+    /**
+     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlModel;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $request;
@@ -80,15 +93,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->appEmulation = $this->getMockBuilder('Magento\Store\Model\App\Emulation')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,12 +114,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getFrontendName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->store->expects($this->any())
             ->method('getFrontendName')
             ->will($this->returnValue('frontendName'));
+
         $this->store->expects($this->any())
             ->method('getFrontendName')
             ->will($this->returnValue('storeId'));
+
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->store));
@@ -110,21 +130,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->filterManager = $this->getMockBuilder('Magento\Framework\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->urlModel = $this->getMockBuilder('Magento\Framework\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->filterFactory = $this->getMockBuilder('Magento\Newsletter\Model\Template\FilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,6 +186,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->scopeConfig,
                     $this->emailConfig,
                     $this->templateFactory,
+                    $this->filterManager,
+                    $this->urlModel,
                     $this->request,
                     $this->filterFactory,
                 ]
@@ -185,11 +221,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with($templateSubject)
             ->will($this->returnValue($expectedResult));
 
-        $variables = [ 'key' => 'value' ];
+        $variables = ['key' => 'value'];
         $filterTemplate->expects($this->once())
             ->method('setVariables')
             ->with(array_merge($variables, ['this' => $model]))
             ->will($this->returnValue($filterTemplate));
+
         $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
     }
 
@@ -229,7 +266,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
-            ->with($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT)
+            ->with($templateType === TemplateTypesInterface::TYPE_TEXT)
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
             ->method('setIsChildTemplate')
@@ -283,7 +320,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $model->expects($this->atLeastOnce())
             ->method('isPlain')
-            ->will($this->returnValue($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT));
+            ->will($this->returnValue($templateType === TemplateTypesInterface::TYPE_TEXT));
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
@@ -306,7 +343,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         return [
             'default' => [
                 'variables' => [],
-                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
+                'templateType' => TemplateTypesInterface::TYPE_TEXT,
                 'storeId' => 1,
                 'expectedVariables' => [
                     'logo_url' => null,
@@ -325,7 +362,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'logo_url' => 'http://example.com/logo',
                     'logo_alt' => 'Logo Alt',
                 ],
-                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
+                'templateType' => TemplateTypesInterface::TYPE_HTML,
                 'storeId' => 1,
                 'expectedVariables' => [
                     'logo_url' => 'http://example.com/logo',

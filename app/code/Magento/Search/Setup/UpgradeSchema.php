@@ -3,47 +3,40 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Search\Setup;
 
-
-use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-
     /**
-     * @var ModuleListInterface
-     */
-    private $moduleList;
-
-    /**
-     * @param ModuleListInterface $moduleList
-     */
-    public function __construct(ModuleListInterface $moduleList)
-    {
-        $this->moduleList = $moduleList;
-    }
-
-    /**
-     * Upgrades DB schema for a module
-     *
-     * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.0.1') < 0) {
-            $setup->startSetup();
-            $connection = $setup->getConnection();
-            $tableName = $setup->getTable('search_query');
-            $idxName = $setup->getIdxName('search_query', ['is_processed']);
-            $connection->addIndex($tableName, $idxName, ['is_processed']);
-            $setup->endSetup();
+        $installer = $setup;
+        $connection = $installer->getConnection();
+        if (version_compare($context->getVersion(), '2.0.1') < 0) {
+            $connection->dropIndex(
+                $setup->getTable('search_query'),
+                $installer->getIdxName('search_query', ['query_text', 'store_id'])
+            );
+            $connection->addIndex(
+                $setup->getTable('search_query'),
+                $installer->getIdxName(
+                    'search_query',
+                    ['query_text', 'store_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['query_text', 'store_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            );
         }
     }
 }

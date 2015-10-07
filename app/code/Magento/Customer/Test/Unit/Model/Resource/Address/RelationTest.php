@@ -75,9 +75,9 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             true,
-            ['getWriteConnection', 'getTable']
+            ['getConnection', 'getTable']
         );
-        $adapter = $this->getMockForAbstractClass(
+        $connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -101,10 +101,10 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
             $customerId = 1;
-            $customerResource->expects($this->exactly(2))->method('getWriteConnection')->willReturn($adapter);
+            $customerResource->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);
             $customerModel->expects($this->any())->method('getId')->willReturn(1);
             $conditionSql = "entity_id = $customerId";
-            $adapter->expects($this->once())->method('quoteInto')
+            $connectionMock->expects($this->once())->method('quoteInto')
                 ->with('entity_id = ?', $customerId)
                 ->willReturn($conditionSql);
             $customerResource->expects($this->once())->method('getTable')
@@ -117,7 +117,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             if ($isDefaultShipping) {
                 $toUpdate['default_shipping'] = $addressId;
             }
-            $adapter->expects($this->once())->method('update')->with(
+            $connectionMock->expects($this->once())->method('update')->with(
                 'customer_entity',
                 $toUpdate,
                 $conditionSql

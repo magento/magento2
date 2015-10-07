@@ -33,7 +33,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $optionValueCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -43,7 +43,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $optionValueCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_optionValueCollectionFactory = $optionValueCollectionFactory;
@@ -83,8 +83,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addTitleToResult($storeId)
     {
         $productOptionTitleTable = $this->getTable('catalog_product_option_title');
-        $adapter = $this->getConnection();
-        $titleExpr = $adapter->getCheckSql(
+        $connection = $this->getConnection();
+        $titleExpr = $connection->getCheckSql(
             'store_option_title.title IS NULL',
             'default_option_title.title',
             'store_option_title.title'
@@ -96,7 +96,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             ['default_title' => 'title']
         )->joinLeft(
             ['store_option_title' => $productOptionTitleTable],
-            'store_option_title.option_id = main_table.option_id AND ' . $adapter->quoteInto(
+            'store_option_title.option_id = main_table.option_id AND ' . $connection->quoteInto(
                 'store_option_title.store_id = ?',
                 $storeId
             ),
@@ -118,13 +118,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addPriceToResult($storeId)
     {
         $productOptionPriceTable = $this->getTable('catalog_product_option_price');
-        $adapter = $this->getConnection();
-        $priceExpr = $adapter->getCheckSql(
+        $connection = $this->getConnection();
+        $priceExpr = $connection->getCheckSql(
             'store_option_price.price IS NULL',
             'default_option_price.price',
             'store_option_price.price'
         );
-        $priceTypeExpr = $adapter->getCheckSql(
+        $priceTypeExpr = $connection->getCheckSql(
             'store_option_price.price_type IS NULL',
             'default_option_price.price_type',
             'store_option_price.price_type'
@@ -132,14 +132,14 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         $this->getSelect()->joinLeft(
             ['default_option_price' => $productOptionPriceTable],
-            'default_option_price.option_id = main_table.option_id AND ' . $adapter->quoteInto(
+            'default_option_price.option_id = main_table.option_id AND ' . $connection->quoteInto(
                 'default_option_price.store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ),
             ['default_price' => 'price', 'default_price_type' => 'price_type']
         )->joinLeft(
             ['store_option_price' => $productOptionPriceTable],
-            'store_option_price.option_id = main_table.option_id AND ' . $adapter->quoteInto(
+            'store_option_price.option_id = main_table.option_id AND ' . $connection->quoteInto(
                 'store_option_price.store_id = ?',
                 $storeId
             ),

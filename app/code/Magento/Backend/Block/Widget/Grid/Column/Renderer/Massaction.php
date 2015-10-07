@@ -43,10 +43,10 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
     /**
      * Returns HTML of the object
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($this->getColumn()->getGrid()->getMassactionIdFieldOnlyIndexValue()) {
             $this->setNoObjectId(true);

@@ -6,6 +6,9 @@
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -177,16 +180,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('getPostValue')
             ->will($this->returnValue($post));
 
-        $store = $this->getMock('\Magento\Store\Model\Store', ['getId', '__sleep', '__wakeup'], [], '', false);
-
-        $store->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(1));
-
-        $this->_storeManager->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($store));
-
         $transport = $this->getMock('\Magento\Framework\Mail\TransportInterface', [], [], '', false);
 
         $this->_transportBuilder->expects($this->once())
@@ -196,8 +189,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_transportBuilder->expects($this->once())
             ->method('setTemplateOptions')
             ->with([
-                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => 1,
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ])
             ->will($this->returnSelf());
 

@@ -9,9 +9,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetAddButtonId()
     {
-        $button = new \Magento\Framework\Object();
+        $button = new \Magento\Framework\DataObject();
 
-        $itemsBlock = $this->getMock('Magento\Framework\Object', ['getChildBlock']);
+        $itemsBlock = $this->getMock('Magento\Framework\DataObject', ['getChildBlock']);
         $itemsBlock->expects(
             $this->atLeastOnce()
         )->method(
@@ -22,7 +22,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($button)
         );
 
-        $layout = $this->getMock('Magento\Framework\Object', ['getBlock']);
+        $layout = $this->getMock('Magento\Framework\DataObject', ['getBlock']);
         $layout->expects(
             $this->atLeastOnce()
         )->method(

@@ -803,7 +803,7 @@ class EavSetup
     }
 
     /**
-     * Add Attribure Option
+     * Add Attribute Option
      *
      * @param array $option
      * @return void

@@ -31,7 +31,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected $customerAccountManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object\Copy
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\Copy
      */
     protected $objectCopyServiceMock;
 
@@ -62,7 +62,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectCopyServiceMock = $this->getMockBuilder('\Magento\Framework\Object\Copy')
+        $this->objectCopyServiceMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy')
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSessionMock = $this->getMockBuilder('\Magento\Customer\Model\Session')

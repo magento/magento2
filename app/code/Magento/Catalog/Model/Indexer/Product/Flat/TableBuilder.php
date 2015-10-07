@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Class TableBuilder
  */
@@ -36,7 +38,7 @@ class TableBuilder
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
     }
 
     /**

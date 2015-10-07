@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model\Express\Checkout;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\Object\Copy as CopyObject;
+use Magento\Framework\DataObject\Copy as CopyObject;
 
 /**
  * Class Quote

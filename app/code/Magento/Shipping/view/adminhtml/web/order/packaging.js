@@ -748,7 +748,7 @@ Packaging.prototype = {
 
     _observeQty: function() {
         /** this = input[type="checkbox"] */
-        var tr  = this.parentNode.parentNode,
+        var tr  = jQuery(this).closest('tr')[0],
             qty = $(tr.cells[tr.cells.length - 1]).select('input[name="qty"]')[0];
 
         if (qty.disabled = !this.checked) {

@@ -14,14 +14,14 @@ namespace Magento\Catalog\Model\Product;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class Url extends \Magento\Framework\Object
+class Url extends \Magento\Framework\DataObject
 {
     /**
-     * Static URL instance
+     * URL instance
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var \Magento\Framework\UrlFactory
      */
-    protected $_url;
+    protected $urlFactory;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
@@ -29,57 +29,41 @@ class Url extends \Magento\Framework\Object
     protected $filter;
 
     /**
-     * Catalog category
-     *
-     * @var \Magento\Catalog\Helper\Category
-     */
-    protected $_catalogCategory = null;
-
-    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
      */
-    protected $_sidResolver;
-
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
-    protected $productUrlPathGenerator;
+    protected $sidResolver;
 
     /** @var UrlFinderInterface */
     protected $urlFinder;
 
     /**
-     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\UrlFactory $urlFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\UrlFactory $urlFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Framework\Filter\FilterManager $filter,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
         UrlFinderInterface $urlFinder,
         array $data = []
     ) {
         parent::__construct($data);
-        $this->_url = $url;
-        $this->_storeManager = $storeManager;
-        $this->_catalogCategory = $catalogCategory;
+        $this->urlFactory = $urlFactory;
+        $this->storeManager = $storeManager;
         $this->filter = $filter;
-        $this->_sidResolver = $sidResolver;
-        $this->productUrlPathGenerator = $productUrlPathGenerator;
+        $this->sidResolver = $sidResolver;
         $this->urlFinder = $urlFinder;
     }
 
@@ -88,23 +72,9 @@ class Url extends \Magento\Framework\Object
      *
      * @return \Magento\Framework\UrlInterface
      */
-    public function getUrlInstance()
+    private function getUrlInstance()
     {
-        return $this->_url;
-    }
-
-    /**
-     * 'no_selection' shouldn't be a valid image attribute value
-     *
-     * @param string $image
-     * @return string
-     */
-    protected function _validImage($image)
-    {
-        if ($image == 'no_selection') {
-            $image = null;
-        }
-        return $image;
+        return $this->urlFactory->create();
     }
 
     /**
@@ -130,7 +100,7 @@ class Url extends \Magento\Framework\Object
     public function getProductUrl($product, $useSid = null)
     {
         if ($useSid === null) {
-            $useSid = $this->_sidResolver->getUseSessionInUrl();
+            $useSid = $this->sidResolver->getUseSessionInUrl();
         }
 
         $params = [];
@@ -167,12 +137,11 @@ class Url extends \Magento\Framework\Object
         $routeParams = $params;
 
         $storeId = $product->getStoreId();
-        if (isset($params['_ignore_category'])) {
-            unset($params['_ignore_category']);
-            $categoryId = null;
-        } else {
-            $categoryId = $product->getCategoryId() &&
-                !$product->getDoNotUseCategoryId() ? $product->getCategoryId() : null;
+
+        $categoryId = null;
+
+        if (!isset($params['_ignore_category']) && $product->getCategoryId() && !$product->getDoNotUseCategoryId()) {
+            $categoryId = $product->getCategoryId();
         }
 
         if ($product->hasUrlDataObject()) {
@@ -200,10 +169,10 @@ class Url extends \Magento\Framework\Object
         }
 
         if (isset($routeParams['_scope'])) {
-            $storeId = $this->_storeManager->getStore($routeParams['_scope'])->getId();
+            $storeId = $this->storeManager->getStore($routeParams['_scope'])->getId();
         }
 
-        if ($storeId != $this->_storeManager->getStore()->getId()) {
+        if ($storeId != $this->storeManager->getStore()->getId()) {
             $routeParams['_scope_to_url'] = true;
         }
 

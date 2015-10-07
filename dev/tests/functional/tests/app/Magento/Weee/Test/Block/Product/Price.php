@@ -18,7 +18,7 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      */
     protected $mapTypePrices = [
         'regular_price' => [
-            'selector' => '[data-price-type="finalPrice"] .price'
+            'selector' => '.price-final_price .price'
         ],
         'fpt_price' => [
             'selector' => '[data-price-type="weee"] .price',

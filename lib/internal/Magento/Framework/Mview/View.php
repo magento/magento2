@@ -11,7 +11,7 @@ namespace Magento\Framework\Mview;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends \Magento\Framework\Object implements ViewInterface
+class View extends \Magento\Framework\DataObject implements ViewInterface
 {
     /**
      * @var string

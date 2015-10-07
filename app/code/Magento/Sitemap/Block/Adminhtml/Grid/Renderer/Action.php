@@ -11,10 +11,10 @@ namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $this->getColumn()->setActions(
             [

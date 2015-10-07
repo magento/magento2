@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateInvalidArgument()
@@ -13,7 +15,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $className = 'class_name';
         $data = ['data'];
 
-        $object = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject('Magento\Framework\Object');
+        $object = (new ObjectManager($this))->getObject('Magento\Framework\DataObject');
 
         /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');

@@ -191,6 +191,23 @@ class Context implements ContextInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getFiltersParams()
+    {
+        return $this->getRequestParam(self::FILTER_VAR, []);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterParam($key, $defaultValue = null)
+    {
+        $filter = $this->getFiltersParams();
+        return isset($filter[$key]) ? $filter[$key] : $defaultValue;
+    }
+
+    /**
      * Get data provider
      *
      * @return DataProviderInterface
@@ -343,6 +360,6 @@ class Context implements ContextInterface
                 $this->prepareDataSource($data, $child);
             }
         }
-        $component->prepareDataSource($data);
+        $data = $component->prepareDataSource($data);
     }
 }

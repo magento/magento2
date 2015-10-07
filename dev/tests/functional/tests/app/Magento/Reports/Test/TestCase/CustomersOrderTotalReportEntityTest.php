@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Login to backend
  * 2. Open Reports > Customer > Order Total
- * 3. Fill data from dataSet
+ * 3. Fill data from dataset
  * 4. Click button Refresh
  * 5. Perform all assertions
  *
@@ -69,7 +69,7 @@ class CustomersOrderTotalReportEntityTest extends Injectable
         foreach ($orders as $order) {
             $order = $fixtureFactory->createByCode(
                 'orderInjectable',
-                ['dataSet' => $order, 'data' => ['customer_id' => ['customer' => $customer]]]
+                ['dataset' => $order, 'data' => ['customer_id' => ['customer' => $customer]]]
             );
             $order->persist();
         }

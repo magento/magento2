@@ -348,6 +348,58 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function validateData(\Magento\Framework\DataObject $dataObject)
+    {
+        $result = parent::validateData($dataObject);
+        if ($result === true) {
+            $result = [];
+        }
+
+        $action = $dataObject->getData('simple_action');
+        $discount = $dataObject->getData('discount_amount');
+        $result = array_merge($result, $this->validateDiscount($action, $discount));
+        if ($dataObject->getData('sub_is_enable') == 1) {
+            $action = $dataObject->getData('sub_simple_action');
+            $discount = $dataObject->getData('sub_discount_amount');
+            $result = array_merge($result, $this->validateDiscount($action, $discount));
+        }
+
+        return !empty($result) ? $result : true;
+    }
+
+    /**
+     * Validate discount based on action
+     *
+     * @param string $action
+     * @param string|int|float $discount
+     *
+     * @return array Validation errors
+     */
+    protected function validateDiscount($action, $discount)
+    {
+        $result = [];
+        switch ($action) {
+            case 'by_percent':
+            case 'to_percent':
+                if ($discount < 0 || $discount > 100) {
+                    $result[] = __('Percentage discount should be between 0 and 100.');
+                };
+                break;
+            case 'by_fixed':
+            case 'to_fixed':
+                if ($discount < 0) {
+                    $result[] = __('Discount value should be 0 or greater.');
+                };
+                break;
+            default:
+                $result[] = __('Unknown action.');
+        }
+        return $result;
+    }
+
+    /**
      * Calculate price using catalog price rule of product
      *
      * @param Product $product
@@ -484,5 +536,51 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         $this->_ruleProductProcessor->getIndexer()->invalidate();
         return parent::afterDelete();
+    }
+
+    /**
+     * Check if rule behavior changed
+     *
+     * @return bool
+     */
+    public function isRuleBehaviorChanged()
+    {
+        if (!$this->isObjectNew()) {
+            $arrayDiff = $this->dataDiff($this->getOrigData(), $this->getStoredData());
+            unset($arrayDiff['name']);
+            unset($arrayDiff['description']);
+            if (empty($arrayDiff)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get array with data differences
+     * @param array $array1
+     * @param array $array2
+     *
+     * @return array
+     */
+    protected function dataDiff($array1, $array2)
+    {
+        $result = [];
+        foreach ($array1 as $key => $value) {
+            if (array_key_exists($key, $array2)) {
+                if (is_array($value)) {
+                    if ($value != $array2[$key]) {
+                        $result[$key] = true;
+                    }
+                } else {
+                    if ($value != $array2[$key]) {
+                        $result[$key] = true;
+                    }
+                }
+            } else {
+                $result[$key] = true;
+            }
+        }
+        return $result;
     }
 }

@@ -130,7 +130,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($this->filterMock);
         $this->searchCriteriaBuilderMock
             ->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$this->filterMock])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock
@@ -176,7 +176,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($this->filterMock);
         $this->searchCriteriaBuilderMock
             ->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$this->filterMock])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock

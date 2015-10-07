@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Onepage;
 
 class Failure extends \Magento\Framework\View\Element\Template
@@ -41,7 +38,7 @@ class Failure extends \Magento\Framework\View\Element\Template
     /**
      *  Payment custom error message
      *
-     *  @return	string
+     * @return string
      */
     public function getErrorMessage()
     {

@@ -64,9 +64,9 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getIsDefault()) {
-            $this->_getWriteAdapter()->update($this->getMainTable(), ['is_default' => 0]);
+            $this->getConnection()->update($this->getMainTable(), ['is_default' => 0]);
             $where = ['website_id = ?' => $object->getId()];
-            $this->_getWriteAdapter()->update($this->getMainTable(), ['is_default' => 1], $where);
+            $this->getConnection()->update($this->getMainTable(), ['is_default' => 1], $where);
         }
         return parent::_afterSave($object);
     }
@@ -84,7 +84,7 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'scope_id = ?' => $model->getWebsiteId(),
         ];
 
-        $this->_getWriteAdapter()->delete($this->getTable('core_config_data'), $where);
+        $this->getConnection()->delete($this->getTable('core_config_data'), $where);
 
         return $this;
     }
@@ -98,12 +98,12 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getDefaultStoresSelect($includeDefault = false)
     {
-        $ifNull = $this->_getReadAdapter()->getCheckSql(
+        $ifNull = $this->getConnection()->getCheckSql(
             'store_group_table.default_store_id IS NULL',
             '0',
             'store_group_table.default_store_id'
         );
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['website_table' => $this->getTable('store_website')],
             ['website_id']
         )->joinLeft(
@@ -126,11 +126,11 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($includeDefault = false)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from($this->getMainTable(), 'COUNT(*)');
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), 'COUNT(*)');
         if (!$includeDefault) {
             $select->where('website_id <> ?', 0);
         }
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 }

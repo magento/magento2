@@ -5,12 +5,10 @@
  */
 namespace Magento\Framework\DB;
 
-\Zend_Loader::loadClass('\Zend_Db_Select');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\Node');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\NodeSet');
 use Magento\Framework\DB\Tree\Node;
 use Magento\Framework\DB\Tree\NodeSet;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Magento Library
@@ -64,9 +62,7 @@ class Tree
     private $_extTables = [];
 
     /**
-     * \Zend_Db_Adapter
-     *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $_db;
 
@@ -93,10 +89,10 @@ class Tree
                 $connection = \Zend::registry($connection);
             }
 
-            // make sure it's a \Zend_Db_Adapter
-            if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
+            // make sure it's a \Magento\Framework\DB\Adapter\AdapterInterface
+            if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('db object does not implement \Zend_Db_Adapter_Abstract')
+                    new Phrase('db object does not implement \Magento\Framework\DB\Adapter\AdapterInterface')
                 );
             }
 
@@ -107,7 +103,7 @@ class Tree
                 $conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             }
         } else {
-            throw new LocalizedException(new \Magento\Framework\Phrase('db object is not set in config'));
+            throw new LocalizedException(new Phrase('db object is not set in config'));
         }
 
         if (!empty($config['table'])) {
@@ -991,10 +987,10 @@ class Tree
     }
 
     /**
-     * @param \Zend_Db_Select $select
+     * @param Select $select
      * @return void
      */
-    protected function _addExtTablesToSelect(\Zend_Db_Select &$select)
+    protected function _addExtTablesToSelect(Select &$select)
     {
         foreach ($this->_extTables as $tableName => $info) {
             $select->joinInner($tableName, $info['joinCondition'], $info['fields']);
@@ -1017,7 +1013,7 @@ class Tree
             exit;
         }
 
-        $dbSelect = new \Zend_Db_Select($this->_db);
+        $dbSelect = new Select($this->_db);
         $dbSelect->from(
             $this->_table
         )->where(
@@ -1055,7 +1051,7 @@ class Tree
      */
     public function getNode($nodeId)
     {
-        $dbSelect = new \Zend_Db_Select($this->_db);
+        $dbSelect = new Select($this->_db);
         $dbSelect->from($this->_table)->where($this->_table . '.' . $this->_id . ' >= :id');
 
         $this->_addExtTablesToSelect($dbSelect);

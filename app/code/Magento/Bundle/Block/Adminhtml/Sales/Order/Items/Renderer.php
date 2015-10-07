@@ -33,10 +33,10 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     /**
      * Getting all available children for Invoice, Shipment or CreditMemo item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return array|null
      */
-    public function getChilds($item)
+    public function getChildren($item)
     {
         $itemsArray = [];
 

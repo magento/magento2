@@ -19,7 +19,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $layout->createBlock('Magento\Sales\Block\Adminhtml\Items\AbstractItems', 'block');
 
-        $item = new \Magento\Framework\Object();
+        $item = new \Magento\Framework\DataObject();
 
         $this->assertEmpty($block->getItemExtraInfoHtml($item));
 

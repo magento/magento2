@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Contact index controller
  */
-class Index extends \Magento\Framework\App\Action\Action
+abstract class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Recipient email config path

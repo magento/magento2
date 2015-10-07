@@ -50,7 +50,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
             ['stockRegistry' => $this->stockRegistry]
         );
-        $attribute = $this->getMock('Magento\Framework\Object', ['getAttributeCode']);
+        $attribute = $this->getMock('Magento\Framework\DataObject', ['getAttributeCode']);
         $attribute->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->will($this->returnValue(self::ATTRIBUTE_NAME));
@@ -68,7 +68,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));
-        $object = new \Magento\Framework\Object(['id' => $productId, 'store' => $store]);
+        $object = new \Magento\Framework\DataObject(['id' => $productId, 'store' => $store]);
         $this->model->afterLoad($object);
         $data = $object->getData();
         $this->assertEquals(1, $data[self::ATTRIBUTE_NAME]['is_in_stock']);
@@ -77,7 +77,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSave()
     {
-        $object = new \Magento\Framework\Object(
+        $object = new \Magento\Framework\DataObject(
             [
                 self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 5],
                 'stock_data' => ['is_in_stock' => 2, 'qty' => 2],
@@ -98,7 +98,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveQtyIsEmpty()
     {
-        $object = new \Magento\Framework\Object(
+        $object = new \Magento\Framework\DataObject(
             [
                 self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => ''],
                 'stock_data' => ['is_in_stock' => 2, 'qty' => ''],
@@ -113,7 +113,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveQtyIsZero()
     {
-        $object = new \Magento\Framework\Object(
+        $object = new \Magento\Framework\DataObject(
             [
                 self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 0],
                 'stock_data' => ['is_in_stock' => 2, 'qty' => 0],

@@ -3,29 +3,34 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Setup;
 
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Catalog\Model\Category;
 
 /**
+ * Upgrade Data script
  * @codeCoverageIgnore
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var Category
+     * Category setup factory
+     *
+     * @var CategorySetupFactory
      */
-    protected $category;
+    private $categorySetupFactory;
 
     /**
-     * @param Category $category
+     * Init
+     *
+     * @param CategorySetupFactory $categorySetupFactory
      */
-    public function __construct(Category $category)
+    public function __construct(CategorySetupFactory $categorySetupFactory)
     {
-        $this->category = $category;
+        $this->categorySetupFactory = $categorySetupFactory;
     }
 
     /**
@@ -33,24 +38,53 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.0.2') < 0) {
-            $newBackendModel = 'Magento\Catalog\Model\Attribute\Backend\Startdate';
-            $connection = $setup->getConnection();
-            $connection->startSetup();
-            $connection->update(
-                $setup->getTable('eav_attribute'),
-                ['backend_model' => $newBackendModel],
-                ['backend_model = ?' => 'Magento\Catalog\Model\Product\Attribute\Backend\Startdate']
+        $setup->startSetup();
+        if (version_compare($context->getVersion(), '2.0.1') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+
+            $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+            $attributeSetId = $categorySetup->getDefaultAttributeSetId($entityTypeId);
+
+            $attributeGroupId = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, 'Images');
+
+            // update General Group
+            $categorySetup->updateAttributeGroup(
+                $entityTypeId,
+                $attributeSetId,
+                $attributeGroupId,
+                'attribute_group_name',
+                'Images and Videos'
             );
-            /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-            foreach ($this->category->getAttributes() as $attribute) {
-                if ($attribute->getAttributeCode() == 'custom_design_from') {
-                    $attribute->setBackendModel($newBackendModel);
-                    $attribute->save();
-                    break;
-                }
-            }
-            $connection->endSetup();
+            $select = $setup->getConnection()->select()
+                ->from(
+                    $setup->getTable('catalog_product_entity_group_price'),
+                    [
+                        'value_id',
+                        'entity_id',
+                        'all_groups',
+                        'customer_group_id',
+                        new \Zend_Db_Expr('1'),
+                        'value',
+                        'website_id'
+                    ]
+                );
+            $setup->getConnection()->insertFromSelect(
+                $select,
+                $setup->getTable('catalog_product_entity_group_price'),
+                [
+                    'value_id',
+                    'entity_id',
+                    'all_groups',
+                    'customer_group_id',
+                    'qty',
+                    'value',
+                    'website_id'
+                ]
+            );
+            $categorySetupManager = $this->categorySetupFactory->create();
+            $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
         }
+        $setup->endSetup();
     }
 }

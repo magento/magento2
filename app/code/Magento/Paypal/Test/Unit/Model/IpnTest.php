@@ -66,16 +66,19 @@ class IpnTest extends \PHPUnit_Framework_TestCase
 
         $this->configFactory = $this->getMock(
             'Magento\Paypal\Model\ConfigFactory',
-            ['create', 'isMethodActive', 'isMethodAvailable', 'getValue', 'getPaypalUrl'],
+            ['create'],
             [],
             '',
             false
         );
-        $this->configFactory->expects($this->any())->method('create')->will($this->returnSelf());
-        $this->configFactory->expects($this->any())->method('isMethodActive')->will($this->returnValue(true));
-        $this->configFactory->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
-        $this->configFactory->expects($this->any())->method('getValue')->will($this->returnValue(null));
-        $this->configFactory->expects($this->any())->method('getPaypalUrl')
+        $configMock = $this->getMockBuilder('Magento\Paypal\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configFactory->expects($this->any())->method('create')->willReturn($configMock);
+        $configMock->expects($this->any())->method('isMethodActive')->will($this->returnValue(true));
+        $configMock->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
+        $configMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $configMock->expects($this->any())->method('getPaypalUrl')
             ->will($this->returnValue('http://paypal_url'));
 
         $this->curlFactory = $this->getMock(

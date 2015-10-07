@@ -8,22 +8,22 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer) {
+    function (quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
         'use strict';
 
-        return function () {
+        return function (messageContainer, paymentData) {
             var serviceUrl,
-                payload,
-                paymentData = quote.paymentMethod();
+                payload;
 
             /**
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/set-payment-information', {
-                    quoteId: quote.getQuoteId()
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
+                    cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
@@ -39,15 +39,18 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             }
+
+            fullScreenLoader.startLoader();
             return storage.post(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, JSON.stringify(payload), false
             ).done(
                 function () {
                     //do nothing
                 }
             ).fail(
                 function (response) {
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
+                    fullScreenLoader.stopLoader();
                 }
             );
         };

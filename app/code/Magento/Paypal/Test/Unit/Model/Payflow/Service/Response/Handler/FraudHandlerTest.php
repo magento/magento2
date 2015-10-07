@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Info;
@@ -37,14 +37,17 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $this->paypalInfoManagerMock = $this->getMockBuilder('Magento\Paypal\Model\Info')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fraudHandler = new FraudHandler($this->paypalInfoManagerMock);
+        $this->fraudHandler = new FraudHandler(
+            $this->paypalInfoManagerMock,
+            new \Magento\Framework\Xml\Security()
+        );
     }
 
     public function testHandleApprovedTransaction()
@@ -124,11 +127,12 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns rules xml list as string
      *
+     * @param string $fileName
      * @return string
      */
-    private function getRulesXmlString()
+    private function getRulesXmlString($fileName = 'fps_prexmldata.xml')
     {
-        return file_get_contents(__DIR__ .'/_files/fps_prexmldata.xml');
+        return file_get_contents(__DIR__ . '/_files/' . $fileName);
     }
 
     /**
@@ -152,5 +156,46 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
             'USPS Address Validation Failure' =>
                 'The billing address is not a valid USAddress'
         ];
+    }
+
+    /**
+     * Check attempting to read invalid XML file (XXE XML)
+     */
+    public function testHandleXXEXml()
+    {
+        $file = __DIR__ . '/_files/xxe-xml.txt';
+        $rulesString = str_replace('{file}', $file, $this->getRulesXmlString('xxe_fps_prexmldata.xml'));
+
+        $this->responseMock->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    [FraudHandler::RESPONSE_MESSAGE, null, 'New fraud message'],
+                    [FraudHandler::FRAUD_RULES_XML, null, $rulesString],
+                    ['result', null, Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER]
+                ]
+            );
+        $this->paymentMock->expects($this->once())
+            ->method('getAdditionalInformation')
+            ->with(Info::FRAUD_FILTERS)
+            ->willReturn(
+                [
+                    'Total Purchase Price Ceiling' => 'Existing fraud message',
+                    'RESPMSG' => 'Existing fraud message'
+                ]
+            );
+
+        $this->paypalInfoManagerMock->expects($this->once())
+            ->method('importToPayment')
+            ->with(
+                [
+                    Info::FRAUD_FILTERS => [
+                        'RESPMSG' => 'Existing fraud message',
+                        'Total Purchase Price Ceiling' => 'Existing fraud message'
+                    ]
+                ]
+            );
+
+        $this->fraudHandler->handle($this->paymentMock, $this->responseMock);
     }
 }

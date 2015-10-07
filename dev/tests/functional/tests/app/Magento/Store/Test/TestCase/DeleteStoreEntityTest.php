@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Go to Stores -> All Stores
  * 3. Open created store view
  * 4. Click "Delete Store View"
- * 5. Set "Create DB Backup" according to dataSet
+ * 5. Set "Create DB Backup" according to dataset
  * 6. Click "Delete Store View"
  * 7. Perform all assertions
  *

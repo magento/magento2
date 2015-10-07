@@ -9,13 +9,13 @@
 ?>
 <?php /* @var $block \Magento\Paypal\Block\Payment\Form\Billing\Agreement */?>
 <?php $_code = $block->getMethodCode() ?>
-<div class="field items required" id="payment_form_<?php echo $_code ?>" style="display:none;">
-    <label for="<?php echo $_code ?>_ba_agreement_id" class="label"><span><?php echo __('Billing Agreement') ?></span></label>
+<div class="field items required" id="payment_form_<?php /* @escapeNotVerified */ echo $_code ?>" style="display:none;">
+    <label for="<?php /* @escapeNotVerified */ echo $_code ?>_ba_agreement_id" class="label"><span><?php /* @escapeNotVerified */ echo __('Billing Agreement') ?></span></label>
     <div class="control">
-        <select id="<?php echo $_code ?>_ba_agreement_id" name="payment[<?php echo $block->getTransportName(); ?>]" class="select">
-            <option value=""><?php echo __('-- Please Select Billing Agreement--') ?></option>
+        <select id="<?php /* @escapeNotVerified */ echo $_code ?>_ba_agreement_id" name="payment[<?php /* @escapeNotVerified */ echo $block->getTransportName(); ?>]" class="select">
+            <option value=""><?php /* @escapeNotVerified */ echo __('-- Please Select Billing Agreement--') ?></option>
         <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
-            <option value="<?php echo $id ?>"><?php echo $block->escapeHtml($referenceId) ?></option>
+            <option value="<?php /* @escapeNotVerified */ echo $id ?>"><?php echo $block->escapeHtml($referenceId) ?></option>
         <?php endforeach ?>
         </select>
     </div>

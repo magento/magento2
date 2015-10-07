@@ -24,7 +24,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPrice()
     {
-        $this->assertEquals('test', $this->_model->getPrice(new \Magento\Framework\Object(['price' => 'test'])));
+        $this->assertEquals('test', $this->_model->getPrice(new \Magento\Framework\DataObject(['price' => 'test'])));
     }
 
     public function testGetFinalPrice()

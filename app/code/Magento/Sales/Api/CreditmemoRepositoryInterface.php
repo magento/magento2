@@ -32,6 +32,13 @@ interface CreditmemoRepositoryInterface
     public function get($id);
 
     /**
+     * Create credit memo instance
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
+     */
+    public function create();
+
+    /**
      * Deletes a specified credit memo.
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo.

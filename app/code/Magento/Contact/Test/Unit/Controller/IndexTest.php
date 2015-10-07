@@ -54,7 +54,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_controller = new \Magento\Contact\Controller\Index(
+        $this->_controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
             $context,
             $this->getMock('\Magento\Framework\Mail\Template\TransportBuilder', [], [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\Translate\Inline\StateInterface', [], '', false),

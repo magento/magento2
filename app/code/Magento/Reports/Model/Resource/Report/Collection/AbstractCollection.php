@@ -157,10 +157,10 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
     /**
      * Apply stores filter to select object
      *
-     * @param \Zend_Db_Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return $this
      */
-    protected function _applyStoresFilterToSelect(\Zend_Db_Select $select)
+    protected function _applyStoresFilterToSelect(\Magento\Framework\DB\Select $select)
     {
         $nullCheck = false;
         $storeIds = $this->_storesIds;

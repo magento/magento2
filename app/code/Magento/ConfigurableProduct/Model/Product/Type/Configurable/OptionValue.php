@@ -7,8 +7,6 @@
 
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-use Magento\ConfigurableProduct\Api\Data\OptionValueInterface;
-
 /**
  * Class OptionValue
  *
@@ -19,27 +17,10 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     /**#@+
      * Constants for field names
      */
-    const KEY_PRICING_VALUE = 'pricing_value';
-    const KEY_IS_PERCENT = 'is_percent';
     const KEY_VALUE_INDEX = 'value_index';
     /**#@-*/
 
     //@codeCoverageIgnoreStart
-    /**
-     * {@inheritdoc}
-     */
-    public function getPricingValue()
-    {
-        return $this->getData(self::KEY_PRICING_VALUE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIsPercent()
-    {
-        return $this->getData(self::KEY_IS_PERCENT);
-    }
 
     /**
      * {@inheritdoc}
@@ -47,24 +28,6 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     public function getValueIndex()
     {
         return $this->getData(self::KEY_VALUE_INDEX);
-    }
-
-    /**
-     * @param float $pricingValue
-     * @return $this
-     */
-    public function setPricingValue($pricingValue)
-    {
-        return $this->setData(self::KEY_PRICING_VALUE, $pricingValue);
-    }
-
-    /**
-     * @param int $isPercent
-     * @return $this
-     */
-    public function setIsPercent($isPercent)
-    {
-        return $this->setData(self::KEY_IS_PERCENT, $isPercent);
     }
 
     /**

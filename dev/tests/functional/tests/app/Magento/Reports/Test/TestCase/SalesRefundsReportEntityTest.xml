@@ -6,11 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\SalesRefundsReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\SalesRefundsReportEntityTest" summary="Sales Refunds Report" ticketId="MAGETWO-29348">
         <variation name="SalesRefundsReportEntityTestVariation1">
             <data name="description" xsi:type="string">assert refunds year report</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="refundsReport/report_type" xsi:type="string">Order Created</data>
             <data name="refundsReport/period_type" xsi:type="string">Year</data>
             <data name="refundsReport/from" xsi:type="string">m/d/Y 12:00 a-2 days</data>
@@ -21,8 +21,8 @@
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation2">
             <data name="description" xsi:type="string">assert refunds month report</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="refundsReport/report_type" xsi:type="string">Order Created</data>
             <data name="refundsReport/period_type" xsi:type="string">Month</data>
             <data name="refundsReport/from" xsi:type="string">m/d/Y</data>
@@ -33,8 +33,8 @@
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation3">
             <data name="description" xsi:type="string">assert refund Daily report</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="refundsReport/report_type" xsi:type="string">Last Credit Memo Created Date</data>
             <data name="refundsReport/period_type" xsi:type="string">Day</data>
             <data name="refundsReport/from" xsi:type="string">m/d/Y</data>

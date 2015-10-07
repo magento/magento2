@@ -13,14 +13,14 @@
     &.popup {
         .action {
             &.close {
-                .css(top, @popup-button-close__position-top);
+                .lib-css(top, @popup-button-close__position-top);
             }
         }
     }
 }
 
 .map-popup {
-    .popup(
+    .lib-popup(
         @_popup-margin-top: @indent__s,
         @_popup-margin-left: false,
         @_popup-content-margin: @indent__s 0 0,

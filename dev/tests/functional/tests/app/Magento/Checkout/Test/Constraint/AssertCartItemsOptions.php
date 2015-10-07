@@ -30,7 +30,7 @@ class AssertCartItemsOptions extends AbstractAssertForm
 
     /**
      * Assert that cart item options for product(s) display with correct information block
-     * (custom options, variations, links, samples, bundle items etc) according to passed from dataSet.
+     * (custom options, variations, links, samples, bundle items etc) according to passed from dataset.
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart

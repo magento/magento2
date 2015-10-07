@@ -36,9 +36,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $blockConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\Magento\Framework\View\Asset\ConfigInterface
+     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $bundleConfig;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minificationMock;
 
     protected function setUp()
     {
@@ -65,10 +70,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('/path/to/require/require.js');
+        $minResolverAsset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $minResolverAsset
+            ->expects($this->atLeastOnce())
+            ->method('getFilePath')
+            ->willReturn('/path/to/require/require-min-resolver.js');
 
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsConfigAsset')
+            ->will($this->returnValue($requireJsAsset));
+        $this->fileManager
+            ->expects($this->once())
+            ->method('createRequireJsMixinsAsset')
             ->will($this->returnValue($requireJsAsset));
         $this->fileManager
             ->expects($this->once())
@@ -78,6 +92,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createBundleJsPool')
             ->will($this->returnValue([$asset]));
+        $this->fileManager
+            ->expects($this->once())
+            ->method('createMinResolverAsset')
+            ->will($this->returnValue($minResolverAsset));
 
         $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
 
@@ -93,7 +111,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('insert')
             ->willReturn(true);
 
-        $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig, $this->bundleConfig);
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
+
+
+        $object = new Config(
+            $this->context,
+            $this->config,
+            $this->fileManager,
+            $this->pageConfig,
+            $this->bundleConfig,
+            $this->minificationMock
+        );
         $object->setLayout($layout);
     }
 
@@ -108,7 +143,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface')
             ));
         $this->config->expects($this->once())->method('getBaseConfig')->will($this->returnValue('the config data'));
-        $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig, $this->bundleConfig);
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $object = new Config(
+            $this->context,
+            $this->config,
+            $this->fileManager,
+            $this->pageConfig,
+            $this->bundleConfig,
+            $this->minificationMock
+        );
         $html = $object->toHtml();
         $expectedFormat = <<<expected
 <script type="text/javascript">

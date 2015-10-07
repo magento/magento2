@@ -21,7 +21,7 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
             return $this->_redirect('backup/*/index');
         }
 
-        $resultData = new \Magento\Framework\Object();
+        $resultData = new \Magento\Framework\DataObject();
         $resultData->setIsSuccess(false);
         $resultData->setDeleteResult([]);
         $this->_coreRegistry->register('backup_manager', $resultData);

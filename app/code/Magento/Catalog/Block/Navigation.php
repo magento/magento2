@@ -17,7 +17,7 @@ use Magento\Customer\Model\Context;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Category
@@ -196,7 +196,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     /**
      * Checkin activity of category
      *
-     * @param   \Magento\Framework\Object $category
+     * @param   \Magento\Framework\DataObject $category
      * @return  bool
      */
     public function isCategoryActive($category)

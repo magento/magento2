@@ -9,8 +9,6 @@ namespace Magento\Catalog\Test\TestCase\Product;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create products.
  * 2. Assign promoted products.

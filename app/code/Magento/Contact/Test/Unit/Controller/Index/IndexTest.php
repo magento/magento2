@@ -93,30 +93,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $layout = $this->getMock(
-            '\Magento\Framework\View\Layout',
-            ['getBlock', 'initMessages'],
-            [],
-            '',
-            false
-        );
-        $block = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\Element\AbstractBlock',
-            ['setFormAction'],
-            '',
-            false
-        );
-        $layout->expects($this->once())
-            ->method('getBlock')
-            ->with('contactForm')
-            ->will($this->returnValue($block));
-
         $this->_view->expects($this->once())
             ->method('loadLayout');
-
-        $this->_view->expects($this->exactly(1))
-            ->method('getLayout')
-            ->will($this->returnValue($layout));
 
         $this->_view->expects($this->once())
             ->method('renderLayout');

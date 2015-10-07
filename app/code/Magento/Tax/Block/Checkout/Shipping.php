@@ -28,6 +28,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
@@ -36,10 +37,11 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
+        array $layoutProcessors = [],
         array $data = []
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $layoutProcessors, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -70,7 +72,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingIncludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingInclTax();
+        return $this->getTotal()->getShippingInclTax();
     }
 
     /**
@@ -80,7 +82,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingExcludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingAmount();
+        return $this->getTotal()->getValue();
     }
 
     /**
@@ -92,7 +94,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
@@ -105,7 +107,20 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
+    }
+
+    /**
+     * Determine shipping visibility based on selected method.
+     *
+     * @return bool
+     */
+    public function displayShipping()
+    {
+        if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
+            return false;
+        }
+        return true;
     }
 }

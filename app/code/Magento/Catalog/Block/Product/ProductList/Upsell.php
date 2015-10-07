@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     protected $_columnCount = 4;
 
     /**
-     * @var  \Magento\Framework\Object[]
+     * @var  \Magento\Framework\DataObject[]
      */
     protected $_items;
 
@@ -138,7 +138,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
     {

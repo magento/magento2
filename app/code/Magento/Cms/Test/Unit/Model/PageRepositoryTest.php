@@ -6,7 +6,7 @@
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\PageRepository;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Test for Magento\Cms\Model\PageRepository
@@ -147,10 +147,10 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->page->expects($this->once())
             ->method('getId')
             ->willReturn(true);
-        $this->pageResource->expects($this->once())
+        $this->page->expects($this->once())
             ->method('load')
-            ->with($this->page, $pageId)
-            ->willReturn($this->page);
+            ->with($pageId)
+            ->willReturnSelf();
         $this->pageResource->expects($this->once())
             ->method('delete')
             ->with($this->page)
@@ -199,10 +199,10 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->page->expects($this->once())
             ->method('getId')
             ->willReturn(false);
-        $this->pageResource->expects($this->once())
+        $this->page->expects($this->once())
             ->method('load')
-            ->with($this->page, $pageId)
-            ->willReturn($this->page);
+            ->with($pageId)
+            ->willReturnSelf();
         $this->repository->getById($pageId);
     }
 
@@ -236,7 +236,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeFilter->expects($this->any())->method('getField')->willReturn('store_id');
         $storeFilter->expects($this->once())->method('getValue')->willReturn(1);
         $sortOrder->expects($this->once())->method('getField')->willReturn($sortField);
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SearchCriteriaInterface::SORT_DESC);
+        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_DESC);
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
 

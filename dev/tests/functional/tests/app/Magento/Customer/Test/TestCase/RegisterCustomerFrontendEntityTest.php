@@ -29,7 +29,6 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     const MVP = 'yes';
     const DOMAIN = 'CS';
     const TEST_TYPE = 'acceptance_test';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -64,13 +63,13 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     }
 
     /**
-     * Create Customer account on frontend
+     * Create Customer account on Storefront.
      *
      * @param Customer $customer
      */
     public function test(Customer $customer)
     {
-        //Steps
+        // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);

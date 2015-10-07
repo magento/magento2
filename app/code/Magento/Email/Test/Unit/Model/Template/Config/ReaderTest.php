@@ -23,9 +23,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_moduleDirResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystemDirectoryMock;
+    protected $read;
 
     /**
      * Paths to fixtures
@@ -79,24 +79,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_filesystemDirectoryMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Read',
+        $readFactory = $this->getMock(
+            '\Magento\Framework\Filesystem\File\ReadFactory',
             [],
             [],
             '',
             false
         );
-
-        $this->_filesystemDirectoryMock->expects(
-            $this->any()
-        )->method(
-            'getAbsolutePath'
-        )->will(
-            $this->returnArgument(0)
-        );
+        $this->read = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $readFactory->expects($this->any())->method('create')->willReturn($this->read);
 
         $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
-            $this->_filesystemDirectoryMock,
+            $readFactory,
             $this->_paths,
             $this->_moduleDirResolver
         );
@@ -121,17 +115,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $this->_filesystemDirectoryMock->expects(
-            $this->at(1)
+        $this->read->expects(
+            $this->at(0)
         )->method(
-            'readFile'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[0]))
         );
-        $this->_filesystemDirectoryMock->expects(
-            $this->at(3)
+        $this->read->expects(
+            $this->at(1)
         )->method(
-            'readFile'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[1]))
         );

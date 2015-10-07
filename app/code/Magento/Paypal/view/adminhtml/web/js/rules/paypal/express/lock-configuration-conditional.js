@@ -7,7 +7,19 @@ define([
 ], function (lockConfiguration) {
     "use strict";
     return function ($target, $owner, data) {
-        if ($owner.find(data.enableButton).val() == 1) {
+        var isDisabled = true;
+
+        _.every(data.argument, function (name) {
+            if (data.solutionsElements[name]
+                && data.solutionsElements[name].find(data.enableButton).val() == 1
+            ) {
+                isDisabled = false;
+                return isDisabled;
+            }
+            return isDisabled;
+        }, this);
+
+        if (!isDisabled) {
             lockConfiguration($target, $owner, data);
         }
     };

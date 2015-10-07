@@ -5,7 +5,7 @@
 
 //  # Default button
 //
-//  Default style for buttons is set by the <code>.button()</code> mixin. The mixin is called in <code>.magento-reset()</code> or it can be called directly.
+//  Default style for buttons is set by the <code>.lib-button()</code> mixin. The mixin is called in <code>.lib-magento-reset()</code> or it can be called directly.
 //
 //  ## Default button large
 //  ```html
@@ -33,7 +33,7 @@
 //
 
 button {
-    .button(@_button-margin: 3px);
+    .lib-button(@_button-margin: 3px);
     border-radius: 3px;
     &:active,
     &:focus {
@@ -43,10 +43,10 @@ button {
 
 .example-button-1 {
     &.example-button-2 {
-        .button-l();
+        .lib-button-l();
     }
     &.example-button-3 {
-        .button-s();
+        .lib-button-s();
         border-radius: 0;
         color: #000;
         &:hover,
@@ -345,13 +345,13 @@ button {
 //
 
 .example-button-10 {
-    .button(
+    .lib-button(
         @_button-margin: 3px,
         @_button-icon-use: true,
         @_button-font-content: @icon-cart,
         @_button-icon-font-text-hide: true
     );
-    .button-reset();
+    .lib-button-reset();
 }
 
 //  # Button with an icon on the left or right side of the text
@@ -398,7 +398,7 @@ button {
 //
 
 .example-button-11 {
-    .button(
+    .lib-button(
         @_button-margin: 3px,
         @_button-icon-use: true,
         @_button-font-content: @icon-cart,
@@ -407,7 +407,7 @@ button {
 }
 
 .example-button-12 {
-    .button(
+    .lib-button(
         @_button-margin: 3px,
         @_button-icon-use: true,
         @_button-font-content: @icon-cart,
@@ -439,12 +439,12 @@ button {
 //
 
 .example-button-13 {
-    .button(@_button-width: 100px, @_button-margin: 3px);
+    .lib-button(@_button-width: 100px, @_button-margin: 3px);
 }
 
 //  # Primary button
 //
-//  The <code>.button-primary()</code> mixin is used to create a **primary button**. By default it uses Primary button variables from _variables.less file.
+//  The <code>.lib-button-primary()</code> mixin is used to create a **primary button**. By default it uses Primary button variables from _variables.less file.
 //
 //  ##Primary button big
 //  ```html
@@ -472,17 +472,17 @@ button {
 //
 
 .example-button-4 {
-    .button-primary(
+    .lib-button-primary(
         @_button-margin: 3px
     );
     &:active {
         box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
     }
     &.example-button-5 {
-        .button-l(@_button-l-padding: 7px 35px);
+        .lib-button-l(@_button-l-padding: 7px 35px);
     }
     &.example-button-6 {
-        .button-s();
+        .lib-button-s();
         color: #fff;
         &:hover,
         &.active {
@@ -493,7 +493,7 @@ button {
 
 //  # Primary button variables
 //
-//  In the variables list primary buttons are configured with @button-primary__ prefix. So for example to configure primary button background you should use @_button-background variable of the mixin or @button-primary__background of the global variables list.
+//  In the variables list primary buttons are configured with <code>@button-primary__</code> prefix. So for example to configure primary button background you should use <code>@_button-background</code> variable of the mixin or <code>@button-primary__background</code> of the global variables list.
 //  <pre>
 //    <table>
 //        <tr>
@@ -642,7 +642,7 @@ button {
 
 //  # Button with gradient background
 //
-//  The <code>.button()</code> mixin can get its values from _variables.less file or directly
+//  The <code>.lib-button()</code> mixin can get its values from _variables.less file or directly
 //  ```html
 //  <button class="example-button-7" type="button"><span>Button</span></button>
 //  <button class="example-button-7 :hover" type="button"><span>Hover</span></button>
@@ -652,7 +652,7 @@ button {
 //
 
 .example-button-7 {
-    .button(
+    .lib-button(
         @_button-margin: 3px,
         @_button-padding: @button__padding,
         @_button-gradient-color-start: #1979c3,
@@ -678,7 +678,7 @@ button {
 
 //  # Button as a link
 //
-//  The <code>.button-as-link()</code> mixin is used to make button look like a link. It resets default button styles.
+//  The <code>.lib-button-as-link()</code> mixin is used to make button look like a link. It resets default button styles.
 //
 //  ```html
 //  <button class="example-button-8" type="button"><span>Button</span></button>
@@ -690,7 +690,7 @@ button {
 //
 
 .example-button-8 {
-    .button-as-link();
+    .lib-button-as-link();
     font-weight: normal;
     &:active {
         box-shadow: none;
@@ -740,7 +740,7 @@ button {
 
 //  # Link as a button
 //
-//  The <code>.link-as-button()</code> mixin is used to reset link styles (text-decoration and display inline). Then to make it look like a button, you need to add the <code>.button()</code> mixin with appropriate paremeters.
+//  The <code>.lib-link-as-button()</code> mixin is used to reset link styles (text-decoration and display inline). Then to make it look like a button, you need to add the <code>.lib-button()</code> mixin with appropriate paremeters.
 //
 //  ```html
 //  <a href="#" class="example-button-9"><span>Button</span></a>
@@ -751,8 +751,8 @@ button {
 //
 
 .example-button-9 {
-    .link-as-button();
-    .button();
+    .lib-link-as-button();
+    .lib-button();
     margin: 3px;
     border-radius: 3px;
     font-weight: bold;
@@ -763,7 +763,7 @@ button {
 
 //  # Button reset
 //
-//  The <code>.button-reset()</code> mixin is used to fully reset button styles.
+//  The <code>.lib-button-reset()</code> mixin is used to fully reset button styles.
 //
 //  ```html
 //  <button class="example-button-14" type="button"><span>Button with reset styles</span></button>
@@ -771,12 +771,12 @@ button {
 //
 
 .example-button-14 {
-    .button-reset();
+    .lib-button-reset();
 }
 
 //  # Button revert secondary color
 //
-//  The <code>.button-revert-secondary-color()</code> mixin is used to revert button styles (primary for example) to secondary color styles.
+//  The <code>.lib-button-revert-secondary-color()</code> mixin is used to revert button styles (primary for example) to secondary color styles.
 //  Also can be passed any color, background and border if needed.
 //
 //  ```html
@@ -786,8 +786,8 @@ button {
 //
 
 .example-button-15 {
-    .button-primary();
-    .button-revert-secondary-color();
+    .lib-button-primary();
+    .lib-button-revert-secondary-color();
 }
 
 //  # Button revert secondary color variables
@@ -858,7 +858,7 @@ button {
 
 //  # Button revert secondary size
 //
-//  The <code>.button-revert-secondary-size()</code> mixin is used to revert button sizes to secondary button sizes.
+//  The <code>.lib-button-revert-secondary-size()</code> mixin is used to revert button sizes to secondary button sizes.
 //  Also can be passed font-size, line-height and padding if needed.
 //
 //  ```html
@@ -868,11 +868,11 @@ button {
 //
 
 .example-button-17 {
-    .button-l();
-    .button-revert-secondary-size();
+    .lib-button-l();
+    .lib-button-revert-secondary-size();
 }
 .example-button-18 {
-    .button-revert-secondary-size(
+    .lib-button-revert-secondary-size(
         @_button-font-size: 10px,
         @_button-line-height: 12px,
         @_button-padding: 4px 10px

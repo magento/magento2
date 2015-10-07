@@ -40,19 +40,19 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -97,7 +97,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($object->getPrice() && $priceType) {
             //save for store_id = 0
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $priceTable,
                 'option_type_id'
             )->where(
@@ -107,7 +107,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             );
-            $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
+            $optionTypeId = $this->getConnection()->fetchOne($select);
 
             if ($optionTypeId) {
                 if ($object->getStoreId() == '0') {
@@ -117,7 +117,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     ];
 
-                    $this->_getWriteAdapter()->update($priceTable, $bind, $where);
+                    $this->getConnection()->update($priceTable, $bind, $where);
                 }
             } else {
                 $bind = [
@@ -126,7 +126,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'price' => $price,
                     'price_type' => $priceType,
                 ];
-                $this->_getWriteAdapter()->insert($priceTable, $bind);
+                $this->getConnection()->insert($priceTable, $bind);
             }
         }
 
@@ -162,7 +162,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         $newPrice = $price;
                     }
 
-                    $select = $this->_getReadAdapter()->select()->from(
+                    $select = $this->getConnection()->select()->from(
                         $priceTable,
                         'option_type_id'
                     )->where(
@@ -172,13 +172,13 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         'store_id = ?',
                         (int)$storeId
                     );
-                    $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
+                    $optionTypeId = $this->getConnection()->fetchOne($select);
 
                     if ($optionTypeId) {
                         $bind = ['price' => $newPrice, 'price_type' => $priceType];
                         $where = ['option_type_id = ?' => (int)$optionTypeId, 'store_id = ?' => (int)$storeId];
 
-                        $this->_getWriteAdapter()->update($priceTable, $bind, $where);
+                        $this->getConnection()->update($priceTable, $bind, $where);
                     } else {
                         $bind = [
                             'option_type_id' => (int)$object->getId(),
@@ -187,7 +187,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                             'price_type' => $priceType,
                         ];
 
-                        $this->_getWriteAdapter()->insert($priceTable, $bind);
+                        $this->getConnection()->insert($priceTable, $bind);
                     }
                 }
             }
@@ -202,7 +202,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         'option_type_id = ?' => (int)$object->getId(),
                         'store_id = ?' => $storeId,
                     ];
-                    $this->_getWriteAdapter()->delete($priceTable, $where);
+                    $this->getConnection()->delete($priceTable, $where);
                 }
             }
         }
@@ -219,7 +219,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         foreach ([\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
             $titleTable = $this->getTable('catalog_product_option_type_title');
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $titleTable,
                 ['option_type_id']
             )->where(
@@ -229,7 +229,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'store_id = ?',
                 (int)$storeId
             );
-            $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
+            $optionTypeId = $this->getConnection()->fetchOne($select);
             $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, (int)$object->getId(), (int)$storeId);
             if ($object->getTitle()) {
                 if ($existInCurrentStore) {
@@ -239,7 +239,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                             'store_id = ?' => $storeId,
                         ];
                         $bind = ['title' => $object->getTitle()];
-                        $this->_getWriteAdapter()->update($titleTable, $bind, $where);
+                        $this->getConnection()->update($titleTable, $bind, $where);
                     }
                 } else {
                     $existInDefaultStore = $this->getOptionIdFromOptionTable(
@@ -256,7 +256,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                             'store_id' => $storeId,
                             'title' => $object->getTitle(),
                         ];
-                        $this->_getWriteAdapter()->insert($titleTable, $bind);
+                        $this->getConnection()->insert($titleTable, $bind);
                     }
                 }
             } else {
@@ -268,7 +268,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         'option_type_id = ?' => (int)$optionTypeId,
                         'store_id = ?' => $storeId,
                     ];
-                    $this->_getWriteAdapter()->delete($titleTable, $where);
+                    $this->getConnection()->delete($titleTable, $where);
                 }
             }
         }
@@ -284,8 +284,8 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function getOptionIdFromOptionTable($tableName, $optionId, $storeId)
     {
-        $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $tableName,
             ['option_type_id']
         )->where(
@@ -295,7 +295,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'store_id = ?',
             (int)$storeId
         );
-        return $readAdapter->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -306,20 +306,20 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteValue($optionId)
     {
-        $statement = $this->_getReadAdapter()->select()->from(
+        $statement = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_option_type_value')
         )->where(
             'option_id = ?',
             $optionId
         );
 
-        $rowSet = $this->_getReadAdapter()->fetchAll($statement);
+        $rowSet = $this->getConnection()->fetchAll($statement);
 
         foreach ($rowSet as $optionType) {
             $this->deleteValues($optionType['option_type_id']);
         }
 
-        $this->_getWriteAdapter()->delete($this->getMainTable(), ['option_id = ?' => $optionId]);
+        $this->getConnection()->delete($this->getMainTable(), ['option_id = ?' => $optionId]);
 
         return $this;
     }
@@ -334,9 +334,9 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $condition = ['option_type_id = ?' => $optionTypeId];
 
-        $this->_getWriteAdapter()->delete($this->getTable('catalog_product_option_type_price'), $condition);
+        $this->getConnection()->delete($this->getTable('catalog_product_option_type_price'), $condition);
 
-        $this->_getWriteAdapter()->delete($this->getTable('catalog_product_option_type_title'), $condition);
+        $this->getConnection()->delete($this->getTable('catalog_product_option_type_title'), $condition);
     }
 
     /**
@@ -349,10 +349,9 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function duplicate(\Magento\Catalog\Model\Product\Option\Value $object, $oldOptionId, $newOptionId)
     {
-        $writeAdapter = $this->_getWriteAdapter();
-        $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
-        $valueData = $readAdapter->fetchAll($select);
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
+        $valueData = $connection->fetchAll($select);
 
         $valueCond = [];
 
@@ -361,8 +360,8 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             unset($data[$this->getIdFieldName()]);
             $data['option_id'] = $newOptionId;
 
-            $writeAdapter->insert($this->getMainTable(), $data);
-            $valueCond[$optionTypeId] = $writeAdapter->lastInsertId($this->getMainTable());
+            $connection->insert($this->getMainTable(), $data);
+            $valueCond[$optionTypeId] = $connection->lastInsertId($this->getMainTable());
         }
 
         unset($valueData);
@@ -372,7 +371,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $priceTable = $this->getTable('catalog_product_option_type_price');
             $columns = [new \Zend_Db_Expr($newTypeId), 'store_id', 'price', 'price_type'];
 
-            $select = $readAdapter->select()->from(
+            $select = $connection->select()->from(
                 $priceTable,
                 []
             )->where(
@@ -381,18 +380,18 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->columns(
                 $columns
             );
-            $insertSelect = $writeAdapter->insertFromSelect(
+            $insertSelect = $connection->insertFromSelect(
                 $select,
                 $priceTable,
                 ['option_type_id', 'store_id', 'price', 'price_type']
             );
-            $writeAdapter->query($insertSelect);
+            $connection->query($insertSelect);
 
             // title
             $titleTable = $this->getTable('catalog_product_option_type_title');
             $columns = [new \Zend_Db_Expr($newTypeId), 'store_id', 'title'];
 
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $titleTable,
                 []
             )->where(
@@ -401,12 +400,12 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->columns(
                 $columns
             );
-            $insertSelect = $writeAdapter->insertFromSelect(
+            $insertSelect = $connection->insertFromSelect(
                 $select,
                 $titleTable,
                 ['option_type_id', 'store_id', 'title']
             );
-            $writeAdapter->query($insertSelect);
+            $connection->query($insertSelect);
         }
 
         return $object;

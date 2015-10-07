@@ -20,37 +20,35 @@ class Resource
 
     const AUTO_UPDATE_ALWAYS = 1;
 
-    const DEFAULT_READ_RESOURCE = 'core_read';
-
-    const DEFAULT_WRITE_RESOURCE = 'core_write';
+    const DEFAULT_CONNECTION = 'default';
 
     /**
      * Instances of actual connections
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface[]
      */
-    protected $_connections = [];
+    protected $connections = [];
 
     /**
      * Mapped tables cache array
      *
      * @var array
      */
-    protected $_mappedTableNames;
+    protected $mappedTableNames;
 
     /**
      * Resource config
      *
      * @var ResourceConfigInterface
      */
-    protected $_config;
+    protected $config;
 
     /**
      * Resource connection adapter factory
      *
      * @var ConnectionFactoryInterface
      */
-    protected $_connectionFactory;
+    protected $connectionFactory;
 
     /**
      * @var DeploymentConfig $deploymentConfig
@@ -60,36 +58,37 @@ class Resource
     /**
      * @var string
      */
-    protected $_tablePrefix;
+    protected $tablePrefix;
 
     /**
      * @param ResourceConfigInterface $resourceConfig
-     * @param ConnectionFactoryInterface $adapterFactory
+     * @param ConnectionFactoryInterface $connectionFactory
      * @param DeploymentConfig $deploymentConfig
      * @param string $tablePrefix
      */
     public function __construct(
         ResourceConfigInterface $resourceConfig,
-        ConnectionFactoryInterface $adapterFactory,
+        ConnectionFactoryInterface $connectionFactory,
         DeploymentConfig $deploymentConfig,
         $tablePrefix = ''
     ) {
-        $this->_config = $resourceConfig;
-        $this->_connectionFactory = $adapterFactory;
+        $this->config = $resourceConfig;
+        $this->connectionFactory = $connectionFactory;
         $this->deploymentConfig = $deploymentConfig;
-        $this->_tablePrefix = $tablePrefix ?: null;
+        $this->tablePrefix = $tablePrefix ?: null;
     }
 
     /**
      * Retrieve connection to resource specified by $resourceName
      *
      * @param string $resourceName
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
      * @codeCoverageIgnore
      */
-    public function getConnection($resourceName)
+    public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
-        $connectionName = $this->_config->getConnectionName($resourceName);
+        $connectionName = $this->config->getConnectionName($resourceName);
         return $this->getConnectionByName($connectionName);
     }
 
@@ -97,12 +96,13 @@ class Resource
      * Retrieve connection by $connectionName
      *
      * @param string $connectionName
-     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
      */
     public function getConnectionByName($connectionName)
     {
-        if (isset($this->_connections[$connectionName])) {
-            return $this->_connections[$connectionName];
+        if (isset($this->connections[$connectionName])) {
+            return $this->connections[$connectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -110,13 +110,12 @@ class Resource
         );
 
         if ($connectionConfig) {
-            $connection = $this->_connectionFactory->create($connectionConfig);
-        }
-        if (empty($connection)) {
-            return false;
+            $connection = $this->connectionFactory->create($connectionConfig);
+        } else {
+            throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->_connections[$connectionName] = $connection;
+        $this->connections[$connectionName] = $connection;
         return $connection;
     }
 
@@ -124,11 +123,11 @@ class Resource
      * Get resource table name, validated by db adapter
      *
      * @param   string|string[] $modelEntity
-     * @param   string $connectionName
+     * @param string $connectionName
      * @return  string
      * @api
      */
-    public function getTableName($modelEntity, $connectionName = self::DEFAULT_READ_RESOURCE)
+    public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
     {
         $tableSuffix = null;
         if (is_array($modelEntity)) {
@@ -163,7 +162,7 @@ class Resource
      */
     public function getTriggerName($tableName, $time, $event)
     {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+        return $this->getConnection()->getTriggerName($tableName, $time, $event);
     }
 
     /**
@@ -176,7 +175,7 @@ class Resource
      */
     public function setMappedTableName($tableName, $mappedName)
     {
-        $this->_mappedTableNames[$tableName] = $mappedName;
+        $this->mappedTableNames[$tableName] = $mappedName;
         return $this;
     }
 
@@ -188,8 +187,8 @@ class Resource
      */
     public function getMappedTableName($tableName)
     {
-        if (isset($this->_mappedTableNames[$tableName])) {
-            return $this->_mappedTableNames[$tableName];
+        if (isset($this->mappedTableNames[$tableName])) {
+            return $this->mappedTableNames[$tableName];
         } else {
             return false;
         }
@@ -208,7 +207,7 @@ class Resource
         $fields,
         $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+        return $this->getConnection()
             ->getIndexName(
                 $this->getTableName($tableName),
                 $fields,
@@ -227,9 +226,7 @@ class Resource
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection(
-            self::DEFAULT_READ_RESOURCE
-        )->getForeignKeyName(
+        return $this->getConnection()->getForeignKeyName(
             $this->getTableName($priTableName),
             $priColumnName,
             $this->getTableName($refTableName),
@@ -244,11 +241,11 @@ class Resource
      */
     private function getTablePrefix()
     {
-        if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->deploymentConfig->get(
+        if (null === $this->tablePrefix) {
+            $this->tablePrefix = (string)$this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
             );
         }
-        return $this->_tablePrefix;
+        return $this->tablePrefix;
     }
 }

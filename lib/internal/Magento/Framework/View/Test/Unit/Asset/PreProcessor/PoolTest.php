@@ -41,16 +41,20 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                     'css' =>
                         [
                             'Magento\Framework\Css\PreProcessor\Less',
-                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                            'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                         ],
                     'less' =>
                         [
-                            'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                            'Magento\Framework\Less\PreProcessor\Instruction\Import',
+                            'Magento\Framework\Css\PreProcessor\Instruction\MagentoImport',
+                            'Magento\Framework\Css\PreProcessor\Instruction\Import',
                         ],
                 ],
                 'css' => [
-                    'css' => ['Magento\Framework\View\Asset\PreProcessor\ModuleNotation']
+                    'css' => [
+                        'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                        'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
+                    ]
                 ],
             ]
         );
@@ -80,7 +84,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 ->with($this->processorChain);
             $processorMaps[] = [$processor, $processorMock];
         }
-        $this->objectManager->method('get')->willReturnMap($processorMaps);
+        $this->objectManager
+            ->expects(static::atLeastOnce())
+            ->method('get')
+            ->willReturnMap($processorMaps);
 
         $this->processorPool->process($this->processorChain);
     }
@@ -91,7 +98,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             'css => css' => [
                 'css', 'css',
                 [
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                 ],
             ],
             //all undefined types will be processed by Passthrough preprocessor
@@ -103,14 +111,15 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 'less', 'css',
                 [
                     'Magento\Framework\Css\PreProcessor\Less',
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
                 ],
             ],
             'less => less' => [
                 'less', 'less',
                 [
-                    'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                    'Magento\Framework\Less\PreProcessor\Instruction\Import',
+                    'Magento\Framework\Css\PreProcessor\Instruction\MagentoImport',
+                    'Magento\Framework\Css\PreProcessor\Instruction\Import',
                 ],
             ],
             //all undefined types will be processed by Passthrough preprocessor

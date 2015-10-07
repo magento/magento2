@@ -191,7 +191,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         $description = sprintf(
             $description,
             $item->getProductUrl(),
-            $this->imageHelper->init($item, 'thumbnail')->resize(75, 75),
+            $this->imageHelper->init($item, 'rss_thumbnail')->getUrl(),
             $this->outputHelper->productAttribute($item, $item->getDescription(), 'description'),
             $specialPrice
         );

@@ -5,10 +5,10 @@
  */
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
-class AbstractProcessorStub extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+class AbstractProcessorStub extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID
      */
-    const INDEXER_ID = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+    const INDEXER_ID = 'stub_indexer_id';
 }

@@ -82,7 +82,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $this->httpContext = $httpContext;
         $this->storeManager = $storeManager;
         $this->localeFormat = $localeFormat;
-        $this-> formKey = $formKey;
+        $this->formKey = $formKey;
     }
 
     /**

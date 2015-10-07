@@ -63,13 +63,13 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $options->setAttributeFilter($attr->getId())->load();
         $optionIds = $options->getAllIds();
 
-        $adapter = $this->productResource->getReadConnection();
-        $select = $adapter->select()->from($this->productResource->getTable('catalog_product_index_eav'))
+        $connection = $this->productResource->getConnection();
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id = ?', 1)
             ->where('attribute_id = ?', $attr->getId())
             ->where('value IN (?)', $optionIds);
 
-        $result = $adapter->fetchAll($select);
+        $result = $connection->fetchAll($select);
         $this->assertCount(2, $result);
 
         /** @var \Magento\Catalog\Model\Product $product1 **/
@@ -82,7 +82,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $product2 = $product2->load(20);
         $product2->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)->save();
 
-        $result = $adapter->fetchAll($select);
+        $result = $connection->fetchAll($select);
         $this->assertCount(0, $result);
     }
 }

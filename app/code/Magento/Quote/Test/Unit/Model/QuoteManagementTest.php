@@ -118,11 +118,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $agreementsValidatorMock;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -219,13 +214,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->accountManagementMock = $this->getMock(
             '\Magento\Customer\Api\AccountManagementInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->agreementsValidatorMock = $this->getMock(
-            '\Magento\Checkout\Model\Agreements\AgreementsValidator',
             [],
             [],
             '',
@@ -698,7 +686,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
-                'agreementsValidator' => $this->agreementsValidatorMock,
             ]
         );
         $orderMock = $this->getMock(
@@ -755,7 +742,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
-                'agreementsValidator' => $this->agreementsValidatorMock,
             ]
         );
         $orderMock = $this->getMock(
@@ -805,7 +791,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMethod->expects($this->once())->method('setChecks');
         $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
 
-        $this->assertEquals($orderId, $service->placeOrder($cartId, null, $paymentMethod));
+        $this->assertEquals($orderId, $service->placeOrder($cartId, $paymentMethod));
     }
 
     /**

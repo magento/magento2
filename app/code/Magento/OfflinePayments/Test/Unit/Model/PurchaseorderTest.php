@@ -41,7 +41,7 @@ class PurchaseorderTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignData()
     {
-        $data = new \Magento\Framework\Object([
+        $data = new \Magento\Framework\DataObject([
             'po_number' => '12345'
         ]);
 

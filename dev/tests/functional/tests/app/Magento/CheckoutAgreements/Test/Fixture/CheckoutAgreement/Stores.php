@@ -6,40 +6,24 @@
 
 namespace Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Stores
- * Prepare Stores
+ * Prepare Stores.
  */
-class Stores implements FixtureInterface
+class Stores extends DataSource
 {
     /**
-     * Prepared dataSet data
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Store fixture
+     * Store fixture.
      *
      * @var Store[]
      */
     public $stores;
 
     /**
-     * Constructor
-     *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $data
      * @param array $params [optional]
@@ -47,9 +31,9 @@ class Stores implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
-            foreach ($data['dataSet'] as $store) {
-                $store = $fixtureFactory->createByCode('store', ['dataSet' => $store]);
+        if (isset($data['dataset'])) {
+            foreach ($data['dataset'] as $store) {
+                $store = $fixtureFactory->createByCode('store', ['dataset' => $store]);
                 /** @var Store $store */
                 if (!$store->getStoreId()) {
                     $store->persist();
@@ -61,40 +45,7 @@ class Stores implements FixtureInterface
     }
 
     /**
-     * Persist stores
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return array
+     * Return array.
      *
      * @return Store[]
      */

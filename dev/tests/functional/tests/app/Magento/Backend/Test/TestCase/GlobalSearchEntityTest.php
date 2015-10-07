@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Login to backend
  * 2. Click on Search button on the top of page
- * 3. Fill in data according dataSet
+ * 3. Fill in data according dataset
  * 4. Perform assertions
  *
  * @group Search_Core_(MX)
@@ -58,7 +58,7 @@ class GlobalSearchEntityTest extends Injectable
      */
     public function test(GlobalSearch $search)
     {
-        //Steps:
+        // Steps:
         $this->dashboard->open();
         $this->dashboard->getAdminPanelHeader()->search($search->getQuery());
     }

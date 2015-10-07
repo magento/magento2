@@ -41,13 +41,13 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $this->_actions = [];
-        if ($this->_salesReorder->canReorder($row)) {
+        if ($this->_salesReorder->canReorder($row->getId())) {
             $reorderAction = [
                 '@' => [
                     'href' => $this->getUrl('sales/order_create/reorder', ['order_id' => $row->getId()]),
@@ -83,7 +83,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected function _actionsToHtml(array $actions = [])
     {
         $html = [];
-        $attributesObject = new \Magento\Framework\Object();
+        $attributesObject = new \Magento\Framework\DataObject();
 
         if (empty($actions)) {
             $actions = $this->_actions;

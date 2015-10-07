@@ -15,10 +15,10 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Render product name to add Configure link
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $rendered = parent::render($row);
         $isConfigurable = $row->canConfigure();

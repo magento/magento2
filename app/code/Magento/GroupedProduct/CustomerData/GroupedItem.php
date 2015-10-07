@@ -16,7 +16,7 @@ class GroupedItem extends DefaultItem
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Msrp\Helper\Data $msrpHelper
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
@@ -24,7 +24,7 @@ class GroupedItem extends DefaultItem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
@@ -32,7 +32,7 @@ class GroupedItem extends DefaultItem
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct(
-            $productImageView,
+            $imageHelper,
             $msrpHelper,
             $urlBuilder,
             $configurationPool,

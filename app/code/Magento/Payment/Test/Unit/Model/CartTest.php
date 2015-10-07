@@ -7,7 +7,6 @@ namespace Magento\Payment\Test\Unit\Model;
 
 use \Magento\Payment\Model\Cart;
 
-
 class CartTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Payment\Model\Cart */
@@ -91,12 +90,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $customItems = [];
         if ($transferFlags['transfer_shipping']) {
-            $customItems[] = new \Magento\Framework\Object(
+            $customItems[] = new \Magento\Framework\DataObject(
                 ['name' => 'Shipping', 'qty' => 1, 'amount' => $salesModelAmounts['BaseShippingAmount']]
             );
         }
         if ($transferFlags['transfer_discount']) {
-            $customItems[] = new \Magento\Framework\Object(
+            $customItems[] = new \Magento\Framework\DataObject(
                 ['name' => 'Discount', 'qty' => 1, 'amount' => -1.00 * $salesModelAmounts['BaseDiscountAmount']]
             );
         }
@@ -277,15 +276,15 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSalesModelItems()
     {
-        $product = new \Magento\Framework\Object(['id' => '1']);
+        $product = new \Magento\Framework\DataObject(['id' => '1']);
         return [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['name' => 'name 1', 'qty' => 1, 'price' => 0.1, 'original_item' => $product]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['name' => 'name 2', 'qty' => 2, 'price' => 1.2, 'original_item' => $product]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'parent_item' => 'parent item 3',
                     'name' => 'name 3',
@@ -310,7 +309,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             if ($item->getParentItem()) {
                 continue;
             }
-            $result[] = new \Magento\Framework\Object(
+            $result[] = new \Magento\Framework\DataObject(
                 [
                     'name' => $item->getName(),
                     'qty' => $item->getQty(),

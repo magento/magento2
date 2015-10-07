@@ -41,5 +41,17 @@
             </field>
             <field name="page_layout" xsi:type="string">3 columns</field>
         </dataset>
+
+        <dataset name="cms-page-searchable">
+            <field name="title" xsi:type="string">page_%isolation%</field>
+            <field name="identifier" xsi:type="string">page_%isolation%</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">Test Content</item>
+            </field>
+            <field name="content_heading" xsi:type="string">Heading_%isolation%</field>
+            <field name="page_layout" xsi:type="string">1 column</field>
+        </dataset>
     </repository>
 </config>

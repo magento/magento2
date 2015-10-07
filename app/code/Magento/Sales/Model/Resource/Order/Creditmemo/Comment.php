@@ -37,7 +37,7 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -46,7 +46,7 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->validator = $validator;
         parent::__construct(
@@ -55,7 +55,7 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
             $entityRelationComposite,
             $attribute,
             $sequenceManager,
-            $resourcePrefix
+            $connectionName
         );
     }
 

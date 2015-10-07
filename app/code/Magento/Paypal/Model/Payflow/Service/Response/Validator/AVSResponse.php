@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 
 /**
@@ -75,7 +75,7 @@ class AVSResponse extends AbstractFilterValidator implements ValidatorInterface
      * @param Object $response
      * @return bool
      */
-    public function validate(Object $response)
+    public function validate(DataObject $response)
     {
         $config = $this->getConfig();
         foreach ($this->avsCheck as $fieldName => $settingName) {

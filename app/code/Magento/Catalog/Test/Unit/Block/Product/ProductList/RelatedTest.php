@@ -41,4 +41,47 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
             $this->block->getIdentities()
         );
     }
+
+    /**
+     * @dataProvider canItemsAddToCartDataProvider
+     * @param bool $isComposite
+     * @param bool $isSaleable
+     * @param bool $hasRequiredOptions
+     * @param bool $canItemsAddToCart
+     */
+    public function testCanItemsAddToCart($isComposite, $isSaleable, $hasRequiredOptions, $canItemsAddToCart)
+    {
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['isComposite', 'isSaleable', 'getRequiredOptions'],
+            [],
+            '',
+            false
+        );
+        $product->expects($this->any())->method('isComposite')->willReturn($isComposite);
+        $product->expects($this->any())->method('isSaleable')->willReturn($isSaleable);
+        $product->expects($this->any())->method('getRequiredOptions')->willReturn($hasRequiredOptions);
+
+        $itemsCollection = new \ReflectionProperty(
+            'Magento\Catalog\Block\Product\ProductList\Related',
+            '_itemCollection'
+        );
+        $itemsCollection->setAccessible(true);
+        $itemsCollection->setValue($this->block, [$product]);
+
+        $this->assertEquals(
+            $canItemsAddToCart,
+            $this->block->canItemsAddToCart()
+        );
+    }
+
+    public function canItemsAddToCartDataProvider()
+    {
+        return [
+            [false, true, false, true],
+            [false, false, false, false],
+            [true, false, false, false],
+            [true, false, true, false],
+        ];
+    }
 }

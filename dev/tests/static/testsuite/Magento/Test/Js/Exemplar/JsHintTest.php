@@ -29,7 +29,7 @@ class JsHintTest extends \PHPUnit_Framework_TestCase
     {
         $reportFile = self::$_cmd->getReportFile();
         if (!is_dir(dirname($reportFile))) {
-            mkdir(dirname($reportFile), 0777);
+            mkdir(dirname($reportFile), 0770);
         }
     }
 

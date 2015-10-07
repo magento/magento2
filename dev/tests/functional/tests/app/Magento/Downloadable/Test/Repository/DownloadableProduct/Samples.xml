@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Downloadable\Test\Repository\DownloadableProduct\Samples">
+        <dataset name="with_two_samples">
+            <field name="title" xsi:type="string">Samples%isolation%</field>
+            <field name="downloadable" xsi:type="array">
+                <item name="sample" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">sample1%isolation%</item>
+                        <item name="sample_type_url" xsi:type="string">Yes</item>
+                        <item name="sample_url" xsi:type="string">http://example.com</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">sample2%isolation%</item>
+                        <item name="sample_type_url" xsi:type="string">Yes</item>
+                        <item name="sample_url" xsi:type="string">http://example.com</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="with_three_samples">
+            <field name="title" xsi:type="string">Samples%isolation%</field>
+            <field name="downloadable" xsi:type="array">
+                <item name="sample" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">sample1%isolation%</item>
+                        <item name="sample_type_url" xsi:type="string">Yes</item>
+                        <item name="sample_url" xsi:type="string">http://example.com</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">sample2%isolation%</item>
+                        <item name="sample_type_url" xsi:type="string">Yes</item>
+                        <item name="sample_url" xsi:type="string">http://example.com</item>
+                    </item>
+                    <item name="2" xsi:type="array">
+                        <item name="title" xsi:type="string">sample3%isolation%</item>
+                        <item name="sample_type_url" xsi:type="string">Yes</item>
+                        <item name="sample_url" xsi:type="string">http://example.com</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+    </repository>
+</config>

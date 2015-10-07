@@ -20,7 +20,7 @@ namespace Magento\Backend\Model\Search;
  * @method Customer setResults(array $results)
  * @method array getResults()
  */
-class Customer extends \Magento\Framework\Object
+class Customer extends \Magento\Framework\DataObject
 {
     /**
      * Adminhtml data
@@ -96,7 +96,7 @@ class Customer extends \Magento\Framework\Object
                 ->setValue($this->getQuery() . '%')
                 ->create();
         }
-        $this->searchCriteriaBuilder->addFilter($filters);
+        $this->searchCriteriaBuilder->addFilters($filters);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchResults = $this->customerRepository->getList($searchCriteria);
 

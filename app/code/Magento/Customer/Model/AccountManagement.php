@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -14,12 +12,16 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -30,13 +32,16 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -52,6 +57,8 @@ class AccountManagement implements AccountManagementInterface
      * Configuration paths for email templates and identities
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+
+    const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
@@ -72,8 +79,14 @@ class AccountManagement implements AccountManagementInterface
     // Constants for the type of new account email to be sent
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
+    // welcome email, when password setting is required
+    const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
+
     // welcome email, when confirmation is enabled
     const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
+
+    // confirmation email, when account is confirmed
+    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
     /**
      * Constants for types of emails to send out.
@@ -125,11 +138,6 @@ class AccountManagement implements AccountManagementInterface
      * @var CustomerMetadataInterface
      */
     private $customerMetadataService;
-
-    /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
 
     /**
      * @var PsrLogger
@@ -190,7 +198,7 @@ class AccountManagement implements AccountManagementInterface
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\ObjectFactory
+     * @var ObjectFactory
      */
     protected $objectFactory;
 
@@ -210,11 +218,10 @@ class AccountManagement implements AccountManagementInterface
      * @param StoreManagerInterface $storeManager
      * @param Random $mathRandom
      * @param Validator $validator
-     * @param \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory
+     * @param ValidationResultsInterfaceFactory $validationResultsDataFactory
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerMetadataInterface $customerMetadataService
      * @param CustomerRegistry $customerRegistry
-     * @param \Magento\Framework\Url $url
      * @param PsrLogger $logger
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
@@ -223,12 +230,12 @@ class AccountManagement implements AccountManagementInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param TransportBuilder $transportBuilder
      * @param DataObjectProcessor $dataProcessor
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param CustomerViewHelper $customerViewHelper
      * @param DateTime $dateTime
      * @param CustomerModel $customerModel
-     * @param \Magento\Framework\ObjectFactory $objectFactory
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param ObjectFactory $objectFactory
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -238,11 +245,10 @@ class AccountManagement implements AccountManagementInterface
         StoreManagerInterface $storeManager,
         Random $mathRandom,
         Validator $validator,
-        \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory,
+        ValidationResultsInterfaceFactory $validationResultsDataFactory,
         AddressRepositoryInterface $addressRepository,
         CustomerMetadataInterface $customerMetadataService,
         CustomerRegistry $customerRegistry,
-        \Magento\Framework\Url $url,
         PsrLogger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
@@ -251,12 +257,12 @@ class AccountManagement implements AccountManagementInterface
         ScopeConfigInterface $scopeConfig,
         TransportBuilder $transportBuilder,
         DataObjectProcessor $dataProcessor,
-        \Magento\Framework\Registry $registry,
+        Registry $registry,
         CustomerViewHelper $customerViewHelper,
         DateTime $dateTime,
         CustomerModel $customerModel,
-        \Magento\Framework\ObjectFactory $objectFactory,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        ObjectFactory $objectFactory,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -267,7 +273,6 @@ class AccountManagement implements AccountManagementInterface
         $this->addressRepository = $addressRepository;
         $this->customerMetadataService = $customerMetadataService;
         $this->customerRegistry = $customerRegistry;
-        $this->url = $url;
         $this->logger = $logger;
         $this->encryptor = $encryptor;
         $this->configShare = $configShare;
@@ -373,9 +378,10 @@ class AccountManagement implements AccountManagementInterface
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
 
+        $customerModel = $this->customerFactory->create()->updateData($customer);
         $this->eventManager->dispatch(
             'customer_customer_authenticated',
-            ['model' => $this->getFullCustomerObject($customer), 'password' => $password]
+            ['model' => $customerModel, 'password' => $password]
         );
 
         $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
@@ -397,7 +403,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         // load customer by email
@@ -409,7 +415,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             switch ($template) {
                 case AccountManagement::EMAIL_REMINDER:
-                    $this->sendPasswordReminderEmail($customer, $newPasswordToken);
+                    $this->sendPasswordReminderEmail($customer);
                     break;
                 case AccountManagement::EMAIL_RESET:
                     $this->sendPasswordResetConfirmationEmail($customer);
@@ -467,28 +473,24 @@ class AccountManagement implements AccountManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function createAccount(
-        CustomerInterface $customer,
-        $password = null,
-        $redirectUrl = ''
-    ) {
-        if (!is_null($password)) {
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
+    {
+        if ($password !== null) {
             $this->checkPasswordStrength($password);
+            $hash = $this->createPasswordHash($password);
         } else {
-            $password = $this->mathRandom->getRandomString(self::MIN_PASSWORD_LENGTH);
+            $hash = null;
         }
-        $hash = $this->createPasswordHash($password);
         return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function createAccountWithPasswordHash(
-        CustomerInterface $customer,
-        $hash,
-        $redirectUrl = ''
-    ) {
+    public function createAccountWithPasswordHash(CustomerInterface $customer, $hash, $redirectUrl = '')
+    {
         // This logic allows an existing customer to be added to a different store.  No new account is created.
         // The plan is to move this logic into a new method called something like 'registerAccountWithStore'
         if ($customer->getId()) {
@@ -511,6 +513,8 @@ class AccountManagement implements AccountManagementInterface
             $customer->setStoreId($storeId);
         }
 
+        $customerAddresses = $customer->getAddresses() ?: [];
+        $customer->setAddresses(null);
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
@@ -521,9 +525,14 @@ class AccountManagement implements AccountManagementInterface
         } catch (LocalizedException $e) {
             throw $e;
         }
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->addressRepository->save($address);
+        try {
+            foreach ($customerAddresses as $address) {
+                $address->setCustomerId($customer->getId());
+                $this->addressRepository->save($address);
+            }
+        } catch (InputException $e) {
+            $this->customerRepository->delete($customer);
+            throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();
@@ -561,21 +570,14 @@ class AccountManagement implements AccountManagementInterface
     protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
     {
         try {
-            if ($this->isConfirmationRequired($customer)) {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
-            } else {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_REGISTERED,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
+            $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
+            $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED;
+            if ($this->isConfirmationRequired($customer) && $hash != '') {
+                $templateType = self::NEW_ACCOUNT_EMAIL_CONFIRMATION;
+            } elseif ($hash == '') {
+                $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
+            $this->sendNewAccountEmail($customer, $templateType, $redirectUrl, $customer->getStoreId());
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -611,18 +613,19 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Change customer password.
      *
-     * @param string $email
+     * @param CustomerModel $customer
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success
+     * @throws InputException
+     * @throws InvalidEmailOrPasswordException
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(
-                __('The password doesn\'t match this account.'));
+            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
@@ -676,13 +679,11 @@ class AccountManagement implements AccountManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function validate(CustomerInterface $customer)
     {
-        $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
-            [],
-            'customer'
-        );
+        $customerData = $this->extensibleDataObjectConverter
+            ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
+        $customerErrors = $this->validator->validateData($customerData, [], 'customer');
 
         $validationResults = $this->validationResultsDataFactory->create();
         if ($customerErrors !== true) {
@@ -711,7 +712,7 @@ class AccountManagement implements AccountManagementInterface
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
         try {
-            if (is_null($websiteId)) {
+            if ($websiteId === null) {
                 $websiteId = $this->storeManager->getStore()->getWebsiteId();
             }
             $this->customerRepository->get($customerEmail, $websiteId);
@@ -764,7 +765,7 @@ class AccountManagement implements AccountManagementInterface
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
 
-        if (strcmp($rpToken, $resetPasswordLinkToken) !== 0) {
+        if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
             throw new InputMismatchException(__('Reset password token mismatch.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('Reset password token expired.'));
@@ -779,7 +780,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isReadonly($customerId)
     {
@@ -796,11 +797,11 @@ class AccountManagement implements AccountManagementInterface
      * @param string $storeId
      * @param string $sendemailStoreId
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function sendNewAccountEmail(
         $customer,
-        $type = 'registered',
+        $type = self::NEW_ACCOUNT_EMAIL_REGISTERED,
         $backUrl = '',
         $storeId = '0',
         $sendemailStoreId = null
@@ -808,9 +809,7 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the transactional account email type.')
-            );
+            throw new LocalizedException(__('Please correct the transactional account email type.'));
         }
 
         if (!$storeId) {
@@ -846,28 +845,14 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->transportBuilder->setTemplateIdentifier(
-            $this->scopeConfig->getValue(
-                self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
-        )->setTemplateVars(
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)]
-        )->setFrom(
-            $this->scopeConfig->getValue(
-                self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
-        )->getTransport();
-        $transport->sendMessage();
+
+        $this->sendEmailTemplate(
+            $customer,
+            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
+        );
 
         return $this;
     }
@@ -895,14 +880,19 @@ class AccountManagement implements AccountManagementInterface
     protected function getTemplateTypes()
     {
         /**
-         * 'registered'   welcome email, when confirmation is disabled
-         * 'confirmed'    welcome email, when confirmation is enabled
-         * 'confirmation' email with confirmation link
+         * self::NEW_ACCOUNT_EMAIL_REGISTERED               welcome email, when confirmation is disabled
+         *                                                  and password is set
+         * self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD   welcome email, when confirmation is disabled
+         *                                                  and password is not set
+         * self::NEW_ACCOUNT_EMAIL_CONFIRMED                welcome email, when confirmation is enabled
+         *                                                  and password is set
+         * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
          */
         $types = [
-            'registered' => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
-            'confirmed' => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
     }
@@ -919,19 +909,14 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
     {
-        /** @var \Magento\Framework\Mail\TransportInterface $transport */
-        $transport = $this->transportBuilder->setTemplateIdentifier(
-            $this->scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->setTemplateOptions(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
-        )->setTemplateVars(
-            $templateParams
-        )->setFrom(
-            $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
-        )->getTransport();
+        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->setTemplateVars($templateParams)
+            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
+            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
+            ->getTransport();
+
         $transport->sendMessage();
 
         return $this;
@@ -950,11 +935,7 @@ class AccountManagement implements AccountManagementInterface
         }
         $storeId = $customer->getStoreId() ? $customer->getStoreId() : null;
 
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_IS_CONFIRM,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -1032,9 +1013,7 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt(
-                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
-            );
+            $customerSecure->setRpTokenCreatedAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
             $this->customerRepository->save($customer);
         }
         return true;
@@ -1044,34 +1023,23 @@ class AccountManagement implements AccountManagementInterface
      * Send email with new customer password
      *
      * @param CustomerInterface $customer
-     * @param string $newPasswordToken
      * @return $this
      */
-    public function sendPasswordReminderEmail($customer, $newPasswordToken)
+    public function sendPasswordReminderEmail($customer)
     {
-        $this->url->setScope($customer->getStoreId());
-        //TODO : Fix how template is built. Maybe Framework Object or create new Email template data model?
-        // Check template to see what values need to be set in the data model to be passed
-        // Need to set the reset_password_url property of the object
-        $store = $this->storeManager->getStore($customer->getStoreId());
-        $resetUrl = $this->url->getUrl(
-            'customer/account/createPassword',
-            [
-                '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
-                '_store' => $customer->getStoreId(),
-                '_secure' => $store->isFrontUrlSecure(),
-            ]
-        );
+        $storeId = $this->storeManager->getStore()->getId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        $customerEmailData->setResetPasswordUrl($resetUrl);
 
         $this->sendEmailTemplate(
             $customer,
             self::XML_PATH_REMIND_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $store],
-            $customer->getStoreId()
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
         );
 
         return $this;

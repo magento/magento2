@@ -76,7 +76,7 @@ class CreateInvoiceStep implements TestStepInterface
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderInjectable $order
      * @param OrderShipmentView $orderShipmentView
-     * @param array|null $data[optional]
+     * @param array|null $data [optional]
      */
     public function __construct(
         OrderIndex $orderIndex,
@@ -107,8 +107,12 @@ class CreateInvoiceStep implements TestStepInterface
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
         $this->salesOrderView->getPageActions()->invoice();
         if (!empty($this->data)) {
-            $this->orderInvoiceNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+            $this->orderInvoiceNew->getFormBlock()->fillProductData(
+                $this->data,
+                $this->order->getEntityId()['products']
+            );
             $this->orderInvoiceNew->getFormBlock()->updateQty();
+            $this->orderInvoiceNew->getFormBlock()->fillFormData($this->data);
         }
         $this->orderInvoiceNew->getFormBlock()->submit();
         $invoiceIds = $this->getInvoiceIds();

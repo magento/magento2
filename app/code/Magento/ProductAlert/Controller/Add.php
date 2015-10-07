@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
-class Add extends Action
+abstract class Add extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -37,7 +37,7 @@ class Add extends Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->customerSession->authenticate($this)) {
+        if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
             if (!$this->customerSession->getBeforeUrl()) {
                 $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());

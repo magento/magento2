@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
@@ -28,6 +28,16 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected $uiComponentFactory;
 
     /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterModifierMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -38,7 +48,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             ['create'],
@@ -46,6 +55,22 @@ class DateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->filterModifierMock = $this->getMock(
+            'Magento\Ui\Component\Filters\FilterModifier',
+            ['applyFilterModifier'],
+            [],
+            '',
+            false
+        );
+
     }
 
     /**
@@ -55,7 +80,13 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $date = new Date($this->contextMock, $this->uiComponentFactory, []);
+        $date = new Date(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            $this->filterModifierMock,
+            []
+        );
 
         $this->assertTrue($date->getComponentName() === Date::NAME);
     }
@@ -92,24 +123,21 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->with(Date::NAME, ['extends' => Date::NAME]);
         $this->contextMock->expects($this->any())
             ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
-
+        $dataProvider = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+            [],
+            '',
+            false
+        );
+        $this->contextMock->expects($this->any())
+            ->method('getDataProvider')
+            ->willReturn($dataProvider);
         if ($expectedCondition !== null) {
-            /** @var DataProviderInterface $dataProvider */
-            $dataProvider = $this->getMockForAbstractClass(
-                'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-                [],
-                '',
-                false
-            );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
-
-            $this->contextMock->expects($this->any())
-                ->method('getDataProvider')
-                ->willReturn($dataProvider);
+                ->with($expectedCondition, $name);
 
             $uiComponent->expects($this->any())
                 ->method('getLocale')
@@ -124,8 +152,14 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->with($name, Date::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
-        $date = new Date($this->contextMock, $this->uiComponentFactory, [], ['name' => $name]);
-
+        $date = new Date(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            $this->filterModifierMock,
+            [],
+            ['name' => $name]
+        );
         $date->prepare();
     }
 

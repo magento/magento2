@@ -8,24 +8,52 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Order\Pdf\Invoice;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory;
 
-abstract class Pdfinvoices extends \Magento\Backend\App\Action
+abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
-    protected $_fileFactory;
+    protected $fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @var Invoice
+     */
+    protected $pdfInvoice;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param DateTime $dateTime
+     * @param FileFactory $fileFactory
+     * @param Invoice $pdfInvoice
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        Filter $filter,
+        DateTime $dateTime,
+        FileFactory $fileFactory,
+        Invoice $pdfInvoice,
+        CollectionFactory $collectionFactory
     ) {
-        $this->_fileFactory = $fileFactory;
-        parent::__construct($context);
+        $this->fileFactory = $fileFactory;
+        $this->dateTime = $dateTime;
+        $this->pdfInvoice = $pdfInvoice;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $filter);
     }
 
     /**
@@ -37,31 +65,19 @@ abstract class Pdfinvoices extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ResponseInterface|void
+     * Save collection items to pdf invoices
+     *
+     * @param AbstractCollection $collection
+     * @return ResponseInterface
+     * @throws \Exception
      */
-    public function execute()
+    public function massAction(AbstractCollection $collection)
     {
-        $invoicesIds = $this->getRequest()->getPost('invoice_ids');
-        if (!empty($invoicesIds)) {
-            $invoices = $this->_objectManager->create('Magento\Sales\Model\Resource\Order\Invoice\Collection')
-                ->addAttributeToSelect('*')
-                ->addAttributeToFilter('entity_id', ['in' => $invoicesIds])
-                ->load();
-            if (!isset($pdf)) {
-                $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf($invoices);
-            } else {
-                $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf($invoices);
-                $pdf->pages = array_merge($pdf->pages, $pages->pages);
-            }
-            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
-
-            return $this->_fileFactory->create(
-                'invoice' . $date . '.pdf',
-                $pdf->render(),
-                DirectoryList::VAR_DIR,
-                'application/pdf'
-            );
-        }
-        return $this->resultRedirectFactory->create()->setPath('sales/*/');
+        return $this->fileFactory->create(
+            sprintf('invoice%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $this->pdfInvoice->getPdf($collection)->render(),
+            DirectoryList::VAR_DIR,
+            'application/pdf'
+        );
     }
 }

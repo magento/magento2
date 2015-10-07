@@ -49,6 +49,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -114,6 +115,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * Get all cart items
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getItems()
     {
@@ -134,6 +136,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getTotals()
     {
@@ -146,7 +149,11 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     public function getTotalsCache()
     {
         if (empty($this->_totals)) {
-            $this->_totals = $this->getQuote()->getTotals();
+            if ($this->getQuote()->isVirtual()) {
+                $this->_totals = $this->getQuote()->getBillingAddress()->getTotals();
+            } else {
+                $this->_totals = $this->getQuote()->getShippingAddress()->getTotals();
+            }
         }
         return $this->_totals;
     }

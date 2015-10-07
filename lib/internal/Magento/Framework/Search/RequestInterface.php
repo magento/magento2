@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search;
 
-use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\QueryInterface;
 
@@ -38,7 +38,7 @@ interface RequestInterface
     /**
      * Get Aggregation Buckets
      *
-     * @return BucketInterface[]
+     * @return RequestBucketInterface[]
      */
     public function getAggregation();
 

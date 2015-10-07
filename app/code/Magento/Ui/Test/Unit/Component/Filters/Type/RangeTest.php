@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\Range;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
@@ -25,6 +25,16 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $uiComponentFactory;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterModifierMock;
 
     /**
      * Set up
@@ -45,6 +55,20 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->filterModifierMock = $this->getMock(
+            'Magento\Ui\Component\Filters\FilterModifier',
+            ['applyFilterModifier'],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -54,7 +78,13 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $range = new Range($this->contextMock, $this->uiComponentFactory, []);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            $this->filterModifierMock,
+            []
+        );
 
         $this->assertTrue($range->getComponentName() === Range::NAME);
     }
@@ -78,27 +108,32 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->with(Range::NAME, ['extends' => Range::NAME]);
         $this->contextMock->expects($this->any())
             ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
-
+        /** @var DataProviderInterface $dataProvider */
+        $dataProvider = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+            [],
+            '',
+            false
+        );
+        $this->contextMock->expects($this->any())
+            ->method('getDataProvider')
+            ->willReturn($dataProvider);
         if ($expectedCondition !== null) {
-            /** @var DataProviderInterface $dataProvider */
-            $dataProvider = $this->getMockForAbstractClass(
-                'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-                [],
-                '',
-                false
-            );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
-
-            $this->contextMock->expects($this->any())
-                ->method('getDataProvider')
-                ->willReturn($dataProvider);
+                ->with($expectedCondition, $name);
         }
 
-        $range = new Range($this->contextMock, $this->uiComponentFactory, [], ['name' => $name]);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            $this->filterModifierMock,
+            [],
+            ['name' => $name]
+        );
         $range->prepare();
     }
 

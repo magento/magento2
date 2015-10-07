@@ -6,7 +6,7 @@
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\BlockRepository;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Test for Magento\Cms\Model\BlockRepository
@@ -236,7 +236,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeFilter->expects($this->any())->method('getField')->willReturn('store_id');
         $storeFilter->expects($this->once())->method('getValue')->willReturn(1);
         $sortOrder->expects($this->once())->method('getField')->willReturn($sortField);
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SearchCriteriaInterface::SORT_DESC);
+        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_DESC);
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
 

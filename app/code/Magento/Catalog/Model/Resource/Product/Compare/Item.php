@@ -31,13 +31,13 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByProduct(\Magento\Catalog\Model\Product\Compare\Item $object, $product)
     {
-        $read = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         if ($product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product->getId();
         } else {
             $productId = $product;
         }
-        $select = $read->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
+        $select = $connection->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
@@ -45,7 +45,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
         }
 
-        $data = $read->fetchRow($select);
+        $data = $connection->fetchRow($select);
 
         if (!$data) {
             return false;
@@ -67,7 +67,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getCount($customerId, $visitorId)
     {
         $bind = ['visitore_id' => (int)$visitorId];
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             'COUNT(*)'
         )->where(
@@ -77,7 +77,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind['customer_id'] = (int)$customerId;
             $select->where('customer_id = :customer_id');
         }
-        return $this->_getReadAdapter()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }
 
     /**
@@ -88,11 +88,11 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function clean()
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['compare_table' => $this->getMainTable()],
                 ['catalog_compare_item_id']
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'visitor_table.visitor_id=compare_table.visitor_id AND compare_table.customer_id IS NULL',
                 []
             )->where(
@@ -103,15 +103,15 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             )->limit(
                 100
             );
-            $itemIds = $this->_getReadAdapter()->fetchCol($select);
+            $itemIds = $this->getConnection()->fetchCol($select);
 
             if (!$itemIds) {
                 break;
             }
 
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto('catalog_compare_item_id IN(?)', $itemIds)
+                $this->getConnection()->quoteInto('catalog_compare_item_id IN(?)', $itemIds)
             );
         }
 
@@ -130,10 +130,10 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $where = $this->_getWriteAdapter()->quoteInto('customer_id=?', $object->getCustomerId());
+        $where = $this->getConnection()->quoteInto('customer_id=?', $object->getCustomerId());
         $bind = ['visitor_id' => 0];
 
-        $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
+        $this->getConnection()->update($this->getMainTable(), $bind, $where);
 
         return $this;
     }
@@ -152,16 +152,16 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         // collect visitor compared items
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable()
         )->where(
             'visitor_id=?',
             $object->getVisitorId()
         );
-        $visitor = $this->_getWriteAdapter()->fetchAll($select);
+        $visitor = $this->getConnection()->fetchAll($select);
 
         // collect customer compared items
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable()
         )->where(
             'customer_id = ?',
@@ -170,7 +170,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'visitor_id != ?',
             $object->getVisitorId()
         );
-        $customer = $this->_getWriteAdapter()->fetchAll($select);
+        $customer = $this->getConnection()->fetchAll($select);
 
         $products = [];
         $delete = [];
@@ -199,18 +199,18 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if ($delete) {
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $delete)
+                $this->getConnection()->quoteInto($this->getIdFieldName() . ' IN(?)', $delete)
             );
         }
         if ($update) {
             foreach ($update as $itemId => $productId) {
                 $bind = $products[$productId];
-                $this->_getWriteAdapter()->update(
+                $this->getConnection()->update(
                     $this->getMainTable(),
                     $bind,
-                    $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $itemId)
+                    $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $itemId)
                 );
             }
         }
@@ -230,16 +230,16 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $where = [];
         if ($customerId) {
             $customerId = (int)$customerId;
-            $where[] = $this->_getWriteAdapter()->quoteInto('customer_id = ?', $customerId);
+            $where[] = $this->getConnection()->quoteInto('customer_id = ?', $customerId);
         }
         if ($visitorId) {
             $visitorId = (int)$visitorId;
-            $where[] = $this->_getWriteAdapter()->quoteInto('visitor_id = ?', $visitorId);
+            $where[] = $this->getConnection()->quoteInto('visitor_id = ?', $visitorId);
         }
         if (!$where) {
             return $this;
         }
-        $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+        $this->getConnection()->delete($this->getMainTable(), $where);
         return $this;
     }
 }

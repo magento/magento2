@@ -18,7 +18,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Navigate to backend.
  * 2. Go to Sales > Orders.
- * 3. Select Mass Action according to dataSet.
+ * 3. Select Mass Action according to dataset.
  * 4. Submit.
  * 5. Perform Asserts.
  *
@@ -94,7 +94,7 @@ class MassOrdersUpdateTest extends Injectable
         $steps = explode('|', $steps);
         for ($i = 0; $i < $count; $i++) {
             /** @var OrderInjectable $order */
-            $order = $this->fixtureFactory->createByCode('orderInjectable', ['dataSet' => 'default']);
+            $order = $this->fixtureFactory->createByCode('orderInjectable', ['dataset' => 'default']);
             $order->persist();
             $orders[$i] = $order;
             $this->processSteps($order, $steps[$i]);

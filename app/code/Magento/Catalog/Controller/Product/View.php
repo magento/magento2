@@ -99,7 +99,7 @@ class View extends \Magento\Catalog\Controller\Product
         }
 
         // Prepare helper and params
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setCategoryId($categoryId);
         $params->setSpecifyOptions($specifyOptions);
 

@@ -28,8 +28,8 @@ class CouponCode extends DataSource
             $this->data = $data['value'];
             return;
         }
-        if (isset($data['dataSet'])) {
-            $salesRule = $fixtureFactory->createByCode('salesRule', ['dataSet' => $data['dataSet']]);
+        if (isset($data['dataset'])) {
+            $salesRule = $fixtureFactory->createByCode('salesRule', ['dataset' => $data['dataset']]);
             $salesRule->persist();
             $this->data = $salesRule;
         }

@@ -5,10 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer\CleanExpiredQuotes" method="execute">
             <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="sales_clean_orders" instance="Magento\Sales\Model\Observer\CleanExpiredOrders" method="execute">
+            <schedule>0 * * * *</schedule>
         </job>
         <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportOrderData" method="execute">
             <schedule>0 0 * * *</schedule>

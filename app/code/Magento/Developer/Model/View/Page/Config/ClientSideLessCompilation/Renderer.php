@@ -19,21 +19,19 @@ class Renderer extends Config\Renderer
 
     /**
      * @param Config $pageConfig
-     * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
         Config $pageConfig,
-        \Magento\Framework\View\Asset\MinifyService $assetMinifyService,
         \Magento\Framework\View\Asset\MergeService $assetMergeService,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
@@ -41,7 +39,6 @@ class Renderer extends Config\Renderer
 
         parent::__construct(
             $pageConfig,
-            $assetMinifyService,
             $assetMergeService,
             $urlBuilder,
             $escaper,

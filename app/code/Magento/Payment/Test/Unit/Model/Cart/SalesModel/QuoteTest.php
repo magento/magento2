@@ -70,7 +70,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($qty));
         $itemMock->expects($this->any())->method('getBaseCalculationPrice')->will($this->returnValue($price));
         $expected = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'parent_item' => $pItem,
                     'name' => $name,

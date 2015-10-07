@@ -2,23 +2,17 @@
     "name": "magento/theme-frontend-luma",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/theme-frontend-blank": "0.74.0-beta16",
-        "magento/framework": "0.74.0-beta16",
-        "magento/magento-composer-installer": "*"
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/theme-frontend-blank": "1.0.0-beta",
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-theme",
-    "version": "0.74.0-beta16",
+    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "frontend/Magento/luma"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

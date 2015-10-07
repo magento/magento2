@@ -108,7 +108,7 @@ class MassDeleteCustomerBackendEntityTest extends Injectable
     {
         $customers = [];
         for ($i = 0; $i < $customersQty; $i++) {
-            $customer = $this->fixtureFactory->createByCode('customer', ['dataSet' => 'default']);
+            $customer = $this->fixtureFactory->createByCode('customer', ['dataset' => 'default']);
             $customer->persist();
             $customers[] = $customer;
         }

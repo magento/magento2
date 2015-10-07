@@ -8,9 +8,9 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
-use Magento\Sales\Model\Resource\Order\Item as OrderItemResource;
 use Magento\Sales\Model\Resource\Order\Payment as OrderPaymentResource;
 use Magento\Sales\Model\Resource\Order\Status\History as OrderStatusHistoryResource;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 /**
  * Class Relation
@@ -23,9 +23,9 @@ class Relation implements RelationInterface
     protected $addressHandler;
 
     /**
-     * @var OrderItemResource
+     * @var OrderItemRepositoryInterface
      */
-    protected $orderItemResource;
+    protected $orderItemRepository;
 
     /**
      * @var OrderPaymentResource
@@ -39,18 +39,18 @@ class Relation implements RelationInterface
 
     /**
      * @param AddressHandler $addressHandler
-     * @param OrderItemResource $orderItemResource
+     * @param OrderItemRepositoryInterface $orderItemRepository
      * @param OrderPaymentResource $orderPaymentResource
      * @param OrderStatusHistoryResource $orderStatusHistoryResource
      */
     public function __construct(
         AddressHandler $addressHandler,
-        OrderItemResource $orderItemResource,
+        OrderItemRepositoryInterface $orderItemRepository,
         OrderPaymentResource $orderPaymentResource,
         OrderStatusHistoryResource $orderStatusHistoryResource
     ) {
         $this->addressHandler = $addressHandler;
-        $this->orderItemResource = $orderItemResource;
+        $this->orderItemRepository = $orderItemRepository;
         $this->orderPaymentResource = $orderPaymentResource;
         $this->orderStatusHistoryResource = $orderStatusHistoryResource;
     }
@@ -65,14 +65,13 @@ class Relation implements RelationInterface
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->removeEmptyAddresses($object);
-        $this->addressHandler->process($object);
+
         if (null !== $object->getItems()) {
             /** @var \Magento\Sales\Model\Order\Item $item */
             foreach ($object->getItems() as $item) {
                 $item->setOrderId($object->getId());
                 $item->setOrder($object);
-                $this->orderItemResource->save($item);
+                $this->orderItemRepository->save($item);
             }
         }
         if (null !== $object->getPayments()) {
@@ -98,5 +97,7 @@ class Relation implements RelationInterface
                 $relatedObject->save();
             }
         }
+        $this->addressHandler->removeEmptyAddresses($object);
+        $this->addressHandler->process($object);
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -41,7 +42,13 @@ class PayflowConfigTest extends \PHPUnit_Framework_TestCase
         $this->methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
             ->getMockForAbstractClass();
 
-        $this->config = new PayflowConfig($this->scopeConfigMock);
+        $om = new ObjectManager($this);
+        $this->config = $om->getObject(
+            'Magento\Paypal\Model\PayflowConfig',
+            [
+                'scopeConfig' => $this->scopeConfigMock
+            ]
+        );
     }
 
     /**
@@ -162,6 +169,11 @@ class PayflowConfigTest extends \PHPUnit_Framework_TestCase
     public function testIsMethodActive(array $expectsMethods, $currentMethod, $result)
     {
         $this->config->setStoreId(5);
+
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with('paypal/general/merchant_country')
+            ->will($this->returnValue('US'));
 
         $i = 0;
         foreach ($expectsMethods as $method => $isActive) {

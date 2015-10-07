@@ -41,7 +41,7 @@ class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
     {
         $scopeResolver = $this->_helper->getObject('Magento\Framework\App\ScopeResolverPool', [
             'scopeResolvers' => [
-                'test' => new \Magento\Framework\Object(),
+                'test' => new \Magento\Framework\DataObject(),
             ]
         ]);
         $scopeResolver->get($scope);

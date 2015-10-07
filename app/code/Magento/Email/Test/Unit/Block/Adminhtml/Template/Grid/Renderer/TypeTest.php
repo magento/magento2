@@ -26,7 +26,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderHtml()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_HTML);
         $this->assertEquals('HTML', $this->type->render($row));
     }
@@ -36,7 +36,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderText()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
         $this->assertEquals('Text', $this->type->render($row));
     }
@@ -46,7 +46,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderUnknown()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType('xx');
         $this->assertEquals('Unknown', $this->type->render($row));
     }

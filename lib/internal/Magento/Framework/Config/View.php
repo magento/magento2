@@ -9,16 +9,60 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\View\Xsd\Reader;
+use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
+
 class View extends \Magento\Framework\Config\AbstractXml
 {
+    /** @var UrnResolver */
+    protected $urnResolver;
+
     /**
-     * Path to view.xsd
+     * @var \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
+     */
+    protected $extractorPool;
+
+    /**
+     * @var array
+     */
+    protected $xpath;
+
+    /**
+     * @var Reader
+     */
+    private $xsdReader;
+
+    /**
+     * @param array $configFiles
+     * @param Reader $xsdReader
+     * @param UrnResolver $urnResolver
+     * @param TypeDataExtractorPool $extractorPool
+     * @param array $xpath
+     */
+    public function __construct(
+        $configFiles,
+        Reader $xsdReader,
+        UrnResolver $urnResolver,
+        TypeDataExtractorPool $extractorPool,
+        $xpath = []
+    ) {
+        $this->xpath = $xpath;
+        $this->extractorPool = $extractorPool;
+        $this->urnResolver = $urnResolver;
+        $this->xsdReader = $xsdReader;
+        parent::__construct($configFiles);
+    }
+    
+    /**
+     * Merged file view.xsd
      *
      * @return string
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/view.xsd';
+        $configXsd = $this->xsdReader->read();
+        return $configXsd;
     }
 
     /**
@@ -26,12 +70,13 @@ class View extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _extractData(\DOMDocument $dom)
     {
         $result = [];
         /** @var $varsNode \DOMElement */
-        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $childNode) {
+        foreach ($dom->childNodes->item(0)->childNodes as $childNode) {
             switch ($childNode->tagName) {
                 case 'vars':
                     $moduleName = $childNode->getAttribute('module');
@@ -47,6 +92,18 @@ class View extends \Magento\Framework\Config\AbstractXml
                     foreach ($childNode->getElementsByTagName('item') as $itemNode) {
                         $itemType = $itemNode->getAttribute('type');
                         $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
+                    }
+                    break;
+                case 'media':
+                    foreach ($childNode->childNodes as $mediaNode) {
+                        if ($mediaNode instanceof \DOMElement) {
+                            $mediaNodesArray =
+                                $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
+                                    $mediaNode,
+                                    $childNode->tagName
+                                );
+                            $result = array_merge($result, $mediaNodesArray);
+                        }
                     }
                     break;
             }
@@ -80,6 +137,33 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Retrieve a list media attributes in scope of specified module
+     *
+     * @param string $module
+     * @param string $mediaType
+     * @return array
+     */
+    public function getMediaEntities($module, $mediaType)
+    {
+        return isset($this->_data['media'][$module][$mediaType]) ? $this->_data['media'][$module][$mediaType] : [];
+    }
+
+    /**
+     * Retrieve array of media attributes
+     *
+     * @param string $module
+     * @param string $mediaType
+     * @param string $mediaId
+     * @return array
+     */
+    public function getMediaAttributes($module, $mediaType, $mediaId)
+    {
+        return isset($this->_data['media'][$module][$mediaType][$mediaId])
+            ? $this->_data['media'][$module][$mediaType][$mediaId]
+            : [];
+    }
+
+    /**
      * Return copy of DOM
      *
      * @return \Magento\Framework\Config\Dom
@@ -97,7 +181,7 @@ class View extends \Magento\Framework\Config\AbstractXml
     protected function _getInitialXml()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>' .
-               '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
+        '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
     }
 
     /**
@@ -107,7 +191,35 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => ['type', 'item']];
+        $idAttributes = $this->addIdAttributes($this->xpath);
+        return $idAttributes;
+    }
+
+    /**
+     * Add attributes for module identification
+     *
+     * @param array $xpath
+     * @return array
+     */
+    protected function addIdAttributes($xpath)
+    {
+        $idAttributes = [
+            '/view/vars' => 'module',
+            '/view/vars/var' => 'name',
+            '/view/exclude/item' => ['type', 'item'],
+        ];
+        foreach ($xpath as $attribute) {
+            if (is_array($attribute)) {
+                foreach ($attribute as $key => $id) {
+                    if (count($id) > 1) {
+                        $idAttributes[$key] = array_values($id);
+                    } else {
+                        $idAttributes[$key] = array_shift($id);
+                    }
+                }
+            }
+        }
+        return $idAttributes;
     }
 
     /**

@@ -5,6 +5,9 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model\Queue;
 
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\MessageInterface;
+
 class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\TransportBuilderTest
 {
     /**
@@ -25,8 +28,8 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetTransport(
-        $templateType = \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-        $messageType = \Magento\Framework\Mail\Message::TYPE_HTML,
+        $templateType = TemplateTypesInterface::TYPE_HTML,
+        $messageType = MessageInterface::TYPE_HTML,
         $bodyText = '<h1>Html message</h1>'
     ) {
         $data = [

@@ -469,7 +469,12 @@ class SessionManager implements SessionManagerInterface
         if (headers_sent()) {
             return $this;
         }
-        session_regenerate_id(true);
+        if ($this->isSessionExists()) {
+            session_regenerate_id(true);
+        } else {
+            session_start();
+        }
+        $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
             $this->clearSubDomainSessionCookie();

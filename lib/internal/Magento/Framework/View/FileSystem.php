@@ -31,6 +31,11 @@ class FileSystem
     protected $_staticFileResolution;
 
     /**
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
+     */
+    protected $_emailTemplateFileResolution;
+
+    /**
      * View service
      *
      * @var \Magento\Framework\View\Asset\Repository
@@ -44,6 +49,7 @@ class FileSystem
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile $fallbackTemplateFile
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile $fallbackLocaleFile
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallbackStaticFile
+     * @param \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile $fallbackEmailTemplateFile
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
@@ -51,12 +57,14 @@ class FileSystem
         \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile $fallbackTemplateFile,
         \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile $fallbackLocaleFile,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallbackStaticFile,
+        \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile $fallbackEmailTemplateFile,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
         $this->_fileResolution = $fallbackFile;
         $this->_templateFileResolution = $fallbackTemplateFile;
         $this->_localeFileResolution = $fallbackLocaleFile;
         $this->_staticFileResolution = $fallbackStaticFile;
+        $this->_emailTemplateFileResolution = $fallbackEmailTemplateFile;
         $this->_assetRepo = $assetRepo;
     }
 
@@ -100,7 +108,7 @@ class FileSystem
      *
      * @param string $fileId
      * @param array $params
-     * @return string|false
+     * @return string|bool
      */
     public function getTemplateFileName($fileId, array $params = [])
     {
@@ -133,6 +141,21 @@ class FileSystem
         $this->_assetRepo->updateDesignParams($params);
         return $this->_staticFileResolution
             ->getFile($params['area'], $params['themeModel'], $params['locale'], $filePath, $params['module']);
+    }
+
+    /**
+     * Get an email template file
+     *
+     * @param string $fileId
+     * @param array $params
+     * @param string $module
+     * @return string|bool
+     */
+    public function getEmailTemplateFileName($fileId, array $params, $module)
+    {
+        $this->_assetRepo->updateDesignParams($params);
+        return $this->_emailTemplateFileResolution
+            ->getFile($params['area'], $params['themeModel'], $params['locale'], $fileId, $module);
     }
 
     /**

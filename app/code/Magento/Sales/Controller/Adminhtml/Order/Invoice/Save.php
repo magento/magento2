@@ -11,7 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Service\InvoiceService;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -29,25 +31,41 @@ class Save extends \Magento\Backend\App\Action
     protected $shipmentSender;
 
     /**
+     * @var ShipmentFactory
+     */
+    protected $shipmentFactory;
+
+    /**
      * @var Registry
      */
     protected $registry;
+
+    /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
 
     /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceSender $invoiceSender
      * @param ShipmentSender $shipmentSender
+     * @param ShipmentFactory $shipmentFactory
+     * @param InvoiceService $invoiceService
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         InvoiceSender $invoiceSender,
-        ShipmentSender $shipmentSender
+        ShipmentSender $shipmentSender,
+        ShipmentFactory $shipmentFactory,
+        InvoiceService $invoiceService
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
         $this->shipmentSender = $shipmentSender;
+        $this->shipmentFactory = $shipmentFactory;
+        $this->invoiceService = $invoiceService;
         parent::__construct($context);
     }
 
@@ -67,30 +85,19 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _prepareShipment($invoice)
     {
-        $savedQtys = [];
-        $data = $this->getRequest()->getParam('invoice');
-        if (isset($data['items'])) {
-            $savedQtys = $data['items'];
-        }
-        $shipment = $this->_objectManager->create(
-            'Magento\Sales\Model\Service\Order',
-            ['order' => $invoice->getOrder()]
-        )->prepareShipment(
-            $savedQtys
+        $invoiceData = $this->getRequest()->getParam('invoice');
+
+        $shipment = $this->shipmentFactory->create(
+            $invoice->getOrder(),
+            isset($invoiceData['items']) ? $invoiceData['items'] : [],
+            $this->getRequest()->getPost('tracking')
         );
+
         if (!$shipment->getTotalQty()) {
             return false;
         }
 
-        $shipment->register();
-        $tracks = $this->getRequest()->getPost('tracking');
-        if ($tracks) {
-            foreach ($tracks as $data) {
-                $track = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment\Track')->addData($data);
-                $shipment->addTrack($track);
-            }
-        }
-        return $shipment;
+        return $shipment->register();
     }
 
     /**
@@ -129,9 +136,7 @@ class Save extends \Magento\Backend\App\Action
                 );
             }
 
-            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice) {
                 throw new LocalizedException(__('We can\'t save the invoice right now.'));

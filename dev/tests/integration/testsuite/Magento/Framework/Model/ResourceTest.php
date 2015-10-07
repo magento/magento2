@@ -39,12 +39,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Init profiler during creation of DB connect
+     * @return void
      */
     public function testProfilerInit()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Zend_Db_Adapter_Abstract $connection */
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
         $connection = $objectManager->create(
             'Magento\TestFramework\Db\Adapter\Mysql',
             [

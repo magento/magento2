@@ -63,6 +63,11 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
@@ -71,6 +76,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
@@ -80,7 +87,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -90,11 +98,11 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $this->logger = $logger;
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
      * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveAddressInformation(
@@ -107,15 +115,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        if ($quote->isVirtual()) {
-            throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
-            );
-        }
-
-        if (0 == $quote->getItemsCount()) {
-            throw new InputException(__('Shipping method is not applicable for empty cart'));
-        }
+        $this->validateQuote($quote);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
@@ -128,8 +128,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
-        $address->setSameAsBilling($sameAsBilling);
+
         $address->setSaveInAddressBook($saveInAddressBook);
+        $address->setSameAsBilling($sameAsBilling);
         $address->setCollectShippingRates(true);
 
         if (!$address->getCountryId()) {
@@ -139,8 +140,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $address->setShippingMethod($carrierCode . '_' . $methodCode);
 
         try {
-            $address->save();
-            $address->collectTotals();
+            $this->totalsCollector->collectAddressTotals($quote, $address);
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));
@@ -174,5 +174,26 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
         $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
         return $paymentDetails;
+    }
+
+    /**
+     * Validate quote
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @return void
+     */
+    protected function validateQuote(\Magento\Quote\Model\Quote $quote)
+    {
+        if ($quote->isVirtual()) {
+            throw new NoSuchEntityException(
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+            );
+        }
+
+        if (0 == $quote->getItemsCount()) {
+            throw new InputException(__('Shipping method is not applicable for empty cart'));
+        }
     }
 }

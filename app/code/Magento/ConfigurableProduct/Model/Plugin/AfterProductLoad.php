@@ -65,21 +65,19 @@ class AfterProductLoad
         $typeInstance = $product->getTypeInstance();
         $attributeCollection = $typeInstance->getConfigurableAttributes($product);
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
-        foreach ($attributeCollection as $option) {
+        foreach ($attributeCollection as $attribute) {
             $values = [];
-            $prices = $option->getPrices();
-            if (is_array($prices)) {
-                foreach ($prices as $price) {
+            $attributeOptions = $attribute->getOptions();
+            if (is_array($attributeOptions)) {
+                foreach ($attributeOptions as $option) {
                     /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
                     $value = $this->optionValueFactory->create();
-                    $value->setValueIndex($price['value_index'])
-                        ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent']);
+                    $value->setValueIndex($option['value_index']);
                     $values[] = $value;
                 }
             }
-            $option->setValues($values);
-            $options[] = $option;
+            $attribute->setValues($values);
+            $options[] = $attribute;
         }
         return $options;
     }

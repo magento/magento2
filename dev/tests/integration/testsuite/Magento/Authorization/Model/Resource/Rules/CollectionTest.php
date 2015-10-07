@@ -28,10 +28,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_collection->getByRoles($user->getRole()->getId());
 
-        $where = $this->_collection->getSelect()->getPart(\Zend_Db_Select::WHERE);
-        /** @var \Zend_Db_Adapter_Abstract $adapter */
-        $adapter = $this->_collection->getConnection();
-        $quote = $adapter->getQuoteIdentifierSymbol();
+        $where = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
+        $connection = $this->_collection->getConnection();
+        $quote = $connection->getQuoteIdentifierSymbol();
         $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
     }
 
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_collection->addSortByLength();
 
-        $order = $this->_collection->getSelect()->getPart(\Zend_Db_Select::ORDER);
+        $order = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertContains(['length', 'DESC'], $order);
     }
 }

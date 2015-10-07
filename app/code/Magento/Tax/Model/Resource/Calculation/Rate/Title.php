@@ -30,7 +30,7 @@ class Title extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteByRateId($rateId)
     {
-        $conn = $this->_getWriteAdapter();
+        $conn = $this->getConnection();
         $where = $conn->quoteInto('tax_calculation_rate_id = ?', (int)$rateId);
         $conn->delete($this->getMainTable(), $where);
 

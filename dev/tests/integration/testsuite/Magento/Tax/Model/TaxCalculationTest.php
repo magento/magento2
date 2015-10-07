@@ -173,6 +173,343 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $weeeProduct = $baseQuote;
+        $weeeProduct['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 1,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $weeeProduct['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 1,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $weeeProductResults = [
+            'subtotal' => 17,
+            'tax_amount' => 1.4,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 1.4,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 0.83,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 10,
+                    'row_total_incl_tax' => 10.83,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 0.83,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 0.57,
+                    'price' => 7,
+                    'price_incl_tax' => 7.57,
+                    'row_total' => 7,
+                    'row_total_incl_tax' => 7.57,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 0.57,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
+
+        $weeeProducts = $baseQuote;
+        $weeeProducts['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $weeeProducts['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $weeeProductsResults = [
+            'subtotal' => 34,
+            'tax_amount' => 2.80,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 2.80,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 1.66,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.66,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.66,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 1.14,
+                    'price' => 7,
+                    'price_incl_tax' => 7.57,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.14,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.14,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
+
+        $multiWeeeProducts = $baseQuote;
+        $multiWeeeProducts['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'sequence-2',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'weee2-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-2'
+        ];
+        $multiWeeeProductsResults = [
+            'subtotal' => 68,
+            'tax_amount' => 5.60,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 5.60,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 1.66,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.66,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.66,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 1.14,
+                    'price' => 7,
+                    'price_incl_tax' => 7.57,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.14,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.14,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'sequence-2' => [
+                    'code' => 'sequence-2',
+                    'row_tax' => 1.66,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.66,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.66,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee2-Recycling Fee' => [
+                    'code' => 'weee2-Recycling Fee',
+                    'row_tax' => 1.14,
+                    'price' => 7,
+                    'price_incl_tax' => 7.57,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.14,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-2',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.14,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
+
         $oneProductInclTax = $baseQuote;
         $oneProductInclTax['items'][] = [
             'code' => 'sku_1',
@@ -432,6 +769,18 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'one product' => [
                 'quote_details' => $oneProduct,
                 'expected_tax_details' => $oneProductResults,
+            ],
+            'weee product' => [
+                'quote_details' => $weeeProduct,
+                'expected_tax_details' => $weeeProductResults,
+            ],
+            'weee products' => [
+                'quote_details' => $weeeProducts,
+                'expected_tax_details' => $weeeProductsResults,
+            ],
+            'multi weee products' => [
+                'quote_details' => $multiWeeeProducts,
+                'expected_tax_details' => $multiWeeeProductsResults,
             ],
             'one product, tax included' => [
                 'quote_details' => $oneProductInclTax,
@@ -935,7 +1284,6 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
         $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
     /**
@@ -944,6 +1292,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function calculateTaxRowBasedDataProvider()
     {
         $baseQuote = $this->getBaseQuoteData();
+
         $oneProduct = $baseQuote;
         $oneProduct['items'][] = [
             'code' => 'sku_1',
@@ -997,6 +1346,343 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
+            ],
+        ];
+
+        $weeeProduct = $baseQuote;
+        $weeeProduct['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 1,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $weeeProduct['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 1,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $weeeProductResults = [
+            'subtotal' => 17,
+            'tax_amount' => 1.4,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 1.4,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 0.83,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 10,
+                    'row_total_incl_tax' => 10.83,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 0.83,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 0.57,
+                    'price' => 7,
+                    'price_incl_tax' => 7.57,
+                    'row_total' => 7,
+                    'row_total_incl_tax' => 7.57,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 0.57,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
+
+        $weeeProducts = $baseQuote;
+        $weeeProducts['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $weeeProducts['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $weeeProductsResults = [
+            'subtotal' => 34,
+            'tax_amount' => 2.81,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 2.81,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 1.65,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.65,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.65,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 1.16,
+                    'price' => 7,
+                    'price_incl_tax' => 7.58,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.16,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.16,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
+
+        $multiWeeeProducts = $baseQuote;
+        $multiWeeeProducts['items'][] = [
+            'code' => 'sequence-1',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'weee1-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-1'
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'sequence-2',
+            'type' => 'product',
+            'quantity' => 2,
+            'unit_price' => 10,
+            'tax_class_key' => 'WeeeProductClass',
+        ];
+        $multiWeeeProducts['items'][] = [
+            'code' => 'weee2-Recycling Fee',
+            'type' => 'weee',
+            'quantity' => 2,
+            'unit_price' => 7,
+            'tax_class_key' => 'WeeeProductClass',
+            'associated_item_code' => 'sequence-2'
+        ];
+        $multiWeeeProductsResults = [
+            'subtotal' => 68,
+            'tax_amount' => 5.62,
+            'discount_tax_compensation_amount' => 0,
+            'applied_taxes' => [
+                [
+                    'amount' => 5.62,
+                    'percent' => 8.25,
+                    'rates' => [
+                        [
+                            'code' => 'US - 42 - 8.25',
+                            'title' => 'US - 42 - 8.25',
+                            'percent' => 8.25,
+                        ],
+                    ],
+                    'tax_rate_key' => 'US - 42 - 8.25',
+                ],
+            ],
+            'items' => [
+                'sequence-1' => [
+                    'code' => 'sequence-1',
+                    'row_tax' => 1.65,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.65,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.65,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee1-Recycling Fee' => [
+                    'code' => 'weee1-Recycling Fee',
+                    'row_tax' => 1.16,
+                    'price' => 7,
+                    'price_incl_tax' => 7.58,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.16,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-1',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.16,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'sequence-2' => [
+                    'code' => 'sequence-2',
+                    'row_tax' => 1.65,
+                    'price' => 10,
+                    'price_incl_tax' => 10.83,
+                    'row_total' => 20,
+                    'row_total_incl_tax' => 21.65,
+                    'type' => 'product',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => null,
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.65,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'weee2-Recycling Fee' => [
+                    'code' => 'weee2-Recycling Fee',
+                    'row_tax' => 1.16,
+                    'price' => 7,
+                    'price_incl_tax' => 7.58,
+                    'row_total' => 14,
+                    'row_total_incl_tax' => 15.16,
+                    'type' => 'weee',
+                    'tax_percent' => 8.25,
+                    'discount_tax_compensation_amount' => 0,
+                    'associated_item_code' => 'sequence-2',
+                    'applied_taxes' => [
+                        'US - 42 - 8.25' => [
+                            'amount' => 1.16,
+                            'percent' => 8.25,
+                            'tax_rate_key' => 'US - 42 - 8.25',
+                            'rates' => [
+                                'US - 42 - 8.25' => [
+                                    'percent' => 8.25,
+                                    'code' => 'US - 42 - 8.25',
+                                    'title' => 'US - 42 - 8.25',
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
             ],
         ];
 
@@ -1427,6 +2113,18 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'quote_details' => $oneProduct,
                 'expected_tax_details' => $oneProductResults,
             ],
+            'weee_product' => [
+                'quote_details' => $weeeProduct,
+                'expected_tax_details' => $weeeProductResults,
+            ],
+            'weee_products' => [
+                'quote_details' => $weeeProducts,
+                'expected_tax_details' => $weeeProductsResults,
+            ],
+            'multi weee_products' => [
+                'quote_details' => $multiWeeeProducts,
+                'expected_tax_details' => $multiWeeeProductsResults,
+            ],
             'one product, tax included' => [
                 'quote_details' => $oneProductInclTax,
                 'expected_tax_details' => $oneProductInclTaxResults,
@@ -1837,11 +2535,16 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             ['name' => 'DefaultProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
             ['name' => 'HigherProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
             ['name' => 'MultipleRulesProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
+            ['name' => 'WeeeProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
         ]);
 
         $this->taxRates = $this->taxRuleFixtureFactory->createTaxRates([
             ['percentage' => 7.5, 'country' => 'US', 'region' => 42],
             ['percentage' => 7.5, 'country' => 'US', 'region' => 12], // Default store rate
+        ]);
+
+        $weeeTaxRates = $this->taxRuleFixtureFactory->createTaxRates([
+            ['percentage' => 8.25, 'country' => 'US', 'region' => 12] // Default store rate
         ]);
 
         $multiTaxRates1 = $this->taxRuleFixtureFactory->createTaxRates([
@@ -1860,7 +2563,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $higherRates = $this->taxRuleFixtureFactory->createTaxRates([
             ['percentage' => 22, 'country' => 'US', 'region' => 42],
             ['percentage' => 10, 'country' => 'US', 'region' => 12], // Default store rate
-            ]);
+        ]);
 
         $this->taxRules = $this->taxRuleFixtureFactory->createTaxRules([
             [
@@ -1868,6 +2571,14 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'customer_tax_class_ids' => [$this->taxClassIds['DefaultCustomerClass'], 3],
                 'product_tax_class_ids' => [$this->taxClassIds['DefaultProductClass']],
                 'tax_rate_ids' => array_values($this->taxRates),
+                'sort_order' => 0,
+                'priority' => 0,
+            ],
+            [
+                'code' => 'Weee Rule',
+                'customer_tax_class_ids' => [$this->taxClassIds['DefaultCustomerClass'], 3],
+                'product_tax_class_ids' => [$this->taxClassIds['WeeeProductClass']],
+                'tax_rate_ids' => array_values($weeeTaxRates),
                 'sort_order' => 0,
                 'priority' => 0,
             ],
@@ -1882,7 +2593,10 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             [
                 'code' => 'MultiRule-1',
                 'customer_tax_class_ids' => [$this->taxClassIds['DefaultCustomerClass'], 3],
-                'product_tax_class_ids' => [$this->taxClassIds['MultipleRulesProductClass']],
+                'product_tax_class_ids' => [
+                    $this->taxClassIds['MultipleRulesProductClass'],
+                    $this->taxClassIds['WeeeProductClass']
+                ],
                 'tax_rate_ids' => array_values($multiTaxRates1),
                 'sort_order' => 0,
                 'priority' => 0,
@@ -1906,6 +2620,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         ]);
 
         // For cleanup
+        $this->taxRates = array_merge($this->taxRates, $weeeTaxRates);
         $this->taxRates = array_merge($this->taxRates, $higherRates);
         $this->taxRates = array_merge($this->taxRates, $multiTaxRates1);
         $this->taxRates = array_merge($this->taxRates, $multiTaxRatesSamePriority);
@@ -1951,12 +2666,12 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
      *
      * This utility function is used to simplify expected result verification.
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return array
      */
     private function convertObjectToArray($object)
     {
-        if ($object instanceof \Magento\Framework\Object) {
+        if ($object instanceof \Magento\Framework\DataObject) {
             $data = $object->getData();
         } else if (is_object($object)) {
             $data = (array)$object;

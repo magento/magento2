@@ -22,15 +22,15 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -52,7 +52,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function checkCodeUsage(\Magento\Email\Model\Template $template)
     {
         if ($template->getTemplateActual() != 0 || $template->getTemplateActual() === null) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getMainTable(),
                 'COUNT(*)'
             )->where(
@@ -66,7 +66,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $bind['template_id'] = $templateId;
             }
 
-            $result = $this->_getReadAdapter()->fetchOne($select, $bind);
+            $result = $this->getConnection()->fetchOne($select, $bind);
             if ($result) {
                 return true;
             }
@@ -110,7 +110,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $pathsCounter++;
         }
         $bind['template_id'] = $templateId;
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('core_config_data'),
             ['scope', 'scope_id', 'path']
         )->where(
@@ -119,6 +119,6 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
             join(' OR ', $orWhere)
         );
 
-        return $this->_getReadAdapter()->fetchAll($select, $bind);
+        return $this->getConnection()->fetchAll($select, $bind);
     }
 }
