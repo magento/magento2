@@ -85,7 +85,7 @@ class Dependency
     protected function getSuggestsFromModules()
     {
         $suggests = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $file = $moduleDir . '/composer.json';
 
             /** @var Package $package */
