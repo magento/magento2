@@ -44,7 +44,7 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
-     * @var SampleData\Model\State
+     * @var \Magento\Framework\Setup\SampleData\State
      */
     protected $sampleDataState;
 
@@ -54,13 +54,13 @@ class Install extends AbstractActionController
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
-     * @param SampleData\Model\State $sampleDataState
+     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        SampleData\Model\State $sampleDataState
+        \Magento\Framework\Setup\SampleData\State $sampleDataState
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);

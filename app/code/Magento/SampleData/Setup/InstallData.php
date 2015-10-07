@@ -13,15 +13,15 @@ use Magento\Framework\Setup;
 class InstallData implements Setup\InstallDataInterface
 {
     /**
-     * @var \Magento\SampleData\Model\State
+     * @var \Magento\Framework\Setup\SampleData\State
      */
     protected $state;
 
     /**
-     * @param \Magento\SampleData\Model\State $state
+     * @param \Magento\Framework\Setup\SampleData\State $state
      */
     public function __construct(
-        \Magento\SampleData\Model\State $state
+        \Magento\Framework\Setup\SampleData\State $state
     ) {
         $this->state = $state;
     }

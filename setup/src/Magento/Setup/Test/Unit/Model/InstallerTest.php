@@ -122,7 +122,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $dataSetupFactory;
 
     /**
-     * @var \Magento\SampleData\Model\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sampleDataState;
 
@@ -177,7 +177,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
         $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
         $this->dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
-        $this->sampleDataState = $this->getMock('Magento\SampleData\Model\State', [], [], '', false);
+        $this->sampleDataState = $this->getMock('Magento\Framework\Setup\SampleData\State', [], [], '', false);
         $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->object = $this->createObject();
     }

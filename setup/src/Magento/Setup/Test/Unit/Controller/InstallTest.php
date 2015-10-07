@@ -31,7 +31,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \Magento\SampleData\Model\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sampleDataState;
 
@@ -41,7 +41,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $installerFactory = $this->getMock('\Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
-        $this->sampleDataState = $this->getMock('Magento\SampleData\Model\State', [], [], '', false);
+        $this->sampleDataState = $this->getMock('\Magento\Framework\Setup\SampleData\State', [], [], '', false);
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
         $this->controller = new Install(

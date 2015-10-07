@@ -16,7 +16,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\StateInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\State
      */
     private $sampleDataState;
 
@@ -41,7 +41,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         $this->sampleDataState = $this->getMock(
-            'Magento\Framework\Setup\SampleData\StateInterface',
+            'Magento\Framework\Setup\SampleData\State',
             [],
             [],
             '',

@@ -207,7 +207,7 @@ class Installer
     private $dataSetupFactory;
 
     /**
-     * @var SampleData\Model\State
+     * @var \Magento\Framework\Setup\SampleData\State
      */
     protected $sampleDataState;
 
@@ -239,7 +239,7 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
-     * @param SampleData\Model\State $sampleDataState
+     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -263,7 +263,7 @@ class Installer
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
-        SampleData\Model\State $sampleDataState,
+        \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar
     ) {
         $this->filePermissions = $filePermissions;

@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Setup\SampleData\StateInterface" type="Magento\SampleData\Model\State" />
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
