@@ -87,7 +87,7 @@ class Data
                         [
                             'thumb' => $image->getData('small_image_url'),
                             'img' => $image->getData('medium_image_url'),
-                            'original' => $image->getData('large_image_url'),
+                            'full' => $image->getData('large_image_url'),
                             'caption' => $image->getLabel(),
                             'position' => $image->getPosition(),
                             'isMain' => $image->getFile() == $product->getImage(),
