@@ -20,6 +20,8 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Simple implements Fallback\ResolverInterface
 {
     /**
+     * Root directory
+     *
      * @var ReadInterface
      */
     protected $rootDirectory;
@@ -57,7 +59,7 @@ class Simple implements Fallback\ResolverInterface
             }
         }
         if (!empty($module)) {
-            list($params['namespace'], $params['module']) = explode('_', $module, 2);
+            $params['module_name'] = $module;
         }
         $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
 
