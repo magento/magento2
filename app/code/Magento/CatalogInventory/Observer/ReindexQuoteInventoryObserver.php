@@ -7,11 +7,9 @@
 namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Catalog inventory module observer
- */
-class ReindexQuoteInventoryObserver
+class ReindexQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -49,7 +47,7 @@ class ReindexQuoteInventoryObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         // Reindex quote ids
         $quote = $observer->getEvent()->getQuote();

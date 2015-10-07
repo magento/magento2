@@ -102,7 +102,7 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
             }
         }
         $this->_event->setContainer($shortcutButtonsMock);
-        $this->_model->invoke($this->_observer);
+        $this->_model->execute($this->_observer);
     }
 
     public function addAvailabilityOfMethodsDataProvider()

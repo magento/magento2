@@ -7,10 +7,6 @@ namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
 use \Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
 
-/**
- * ModularSwitch Test
- *
- */
 class ModularSwitchTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,7 +63,7 @@ class ModularSwitchTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPatternDirsModular()
     {
-        $inputParams = ['param' => 'value', 'namespace' => 'Magento', 'module' => 'Core'];
+        $inputParams = ['param' => 'value', 'module_name' => 'Magento_Core'];
         $expectedResult = new \stdClass();
         $this->ruleNonModular->expects($this->never())->method('getPatternDirs');
 
@@ -82,27 +78,5 @@ class ModularSwitchTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($expectedResult, $this->object->getPatternDirs($inputParams));
-    }
-
-    /**
-     * @param array $inputParams
-     * @dataProvider getPatternDirsExceptionDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parameters 'namespace' and 'module' should either be both set or unset
-     */
-    public function testGetPatternDirsException(array $inputParams)
-    {
-        $this->object->getPatternDirs($inputParams);
-    }
-
-    /**
-     * @return array
-     */
-    public function getPatternDirsExceptionDataProvider()
-    {
-        return [
-            'no namespace' => [['module' => 'Core']],
-            'no module' => [['namespace' => 'Magento']]
-        ];
     }
 }

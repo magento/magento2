@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList" />
     <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type" />
     <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement" />
@@ -45,7 +45,6 @@
                 <item name="regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\BundleRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
                 <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
-                <item name="group_price" xsi:type="string">Magento\Bundle\Pricing\Price\GroupPrice</item>
                 <item name="special_price" xsi:type="string">Magento\Bundle\Pricing\Price\SpecialPrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
@@ -107,6 +106,13 @@
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
                 <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
             </argument>
         </arguments>
     </type>
