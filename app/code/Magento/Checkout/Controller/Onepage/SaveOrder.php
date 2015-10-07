@@ -9,7 +9,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
 /**
- * @deprecated
  * @removeCandidate
  */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
