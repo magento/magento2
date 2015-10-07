@@ -278,9 +278,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('one', $parent->getChildHtml('block1'));
         $this->assertEquals('two', $parent->getChildHtml('block2'));
 
-        // Sorted will render in the designated order
-        $this->assertEquals('onetwo', $parent->getChildHtml('', true, true));
-
         // GetChildChildHtml
         $blockTwo->setChild('block11', $blockOne);
         $this->assertEquals('one', $parent->getChildChildHtml('block2'));
