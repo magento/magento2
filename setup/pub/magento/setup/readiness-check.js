@@ -306,7 +306,7 @@ angular.module('readiness-check', [])
             });
             var $delay = 0;
             angular.forEach($scope.items, function(item) {
-                $timeout(function(){ $scope.query(item); }, $delay * 1000);
+                $timeout(function() { $scope.query(item); }, $delay * 1000);
                 $delay++;
             });
         };
