@@ -7,7 +7,6 @@
 namespace Magento\Test\Integrity\Xml;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Config\Dom\UrnResolver;
 
 class SchemaTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,18 +35,11 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:Relative_Path/something.xsd"'
                 );
 
-                try {
-                    $schemaFile = (new UrnResolver())->getRealPath($schemaLocations[1]);
-                    $this->assertFileExists($schemaFile, "$filename refers to an invalid schema $schemaFile.");
-                    $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
-                    $this->assertEmpty(
-                        $errors,
-                        "Error validating $filename against $schemaFile\n" . print_r($errors, true)
-                    );
-                } catch (\UnexpectedValueException $e) {
-                    $this->fail($e->getMessage());
-                }
-
+                $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocations[1]);
+                $this->assertEmpty(
+                    $errors,
+                    "Error validating $filename against {$schemaLocations[1]}\n" . print_r($errors, true)
+                );
             },
             $this->getXmlFiles()
         );
