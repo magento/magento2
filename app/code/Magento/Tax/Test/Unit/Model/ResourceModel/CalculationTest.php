@@ -41,7 +41,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         // get access to the method
         $method = new \ReflectionMethod(
             'Magento\Tax\Model\ResourceModel\Calculation',
-            '_createSearchPostCodeTemplates');
+            '_createSearchPostCodeTemplates'
+        );
         $method->setAccessible(true);
 
         // test & verify

@@ -95,6 +95,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
