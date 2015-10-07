@@ -13,31 +13,31 @@ return [
         ["Element 'resource': The attribute 'name' is required but missing.\nLine: 1\n"],
     ],
     'resource_name_attribute_invalid_value' => [
-        '<?xml version="1.0"?><config><resource name="testinvalidname1" /></config>',
+        '<?xml version="1.0"?><config><resource name="testinvalidname$" /></config>',
         [
-            "Element 'resource', attribute 'name': [facet 'pattern'] The value 'testinvalidname1' is not accepted" .
-            " by the pattern '[A-Za-z_]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'name': 'testinvalidname1' is not a valid value of the atomic " .
+            "Element 'resource', attribute 'name': [facet 'pattern'] The value 'testinvalidname$' is not accepted" .
+            " by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
+            "Element 'resource', attribute 'name': 'testinvalidname$' is not a valid value of the atomic " .
             "type 'nameIdentifier'.\nLine: 1\n",
             "Element 'resource', attribute 'name': Warning: No precomputed value available, the value was either " .
             "invalid or something strange happend.\nLine: 1\n"
         ],
     ],
     'resource_extends_attribute_invalid_value' => [
-        '<?xml version="1.0"?><config><resource name="test_name" extends="test1"/></config>',
+        '<?xml version="1.0"?><config><resource name="test_name" extends="test@"/></config>',
         [
-            "Element 'resource', attribute 'extends': [facet 'pattern'] The value 'test1' is not accepted " .
-            "by the pattern '[A-Za-z_]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'extends': 'test1' is not a valid value of the atomic" .
+            "Element 'resource', attribute 'extends': [facet 'pattern'] The value 'test@' is not accepted " .
+            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
+            "Element 'resource', attribute 'extends': 'test@' is not a valid value of the atomic" .
             " type 'nameIdentifier'.\nLine: 1\n"
         ],
     ],
     'resource_connection_attribute_invalid_value' => [
-        '<?xml version="1.0"?><config><resource name="test_name" connection="test1"/></config>',
+        '<?xml version="1.0"?><config><resource name="test_name" connection="test#"/></config>',
         [
-            "Element 'resource', attribute 'connection': [facet 'pattern'] The value 'test1' is not accepted " .
-            "by the pattern '[A-Za-z_]+'.\nLine: 1\n",
-            "Element 'resource', attribute 'connection': 'test1' is not a valid value of the atomic" .
+            "Element 'resource', attribute 'connection': [facet 'pattern'] The value 'test#' is not accepted " .
+            "by the pattern '[A-Za-z_0-9]+'.\nLine: 1\n",
+            "Element 'resource', attribute 'connection': 'test#' is not a valid value of the atomic" .
             " type 'nameIdentifier'.\nLine: 1\n"
         ],
     ],
