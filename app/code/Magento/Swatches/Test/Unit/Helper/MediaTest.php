@@ -297,7 +297,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $configMock->expects($this->any())->method('getImages')->willReturn($imageConfig);
+        $configMock->expects($this->any())->method('getMediaEntities')->willReturn($imageConfig);
     }
 
     public function testGetAttributeSwatchPath()
