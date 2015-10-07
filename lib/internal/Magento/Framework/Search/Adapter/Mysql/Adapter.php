@@ -49,14 +49,14 @@ class Adapter implements AdapterInterface
     /**
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param AggregationBuilder $aggregationBuilder
      * @param TemporaryStorageFactory $temporaryStorageFactory
      */
     public function __construct(
         Mapper $mapper,
         ResponseFactory $responseFactory,
-        Resource $resource,
+        ResourceConnection $resource,
         AggregationBuilder $aggregationBuilder,
         TemporaryStorageFactory $temporaryStorageFactory
     ) {

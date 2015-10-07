@@ -24,12 +24,12 @@ class Grid
     protected $flatScopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param IndexerRegistry $indexerRegistry
      * @param FlatScopeResolver $flatScopeResolver
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         IndexerRegistry $indexerRegistry,
         FlatScopeResolver $flatScopeResolver
     ) {

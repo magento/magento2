@@ -9,7 +9,7 @@ namespace Magento\Framework\Acl;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class ResourceFactory
+class AclResourceFactory
 {
     const RESOURCE_CLASS_NAME = 'Magento\Framework\Acl\AclResource';
 

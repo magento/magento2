@@ -45,9 +45,9 @@ class Fulltext
     private $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->connection = $resource->getConnection();
     }

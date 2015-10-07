@@ -24,11 +24,11 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     private $scopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver
     ) {
         $this->resource = $resource;

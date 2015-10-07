@@ -66,7 +66,7 @@ class IndexBuilder implements IndexBuilderInterface
      * @param TableMapper $tableMapper
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         ScopeConfigInterface $config,
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,

@@ -25,11 +25,11 @@ class IndexStructure implements IndexStructureInterface
     private $indexScopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param IndexScopeResolver $indexScopeResolver
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         IndexScopeResolver $indexScopeResolver
     ) {
         $this->resource = $resource;
