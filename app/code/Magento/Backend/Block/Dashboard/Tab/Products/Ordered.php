@@ -86,7 +86,8 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareColumns()
     {
         $this->addColumn(
-            'name', [
+            'name',
+            [
                 'header' => __('Product'),
                 'sortable' => false,
                 'index' => 'product_name',

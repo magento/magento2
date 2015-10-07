@@ -18,16 +18,6 @@ class Plugin
     private $update;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface
-     */
-    private $theme;
-
-    /**
-     * @var \Magento\Framework\App\ScopeInterface
-     */
-    private $store;
-
-    /**
      * @param \Magento\Widget\Model\ResourceModel\Layout\Update $update
      */
     public function __construct(
@@ -52,4 +42,4 @@ class Plugin
     ) {
         return $this->update->fetchUpdatesByHandle($handle, $subject->getTheme(), $subject->getScope());
     }
-} 
+}
