@@ -64,7 +64,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param IndexStructureInterface $indexStructure
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param Batch $batch
      * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
      * @param \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver $flatScopeResolver
@@ -73,7 +73,7 @@ class IndexerHandler implements IndexerInterface
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
-        Resource $resource,
+        ResourceConnection $resource,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,
         FlatScopeResolver $flatScopeResolver,

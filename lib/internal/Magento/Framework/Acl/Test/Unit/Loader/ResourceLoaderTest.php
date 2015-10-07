@@ -1,16 +1,16 @@
 <?php
 /**
- * Test for \Magento\Framework\Acl\Loader\Resource
+ * Test for \Magento\Framework\Acl\Loader\ResourceLoader
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit\Loader;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class ResourceLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test for \Magento\Framework\Acl\Loader\Resource::populateAcl
+     * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
      */
     public function testPopulateAclOnValidObjects()
     {
@@ -56,14 +56,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        /** @var $loaderResource \Magento\Framework\Acl\Loader\Resource */
-        $loaderResource = new \Magento\Framework\Acl\Loader\Resource($resourceProvider, $factoryObject);
+        /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
+        $loaderResource = new \Magento\Framework\Acl\Loader\ResourceLoader($resourceProvider, $factoryObject);
 
         $loaderResource->populateAcl($acl);
     }
 
     /**
-     * Test for \Magento\Framework\Acl\Loader\Resource::populateAcl
+     * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Missing ACL resource identifier
@@ -106,8 +106,8 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         /** @var $acl \Magento\Framework\Acl */
         $acl = $this->getMock('Magento\Framework\Acl', ['addResource'], [], '', false);
 
-        /** @var $loaderResource \Magento\Framework\Acl\Loader\Resource */
-        $loaderResource = new \Magento\Framework\Acl\Loader\Resource($resourceProvider, $factoryObject);
+        /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
+        $loaderResource = new \Magento\Framework\Acl\Loader\ResourceLoader($resourceProvider, $factoryObject);
 
         $loaderResource->populateAcl($acl);
     }

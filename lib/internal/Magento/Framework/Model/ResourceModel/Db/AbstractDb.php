@@ -317,7 +317,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function getConnection()
     {
-        $fullResourceName = ($this->connectionName ? $this->connectionName : Resource::DEFAULT_CONNECTION);
+        $fullResourceName = ($this->connectionName ? $this->connectionName : ResourceConnection::DEFAULT_CONNECTION);
         return $this->_resources->getConnection($fullResourceName);
     }
 

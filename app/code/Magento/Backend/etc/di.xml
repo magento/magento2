@@ -86,7 +86,7 @@
     </type>
     <type name="Magento\Framework\Acl\Builder">
         <arguments>
-            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\Resource</argument>
+            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\Cache">
