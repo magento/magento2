@@ -438,7 +438,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel
      */
     protected $_resource;
 
@@ -741,7 +741,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function getMediaGalleryAttributeId()
     {
         if (!$this->_mediaGalleryAttributeId) {
-            /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
+            /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel */
             $resource = $this->_resourceFactory->create();
             $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }
@@ -1319,7 +1319,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProducts()
     {
-        /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
+        /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel */
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
