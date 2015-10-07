@@ -9,6 +9,6 @@
  */
 namespace Magento\Framework\Acl;
 
-class Resource extends \Zend_Acl_Resource
+class AclResource extends \Zend_Acl_Resource
 {
 }
