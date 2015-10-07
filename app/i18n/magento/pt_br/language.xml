@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../lib/internal/Magento/Framework/App/Language/package.xsd">
+<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/Language/package.xsd">
     <code>pt_BR</code>
     <vendor>magento</vendor>
     <package>pt_br</package>

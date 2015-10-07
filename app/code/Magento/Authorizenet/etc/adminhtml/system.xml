@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
             <group id="authorizenet_directpost" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -45,7 +45,7 @@
                     <label>Gateway URL</label>
                 </field>
                 <field id="cgi_url_td" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Transaction Details Url</label>
+                    <label>Transaction Details URL</label>
                 </field>
                 <field id="currency" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Accepted Currency</label>
