@@ -111,22 +111,23 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);
-        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $enabledModuleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $enabledModuleList->expects($this->any())->method('has')->willReturn(true);
-        $fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
-        $fullModuleList->expects($this->any())->method('getNames')->willReturn($allComponentData);
+        $this->packageInfoFactoryMock = $this
+            ->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $this->enabledModuleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $this->enabledModuleListMock->expects($this->any())->method('has')->willReturn(true);
+        $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->fullModuleListMock->expects($this->any())->method('getNames')->willReturn($allComponentData);
         $objectManager->expects($this->exactly(3))
             ->method('get')
             ->willReturnMap([
-                ['Magento\Framework\Module\PackageInfoFactory', $packageInfoFactory],
-                ['Magento\Framework\Module\FullModuleList', $fullModuleList],
-                ['Magento\Framework\Module\ModuleList', $enabledModuleList]
+                ['Magento\Framework\Module\PackageInfoFactory', $this->packageInfoFactoryMock],
+                ['Magento\Framework\Module\FullModuleList', $this->fullModuleListMock],
+                ['Magento\Framework\Module\ModuleList', $this->enabledModuleListMock]
             ]);
         $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $this->updatePackagesCacheMock = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
         $this->connectManagerMock = $this->getMock('Magento\Setup\Model\ConnectManager', [], [], '', false);
-        $packageInfoFactory->expects($this->once())->method('create')->willReturn($this->packageInfo);
+        $this->packageInfoFactoryMock->expects($this->once())->method('create')->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
             $objectManagerProvider,
