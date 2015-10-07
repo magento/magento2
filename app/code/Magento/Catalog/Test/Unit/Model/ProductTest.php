@@ -1129,7 +1129,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'images' => [
                 [
-                    "value_id" => 1,
+                    'value_id' => 1,
                     'file' => 'file1.jpg',
                     'label' => 'label_text',
                     'position' => 4,
@@ -1163,7 +1163,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                           ->getMockForAbstractClass();
 
         $result = [
-            "value_id" => 1,
+            'value_id' => 1,
             'file' => 'file1.jpg',
             'label' => 'label_text',
             'position' => 4,
