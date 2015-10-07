@@ -12,12 +12,10 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/MysqlMq"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\MysqlMq\\": ""
+        }
     }
 }

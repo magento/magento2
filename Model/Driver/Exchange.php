@@ -5,17 +5,17 @@
  */
 namespace Magento\MysqlMq\Model\Driver;
 
-use Magento\Framework\Amqp\EnvelopeInterface;
-use Magento\Framework\Amqp\ExchangeInterface;
-use Magento\Framework\Amqp\Config\Data as AmqpConfig;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\ExchangeInterface;
+use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
 use Magento\MysqlMq\Model\QueueManagement;
 
 class Exchange implements ExchangeInterface
 {
     /**
-     * @var AmqpConfig
+     * @var MessageQueueConfig
      */
-    private $amqpConfig;
+    private $messageQueueConfig;
 
     /**
      * @var QueueManagement
@@ -25,12 +25,12 @@ class Exchange implements ExchangeInterface
     /**
      * Initialize dependencies.
      *
-     * @param AmqpConfig $amqpConfig
+     * @param MessageQueueConfig $messageQueueConfig
      * @param QueueManagement $queueManagement
      */
-    public function __construct(AmqpConfig $amqpConfig, QueueManagement $queueManagement)
+    public function __construct(MessageQueueConfig $messageQueueConfig, QueueManagement $queueManagement)
     {
-        $this->amqpConfig = $amqpConfig;
+        $this->messageQueueConfig = $messageQueueConfig;
         $this->queueManagement = $queueManagement;
     }
 
@@ -43,7 +43,7 @@ class Exchange implements ExchangeInterface
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {
-        $queueNames = $this->amqpConfig->getQueuesByTopic($topic);
+        $queueNames = $this->messageQueueConfig->getQueuesByTopic($topic);
         $this->queueManagement->addMessageToQueues($topic, $envelope->getBody(), $queueNames);
     }
 }

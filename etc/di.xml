@@ -5,17 +5,17 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherProxy"/>
 
-    <type name="Magento\Framework\Amqp\QueueRepository">
+    <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
             <argument name="queues" xsi:type="array">
                 <item name="db" xsi:type="string">Magento\MysqlMq\Model\Driver\Queue</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Amqp\ExchangeRepository">
+    <type name="Magento\Framework\MessageQueue\ExchangeRepository">
         <arguments>
             <argument name="exchanges" xsi:type="array">
                 <item name="db" xsi:type="string">Magento\MysqlMq\Model\Driver\Exchange</item>
@@ -23,21 +23,21 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\Amqp\PublisherFactory">
+    <type name="Magento\Framework\MessageQueue\PublisherFactory">
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Framework\Amqp\Publisher</item>
+                    <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
                     <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Amqp\ConsumerFactory">
+    <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="string">Magento\Framework\Amqp\Consumer</item>
+                    <item name="type" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
                     <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
