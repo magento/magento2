@@ -796,6 +796,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($appState);
         }
 
+        $paymentObject->setParentId('1');
         $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->getMockForAbstractClass();
         $order->expects($this->once())
@@ -1771,6 +1772,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $this->psrLoggerMock->expects($this->never())
             ->method('critical');
 
+        $paymentObject->setParentId('1');
         $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->getMockForAbstractClass();
         $order->expects($this->once())
@@ -1922,6 +1924,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->method('sale')
             ->willReturn($result);
 
+        $paymentObject->setParentId('1');
         $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->getMockForAbstractClass();
         $order->expects($this->once())
@@ -2113,6 +2116,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                 ]
             )->willReturn($resultSuccess);
 
+        $paymentObject->setParentId('1');
         $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->getMockForAbstractClass();
         $order->expects($this->once())
