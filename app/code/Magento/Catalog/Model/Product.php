@@ -1090,7 +1090,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param   float $qty
      * @return  float|array
-     * @deprecated (MAGETWO-31465)
      */
     public function getTierPrice($qty = null)
     {
