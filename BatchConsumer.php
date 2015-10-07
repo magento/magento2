@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 
@@ -56,7 +56,7 @@ class BatchConsumer implements ConsumerInterface
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param int $interval
      */
     public function __construct(
@@ -64,7 +64,7 @@ class BatchConsumer implements ConsumerInterface
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
-        Resource $resource,
+        ResourceConnection $resource,
         $interval = 5
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
