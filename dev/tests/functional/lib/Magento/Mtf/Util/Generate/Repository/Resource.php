@@ -10,7 +10,7 @@ namespace Magento\Mtf\Util\Generate\Repository;
  * Class Resource
  *
  */
-class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Resource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Set fixture entity_type
@@ -28,7 +28,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
      * @param null $field
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb|void
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)

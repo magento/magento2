@@ -12,7 +12,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -20,12 +20,12 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {

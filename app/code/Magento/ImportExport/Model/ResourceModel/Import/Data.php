@@ -10,7 +10,7 @@ namespace Magento\ImportExport\Model\ResourceModel\Import;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \IteratorAggregate
+class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \IteratorAggregate
 {
     /**
      * @var \Iterator
@@ -27,12 +27,12 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         $connectionName = null
     ) {

@@ -51,7 +51,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => [
                     'profiler' => [
-                        'class' => 'Magento\Framework\Model\Resource\Db\Profiler',
+                        'class' => 'Magento\Framework\Model\ResourceModel\Db\Profiler',
                         'enabled' => 'true',
                     ],
                     'username' => 'username',
@@ -63,10 +63,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Framework\Model\Resource\Db\Profiler $profiler */
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();
 
-        $this->assertInstanceOf('Magento\Framework\Model\Resource\Db\Profiler', $profiler);
+        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\Profiler', $profiler);
         $this->assertTrue($profiler->getEnabled());
     }
 }

@@ -39,15 +39,15 @@ class StoreGroup
     }
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $subject
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject
      * @param callable $proceed
      * @param \Magento\Framework\Model\AbstractModel $group
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Framework\Model\Resource\Db\AbstractDb $subject,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $group
     ) {

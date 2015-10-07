@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {

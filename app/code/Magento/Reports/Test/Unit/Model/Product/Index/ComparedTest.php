@@ -61,7 +61,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
     protected $catalogProductHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -99,7 +99,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->disableOriginalConstructor()
             ->setMethods(['getIdFieldName', '_construct', 'getConnection'])
             ->getMockForAbstractClass();

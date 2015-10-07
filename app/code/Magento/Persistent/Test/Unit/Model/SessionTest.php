@@ -38,7 +38,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,

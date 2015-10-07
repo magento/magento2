@@ -7,7 +7,7 @@
  */
 namespace Magento\TestFramework\Db;
 
-class ConnectionAdapter extends \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql
+class ConnectionAdapter extends \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql
 {
     /**
      * Retrieve DB connection class name

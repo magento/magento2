@@ -53,18 +53,18 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $this->groupModel = $this->getMock('Magento\Customer\Model\Group', [], [], '', false);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resource);
 
         $this->relationProcessorMock = $this->getMock(
-            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            '\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
             [],
             [],
             '',
             false
         );
 
-        $transactionManagerMock = $this->getMock('\Magento\Framework\Model\Resource\Db\TransactionManagerInterface');
+        $transactionManagerMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface');
         $transactionManagerMock->expects($this->once())
             ->method('start')
             ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));

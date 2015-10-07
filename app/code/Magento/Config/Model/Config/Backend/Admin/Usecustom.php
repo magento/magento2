@@ -23,7 +23,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -32,7 +32,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

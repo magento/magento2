@@ -16,10 +16,10 @@ use Magento\Framework\App\Config\Element;
 use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
-use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Entity/Attribute/Model - entity abstract

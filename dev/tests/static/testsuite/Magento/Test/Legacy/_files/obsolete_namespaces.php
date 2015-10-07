@@ -96,4 +96,6 @@ return [
     ['Magento\Widget\Test\Unit\Model\Resource', 'Magento\Widget\Test\Unit\Model\ResourceModel'],
     ['Magento\Wishlist\Model\Resource', 'Magento\Wishlist\Model\ResourceModel'],
     ['Magento\Wishlist\Test\Unit\Model\Resource', 'Magento\Wishlist\Test\Unit\Model\ResourceModel'],
+    ['Magento\Framework\Model\Resource', 'Magento\Framework\Model\ResourceModel'],
+    ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ResourceModel']
 ];

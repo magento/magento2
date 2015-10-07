@@ -181,7 +181,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @param TransactionCollectionFactory $salesTransactionCollectionFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetaData
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -206,7 +206,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         TransactionCollectionFactory $salesTransactionCollectionFactory,
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

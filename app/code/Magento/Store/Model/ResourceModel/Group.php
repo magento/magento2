@@ -8,7 +8,7 @@ namespace Magento\Store\Model\ResourceModel;
 /**
  * Store group resource model
  */
-class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Category;
 
-use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Product extends AbstractDb
 {

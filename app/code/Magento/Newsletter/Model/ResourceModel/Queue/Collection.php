@@ -10,7 +10,7 @@ namespace Magento\Newsletter\Model\ResourceModel\Queue;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * True when subscribers info joined
@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -49,7 +49,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
