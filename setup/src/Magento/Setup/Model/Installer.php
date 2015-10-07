@@ -37,6 +37,7 @@ use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\SampleData;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -206,6 +207,11 @@ class Installer
     private $dataSetupFactory;
 
     /**
+     * @var \Magento\Framework\Setup\SampleData\State
+     */
+    protected $sampleDataState;
+
+    /**
      * Component Registrar
      *
      * @var ComponentRegistrar
@@ -233,6 +239,7 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
+     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -256,6 +263,7 @@ class Installer
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
+        \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar
     ) {
         $this->filePermissions = $filePermissions;
@@ -277,6 +285,7 @@ class Installer
         $this->dbValidator = $dbValidator;
         $this->setupFactory = $setupFactory;
         $this->dataSetupFactory = $dataSetupFactory;
+        $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
     }
 
@@ -297,6 +306,7 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
+        $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', []];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -306,12 +316,7 @@ class Installer
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
-        $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA])
-            && $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_SampleData') !== null
-        ) {
-            $script[] = ['Installing sample data:', 'installSampleData', [$request]];
-        }
+        $script[] = ['Caches clearing:', 'cleanCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
@@ -335,6 +340,9 @@ class Installer
 
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
             throw new \LogicException('Installation progress did not finish properly.');
+        }
+        if ($this->sampleDataState->hasError()) {
+            $this->log->log('Sample Data is installed with errors. See log file for details');
         }
     }
 
@@ -930,7 +938,7 @@ class Installer
     {
         $this->assertDeploymentConfigExists();
 
-        $this->clearCache();
+        $this->cleanCaches();
 
         if (!$keepGeneratedCode) {
             $this->cleanupGeneratedCode();
@@ -949,7 +957,7 @@ class Installer
         $this->log->log('Starting Magento uninstallation:');
 
         $this->cleanupDb();
-        $this->clearCache();
+        $this->cleanCaches();
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();
@@ -960,18 +968,6 @@ class Installer
         $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
-    }
-
-    /**
-     * Clears cache
-     *
-     * @return void
-     */
-    private function clearCache()
-    {
-        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
-        $cache->clean();
-        $this->log->log('Cache cleared successfully');
     }
 
     /**
@@ -991,6 +987,22 @@ class Installer
 
         $this->log->log('Current status:');
         $this->log->log(print_r($cacheManager->getStatus(), true));
+    }
+
+    /**
+     * Clean caches after installing application
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     */
+    private function cleanCaches()
+    {
+        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get('Magento\Framework\App\Cache\Manager');
+        $types = $cacheManager->getAvailableTypes();
+        $cacheManager->clean($types);
+        $this->log->log('Cache cleared successfully');
     }
 
     /**
@@ -1117,30 +1129,6 @@ class Installer
         );
         if (null !== $prefix) {
             $this->dbValidator->checkDatabaseTablePrefix($prefix);
-        }
-    }
-
-    /**
-     * Run installation process for Sample Data
-     *
-     * @param array $request
-     * @return void
-     * @throws \Magento\Setup\SampleDataException
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
-     */
-    private function installSampleData($request)
-    {
-        try {
-            $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
-            $this->objectManagerProvider->reset();
-            $sampleData = $this->objectManagerProvider->get()->get('Magento\SampleData\Model\SampleData');
-            $sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
-        } catch (\Exception $e) {
-            throw new \Magento\Setup\SampleDataException(
-                "Error during sample data installation: {$e->getMessage()}",
-                $e->getCode()
-            );
         }
     }
 
