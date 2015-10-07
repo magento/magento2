@@ -22,7 +22,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Sales\Ui\Component\Listing\Column\Address');
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->model = $objectManager->getObject(
+            'Magento\Sales\Ui\Component\Listing\Column\Address',
+            ['context' => $contextMock]
+        );
     }
 
     public function testPrepareDataSource()

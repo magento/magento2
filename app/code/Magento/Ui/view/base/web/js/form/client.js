@@ -6,7 +6,7 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/class'
+    'uiClass'
 ], function ($, _, utils, Class) {
     'use strict';
 

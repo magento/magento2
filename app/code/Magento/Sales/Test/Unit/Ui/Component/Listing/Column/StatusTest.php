@@ -43,9 +43,15 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collection);
 
         $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\Status',
-            ['collectionFactory' => $collectionFactoryMock]
+            ['collectionFactory' => $collectionFactoryMock, 'context' => $contextMock]
         );
         $model->setData('name', $itemName);
         $dataSource = $model->prepareDataSource($dataSource);
