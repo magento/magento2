@@ -22,12 +22,11 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Store model
  *
- * @method Store setGroupId(int $value)
- * @method Store setName(string $value)
+ * @method Store setGroupId($value)
  * @method int getSortOrder()
  * @method int getStoreId()
- * @method Store setSortOrder(int $value)
- * @method Store setIsActive(int $value)
+ * @method Store setSortOrder($value)
+ * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -90,14 +89,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**#@-*/
 
-    /**#@+
-     * Code constants
-     */
-    const DEFAULT_CODE = 'default';
-
     const ADMIN_CODE = 'admin';
-
-    /**#@-*/
 
     /**
      * Cache tag
@@ -493,6 +485,22 @@ class Store extends AbstractExtensibleModel implements
     public function setCode($code)
     {
         return $this->setData('code', $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->_getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 
     /**
@@ -1129,16 +1137,6 @@ class Store extends AbstractExtensibleModel implements
     public function isActive()
     {
         return (bool)$this->_getData('is_active');
-    }
-
-    /**
-     * Retrieve store name
-     *
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->_getData('name');
     }
 
     /**

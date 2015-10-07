@@ -248,7 +248,7 @@ class IndexBuilder
             ]
         );
 
-        if (!$rule->getConditions()->validate($product)) {
+        if (!$rule->validate($product)) {
             $this->connection->delete(
                 $this->resource->getTableName('catalogrule_product_price'),
                 [$this->connection->quoteInto('product_id = ?', $productId)]
@@ -596,17 +596,6 @@ class IndexBuilder
         }
 
         /**
-         * Join group price to result
-         */
-        $groupPriceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'group_price');
-        $select->joinLeft(
-            ['gp' => $groupPriceAttr->getBackend()->getResource()->getMainTable()],
-            'gp.entity_id=rp.product_id AND gp.customer_group_id=rp.customer_group_id AND '
-            . $this->connection->getCheckSql('gp.website_id=0', 'TRUE', 'gp.website_id=rp.website_id'),
-            'value'
-        );
-
-        /**
          * Join default price and websites prices to result
          */
         $priceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -647,10 +636,7 @@ class IndexBuilder
             []
         );
         $select->columns([
-            'default_price' => $this->connection->getIfNullSql(
-                'gp.value',
-                $this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value')
-            ),
+            'default_price' =>$this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
         ]);
 
         return $this->connection->query($select);

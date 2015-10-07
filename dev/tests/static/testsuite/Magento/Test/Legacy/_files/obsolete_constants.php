@@ -168,7 +168,6 @@ return [
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS',
         'Magento\Framework\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS',
     ],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS',
@@ -935,5 +934,22 @@ return [
         'KEY_MODULES',
         'Magento\Setup\Model\ConfigOptionsList',
         'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
+    ],
+    [
+        'SAMPLE_FILES_DIRECTORY',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download::SAMPLE_FILES_MODULE'
+    ],
+    [
+        'MODULES',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'LOCALE',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'THEMES',
+        'Magento\Framework\App\Filesystem\DirectoryList'
     ],
 ];
