@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ProductVideo\Test\Unit\Model;
+namespace Magento\ProductVideo\Test\Unit\Observer;
 
-
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ChangeTemplateObserverTest extends \PHPUnit_Framework_TestCase
 {
     public function testChangeTemplate()
     {
@@ -20,13 +19,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
          */
         $block = $this->getMock('\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo', [], [], '', false);
         $block->expects($this->once())
-              ->method('setTemplate')
-              ->with('Magento_ProductVideo::helper/gallery.phtml')
-              ->willReturnSelf();
+            ->method('setTemplate')
+            ->with('Magento_ProductVideo::helper/gallery.phtml')
+            ->willReturnSelf();
         $observer->expects($this->once())->method('__call')->with('getBlock')->willReturn($block);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductVideo\Model\Observer $model */
-        $model = $this->getMock('\Magento\ProductVideo\Model\Observer', null, [], '', false);
-        $model->changeTemplate($observer);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductVideo\Observer\ChangeTemplateObserver $unit */
+        $unit = $this->getMock('Magento\ProductVideo\Observer\ChangeTemplateObserver', null, [], '', false);
+        $unit->execute($observer);
     }
 }

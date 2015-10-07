@@ -43,7 +43,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'SalesOrderInvoiceSendEmailsObserver',
         'SalesOrderShipmentSendEmailsObserver',
         'SalesOrderCreditmemoSendEmailsObserver',
-        'Magento\ProductVideo\Model\Observer',
     ];
 
     public static function setUpBeforeClass()
