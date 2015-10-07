@@ -211,7 +211,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getWebsiteId()
     {
         if (!$this->hasData('website_id')) {
-            $this->setData('website_id', $this->getRequest()->getParam($this->getWebsiteVarName()));
+            $this->setData('website_id', (int)$this->getRequest()->getParam($this->getWebsiteVarName()));
         }
         return $this->getData('website_id');
     }
@@ -289,7 +289,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreGroupId()
     {
         if (!$this->hasData('store_group_id')) {
-            $this->setData('store_group_id', $this->getRequest()->getParam($this->getStoreGroupVarName()));
+            $this->setData('store_group_id', (int)$this->getRequest()->getParam($this->getStoreGroupVarName()));
         }
         return $this->getData('store_group_id');
     }
@@ -339,7 +339,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreId()
     {
         if (!$this->hasData('store_id')) {
-            $this->setData('store_id', $this->getRequest()->getParam($this->getStoreVarName()));
+            $this->setData('store_id', (int)$this->getRequest()->getParam($this->getStoreVarName()));
         }
         return $this->getData('store_id');
     }
@@ -548,11 +548,11 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="tooltip">' . '<span class="help"><a' . ' href="' . $this->escapeUrl(
+            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
                 $url
             ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
                 'What is this?'
-            ) . '"' . ' class="link-store-scope"><span>' . __(
+            ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
                 'What is this?'
             ) . '</span></a></span>' . ' </div>';
         }
