@@ -5,12 +5,17 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 class FixtureManager
 {
+    /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
     /**
      * Modules root directory
      *
@@ -24,12 +29,12 @@ class FixtureManager
     protected $_string;
 
     /**
-     * @param Filesystem $filesystem
+     * @param ComponentRegistrar $componentRegistrar
      * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(Filesystem $filesystem, \Magento\Framework\Stdlib\StringUtils $string)
+    public function __construct(ComponentRegistrar $componentRegistrar, \Magento\Framework\Stdlib\StringUtils $string)
     {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->componentRegistrar = $componentRegistrar;
         $this->_string = $string;
     }
 
@@ -43,12 +48,7 @@ class FixtureManager
         list($moduleName, $filePath) = \Magento\Framework\View\Asset\Repository::extractModule(
             $this->normalizePath($fileId)
         );
-
-        $path = $this->_string->upperCaseWords($moduleName, '_', '/') . '/' . $filePath;
-        $result = $this->_modulesDirectory->getAbsolutePath($path);
-
-        return $result;
-
+        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) . '/' . $filePath;
     }
 
     /**
