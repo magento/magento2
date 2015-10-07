@@ -13,4 +13,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
         <attribute code="downloadable_option" type="Magento\Downloadable\Api\Data\DownloadableOptionInterface" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="downloadable_option" type="Magento\Downloadable\Api\Data\DownloadableOptionInterface" />
+    </extension_attributes>
 </config>
