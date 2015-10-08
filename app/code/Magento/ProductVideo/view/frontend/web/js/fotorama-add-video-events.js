@@ -23,7 +23,8 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
     function parseURL(href, forceVideo) {
         var id,
             type,
-            ampersandPosition;
+            ampersandPosition,
+            vimeoRegex;
 
         /**
          * Get youtube ID
@@ -62,7 +63,10 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
             type = 'youtube';
         } else if (href.host.match(/vimeo\.com/)) {
             type = 'vimeo';
-            id = href.pathname.replace(/^\/(video\/)?/, '').replace(/\/.*/, '');
+            vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+            ].join(''));
+            id = href.href.match(vimeoRegex)[3];
         }
 
         if ((!id || !type) && forceVideo) {
