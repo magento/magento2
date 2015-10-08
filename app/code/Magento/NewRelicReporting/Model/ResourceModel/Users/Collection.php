@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\NewRelicReporting\Model\ResourceModel\Module;
+namespace Magento\NewRelicReporting\Model\ResourceModel\Users;
 
 class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
 {
     /**
-     * Initialize module status resource model
+     * Initialize users resource collection
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\Module', 'Magento\NewRelicReporting\Model\ResourceModel\Module');
+        $this->_init('Magento\NewRelicReporting\Model\Users', 'Magento\NewRelicReporting\Model\ResourceModelModel\Users');
     }
 }

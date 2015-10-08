@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\NewRelicReporting\Model\Resource;
+namespace Magento\NewRelicReporting\Model\ResourceModel;
 
 class Counts extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {

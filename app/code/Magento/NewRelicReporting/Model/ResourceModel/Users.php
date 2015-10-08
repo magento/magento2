@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\NewRelicReporting\Model\Resource;
+namespace Magento\NewRelicReporting\Model\ResourceModel;
 
 class Users extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {
