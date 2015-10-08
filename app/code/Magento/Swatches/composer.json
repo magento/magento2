@@ -15,7 +15,8 @@
         "magento/framework": "1.0.0-beta"
     },
     "suggest": {
-        "magento/module-layered-navigation": "1.0.0-beta"
+        "magento/module-layered-navigation": "1.0.0-beta",
+        "magento/module-swatches-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
