@@ -72,6 +72,7 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Setup\Validator\DbValidator'),
             $this->serviceLocator->get('Magento\Setup\Module\SetupFactory'),
             $this->serviceLocator->get('Magento\Setup\Module\DataSetupFactory'),
+            $this->serviceLocator->get('Magento\Framework\Setup\SampleData\State'),
             new \Magento\Framework\Component\ComponentRegistrar()
         );
     }
