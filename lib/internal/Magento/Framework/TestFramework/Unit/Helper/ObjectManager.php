@@ -146,7 +146,7 @@ class ObjectManager
     /**
      * Get class instance
      *
-     * @param $className
+     * @param string $className
      * @param array $arguments
      * @return object
      */

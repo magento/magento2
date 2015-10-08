@@ -51,7 +51,7 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
     protected $countsModel;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollectionFactory;
 
