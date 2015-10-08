@@ -10,19 +10,21 @@
         <job name="sales_clean_quotes" instance="Magento\Sales\Cron\CleanExpiredQuotes" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="sales_clean_orders" instance="Magento\Sales\Model\Observer\CleanExpiredOrders" method="execute">
+        <job name="sales_clean_orders" instance="Magento\Sales\Model\CronJob\CleanExpiredOrders" method="execute">
             <schedule>0 * * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportOrderData" method="execute">
+        <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\CronJob\AggregateSalesReportOrderData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_invoiced_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportInvoicedData" method="execute">
+        <job name="aggregate_sales_report_invoiced_data"
+             instance="Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportRefundedData" method="execute">
+        <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportBestsellersData" method="execute">
+        <job name="aggregate_sales_report_bestsellers_data"
+             instance="Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
         <job name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertCron" method="execute">

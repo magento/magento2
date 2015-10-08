@@ -274,22 +274,22 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
             <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
         </arguments>
     </virtualType>
-    <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
             <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
         </arguments>
     </virtualType>
-    <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
             <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
         </arguments>
     </virtualType>
-    <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
             <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
