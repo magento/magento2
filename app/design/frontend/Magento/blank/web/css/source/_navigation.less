@@ -125,13 +125,17 @@
 
         .header.links {
             .lib-list-reset-styles();
+            border-bottom: 1px solid @color-gray82;
             li {
-                border-top: 1px solid @color-gray82;
                 font-size: 1.6rem;
                 margin: 0;
                 &.greet.welcome {
+                    border-top: 1px solid @color-gray82;
                     font-weight: 700;
                     padding: 8px 20px;
+                }
+                > a {
+                    border-top: 1px solid @color-gray82;
                 }
             }
             a,
