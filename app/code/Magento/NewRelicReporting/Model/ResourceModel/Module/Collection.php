@@ -15,6 +15,6 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\Module', 'Magento\NewRelicReporting\Model\ResourceModelModel\Module');
+        $this->_init('Magento\NewRelicReporting\Model\Module', 'Magento\NewRelicReporting\Model\ResourceModel\Module');
     }
 }
