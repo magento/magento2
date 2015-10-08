@@ -101,6 +101,8 @@ class Reader
      * Finds list of files that has the key
      *
      * @param array $keys
+     * @param string $configPath
+     * @param array $configFiles
      * @return string
      */
     private function findFilesWithKeys($keys, $configPath, $configFiles)
