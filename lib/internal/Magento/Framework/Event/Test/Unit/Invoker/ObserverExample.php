@@ -5,12 +5,16 @@
  */
 namespace Magento\Framework\Event\Test\Unit\Invoker;
 
-class ObserverExample implements \Magento\Framework\Event\ObserverInterface
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+
+class ObserverExample implements ObserverInterface
 {
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param Observer $observer
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         //do nothing
     }
