@@ -90,6 +90,7 @@ location /static/ {
     if (!-f $request_filename) {
         rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
     }
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/ {
@@ -109,6 +110,7 @@ location /media/ {
         expires    off;
         try_files $uri $uri/ /get.php?$args;
     }
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/customer/ {
