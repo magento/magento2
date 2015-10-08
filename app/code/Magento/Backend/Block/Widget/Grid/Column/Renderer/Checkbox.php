@@ -82,7 +82,7 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
         } else {
             $checkedValue = $this->getColumn()->getValue();
-            if (!is_null($checkedValue)) {
+            if ($checkedValue !== null) {
                 $checked = $value === $checkedValue ? ' checked="checked"' : '';
             }
         }
@@ -93,7 +93,7 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             $disabled = in_array($value, $disabledValues) ? ' disabled="disabled"' : '';
         } else {
             $disabledValue = $this->getColumn()->getDisabledValue();
-            if (!is_null($disabledValue)) {
+            if ($disabledValue !== null) {
                 $disabled = $value === $disabledValue ? ' disabled="disabled"' : '';
             }
         }
