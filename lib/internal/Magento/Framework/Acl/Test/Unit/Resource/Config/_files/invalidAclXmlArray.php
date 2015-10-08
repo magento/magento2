@@ -7,31 +7,34 @@ return [
     'disabled_attribute_empty_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'disabled=""/></resources></acl></config>',
-        ["Element 'resource', attribute 'disabled': '' is not a valid value of the atomic type 'xs:boolean'."],
+        [
+            "Element 'resource', attribute 'disabled': '' is not a valid value of the atomic" .
+            " type 'xs:boolean'.\nLine: 1\n"],
     ],
     'disabled_attribute_wrong_type_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'disabled="notBool"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'disabled': 'notBool' is not a valid value of the atomic type " .
-            "'xs:boolean'."
+            "'xs:boolean'.\nLine: 1\n"
         ],
     ],
     'double_acl' => [
         '<?xml version="1.0"?><config><acl><resources></resources></acl><acl/></config>',
-        ["Element 'acl': This element is not expected."],
+        ["Element 'acl': This element is not expected.\nLine: 1\n"],
     ],
     'double_resource' => [
         '<?xml version="1.0"?><config><acl><resources></resources><resources></resources></acl></config>',
-        ["Element 'resources': This element is not expected."],
+        ["Element 'resources': This element is not expected.\nLine: 1\n"],
     ],
     'less_minLength_title_attribute' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'title="Sh"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'title': [facet 'minLength'] The value 'Sh' has a length of '2'; " .
-            "this underruns the allowed minimum length of '3'.",
-            "Element 'resource', attribute 'title': 'Sh' is not a valid value of the atomic type 'typeTitle'."
+            "this underruns the allowed minimum length of '3'.\nLine: 1\n",
+            "Element 'resource', attribute 'title': 'Sh' is not a valid value of the atomic type" .
+            " 'typeTitle'.\nLine: 1\n"
         ],
     ],
     'more_maxLength_title_attribute' => [
@@ -39,9 +42,10 @@ return [
         ' title="Lorem ipsum dolor sit amet, consectetur adipisicing"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'title': [facet 'maxLength'] The value 'Lorem ipsum dolor sit amet, " .
-            "consectetur adipisicing' has a length of '51'; this exceeds the allowed maximum length of '50'.",
+            "consectetur adipisicing' has a length of '51'; this exceeds the allowed maximum" .
+            " length of '50'.\nLine: 1\n",
             "Element 'resource', attribute 'title': 'Lorem ipsum dolor sit amet, consectetur adipisicing' is not " .
-            "a valid value of the atomic type 'typeTitle'."
+            "a valid value of the atomic type 'typeTitle'.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp1' => [
@@ -49,12 +53,13 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'test_Value::show_toolbar' is " .
-            "not accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "not accepted by the pattern" .
+            " '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'test_Value::show_toolbar' is not a valid value of the atomic type " .
-            "'typeId'.",
+            "'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
             "the value was either invalid or " .
-            "something strange happend."
+            "something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp2' => [
@@ -62,12 +67,11 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value::show_toolbar' is not " .
-            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'Test_value::show_toolbar' is not a valid value of the atomic type " .
-            "'typeId'.",
+            "'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
-            "the value was either invalid " .
-            "or something strange happend."
+            "the value was either invalid or something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp3' => [
@@ -75,13 +79,11 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'M@#$%^*_Value::show_toolbar' is not " .
-            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'M@#$%^*_Value::show_toolbar' " .
-            "is not a valid value of the atomic type " .
-            "'typeId'.",
+            "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
-            "the value was either invalid " .
-            "or something strange happend."
+            "the value was either invalid or something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp4' => [
@@ -89,12 +91,12 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value '_Value::show_toolbar' is not " .
-            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': '_Value::show_toolbar' " .
-            "is not a valid value of the atomic type 'typeId'.",
+            "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend."
+            "or something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp5' => [
@@ -102,12 +104,12 @@ return [
         '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Value_::show_toolbar' is not " .
-            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'Value_::show_toolbar' " .
-            "is not a valid value of the atomic type 'typeId'.",
+            "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend."
+            "or something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp6' => [
@@ -115,23 +117,24 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value:show_toolbar' is not " .
-            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
             "Element 'resource', attribute 'id': 'Test_value:show_toolbar' is not a valid value of the atomic " .
-            "type 'typeId'.",
+            "type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend."
+            "or something strange happend.\nLine: 1\n"
         ],
     ],
     'notvalid_id_attribute_value_regexp7' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::"/></resources>' . '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_Value::' is not accepted by " .
-            "the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
-            "Element 'resource', attribute 'id': 'Test_Value::' is not a valid value of the atomic type 'typeId'.",
+            "the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
+            "Element 'resource', attribute 'id': 'Test_Value::' is not a valid value of the atomic type" .
+            " 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend."
+            "or something strange happend.\nLine: 1\n"
         ],
     ],
     'sortOrder_attribute_empty_value' => [
@@ -139,18 +142,18 @@ return [
         'title="Lorem ipsum" sortOrder="stringValue"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'sortOrder': 'stringValue' is not a valid value of the atomic " .
-            "type 'xs:int'."
+            "type 'xs:int'.\nLine: 1\n"
         ],
     ],
     'sortOrder_attribute_wrong_type_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'title="Lorem ipsum" sortOrder=""/></resources></acl></config>',
-        ["Element 'resource', attribute 'sortOrder': '' is not a valid value of the atomic type 'xs:int'."],
+        ["Element 'resource', attribute 'sortOrder': '' is not a valid value of the atomic type 'xs:int'.\nLine: 1\n"],
     ],
     'with_not_allowed_attribute' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'someatrrname="some value"/></resources></acl></config>',
-        ["Element 'resource', attribute 'someatrrname': The attribute 'someatrrname' is not allowed."],
+        ["Element 'resource', attribute 'someatrrname': The attribute 'someatrrname' is not allowed.\nLine: 1\n"],
     ],
     'with_two_same_id' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
@@ -158,19 +161,19 @@ return [
         '</resources></acl></config>',
         [
             "Element 'resource': Duplicate key-sequence ['Test_Value::show_toolbar'] in unique identity-constraint " .
-            "'uniqueResourceId'."
+            "'uniqueResourceId'.\nLine: 1\n"
         ],
     ],
     'without_acl' => [
         '<?xml version="1.0"?><config/>',
-        ["Element 'config': Missing child element(s). Expected is ( acl )."],
+        ["Element 'config': Missing child element(s). Expected is ( acl ).\nLine: 1\n"],
     ],
     'without_required_id_attribute' => [
         '<?xml version="1.0"?><config><acl><resources><resource title="Notifications"/></resources></acl></config>',
-        ["Element 'resource': The attribute 'id' is required but missing."],
+        ["Element 'resource': The attribute 'id' is required but missing.\nLine: 1\n"],
     ],
     'without_resource' => [
         '<?xml version="1.0"?><config><acl/></config>',
-        ["Element 'acl': Missing child element(s). Expected is ( resources )."],
+        ["Element 'acl': Missing child element(s). Expected is ( resources ).\nLine: 1\n"],
     ]
 ];
