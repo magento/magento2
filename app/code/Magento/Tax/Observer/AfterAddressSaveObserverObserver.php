@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
 
-class AfterAddressSave implements ObserverInterface
+class AfterAddressSaveObserver implements ObserverInterface
 {
     /**
      * @var Session

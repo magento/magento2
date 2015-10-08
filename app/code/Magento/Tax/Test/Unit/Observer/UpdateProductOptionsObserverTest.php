@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Observer;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UpdateProductOptionsTest extends \PHPUnit_Framework_TestCase
+class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -66,7 +66,7 @@ class UpdateProductOptionsTest extends \PHPUnit_Framework_TestCase
 
          $objectManager = new ObjectManager($this);
          $taxObserverObject = $objectManager->getObject(
-             'Magento\Tax\Observer\UpdateProductOptions',
+             'Magento\Tax\Observer\UpdateProductOptionsObserver',
              [
                  'taxData' => $taxData,
                  'registry' => $registry,

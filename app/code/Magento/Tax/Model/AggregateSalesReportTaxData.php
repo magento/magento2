@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tax\Observer;
+namespace Magento\Tax\Model;
 
 class AggregateSalesReportTaxData
 {

@@ -11,9 +11,8 @@ use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
-use Magento\Tax\Observer\AfterAddressSave;
 
-class AfterAddressSaveTest extends \PHPUnit_Framework_TestCase
+class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Observer
@@ -82,7 +81,7 @@ class AfterAddressSaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->session = $this->objectManager->getObject(
-            'Magento\Tax\Observer\AfterAddressSave',
+            'Magento\Tax\Observer\AfterAddressSaveObserver',
             [
                 'customerSession' => $this->customerSessionMock,
                 'taxHelper' => $this->taxHelperMock,
