@@ -219,7 +219,8 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     protected function _buildFormUrlRequest(\Magento\Payment\Model\InfoInterface $payment)
     {
-        $request = $this->_buildBasicRequest()->setOrder($payment->getOrder())->setPaymentMethod($this);
+        $order = $payment->getOrder();
+        $request = $this->_buildBasicRequest()->setOrder($order)->setPaymentMethod($this)->setAmount($order);
 
         return $request;
     }

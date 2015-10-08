@@ -37,7 +37,7 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
-        if ('php' != $fileType || !preg_match('#/app/.*/(Setup|Resource)/.*\.php$#', $file)) {
+        if ('php' != $fileType || !preg_match('#.*/(Setup|Resource)/.*\.php$#', $file)) {
             return [];
         }
 
