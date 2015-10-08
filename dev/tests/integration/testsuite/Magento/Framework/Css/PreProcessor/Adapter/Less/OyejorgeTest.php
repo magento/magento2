@@ -37,8 +37,6 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
             : file_get_contents(__DIR__ . '/_files/oyejorge.css');
         $actualCss = ($this->model->process($sourceFilePath));
 
-        file_put_contents(__DIR__ . '/_files/actual.css', $actualCss);
-        file_put_contents(__DIR__ . '/_files/expected.css', $expectedCss);
         $this->assertEquals($this->cutCopyrights($expectedCss), $actualCss);
     }
 
