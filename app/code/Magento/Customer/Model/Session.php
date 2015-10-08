@@ -208,7 +208,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve customer model object
      *
-     * @deprecated
      * @return CustomerData
      */
     public function getCustomerData()
@@ -249,7 +248,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param   Customer $customerModel
      * @return  $this
-     * @deprecated use setCustomerId() instead
+     * use setCustomerId() instead
      */
     public function setCustomer(Customer $customerModel)
     {
@@ -277,7 +276,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Retrieve customer model object
      *
      * @return Customer
-     * @deprecated use getCustomerId() instead
+     * use getCustomerId() instead
      */
     public function getCustomer()
     {

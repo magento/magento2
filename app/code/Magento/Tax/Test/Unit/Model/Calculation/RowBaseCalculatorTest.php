@@ -21,7 +21,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initMocks(true);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->once())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound')->will($this->returnValue(0));
 
         $this->assertSame(
@@ -34,7 +34,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initMocks(false);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->never())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound');
 
         $this->assertSame(
