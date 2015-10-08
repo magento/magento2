@@ -9,6 +9,9 @@
  */
 namespace Magento\TestFramework\Workaround\Cleanup;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\App\Utility\Files;
+
 class StaticProperties
 {
     /**
@@ -19,9 +22,7 @@ class StaticProperties
      * @var array
      */
     protected static $_cleanableFolders = [
-        '/app/code/' => ['/app/code/*/*/Test/Unit/'],
         '/dev/tests/integration/framework' => [],
-        '/lib/internal/' => ['/lib/internal/*/*/Test/Unit/', '/lib/internal/Magento/Framework/*/Test/Unit/']
     ];
 
     protected static $backupStaticVariables = [];
@@ -41,6 +42,26 @@ class StaticProperties
         'Magento\TestFramework\Workaround\Cleanup\StaticProperties',
         'Magento\Framework\Phrase',
     ];
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $componentRegistrar = new ComponentRegistrar();
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $key = $moduleDir . '/';
+            $value = $key . 'Test/Unit/';
+            self::$_cleanableFolders[$key] = [$value];
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $key = $libraryDir . '/';
+            $valueRootFolder = $key . '/Test/Unit/';
+            $valueSubFolder = $key . '/*/Test/Unit/';
+            self::$_cleanableFolders[$key] = [$valueSubFolder, $valueRootFolder];
+        }
+    }
 
     /**
      * Check whether it is allowed to clean given class static variables
@@ -109,7 +130,11 @@ class StaticProperties
      */
     public static function backupStaticVariables()
     {
-        $classFiles = \Magento\Framework\App\Utility\Files::init()->getClassFiles(true, true, false, true, false);
+        $classFiles = Files::init()->getPhpFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TESTS
+        );
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {

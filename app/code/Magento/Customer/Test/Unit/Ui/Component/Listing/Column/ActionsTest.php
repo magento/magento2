@@ -90,7 +90,7 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn('http://magento.com/customer/index/edit');
 
-        $this->component->prepareDataSource($dataSource);
+        $dataSource = $this->component->prepareDataSource($dataSource);
 
         $this->assertEquals($expectedDataSource, $dataSource);
     }

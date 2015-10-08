@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_Customer::customer" title="Customers" module="Magento_Customer" sortOrder="30" resource="Magento_Customer::customer"/>
         <add id="Magento_Customer::customer_manage" title="All Customers" module="Magento_Customer" sortOrder="10" parent="Magento_Customer::customer" action="customer/index/" resource="Magento_Customer::manage"/>

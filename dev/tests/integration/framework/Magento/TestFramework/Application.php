@@ -164,7 +164,10 @@ class Application
 
         $customDirs = $this->getCustomDirs();
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
-        \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
+        \Magento\Framework\Autoload\Populator::populateMappings(
+            $autoloadWrapper,
+            $this->dirList
+        );
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
@@ -626,7 +629,6 @@ class Application
             DirectoryList::GENERATION => [$path => "{$var}/generation"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
-            DirectoryList::THEMES => [$path => BP . '/app/design'],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
