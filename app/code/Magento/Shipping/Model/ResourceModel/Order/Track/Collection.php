@@ -8,6 +8,7 @@ namespace Magento\Shipping\Model\ResourceModel\Order\Track;
 /**
  * Flat sales order shipment tracks collection
  *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection
 {
