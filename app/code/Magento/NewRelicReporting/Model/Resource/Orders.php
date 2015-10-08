@@ -6,7 +6,7 @@
 
 namespace Magento\NewRelicReporting\Model\Resource;
 
-class Orders extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Orders extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {
     /**
      * Initialize orders resource model
