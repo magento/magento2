@@ -59,7 +59,9 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     public function getCount($status = null)
     {
         $products = $this->productsFactory->create();
+        // @codingStandardsIgnoreStart
         /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection $products */
+        // @codingStandardsIgnoreEnd
         switch ($status) {
             case Status::STATUS_ENABLED:
                 $products->addAttributeToFilter('status', Status::STATUS_ENABLED);

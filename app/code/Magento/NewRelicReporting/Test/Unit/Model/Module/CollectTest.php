@@ -47,7 +47,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
     protected $moduleFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleCollectionFactoryMock;
 
