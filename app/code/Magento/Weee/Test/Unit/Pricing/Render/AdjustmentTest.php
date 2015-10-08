@@ -385,4 +385,32 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             [new \Magento\Framework\DataObject(['name' => false]), false],
         ];
     }
+
+    /**
+     * Test for method renderWeeeTaxAttributeWithTax
+     *
+     * @param \Magento\Framework\DataObject $attribute
+     * @param string $expectedResult
+     * @dataProvider renderWeeeTaxAttributeAmountWithTaxDataProvider
+     */
+    public function testRenderWeeeTaxAttributeWithTax($attribute, $expectedResult)
+    {
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+
+        $result = $this->model->renderWeeeTaxAttributeWithTax($attribute);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * Data provider for testRenderWeeeTaxAttributeAmount
+     *
+     * @return array
+     */
+    public function renderWeeeTaxAttributeAmountWithTaxDataProvider()
+    {
+        return [
+            [new \Magento\Framework\DataObject(['amount' => 50, 'tax_amount' => 5]), 55],
+            [new \Magento\Framework\DataObject(['amount' => false]), false],
+        ];
+    }
 }
