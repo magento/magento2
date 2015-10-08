@@ -1566,7 +1566,6 @@ return [
         '\Magento\Framework\View\Element\Context::getScopeConfig',
     ],
     ['setConfig', 'Magento\Store\Model\Store'],
-    ['getConfig', 'Magento\Store\Model\Store'],
     ['_compareSortOrder', 'Magento\Sales\Model\Config\Ordered'],
     [
         '_toOptionHashOptimized',

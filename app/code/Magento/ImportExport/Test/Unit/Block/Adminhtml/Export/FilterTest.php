@@ -93,7 +93,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 

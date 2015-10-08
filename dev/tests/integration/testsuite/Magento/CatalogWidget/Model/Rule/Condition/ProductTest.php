@@ -15,7 +15,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $conditionProduct;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
