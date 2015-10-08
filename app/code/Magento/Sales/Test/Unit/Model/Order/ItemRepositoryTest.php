@@ -15,7 +15,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $objectFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Metadata | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
@@ -51,7 +51,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->metadata = $this->getMockBuilder('Magento\Sales\Model\Resource\Metadata')
+        $this->metadata = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Metadata')
             ->disableOriginalConstructor()
             ->getMock();
 

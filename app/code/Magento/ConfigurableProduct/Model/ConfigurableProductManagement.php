@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Model;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 
 class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface
 {
@@ -59,7 +59,7 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     public function getCount($status = null)
     {
         $products = $this->productsFactory->create();
-        /** @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection $products */
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection $products */
         switch ($status) {
             case Status::STATUS_ENABLED:
                 $products->addAttributeToFilter('status', Status::STATUS_ENABLED);

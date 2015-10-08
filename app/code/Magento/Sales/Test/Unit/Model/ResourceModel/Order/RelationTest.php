@@ -79,7 +79,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->orderPaymentResourceMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+        $this->orderPaymentResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
