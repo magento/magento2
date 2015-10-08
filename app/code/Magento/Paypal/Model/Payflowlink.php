@@ -418,9 +418,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             ->setTrxtype($this->_getTrxTokenType());
 
         $order = $payment->getOrder();
-        if (empty($order)) {
-            return $request;
-        }
         $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
             ->setCurrency($order->getBaseCurrencyCode());
         $this->addRequestOrderInfo($request, $order);
