@@ -1282,6 +1282,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $paymentType = $request->getIsReturn() ? 'RECIPIENT' : 'SENDER';
+        $optionType = $request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST
+            ? 'SERVICE_DEFAULT' : $packageParams->getDeliveryConfirmation();
         $requestClient = [
             'RequestedShipment' => [
                 'ShipTimestamp' => time(),
@@ -1344,7 +1346,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     ],
                     'SpecialServicesRequested' => [
                         'SpecialServiceTypes' => 'SIGNATURE_OPTION',
-                        'SignatureOptionDetail' => ['OptionType' => $packageParams->getDeliveryConfirmation()],
+                        'SignatureOptionDetail' => ['OptionType' => $optionType],
                     ],
                 ],
             ],
@@ -1382,6 +1384,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $requestClient['RequestedShipment']['MasterTrackingId'] = $request->getMasterTrackingId();
         }
 
+        if ($request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST) {
+            $requestClient['RequestedShipment']['SmartPostDetail'] = [
+                'Indicia' => (double)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'HubId' => $this->getConfigData('smartpost_hubid'),
+            ];
+        }
+
         // set dimensions
         if ($length || $width || $height) {
             $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [];
@@ -1411,7 +1420,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
             $shippingLabelContent = $response->CompletedShipmentDetail->CompletedPackageDetails->Label->Parts->Image;
-            $trackingNumber = $response->CompletedShipmentDetail->CompletedPackageDetails->TrackingIds->TrackingNumber;
+            $trackingNumber = $this->getTrackingNumber(
+                $response->CompletedShipmentDetail->CompletedPackageDetails->TrackingIds
+            );
             $result->setShippingLabelContent($shippingLabelContent);
             $result->setTrackingNumber($trackingNumber);
             $debugData = ['request' => $client->__getLastRequest(), 'result' => $client->__getLastResponse()];
@@ -1436,6 +1447,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $result->setGatewayResponse($client->__getLastResponse());
 
         return $result;
+    }
+
+    /**
+     * @param array|object $trackingIds
+     * @return string
+     */
+    private function getTrackingNumber($trackingIds) {
+        return is_array($trackingIds) ? array_map(
+            function($val) {
+                return $val->TrackingNumber;
+            },
+            $trackingIds
+        ) : $trackingIds->TrackingNumber;
     }
 
     /**
