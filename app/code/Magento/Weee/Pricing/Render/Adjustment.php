@@ -61,9 +61,12 @@ class Adjustment extends AbstractAdjustment
                 );
             } else {
                 $weeeTaxAmount = 0;
-                $attributes = $this->weeeHelper->getProductWeeeAttributes($this->getSaleableItem(), null, null, null, true);
-                foreach ($attributes as $attribute) {
-                    $weeeTaxAmount += $attribute->getData('tax_amount');
+                $attributes =
+                    $this->weeeHelper->getProductWeeeAttributes($this->getSaleableItem(), null, null, null, true);
+                if ($attributes != null) {
+                    foreach ($attributes as $attribute) {
+                        $weeeTaxAmount += $attribute->getData('tax_amount');
+                    }
                 }
                 $this->amountRender->setDisplayValue(
                     $this->amountRender->getDisplayValue() -
