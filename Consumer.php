@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * A MessageQueue Consumer to handle receiving a message.
@@ -42,7 +42,7 @@ class Consumer implements ConsumerInterface
     private $queueRepository;
 
     /**
-     * @var Resource
+     * @var ResourceConnection
      */
     private $resource;
 
@@ -52,13 +52,13 @@ class Consumer implements ConsumerInterface
      * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
     public function __construct(
         MessageQueueConfig $messageQueueConfig,
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
-        Resource $resource
+        ResourceConnection $resource
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
