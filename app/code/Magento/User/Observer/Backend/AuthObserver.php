@@ -4,12 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Model\Backend\Observer;
+namespace Magento\User\Observer\Backend;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use Magento\User\Model\Resource\User as ResourceUser;
 use Magento\User\Model\User;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\User\Model\UserFactory;
 
 /**
  * User backend observer model for authentication
@@ -19,69 +26,69 @@ class AuthObserver implements ObserverInterface
     /**
      * Backend configuration interface
      *
-     * @var \Magento\User\Model\Backend\Config\ObserverConfig
+     * @var ObserverConfig
      */
     protected $observerConfig;
 
     /**
      * Admin user resource model
      *
-     * @var \Magento\User\Model\Resource\User
+     * @var ResourceUser
      */
     protected $userResource;
 
     /**
      * Backend url interface
      *
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var UrlInterface
      */
     protected $url;
 
     /**
      * Backend authorization session
      *
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $authSession;
 
     /**
      * Factory class for user model
      *
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     protected $userFactory;
 
     /**
      * Encryption model
      *
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $encryptor;
 
     /**
      * Message manager interface
      *
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\Resource\User $userResource
-     * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ObserverConfig $observerConfig
+     * @param ResourceUser $userResource
+     * @param UrlInterface $url
+     * @param Session $authSession
+     * @param UserFactory $userFactory
+     * @param EncryptorInterface $encryptor
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\Resource\User $userResource,
-        \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        ObserverConfig $observerConfig,
+        ResourceUser $userResource,
+        UrlInterface $url,
+        Session $authSession,
+        UserFactory $userFactory,
+        EncryptorInterface $encryptor,
+        ManagerInterface $messageManager
     ) {
         $this->observerConfig = $observerConfig;
         $this->userResource = $userResource;
