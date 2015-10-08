@@ -84,7 +84,7 @@ class Reader
                 if (!empty($fileData)) {
                     $intersection = array_intersect_key($result, $fileData);
                     if (!empty($intersection)) {
-                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection));
+                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection), $path, $configFiles);
                         throw new \Exception(
                             "Key collision! The following keys occur in multiple config files:"
                             . PHP_EOL . $displayMessage
@@ -103,19 +103,19 @@ class Reader
      * @param array $keys
      * @return string
      */
-    private function findFilesWithKeys($keys)
+    private function findFilesWithKeys($keys, $configPath, $configFiles)
     {
         $displayMessage = '';
-        $path = $this->dirList->getPath(DirectoryList::CONFIG);
-        $configFiles = $this->configFilePool->getPaths();
-        foreach (array_keys($configFiles) as $fileKey) {
-            $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
-            $fileData = @include $configFile;
-            foreach ($keys as $key) {
+        foreach ($keys as $key) {
+            $foundConfigFiles = [];
+            foreach (array_values($configFiles) as $fileValue) {
+                $configFile = $configPath . '/' . $fileValue;
+                $fileData = @include $configFile;
                 if (array_key_exists($key, $fileData)) {
-                    $displayMessage .= 'Key "'. $key . '" found in ' . $configFile . PHP_EOL;
+                    $foundConfigFiles[] = $fileValue;
                 }
             }
+            $displayMessage .= 'Key "' . $key . '" found in ' . implode(', ', $foundConfigFiles) . PHP_EOL;
         }
         return $displayMessage;
     }
