@@ -60,7 +60,7 @@ class MagentoTest extends \PHPUnit_Framework_TestCase
 
     public function testInitStoreAfter()
     {
-        $this->_eventManager->expects($this->once())->method('fireEvent')->with('execute');
+        $this->_eventManager->expects($this->once())->method('fireEvent')->with('initStoreAfter');
         $this->_object->execute($this->getMock('\Magento\Framework\Event\Observer'));
     }
 }
