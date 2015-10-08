@@ -140,6 +140,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
+        if ($setup->tableExists(Media::GALLERY_VALUE_TO_ENTITY_TABLE)) {
+            return;
+        };
+
         /** Add support video media attribute */
         $this->createValueToEntityTable($setup);
         /**
