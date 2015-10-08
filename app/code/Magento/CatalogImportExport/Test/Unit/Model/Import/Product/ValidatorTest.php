@@ -72,6 +72,25 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->init($this->context);
     }
 
+    public function testIsBooleanAttributeValid()
+    {
+        $this->context->expects($this->any())->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE);
+        $result = $this->validator->isAttributeValid(
+            'boolean_attribute',
+            [
+                'type' => 'boolean',
+                'apply_to' => ['simple'],
+                'is_required' => false
+            ],
+            [
+                'product_type' => 'simple',
+                'boolean_attribute' => 'Yes'
+            ]
+        );
+        $this->assertTrue($result);
+    }
+
     public function testIsValidCorrect()
     {
         $value = ['product_type' => 'simple'];
