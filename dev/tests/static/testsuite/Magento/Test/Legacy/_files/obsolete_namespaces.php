@@ -187,6 +187,10 @@ return [
     ['Magento\Widget\Test\Unit\Model\Resource', 'Magento\Widget\Test\Unit\Model\ResourceModel'],
     ['Magento\Wishlist\Model\Resource', 'Magento\Wishlist\Model\ResourceModel'],
     ['Magento\Wishlist\Test\Unit\Model\Resource', 'Magento\Wishlist\Test\Unit\Model\ResourceModel'],
+    ['Magento\Catalog\Plugin\Model\Resource', 'Magento\Catalog\Plugin\Model\ResourceModel'],
+    ['Magento\Catalog\Test\Unit\Plugin\Model\Resource', 'Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel'],
+    ['Magento\Framework\Acl\Resource', 'Magento\Framework\Acl\AclResource'],
+    ['Magento\Framework\App\Resource', 'Magento\Framework\App\ResourceConnection'],
     ['Magento\Framework\Model\Resource', 'Magento\Framework\Model\ModelResource'],
     ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ModelResource'],
 ];
