@@ -36,6 +36,7 @@ location /setup {
     location ~ /setup/(?!pub/). {
         deny all;
     }
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /update {
@@ -63,6 +64,7 @@ location /pub {
         deny all;
     }
     alias $MAGE_ROOT/pub;
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /static/ {
