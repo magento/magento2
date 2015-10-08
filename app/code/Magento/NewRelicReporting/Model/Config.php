@@ -62,7 +62,7 @@ class Config
     protected $encryptor;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config
+     * @var \Magento\Config\Model\ResourceModelModel\Config
      */
     protected $resourceConfig;
 
@@ -71,12 +71,12 @@ class Config
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @param \Magento\Config\Model\ResourceModelModel\Config $resourceConfig
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Config\Model\ResourceModel\Config $resourceConfig
+        \Magento\Config\Model\ResourceModelModel\Config $resourceConfig
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->encryptor = $encryptor;
