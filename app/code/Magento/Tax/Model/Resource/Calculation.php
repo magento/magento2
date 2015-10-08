@@ -25,13 +25,6 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_ratesCache = [];
 
     /**
-     * Primary key auto increment flag
-     *
-     * @var bool
-     */
-    protected $_isPkAutoIncrement = false;
-
-    /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
