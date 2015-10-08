@@ -4020,7 +4020,6 @@ return [
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],
     ['Magento\Tax\Observer\UpdateProductOptions', 'Magento\Tax\Observer\*'],
-    ['Magento\Paypal\Observer\AddBillingAgreementToSessionObserver', 'Magento\Paypal\Observer\*'],
     ['Magento\Paypal\Observer\HtmlTransactionIdObserver', 'Magento\Paypal\Observer\*'],
     ['Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals', 'Magento\Quote\Observer\*'],
     ['Magento\CurrencySymbol\Observer\CurrencyDisplayOptions', 'Magento\CurrencySymbol\Observer\*'],
