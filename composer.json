@@ -226,7 +226,6 @@
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php",
-            "app/code/Magento/SampleData/cli_commands.php"
         ]
     },
     "autoload-dev": {
