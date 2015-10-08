@@ -314,10 +314,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getAttributeType(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
-        if ($attribute->usesSource() && in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
-            return $attribute->getFrontendInput() == 'multiselect' ? 'multiselect' : 'select';
+        $frontendInput = $attribute->getFrontendInput();
+        if ($attribute->usesSource() && in_array($frontendInput, ['select', 'multiselect', 'boolean'])) {
+            return $frontendInput;
         } elseif ($attribute->isStatic()) {
-            return $attribute->getFrontendInput() == 'date' ? 'datetime' : 'varchar';
+            return $frontendInput == 'date' ? 'datetime' : 'varchar';
         } else {
             return $attribute->getBackendType();
         }

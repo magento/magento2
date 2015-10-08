@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/App/etc/resources.xsd">
-    <resource name="test_name" extends="test_extends" connection="test_connection" />
+    <resource name="test_name1" extends="test_extends1" connection="test_connection1" />
     <resource name="test_name_two" />
 </config>
