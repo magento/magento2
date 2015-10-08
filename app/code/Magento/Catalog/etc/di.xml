@@ -494,6 +494,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Console\Command\ImagesResizeCommand">
+        <arguments>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Config\View">
         <arguments>
             <argument name="xpath" xsi:type="array">
