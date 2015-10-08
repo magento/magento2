@@ -40,7 +40,10 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
                 '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
                 ['customer' => $customer]
             )->run();
+        } else {
+            $this->objectManager->create('\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
         }
+
         $cmsIndexPage->open();
         foreach ($products as $key => $product) {
             $categoryName = $product->getCategoryIds()[0];

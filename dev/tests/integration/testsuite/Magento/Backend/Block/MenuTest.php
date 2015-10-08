@@ -5,9 +5,8 @@
  */
 namespace Magento\Backend\Block;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\Backend\Block\Menu
@@ -22,6 +21,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Cache\Type\Config $configCacheType */
     protected $configCacheType;
 
+    /**
+     * @var array
+     */
+    protected $backupRegistrar;
+
     protected function setUp()
     {
         $this->configCacheType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -32,6 +36,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Block\Menu'
         );
+
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setAccessible(false);
     }
 
     /**
@@ -70,12 +80,18 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         $this->loginAdminUser();
 
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::MODULES => ['path' => __DIR__ . '/_files/menu'],
-                ],
-            ]
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue(
+            [ComponentRegistrar::MODULE => [], ComponentRegistrar::THEME => [], ComponentRegistrar::LANGUAGE => []]
+        );
+        $paths->setAccessible(false);
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Backend',
+            __DIR__ . '/_files/menu/Magento/Backend'
         );
 
         /* @var $validationState \Magento\Framework\App\Arguments\ValidationState */
@@ -118,5 +134,10 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 }
