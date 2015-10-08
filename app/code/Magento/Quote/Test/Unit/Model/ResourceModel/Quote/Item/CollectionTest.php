@@ -89,6 +89,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('Magento\Framework\Model\ModelResource\Db\VersionControl\Collection', $this->collection);
+        $this->assertInstanceOf(
+            'Magento\Framework\Model\ModelResource\Db\VersionControl\Collection',
+            $this->collection
+        );
     }
 }

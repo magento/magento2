@@ -44,7 +44,8 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerMock = $this->getMockBuilder('Magento\Framework\DB\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionAdapterMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface')
+        $adapterClass = 'Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface';
+        $connectionAdapterMock = $this->getMockBuilder($adapterClass)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
