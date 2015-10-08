@@ -148,7 +148,6 @@ return [
     ['Magento\Ui\Model\Resource', 'Magento\Ui\Model\ResourceModel'],
     ['Magento\UrlRewrite\Model\Resource', 'Magento\UrlRewrite\Model\ResourceModel'],
     ['Magento\User\Model\Resource', 'Magento\User\Model\ResourceModel'],
-    ['Magento\Variable\Model\Resource', 'Magento\Variable\Model\ResourceModel'],
     ['Magento\CatalogSearch\Test\Unit\Model\Resource', 'Magento\CatalogSearch\Test\Unit\Model\ResourceModel'],
     ['Magento\Catalog\Test\Unit\Model\Resource', 'Magento\Catalog\Test\Unit\Model\ResourceModel'],
     ['Magento\Cms\Test\Unit\Model\Resource', 'Magento\Cms\Test\Unit\Model\ResourceModel'],
