@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Service\V1;
 
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 class OrderCreateTest extends WebapiAbstract
 {
@@ -57,6 +57,7 @@ class OrderCreateTest extends WebapiAbstract
         } else {
             $orderItem->setData('parent_item', ['weight' => 1]);
         }
+
         $orderPayment->setCcLast4('4444');
         $orderPayment->setMethod('checkmo');
         $orderPayment->setAccountStatus('ok');
@@ -64,6 +65,9 @@ class OrderCreateTest extends WebapiAbstract
         $order->setCustomerEmail($email);
         $order->setBaseGrandTotal(100);
         $order->setGrandTotal(100);
+
+        $this->addProductOption($orderItem);
+
         $order->setItems([$orderItem->getData()]);
         $order->setPayments([$orderPayment->getData()]);
 
@@ -106,6 +110,55 @@ class OrderCreateTest extends WebapiAbstract
         return $data;
     }
 
+    /**
+     * @param array $orderItem
+     * @return array
+     */
+    protected function addProductOption($orderItem)
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('simple');
+        $options = [];
+        foreach ($product->getOptions() as $option) {
+            $options[] = [
+                'option_id' => $option->getId(),
+                'option_value' => $this->getOptionRequestValue($option),
+            ];
+        }
+        $data['extension_attributes']['custom_options'] = $options;
+        $orderItem->setData('product_option', $data);
+        $orderItem->setPrice(10);
+        $orderItem->setBasePrice(10);
+    }
+
+    /**
+     * @param ProductCustomOptionInterface $option
+     * @return null|string
+     */
+    protected function getOptionRequestValue(ProductCustomOptionInterface $option)
+    {
+        $returnValue = null;
+        switch ($option->getType()) {
+            case 'field':
+                $returnValue = 'Test value';
+                break;
+            case 'date_time':
+                $returnValue = '2015-09-09 07:16:00';
+                break;
+            case 'drop_down':
+                $returnValue = '3-1-select';
+                break;
+            case 'radio':
+                $returnValue = '4-1-radio';
+                break;
+        }
+        return $returnValue;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testOrderCreate()
     {
         $order = $this->prepareOrder();
