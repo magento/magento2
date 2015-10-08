@@ -1,0 +1,1 @@
+The Magento_Marketplace module allows to display partners of Magento in the backend.

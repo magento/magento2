@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_place_after">
         <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment" method="execute" />
     </event>
@@ -46,6 +46,6 @@
         <observer name="sales_send_order_creditmemo_emails" instance="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" method="execute" />
     </event>
     <event name="store_add">
-        <observer name="magento_sequence" instance="Magento\SalesSequence\Model\Observer" method="execute" />
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" method="execute" />
     </event>
 </config>
