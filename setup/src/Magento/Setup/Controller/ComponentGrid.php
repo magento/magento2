@@ -7,9 +7,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
-use Magento\Framework\Module\PackageInfo;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
