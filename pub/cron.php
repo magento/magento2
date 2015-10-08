@@ -23,6 +23,9 @@ try {
     if (empty($opt['group'])) {
         $opt['group'] = 'default';
     }
+    foreach ($opt as $key => $value) {
+        $opt[$key] = escapeshellarg($value);
+    }
     $opt['standaloneProcessStarted'] = '0';
     $params = $_SERVER;
     $params[StoreManager::PARAM_RUN_CODE] = 'admin';
