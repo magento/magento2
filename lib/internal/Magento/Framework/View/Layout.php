@@ -247,8 +247,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
     /**
      * TODO Will be eliminated in MAGETWO-28359
-     *
-     * @deprecated
      * @return void
      */
     public function publicBuild()

@@ -124,7 +124,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 
         $cartItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getProduct'], [], '', false);
         $cartItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
-        $this->assertEquals($cartItemMock, $this->model->processProductOptions($cartItemMock));
+        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptions()
@@ -174,7 +174,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
-        $this->assertEquals($cartItemMock, $this->model->processProductOptions($cartItemMock));
+        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptionsIfOptionsExist()
@@ -224,6 +224,6 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
-        $this->assertEquals($cartItemMock, $this->model->processProductOptions($cartItemMock));
+        $this->assertEquals($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }
