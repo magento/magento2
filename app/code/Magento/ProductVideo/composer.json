@@ -2,11 +2,12 @@
     "name": "magento/module-product-video",
     "description": "Add Video to Products",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-catalog": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
+        "magento/module-media-storage": "1.0.0-beta",
         "magento/module-store": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
@@ -16,12 +17,10 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/ProductVideo"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\ProductVideo\\": ""
+        }
     }
 }
