@@ -360,6 +360,6 @@ class Context implements ContextInterface
                 $this->prepareDataSource($data, $child);
             }
         }
-        $component->prepareDataSource($data);
+        $data = $component->prepareDataSource($data);
     }
 }

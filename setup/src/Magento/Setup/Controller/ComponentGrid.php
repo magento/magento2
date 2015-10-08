@@ -14,6 +14,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\ConnectManager;
 use Magento\Setup\Model\UpdatePackagesCache;
 
 /**
@@ -34,8 +35,11 @@ class ComponentGrid extends AbstractActionController
     private $packageInfo;
 
     /**
-     * Enabled Module info
-     *
+     * @var ConnectManager
+     */
+    private $connectManager;
+
+    /**
      * @var \Magento\Framework\Module\ModuleList
      */
     private $enabledModuleList;
@@ -53,14 +57,16 @@ class ComponentGrid extends AbstractActionController
     private $updatePackagesCache;
 
     /**
-     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
-     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+     * @param ComposerInformation $composerInformation
+     * @param ObjectManagerProvider $objectManagerProvider
+     * @param ConnectManager $connectManager
+     * @param UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
-        \Magento\Framework\Composer\ComposerInformation $composerInformation,
-        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
-        \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+        ComposerInformation $composerInformation,
+        ObjectManagerProvider $objectManagerProvider,
+        UpdatePackagesCache $updatePackagesCache,
+        ConnectManager $connectManager
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
@@ -68,6 +74,7 @@ class ComponentGrid extends AbstractActionController
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
         $this->packageInfo = $objectManagerProvider->get()
             ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->connectManager = $connectManager;
         $this->updatePackagesCache = $updatePackagesCache;
     }
 
@@ -88,6 +95,7 @@ class ComponentGrid extends AbstractActionController
      *
      * @return JsonModel
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function componentsAction()
     {
@@ -122,6 +130,13 @@ class ComponentGrid extends AbstractActionController
             $componentNameParts = explode('/', $component['name']);
             $components[$component['name']]['vendor'] = $componentNameParts[0];
         }
+
+        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+
         return new JsonModel(
             [
                 'success' => true,
@@ -141,6 +156,15 @@ class ComponentGrid extends AbstractActionController
     {
         $this->updatePackagesCache->syncPackagesForUpdate();
         $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
+
+        $this->connectManager->syncPackagesForInstall();
+        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+
+
         return new JsonModel(
             [
                 'success' => true,
