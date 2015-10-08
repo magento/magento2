@@ -39,7 +39,8 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.0.1') < 0) {
+        if ($context->getVersion() && version_compare($context->getVersion(), '2.0.1') < 0) {
+
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
 
