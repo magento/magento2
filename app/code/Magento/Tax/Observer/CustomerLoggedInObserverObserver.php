@@ -13,7 +13,7 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
 
-class CustomerLoggedIn implements ObserverInterface
+class CustomerLoggedInObserver implements ObserverInterface
 {
     /**
      * @var Session

@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Observer;
 
-class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
+class CustomerLoggedInObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer
@@ -42,7 +42,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Tax\Observer\CustomerLoggedIn
+     * @var \Magento\Tax\Observer\CustomerLoggedInObserver
      */
     protected $session;
 
@@ -81,7 +81,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->session = $this->objectManager->getObject(
-            'Magento\Tax\Observer\CustomerLoggedIn',
+            'Magento\Tax\Observer\CustomerLoggedInObserver',
             [
                 'groupRepository' => $this->groupRepositoryMock,
                 'customerSession' => $this->customerSessionMock,

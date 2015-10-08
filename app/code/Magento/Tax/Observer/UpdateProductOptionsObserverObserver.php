@@ -8,7 +8,7 @@ namespace Magento\Tax\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class UpdateProductOptions implements ObserverInterface
+class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
      * Tax data

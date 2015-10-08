@@ -3959,7 +3959,6 @@ return [
     ['Magento\Authorizenet\Model\Directpost\Observer', 'Magento\Authorizenet\Observer\*'],
     ['Magento\Downloadable\Model\Observer', 'Magento\Downloadable\Observer\*'],
     ['Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp', 'Magento\Msrp\Observer\*'],
-    ['Magento\Customer\Model\Visitor', 'Magento\Customer\Observer\*'],
     ['Magento\Customer\Model\Observer\Log', 'Magento\Customer\Observer\*'],
     ['Magento\Customer\Model\Observer', 'Magento\Customer\Observer\*'],
     ['Magento\Paypal\Observer\SaveOrderAfterSubmitObserver', 'Magento\Paypal\Observer\*'],
@@ -4019,10 +4018,8 @@ return [
     ['Magento\CmsUrlRewrite\Model\Observer', 'Magento\CmsUrlRewrite\Observer\*'],
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],
-    ['Magento\Tax\Observer\UpdateProductOptions', 'Magento\Tax\Observer\*'],
     ['Magento\Paypal\Observer\HtmlTransactionIdObserver', 'Magento\Paypal\Observer\*'],
     ['Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals', 'Magento\Quote\Observer\*'],
-    ['Magento\CurrencySymbol\Observer\CurrencyDisplayOptions', 'Magento\CurrencySymbol\Observer\*'],
     ['Magento\Backend\Model\Observer', 'Magento\Backend\Observer\*'],
     ['Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment', 'Magento\Sales\Observer\*'],
     ['Magento\Sales\Model\Observer\Order\IndexGrid', 'Magento\Sales\Observer\*'],
@@ -4045,7 +4042,6 @@ return [
     ['Magento\PageCache\Model\Observer\InvalidateCache', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\RegisterFormKeyFromCookie', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\*'],
-    ['Magento\CatalogInventory\Observer\DisplayProductStatusInfoObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\AddInventoryDataObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\AddStockStatusToCollectionObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Model\Quote\Item\QuantityValidator', 'Magento\CatalogInventory\Observer\*'],
@@ -4056,10 +4052,6 @@ return [
     ['Magento\CatalogInventory\Observer\CancelOrderItemObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\RefundOrderInventoryObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\SaveInventoryDataObserver', 'Magento\CatalogInventory\Observer\*'],
-    [
-        'Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver',
-        'Magento\CatalogInventory\Observer\*'
-    ],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Save', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Delete', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Category\Save', 'Magento\GoogleOptimizer\Observer\*'],
@@ -4068,4 +4060,5 @@ return [
     ['Magento\GoogleOptimizer\Model\Observer\CmsPage\Delete', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Block\Category\Tab', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\Payment\Model\Observer', 'Magento\Payment\Observer\*'],
+    ['Magento\Tax\Observer\AggregateSalesReportTaxData', 'Magento\Tax\Model\AggregateSalesReportTaxData'],
 ];
