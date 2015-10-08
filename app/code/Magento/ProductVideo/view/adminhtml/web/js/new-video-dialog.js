@@ -93,7 +93,7 @@ define([
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="https://youtube.com/channel/' +
                     this.options.metaData.data.uploaderUrl +
-                    '">' +
+                    '" target="_blank">' +
                     this.options.metaData.data.uploader +
                     '</a>'
                 );
@@ -102,7 +102,7 @@ define([
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
-                    '">' + this.options.metaData.data.uploader +
+                    '" target="_blank">' + this.options.metaData.data.uploader +
                     '</a>');
             }
             $('.' + this.options.videoClass).productVideoLoader();
