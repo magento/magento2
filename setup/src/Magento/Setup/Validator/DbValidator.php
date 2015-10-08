@@ -101,7 +101,29 @@ class DbValidator
     {
         $grantInfo = $connection->query('SHOW GRANTS FOR current_user()')->fetchAll(\PDO::FETCH_NUM);
         foreach ($grantInfo as $grantRow) {
-            if (preg_match('/(ALL|ALL\sPRIVILEGES)\sON\s[^a-zA-Z\d\s]?(\*|' . $dbName .  ')/', $grantRow[0]) === 1) {
+            // get the database name to match, this should take any wildcards into account used in the database name with GRANT
+
+            // get db name of result row
+            $matches = array();
+            preg_match('/ON\s`(.*)`/', $grantRow[0], $matches);
+
+            if (isset($matches[1])) {
+                $resultRowDbName = $matches[1];
+
+                // replace % by .* in found db name and put in a regex to find the database name
+                $findDbNameRegex = '/`(' . str_replace('%', '.*', $resultRowDbName) . ')`/';
+
+                // match the database name we should test with in the real current database name
+                $matches = array();
+                preg_match($findDbNameRegex, $grantRow[0], $matches);
+                // database name with possible wildcards
+                $dbNameToSearchFor = $matches[1];
+            } else {
+                $dbNameToSearchFor = $dbName;
+            }
+
+            // are all privileges given on the database name?
+            if (preg_match('/(ALL|ALL\sPRIVILEGES)\sON\s[^a-zA-Z\d\s]?(\*|' . $dbNameToSearchFor .  ')/', $grantRow[0]) === 1) {
                 return true;
             }
         }
