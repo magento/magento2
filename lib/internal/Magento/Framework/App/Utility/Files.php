@@ -273,6 +273,7 @@ class Files
             } else {
                 foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                     $excludePaths[] = str_replace('\\', '/', '#' . $moduleDir . '/registration.php#');
+                    $excludePaths[] = str_replace('\\', '/', '#' . $moduleDir . '/cli_commands.php#');
                 }
             }
             return $this->getFilesSubset(

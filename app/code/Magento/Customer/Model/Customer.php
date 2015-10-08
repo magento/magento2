@@ -369,7 +369,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param  string $password
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated Use \Magento\Customer\Api\AccountManagementInterface::authenticate
+     * Use \Magento\Customer\Api\AccountManagementInterface::authenticate
      */
     public function authenticate($login, $password)
     {
@@ -768,7 +768,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
-     * @deprecated
      */
     public function isConfirmationRequired()
     {
@@ -1278,7 +1277,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
-     * @deprecated
      */
     public function isResetPasswordLinkTokenExpired()
     {
