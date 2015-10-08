@@ -21,9 +21,9 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     protected $addressHandlerMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderItemResourceMock;
+    protected $orderItemRepositoryMock;
 
     /**
      * @var \Magento\Sales\Model\Resource\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
@@ -71,14 +71,14 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->orderItemResourceMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item')
+        $this->orderItemRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderItemRepositoryInterface')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'save'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderPaymentResourceMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(
@@ -154,7 +154,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->relationProcessor = new \Magento\Sales\Model\Resource\Order\Relation(
             $this->addressHandlerMock,
-            $this->orderItemResourceMock,
+            $this->orderItemRepositoryMock,
             $this->orderPaymentResourceMock,
             $this->statusHistoryResource
         );
@@ -184,7 +184,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->method('setOrder')
             ->with($this->orderMock)
             ->willReturnSelf();
-        $this->orderItemResourceMock->expects($this->once())
+        $this->orderItemRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderItemMock)
             ->willReturnSelf();

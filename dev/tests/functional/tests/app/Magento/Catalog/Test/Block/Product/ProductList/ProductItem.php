@@ -37,6 +37,13 @@ class ProductItem extends Block
     protected $addToCard = "button.action.tocart";
 
     /**
+     * Product base image.
+     *
+     * @var string
+     */
+    protected $baseImage = '.product-image-photo';
+
+    /**
      * Check whether block is visible.
      *
      * @return bool
@@ -97,5 +104,16 @@ class ProductItem extends Block
             'Magento\Catalog\Test\Block\Product\Price',
             ['element' => $this->_rootElement->find($this->priceBox)]
         );
+    }
+
+    /**
+     * Get base image source link.
+     *
+     * @return string
+     */
+    public function getBaseImageSource()
+    {
+        $baseImage = $this->_rootElement->find($this->baseImage);
+        return $baseImage->isVisible() ? $baseImage->getAttribute('src') : '';
     }
 }
