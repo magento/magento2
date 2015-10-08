@@ -8,6 +8,7 @@
 
 namespace Magento\Fedex\Model;
 
+use Magento\Framework\Module\Dir;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
@@ -182,7 +183,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $stockRegistry,
             $data
         );
-        $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Fedex') . '/wsdl/';
+        $wsdlBasePath = $configReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Fedex') . '/wsdl/';
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v5.wsdl';
