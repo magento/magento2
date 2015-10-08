@@ -1129,7 +1129,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'images' => [
                 [
-                    "value_id" => 1,
+                    'value_id' => 1,
                     'file' => 'file1.jpg',
                     'label' => 'label_text',
                     'position' => 4,
@@ -1163,7 +1163,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                           ->getMockForAbstractClass();
 
         $result = [
-            "value_id" => 1,
+            'value_id' => 1,
             'file' => 'file1.jpg',
             'label' => 'label_text',
             'position' => 4,
@@ -1222,56 +1222,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
         $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
-    }
-
-    /**
-     * @dataProvider priceDataProvider
-     */
-    public function testGetGroupPrices($originalGroupPrices)
-    {
-        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getGroupPrices');
-    }
-
-    /**
-     * @dataProvider priceDataProvider
-     */
-    public function testGetTierPrices($originalGroupPrices)
-    {
-        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getTierPrices');
-    }
-
-    protected function invokeGetGroupOrTierPrices($originalPrices, $getter)
-    {
-        // the priceModel's getter method will return the originalPrices
-        $priceModelMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Price')
-            ->disableOriginalConstructor()
-            ->setMethods([$getter])
-            ->getMock();
-        $priceModelMock->expects($this->any())
-            ->method($getter)
-            ->will($this->returnValue($originalPrices));
-
-        // the catalogProductType's priceFactory method will return the above priceModel
-        $catalogProductTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
-            ->disableOriginalConstructor()
-            ->setMethods(['priceFactory'])
-            ->getMock();
-        $catalogProductTypeMock->expects(($this->any()))
-            ->method('priceFactory')
-            ->will($this->returnValue($priceModelMock));
-
-        // the productModel
-        $productModel = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product',
-            [
-                'catalogProductType' => $catalogProductTypeMock
-            ]
-        );
-
-        $expectedResultIsEmpty = (empty($originalPrices) ? true : false);
-        $groupPrices = $productModel->$getter();
-        $actualResultIsEmpty = (empty($groupPrices) ? true : false);
-        $this->assertEquals($expectedResultIsEmpty, $actualResultIsEmpty);
     }
 
     /**

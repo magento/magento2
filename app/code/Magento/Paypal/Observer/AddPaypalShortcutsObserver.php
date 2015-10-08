@@ -5,13 +5,14 @@
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
  * PayPal module observer
  */
-class AddPaypalShortcutsObserver
+class AddPaypalShortcutsObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Paypal\Helper\Shortcut\Factory
@@ -43,7 +44,7 @@ class AddPaypalShortcutsObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
