@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="tax" translate="label" sortOrder="303" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
@@ -118,7 +118,7 @@
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Include Tax In Grand Total</label>
+                    <label>Include Tax In Order Total</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="full_summary" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -148,7 +148,7 @@
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Include Tax In Grand Total</label>
+                    <label>Include Tax In Order Total</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="full_summary" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">

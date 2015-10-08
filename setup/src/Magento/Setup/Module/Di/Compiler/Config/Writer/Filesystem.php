@@ -8,6 +8,7 @@
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
 class Filesystem implements WriterInterface
@@ -50,7 +51,7 @@ class Filesystem implements WriterInterface
     private function initialize()
     {
         if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
-            mkdir($this->directoryList->getPath(DirectoryList::DI));
+            mkdir($this->directoryList->getPath(DirectoryList::DI), DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
     }
 }

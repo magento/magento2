@@ -26,7 +26,7 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->ruleFactory = $this->getMockBuilder('Magento\SalesRule\Model\RuleFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->dataObjectProcessor = $this->getMockBuilder('\Magento\Framework\Reflection\DataObjectProcessor')
