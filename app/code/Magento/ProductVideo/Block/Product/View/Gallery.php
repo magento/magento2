@@ -28,8 +28,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\ProductVideo\Helper\Media $mediaHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\ProductVideo\Helper\Media $mediaHelper,
         array $data = []
     ) {
         parent::__construct(
