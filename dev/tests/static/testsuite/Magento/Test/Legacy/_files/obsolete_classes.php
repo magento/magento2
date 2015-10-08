@@ -3940,4 +3940,8 @@ return [
     ['Magento\Catalog\Pricing\Price\GroupPrice'],
     ['Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice'],
     ['Magento\Catalog\Model\App\Action\ContextPlugin'],
+    ['Magento\Framework\Acl\ResourceFactory', 'Magento\Framework\Acl\AclResourceFactory'],
+    ['Magento\Framework\App\Resource', 'Magento\Framework\App\ResourceConnection'],
+    ['Magento\Framework\Flag\Resource', 'Magento\Framework\Flag\FlagResource'],
+    ['Magento\Framework\Module\Resource', 'Magento\Framework\Module\ModuleResource'],
 ];
