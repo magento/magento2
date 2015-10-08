@@ -224,7 +224,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Set connections for entity operations
      *
-     * @deprecated
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
      * @codeCoverageIgnore
