@@ -6,6 +6,9 @@
 
 namespace Magento\Sales\Model\ResourceModel\Transaction\Grid;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection
 {
     /**
@@ -22,7 +25,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Registry $registryManager
-     * @param null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
      */
     public function __construct(
