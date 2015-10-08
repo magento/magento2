@@ -86,7 +86,7 @@
             font-size: 1.6rem;
             font-weight: 700;
             margin: 0;
-            padding: 8px 20px;
+            padding: .8rem 3.5rem .8rem 2rem;
             .label {
                 display: block;
                 margin-bottom: @indent__xs;
@@ -132,9 +132,6 @@
                 &.greet.welcome {
                     font-weight: 700;
                     padding: 8px 20px;
-                }
-                &:last-child {
-                    border-bottom: 1px solid @color-gray82;
                 }
             }
             a,
@@ -216,6 +213,11 @@
             &.active {
                 background: transparent;
                 border-bottom: 0;
+            }
+            .nav-sections-item-switch {
+                &:hover {
+                    text-decoration: none;
+                }
             }
         }
 
