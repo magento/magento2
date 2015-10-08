@@ -3948,8 +3948,14 @@ return [
     ['Magento\Catalog\Model\Product\Compare\Item', 'Magento\Catalog\Observer\*'],
     ['Magento\Catalog\Observer\AddCatalogToTopmenuItems', 'Magento\Catalog\Observer\*'],
     ['Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowed', 'Magento\Catalog\Observer\*'],
-    ['Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Edit\Tab\Front\Observer', 'Magento\LayeredNavigation\Observer\*'],
-    ['Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Grid\Observer', 'Magento\LayeredNavigation\Observer\*'],
+    [
+        'Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Edit\Tab\Front\Observer',
+        'Magento\LayeredNavigation\Observer\*'
+    ],
+    [
+        'Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Grid\Observer',
+        'Magento\LayeredNavigation\Observer\*'
+    ],
     ['Magento\Authorizenet\Model\Directpost\Observer', 'Magento\Authorizenet\Observer\*'],
     ['Magento\Downloadable\Model\Observer', 'Magento\Downloadable\Observer\*'],
     ['Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp', 'Magento\Msrp\Observer\*'],
@@ -3979,7 +3985,7 @@ return [
     ['Magento\AdminNotification\Model\Observer', 'Magento\AdminNotification\Observer\*'],
     ['Magento\Cron\Model\Observer', 'Magento\Cron\Observer\*'],
     ['Magento\User\Model\Backend\Observer\AuthObserver', 'Magento\User\Observer\*'],
-    ['Magento\User\Model\Backend\Observer\PasswordObserver', 'Magento\User\Observer\*'],
+    ['Magento\User\Model\Backend\Observer\PasswordObserver', 'Magento\User\Observer\Backend\*'],
     ['Magento\SalesRule\Model\Observer', 'Magento\SalesRule\Observer\*'],
     ['Magento\CatalogUrlRewrite\Observer\CategorySaveRewritesHistorySetter', 'Magento\CatalogUrlRewrite\Observer\*'],
     ['Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogenerator', 'Magento\CatalogUrlRewrite\Observer\*'],
@@ -4051,7 +4057,10 @@ return [
     ['Magento\CatalogInventory\Observer\CancelOrderItemObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\RefundOrderInventoryObserver', 'Magento\CatalogInventory\Observer\*'],
     ['Magento\CatalogInventory\Observer\SaveInventoryDataObserver', 'Magento\CatalogInventory\Observer\*'],
-    ['Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver', 'Magento\CatalogInventory\Observer\*'],
+    [
+        'Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver',
+        'Magento\CatalogInventory\Observer\*'
+    ],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Save', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Delete', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Category\Save', 'Magento\GoogleOptimizer\Observer\*'],
