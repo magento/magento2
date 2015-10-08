@@ -51,12 +51,12 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
     protected $countsModel;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Resource\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollectionFactory;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Resource\Counts\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollection;
 
@@ -94,11 +94,11 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactory = $this
-            ->getMockBuilder('Magento\NewRelicReporting\Model\Resource\Counts\CollectionFactory')
+            ->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->countsCollection = $this->getMockBuilder('Magento\NewRelicReporting\Model\Resource\Counts\Collection')
+        $this->countsCollection = $this->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])
             ->getMock();

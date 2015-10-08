@@ -7,7 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\ConfigurableProductManagement;
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 
 class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,7 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productsFactoryMock = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory',
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -110,7 +110,7 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
     {
         $statusEnabled = 1;
         $productsMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
             [],
             [],
             '',
@@ -141,7 +141,7 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
     {
         $statusDisabled = 2;
         $productsMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
             [],
             [],
             '',
