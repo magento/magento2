@@ -3940,6 +3940,31 @@ return [
     ['Magento\Catalog\Pricing\Price\GroupPrice'],
     ['Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice'],
     ['Magento\Catalog\Model\App\Action\ContextPlugin'],
+    [
+        'Magento\CmsUrlRewrite\Plugin\Cms\Model\Resource\Page',
+        'Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page'
+    ],
+    [
+        'Magento\CmsUrlRewrite\Test\Unit\Plugin\Cms\Model\Resource\PageTest',
+        'Magento\CmsUrlRewrite\Test\Unit\Plugin\Cms\Model\ResourceModel\PageTest'
+    ],
+    [
+        'Magento\ConfigurableProduct\Plugin\Model\Resource\Product',
+        'Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product'
+    ],
+    [
+        'Magento\ConfigurableProduct\Test\Unit\Plugin\Model\Resource\ProductTest',
+        'Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel\ProductTest'
+    ],
+    [
+        '\Magento\SalesRule\Model\Plugin\Resource\Rule',
+        '\Magento\SalesRule\Model\Plugin\ResourceModel\Rule'
+    ],
+    [
+        '\Magento\SalesRule\Test\Unit\Model\Plugin\Resource\RuleTest',
+        '\Magento\SalesRule\Test\Unit\Model\Plugin\ResourceModel\RuleTest'
+    ],
+    ['Magento\Framework\Acl\Resource', 'Magento\Framework\Acl\AclResource'],
     ['Magento\Framework\Acl\ResourceFactory', 'Magento\Framework\Acl\AclResourceFactory'],
     ['Magento\Framework\App\Resource', 'Magento\Framework\App\ResourceConnection'],
     ['Magento\Framework\Flag\Resource', 'Magento\Framework\Flag\FlagResource'],
