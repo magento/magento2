@@ -20,6 +20,7 @@ class JobFactory
     const JOB_COMPONENT_UNINSTALL = 'setup:component:uninstall';
     const JOB_MODULE_ENABLE = 'setup:module:enable';
     const JOB_MODULE_DISABLE = 'setup:module:disable';
+    const JOB_STATIC_REGENERATE = 'setup:static:regenerate';
 
     /**
      * @var ServiceLocatorInterface
@@ -59,6 +60,7 @@ class JobFactory
                     $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
+                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
                     $cronStatus,
                     $name,
                     $params
@@ -70,6 +72,15 @@ class JobFactory
                     $multipleStreamOutput,
                     $cronStatus,
                     $objectManagerProvider,
+                    $name,
+                    $params
+                );
+                break;
+            case self::JOB_STATIC_REGENERATE:
+                return new JobStaticRegenerate(
+                    $objectManagerProvider,
+                    $multipleStreamOutput,
+                    $cronStatus,
                     $name,
                     $params
                 );
@@ -90,6 +101,7 @@ class JobFactory
                     $themeUninstall,
                     $objectManagerProvider,
                     $multipleStreamOutput,
+                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
                     $cronStatus,
                     $this->serviceLocator->get('Magento\Setup\Model\Updater'),
                     $name,
