@@ -1,18 +1,18 @@
-app/code/Magento/Authorizenet
-app/code/Magento/Bundle
-app/code/Magento/Captcha
-app/code/Magento/Catalog
-app/code/Magento/CatalogSearch
-app/code/Magento/Checkout
-app/code/Magento/Customer
-app/code/Magento/Downloadable
-app/code/Magento/GiftMessage
-app/code/Magento/Newsletter
-app/code/Magento/OfflinePayments
-app/code/Magento/Payment
-app/code/Magento/Persistent
-app/code/Magento/Sales
-app/code/Magento/Theme
-app/code/Magento/Wishlist
+module Magento_Authorizenet /
+module Magento_Bundle /
+module Magento_Captcha /
+module Magento_Catalog /
+module Magento_CatalogSearch /
+module Magento_Checkout /
+module Magento_Customer /
+module Magento_Downloadable /
+module Magento_GiftMessage /
+module Magento_Newsletter /
+module Magento_OfflinePayments /
+module Magento_Payment /
+module Magento_Persistent /
+module Magento_Sales /
+module Magento_Theme /
+module Magento_Wishlist /
 dev/tests/js
 lib/web/mage

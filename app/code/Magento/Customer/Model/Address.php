@@ -127,7 +127,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param AddressInterface $address
      * @return $this
-     * @deprecated Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
+     * Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
      */
     public function updateData(AddressInterface $address)
     {
