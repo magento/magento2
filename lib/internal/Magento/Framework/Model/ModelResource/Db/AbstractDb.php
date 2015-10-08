@@ -166,7 +166,8 @@ abstract class AbstractDb extends AbstractResource
      */
     public function __wakeup()
     {
-        $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\ResourceConnection');
+        $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get('Magento\Framework\App\ResourceConnection');
     }
 
     /**

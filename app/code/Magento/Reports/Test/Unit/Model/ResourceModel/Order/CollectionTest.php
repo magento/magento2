@@ -102,7 +102,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->managerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->getMock();
-        $this->entitySnapshotMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot')
+        $snapshotClassName = 'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot';
+        $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
             ->getMock();
         $this->helperMock = $this->getMockBuilder('Magento\Framework\DB\Helper')

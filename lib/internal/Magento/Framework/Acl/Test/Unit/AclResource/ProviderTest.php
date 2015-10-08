@@ -32,7 +32,10 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new \Magento\Framework\Acl\AclResource\Provider($this->_configReaderMock, $this->_treeBuilderMock);
+        $this->_model = new \Magento\Framework\Acl\AclResource\Provider(
+            $this->_configReaderMock,
+            $this->_treeBuilderMock
+        );
     }
 
     public function testGetIfAclResourcesExist()

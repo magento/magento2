@@ -56,6 +56,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $connectionMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+            ->disableOriginalConstructor()
+            ->getMock();
         $sharedInstances = [
             'Magento\Framework\App\Cache\Type\Config' => $cache,
             'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
@@ -67,9 +70,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
             'Magento\Framework\Cache\FrontendInterface' =>
                 $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'Magento\Framework\App\ResourceConnection' => $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
-                ->disableOriginalConstructor()
-                ->getMock(),
+            'Magento\Framework\App\ResourceConnection' => $connectionMock,
             'Magento\Framework\App\ResourceConnection\Config' => $this->getMock(
                 'Magento\Framework\App\ResourceConnection\Config',
                 [],

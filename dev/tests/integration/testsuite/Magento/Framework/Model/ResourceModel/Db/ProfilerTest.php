@@ -68,7 +68,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $connection = $this->_getConnection();
 
         /** @var \Magento\Framework\App\ResourceConnection $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\ResourceConnection');
         $testTableName = $resource->getTableName('setup_module');
         $selectQuery = sprintf($selectQuery, $testTableName);
 
@@ -134,7 +135,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var \Magento\Framework\App\ResourceConnection $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\ResourceConnection');
         $testTableName = $resource->getTableName('setup_module');
         $connection->query('SELECT * FROM ' . $testTableName);
 

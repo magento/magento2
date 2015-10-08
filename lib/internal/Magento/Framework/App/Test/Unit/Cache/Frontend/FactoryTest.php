@@ -107,7 +107,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
-        $this->assertInstanceOf('Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy', $result);
+        $this->assertInstanceOf(
+            'Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy',
+            $result
+        );
 
         $params = $result->getParams();
         $this->assertArrayHasKey('param', $params);
