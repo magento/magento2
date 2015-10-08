@@ -39,8 +39,7 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if ($context->getVersion() && version_compare($context->getVersion(), '2.0.1') < 0) {
-
+        if (version_compare($context->getVersion(), '2.0.1') < 0) {
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
 
@@ -53,9 +52,7 @@ class UpgradeData implements UpgradeDataInterface
                 'Images',
                 'attribute_group_name'
             );
-            if (isset($attributeGroup['attribute_group_name'])
-                && $attributeGroup['attribute_group_name'] == 'Images'
-            ) {
+            if (isset($attributeGroup['attribute_group_name']) && $attributeGroup['attribute_group_name'] == 'Images') {
                 // update General Group
                 $categorySetup->updateAttributeGroup(
                     $entityTypeId,
@@ -65,6 +62,11 @@ class UpgradeData implements UpgradeDataInterface
                     'Images and Videos'
                 );
             }
+        }
+
+        if ($context->getVersion()
+            && version_compare($context->getVersion(), '2.0.1') < 0
+        ) {
             $select = $setup->getConnection()->select()
                 ->from(
                     $setup->getTable('catalog_product_entity_group_price'),
