@@ -9,6 +9,8 @@ namespace Magento\Framework\Console;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Shell\ComplexParameter;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
@@ -21,6 +23,13 @@ class Cli extends SymfonyApplication
      * Name of input option
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+
+    /**
+     * Initialization exception
+     *
+     * @var \Exception
+     */
+    private $initException;
 
     /**
      * {@inheritdoc}
@@ -37,40 +46,35 @@ class Cli extends SymfonyApplication
      */
     protected function getApplicationCommands()
     {
-        $setupCommands   = [];
-        $modulesCommands = [];
+        $commands = [];
+        try {
+            $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
+            $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
+            $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+            $bootstrap = Bootstrap::create(BP, $params);
+            $objectManager = $bootstrap->getObjectManager();
+            $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+                ->getServiceManager();
+            /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
+            $omProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+            $omProvider->setObjectManager($objectManager);
 
-        $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
-        $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
-        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-        $bootstrap = Bootstrap::create(BP, $params);
-        $objectManager = $bootstrap->getObjectManager();
-        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
-        /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-        $omProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
-        $omProvider->setObjectManager($objectManager);
+            if (class_exists('Magento\Setup\Console\CommandList')) {
+                $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
+                $commands = array_merge($commands, $setupCommandList->getCommands());
+            }
 
-        if (class_exists('Magento\Setup\Console\CommandList')) {
-            $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
-            $setupCommands = $setupCommandList->getCommands();
+            if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                /** @var \Magento\Framework\Console\CommandList $commandList */
+                $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
+                $commands = array_merge($commands, $commandList->getCommands());
+            }
+
+            $commands = array_merge($commands, $this->getVendorCommands($objectManager));
+        } catch (\Exception $e) {
+            $this->initException = $e;
         }
-
-        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-            /** @var \Magento\Framework\Console\CommandList $commandList */
-            $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
-            $modulesCommands = $commandList->getCommands();
-        }
-
-        $vendorCommands = $this->getVendorCommands($objectManager);
-
-        $commandsList = array_merge(
-            $setupCommands,
-            $modulesCommands,
-            $vendorCommands
-        );
-
-        return $commandsList;
+        return $commands;
     }
 
     /**
@@ -91,5 +95,26 @@ class Cli extends SymfonyApplication
             }
         }
         return $commands;
+    }
+
+    /**
+     * Process an error happened during initialization of commands, if any
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws \Exception
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $exitCode = parent::doRun($input, $output);
+        if ($this->initException) {
+            $output->writeln(
+                '<error>An error happened during commands initialization. '
+                . 'If you just updated the code base, consider cleaning "var/generation" and "var/di" folders.</error>'
+            );
+            throw $this->initException;
+        }
+        return $exitCode;
     }
 }
