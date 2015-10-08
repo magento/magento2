@@ -147,13 +147,13 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $cartItemMock->expects($this->atLeastOnce())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('setExtensionAttributes')->with($optionExtensionMock);
 
-        $this->assertSame($cartItemMock, $this->model->processProductOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 
     public function testProcessProductOptionsInvalidType()
     {
         $cartItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getProductType'], [], '', false);
         $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_SIMPLE);
-        $this->assertSame($cartItemMock, $this->model->processProductOptions($cartItemMock));
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }
