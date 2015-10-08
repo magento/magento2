@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="One">
         <var name="one">Value One</var>
     </vars>
