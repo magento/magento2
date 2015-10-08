@@ -6,7 +6,7 @@
 
 namespace Magento\NewRelicReporting\Model\Resource\Users;
 
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize users resource collection

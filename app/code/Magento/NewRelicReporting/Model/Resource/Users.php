@@ -6,7 +6,7 @@
 
 namespace Magento\NewRelicReporting\Model\Resource;
 
-class Users extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Users extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {
     /**
      * Initialize users resource model
