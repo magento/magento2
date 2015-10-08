@@ -19,6 +19,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\SampleData;
 
 /**
  * Install controller
@@ -43,20 +44,28 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
+     * @var \Magento\Framework\Setup\SampleData\State
+     */
+    protected $sampleDataState;
+
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
+     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
-        ProgressFactory $progressFactory
+        ProgressFactory $progressFactory,
+        \Magento\Framework\Setup\SampleData\State $sampleDataState
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
+        $this->sampleDataState = $sampleDataState;
     }
 
     /**
@@ -91,13 +100,13 @@ class Install extends AbstractActionController
                 $this->installer->getInstallInfo()[SetupConfigOptionsList::KEY_ENCRYPTION_KEY]
             );
             $json->setVariable('success', true);
+            if ($this->sampleDataState->hasError()) {
+                $json->setVariable('isSampleDataError', true);
+            }
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch (\Exception $e) {
             $this->log->logError($e);
             $json->setVariable('success', false);
-            if ($e instanceof \Magento\Setup\SampleDataException) {
-                $json->setVariable('isSampleDataError', true);
-            }
         }
         return $json;
     }
@@ -117,11 +126,11 @@ class Install extends AbstractActionController
             $percent = sprintf('%d', $progress->getRatio() * 100);
             $success = true;
             $contents = $this->log->get();
-        } catch (\Exception $e) {
-            $contents = [(string)$e];
-            if ($e instanceof \Magento\Setup\SampleDataException) {
+            if ($this->sampleDataState->hasError()) {
                 $json->setVariable('isSampleDataError', true);
             }
+        } catch (\Exception $e) {
+            $contents = [(string)$e];
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
     }
