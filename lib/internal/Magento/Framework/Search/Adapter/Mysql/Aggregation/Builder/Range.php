@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
@@ -36,9 +36,9 @@ class Range implements BucketInterface
 
     /**
      * @param Metrics $metricsBuilder
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Metrics $metricsBuilder, Resource $resource)
+    public function __construct(Metrics $metricsBuilder, ResourceConnection $resource)
     {
         $this->metricsBuilder = $metricsBuilder;
         $this->resource = $resource;

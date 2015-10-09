@@ -18,7 +18,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $indexBuilder;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -28,7 +28,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $ruleCollectionFactory;
 
@@ -116,14 +116,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',
             false
         );
         $this->ruleCollectionFactory = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\Rule\CollectionFactory',
+            'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
             ['create', 'addFieldToFilter'],
             [],
             '',
@@ -219,7 +219,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice',
             ['getMainTable'],
             [],
             '',
