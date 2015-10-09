@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
-use Magento\Store\Model\Resource\Website\Collection;
+use Magento\Store\Model\ResourceModel\Website\Collection;
 
 /**
  * Adminhtml sales order create totals table block

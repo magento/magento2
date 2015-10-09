@@ -17,7 +17,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
     protected $bundleData;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection
+     * @var \Magento\Bundle\Model\ResourceModel\Selection
      */
     protected $bundleSelection;
 
@@ -35,13 +35,13 @@ class AppendUpsellProductsObserver implements ObserverInterface
      * @param \Magento\Bundle\Helper\Data $bundleData
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
+     * @param \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
      */
     public function __construct(
         \Magento\Bundle\Helper\Data $bundleData,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Bundle\Model\Resource\Selection $bundleSelection
+        \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
     ) {
         $this->bundleData = $bundleData;
         $this->productVisibility = $productVisibility;
@@ -69,7 +69,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Link\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
         $collection = $observer->getEvent()->getCollection();
         $limit = $observer->getEvent()->getLimit();
         if (is_array($limit)) {
@@ -80,7 +80,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             }
         }
 
-        /* @var $resource \Magento\Bundle\Model\Resource\Selection */
+        /* @var $resource \Magento\Bundle\Model\ResourceModel\Selection */
         $resource = $this->bundleSelection;
 
         $productIds = array_keys($collection->getItems());
@@ -97,7 +97,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $bundleCollection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $bundleCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $bundleCollection = $product->getCollection()->addAttributeToSelect(
             $this->config->getProductAttributes()
         )->addStoreFilter()->addMinimalPrice()->addFinalPrice()->addTaxPercents()->setVisibility(

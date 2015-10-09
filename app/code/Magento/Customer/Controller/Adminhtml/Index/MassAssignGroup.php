@@ -6,7 +6,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Api\CustomerRepositoryInterface;

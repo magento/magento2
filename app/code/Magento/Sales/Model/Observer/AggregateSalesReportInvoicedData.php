@@ -21,19 +21,19 @@ class AggregateSalesReportInvoicedData
     protected $localeDate;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\InvoicedFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory
      */
     protected $invoicedFactory;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Sales\Model\Resource\Report\InvoicedFactory $invoicedFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory $invoicedFactory
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Sales\Model\Resource\Report\InvoicedFactory $invoicedFactory
+        \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory $invoicedFactory
     ) {
         $this->localeResolver = $localeResolver;
         $this->localeDate = $timezone;
