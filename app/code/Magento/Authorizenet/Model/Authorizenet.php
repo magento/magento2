@@ -130,7 +130,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
         TransactionService $transactionService,
-        \Magento\Framework\ModelResource\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
