@@ -123,7 +123,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             '<?php /* @noEscape */ echo $controller; ?>',
             '<?php /* @noEscape */ echo $orderUrl; ?>',
             '<?php echo $block->escapeUrl($method->getCgiUrl()); ?>',
-            '<?php /* @noEscape*/ echo $block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()]) ?>');
+            '<?php /* @noEscape */ echo $block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()]) ?>');
 
         <?php if (!$block->isAjaxRequest()): ?>
             });
