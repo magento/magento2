@@ -81,7 +81,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     public function testGetItemCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Compare\Item\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection',
             $this->_helper->getItemCollection()
         );
     }

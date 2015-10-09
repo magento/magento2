@@ -5,7 +5,7 @@
  */
 
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $model->setName('system_attribute')->setId(5)->setEntityTypeId(4)->setIsUserDefined(0);
 $model->save();
