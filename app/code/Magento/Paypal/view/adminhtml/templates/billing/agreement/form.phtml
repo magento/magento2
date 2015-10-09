@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
 /** @var \Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Form $block */
 ?>
 <?php $code = $block->getMethodCode() ?>
@@ -17,13 +18,11 @@
                     name="payment[<?php echo $block->escapeHtml($block->getTransportBAId()); ?>]"
                     class="required-entry admin__control-select">
                 <option value=""><?php echo $block->escapeHtml(__('Please Select')); ?></option>
-                <?php
-                foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
+                <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
                     <option value="<?php echo $block->escapeHtml($id); ?>">
                         <?php echo $block->escapeHtml($referenceId); ?>
                     </option>
-                <?php
-                endforeach; ?>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>

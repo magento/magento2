@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-
-
+// @codingStandardsIgnoreFile
 /** @var $block \Magento\Paypal\Block\Express\Review */
 ?>
 <div id="shipping-method-container">
@@ -19,7 +18,8 @@
                     </option>
                 <?php endif; ?>
                 <?php foreach ($groups as $code => $rates): ?>
-                    <optgroup label="<?php echo $block->escapeHtml($block->getCarrierName($code)) ?>" style="font-style:normal;">
+                    <optgroup label="<?php echo $block->escapeHtml($block->getCarrierName($code)) ?>"
+                              style="font-style:normal;">
                         <?php foreach ($rates as $rate): ?>
                             <option
                                 value="<?php echo $block->escapeHtml($block->renderShippingRateValue($rate)); ?>"
