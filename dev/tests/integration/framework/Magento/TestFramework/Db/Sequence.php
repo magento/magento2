@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Db;
 
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**

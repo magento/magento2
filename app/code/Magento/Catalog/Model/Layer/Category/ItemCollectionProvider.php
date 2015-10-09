@@ -12,7 +12,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
     /**
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {

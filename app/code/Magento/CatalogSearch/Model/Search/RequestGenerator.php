@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Entity\Attribute;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -131,7 +131,7 @@ class RequestGenerator
      */
     protected function getSearchableAttributes()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $productAttributes */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
         $productAttributes = $this->productAttributeCollectionFactory->create();
         $productAttributes->addFieldToFilter(
             ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],

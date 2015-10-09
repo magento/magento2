@@ -18,7 +18,8 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
         if ($this->getRequest()->getParam('_unsubscribe')) {
             $problems = (array)$this->getRequest()->getParam('problem', []);
             if (count($problems) > 0) {
-                $collection = $this->_objectManager->create('Magento\Newsletter\Model\Resource\Problem\Collection');
+                $collection =
+                    $this->_objectManager->create('Magento\Newsletter\Model\ResourceModel\Problem\Collection');
                 $collection->addSubscriberInfo()->addFieldToFilter(
                     $collection->getResource()->getIdFieldName(),
                     ['in' => $problems]
@@ -33,7 +34,8 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
         if ($this->getRequest()->getParam('_delete')) {
             $problems = (array)$this->getRequest()->getParam('problem', []);
             if (count($problems) > 0) {
-                $collection = $this->_objectManager->create('Magento\Newsletter\Model\Resource\Problem\Collection');
+                $collection =
+                    $this->_objectManager->create('Magento\Newsletter\Model\ResourceModel\Problem\Collection');
                 $collection->addFieldToFilter(
                     $collection->getResource()->getIdFieldName(),
                     ['in' => $problems]
