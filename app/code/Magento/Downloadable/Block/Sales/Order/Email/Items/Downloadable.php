@@ -31,7 +31,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     protected $_purchasedFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
 
@@ -43,13 +43,13 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
-     * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
-        \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = []
     ) {
         $this->_purchasedFactory = $purchasedFactory;

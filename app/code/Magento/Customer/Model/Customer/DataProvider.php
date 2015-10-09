@@ -10,8 +10,8 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Resource\Customer\Collection;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**

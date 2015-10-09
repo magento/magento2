@@ -16,7 +16,7 @@ class IndexGrid
     /**
      * Entity grid model.
      *
-     * @var \Magento\Sales\Model\Resource\GridInterface
+     * @var \Magento\Sales\Model\ResourceModel\GridInterface
      */
     protected $entityGrid;
 
@@ -28,11 +28,11 @@ class IndexGrid
     protected $globalConfig;
 
     /**
-     * @param \Magento\Sales\Model\Resource\GridInterface $entityGrid
+     * @param \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      */
     public function __construct(
-        \Magento\Sales\Model\Resource\GridInterface $entityGrid,
+        \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
     ) {
         $this->entityGrid = $entityGrid;
