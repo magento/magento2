@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -74,10 +75,12 @@ class UpdateCategoryEntityTest extends Injectable
      *
      * @param Category $category
      * @param Category $initialCategory
+     * @param Store $store
      * @return void
      */
-    public function test(Category $category, Category $initialCategory)
+    public function test(Category $category, Category $initialCategory, Store $store)
     {
+        $store->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
