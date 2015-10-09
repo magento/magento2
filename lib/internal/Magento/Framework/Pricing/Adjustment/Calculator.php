@@ -40,6 +40,7 @@ class Calculator implements CalculatorInterface
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
         $baseAmount = $fullAmount = $amount;
+        $previousAdjustments = 0;
         $adjustments = [];
         foreach ($saleableItem->getPriceInfo()->getAdjustments() as $adjustment) {
             $code = $adjustment->getAdjustmentCode();
@@ -51,7 +52,7 @@ class Calculator implements CalculatorInterface
                 $adjust = $adjustment->extractAdjustment($baseAmount, $saleableItem, $context);
                 $baseAmount -= $adjust;
                 $fullAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem, $context);
-                $adjust = $fullAmount - $baseAmount;
+                $adjust = $fullAmount - $baseAmount - $previousAdjustments;
                 if (!$toExclude) {
                     $adjustments[$code] = $adjust;
                 }
@@ -63,6 +64,7 @@ class Calculator implements CalculatorInterface
                 $adjust = $newAmount - $fullAmount;
                 $adjustments[$code] = $adjust;
                 $fullAmount = $newAmount;
+                $previousAdjustments += $adjust;
             }
         }
 
