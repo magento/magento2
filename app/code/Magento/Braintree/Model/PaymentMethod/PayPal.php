@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Braintree\Model\Vault;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 
 /**
  * Class PayPal
@@ -68,7 +68,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Braintree\Model\Config\PayPal $payPalConfig
      * @param BraintreeTransaction $braintreeTransaction
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -94,7 +94,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Braintree\Model\Config\PayPal $payPalConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

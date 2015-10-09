@@ -10,7 +10,7 @@
              module="Magento_Widget"
              type="flat"
              entity_type="widget_instance"
-             collection="Magento\Widget\Model\Resource\Widget\Instance\Collection"
+             collection="Magento\Widget\Model\ResourceModel\Widget\Instance\Collection"
              identifier="parameters"
              repository_class="Magento\Widget\Test\Repository\Widget"
              handler_interface="Magento\Widget\Test\Handler\Widget\WidgetInterface"
