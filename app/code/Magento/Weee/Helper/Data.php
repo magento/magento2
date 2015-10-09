@@ -786,6 +786,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get tax price display settings
+     *
+     * @param  null|string|bool|int|Store $store
+     * @return bool
+     */
+    public function showPriceWithTax($store = null)
+    {
+        return ($this->_taxData->getPriceDisplayType($store) == 1 ? false : true);
+    }
+
+    /**
      * Return an array of FPT attributes for a bundle product
      *
      * @param  \Magento\Catalog\Model\Product $product
