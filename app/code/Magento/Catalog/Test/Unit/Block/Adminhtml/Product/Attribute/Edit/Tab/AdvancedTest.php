@@ -69,7 +69,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     {
         $fieldSet = $this->getMock('Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);
         $form = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
-        $attributeModel = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeModel = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $entityType = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $formElement = $this->getMock('Magento\Framework\Data\Form\Element\Text', ['setDisabled'], [], '', false);
         $directoryReadInterface = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface');

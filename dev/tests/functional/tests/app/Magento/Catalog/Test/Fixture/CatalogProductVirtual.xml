@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="virtual"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Catalog\Test\Repository\CatalogProductVirtual"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface"
