@@ -28,7 +28,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->groupRepositoryInterface = $this->getMock(
-            'Magento\Customer\Model\Resource\GroupRepository',
+            'Magento\Customer\Model\ResourceModel\GroupRepository',
             [],
             [],
             '',

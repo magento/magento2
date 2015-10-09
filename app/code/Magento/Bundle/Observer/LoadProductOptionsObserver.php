@@ -19,7 +19,7 @@ class LoadProductOptionsObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $collection = $observer->getEvent()->getCollection();
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection->addPriceData();
 
         return $this;

@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerManagementInterface;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 class CustomerManagement implements CustomerManagementInterface
 {
@@ -29,7 +29,7 @@ class CustomerManagement implements CustomerManagementInterface
     public function getCount()
     {
         $customers = $this->customersFactory->create();
-        /** @var \Magento\Customer\Model\Resource\Customer\Collection $customers */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $customers */
         return $customers->getSize();
     }
 }

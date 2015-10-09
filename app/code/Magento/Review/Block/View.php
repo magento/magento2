@@ -97,7 +97,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve collection of ratings
      *
-     * @return \Magento\Review\Model\Resource\Rating\Option\Vote\Collection
+     * @return \Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection
      */
     public function getRating()
     {

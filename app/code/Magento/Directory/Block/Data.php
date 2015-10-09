@@ -13,12 +13,12 @@ class Data extends \Magento\Framework\View\Element\Template
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionCollectionFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countryCollectionFactory;
 
@@ -37,8 +37,8 @@ class Data extends \Magento\Framework\View\Element\Template
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -46,8 +46,8 @@ class Data extends \Magento\Framework\View\Element\Template
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -67,7 +67,7 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function getCountryCollection()
     {
@@ -138,7 +138,7 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {

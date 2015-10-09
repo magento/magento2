@@ -23,7 +23,7 @@ class ProductServiceTest extends WebapiAbstract
     const BUNDLE_PRODUCT_ID = 'sku-test-product-bundle';
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $productCollection;
 
@@ -33,7 +33,7 @@ class ProductServiceTest extends WebapiAbstract
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $objectManager->get('Magento\Catalog\Model\Resource\Product\Collection');
+        $this->productCollection = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
     }
 
     /**
