@@ -13,6 +13,7 @@ use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
+use Magento\Usps\Helper\Config;
 
 /**
  * USPS shipping
@@ -113,6 +114,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_httpClientFactory;
 
     /**
+     * @var Config
+     */
+    protected $configHelper;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -131,6 +137,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param Config $configHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -154,9 +161,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        Config $configHelper,
         array $data = []
     ) {
         $this->_carrierHelper = $carrierHelper;
+        $this->configHelper = $configHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_httpClientFactory = $httpClientFactory;
         parent::__construct(
@@ -398,7 +407,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $package = $xml->addChild('Package');
             $package->addAttribute('ID', 0);
-            $service = $this->getCode('service_to_code', $r->getService());
+            $service = $this->configHelper->getCode('service_to_code', $r->getService());
             if (!$service) {
                 $service = $r->getService();
             }
@@ -528,7 +537,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         if (is_object($xml->Package) && is_object($xml->Package->Postage)) {
                             foreach ($xml->Package->Postage as $postage) {
                                 $serviceName = $this->_filterServiceName((string)$postage->MailService);
-                                $_serviceCode = $this->getCode('method_to_code', $serviceName);
+                                $_serviceCode = $this->configHelper->getCode('method_to_code', $serviceName);
                                 $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
                                 if (in_array($serviceCode, $allowedMethods)) {
@@ -581,7 +590,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $rate->setMethodTitle(
                     isset(
                         $serviceCodeToActualNameMap[$method]
-                    ) ? $serviceCodeToActualNameMap[$method] : $this->getCode(
+                    ) ? $serviceCodeToActualNameMap[$method] : $this->configHelper->getCode(
                         'method',
                         $method
                     )
@@ -593,362 +602,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return $result;
-    }
-
-    /**
-     * Get configuration data of carrier
-     *
-     * @param string $type
-     * @param string $code
-     * @return array|false
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function getCode($type, $code = '')
-    {
-        $codes = [
-            'method' => [
-                '0_FCLE' => __('First-Class Mail Large Envelope'),
-                '0_FCL' => __('First-Class Mail Letter'),
-                '0_FCP' => __('First-Class Mail Parcel'),
-                '0_FCPC' => __('First-Class Mail Postcards'),
-                '1' => __('Priority Mail'),
-                '2' => __('Priority Mail Express Hold For Pickup'),
-                '3' => __('Priority Mail Express'),
-                '4' => __('Standard Post'),
-                '6' => __('Media Mail'),
-                '7' => __('Library Mail'),
-                '13' => __('Priority Mail Express Flat Rate Envelope'),
-                '15' => __('First-Class Mail Large Postcards'),
-                '16' => __('Priority Mail Flat Rate Envelope'),
-                '17' => __('Priority Mail Medium Flat Rate Box'),
-                '22' => __('Priority Mail Large Flat Rate Box'),
-                '23' => __('Priority Mail Express Sunday/Holiday Delivery'),
-                '25' => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope'),
-                '27' => __('Priority Mail Express Flat Rate Envelope Hold For Pickup'),
-                '28' => __('Priority Mail Small Flat Rate Box'),
-                '29' => __('Priority Mail Padded Flat Rate Envelope'),
-                '30' => __('Priority Mail Express Legal Flat Rate Envelope'),
-                '31' => __('Priority Mail Express Legal Flat Rate Envelope Hold For Pickup'),
-                '32' => __('Priority Mail Express Sunday/Holiday Delivery Legal Flat Rate Envelope'),
-                '33' => __('Priority Mail Hold For Pickup'),
-                '34' => __('Priority Mail Large Flat Rate Box Hold For Pickup'),
-                '35' => __('Priority Mail Medium Flat Rate Box Hold For Pickup'),
-                '36' => __('Priority Mail Small Flat Rate Box Hold For Pickup'),
-                '37' => __('Priority Mail Flat Rate Envelope Hold For Pickup'),
-                '38' => __('Priority Mail Gift Card Flat Rate Envelope'),
-                '39' => __('Priority Mail Gift Card Flat Rate Envelope Hold For Pickup'),
-                '40' => __('Priority Mail Window Flat Rate Envelope'),
-                '41' => __('Priority Mail Window Flat Rate Envelope Hold For Pickup'),
-                '42' => __('Priority Mail Small Flat Rate Envelope'),
-                '43' => __('Priority Mail Small Flat Rate Envelope Hold For Pickup'),
-                '44' => __('Priority Mail Legal Flat Rate Envelope'),
-                '45' => __('Priority Mail Legal Flat Rate Envelope Hold For Pickup'),
-                '46' => __('Priority Mail Padded Flat Rate Envelope Hold For Pickup'),
-                '47' => __('Priority Mail Regional Rate Box A'),
-                '48' => __('Priority Mail Regional Rate Box A Hold For Pickup'),
-                '49' => __('Priority Mail Regional Rate Box B'),
-                '50' => __('Priority Mail Regional Rate Box B Hold For Pickup'),
-                '53' => __('First-Class Package Service Hold For Pickup'),
-                '55' => __('Priority Mail Express Flat Rate Boxes'),
-                '56' => __('Priority Mail Express Flat Rate Boxes Hold For Pickup'),
-                '57' => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes'),
-                '58' => __('Priority Mail Regional Rate Box C'),
-                '59' => __('Priority Mail Regional Rate Box C Hold For Pickup'),
-                '61' => __('First-Class Package Service'),
-                '62' => __('Priority Mail Express Padded Flat Rate Envelope'),
-                '63' => __('Priority Mail Express Padded Flat Rate Envelope Hold For Pickup'),
-                '64' => __('Priority Mail Express Sunday/Holiday Delivery Padded Flat Rate Envelope'),
-                'INT_1' => __('Priority Mail Express International'),
-                'INT_2' => __('Priority Mail International'),
-                'INT_4' => __('Global Express Guaranteed (GXG)'),
-                'INT_5' => __('Global Express Guaranteed Document'),
-                'INT_6' => __('Global Express Guaranteed Non-Document Rectangular'),
-                'INT_7' => __('Global Express Guaranteed Non-Document Non-Rectangular'),
-                'INT_8' => __('Priority Mail International Flat Rate Envelope'),
-                'INT_9' => __('Priority Mail International Medium Flat Rate Box'),
-                'INT_10' => __('Priority Mail Express International Flat Rate Envelope'),
-                'INT_11' => __('Priority Mail International Large Flat Rate Box'),
-                'INT_12' => __('USPS GXG Envelopes'),
-                'INT_13' => __('First-Class Mail International Letter'),
-                'INT_14' => __('First-Class Mail International Large Envelope'),
-                'INT_15' => __('First-Class Package International Service'),
-                'INT_16' => __('Priority Mail International Small Flat Rate Box'),
-                'INT_17' => __('Priority Mail Express International Legal Flat Rate Envelope'),
-                'INT_18' => __('Priority Mail International Gift Card Flat Rate Envelope'),
-                'INT_19' => __('Priority Mail International Window Flat Rate Envelope'),
-                'INT_20' => __('Priority Mail International Small Flat Rate Envelope'),
-                'INT_21' => __('First-Class Mail International Postcard'),
-                'INT_22' => __('Priority Mail International Legal Flat Rate Envelope'),
-                'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
-                'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
-                'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
-                'INT_26' => __('Priority Mail Express International Flat Rate Boxes'),
-                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
-            ],
-            'service_to_code' => [
-                '0_FCLE' => 'First Class',
-                '0_FCL' => 'First Class',
-                '0_FCP' => 'First Class',
-                '0_FCPC' => 'First Class',
-                '1' => 'Priority',
-                '2' => 'Priority Express',
-                '3' => 'Priority Express',
-                '4' => 'Standard Post',
-                '6' => 'Media',
-                '7' => 'Library',
-                '13' => 'Priority Express',
-                '15' => 'First Class',
-                '16' => 'Priority',
-                '17' => 'Priority',
-                '22' => 'Priority',
-                '23' => 'Priority Express',
-                '25' => 'Priority Express',
-                '27' => 'Priority Express',
-                '28' => 'Priority',
-                '29' => 'Priority',
-                '30' => 'Priority Express',
-                '31' => 'Priority Express',
-                '32' => 'Priority Express',
-                '33' => 'Priority',
-                '34' => 'Priority',
-                '35' => 'Priority',
-                '36' => 'Priority',
-                '37' => 'Priority',
-                '38' => 'Priority',
-                '39' => 'Priority',
-                '40' => 'Priority',
-                '41' => 'Priority',
-                '42' => 'Priority',
-                '43' => 'Priority',
-                '44' => 'Priority',
-                '45' => 'Priority',
-                '46' => 'Priority',
-                '47' => 'Priority',
-                '48' => 'Priority',
-                '49' => 'Priority',
-                '50' => 'Priority',
-                '53' => 'First Class',
-                '55' => 'Priority Express',
-                '56' => 'Priority Express',
-                '57' => 'Priority Express',
-                '58' => 'Priority',
-                '59' => 'Priority',
-                '61' => 'First Class',
-                '62' => 'Priority Express',
-                '63' => 'Priority Express',
-                '64' => 'Priority Express',
-                'INT_1' => 'Priority Express',
-                'INT_2' => 'Priority',
-                'INT_4' => 'Priority Express',
-                'INT_5' => 'Priority Express',
-                'INT_6' => 'Priority Express',
-                'INT_7' => 'Priority Express',
-                'INT_8' => 'Priority',
-                'INT_9' => 'Priority',
-                'INT_10' => 'Priority Express',
-                'INT_11' => 'Priority',
-                'INT_12' => 'Priority Express',
-                'INT_13' => 'First Class',
-                'INT_14' => 'First Class',
-                'INT_15' => 'First Class',
-                'INT_16' => 'Priority',
-                'INT_17' => 'Priority',
-                'INT_18' => 'Priority',
-                'INT_19' => 'Priority',
-                'INT_20' => 'Priority',
-                'INT_21' => 'First Class',
-                'INT_22' => 'Priority',
-                'INT_23' => 'Priority',
-                'INT_24' => 'Priority',
-                'INT_25' => 'Priority',
-                'INT_26' => 'Priority Express',
-                'INT_27' => 'Priority Express',
-            ],
-            'method_to_code' => [
-                'First-Class Mail Large Envelope' => '0_FCLE',
-                'First-Class Mail Letter' => '0_FCL',
-                'First-Class Mail Parcel' => '0_FCP',
-            ],
-            'first_class_mail_type' => ['LETTER' => __('Letter'), 'FLAT' => __('Flat'), 'PARCEL' => __('Parcel')],
-            'container' => [
-                'VARIABLE' => __('Variable'),
-                'FLAT RATE BOX' => __('Flat-Rate Box'),
-                'FLAT RATE ENVELOPE' => __('Flat-Rate Envelope'),
-                'RECTANGULAR' => __('Rectangular'),
-                'NONRECTANGULAR' => __('Non-rectangular'),
-            ],
-            'containers_filter' => [
-                [
-                    'containers' => ['VARIABLE'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'Priority Mail Express Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope',
-                                'Priority Mail Large Flat Rate Box',
-                                'Priority Mail Medium Flat Rate Box',
-                                'Priority Mail Small Flat Rate Box',
-                                'Priority Mail Express Hold For Pickup',
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Priority Mail Hold For Pickup',
-                                'Priority Mail Large Flat Rate Box Hold For Pickup',
-                                'Priority Mail Medium Flat Rate Box Hold For Pickup',
-                                'Priority Mail Small Flat Rate Box Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Small Flat Rate Envelope',
-                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
-                                'First-Class Package Service Hold For Pickup',
-                                'Priority Mail Express Flat Rate Boxes',
-                                'Priority Mail Express Flat Rate Boxes Hold For Pickup',
-                                'Standard Post',
-                                'Media Mail',
-                                'First-Class Mail Large Envelope',
-                                'Priority Mail Express Sunday/Holiday Delivery',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'Priority Mail Express International Flat Rate Envelope',
-                                'Priority Mail International Flat Rate Envelope',
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Envelope',
-                                'Priority Mail Express International Flat Rate Boxes',
-                                'Global Express Guaranteed (GXG)',
-                                'USPS GXG Envelopes',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Mail International Letter',
-                                'First-Class Mail International Large Envelope',
-                                'First-Class Package International Service',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'containers' => ['FLAT RATE BOX'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'Priority Mail Large Flat Rate Box',
-                                'Priority Mail Medium Flat Rate Box',
-                                'Priority Mail Small Flat Rate Box',
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail International DVD Flat Rate priced box',
-                                'Priority Mail International Large Video Flat Rate priced box',
-                            ],
-                        ],
-                    ]
-                ],
-                [
-                    'containers' => ['FLAT RATE ENVELOPE'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'Priority Mail Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope',
-                                'First-Class Mail Large Envelope',
-                                'Priority Mail Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Small Flat Rate Envelope',
-                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
-                                'Priority Mail Express Padded Flat Rate Envelope',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'Priority Mail Express International Flat Rate Envelope',
-                                'Priority Mail International Flat Rate Envelope',
-                                'First-Class Mail International Large Envelope',
-                                'Priority Mail International Small Flat Rate Envelope',
-                                'Priority Mail Express International Legal Flat Rate Envelope',
-                                'Priority Mail International Gift Card Flat Rate Envelope',
-                                'Priority Mail International Window Flat Rate Envelope',
-                                'Priority Mail International Legal Flat Rate Envelope',
-                                'Priority Mail Express International Padded Flat Rate Envelope',
-                            ],
-                        ],
-                    ]
-                ],
-                [
-                    'containers' => ['RECTANGULAR'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Standard Post',
-                                'Media Mail',
-                                'Library Mail',
-                                'First-Class Package Service',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'USPS GXG Envelopes',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Package International Service',
-                            ],
-                        ],
-                    ]
-                ],
-                [
-                    'containers' => ['NONRECTANGULAR'],
-                    'filters' => [
-                        'within_us' => [
-                            'method' => [
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Standard Post',
-                                'Media Mail',
-                                'Library Mail',
-                            ],
-                        ],
-                        'from_us' => [
-                            'method' => [
-                                'Global Express Guaranteed (GXG)',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Package International Service',
-                            ],
-                        ],
-                    ]
-                ],
-            ],
-            'size' => ['REGULAR' => __('Regular'), 'LARGE' => __('Large')],
-            'machinable' => ['true' => __('Yes'), 'false' => __('No')],
-            'delivery_confirmation_types' => ['True' => __('Not Required'), 'False' => __('Required')],
-        ];
-
-        if (!isset($codes[$type])) {
-            return false;
-        } elseif ('' === $code) {
-            return $codes[$type];
-        }
-
-        if (!isset($codes[$type][$code])) {
-            return false;
-        } else {
-            return $codes[$type][$code];
-        }
     }
 
     /**
@@ -1132,7 +785,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $allowed = explode(',', $this->getConfigData('allowed_methods'));
         $arr = [];
         foreach ($allowed as $k) {
-            $arr[$k] = $this->getCode('method', $k);
+            $arr[$k] = $this->configHelper->getCode('method', $k);
         }
 
         return $arr;
@@ -1654,7 +1307,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // the wrap node needs for remove xml declaration above
         $xmlWrap = $this->_xmlElFactory->create(['data' => '<?xml version = "1.0" encoding = "UTF-8"?><wrap/>']);
         $method = '';
-        $service = $this->getCode('service_to_code', $shippingMethod);
+        $service = $this->configHelper->getCode('service_to_code', $shippingMethod);
         if ($service == 'Priority') {
             $method = 'Priority';
             $rootNode = 'PriorityMailIntlRequest';
@@ -1837,7 +1490,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
-        $service = $this->getCode('service_to_code', $request->getShippingMethod());
+        $service = $this->configHelper->getCode('service_to_code', $request->getShippingMethod());
         $recipientUSCountry = $this->_isUSCountry($request->getRecipientAddressCountryCode());
 
         if ($recipientUSCountry && $service == 'Priority Express') {
@@ -1932,7 +1585,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypesAll()
     {
-        return $this->getCode('container');
+        return $this->configHelper->getCode('container');
     }
 
     /**
@@ -1942,7 +1595,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypesFilter()
     {
-        return $this->getCode('containers_filter');
+        return $this->configHelper->getCode('containers_filter');
     }
 
     /**
@@ -1958,7 +1611,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         $countryRecipient = $params->getCountryRecipient();
         if ($this->_isUSCountry($countryRecipient)) {
-            return $this->getCode('delivery_confirmation_types');
+            return $this->configHelper->getCode('delivery_confirmation_types');
         } else {
             return [];
         }

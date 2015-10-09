@@ -14,24 +14,25 @@ use Magento\Usps\Model\Carrier;
 class Generic implements GenericInterface
 {
     /**
-     * @var \Magento\Usps\Model\Carrier
+     * @var \Magento\Usps\Helper\Config
      */
-    protected $shippingUsps;
+    protected $carrierConfig;
 
     /**
      * Carrier code
      *
      * @var string
      */
-    protected $code = '';
+    protected $_code = '';
 
     /**
-     * @param \Magento\Usps\Model\Carrier $shippingUsps
+     * @param \Magento\Usps\Helper\Config $carrierConfig
      */
-    public function __construct(Carrier $shippingUsps)
+    public function __construct(\Magento\Usps\Helper\Config $carrierConfig)
     {
-        $this->shippingUsps = $shippingUsps;
+        $this->carrierConfig = $carrierConfig;
     }
+
 
     /**
      * Returns array to be used in multiselect on back-end
@@ -41,7 +42,7 @@ class Generic implements GenericInterface
     public function toOptionArray()
     {
         $options = [];
-        $codes = $this->shippingUsps->getCode($this->code);
+        $codes = $this->carrierConfig->getCode($this->code);
         if ($codes) {
             foreach ($codes as $code => $title) {
                 $options[] = ['value' => $code, 'label' => __($title)];

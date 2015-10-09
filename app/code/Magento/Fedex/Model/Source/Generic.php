@@ -8,9 +8,9 @@ namespace Magento\Fedex\Model\Source;
 class Generic implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Fedex\Model\Carrier
+     * @var \Magento\Fedex\Helper\Config
      */
-    protected $_shippingFedex;
+    protected $carrierConfig;
 
     /**
      * Carrier code
@@ -20,11 +20,11 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
     protected $_code = '';
 
     /**
-     * @param \Magento\Fedex\Model\Carrier $shippingFedex
+     * @param \Magento\Fedex\Helper\Config $carrierConfig
      */
-    public function __construct(\Magento\Fedex\Model\Carrier $shippingFedex)
+    public function __construct(\Magento\Fedex\Helper\Config $carrierConfig)
     {
-        $this->_shippingFedex = $shippingFedex;
+        $this->carrierConfig = $carrierConfig;
     }
 
     /**
@@ -34,7 +34,7 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $configData = $this->_shippingFedex->getCode($this->_code);
+        $configData = $this->carrierConfig->getCode($this->_code);
         $arr = [];
         foreach ($configData as $code => $title) {
             $arr[] = ['value' => $code, 'label' => $title];
