@@ -68,7 +68,6 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Braintree\Model\Config\PayPal $payPalConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
