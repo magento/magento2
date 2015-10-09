@@ -20,8 +20,7 @@ $code = $block->escapeHtml($block->getBillingAgreementCode());
                name="payment[<?php /* @noEscape */ echo $code; ?>]">
         <label for="<?php /* @noEscape */ echo $code; ?>" class="label">
             <span>
-                <?php echo $block->escapeHtml(__('Sign a billing agreement to streamline further purchases ' .
-                    ' with PayPal.')); ?>
+                <?php echo $block->escapeHtml(__('Sign a billing agreement to streamline further purchases  with PayPal.')); ?>
             </span>
         </label>
     <?php endif; ?>
