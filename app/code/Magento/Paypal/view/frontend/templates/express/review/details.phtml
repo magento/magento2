@@ -22,10 +22,10 @@
         </tr>
         </thead>
             <?php foreach ($block->getItems() as $item): ?>
-                <?php /* @noEscape */ echo $block->getItemHtml($item) ?>
+                <?php echo $block->getItemHtml($item) ?>
             <?php endforeach ?>
         <tfoot>
-            <?php /* @noEscape */ echo $block->getChildHtml('totals'); ?>
+            <?php echo $block->getChildHtml('totals'); ?>
         </tfoot>
     </table>
 </div>

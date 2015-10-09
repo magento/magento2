@@ -14,7 +14,7 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
 ?>
 <div class="account-billing-agreements">
     <?php if (count($billingAgreements) > 0): ?>
-        <?php /* @noEscape */ echo $block->getChildHtml('pager'); ?>
+        <?php echo $block->getChildHtml('pager'); ?>
         <div class="table-wrapper billing-agreements">
             <table id="billing-agreements" class="data table table-billing-agreements">
                 <caption class="table-caption"><?php echo $block->escapeHtml(__('Billing Agreements')); ?></caption>
