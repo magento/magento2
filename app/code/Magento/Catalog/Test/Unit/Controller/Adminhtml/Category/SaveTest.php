@@ -494,7 +494,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             );
 
         $categoryResource = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category',
+            'Magento\Catalog\Model\ResourceModel\Category',
             [],
             [],
             '',
