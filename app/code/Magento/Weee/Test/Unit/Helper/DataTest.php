@@ -382,7 +382,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->helperData->getProductWeeeAttributesForDisplay($this->product);
     }
 
-    public function testShowPriceWithTax()
+    public function getTaxDisplayConfig()
     {
         $expected = 1;
         $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
@@ -393,6 +393,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
 
-        $this->assertEquals($expected, $helperData->showPriceWithTax());
+        $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
 }

@@ -791,7 +791,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  null|string|bool|int|Store $store
      * @return bool
      */
-    public function showPriceWithTax($store = null)
+    public function getTaxDisplayConfig($store = null)
     {
         return $this->_taxData->getPriceDisplayType($store);
     }
