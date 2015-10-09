@@ -60,8 +60,8 @@ class UpdateProductOptionsObserver implements ObserverInterface
         }
 
         if ($this->weeeData->isEnabled() &&
-            !$this->weeeData->geDisplayIncl($product->getStoreId()) &&
-            !$this->weeeData->geDisplayExcl($product->getStoreId())
+            !$this->weeeData->getDisplayIncl($product->getStoreId()) &&
+            !$this->weeeData->getDisplayExcl($product->getStoreId())
         ) {
             // only do processing on bundle product
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
@@ -87,7 +87,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                     }
                 }
 
-                if ($this->weeeData->geDisplayExlDescIncl($product->getStoreId())) {
+                if ($this->weeeData->getDisplayExlDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
                         . '<%%- data.weeePrice.formatted %%>'
@@ -110,8 +110,8 @@ class UpdateProductOptionsObserver implements ObserverInterface
     protected function getWhichCalcPriceToUse($storeId = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->geDisplayExcl($storeId) ||
-            $this->weeeData->geDisplayExlDescIncl($storeId) ||
+        if ($this->weeeData->getDisplayExcl($storeId) ||
+            $this->weeeData->getDisplayExlDescIncl($storeId) ||
             ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
         ) {
             $calcPrice = 'basePrice';
