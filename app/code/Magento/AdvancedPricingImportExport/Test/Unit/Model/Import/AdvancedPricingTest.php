@@ -7,7 +7,7 @@
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
 use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
-use \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory as ResourceFactory;
+use \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
 use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 
 /**
@@ -57,7 +57,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $tierPriceValidator;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
 
@@ -67,7 +67,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $connection;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataSourceModel;
 
@@ -82,7 +82,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $localeDate;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -112,7 +112,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $advancedPricing;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $stringObject;
 
@@ -140,14 +140,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $this->resourceHelper = $this->getMock(
-            '\Magento\ImportExport\Model\Resource\Helper',
+            '\Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',
             false
         );
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             ['getConnection'],
             [],
             '',
@@ -161,7 +161,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->getMock(
-            '\Magento\ImportExport\Model\Resource\Import\Data',
+            '\Magento\ImportExport\Model\ResourceModel\Import\Data',
             [],
             [],
             '',
@@ -184,7 +184,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $entityType->method('getEntityTypeId')->willReturn('');
         $this->eavConfig->method('getEntityType')->willReturn($entityType);
         $this->resourceFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
+            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory',
             ['create', 'getTable'],
             [],
             '',

@@ -14,7 +14,7 @@ use \Braintree_Configuration;
 use \Braintree_Result_Successful;
 use \Braintree_ClientToken;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 use Magento\Payment\Model\InfoInterface;
 
@@ -48,7 +48,7 @@ class Cc extends \Magento\Braintree\Model\Config
     protected $customerFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      */
     protected $countryFactory;
 

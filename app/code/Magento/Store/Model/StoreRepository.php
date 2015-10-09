@@ -15,7 +15,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     protected $storeFactory;
 
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactory;
 
@@ -36,11 +36,11 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
     /**
      * @param StoreFactory $storeFactory
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      */
     public function __construct(
         StoreFactory $storeFactory,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
     ) {
         $this->storeFactory = $storeFactory;
         $this->storeCollectionFactory = $storeCollectionFactory;
@@ -115,7 +115,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     public function getList()
     {
         if (!$this->allLoaded) {
-            /** @var $storeCollection \Magento\Store\Model\Resource\Store\Collection */
+            /** @var $storeCollection \Magento\Store\Model\ResourceModel\Store\Collection */
             $storeCollection = $this->storeCollectionFactory->create();
             $storeCollection->setLoadDefault(true);
             foreach ($storeCollection as $item) {
