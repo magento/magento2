@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use \Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;

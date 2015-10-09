@@ -10,7 +10,7 @@ require __DIR__ . '/../../../Magento/Downloadable/_files/product_downloadable.ph
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->load(1);
 
-/** @var $linkCollection \Magento\Downloadable\Model\Resource\Link\Collection */
+/** @var $linkCollection \Magento\Downloadable\Model\ResourceModel\Link\Collection */
 $linkCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Downloadable\Model\Link'
 )->getCollection()->addProductToFilter(

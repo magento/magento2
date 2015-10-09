@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Model;
 
-use \Magento\Sales\Model\Resource\Order as Resource;
-use \Magento\Sales\Model\Resource\Metadata;
+use \Magento\Sales\Model\ResourceModel\Order as Resource;
+use \Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;

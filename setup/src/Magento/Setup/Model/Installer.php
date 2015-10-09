@@ -10,12 +10,12 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Model\Resource\Db\Context;
+use Magento\Framework\Model\ModelResource\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
@@ -766,7 +766,7 @@ class Installer
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        $resource = new \Magento\Framework\Module\Resource($this->context);
+        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -1174,7 +1174,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\Resource $resource
+     * @param \Magento\Framework\Module\ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws \Magento\Setup\Exception

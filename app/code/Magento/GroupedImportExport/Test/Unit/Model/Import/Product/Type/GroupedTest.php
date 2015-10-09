@@ -14,17 +14,17 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected $grouped;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrCollectionFactory;
 
@@ -39,7 +39,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -63,14 +63,14 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         parent::setUp();
 
         $this->setCollectionFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->setCollection = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',
@@ -81,7 +81,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
         $this->setCollection->expects($this->any())->method('setEntityTypeFilter')->will($this->returnValue([]));
         $this->attrCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create', 'addFieldToFilter'],
             [],
             '',
@@ -138,7 +138,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue($entityAttributes));
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',

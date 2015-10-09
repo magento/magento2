@@ -30,7 +30,7 @@
             <argument name="reader" xsi:type="object">Magento\Eav\Model\Entity\Attribute\Config\Reader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Eav\Model\Resource\Helper">
+    <type name="Magento\Eav\Model\ResourceModel\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">eav</argument>
         </arguments>
@@ -42,8 +42,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Eav\Model\Resource\Entity\Attribute">
-        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\Resource\Entity\Attribute" />
+    <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
+        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
     </type>
     <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
         <arguments>
