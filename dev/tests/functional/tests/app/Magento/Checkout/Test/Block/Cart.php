@@ -76,7 +76,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $deleteItemButton = '.delete-item-test';
+    protected $deleteItemButton = '.action.action-delete';
 
     /**
      * Get Shopping Cart item.
