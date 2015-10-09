@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
 use Magento\Catalog\Ui\Component\FilterFactory;
-use Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
