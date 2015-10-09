@@ -395,7 +395,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')
-                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
         ];
