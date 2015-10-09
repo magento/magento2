@@ -70,7 +70,7 @@ $relatedOrders = $block->getRelatedOrders();
 </div>
 <?php if (count($relatedOrders) > 0): ?>
     <div class="block block-billing-orders-view">
-        <?php /* @noEscape */ echo $block->getChildHtml('pager'); ?>
+        <?php echo $block->getChildHtml('pager'); ?>
         <div class="block-title">
             <span><?php echo $block->escapeHtml(__('Related Orders')); ?></span>
         </div>
