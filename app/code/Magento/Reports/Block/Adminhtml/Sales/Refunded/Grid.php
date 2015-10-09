@@ -37,8 +37,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function getResourceCollectionName()
     {
         return $this->getFilterData()->getData('report_type') == 'created_at_refunded'
-            ? 'Magento\Sales\Model\Resource\Report\Refunded\Collection\Refunded'
-            : 'Magento\Sales\Model\Resource\Report\Refunded\Collection\Order';
+            ? 'Magento\Sales\Model\ResourceModel\Report\Refunded\Collection\Refunded'
+            : 'Magento\Sales\Model\ResourceModel\Report\Refunded\Collection\Order';
     }
 
     /**

@@ -60,9 +60,9 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
         $customerSession->setCustomerId($customerId);
 
-        /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
+        /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         );
         /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
         $billingAgreement = $billingAgreementCollection->getFirstItem();
