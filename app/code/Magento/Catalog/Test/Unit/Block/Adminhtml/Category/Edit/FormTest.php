@@ -26,7 +26,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryTreeMock;
 
@@ -67,7 +67,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->categoryTreeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\Tree',
+            'Magento\Catalog\Model\ResourceModel\Category\Tree',
             [],
             [],
             '',

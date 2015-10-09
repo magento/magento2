@@ -31,9 +31,9 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            '\Magento\Framework\Model\ModelResource\Db\AbstractDb',
             [$contextMock],
             '',
             true,
