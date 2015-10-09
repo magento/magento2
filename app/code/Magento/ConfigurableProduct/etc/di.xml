@@ -35,7 +35,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
+    <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
         <arguments>
             <argument name="ignoredProductTypes" xsi:type="array">
                 <item name="configurable" xsi:type="const">\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
@@ -45,7 +45,7 @@
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">
-                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Resource\Setup\PropertyMapper</item>
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\ResourceModel\Setup\PropertyMapper</item>
             </argument>
         </arguments>
     </type>

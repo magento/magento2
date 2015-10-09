@@ -18,7 +18,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Resource\GroupRepository
+     * @var \Magento\Customer\Model\ResourceModel\GroupRepository
      */
     protected $groupRepositoryMock;
 
@@ -57,7 +57,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->groupRepositoryMock = $this->getMockBuilder('Magento\Customer\Model\Resource\GroupRepository')
+        $this->groupRepositoryMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\GroupRepository')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -17,20 +17,20 @@ use Magento\Framework\App\TemplateTypesInterface;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Newsletter\Model\Resource\Template\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Template\Collection
      */
     protected $_templateCollection;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection
+     * @param \Magento\Newsletter\Model\ResourceModel\Template\Collection $templateCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection,
+        \Magento\Newsletter\Model\ResourceModel\Template\Collection $templateCollection,
         array $data = []
     ) {
         $this->_templateCollection = $templateCollection;

@@ -61,7 +61,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();

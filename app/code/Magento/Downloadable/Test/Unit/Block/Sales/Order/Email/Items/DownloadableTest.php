@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Unit\Block\Sales\Order\Email\Items;
 
-use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
 
 /**
  * Tests Magento\Downloadable\Test\Unit\Block\Sales\Order\Email\Items\Downloadable
@@ -39,7 +39,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
-            'Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory'
+            'Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -65,7 +65,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $itemCollection = $this->getMockBuilder('Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection')
+        $itemCollection =
+            $this->getMockBuilder('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter'])
             ->getMock();

@@ -24,7 +24,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     private $category;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection|MockObject
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject
      */
     private $collection;
 
@@ -93,7 +93,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->state));
 
         $this->collection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Product\Collection'
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection'
         )
             ->disableOriginalConstructor()
             ->setMethods(['addCategoryFilter', 'getFacetedData', 'addCountToCategories'])

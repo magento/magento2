@@ -296,7 +296,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals('test firstname', $customer->getFirstname());
 
         /**
-         * Addresses should be removed by \Magento\Customer\Model\Resource\Customer::_saveAddresses during _afterSave
+         * Addresses should be removed by
+         * \Magento\Customer\Model\ResourceModel\Customer::_saveAddresses during _afterSave
          * addressOne - updated
          * addressTwo - removed
          * addressThree - removed
