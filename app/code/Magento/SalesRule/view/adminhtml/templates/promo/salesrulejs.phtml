@@ -5,7 +5,7 @@
  */
 ?>
 <script>
-require(['jquery', "prototype"], function(jQuery){
+require(["jquery", "uiRegistry", "prototype"], function(jQuery, registry){
 
 //<![CDATA[
 var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
@@ -116,7 +116,7 @@ window.handleCouponTypeChange = handleCouponTypeChange;
 window.handleCouponsTabContentActivity = handleCouponsTabContentActivity;
 window.disableEnableCouponsTabContent = disableEnableCouponsTabContent;
 
-jQuery(window).load(function(){
+registry.get('formDependenceController', function() {
     handleCouponsTabContentActivity();
     handleCouponTypeChange();
 });
