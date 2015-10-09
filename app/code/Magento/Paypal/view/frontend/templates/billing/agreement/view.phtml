@@ -88,30 +88,38 @@ $relatedOrders = $block->getRelatedOrders();
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($relatedOrders as $order): ?>
-                        <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order #')); ?>" class="col id">
-                                <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'order_increment_id')); ?>
-                            </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Date')); ?>" class="col date">
-                                <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'created_at')); ?>
-                            </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Ship To')); ?>" class="col shipto">
-                                <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'shipping_address')); ?>
-                            </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order Total')); ?>" class="col total">
-                                <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'order_total')); ?>
-                            </td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order Status')); ?>" class="col status">
-                                <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'status_label')); ?></td>
-                            <td data-th="" class="col actions">
-                                <a href="<?php echo $block->escapeUrl($block->getOrderItemValue($order, 'view_url')); ?>"
-                                   class="action view">
-                                    <span><?php echo $block->escapeHtml(__('View Order')); ?></span>
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                        <?php foreach ($relatedOrders as $order): ?>
+                            <tr>
+                                <td data-th="<?php echo $block->escapeHtml(__('Order #')); ?>" class="col id">
+                                    <?php echo $block->escapeHtml($block->getOrderItemValue(
+                                        $order, 'order_increment_id'
+                                    )); ?>
+                                </td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Date')); ?>" class="col date">
+                                    <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'created_at')); ?>
+                                </td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Ship To')); ?>" class="col shipto">
+                                    <?php echo $block->escapeHtml($block->getOrderItemValue(
+                                        $order, 'shipping_address'
+                                    )); ?>
+                                </td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Order Total')); ?>" class="col total">
+                                    <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'order_total')); ?>
+                                </td>
+                                <td data-th="<?php echo $block->escapeHtml(__('Order Status')); ?>" class="col status">
+                                    <?php echo $block->escapeHtml($block->getOrderItemValue(
+                                        $order, 'status_label'
+                                    )); ?>
+                                </td>
+                                <td data-th="" class="col actions">
+                                    <a href="<?php echo $block->escapeUrl($block->getOrderItemValue(
+                                        $order, 'view_url'
+                                    )); ?>" class="action view">
+                                        <span><?php echo $block->escapeHtml(__('View Order')); ?></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

@@ -14,7 +14,11 @@
 <div class="block paypal acceptance">
     <div class="block-content">
         <a href="#" title="<?php echo $block->escapeHtml(__('Additional Options')); ?>"
-           onclick="javascript:window.open('<?php echo $block->escapeUrl($block->getAboutPaypalPageUrl()); ?>','paypal','width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;"
+           onclick="javascript:window.open(
+               '<?php echo $block->escapeUrl($block->getAboutPaypalPageUrl()); ?>',
+               'paypal',
+               'width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'
+               ); return false;"
            class="action paypal additional">
             <img src="<?php echo $block->escapeUrl($block->getLogoImageUrl()); ?>"
                  alt="<?php echo $block->escapeHtml(__('Additional Options')); ?>"

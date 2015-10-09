@@ -11,13 +11,18 @@
  */
 $code = $block->escapeHtml($block->getBillingAgreementCode());
 ?>
-<fieldset class="fieldset paypal items redirect" id="payment_form_<?php /* @noEscape */ echo $block->getMethodCode(); ?>" style="display:none;">
+<fieldset class="fieldset paypal items redirect" style="display:none;"
+          id="payment_form_<?php /* @noEscape */ echo $block->getMethodCode(); ?>">
     <div><?php echo $block->escapeHtml($block->getRedirectMessage()); ?></div>
     <?php  ?>
     <?php if ($code): ?>
-        <input type="checkbox" id="<?php /* @noEscape */ echo $code; ?>" value="1" name="payment[<?php /* @noEscape */ echo $code; ?>]" class="checkbox">
+        <input type="checkbox" id="<?php /* @noEscape */ echo $code; ?>" value="1" class="checkbox"
+               name="payment[<?php /* @noEscape */ echo $code; ?>]">
         <label for="<?php /* @noEscape */ echo $code; ?>" class="label">
-            <span><?php echo $block->escapeHtml(__('Sign a billing agreement to streamline further purchases with PayPal.')); ?></span>
+            <span>
+                <?php echo $block->escapeHtml(__('Sign a billing agreement to streamline further purchases ' .
+                    ' with PayPal.')); ?>
+            </span>
         </label>
     <?php endif; ?>
 </fieldset>

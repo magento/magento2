@@ -12,8 +12,10 @@
 ?>
 <div class="payflow-settings-notice">
     <strong class="important-label"><?php echo $block->escapeHtml(__('Important: ')); ?></strong>
-    <?php echo $block->escapeHtml(__('To use PayPal Payflow Link, you must configure your PayPal Payflow Link account on the PayPal website.')); ?>
-    <?php echo $block->escapeHtml(__('Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below')); ?>
+    <?php echo $block->escapeHtml(__('To use PayPal Payflow Link, you must configure your PayPal Payflow Link ' .
+        'account on the PayPal website.')); ?>
+    <?php echo $block->escapeHtml(__('Once you log into your PayPal Payflow Link account, navigate to the Service ' .
+        'Settings - Hosted Checkout Pages - Set Up menu and set the options described below')); ?>
     <ul class="options-list">
         <li><strong>AVS:</strong> No</li>
         <li><strong>CSC:</strong> No</li>
