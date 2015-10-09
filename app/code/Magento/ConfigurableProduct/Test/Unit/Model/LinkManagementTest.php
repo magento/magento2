@@ -56,7 +56,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->configurableType =
-            $this->getMockBuilder('Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable')
+            $this->getMockBuilder('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable')
                 ->disableOriginalConstructor()->getMock();
 
         $this->object = $this->objectManagerHelper->getObject(

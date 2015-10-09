@@ -18,7 +18,7 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
     protected $themeImageFactory;
 
     /**
-     * @var \Magento\Widget\Model\Resource\Layout\Update\Collection
+     * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection
      */
     protected $updateCollection;
 
@@ -29,12 +29,12 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
 
     /**
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory
-     * @param \Magento\Widget\Model\Resource\Layout\Update\Collection $updateCollection
+     * @param \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $updateCollection
      * @param \Magento\Theme\Model\Config\Customization $themeConfig
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory,
-        \Magento\Widget\Model\Resource\Layout\Update\Collection $updateCollection,
+        \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $updateCollection,
         \Magento\Theme\Model\Config\Customization $themeConfig
     ) {
         $this->themeImageFactory = $themeImageFactory;

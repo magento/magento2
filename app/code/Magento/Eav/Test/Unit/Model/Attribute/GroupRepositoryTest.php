@@ -45,7 +45,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->groupResourceMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Group',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group',
             ['delete', '__wakeup', 'load', 'save'],
             [],
             '',
@@ -67,7 +67,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->groupListFactoryMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory',
             ['create'],
             [],
             '',

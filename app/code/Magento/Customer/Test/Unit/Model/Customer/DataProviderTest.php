@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class DataProviderTest
@@ -49,7 +49,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer\CollectionFactory',
+            'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',
             ['create'],
             [],
             '',
@@ -141,7 +141,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomerCollectionFactoryMock()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -255,7 +255,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMockBuilder('Magento\Customer\Model\Address')
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
