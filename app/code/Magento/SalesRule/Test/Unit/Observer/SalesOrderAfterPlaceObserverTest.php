@@ -29,7 +29,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\Usage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $couponUsage;
 
@@ -76,7 +76,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->couponUsage = $this->getMock('Magento\SalesRule\Model\Resource\Coupon\Usage', [], [], '', false);
+        $this->couponUsage = $this->getMock('Magento\SalesRule\Model\ResourceModel\Coupon\Usage', [], [], '', false);
     }
 
     /**

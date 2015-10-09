@@ -284,7 +284,7 @@
         </column>
         <column name="websites">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Store\Model\Resource\Website\Collection</item>
+                <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection</item>
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="add_field" xsi:type="boolean">true</item>
