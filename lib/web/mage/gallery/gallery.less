@@ -687,6 +687,9 @@
         .fotorama-abs-center();
         height: @size-fotorama-block;
         width: @size-fotorama-block;
+        .ie9 & {
+            margin: (-@size-fotorama-block/2) 0 0 (-@size-fotorama-block/2);
+        }
     }
 }
 
