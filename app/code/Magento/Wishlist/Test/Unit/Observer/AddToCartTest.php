@@ -108,7 +108,7 @@ class AddToCartTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
-        $wishlists = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Wishlist\Collection')
+        $wishlists = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Wishlist\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $loadedWishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist\Item')

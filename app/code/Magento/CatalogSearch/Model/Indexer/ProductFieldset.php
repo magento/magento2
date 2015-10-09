@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
@@ -64,7 +64,7 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
         if ($this->searchableAttributes === null) {
             $this->searchableAttributes = [];
 
-            /** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $productAttributes */
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
             $productAttributes = $this->collectionFactory->create();
             $productAttributes->addToIndexFilter(true);
 

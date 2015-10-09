@@ -43,14 +43,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_productCollection;
 
     /**
      * Wishlist Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_wishlistItemCollection;
 
@@ -223,7 +223,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -233,7 +233,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve wishlist items collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItemCollection()
     {
