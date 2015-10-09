@@ -123,9 +123,8 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request = $this->buildBasicRequest();
 
         $order = $payment->getOrder();
-        if (!empty($order)) {
-            $request = $this->fillCustomerContacts($order, $request);
-        }
+        $this->addRequestOrderInfo($request, $order);
+        $request = $this->fillCustomerContacts($order, $request);
 
         $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
         $request->setOrigid($payment->getAdditionalInformation('pnref'));
