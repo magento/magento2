@@ -29,7 +29,7 @@ abstract class AbstractMapper implements MapperInterface
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     protected $resource;
 
@@ -206,7 +206,7 @@ abstract class AbstractMapper implements MapperInterface
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     public function getResource()
     {
