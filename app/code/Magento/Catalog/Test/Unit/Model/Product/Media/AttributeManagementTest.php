@@ -34,7 +34,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->factoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
@@ -63,7 +63,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeInterface'),
         ];
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
             [],
             [],
             '',

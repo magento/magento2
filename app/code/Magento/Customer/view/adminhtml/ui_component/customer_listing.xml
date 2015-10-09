@@ -182,7 +182,7 @@
             </filterInput>
             <filterSelect name="billing_country_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Directory\Model\Resource\Country\Collection</argument>
+                    <argument name="class" xsi:type="string">Magento\Directory\Model\ResourceModel\Country\Collection</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

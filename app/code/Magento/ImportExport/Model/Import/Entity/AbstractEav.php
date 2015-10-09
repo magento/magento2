@@ -78,8 +78,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
@@ -92,8 +92,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,

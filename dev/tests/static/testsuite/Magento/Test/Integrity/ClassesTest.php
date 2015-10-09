@@ -95,7 +95,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $regex = '/(?:\:\:|\->)getResourceHelper\(\s*\'([a-z\d\\\\]+)\'\s*\)/ix';
         $matches = Classes::getAllMatches($contents, $regex);
         foreach ($matches as $moduleName) {
-            $classes[] = "{$moduleName}\\Model\\Resource\\Helper\\Mysql4";
+            $classes[] = "{$moduleName}\\Model\\ResourceModel\\Helper\\Mysql4";
         }
     }
 

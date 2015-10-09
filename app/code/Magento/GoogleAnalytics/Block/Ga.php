@@ -21,19 +21,19 @@ class Ga extends \Magento\Framework\View\Element\Template
     protected $_googleAnalyticsData = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_salesOrderCollection;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData,
         array $data = []
     ) {

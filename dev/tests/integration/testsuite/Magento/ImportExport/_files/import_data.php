@@ -104,7 +104,7 @@ $bunches = [
 ];
 
 $importDataResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\ImportExport\Model\Resource\Import\Data'
+    'Magento\ImportExport\Model\ResourceModel\Import\Data'
 );
 
 foreach ($bunches as $bunch) {
