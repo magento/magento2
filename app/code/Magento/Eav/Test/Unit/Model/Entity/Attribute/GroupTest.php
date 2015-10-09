@@ -39,12 +39,26 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject('Magento\Eav\Model\Entity\Attribute\Group', $constructorArguments);
     }
 
-    public function testBeforeSaveGeneratesGroupCodeBasedOnGroupName()
+    /**
+     * @dataProvider attributeGroupCodeDataProvider
+     * @param string $groupName
+     * @param string $groupCode
+     */
+    public function testBeforeSaveGeneratesGroupCodeBasedOnGroupName($groupName, $groupCode)
     {
-        $groupName = 'General';
-        $expectedGroupCode = md5($groupName);
         $this->model->setAttributeGroupName($groupName);
         $this->model->beforeSave();
-        $this->assertEquals($expectedGroupCode, $this->model->getAttributeGroupCode());
+        $this->assertEquals($groupCode, $this->model->getAttributeGroupCode());
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeGroupCodeDataProvider()
+    {
+        return [
+            ['General Group', 'general-group'],
+            ['///', md5('///')],
+        ];
     }
 }
