@@ -67,8 +67,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->directoryHelperMock,
             $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', [], '', false),
             $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Country\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Region\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Country\CollectionFactory', [], [], '', false),
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl

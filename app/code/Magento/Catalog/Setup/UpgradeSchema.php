@@ -9,7 +9,7 @@ namespace Magento\Catalog\Setup;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 
 /**

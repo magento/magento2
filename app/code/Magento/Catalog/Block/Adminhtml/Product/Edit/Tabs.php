@@ -12,7 +12,7 @@ use Magento\Backend\Block\Widget\Tabs as WigetTabs;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Helper\Catalog;
 use Magento\Catalog\Helper\Data;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
@@ -120,7 +120,7 @@ class Tabs extends WigetTabs
 
     /**
      * @param int $attributeSetId
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
     public function getGroupCollection($attributeSetId)
     {

@@ -13,14 +13,14 @@ class WebsiteManagementTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\Resource\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $websitesFactoryMock;
 
     protected function setUp()
     {
         $this->websitesFactoryMock = $this->getMock(
-            'Magento\Store\Model\Resource\Website\CollectionFactory',
+            'Magento\Store\Model\ResourceModel\Website\CollectionFactory',
             ['create'],
             [],
             '',
@@ -33,7 +33,7 @@ class WebsiteManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $websitesMock = $this->getMock('\Magento\Store\Model\Resource\Website\Collection', [], [], '', false);
+        $websitesMock = $this->getMock('\Magento\Store\Model\ResourceModel\Website\Collection', [], [], '', false);
 
         $this->websitesFactoryMock
             ->expects($this->once())
