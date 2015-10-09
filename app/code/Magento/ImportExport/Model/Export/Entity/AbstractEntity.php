@@ -399,7 +399,7 @@ abstract class AbstractEntity
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
                         if (strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
-                            $options[$innerOption['value']] = $innerOption[$index];
+                            $options[$innerOption['value']] = (string)$innerOption[$index];
                         }
                     }
                 }

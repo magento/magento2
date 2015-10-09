@@ -322,7 +322,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributeType()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['getFrontendInput', 'usesSource'])
+            ->disableOriginalConstructor()->getMock();
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
+        $attribute->expects($this->any())->method('usesSource')->willReturn(true);
+        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**

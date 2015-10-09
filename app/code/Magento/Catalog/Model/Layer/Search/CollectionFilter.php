@@ -64,6 +64,6 @@ class CollectionFilter implements CollectionFilterInterface
             ->addStoreFilter()
             ->addUrlRewrite()
             ->setVisibility($this->productVisibility->getVisibleInSearchIds())
-            ->setOrder('relevance', Select::SQL_ASC);
+            ->setOrder('relevance', Select::SQL_DESC);
     }
 }
