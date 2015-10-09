@@ -54,7 +54,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
         $attributeId = $this->getRequest()->getParam('attribute_id');
         $attribute = $this->_objectManager->create(
-            'Magento\Catalog\Model\Resource\Eav\Attribute'
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
         )->loadByCode(
             $this->_entityTypeId,
             $attributeCode

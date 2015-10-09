@@ -22,7 +22,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $productResource;
 
@@ -34,9 +34,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
         $this->indexer->load('catalog_category_product');
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Resource\Product'
+            'Magento\Catalog\Model\ResourceModel\Product'
         );
     }
 

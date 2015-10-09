@@ -13,7 +13,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {

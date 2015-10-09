@@ -12,7 +12,7 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Framework\Pricing\Amount\AmountFactory;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\TaxCalculationInterface;
@@ -245,7 +245,7 @@ class Calculator implements BundleCalculatorInterface
      * Get bundle options
      *
      * @param Product $saleableItem
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     protected function getBundleOptions(Product $saleableItem)
     {

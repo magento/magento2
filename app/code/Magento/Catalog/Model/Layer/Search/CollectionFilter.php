@@ -46,7 +46,7 @@ class CollectionFilter implements CollectionFilterInterface
     /**
      * Filter product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param \Magento\Catalog\Model\Category $category
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

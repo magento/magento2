@@ -34,7 +34,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Config\Model\Config\Loader($this->_configValueFactory);
 
         $this->_configCollection = $this->getMock(
-            'Magento\Config\Model\Resource\Config\Data\Collection',
+            'Magento\Config\Model\ResourceModel\Config\Data\Collection',
             [],
             [],
             '',
