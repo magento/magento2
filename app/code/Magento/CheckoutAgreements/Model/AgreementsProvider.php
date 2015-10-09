@@ -6,6 +6,7 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory as AgreementCollectionFactory;
 
 /**
  * Provide Agreements stored in db
@@ -18,7 +19,7 @@ class AgreementsProvider implements AgreementsProviderInterface
     const PATH_ENABLED = 'checkout/options/enable_agreements';
 
     /**
-     * @var Resource\Agreement\CollectionFactory
+     * @var AgreementCollectionFactory
      */
     protected $agreementCollectionFactory;
 
@@ -33,13 +34,13 @@ class AgreementsProvider implements AgreementsProviderInterface
     protected $storeManager;
 
     /**
-     * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
+     * @param AgreementCollectionFactory $agreementCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
+        AgreementCollectionFactory $agreementCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {

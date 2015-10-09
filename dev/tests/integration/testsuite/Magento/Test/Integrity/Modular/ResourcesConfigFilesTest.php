@@ -10,7 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource\Config\Reader
+     * @var \Magento\Framework\App\ResourceConnection\Config\Reader
      */
     protected $_model;
 
@@ -32,7 +32,7 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigMock->expects($this->any())->method('getConfiguration')->will($this->returnValue([]));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $objectManager->create(
-            'Magento\Framework\App\Resource\Config\Reader',
+            'Magento\Framework\App\ResourceConnection\Config\Reader',
             [
                 'fileResolver' => $fileResolverMock,
                 'validationState' => $validationStateMock,

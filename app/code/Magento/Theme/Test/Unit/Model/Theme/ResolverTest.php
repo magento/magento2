@@ -18,7 +18,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected $designMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollectionFactoryMock;
 
@@ -28,7 +28,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected $appStateMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollectionMock;
 
@@ -41,14 +41,14 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->designMock = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
         $this->themeCollectionFactoryMock = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->themeCollectionMock = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\Collection',
+            'Magento\Theme\Model\ResourceModel\Theme\Collection',
             [],
             [],
             '',
