@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Resource\Order\Creditmemo\Relation;
+namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo\Relation;
 
 /**
  * Class RefundTest
@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Model\Resource\Order\Creditmemo\Relation;
 class RefundTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Relation\Refund
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund
      */
     protected $refundResource;
 
@@ -49,7 +49,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->refundResource = $objectManager->getObject(
-            'Magento\Sales\Model\Resource\Order\Creditmemo\Relation\Refund',
+            'Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund',
             [
                 'orderRepository' => $this->orderRepositoryMock,
                 'invoiceRepository' => $this->invoiceRepositoryMock,
