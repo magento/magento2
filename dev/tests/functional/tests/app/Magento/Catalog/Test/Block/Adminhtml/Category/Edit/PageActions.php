@@ -6,13 +6,10 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit;
 
-use Magento\Backend\Test\Block\FormPageActions;
-
 /**
- * Class PageActions
- * Category page actions
+ * Category page actions.
  */
-class PageActions extends FormPageActions
+class PageActions extends \Magento\Backend\Test\Block\System\Config\PageActions
 {
     /**
      * Locator for "OK" button in warning block
