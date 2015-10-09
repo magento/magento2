@@ -17,21 +17,6 @@ use Magento\Weee\Model\Tax;
 class Adjustment extends AbstractAdjustment
 {
     /**
-     * Catalog price excl tax
-     */
-    const PRICE_DISPLAY_EXCL_TAX = 1;
-
-    /**
-     * Catalog price incl tax
-     */
-    const PRICE_DISPLAY_INCL_TAX = 2;
-
-    /**
-     * Catalog price both excl and incl tax
-     */
-    const PRICE_DISPLAY_BOTH = 3;
-
-    /**
      * Weee helper
      *
      * @var \Magento\Weee\Helper\Data
@@ -76,7 +61,7 @@ class Adjustment extends AbstractAdjustment
                 );
             } else {
                 $weeeTaxAmount = 0;
-                if ($this->weeeHelper->getTaxDisplayConfig() != self::PRICE_DISPLAY_EXCL_TAX) {
+                if ($this->weeeHelper->getTaxDisplayConfig() != \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
                     $attributes =
                         $this->weeeHelper->getProductWeeeAttributes($this->getSaleableItem(), null, null, null, true);
                     if ($attributes != null) {
