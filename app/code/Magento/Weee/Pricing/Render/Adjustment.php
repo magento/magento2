@@ -211,4 +211,15 @@ class Adjustment extends AbstractAdjustment
         $isWeeeShown = $this->typeOfDisplay([Tax::DISPLAY_INCL_DESCR, Tax::DISPLAY_EXCL_DESCR_INCL]);
         return $isWeeeShown;
     }
+
+    /**
+     * Returns whether tax should be shown (according to Price Display Settings)
+     *
+     * @return bool
+     */
+    public function showPriceWithTax()
+    {
+        $showPriceWithTax = $this->weeeHelper->showPriceWithTax();
+        return $showPriceWithTax;
+    }
 }
