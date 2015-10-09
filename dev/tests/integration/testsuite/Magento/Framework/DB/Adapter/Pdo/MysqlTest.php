@@ -11,7 +11,7 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -125,9 +125,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     protected function _getConnection()
     {
         if (is_null($this->_connection)) {
-            /** @var $coreResource \Magento\Framework\App\Resource */
+            /** @var $coreResource \Magento\Framework\App\ResourceConnection */
             $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Framework\App\Resource');
+                ->get('Magento\Framework\App\ResourceConnection');
             $this->_connection = $coreResource->getConnection();
         }
         return $this->_connection;

@@ -8,7 +8,7 @@ namespace Magento\Store\Model\Service;
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactory;
 
@@ -37,12 +37,12 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     ];
 
     /**
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
      */
     public function __construct(
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
     ) {

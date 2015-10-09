@@ -10,15 +10,15 @@ use Magento\Framework\Event\ObserverInterface;
 class ResetAttemptForBackendObserver implements ObserverInterface
 {
     /*
-      * @var \Magento\Captcha\Model\Resource\LogFactory
+      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
       */
     public $resLogFactory;
 
     /**
-     * @param \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
+     * @param \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory
      */
     public function __construct(
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
+        \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory
     ) {
         $this->resLogFactory = $resLogFactory;
     }

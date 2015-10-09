@@ -6,7 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Store\Api\StoreManagementInterface;
-use Magento\Store\Model\Resource\Store\CollectionFactory;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 
 /**
  * @api
@@ -31,7 +31,7 @@ class StoreManagement implements StoreManagementInterface
     public function getCount()
     {
         $stores = $this->storesFactory->create();
-        /** @var \Magento\Store\Model\Resource\Store\Collection $stores */
+        /** @var \Magento\Store\Model\ResourceModel\Store\Collection $stores */
         $stores->setWithoutDefaultFilter();
         return $stores->getSize();
     }
