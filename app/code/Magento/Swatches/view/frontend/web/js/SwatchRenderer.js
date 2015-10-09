@@ -764,7 +764,7 @@ define(["jquery", "jquery/ui"], function ($) {
                     .data('gallery')
                     .updateData(images);
             } else {
-                context.find('.product-image-photo').attr('src', images.shift().medium);
+                context.find('.product-image-photo').attr('src', images.shift().img);
             }
         },
 
