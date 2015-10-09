@@ -23,7 +23,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $cache;
 
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateCollection;
 
@@ -50,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['test', 'load', 'save']
         );
         $this->stateCollection = $this->getMock(
-            'Magento\Indexer\Model\Resource\Indexer\State\Collection',
+            'Magento\Indexer\Model\ResourceModel\Indexer\State\Collection',
             ['getItems'],
             [],
             '',
