@@ -37,6 +37,11 @@ class Title extends \Magento\Framework\View\Element\Template
         return $this->pageConfig->getTitle()->getShort();
     }
 
+    /**
+     * Provide own page content heading
+     *
+     * @return string
+     */
     public function getPageHeading()
     {
         if (!empty($this->pageTitle)) {

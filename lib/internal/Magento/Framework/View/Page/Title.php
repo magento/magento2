@@ -78,6 +78,7 @@ class Title
 
     /**
      * Same as getShort(), but return title without prefix and suffix
+     * @return mixed
      */
     public function getShortHeading()
     {
