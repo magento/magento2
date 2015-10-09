@@ -22,6 +22,16 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_connection = null;
 
+    public function setUp()
+    {
+        set_error_handler(null);
+    }
+
+    public function tearDown()
+    {
+        restore_error_handler();
+    }
+
     /**
      * Test lost connection re-initializing
      *

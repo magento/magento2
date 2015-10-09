@@ -6,7 +6,7 @@
         "magento/framework": "~1.0.0-beta"
     },
     "suggest": {
-        "magento/sample-data-media": "Sample Data version:~0.42.0-beta2"
+        "magento/sample-data-media": "Sample Data version:~1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
