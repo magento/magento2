@@ -77,11 +77,25 @@ class Title
     }
 
     /**
+     * Same as getShort(), but return title without prefix and suffix
+     */
+    public function getShortHeading()
+    {
+        $title = $this->build(false);
+        return reset($title);
+    }
+
+    /**
+     * @param bool $withConfigValues
      * @return array
      */
-    protected function build()
+    protected function build($withConfigValues = true)
     {
-        return array_merge($this->prependedValues, [$this->addConfigValues($this->textValue)], $this->appendedValues);
+        return array_merge(
+            $this->prependedValues,
+            [$withConfigValues ? $this->addConfigValues($this->textValue) : $this->textValue],
+            $this->appendedValues
+        );
     }
 
     /**
