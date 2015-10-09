@@ -380,6 +380,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
 
         $this->helperData->getProductWeeeAttributesForDisplay($this->product);
+    }
 
+    public function testShowPriceWithTax()
+    {
+        $expected = 1;
+        $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
+        $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
+        $arguments = [
+            'taxData' => $taxData,
+        ];
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
+
+        $this->assertEquals($expected, $helperData->showPriceWithTax());
     }
 }
