@@ -253,6 +253,17 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Non-magic setter for a cart fixed rules field
+     *
+     * @param array $cartRules
+     * @return \Magento\Framework\DataObject
+     */
+    public function setCartFixedRules($cartRules)
+    {
+        return parent::setData('cart_fixed_rules', $cartRules);
+    }
+
+    /**
      * Enforce format of the street field
      *
      * @param array|string $key
