@@ -14,7 +14,9 @@
             <?php $currentRate = $block->getCurrentShippingRate(); ?>
             <select name="shipping_method" id="shipping_method" class="required-entry">
                 <?php if (!$currentRate): ?>
-                    <option value=""><?php echo $block->escapeHtml(__('Please select a shipping method...')); ?></option>
+                    <option value="">
+                        <?php echo $block->escapeHtml(__('Please select a shipping method...')); ?>
+                    </option>
                 <?php endif; ?>
                 <?php foreach ($groups as $code => $rates): ?>
                     <optgroup label="<?php echo $block->escapeHtml($block->getCarrierName($code)) ?>" style="font-style:normal;">
@@ -30,12 +32,16 @@
             </select>
         <?php else: ?>
             <p>
-                <strong><?php echo $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')); ?></strong>
+                <strong>
+                    <?php echo $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')); ?>
+                </strong>
             </p>
         <?php endif; ?>
     <?php else: ?>
         <p>
-            <strong><?php /* @noEscape */ echo $block->renderShippingRateOption($block->getCurrentShippingRate()) ?></strong>
+            <strong>
+                <?php /* @noEscape */ echo $block->renderShippingRateOption($block->getCurrentShippingRate()); ?>
+            </strong>
         </p>
     <?php endif; ?>
 </div>

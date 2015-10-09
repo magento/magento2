@@ -6,7 +6,7 @@
 
 
 /**
- *  @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement $block
+ * @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement $block
  */
 $code = $block->getMethodCode();
 ?>
@@ -18,9 +18,11 @@ $code = $block->getMethodCode();
         <select id="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id"
                 name="payment[<?php echo $block->escapeHtml($block->getTransportName()); ?>]" class="select">
             <option value=""><?php echo $block->escapeHtml(__('-- Please Select Billing Agreement--')); ?></option>
-        <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
-            <option value="<?php echo $block->escapeHtml($id); ?>"><?php echo $block->escapeHtml($referenceId); ?></option>
-        <?php endforeach ?>
+            <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
+                <option value="<?php echo $block->escapeHtml($id); ?>">
+                    <?php echo $block->escapeHtml($referenceId); ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </div>
 </div>
