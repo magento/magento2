@@ -729,7 +729,7 @@ define(["jquery", "jquery/ui"], function ($) {
 
             if (support(response)) {
                 images.push({
-                    large: response.large,
+                    full: response.large,
                     img: response.medium,
                     thumb: response.small
                 });
@@ -740,7 +740,7 @@ define(["jquery", "jquery/ui"], function ($) {
                             return;
                         }
                         images.push({
-                            large: this.large,
+                            full: this.large,
                             img: this.medium,
                             thumb: this.small
                         });
