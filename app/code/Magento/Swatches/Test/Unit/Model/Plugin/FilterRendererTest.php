@@ -89,7 +89,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundRenderTrue()
     {
-        $attributeMock = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->filterMock->expects($this->atLeastOnce())->method('getAttributeModel')->willReturn($attributeMock);
         $this->filterMock->expects($this->once())->method('hasAttributeModel')->willReturn(true);
         $this->swatchHelperMock
@@ -106,7 +106,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundRenderFalse()
     {
-        $attributeMock = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->filterMock->expects($this->atLeastOnce())->method('getAttributeModel')->willReturn($attributeMock);
         $this->filterMock->expects($this->once())->method('hasAttributeModel')->willReturn(true);
         $this->swatchHelperMock

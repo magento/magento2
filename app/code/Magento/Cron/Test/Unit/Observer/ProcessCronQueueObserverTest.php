@@ -54,7 +54,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_shell;
 
-    /** @var \Magento\Cron\Model\Resource\Schedule\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $_collection;
 
     /**
@@ -86,7 +86,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_collection = $this->getMockBuilder(
-            'Magento\Cron\Model\Resource\Schedule\Collection'
+            'Magento\Cron\Model\ResourceModel\Schedule\Collection'
         )->setMethods(
             ['addFieldToFilter', 'load', '__wakeup']
         )->disableOriginalConstructor()->getMock();
@@ -616,7 +616,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $this->_scheduleFactory->expects($this->at(0))->method('create')->will($this->returnValue($scheduleMock));
 
         $collection = $this->getMockBuilder(
-            'Magento\Cron\Model\Resource\Schedule\Collection'
+            'Magento\Cron\Model\ResourceModel\Schedule\Collection'
         )->setMethods(
             ['addFieldToFilter', 'load', '__wakeup']
         )->disableOriginalConstructor()->getMock();
@@ -695,7 +695,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $this->_scheduleFactory->expects($this->at(0))->method('create')->will($this->returnValue($scheduleMock));
 
         $collection = $this->getMockBuilder(
-            'Magento\Cron\Model\Resource\Schedule\Collection'
+            'Magento\Cron\Model\ResourceModel\Schedule\Collection'
         )->setMethods(
             ['addFieldToFilter', 'load', '__wakeup']
         )->disableOriginalConstructor()->getMock();

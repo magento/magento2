@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Collection resource
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
      */
     protected $_resourceCollection = null;
 

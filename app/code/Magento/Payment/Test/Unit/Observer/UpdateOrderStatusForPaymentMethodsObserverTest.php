@@ -22,7 +22,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_
     /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $paymentConfigMock;
 
-    /** @var \Magento\Config\Model\Resource\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $coreResourceConfigMock;
 
     /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
@@ -39,7 +39,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_
     {
         $this->orderConfigMock = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
         $this->paymentConfigMock = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->coreResourceConfigMock = $this->getMock('Magento\Config\Model\Resource\Config', [], [], '', false);
+        $this->coreResourceConfigMock = $this->getMock('Magento\Config\Model\ResourceModel\Config', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateOrderStatusForPaymentMethodsObserver = $this->objectManagerHelper->getObject(

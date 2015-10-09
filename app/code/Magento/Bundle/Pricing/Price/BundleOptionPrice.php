@@ -80,7 +80,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     /**
      * Get Options with attached Selections collection
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions()
     {
@@ -89,7 +89,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         $typeInstance = $bundleProduct->getTypeInstance();
         $typeInstance->setStoreFilter($bundleProduct->getStoreId(), $bundleProduct);
 
-        /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionCollection */
+        /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionCollection */
         $optionCollection = $typeInstance->getOptionsCollection($bundleProduct);
 
         $selectionCollection = $typeInstance->getSelectionsCollection(
