@@ -10,7 +10,7 @@
              module="Magento_Review"
              type="flat"
              entity_type="rating"
-             collection="Magento\Review\Model\Resource\Rating\Collection"
+             collection="Magento\Review\Model\ResourceModel\Rating\Collection"
              identifier="rating_code"
              repository_class="Magento\Review\Test\Repository\Rating"
              handler_interface="Magento\Review\Test\Handler\Rating\RatingInterface"

@@ -9,8 +9,8 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 interface PriceResolverInterface
 {
     /**
-     * @param \Magento\Framework\Pricing\Object\SaleableInterface $product
+     * @param \Magento\Framework\Pricing\SaleableInterface $product
      * @return float
      */
-    public function resolvePrice(\Magento\Framework\Pricing\Object\SaleableInterface $product);
+    public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product);
 }

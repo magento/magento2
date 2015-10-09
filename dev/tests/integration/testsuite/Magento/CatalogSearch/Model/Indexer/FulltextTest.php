@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -21,12 +21,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
      */
     protected $resourceFulltext;
 
@@ -79,11 +79,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->indexer->load('catalogsearch_fulltext');
 
         $this->engine = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Resource\Engine'
+            'Magento\CatalogSearch\Model\ResourceModel\Engine'
         );
 
         $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Resource\Fulltext'
+            'Magento\CatalogSearch\Model\ResourceModel\Fulltext'
         );
 
         $this->queryFactory = Bootstrap::getObjectManager()->get(

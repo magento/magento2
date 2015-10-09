@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Cron;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class RefreshSpecialPrices
 {
@@ -46,7 +46,7 @@ class RefreshSpecialPrices
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -54,7 +54,7 @@ class RefreshSpecialPrices
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,

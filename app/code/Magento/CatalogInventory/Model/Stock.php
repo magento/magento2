@@ -54,7 +54,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock');
     }
 
     //@codeCoverageIgnoreStart
