@@ -789,7 +789,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get tax price display settings
      *
      * @param  null|string|bool|int|Store $store
-     * @return bool
+     * @return int
      */
     public function getTaxDisplayConfig($store = null)
     {
