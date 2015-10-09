@@ -24,19 +24,19 @@ class AggregateSalesReportRefundedData
     protected $localeDate;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\RefundedFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\RefundedFactory
      */
     protected $refundedFactory;
 
     /**
      * @param ResolverInterface $localeResolver
      * @param TimezoneInterface $timezone
-     * @param \Magento\Sales\Model\Resource\Report\RefundedFactory $refundedFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\RefundedFactory $refundedFactory
      */
     public function __construct(
         ResolverInterface $localeResolver,
         TimezoneInterface $timezone,
-        \Magento\Sales\Model\Resource\Report\RefundedFactory $refundedFactory
+        \Magento\Sales\Model\ResourceModel\Report\RefundedFactory $refundedFactory
     ) {
         $this->localeResolver = $localeResolver;
         $this->localeDate = $timezone;

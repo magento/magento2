@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -55,7 +55,7 @@ class Full
     protected $productEmulators = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $productAttributeCollectionFactory;
 
@@ -102,7 +102,7 @@ class Full
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
 
@@ -132,7 +132,7 @@ class Full
     protected $resource;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
      */
     protected $fulltextResource;
 
@@ -152,13 +152,13 @@ class Full
     protected $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
-     * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory
+     * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
      * @param \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -166,19 +166,19 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
+     * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory,
+        \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -186,7 +186,7 @@ class Full
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
+        \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {
@@ -196,7 +196,7 @@ class Full
         $this->eavConfig = $eavConfig;
         $this->searchRequestConfig = $searchRequestConfig;
         $this->catalogProductStatus = $catalogProductStatus;
-        $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
+        $this->productAttributeCollectionFactory = $prodAttributeCollectionFactory;
         $this->eventManager = $eventManager;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Abstract action reindex class
@@ -72,7 +72,7 @@ abstract class AbstractAction
     protected $_flatTableBuilder;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
@@ -80,7 +80,7 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,

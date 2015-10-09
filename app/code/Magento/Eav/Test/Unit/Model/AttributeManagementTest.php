@@ -59,7 +59,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $this->setRepositoryMock =
             $this->getMock('Magento\Eav\Api\AttributeSetRepositoryInterface', [], [], '', false);
         $this->attributeCollectionMock =
-            $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute\Collection', [], [], '', false);
+            $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection', [], [], '', false);
         $this->eavConfigMock =
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->entityTypeFactoryMock =
@@ -69,7 +69,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $this->attributeRepositoryMock =
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
         $this->attributeResourceMock =
-            $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute', [], [], '', false);
+            $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute', [], [], '', false);
 
         $this->model = new \Magento\Eav\Model\AttributeManagement(
             $this->setRepositoryMock,

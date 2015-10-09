@@ -50,14 +50,14 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order\CollectionFactory',
+            '\Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->orderCollectionMock = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order\Collection',
+            '\Magento\Sales\Model\ResourceModel\Order\Collection',
             [],
             [],
             '',

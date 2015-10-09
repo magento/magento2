@@ -19,7 +19,7 @@ class Sample extends AbstractTypeHandler
     private $sampleFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\SampleFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory
      */
     private $sampleResourceFactory;
 
@@ -27,13 +27,13 @@ class Sample extends AbstractTypeHandler
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
-     * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
-        \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
+        \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
     ) {
         parent::__construct($jsonHelper, $downloadableFile);
         $this->sampleFactory = $sampleFactory;
