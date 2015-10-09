@@ -126,6 +126,30 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetItemById()
+    {
+        $realOrderItemId = 1;
+        $fakeOrderItemId = 2;
+
+        $orderItem = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->order->setData(
+            \Magento\Sales\Api\Data\OrderInterface::ITEMS,
+            [
+                $realOrderItemId => $orderItem
+            ]
+        );
+
+        $this->assertEquals($orderItem, $this->order->getItemById($realOrderItemId));
+        $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
+    }
+
     /**
      * @param int|null $gettingQuoteItemId
      * @param int|null $quoteItemId
