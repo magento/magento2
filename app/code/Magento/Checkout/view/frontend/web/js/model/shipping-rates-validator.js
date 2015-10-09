@@ -80,13 +80,14 @@ define(
                 var countryId = $('select[name="shippingAddress[country_id]"]').val();
                 var validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
 
-                postcodeElement.error(null);
+                postcodeElement.warn(null);
                 if (!validationResult) {
-                    var errorMessage = $t('Invalid Zip/Postal code for current country!');
+                    var warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
                     if (postcodeValidator.validatedPostCodeExample.length) {
-                        errorMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ');
+                        warnMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ') + '. ';
                     }
-                    postcodeElement.error(errorMessage);
+                    warnMessage += $t('If you believe it is the right one you can ignore this notice.');
+                    postcodeElement.warn(warnMessage);
                 }
                 return validationResult;
             },
