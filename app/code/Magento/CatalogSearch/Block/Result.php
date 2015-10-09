@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Block;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Helper\Data;
-use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\QueryFactory;

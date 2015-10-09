@@ -116,7 +116,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->rateResourceMock = $this->getMock(
-            'Magento\Tax\Model\Resource\Calculation\Rate',
+            'Magento\Tax\Model\ResourceModel\Calculation\Rate',
             [],
             [],
             '',
@@ -251,7 +251,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $items = [$rateMock];
         $collectionMock = $objectManager->getCollectionMock(
-            'Magento\Tax\Model\Resource\Calculation\Rate\Collection',
+            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection',
             $items
         );
         $collectionMock->expects($this->once())->method('joinRegionTable');
@@ -378,7 +378,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $rateMock = $this->getTaxRateMock([]);
         $items = [$rateMock];
         $collectionMock = $objectManager->getCollectionMock(
-            'Magento\Tax\Model\Resource\Calculation\Rate\Collection',
+            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection',
             $items
         );
         $collectionMock
