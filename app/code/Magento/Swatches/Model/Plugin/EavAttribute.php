@@ -5,7 +5,7 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
 
 /**
@@ -21,7 +21,7 @@ class EavAttribute
     const BASE_OPTION_TITLE = 'option';
 
     /**
-     * @var \Magento\Swatches\Model\Resource\Swatch\CollectionFactory
+     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
      */
     protected $swatchCollectionFactory;
 
@@ -50,12 +50,12 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
-     * @param \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $collectionFactory
+     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      */
     public function __construct(
-        \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $collectionFactory,
+        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper
     ) {
