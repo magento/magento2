@@ -160,7 +160,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * Adds some extra params to categories collection
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     public function getCategoryCollection()
     {

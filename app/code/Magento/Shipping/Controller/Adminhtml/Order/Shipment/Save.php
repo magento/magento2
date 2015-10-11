@@ -83,6 +83,16 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
+        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
+        $isPost = $this->getRequest()->isPost();
+        if (!$formKeyIsValid || !$isPost) {
+            $this->messageManager->addError(__('We can\'t save the shipment right now.'));
+            return $resultRedirect->setPath('sales/order/index');
+        }
+
         $data = $this->getRequest()->getParam('shipment');
 
         if (!empty($data['comment_text'])) {

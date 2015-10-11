@@ -13,14 +13,14 @@ class Store implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $_storesFactory;
 
     /**
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storesFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storesFactory
      */
-    public function __construct(\Magento\Store\Model\Resource\Store\CollectionFactory $storesFactory)
+    public function __construct(\Magento\Store\Model\ResourceModel\Store\CollectionFactory $storesFactory)
     {
         $this->_storesFactory = $storesFactory;
     }
@@ -31,7 +31,7 @@ class Store implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->_options) {
-            /** @var $stores \Magento\Store\Model\Resource\Store\Collection */
+            /** @var $stores \Magento\Store\Model\ResourceModel\Store\Collection */
             $stores = $this->_storesFactory->create();
             $this->_options = $stores->load()->toOptionArray();
         }

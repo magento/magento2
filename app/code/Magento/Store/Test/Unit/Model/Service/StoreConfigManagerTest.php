@@ -18,7 +18,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactoryMock;
 
@@ -39,7 +39,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Store\Model\Resource\Store\CollectionFactory'
+            '\Magento\Store\Model\ResourceModel\Store\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -138,7 +138,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         ];
         $storeMocks[] = $this->getStoreMock($storeConfigs);
 
-        $storeCollectionMock = $this->getMockBuilder('\Magento\Store\Model\Resource\Store\Collection')
+        $storeCollectionMock = $this->getMockBuilder('\Magento\Store\Model\ResourceModel\Store\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $storeCollectionMock->expects($this->once())

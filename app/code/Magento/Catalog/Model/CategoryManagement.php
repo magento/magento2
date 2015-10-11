@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Resource\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInterface
 {
@@ -29,7 +29,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Catalog\Model\Category\Tree $categoryTree,
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoriesFactory
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoriesFactory
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->categoryTree = $categoryTree;
@@ -84,7 +84,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     public function getCount()
     {
         $categories = $this->categoriesFactory->create();
-        /** @var \Magento\Catalog\Model\Resource\Category\Collection $categories */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categories */
         $categories->addAttributeToFilter('parent_id', ['gt' => 0]);
         return $categories->getSize();
     }

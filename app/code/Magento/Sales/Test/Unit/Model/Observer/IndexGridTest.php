@@ -17,7 +17,7 @@ class IndexGridTest extends \PHPUnit_Framework_TestCase
     protected $indexGrid;
 
     /**
-     * @var \Magento\Sales\Model\Resource\GridInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $gridAggregatorMock;
 
@@ -38,7 +38,7 @@ class IndexGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\Resource\GridInterface')
+        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\GridInterface')
             ->getMockForAbstractClass();
         $this->scopeConfigurationMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getMockForAbstractClass();

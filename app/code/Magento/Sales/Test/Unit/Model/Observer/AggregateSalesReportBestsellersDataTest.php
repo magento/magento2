@@ -23,7 +23,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCas
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\BestsellersFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $bestsellersFactoryMock;
 
@@ -38,7 +38,8 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCas
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bestsellersFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\BestsellersFactory')
+        $this->bestsellersFactoryMock =
+            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\BestsellersFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -56,7 +57,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCas
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $bestsellersMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\Bestsellers')
+        $bestsellersMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Bestsellers')
             ->disableOriginalConstructor()
             ->getMock();
         $bestsellersMock->expects($this->once())
