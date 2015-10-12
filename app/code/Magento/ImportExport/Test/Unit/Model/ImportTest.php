@@ -39,7 +39,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_importData;
 
@@ -140,7 +140,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
 
-        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
+        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\ResourceModel\Import\Data')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_csvFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Export\Adapter\CsvFactory')
@@ -322,7 +322,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testGetAttributeType()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['getFrontendInput', 'usesSource'])
+            ->disableOriginalConstructor()->getMock();
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
+        $attribute->expects($this->any())->method('usesSource')->willReturn(true);
+        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**

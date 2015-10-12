@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface;
 
 /**
  * Product default attributes provider

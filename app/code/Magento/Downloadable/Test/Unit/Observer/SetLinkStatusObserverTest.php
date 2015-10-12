@@ -6,8 +6,8 @@
 namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Downloadable\Observer\SetLinkStatusObserver;
-use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
-use Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection as LinkItemCollection;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection as LinkItemCollection;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -62,7 +62,7 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
-            '\Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory'
+            '\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory'
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -369,7 +369,7 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
     private function createLinkItemCollection(array $expectedOrderItemIds, array $items)
     {
         $linkItemCollection = $this->getMockBuilder(
-            '\Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection'
+            '\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection'
         )
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter'])

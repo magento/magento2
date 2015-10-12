@@ -71,7 +71,7 @@
         "ext-mbstring": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3"
+        "lusitanian/oauth": "~0.3 <=0.7.0"
     },
     "replace": {
         "magento/module-marketplace": "self.version",
@@ -149,6 +149,7 @@
         "magento/module-sales": "self.version",
         "magento/module-sales-rule": "self.version",
         "magento/module-sales-sequence": "self.version",
+        "magento/module-sample-data": "self.version",
         "magento/module-search": "self.version",
         "magento/module-send-friend": "self.version",
         "magento/module-shipping": "self.version",
@@ -223,7 +224,9 @@
         "psr-0": {
             "": "app/code/"
         },
-        "files": ["app/etc/NonComposerComponentRegistration.php"]
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

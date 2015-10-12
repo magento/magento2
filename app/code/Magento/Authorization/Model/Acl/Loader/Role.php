@@ -7,12 +7,12 @@ namespace Magento\Authorization\Model\Acl\Loader;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -29,12 +29,12 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     /**
      * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;

@@ -4,8 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
+/**
+ * @var \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement $block
+ */
 ?>
-<?php /* @var $block \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement */ ?>
-<p><?php echo __('Your billing agreement # is: %1.', sprintf('<a href="%s">%s</a>', $block->escapeHtml($block->getAgreementUrl()), $block->escapeHtml($block->getAgreementRefId())))?></p>
+<p>
+    <?php echo $block->escapeHtml(__('Your billing agreement # is: ')); ?>
+    <a href="<?php echo $block->escapeUrl($block->getAgreementUrl()); ?>">
+        <?php echo $block->escapeHtml($block->getAgreementRefId()); ?>
+    </a>.
+</p>
