@@ -34,6 +34,7 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Locale\Format $localeFormat
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
      */
     public function __construct(
