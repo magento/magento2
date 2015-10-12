@@ -80,11 +80,14 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
 
         $this->addressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
-            ['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'],
+            ['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes'],
             [],
             '',
             false
         );
+        $this->addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $shipping = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);

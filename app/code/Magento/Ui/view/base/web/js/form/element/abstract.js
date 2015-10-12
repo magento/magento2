@@ -24,6 +24,7 @@ define([
             description: '',
             label: '',
             error: '',
+            warn: '',
             notice: '',
             customScope: '',
             additionalClasses: {},
@@ -63,7 +64,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value')
+            this.observe('error disabled focused preview visible value warn')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -130,6 +131,7 @@ define([
             _.extend(this.additionalClasses, {
                 required: this.required,
                 _error: this.error,
+                _warn: this.warn,
                 _disabled: this.disabled
             });
 

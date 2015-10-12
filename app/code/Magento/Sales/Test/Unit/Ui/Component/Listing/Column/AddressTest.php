@@ -19,6 +19,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -28,9 +33,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
         $this->model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\Address',
-            ['context' => $contextMock]
+            [
+                'context' => $contextMock,
+                'escaper' => $this->escaper,
+            ]
         );
     }
 
@@ -48,6 +57,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->model->setData('name', $itemName);
+        $this->escaper->expects($this->once())->method('escapeHtml')->with($newItemValue)->willReturnArgument(0);
         $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
