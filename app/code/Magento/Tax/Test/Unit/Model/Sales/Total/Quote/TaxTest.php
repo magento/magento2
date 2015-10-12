@@ -516,8 +516,21 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getAssociatedTaxables', 'getQuote', 'getBillingAddress', 'getRegionId', '__wakeup'])
+            ->setMethods(
+                [
+                    'getAssociatedTaxables',
+                    'getQuote',
+                    'getBillingAddress',
+                    'getRegionId',
+                    '__wakeup',
+                    'getCustomAttributesCodes'
+                ]
+            )
             ->getMock();
+        $address
+            ->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
         $quote
             ->expects($this->any())
             ->method('getBillingAddress')
@@ -596,7 +609,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             '\Magento\Quote\Model\Quote\Address',
             [
                 'getAppliedTaxes', 'getQuote', 'getAllItems', 'getGrandTotal', '__wakeup',
-                'addTotal', 'getTaxAmount'
+                'addTotal', 'getTaxAmount', 'getCustomAttributesCodes'
             ],
             [],
             '',
@@ -626,6 +639,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getTaxAmount')
             ->will($this->returnValue(8));
+        $address
+            ->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
