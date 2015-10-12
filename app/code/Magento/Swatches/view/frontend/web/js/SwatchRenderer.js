@@ -788,10 +788,7 @@ define(["jquery", "jquery/ui"], function ($) {
         _XhrKiller: function () {
             var $widget = this;
 
-            if (
-                $widget.xhr !== undefined
-                || $widget.xhr !== null
-            ) {
+            if ($widget.xhr !== undefined && $widget.xhr !== null) {
                 $widget.xhr.abort();
                 $widget.xhr = null;
             }
