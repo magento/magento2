@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdvancedSearch\Model\Resource;
+namespace Magento\AdvancedSearch\Model\ResourceModel;
 
-use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Model\ModelResource\Db\AbstractDb;
 
 /**
  * Catalog search recommendations resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Recommendations extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
 {
 
     /**
@@ -25,12 +25,12 @@ class Recommendations extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
      * @param \Magento\Search\Model\QueryFactory $queryFactory
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Model\ModelResource\Db\Context $context,
         \Magento\Search\Model\QueryFactory $queryFactory,
         $connectionName = null
     ) {

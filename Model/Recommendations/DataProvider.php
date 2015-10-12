@@ -32,20 +32,20 @@ class DataProvider implements SuggestedQueriesInterface
     private $scopeConfig;
 
     /**
-     * @var \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory
+     * @var \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory
      */
     private $recommendationsFactory;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory $recommendationsFactory
+     * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
      * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory $recommendationsFactory,
+        \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory,
         \Magento\Search\Model\QueryResultFactory $queryResultFactory
     ) {
         $this->scopeConfig = $scopeConfig;
@@ -99,7 +99,7 @@ class DataProvider implements SuggestedQueriesInterface
             $productCollection = $this->searchLayer->getProductCollection();
             $params = ['store_id' => $productCollection->getStoreId()];
 
-            /** @var \Magento\AdvancedSearch\Model\Resource\Recommendations $recommendationsResource */
+            /** @var \Magento\AdvancedSearch\Model\ResourceModel\Recommendations $recommendationsResource */
             $recommendationsResource = $this->recommendationsFactory->create();
             $recommendations = $recommendationsResource->getRecommendationsByQuery(
                 $query->getQueryText(),

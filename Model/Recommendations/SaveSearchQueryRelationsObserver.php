@@ -5,7 +5,7 @@
  */
 namespace Magento\AdvancedSearch\Model\Recommendations;
 
-use Magento\AdvancedSearch\Model\Resource\RecommendationsFactory;
+use Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
