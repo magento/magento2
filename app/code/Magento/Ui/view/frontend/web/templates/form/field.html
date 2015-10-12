@@ -42,6 +42,10 @@
         <!-- ko if: element.error() -->
             <div class="mage-error" data-bind="attr: { for: element.uid }, text: element.error" generated="true"></div>
         <!-- /ko -->
+
+        <!-- ko if: element.warn() -->
+            <div class="message warning" generated="true"><span data-bind="text: element.warn"></span></div>
+        <!-- /ko -->
     </div>
 </div>
 <!-- /ko -->
