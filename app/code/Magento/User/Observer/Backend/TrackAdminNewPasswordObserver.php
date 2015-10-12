@@ -24,7 +24,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
     /**
      * Admin user resource model
      *
-     * @var \Magento\User\Model\Resource\User
+     * @var \Magento\User\Model\ResourceModel\User
      */
     protected $userResource;
 
@@ -51,14 +51,14 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
 
     /**
      * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\Resource\User $userResource
+     * @param \Magento\User\Model\ResourceModel\User $userResource
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\Resource\User $userResource,
+        \Magento\User\Model\ResourceModel\User $userResource,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager

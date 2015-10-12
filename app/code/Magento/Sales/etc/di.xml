@@ -163,12 +163,12 @@
 
     <virtualType name="SalesOrderIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
@@ -184,12 +184,12 @@
 
     <virtualType name="SalesOrderIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">

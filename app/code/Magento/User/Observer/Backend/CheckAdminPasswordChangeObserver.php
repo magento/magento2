@@ -17,7 +17,7 @@ class CheckAdminPasswordChangeObserver implements ObserverInterface
     /**
      * Admin user resource model
      *
-     * @var \Magento\User\Model\Resource\User
+     * @var \Magento\User\Model\ResourceModel\User
      */
     protected $userResource;
 
@@ -29,11 +29,11 @@ class CheckAdminPasswordChangeObserver implements ObserverInterface
     protected $encryptor;
 
     /**
-     * @param \Magento\User\Model\Resource\User $userResource
+     * @param \Magento\User\Model\ResourceModel\User $userResource
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      */
     public function __construct(
-        \Magento\User\Model\Resource\User $userResource,
+        \Magento\User\Model\ResourceModel\User $userResource,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor
     ) {
         $this->userResource = $userResource;

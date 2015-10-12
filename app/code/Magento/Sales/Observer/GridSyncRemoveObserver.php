@@ -18,15 +18,15 @@ class GridSyncRemoveObserver implements ObserverInterface
     /**
      * Entity grid model.
      *
-     * @var \Magento\Sales\Model\Resource\GridInterface
+     * @var \Magento\Sales\Model\ResourceModel\GridInterface
      */
     protected $entityGrid;
 
     /**
-     * @param \Magento\Sales\Model\Resource\GridInterface $entityGrid
+     * @param \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
      */
     public function __construct(
-        \Magento\Sales\Model\Resource\GridInterface $entityGrid
+        \Magento\Sales\Model\ResourceModel\GridInterface $entityGrid
     ) {
         $this->entityGrid = $entityGrid;
     }
