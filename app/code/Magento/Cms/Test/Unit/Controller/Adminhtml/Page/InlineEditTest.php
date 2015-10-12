@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Test\Unit\Controller\Page;
+namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
 
@@ -49,38 +49,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
-            [],
-            '',
-            false
-        );
-        $this->messageManager = $this->getMockForAbstractClass(
-            'Magento\Framework\Message\ManagerInterface',
-            [],
-            '',
-            false
-        );
-        $this->messageCollection = $this->getMock(
-            'Magento\Framework\Message\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->message = $this->getMockForAbstractClass(
-            'Magento\Framework\Message\MessageInterface',
-            [],
-            '',
-            false
-        );
-        $this->cmsPage = $this->getMock(
-            'Magento\Cms\Model\Page',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $this->messageManager = $this->getMockForAbstractClass('Magento\Framework\Message\ManagerInterface');
+        $this->messageCollection = $this->getMock('Magento\Framework\Message\Collection', [], [], '', false);
+        $this->message = $this->getMockForAbstractClass('Magento\Framework\Message\MessageInterface');
+        $this->cmsPage = $this->getMock('Magento\Cms\Model\Page', [], [], '', false);
         $this->context = $helper->getObject(
             'Magento\Backend\App\Action\Context',
             [
@@ -95,12 +68,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->pageRepository = $this->getMockForAbstractClass(
-            'Magento\Cms\Api\PageRepositoryInterface',
-            [],
-            '',
-            false
-        );
+        $this->pageRepository = $this->getMockForAbstractClass('Magento\Cms\Api\PageRepositoryInterface');
         $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
         $this->jsonFactory = $this->getMock(
             'Magento\Framework\Controller\Result\JsonFactory',
@@ -125,15 +93,14 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'identifier' => 'no-route'
             ]
         ];
-
-        $this->request->expects($this->at(1))
+        $this->request->expects($this->any())
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn($postData);
+            ->willReturnMap(
+                [
+                    ['isAjax', null, true],
+                    ['items', [], $postData]
+                ]
+            );
         $this->pageRepository->expects($this->once())
             ->method('getById')
             ->with(1)
@@ -160,7 +127,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->cmsPage->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('1');
-        $this->cmsPage->expects($this->once())
+        $this->cmsPage->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn([
                 'layout' => '1column',
@@ -196,7 +163,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithRuntimeException()
@@ -217,7 +184,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithException()
@@ -238,7 +205,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithoutData()
@@ -246,14 +213,14 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-        $this->request->expects($this->at(0))
+        $this->request->expects($this->any())
             ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('isAjax', null)
-            ->willReturn(true);
+            ->willReturnMap(
+                [
+                    ['items', [], []],
+                    ['isAjax', null, true]
+                ]
+            );
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with([
@@ -264,6 +231,71 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
+    }
+
+    public function testSetCmsPageData()
+    {
+        $extendedPageData = [
+            'page_id' => '2',
+            'title' => 'Home Page',
+            'page_layout' => '1column',
+            'identifier' => 'home',
+            'content_heading' => 'Home Page',
+            'content' => 'CMS homepage content goes here.',
+            'is_active' => '1',
+            'sort_order' => '1',
+            'custom_theme' => '3',
+            'website_root' => '1',
+            'under_version_control' => '0',
+            'store_id' => ['0']
+        ];
+        $pageData = [
+            'page_id' => '2',
+            'title' => 'Home Page',
+            'page_layout' => '1column',
+            'identifier' => 'home',
+            'is_active' => '1',
+            'custom_theme' => '3',
+            'under_version_control' => '0',
+        ];
+        $getData = [
+            'page_id' => '2',
+            'title' => 'Home Page',
+            'page_layout' => '1column',
+            'identifier' => 'home',
+            'content_heading' => 'Home Page',
+            'content' => 'CMS homepage content goes here.',
+            'is_active' => '1',
+            'sort_order' => '1',
+            'custom_theme' => '3',
+            'custom_root_template' => '1column',
+            'published_revision_id' => '0',
+            'website_root' => '1',
+            'under_version_control' => '0',
+            'store_id' => ['0']
+        ];
+        $mergedData = [
+            'page_id' => '2',
+            'title' => 'Home Page',
+            'page_layout' => '1column',
+            'identifier' => 'home',
+            'content_heading' => 'Home Page',
+            'content' => 'CMS homepage content goes here.',
+            'is_active' => '1',
+            'sort_order' => '1',
+            'custom_theme' => '3',
+            'custom_root_template' => '1column',
+            'published_revision_id' => '0',
+            'website_root' => '1',
+            'under_version_control' => '0',
+            'store_id' => ['0']
+        ];
+        $this->cmsPage->expects($this->once())->method('getData')->willReturn($getData);
+        $this->cmsPage->expects($this->once())->method('setData')->with($mergedData)->willReturnSelf();
+        $this->assertSame(
+            $this->controller,
+            $this->controller->setCmsPageData($this->cmsPage, $extendedPageData, $pageData)
+        );
     }
 }
