@@ -13,16 +13,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
 
 /**
- * Assert that category with custom store visible on frontend.
+ * Assert that category name is different on different store view.
  */
 class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
-     * Assert that category with custom store visible on frontend.
+     * Assert that category name is different on different store view.
      *
      * @param BrowserInterface $browser
      * @param CatalogCategoryView $categoryView
@@ -44,7 +40,7 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $initialCategory->getName(),
             $categoryView->getTitleBlock()->getTitle(),
-            'Wrong page is displayed on default store.'
+            'Wrong category name is displayed for default store.'
         );
 
         $store = $category->getDataFieldConfig('store_id')['source']->store->getName();
@@ -54,7 +50,7 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $category->getName(),
             $categoryView->getTitleBlock()->getTitle(),
-            'Wrong page is displayed on ' . $store
+            'Wrong category name is displayed for ' . $store
         );
     }
 
@@ -65,6 +61,6 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Category with custom store visible on frontend.';
+        return 'Category name is different on different store view.';
     }
 }
