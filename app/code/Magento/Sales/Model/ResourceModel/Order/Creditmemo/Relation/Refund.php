@@ -55,12 +55,12 @@ class Refund implements RelationInterface
         /** @var \Magento\Sales\Model\Order\Creditmemo $object */
         if ($object->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED) {
             $this->prepareOrder($object);
-            $this->orderRepository->save($object->getOrder());
             if ($object->getInvoice()) {
                 $this->prepareInvoice($object);
                 $this->invoiceRepository->save($object->getInvoice());
             }
             $this->preparePayment($object);
+            $this->orderRepository->save($object->getOrder());
         }
     }
 
