@@ -26,7 +26,7 @@ class AuthObserver
     /**
      * Admin user resource model
      *
-     * @var \Magento\User\Model\Resource\User
+     * @var \Magento\User\Model\ResourceModel\User
      */
     protected $userResource;
 
@@ -67,7 +67,7 @@ class AuthObserver
 
     /**
      * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\Resource\User $userResource
+     * @param \Magento\User\Model\ResourceModel\User $userResource
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\User\Model\UserFactory $userFactory
@@ -76,7 +76,7 @@ class AuthObserver
      */
     public function __construct(
         \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\Resource\User $userResource,
+        \Magento\User\Model\ResourceModel\User $userResource,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\User\Model\UserFactory $userFactory,

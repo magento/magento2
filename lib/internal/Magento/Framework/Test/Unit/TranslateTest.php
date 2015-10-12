@@ -68,7 +68,15 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->resource = $this->getMock('\Magento\Framework\Translate\ResourceInterface', [], [], '', false);
         $this->locale = $this->getMock('\Magento\Framework\Locale\ResolverInterface', [], [], '', false);
         $this->appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
-        $this->request = $this->getMock('\Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(
+            '\Magento\Framework\App\RequestInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getParam', 'getControllerModule']
+        );
         $this->csvParser = $this->getMock('\Magento\Framework\File\Csv', [], [], '', false);
         $this->packDictionary = $this->getMock('\Magento\Framework\App\Language\Dictionary', [], [], '', false);
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);

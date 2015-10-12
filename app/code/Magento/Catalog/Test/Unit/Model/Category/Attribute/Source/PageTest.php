@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
-use Magento\Cms\Model\Resource\Block\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PageTest extends \PHPUnit_Framework_TestCase
@@ -39,13 +39,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Cms\Model\Resource\Block\CollectionFactory
+     * @return \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
      */
     private function getMockedBlockCollectionFactory()
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\CollectionFactory');
+        $mockBuilder = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block\CollectionFactory');
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
