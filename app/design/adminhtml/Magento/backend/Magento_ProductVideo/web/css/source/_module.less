@@ -57,26 +57,30 @@
     &.field-new_video_disabled {
         margin-top: 32px;
     }
-    &.field-video_image .admin__field-control {
-        position: relative;
-        &:after {
-            color: @color-black;
-            content: 'Role';
-            font-family: 'Open Sans', @font-family__sans-serif;
-            font-size: @font-size__s + 0.2;
-            font-weight: @font-weight__semibold;
-            height: 20px;
-            position: absolute;
-            right: 50px;
-            top: -2px;
-            width: 34px;
-        }
-    }
     &.field.field-new_video_screenshot {
         margin-bottom: 5px;
     }
     &.field.field-new_video_screenshot_preview {
         margin-bottom: 50px;
+    }
+    &.field-roleLabel {
+        height: 0;
+        .admin__field-control {
+            #mix-grid .column(3, @field-grid__columns);
+            float: left;
+            margin-left: 80px;
+            position: relative;
+            .control-value {
+                color: @color-black;
+                font-family: 'Open Sans', @font-family__sans-serif;
+                font-size: @font-size__s + 0.2;
+                font-weight: @font-weight__semibold;
+                float: right;
+                position: relative;
+                right: 50px;
+                top: 21px;
+            }
+        }
     }
 }
 
@@ -89,7 +93,8 @@
             margin-bottom: 20px;
         }
     }
-    .gallery .image .action-make-base {
+    .gallery .image .action-make-base,
+    .images .image .action-make-base {
         .lib-button(
             @_button-background: transparent,
             @_button-border: none,
