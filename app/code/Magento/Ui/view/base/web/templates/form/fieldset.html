@@ -7,7 +7,7 @@
 
 <div class="admin__fieldset-wrapper" css="'admin__collapsible-block-wrapper': collapsible, opened: opened">
     <div class="admin__fieldset-wrapper-title" tabindex="3" click="toggleOpened" keyboard="13: toggleOpened">
-        <strong class="title">
+        <strong class="title" data-bind="css: {'admin__collapsible-title': collapsible, title: !collapsible}">
             <span text="label"/>
         </strong>
     </div>
