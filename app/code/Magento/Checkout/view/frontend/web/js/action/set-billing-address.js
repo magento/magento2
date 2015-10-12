@@ -7,37 +7,34 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
-        'mage/url',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/action/get-totals',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader) {
+    function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
         'use strict';
 
-        return function (paymentData, redirectOnSuccess, messageContainer) {
+        return function (messageContainer) {
             var serviceUrl,
                 payload;
 
-            redirectOnSuccess = redirectOnSuccess !== false;
-
-            /** Checkout for guest and registered customer. */
+            /**
+             * Checkout for guest and registered customer.
+             */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
-                    quoteId: quote.getQuoteId()
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/billing-address', {
+                    cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
-                    email: quote.guestEmail,
-                    paymentMethod: paymentData,
-                    billingAddress: quote.billingAddress()
+                    address: quote.billingAddress()
                 };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
                     cartId: quote.getQuoteId(),
-                    paymentMethod: paymentData,
-                    billingAddress: quote.billingAddress()
+                    address: quote.billingAddress()
                 };
             }
 
@@ -47,13 +44,14 @@ define(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
-                    if (redirectOnSuccess) {
-                        window.location.replace(url.build('checkout/onepage/success/'));
-                    }
+                    getTotalsAction([]);
                 }
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                }
+            ).always(
+                function () {
                     fullScreenLoader.stopLoader();
                 }
             );
