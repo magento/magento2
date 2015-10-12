@@ -43,8 +43,9 @@ class PageLayout implements OptionSourceInterface
         if ($this->options !== null) {
             return $this->options;
         }
-        $options[] = ['label' => '', 'value' => ''];
+
         $configOptions = $this->pageLayoutBuilder->getPageLayoutsConfig()->getOptions();
+        $options = [];
         foreach ($configOptions as $key => $value) {
             $options[] = [
                 'label' => $value,
