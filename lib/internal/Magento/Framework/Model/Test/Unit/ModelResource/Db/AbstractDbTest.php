@@ -499,7 +499,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         /**
          * Mock SUT so as not to test extraneous logic
          */
-        $model = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+        $model = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['_prepareDataForSave', 'getIdFieldName', 'getConnection', 'getMainTable'])
             ->getMockForAbstractClass();
