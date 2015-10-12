@@ -10,7 +10,7 @@
              module="Magento_Directory"
              type="flat"
              entity_type="directory_currency_rate"
-             collection="Magento\Directory\Model\Resource\Currency"
+             collection="Magento\Directory\Model\ResourceModel\Currency"
              identifier=""
              repository_class="Magento\Directory\Test\Repository\CurrencyRate"
              handler_interface="Magento\Directory\Test\Handler\CurrencyRate\CurrencyRateInterface"

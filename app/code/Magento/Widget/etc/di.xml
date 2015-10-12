@@ -19,7 +19,7 @@
             <argument name="cacheId" xsi:type="string">widget_config</argument>
         </arguments>
     </type>
-    <type name="Magento\Widget\Model\Resource\Layout\Update">
+    <type name="Magento\Widget\Model\ResourceModel\Layout\Update">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
@@ -32,6 +32,6 @@
     </type>
     <type name="Magento\Framework\View\Model\Layout\Merge">
         <plugin name="widget-layout-update-plugin"
-                type="Magento\Widget\Model\Resource\Layout\Plugin" sortOrder="10"/>
+                type="Magento\Widget\Model\ResourceModel\Layout\Plugin" sortOrder="10"/>
     </type>
 </config>

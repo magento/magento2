@@ -33,12 +33,12 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     protected $problemFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subscribersCollection;
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subscribersCollectionFactory;
 
@@ -48,7 +48,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     protected $transportBuilder;
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -79,14 +79,15 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
             )
             ->getMock();
-        $this->subscribersCollection = $this->getMockBuilder('\Magento\Newsletter\Model\Resource\Subscriber\Collection')
+        $this->subscribersCollection =
+            $this->getMockBuilder('\Magento\Newsletter\Model\ResourceModel\Subscriber\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('\Magento\Newsletter\Model\Resource\Queue')
+        $this->resource = $this->getMockBuilder('\Magento\Newsletter\Model\ResourceModel\Queue')
             ->disableOriginalConstructor()
             ->getMock();
         $this->subscribersCollectionFactory = $this->getMockBuilder(
-            '\Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory'
+            '\Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])

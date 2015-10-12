@@ -27,10 +27,10 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
      */
     protected static $blackList = [
         // not support of virtual types
-        'SalesOrderIndexGridAsyncInsert',
-        'SalesInvoiceIndexGridAsyncInsert',
-        'SalesShipmentIndexGridAsyncInsert',
-        'SalesCreditmemoIndexGridAsyncInsert',
+        'SalesOrderIndexGridAsyncInsertObserver',
+        'SalesInvoiceIndexGridAsyncInsertObserver',
+        'SalesShipmentIndexGridAsyncInsertObserver',
+        'SalesCreditmemoIndexGridAsyncInsertObserver',
         'SalesOrderIndexGridSyncInsert',
         'SalesInvoiceIndexGridSyncInsert',
         'SalesShipmentIndexGridSyncInsert',
@@ -39,25 +39,10 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'SalesInvoiceIndexGridSyncRemove',
         'SalesShipmentIndexGridSyncRemove',
         'SalesCreditmemoIndexGridSyncRemove',
-        'Magento\Sales\Model\Observer\Order\SendEmails',
-        'Magento\Sales\Model\Observer\Order\Invoice\SendEmails',
-        'Magento\Sales\Model\Observer\Order\Shipment\SendEmails',
-        'Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails',
-        'Magento\Sales\Model\Observer\AggregateSalesReportShipmentData',
-        'Magento\SalesRule\Model\Observer',
-        'Magento\Sales\Model\Observer\Backend\CatalogProductQuote',
-        'Magento\Sales\Model\Observer\CleanExpiredQuotes',
-        'Magento\Sales\Model\Observer\Backend\CatalogPriceRule',
-        'Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment',
-        'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
-        'Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid',
-        'Magento\Sales\Model\Observer\Order\IndexGrid',
-        'Magento\Sales\Model\Observer\Order\Invoice\IndexGrid',
-        'Magento\Sales\Model\Observer\Order\Shipment\IndexGrid',
-        'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
-        'Magento\User\Model\Backend\Observer\AuthObserver',
-        'Magento\User\Model\Backend\Observer\PasswordObserver',
-        'Magento\ProductVideo\Model\Observer',
+        'SalesOrderSendEmailsObserver',
+        'SalesOrderInvoiceSendEmailsObserver',
+        'SalesOrderShipmentSendEmailsObserver',
+        'SalesOrderCreditmemoSendEmailsObserver',
     ];
 
     public static function setUpBeforeClass()
@@ -133,12 +118,7 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         }
         return array_diff(
             array_unique($observerClasses),
-            self::$blackList,
-            // MAGETWO-43598
-            [
-                'Magento\Versi' . 'onsCms\Model\Backend\Observer',
-                'Magento\Versi' . 'onsCms\Model\Backend\PrepareFormObserver'
-            ]
+            self::$blackList
         );
     }
 }
