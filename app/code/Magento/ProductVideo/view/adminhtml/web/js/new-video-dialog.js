@@ -244,8 +244,8 @@ define([
             this._on(events);
 
             this._videoUrlWidget = $(this._videoUrlSelector).videoData({
-                youtubeKey : this.options.youTubeApiKey,
-                eventSource : 'focusout'
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'focusout'
             });
             this._videoInformationGetBtn = $(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = $(this._videoUrlSelector);
@@ -266,8 +266,8 @@ define([
             this._onlyVideoPlayer = false;
             this._isEditPage = false;
             this._videoInformationGetUrlField.videoData({
-                youtubeKey : this.options.youTubeApiKey,
-                eventSource : 'click'
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'click'
             });
             this._videoUrlWidget.trigger('update_video_information');
         },
@@ -278,8 +278,8 @@ define([
          */
         _onGetVideoInformationFocusOut: function () {
             this._videoInformationGetUrlField.videoData({
-                youtubeKey : this.options.youTubeApiKey,
-                eventSource : 'focusout'
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'focusout'
             });
             this._videoUrlWidget.trigger('update_video_information');
         },
@@ -292,8 +292,8 @@ define([
             this._onlyVideoPlayer = true;
             this._isEditPage = true;
             this._videoInformationGetUrlField.videoData({
-                youtubeKey : this.options.youTubeApiKey,
-                eventSource : 'click'
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'click'
             });
             this._videoUrlWidget.trigger('update_video_information');
         },
