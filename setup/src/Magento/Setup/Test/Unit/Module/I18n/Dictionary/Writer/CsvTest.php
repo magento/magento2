@@ -67,16 +67,16 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $this->_phraseFirstMock->expects(
             $this->once()
         )->method(
-            'getPhrase'
+            'getCompiledPhrase'
         )->will(
-            $this->returnValue("phrase1_quote\\'")
+            $this->returnValue("phrase1_quote'")
         );
         $this->_phraseFirstMock->expects(
             $this->once()
         )->method(
-            'getTranslation'
+            'getCompiledTranslation'
         )->will(
-            $this->returnValue("translation1_quote\\'")
+            $this->returnValue("translation1_quote'")
         );
         $this->_phraseFirstMock->expects(
             $this->once()
@@ -96,16 +96,16 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
-            'getPhrase'
+            'getCompiledPhrase'
         )->will(
-            $this->returnValue("phrase2_quote\\'")
+            $this->returnValue("phrase2_quote'")
         );
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
-            'getTranslation'
+            'getCompiledTranslation'
         )->will(
-            $this->returnValue("translation2_quote\\'")
+            $this->returnValue("translation2_quote'")
         );
         $this->_phraseSecondMock->expects(
             $this->once()
@@ -142,38 +142,26 @@ EXPECTED;
 
     public function testWriteWithoutContext()
     {
-        $this->_phraseFirstMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase1'));
-        $this->_phraseFirstMock->expects(
-            $this->once()
-        )->method(
-            'getTranslation'
-        )->will(
-            $this->returnValue('translation1')
-        );
+        $this->_phraseFirstMock->expects($this->once())
+            ->method('getCompiledPhrase')
+            ->willReturn('phrase1');
+        $this->_phraseFirstMock->expects($this->once())
+            ->method('getCompiledTranslation')
+            ->willReturn('translation1');
         $this->_phraseFirstMock->expects($this->once())->method('getContextType')->will($this->returnValue(''));
 
-        $this->_phraseSecondMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase2'));
-        $this->_phraseSecondMock->expects(
-            $this->once()
-        )->method(
-            'getTranslation'
-        )->will(
-            $this->returnValue('translation2')
-        );
-        $this->_phraseSecondMock->expects(
-            $this->once()
-        )->method(
-            'getContextType'
-        )->will(
-            $this->returnValue('context_type2')
-        );
-        $this->_phraseSecondMock->expects(
-            $this->once()
-        )->method(
-            'getContextValueAsString'
-        )->will(
-            $this->returnValue('')
-        );
+        $this->_phraseSecondMock->expects($this->once())
+            ->method('getCompiledPhrase')
+            ->willReturn('phrase2');
+        $this->_phraseSecondMock->expects($this->once())
+            ->method('getCompiledTranslation')
+            ->willReturn('translation2');
+        $this->_phraseSecondMock->expects($this->once())
+            ->method('getContextType')
+            ->willReturn('context_type2');
+        $this->_phraseSecondMock->expects($this->once())
+            ->method('getContextValueAsString')
+            ->willReturn('');
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Setup\Module\I18n\Dictionary\Writer\Csv $writer */
