@@ -179,7 +179,7 @@ return [
     ['_dir', 'Magento\Backup\Model\Fs\Collection'],
     ['_dir', 'Magento\Cms\Model\Wysiwyg\Images\Storage'],
     ['_dirs', 'Magento\Core\Helper\Theme'],
-    ['_dirs', 'Magento\Framework\Model\ModelResource\Type\Db\Pdo\Mysql'],
+    ['_dirs', 'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql'],
     ['_filesystem', 'Magento\GiftWrapping\Model\Wrapping'],
     ['_customer', 'Magento\Backend\Model\Session\Quote'],
     ['_customerFactory', 'Magento\Backend\Model\Session\Quote'],

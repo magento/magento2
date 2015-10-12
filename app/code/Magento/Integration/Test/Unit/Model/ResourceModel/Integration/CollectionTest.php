@@ -33,7 +33,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $resource = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $resource = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getConnection'])
             ->getMockForAbstractClass();

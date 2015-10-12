@@ -7,7 +7,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationInterface;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 /**
  * Class represents save operations for customer address relations
