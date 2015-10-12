@@ -761,8 +761,8 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             ->method('critical');
 
         $this->model->capture($paymentObject, $amount);
-        $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
-        $this->assertFalse($paymentObject->getShouldCloseParentTransaction());
+        $this->assertEquals(false, $paymentObject->getIsTransactionClosed());
+        $this->assertEquals(true, $paymentObject->getShouldCloseParentTransaction());
     }
 
     /**
