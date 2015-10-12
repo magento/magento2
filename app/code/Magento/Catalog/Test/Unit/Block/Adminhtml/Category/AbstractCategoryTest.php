@@ -132,6 +132,6 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())->method('getGroups')->willReturn([$this->storeMock]);
         $this->storeMock->expects($this->once())->method('getRootCategoryId')->willReturn('storeId');
 
-        $this->assertEquals(['storeId', \Magento\Catalog\Model\Category::TREE_ROOT_ID], $this->category->getRootIds());
+        $this->assertEquals([\Magento\Catalog\Model\Category::TREE_ROOT_ID, 'storeId'], $this->category->getRootIds());
     }
 }
