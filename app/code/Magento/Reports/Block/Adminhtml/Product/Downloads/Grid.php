@@ -13,20 +13,20 @@ namespace Magento\Reports\Block\Adminhtml\Product\Downloads;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Product\Downloads\CollectionFactory
      */
     protected $_downloadsFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory $downloadsFactory
+     * @param \Magento\Reports\Model\ResourceModel\Product\Downloads\CollectionFactory $downloadsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory $downloadsFactory,
+        \Magento\Reports\Model\ResourceModel\Product\Downloads\CollectionFactory $downloadsFactory,
         array $data = []
     ) {
         $this->_downloadsFactory = $downloadsFactory;
