@@ -70,7 +70,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $timezoneMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
 
@@ -173,7 +173,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')

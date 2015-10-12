@@ -8,7 +8,7 @@ namespace Magento\Store\Model\ResourceModel;
 /**
  * Store Resource Model
  */
-class Store extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
@@ -16,11 +16,11 @@ class Store extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $configCache;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\Cache\Type\Config $configCacheType
     ) {
         $this->configCache = $configCacheType;

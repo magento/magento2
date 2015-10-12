@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Model\ModelResource\Entity;
+namespace Magento\Framework\Model\ResourceModel\Entity;
 
 class TableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ModelResource\Entity\Table
+     * @var \Magento\Framework\Model\ResourceModel\Entity\Table
      */
     protected $_model;
 
@@ -21,7 +21,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
         // @codingStandardsIgnoreEnd
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Model\ModelResource\Entity\Table', ['config' => $config]);
+            ->create('Magento\Framework\Model\ResourceModel\Entity\Table', ['config' => $config]);
     }
 
     public function testGetTable()
