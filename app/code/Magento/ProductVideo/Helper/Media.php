@@ -73,10 +73,10 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         DesignInterface $designInterface,
         Context $context
     ) {
+        parent::__construct($context);
         $this->viewConfig = $configInterface;
         $this->currentTheme = $designInterface->getDesignTheme();
         $this->initConfig();
-        parent::__construct($context);
     }
 
     /**
