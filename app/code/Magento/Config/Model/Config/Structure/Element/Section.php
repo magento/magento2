@@ -28,7 +28,6 @@ class Section extends AbstractComposite
     ) {
         parent::__construct($storeManager, $moduleManager, $childrenIterator);
         $this->_authorization = $authorization;
-        $this->moduleManager = $moduleManager;
     }
 
     /**
