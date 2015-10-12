@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<td class="data-grid-onoff-cell admin__scope-old">
+    <div class="switcher">
+        <input
+                class="admin__control-onoff"
+                type="checkbox"
+                data-bind="checked: selected,
+               value: row[indexField],
+               attr: {id: 'check' + row[indexField]}">
+        <label class="switcher-label" data-bind="attr: {for: 'check' + row[indexField]}, text: getLabel(row[indexField])"></label>
+    </div>
+</td>
