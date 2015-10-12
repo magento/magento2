@@ -5,13 +5,15 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
+use \Magento\Framework\View\Layout\ScheduledStructure;
+
 /**
  * Test class for \Magento\Framework\View\Layout\ScheduledStructure
  */
 class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure
+     * @var ScheduledStructure
      */
     protected $model;
 
@@ -20,6 +22,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     protected $scheduledData = [];
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->scheduledData = [
@@ -62,11 +67,16 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'path4' => 'path 4',
             ],
         ];
-        $this->model = new \Magento\Framework\View\Layout\ScheduledStructure($this->scheduledData);
+
+        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $helperObjectManager->getObject(
+            'Magento\Framework\View\Layout\ScheduledStructure',
+            ['data' => $this->scheduledData]
+        );
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getListToMove
+     * @return void
      */
     public function testGetListToMove()
     {
@@ -78,7 +88,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getListToRemove
+     * @return void
      */
     public function testGetListToRemove()
     {
@@ -96,7 +106,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElements
+     * @return void
      */
     public function testGetElements()
     {
@@ -104,7 +114,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElement
+     * @return void
      */
     public function testGetElement()
     {
@@ -116,7 +126,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::isElementsEmpty
+     * @return void
      */
     public function testIsElementsEmpty()
     {
@@ -126,7 +136,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElement
+     * @return void
      */
     public function testSetElement()
     {
@@ -144,7 +154,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasElement
+     * @return void
      */
     public function testHasElement()
     {
@@ -153,7 +163,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElement
+     * @return void
      */
     public function testUnsetElement()
     {
@@ -163,7 +173,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElementToMove
+     * @return void
      */
     public function testGetElementToMove()
     {
@@ -175,6 +185,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($default, $this->model->getElementToMove('not_existing_element', $default));
     }
 
+    /**
+     * @return void
+     */
     public function getIfconfigElement()
     {
         $this->assertEquals(
@@ -186,7 +199,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToMove
+     * @return void
      */
     public function testSetElementToMove()
     {
@@ -204,7 +217,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElementFromListToRemove
+     * @return void
      */
     public function testUnsetElementFromListToRemove()
     {
@@ -214,7 +227,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToRemoveList
+     * @return void
      */
     public function testSetElementToRemoveList()
     {
@@ -223,6 +236,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('element1', $this->model->getListToRemove());
     }
 
+    /**
+     * @return void
+     */
     public function testUnsetElementFromIfconfigList()
     {
         $this->assertContains('element4', $this->model->getIfconfigList());
@@ -230,6 +246,9 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('element4', $this->model->getIfconfigList());
     }
 
+    /**
+     * @return void
+     */
     public function testSetElementToIfconfigList()
     {
         $this->assertNotContains('element5', $this->model->getIfconfigList());
@@ -238,7 +257,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getStructure
+     * @return void
      */
     public function testGetStructure()
     {
@@ -246,7 +265,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getStructureElement
+     * @return void
      */
     public function testGetStructureElement()
     {
@@ -258,7 +277,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::isStructureEmpty
+     * @return void
      */
     public function testIsStructureEmpty()
     {
@@ -268,7 +287,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasStructureElement
+     * @return void
      */
     public function testHasStructureElement()
     {
@@ -277,7 +296,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setStructureElement
+     * @return void
      */
     public function testSetStructureElement()
     {
@@ -295,7 +314,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetStructureElement
+     * @return void
      */
     public function testUnsetStructureElement()
     {
@@ -305,7 +324,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getPaths
+     * @return void
      */
     public function testGetPaths()
     {
@@ -313,7 +332,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getPath
+     * @return void
      */
     public function testGetPath()
     {
@@ -323,7 +342,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasPath
+     * @return void
      */
     public function testHasPath()
     {
@@ -332,7 +351,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setPathElement
+     * @return void
      */
     public function testSetPathElement()
     {
@@ -350,7 +369,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetPathElement
+     * @return void
      */
     public function testUnsetPathElement()
     {
@@ -360,7 +379,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::flushPaths
+     * @return void
      */
     public function testFlushPaths()
     {
@@ -370,7 +389,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::flushScheduledStructure
+     * @return void
      */
     public function testFlushScheduledStructure()
     {
@@ -386,8 +405,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToBrokenParentList
-     * covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElementFromBrokenParentList
+     * @return void
      */
     public function testSetElementToBrokenParentList()
     {
@@ -401,5 +419,77 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
 
         $this->model->unsetElementFromBrokenParentList($element);
         $this->assertEquals($expectedToRemove, $this->model->getListToRemove());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetElementToSortList()
+    {
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $elementsList = [$name => $element];
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($elementsList, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSortEmpty()
+    {
+        $this->assertEmpty($this->model->getElementToSort('test'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($element, $this->model->getElementToSort($name));
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnsetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertArrayHasKey($name, $this->model->getListToSort());
+        $this->model->unsetElementToSort($name);
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsListToSortEmpty()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->assertTrue($this->model->isListToSortEmpty());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertFalse($this->model->isListToSortEmpty());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDataSort()
+    {
+        return [
+            'parent name',
+            'element name',
+            'sibling',
+            false,
+            [
+                ScheduledStructure::ELEMENT_NAME => 'element name',
+                ScheduledStructure::ELEMENT_PARENT_NAME => 'parent name',
+                ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING => 'sibling',
+                ScheduledStructure::ELEMENT_IS_AFTER => false
+            ]
+        ];
     }
 }
