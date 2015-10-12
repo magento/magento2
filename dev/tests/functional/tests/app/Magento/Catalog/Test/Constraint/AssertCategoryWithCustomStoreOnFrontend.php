@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Cms\Test\Page\CmsIndex;
 
 /**
@@ -28,7 +27,7 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
      * @param BrowserInterface $browser
      * @param CatalogCategoryView $categoryView
      * @param Category $category
-     * @param Store $store
+     * @param Category $initialCategory
      * @param CmsIndex $cmsIndex
      * @return void
      */
@@ -36,18 +35,26 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         BrowserInterface $browser,
         CatalogCategoryView $categoryView,
         Category $category,
-        Store $store,
+        Category $initialCategory,
         CmsIndex $cmsIndex
     ) {
         $cmsIndex->open();
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
-        $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
+        $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
+        \PHPUnit_Framework_Assert::assertEquals(
+            $initialCategory->getName(),
+            $categoryView->getTitleBlock()->getTitle(),
+            'Wrong page is displayed on default store.'
+        );
+
+        $store = $category->getDataFieldConfig('store_id')['source']->store->getName();
+        $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store);
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
-        $browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
+        $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertEquals(
             $category->getName(),
             $categoryView->getTitleBlock()->getTitle(),
-            'Wrong page is displayed.'
+            'Wrong page is displayed on ' . $store
         );
     }
 
