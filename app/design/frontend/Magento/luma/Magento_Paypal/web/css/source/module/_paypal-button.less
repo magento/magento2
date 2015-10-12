@@ -28,6 +28,15 @@
             display: block;
             margin: 0 0 @indent__base;
         }
+        .map-form-addtocart & {
+            display: block;
+            margin: @indent__s auto @indent__xs;
+        }
+        .cart-summary & {
+            + .paypal {
+                margin-top: @indent__m;
+            }
+        }
     }
 
     .paypal-button-widget {
