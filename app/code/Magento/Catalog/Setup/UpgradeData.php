@@ -85,6 +85,47 @@ class UpgradeData implements UpgradeDataInterface
             $categorySetupManager = $this->categorySetupFactory->create();
             $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
         }
+
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'entity_model',
+                'Magento\Catalog\Model\ResourceModel\Category'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'entity_attribute_collection',
+                'Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection'
+            );
+            $categorySetup->updateAttribute(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'custom_design_from',
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'entity_model',
+                'Magento\Catalog\Model\ResourceModel\Product'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'entity_attribute_collection',
+                'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+            );
+        }
         $setup->endSetup();
     }
 }
