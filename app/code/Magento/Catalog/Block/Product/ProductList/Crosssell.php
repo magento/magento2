@@ -14,7 +14,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Crosssell item collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     protected $_itemCollection;
 
@@ -56,7 +56,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve crosssell items collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     public function getItems()
     {

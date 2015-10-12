@@ -10,7 +10,7 @@
              module="Magento_Cms"
              type="flat"
              entity_type="cms_page"
-             collection="Magento\Cms\Model\Resource\Page\Grid\Collection"
+             collection="Magento\Cms\Model\ResourceModel\Page\Grid\Collection"
              identifier="identifier"
              repository_class="Magento\Cms\Test\Repository\CmsPage"
              handler_interface="Magento\Cms\Test\Handler\CmsPage\CmsPageInterface"

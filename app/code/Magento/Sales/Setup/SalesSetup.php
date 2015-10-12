@@ -6,7 +6,7 @@
 namespace Magento\Sales\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -214,30 +214,30 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         $entities = [
             'order' => [
-                'entity_model' => 'Magento\Sales\Model\Resource\Order',
+                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order',
                 'table' => 'sales_order',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'invoice' => [
-                'entity_model' => 'Magento\Sales\Model\Resource\Order\Invoice',
+                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Invoice',
                 'table' => 'sales_invoice',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'creditmemo' => [
-                'entity_model' => 'Magento\Sales\Model\Resource\Order\Creditmemo',
+                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Creditmemo',
                 'table' => 'sales_creditmemo',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'shipment' => [
-                'entity_model' => 'Magento\Sales\Model\Resource\Order\Shipment',
+                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Shipment',
                 'table' => 'sales_shipment',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'increment_per_store' => true,
                 'attributes' => [],
             ],

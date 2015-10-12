@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 {
@@ -15,7 +16,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     protected $factory;
 
     /**
-     * @var Resource\Website\CollectionFactory
+     * @var CollectionFactory
      */
     protected $websiteCollectionFactory;
 
@@ -41,11 +42,11 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * @param WebsiteFactory $factory
-     * @param Resource\Website\CollectionFactory $websiteCollectionFactory
+     * @param CollectionFactory $websiteCollectionFactory
      */
     public function __construct(
         WebsiteFactory $factory,
-        Resource\Website\CollectionFactory $websiteCollectionFactory
+        CollectionFactory $websiteCollectionFactory
     ) {
         $this->factory = $factory;
         $this->websiteCollectionFactory = $websiteCollectionFactory;
@@ -117,7 +118,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
                 }
             }
             if (!$this->allLoaded) {
-                /** @var Resource\Website\Collection $collection */
+                /** @var \Magento\Store\Model\ResourceModel\Website\Collection $collection */
                 $collection = $this->websiteCollectionFactory->create();
                 $collection->addFieldToFilter('is_default', 1);
                 $items = $collection->getItems();
