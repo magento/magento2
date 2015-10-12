@@ -113,7 +113,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
@@ -124,6 +124,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn(true);
+        $addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
@@ -165,7 +168,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
@@ -176,6 +179,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn(true);
+        $addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
@@ -249,7 +255,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
@@ -260,6 +266,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn(true);
+        $addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',
@@ -368,7 +377,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
@@ -379,6 +388,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn(true);
+        $addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             'Magento\SalesRule\Model\Quote\Discount',

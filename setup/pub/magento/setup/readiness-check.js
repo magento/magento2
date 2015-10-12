@@ -170,8 +170,10 @@ angular.module('readiness-check', [])
             angular.forEach($scope.items, function(item) {
                 item.show();
             });
+            var $delay = 0;
             angular.forEach($scope.items, function(item) {
-                $scope.query(item);
+                $timeout(function() { $scope.query(item); }, $delay * 1000);
+                $delay++;
             });
         };
 
