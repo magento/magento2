@@ -49,7 +49,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         <?php foreach ($storedCards as $creditCard): ?>
                             <option value="<?php echo $block->escapeHtml($creditCard->token); ?>"
                                 <?php /* @noEscape */ echo $creditCard->default ? ' selected="selected"' : ''; ?>>
-                                <?php echo $block->escapeHtml($creditCard->maskedNumber . ' - ' . $creditCard->cardType); ?>
+                                <?php echo $block->escapeHtml($creditCard->maskedNumber); ?> - <?php echo $block->escapeHtml($creditCard->cardType); ?>
                             </option>
                         <?php endforeach; ?>
                         <option value=''><?php echo $block->escapeHtml(__('Add new card')); ?></option>
