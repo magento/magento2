@@ -37,10 +37,18 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
     protected $_factoryText;
 
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
+
+    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Data\Form\Element\TextFactory $factoryText
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -48,12 +56,14 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Data\Form\Element\TextFactory $factoryText,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_factoryText = $factoryText;
         $this->_qty = isset($data['qty']) ? $data['qty'] : $this->_createQtyElement();
         unset($data['qty']);
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->coreRegistry = $coreRegistry;
         $this->setName($data['name']);
     }
 
@@ -164,6 +174,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
     {
+        $isNewProduct = (int)$this->coreRegistry->registry('product')->isObjectNew();
         return "
             <script type='text/javascript'>
                 require(['jquery', 'prototype', 'domReady!'], function($) {
@@ -184,7 +195,9 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                             var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
                             $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
                             if (stockBeforeDisable.result !== false) {
-                                var manageStockValue = (qty.val() === '') ? 0 : 1,
+                                var manageStockValue = {$isNewProduct}
+                                    ? (qty.val() === '' ? 0 : 1)
+                                    : parseInt(manageStockField.val()),
                                     stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
                                 stockAvailabilityField.prop('disabled', !manageStockValue);
                                 stockAssociations.prop('disabled', !manageStockValue);
