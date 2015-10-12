@@ -7,7 +7,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Render;
 
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\Render\Amount;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
@@ -77,7 +77,7 @@ class AmountTest extends \PHPUnit_Framework_TestCase
 
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
-        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $this->priceMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Price\PriceInterface');
 
         $eventManager = $this->getMock('Magento\Framework\Event\Test\Unit\ManagerStub', [], [], '', false);

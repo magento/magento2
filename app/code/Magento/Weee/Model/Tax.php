@@ -94,7 +94,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Model\Session $customerSession
      * @param AccountManagementInterface $accountManagement
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param Resource\Tax $resource
+     * @param \Magento\Weee\Model\ResourceModel\Tax $resource
      * @param Config $weeeConfig
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -110,7 +110,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Model\Session $customerSession,
         AccountManagementInterface $accountManagement,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Weee\Model\Resource\Tax $resource,
+        \Magento\Weee\Model\ResourceModel\Tax $resource,
         \Magento\Weee\Model\Config $weeeConfig,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -134,7 +134,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Weee\Model\Resource\Tax');
+        $this->_init('Magento\Weee\Model\ResourceModel\Tax');
     }
 
     /**

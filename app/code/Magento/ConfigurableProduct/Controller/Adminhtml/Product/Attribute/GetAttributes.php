@@ -23,7 +23,7 @@ class GetAttributes extends Action
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -31,13 +31,13 @@ class GetAttributes extends Action
      * @param Action\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->storeManager = $storeManager;

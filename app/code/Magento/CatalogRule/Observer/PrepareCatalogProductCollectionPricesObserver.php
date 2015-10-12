@@ -39,7 +39,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
     protected $localeDate;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\RuleFactory
+     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
      */
     protected $resourceRuleFactory;
 
@@ -53,7 +53,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
 
     /**
      * @param RulePricesStorage $rulePricesStorage
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
@@ -61,7 +61,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
-        \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory,
+        \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
         StoreManagerInterface $storeManager,
         TimezoneInterface $localeDate,
         CustomerModelSession $customerSession,

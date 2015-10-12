@@ -30,20 +30,20 @@ class Container extends \Magento\Framework\View\Element\Html\Select
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     protected $_themesFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory,
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory,
         array $data = []
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
@@ -114,7 +114,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
         return $themeCollection->getItemById($themeId);
     }
