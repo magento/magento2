@@ -29,7 +29,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $categoryResource;
 
@@ -42,12 +42,12 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Category $categoryResource
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Category $categoryResource,
+        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
@@ -61,6 +61,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         $existingData = $category->toFlatArray();
+        /** 'available_sort_by' should be set separately because fields of array type are destroyed by toFlatArray() */
+        $existingData['available_sort_by'] = $category->getAvailableSortBy();
         if ($category->getId()) {
             $existingCategory = $this->get($category->getId());
             if (isset($existingData['image']) && is_array($existingData['image'])) {

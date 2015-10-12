@@ -26,13 +26,13 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Status\Collection', [], [], '', false);
+        $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
         $collection->expects($this->once())
             ->method('toOptionHash')
             ->willReturn($itemMapping);
 
         $collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
             ['create'],
             [],
             '',
@@ -48,7 +48,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ['collectionFactory' => $collectionFactoryMock]
         );
         $model->setData('name', $itemName);
-        $model->prepareDataSource($dataSource);
+        $dataSource = $model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

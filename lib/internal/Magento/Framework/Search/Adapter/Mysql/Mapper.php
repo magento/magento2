@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
@@ -75,7 +75,7 @@ class Mapper
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Builder $filterBuilder
      * @param ConditionManager $conditionManager
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param EntityMetadata $entityMetadata
      * @param QueryContainerFactory $queryContainerFactory
      * @param Query\Builder\Match $matchBuilder
@@ -86,7 +86,7 @@ class Mapper
         ScoreBuilderFactory $scoreBuilderFactory,
         Builder $filterBuilder,
         ConditionManager $conditionManager,
-        Resource $resource,
+        ResourceConnection $resource,
         EntityMetadata $entityMetadata,
         QueryContainerFactory $queryContainerFactory,
         Match $matchBuilder,

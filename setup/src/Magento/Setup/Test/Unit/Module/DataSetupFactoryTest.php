@@ -11,13 +11,11 @@ class DataSetupFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())->method('getDirectoryRead');
         $context = $this->getMock('Magento\Framework\Module\Setup\Context', [], [], '', false);
         $context->expects($this->once())->method('getEventManager');
         $context->expects($this->once())->method('getLogger');
-        $context->expects($this->once())->method('getModulesReader');
         $context->expects($this->once())->method('getMigrationFactory');
         $context->expects($this->once())->method('getResourceModel')->willReturn($resource);
         $context->expects($this->once())->method('getFilesystem')->willReturn($filesystem);

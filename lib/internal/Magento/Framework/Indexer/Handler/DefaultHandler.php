@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Indexer\Handler;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\HandlerInterface;
 
 class DefaultHandler implements HandlerInterface

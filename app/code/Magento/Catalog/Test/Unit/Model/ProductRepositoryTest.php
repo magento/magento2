@@ -169,7 +169,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -196,7 +196,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
@@ -557,7 +557,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
         $attributeCode = 'attribute_code';
-        $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $extendedSearchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $productAttributeSearchResultsMock = $this->getMockForAbstractClass(
             '\Magento\Catalog\Api\Data\ProductAttributeInterface',
@@ -1054,6 +1054,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     ImageContentInterface::TYPE => 'image/jpeg',
                     ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
+                'media_type' => 'media_type',
             ],
         ];
 
@@ -1116,6 +1117,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     'label' => 'label_text',
                     'position' => 10,
                     'disabled' => false,
+                    'media_type' => 'media_type',
                 ]
             );
 

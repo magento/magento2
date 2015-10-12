@@ -17,7 +17,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', ['getTypeId'], [], '', false);
-        $roleMock = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $roleMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
 
         $imageRolesArray = [
             'image' => $roleMock,

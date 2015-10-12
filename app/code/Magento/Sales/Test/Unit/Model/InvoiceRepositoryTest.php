@@ -29,7 +29,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->invoiceMetadata = $this->getMock('Magento\Sales\Model\Resource\Metadata', [], [], '', false);
+        $this->invoiceMetadata = $this->getMock('Magento\Sales\Model\ResourceModel\Metadata', [], [], '', false);
         $this->searchResultFactory = $this->getMockBuilder('Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -58,7 +58,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice')
+        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -98,7 +98,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice')
+        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -155,7 +155,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilterGroups')
             ->willReturn($filterGroups);
 
-        $collection = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice\Collection')
+        $collection = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())
@@ -178,7 +178,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice')
+        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -206,7 +206,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice')
+        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -237,7 +237,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice')
+        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())

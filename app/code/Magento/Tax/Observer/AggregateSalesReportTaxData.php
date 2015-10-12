@@ -14,7 +14,7 @@ class AggregateSalesReportTaxData
     protected $localeDate;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Report\TaxFactory
+     * @var \Magento\Tax\Model\ResourceModel\Report\TaxFactory
      */
     protected $reportTaxFactory;
 
@@ -25,12 +25,12 @@ class AggregateSalesReportTaxData
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
+     * @param \Magento\Tax\Model\ResourceModel\Report\TaxFactory $reportTaxFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory,
+        \Magento\Tax\Model\ResourceModel\Report\TaxFactory $reportTaxFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->localeDate = $localeDate;
@@ -41,16 +41,14 @@ class AggregateSalesReportTaxData
     /**
      * Refresh sales tax report statistics for last day
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function invoke($schedule)
+    public function invoke()
     {
         $this->localeResolver->emulate(0);
         $currentDate = $this->localeDate->date();
         $date = $currentDate->modify('-25 hours');
-        /** @var $reportTax \Magento\Tax\Model\Resource\Report\Tax */
+        /** @var $reportTax \Magento\Tax\Model\ResourceModel\Report\Tax */
         $reportTax = $this->reportTaxFactory->create();
         $reportTax->aggregate($date);
         $this->localeResolver->revert();

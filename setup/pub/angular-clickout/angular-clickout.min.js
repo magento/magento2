@@ -1,0 +1,3 @@
+/*! Angular clickout v1.0.2 | © 2014 Greg Bergé | License MIT */
+!function(a,b,c){"use strict";b.module("clickOut",[]).directive("clickOut",["$window","$parse",function(a,c){return{restrict:"A",link:function(d,e,f){var g=c(f.clickOut);b.element(a).on("click",function(a){e[0].contains(a.target)||(g(d,{$event:a}),d.$apply())})}}}])}(window,window.angular);
+//# sourceMappingURL=angular-clickout.min.js.map

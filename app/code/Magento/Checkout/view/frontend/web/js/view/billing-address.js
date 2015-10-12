@@ -16,6 +16,8 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/action/set-billing-address',
+        'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
     function (
@@ -29,20 +31,21 @@ define(
         checkoutData,
         checkoutDataResolver,
         customerData,
+        setBillingAddressAction,
+        globalMessageList,
         $t
     ) {
         'use strict';
 
         var lastSelectedBillingAddress = null,
             newAddressOption = {
-            getAddressInline: function() {
+                getAddressInline: function () {
                 return $t('New Address');
             },
-            customerAddressId: null
+                customerAddressId: null
             },
-            countryData = customerData.get('directory-data');
-
-        var addressOptions = addressList().filter(function(address) {
+            countryData = customerData.get('directory-data'),
+            addressOptions = addressList().filter(function (address) {
             return address.getType() == 'customer-address';
         });
         addressOptions.push(newAddressOption);
@@ -51,14 +54,23 @@ define(
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+            currentBillingAddress: quote.billingAddress,
+            addressOptions: addressOptions,
+            customerHasAddresses: addressOptions.length > 1,
 
+            /**
+             * Init component
+             */
             initialize: function () {
                 this._super();
-                quote.paymentMethod.subscribe(function() {
+                quote.paymentMethod.subscribe(function () {
                     checkoutDataResolver.resolveBillingAddress();
                 }, this);
             },
 
+            /**
+             * @return {exports.initObservable}
+             */
             initObservable: function () {
                 this._super()
                     .observe({
@@ -69,12 +81,13 @@ define(
                         saveInAddressBook: true
                     });
 
-                quote.billingAddress.subscribe(function(newAddress) {
+                quote.billingAddress.subscribe(function (newAddress) {
                     this.isAddressSameAsShipping(
-                        newAddress != null
-                            && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
-                            && !quote.isVirtual()
+                        newAddress != null &&
+                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() &&
+                            !quote.isVirtual()
                     );
+
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
                     }
@@ -84,21 +97,21 @@ define(
                 return this;
             },
 
-            canUseShippingAddress: ko.computed(function(){
-                return !quote.isVirtual() && quote.shippingAddress()
-                    && quote.shippingAddress().canUseForBilling();
+            canUseShippingAddress: ko.computed(function () {
+                return !quote.isVirtual() && quote.shippingAddress() && quote.shippingAddress().canUseForBilling();
             }),
 
-            currentBillingAddress: quote.billingAddress,
-
-            addressOptions: addressOptions,
-
-            customerHasAddresses: addressOptions.length > 1,
-
-            addressOptionsText: function(address) {
+            /**
+             * @param {Object} address
+             * @return {*}
+             */
+            addressOptionsText: function (address) {
                 return address.getAddressInline();
             },
 
+            /**
+             * @return {Boolean}
+             */
             useShippingAddress: function () {
                 if (this.isAddressSameAsShipping()) {
                     selectBillingAddress(quote.shippingAddress());
@@ -109,9 +122,13 @@ define(
                     this.isAddressDetailsVisible(false);
                 }
                 checkoutData.setSelectedBillingAddress(null);
+
                 return true;
             },
 
+            /**
+             * Update address action
+             */
             updateAddress: function () {
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
@@ -119,9 +136,11 @@ define(
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
+
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix),
                             newBillingAddress = createBillingAddress(addressData);
+
                         if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
                             this.saveInAddressBook(true);
                         }
@@ -131,41 +150,62 @@ define(
                         selectBillingAddress(newBillingAddress);
                         checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
                         checkoutData.setNewCustomerBillingAddress(addressData);
+
+                        if (window.checkoutConfig.reloadOnBillingAddress) {
+                            setBillingAddressAction(globalMessageList);
+                        }
                     }
                 }
             },
 
+            /**
+             * Edit address action
+             */
             editAddress: function () {
                 lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
             },
 
+            /**
+             * Cancel address edit action
+             */
             cancelAddressEdit: function () {
                 this.restoreBillingAddress();
+
                 if (quote.billingAddress()) {
                     // restore 'Same As Shipping' checkbox state
                     this.isAddressSameAsShipping(
-                        quote.billingAddress() != null
-                            && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
-                            && !quote.isVirtual()
+                        quote.billingAddress() != null &&
+                            quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey() &&
+                            !quote.isVirtual()
                     );
                     this.isAddressDetailsVisible(true);
                 }
             },
 
+            /**
+             * Restore billing address
+             */
             restoreBillingAddress: function () {
                 if (lastSelectedBillingAddress != null) {
                     selectBillingAddress(lastSelectedBillingAddress);
                 }
             },
 
+            /**
+             * @param {Object} address
+             */
             onAddressChange: function (address) {
                 this.isAddressFormVisible(address == newAddressOption);
             },
 
-            getCountryName: function(countryId) {
-                return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
+            /**
+             * @param {int} countryId
+             * @return {*}
+             */
+            getCountryName: function (countryId) {
+                return countryData()[countryId] != undefined ? countryData()[countryId].name : '';
             }
         });
     }

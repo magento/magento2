@@ -5,14 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory"/>
     <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge" />
 
-    <type name="Magento\Framework\View\TemplateEngineFactory">
-        <plugin name="debug_hints" type="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
-    </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>

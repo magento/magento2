@@ -5,13 +5,11 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-
 /**
  * Quote payment information
  *
- * @method \Magento\Quote\Model\Resource\Quote\Payment _getResource()
- * @method \Magento\Quote\Model\Resource\Quote\Payment getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
  * @method int getQuoteId()
  * @method \Magento\Quote\Model\Quote\Payment setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -68,7 +66,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,7 +79,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -106,7 +104,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Payment');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Payment');
     }
 
     /**
@@ -273,27 +271,6 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function setMethod($method)
     {
         return $this->setData(self::KEY_METHOD, $method);
-    }
-
-    /**
-     * Get payment title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->getData(self::KEY_TITLE);
-    }
-
-    /**
-     * Set payment title
-     *
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        return $this->setData(self::KEY_TITLE, $title);
     }
 
     /**

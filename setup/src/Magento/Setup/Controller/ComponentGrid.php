@@ -6,20 +6,10 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleList;
-use Magento\Framework\Module\PackageInfo;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\UpdatePackagesCache;
-
 /**
  * Controller for component grid tasks
  */
-class ComponentGrid extends AbstractActionController
+class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
@@ -34,8 +24,11 @@ class ComponentGrid extends AbstractActionController
     private $packageInfo;
 
     /**
-     * Enabled Module info
-     *
+     * @var \Magento\Setup\Model\ConnectManager
+     */
+    private $connectManager;
+
+    /**
      * @var \Magento\Framework\Module\ModuleList
      */
     private $enabledModuleList;
@@ -55,30 +48,32 @@ class ComponentGrid extends AbstractActionController
     /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\ConnectManager $connectManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
-        \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+        \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache,
+        \Magento\Setup\Model\ConnectManager $connectManager
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
         $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
-        $this->packageInfo = $objectManagerProvider->get()
-            ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->connectManager = $connectManager;
         $this->updatePackagesCache = $updatePackagesCache;
     }
 
     /**
      * Index page action
      *
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel();
+        $view = new \Zend\View\Model\ViewModel();
         $view->setTerminal(true);
         return $view;
     }
@@ -86,8 +81,9 @@ class ComponentGrid extends AbstractActionController
     /**
      * Get Components info action
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function componentsAction()
     {
@@ -100,7 +96,7 @@ class ComponentGrid extends AbstractActionController
             $components[$component['name']]['uninstall'] = false;
             $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
             if ($this->composerInformation->isPackageInComposerJson($component['name'])
-                && ($component['type'] !== ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
+                && ($component['type'] !== \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
                 $components[$component['name']]['uninstall'] = true;
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
@@ -111,7 +107,7 @@ class ComponentGrid extends AbstractActionController
                     $components[$component['name']]['update'] = true;
                 }
             }
-            if ($component['type'] === ComposerInformation::MODULE_PACKAGE_TYPE) {
+            if ($component['type'] === \Magento\Framework\Composer\ComposerInformation::MODULE_PACKAGE_TYPE) {
                 $components[$component['name']]['enable'] =
                     $this->enabledModuleList->has($components[$component['name']]['moduleName']);
                 $components[$component['name']]['disable'] = !$components[$component['name']]['enable'];
@@ -122,7 +118,14 @@ class ComponentGrid extends AbstractActionController
             $componentNameParts = explode('/', $component['name']);
             $components[$component['name']]['vendor'] = $componentNameParts[0];
         }
-        return new JsonModel(
+
+        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+
+        return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
                 'components' => array_values($components),
@@ -135,13 +138,22 @@ class ComponentGrid extends AbstractActionController
     /**
      * Sync action
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function syncAction()
     {
         $this->updatePackagesCache->syncPackagesForUpdate();
         $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
-        return new JsonModel(
+
+        $this->connectManager->syncPackagesForInstall();
+        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+
+        $lastSyncData['countOfInstall'] =
+            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+
+
+        return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
                 'lastSyncData' => $lastSyncData
@@ -161,7 +173,7 @@ class ComponentGrid extends AbstractActionController
         foreach ($allModules as $module) {
             $moduleName = $this->packageInfo->getPackageName($module);
             $modules[$moduleName]['name'] = $moduleName;
-            $modules[$moduleName]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
+            $modules[$moduleName]['type'] = \Magento\Framework\Composer\ComposerInformation::MODULE_PACKAGE_TYPE;
             $modules[$moduleName]['version'] = $this->packageInfo->getVersion($module);
         }
         return $modules;

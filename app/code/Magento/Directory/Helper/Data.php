@@ -35,16 +35,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@-*/
 
     /**
+     * Path to config value that contains codes of the most used countries.
+     * Such countries can be shown on the top of the country list.
+     */
+    const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+
+    /**
      * Country collection
      *
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_countryCollection;
 
     /**
      * Region collection
      *
-     * @var \Magento\Directory\Model\Resource\Region\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $_regionCollection;
 
@@ -75,7 +81,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regCollectionFactory;
 
@@ -97,8 +103,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
+     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -106,8 +112,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -124,7 +130,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve region collection
      *
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {
@@ -139,7 +145,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve country collection
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function getCountryCollection($store = null)
     {
@@ -335,5 +341,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ];
         }
         return $regions;
+    }
+
+    /**
+     * Retrieve list of codes of the most used countries
+     *
+     * @return array
+     */
+    public function getTopCountryCodes()
+    {
+        $configValue = (string)$this->scopeConfig->getValue(
+            self::XML_PATH_TOP_COUNTRIES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return !empty($configValue) ? explode(',', $configValue) : [];
     }
 }
