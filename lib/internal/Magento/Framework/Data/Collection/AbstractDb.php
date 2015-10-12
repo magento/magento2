@@ -117,7 +117,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get resource instance.
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     abstract public function getResource();
 

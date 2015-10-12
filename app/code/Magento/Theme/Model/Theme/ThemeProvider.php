@@ -8,7 +8,7 @@ namespace Magento\Theme\Model\Theme;
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -18,11 +18,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     protected $themeFactory;
 
     /**
-     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      */
     public function __construct(
-        \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory,
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -34,7 +34,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeByFullPath($fullPath)
     {
-        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = $this->collectionFactory->create();
         return $themeCollection->getThemeByFullPath($fullPath);
     }
@@ -46,7 +46,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
     ) {
-        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = $this->collectionFactory->create();
         $themeCollection->addAreaFilter($area)->addTypeFilter($type);
         return $themeCollection;

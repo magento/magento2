@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogInventory\Model;
 
-use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
-use Magento\CatalogInventory\Model\Resource\QtyCounterInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
  * Class StockManagement
@@ -39,7 +39,7 @@ class StockManagement implements StockManagementInterface
     protected $productRepository;
 
     /**
-     * @var Resource\Stock
+     * @var ResourceStock
      */
     protected $resource;
 
@@ -49,15 +49,15 @@ class StockManagement implements StockManagementInterface
     private $qtyCounter;
 
     /**
-     * @param Resource\Stock $stockResource
+     * @param ResourceStock $stockResource
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockState $stockState
      * @param StockConfigurationInterface $stockConfiguration
      * @param ProductRepositoryInterface $productRepository
-     * @param Resource\QtyCounterInterface $qtyCounter
+     * @param QtyCounterInterface $qtyCounter
      */
     public function __construct(
-        Resource\Stock $stockResource,
+        ResourceStock $stockResource,
         StockRegistryProviderInterface $stockRegistryProvider,
         StockState $stockState,
         StockConfigurationInterface $stockConfiguration,

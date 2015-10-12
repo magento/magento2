@@ -122,7 +122,13 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $testCountryInfo->setData('name_default', 'United Arab Emirates');
         $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
 
-        $countryCollection = $this->getMock('\Magento\Directory\Model\Resource\Country\Collection', [], [], '', false);
+        $countryCollection = $this->getMock(
+            '\Magento\Directory\Model\ResourceModel\Country\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $countryCollection->expects($this->once())->method('addCountryIdFilter')->willReturnSelf();
         $countryCollection->expects($this->once())->method('load')->willReturnSelf();
         $countryCollection->expects($this->once())->method('count')->willReturn(1);
@@ -161,7 +167,13 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $testCountryInfo->setData('name_default', 'United Arab Emirates');
         $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
 
-        $countryCollection = $this->getMock('\Magento\Directory\Model\Resource\Country\Collection', [], [], '', false);
+        $countryCollection = $this->getMock(
+            '\Magento\Directory\Model\ResourceModel\Country\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $countryCollection->expects($this->once())->method('addCountryIdFilter')->willReturnSelf();
         $countryCollection->expects($this->once())->method('load')->willReturnSelf();
         $countryCollection->expects($this->once())->method('count')->willReturn(0);
