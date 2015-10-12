@@ -369,7 +369,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quoteItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
             $quoteItems[$quoteItem->getId()] = $quoteItem;
         }
         $orderItems = [];

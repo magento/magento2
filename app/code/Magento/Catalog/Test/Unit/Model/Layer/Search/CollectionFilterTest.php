@@ -55,7 +55,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
             [
                 'addAttributeToSelect', 'setStore', 'addMinimalPrice', 'addFinalPrice',
                 'addTaxPercents', 'addStoreFilter', 'addUrlRewrite', 'setVisibility'

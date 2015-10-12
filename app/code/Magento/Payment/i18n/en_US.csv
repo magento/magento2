@@ -37,5 +37,5 @@ Year,Year
 "We found an incorrect credit card expiration date.","We found an incorrect credit card expiration date."
 "Switch/Solo/Maestro Only","Switch/Solo/Maestro Only"
 "Issue Number","Issue Number"
-"%1 is not available. You still can process offline actions.","%1 is not available. You still can process offline actions."
+" is not available. You still can process offline actions."," is not available. You still can process offline actions."
 "Payment Methods","Payment Methods"

@@ -5,8 +5,11 @@
  */
 namespace Magento\Authorizenet\Test\Unit\Model;
 
+use Magento\Framework\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Authorizenet\Model\Directpost;
+use Magento\Authorizenet\Model\TransactionService;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * Class DirectpostTest
@@ -39,36 +42,48 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
     protected $responseFactoryMock;
 
     /**
+     * @var TransactionRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionRepositoryMock;
+
+    /**
      * @var \Magento\Authorizenet\Model\Directpost\Response|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseMock;
+
+    /**
+     * @var TransactionService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionServiceMock;
 
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getMock();
-        $this->paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
+        $this->paymentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getOrder', 'getId', 'setAdditionalInformation', 'getAdditionalInformation',
+                'setIsTransactionDenied', 'setIsTransactionClosed'
+            ])
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder('Magento\Authorizenet\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseFactoryMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Response\Factory')
+
+        $this->initResponseFactoryMock();
+
+        $this->transactionRepositoryMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Order\Payment\Transaction\Repository'
+        )
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Response')
-            ->setMethods(
-                [
-                    'setData', 'isValidHash', 'getXTransId',
-                    'getXResponseCode', 'getXResponseReasonText',
-                    'getXAmount'
-                ]
-            )
-            ->disableOriginalConstructor()
+            ->setMethods(['getByTransactionId'])
             ->getMock();
 
-        $this->responseFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->responseMock);
+        $this->transactionServiceMock = $this->getMockBuilder('Magento\Authorizenet\Model\TransactionService')
+            ->disableOriginalConstructor()
+            ->setMethods(['getTransactionDetails'])
+            ->getMock();
 
         $helper = new ObjectManagerHelper($this);
         $this->directpost = $helper->getObject(
@@ -76,7 +91,9 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'dataHelper' => $this->dataHelperMock,
-                'responseFactory' => $this->responseFactoryMock
+                'responseFactory' => $this->responseFactoryMock,
+                'transactionRepository' => $this->transactionRepositoryMock,
+                'transactionService' => $this->transactionServiceMock
             ]
         );
     }
@@ -356,5 +373,161 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
             ['isGatewayActionsLocked' => false, 'canCapture' => true],
             ['isGatewayActionsLocked' => true, 'canCapture' => false]
         ];
+    }
+
+    /**
+     * @covers \Magento\Authorizenet\Model\Directpost::fetchTransactionInfo
+     *
+     * @param $transactionId
+     * @param $resultStatus
+     * @param $responseStatus
+     * @param $responseCode
+     * @return void
+     *
+     * @dataProvider dataProviderTransaction
+     */
+    public function testFetchVoidedTransactionInfo($transactionId, $resultStatus, $responseStatus, $responseCode)
+    {
+        $paymentId = 36;
+        $orderId = 36;
+
+        $this->paymentMock->expects(static::once())
+            ->method('getId')
+            ->willReturn($paymentId);
+
+        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', '__wakeup'])
+            ->getMock();
+        $orderMock->expects(static::once())
+            ->method('getId')
+            ->willReturn($orderId);
+
+        $this->paymentMock->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+
+        $transactionMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->transactionRepositoryMock->expects(static::once())
+            ->method('getByTransactionId')
+            ->with($transactionId, $paymentId, $orderId)
+            ->willReturn($transactionMock);
+
+        $document = $this->getTransactionXmlDocument(
+            $transactionId,
+            TransactionService::PAYMENT_UPDATE_STATUS_CODE_SUCCESS,
+            $resultStatus,
+            $responseStatus,
+            $responseCode
+        );
+        $this->transactionServiceMock->expects(static::once())
+            ->method('getTransactionDetails')
+            ->with($this->directpost, $transactionId)
+            ->willReturn($document);
+
+        // transaction should be closed
+        $this->paymentMock->expects(static::once())
+            ->method('setIsTransactionDenied')
+            ->with(true);
+        $this->paymentMock->expects(static::once())
+            ->method('setIsTransactionClosed')
+            ->with(true);
+        $transactionMock->expects(static::once())
+            ->method('close');
+
+        $this->directpost->fetchTransactionInfo($this->paymentMock, $transactionId);
+    }
+
+    /**
+     * Get data for tests
+     * @return array
+     */
+    public function dataProviderTransaction()
+    {
+        return [
+            [
+                'transactionId' => '9941997799',
+                'resultStatus' => 'Successful.',
+                'responseStatus' => 'voided',
+                'responseCode' => 1
+            ]
+        ];
+    }
+
+    /**
+     * Create mock for response factory
+     * @return void
+     */
+    private function initResponseFactoryMock()
+    {
+        $this->responseFactoryMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Response\Factory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->responseMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Response')
+            ->setMethods(
+                [
+                    'setData', 'isValidHash', 'getXTransId',
+                    'getXResponseCode', 'getXResponseReasonText',
+                    'getXAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->responseFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->responseMock);
+    }
+
+    /**
+     * Get transaction data
+     * @param $transactionId
+     * @param $resultCode
+     * @param $resultStatus
+     * @param $responseStatus
+     * @param $responseCode
+     * @return Element
+     */
+    private function getTransactionXmlDocument(
+        $transactionId,
+        $resultCode,
+        $resultStatus,
+        $responseStatus,
+        $responseCode
+    ) {
+        $body = sprintf(
+            '<?xml version="1.0" encoding="utf-8"?>
+            <getTransactionDetailsResponse
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+                <messages>
+                    <resultCode>%s</resultCode>
+                    <message>
+                        <code>I00001</code>
+                        <text>%s</text>
+                    </message>
+                </messages>
+                <transaction>
+                    <transId>%s</transId>
+                    <transactionType>authOnlyTransaction</transactionType>
+                    <transactionStatus>%s</transactionStatus>
+                    <responseCode>%s</responseCode>
+                    <responseReasonCode>%s</responseReasonCode>
+                </transaction>
+            </getTransactionDetailsResponse>',
+            $resultCode,
+            $resultStatus,
+            $transactionId,
+            $responseStatus,
+            $responseCode,
+            $responseCode
+        );
+        libxml_use_internal_errors(true);
+        $document = new Element($body);
+        libxml_use_internal_errors(false);
+        return $document;
     }
 }

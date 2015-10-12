@@ -69,7 +69,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
         $quote = $this->getQuote(1);
         $proceed = $this->getProceedClosure(true, $paymentMethod, $quote);
         $agreementCollection = $this->getMock(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection',
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection',
             [],
             [],
             '',

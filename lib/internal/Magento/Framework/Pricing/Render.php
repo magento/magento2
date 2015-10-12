@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing;
 
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\Layout;
 use Magento\Framework\View\Element\AbstractBlock;
