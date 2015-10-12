@@ -137,8 +137,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         // Estimate Shipping and Tax
         $checkoutCart->open();
         $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
-        $checkoutCart->getShippingBlock()->fill($address);
-        $checkoutCart->getShippingBlock()->clickGetQuote();
+        $checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($address);
         $checkoutCart->getShippingBlock()->selectShippingMethod($shipping);
         $this->assert();
     }
