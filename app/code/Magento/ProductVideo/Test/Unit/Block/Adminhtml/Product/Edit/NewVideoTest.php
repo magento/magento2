@@ -86,7 +86,8 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
         $value = [
             'saveVideoUrl' => $saveVideoUrl,
             'saveRemoteVideoUrl' => $saveRemoteVideoUrl,
-            'htmlId' => 'id_' . $rand
+            'htmlId' => 'id_' . $rand,
+            'youTubeApiKey' => null
         ];
         $this->jsonEncoderMock->expects($this->once())->method('encode')->with(
             $value
