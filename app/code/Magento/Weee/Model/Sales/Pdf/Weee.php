@@ -15,14 +15,14 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
     /**
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory
+     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
      * @param \Magento\Weee\Helper\Data $_weeeData
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory,
+        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
         \Magento\Weee\Helper\Data $_weeeData,
         array $data = []
     ) {

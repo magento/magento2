@@ -96,7 +96,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -242,7 +242,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attribute);
 
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

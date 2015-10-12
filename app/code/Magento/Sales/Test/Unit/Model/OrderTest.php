@@ -7,7 +7,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use \Magento\Sales\Model\Order;
 
-use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -40,7 +40,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $incrementId;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Item | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Item | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
 
@@ -58,34 +58,34 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->orderItemCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->historyCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->item = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item',
+            'Magento\Sales\Model\ResourceModel\Order\Item',
             ['isDeleted', 'getQtyToInvoice', 'getParentItemId', 'getQuoteItemId', 'getLockedDoInvoice'],
             [],
             '',
             false
         );
-        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Item\Collection', [], [], '', false);
+        $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Item\Collection', [], [], '', false);
         $collection->expects($this->any())
             ->method('setOrderFilter')
             ->willReturnSelf();
@@ -124,6 +124,30 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency
             ]
         );
+    }
+
+    public function testGetItemById()
+    {
+        $realOrderItemId = 1;
+        $fakeOrderItemId = 2;
+
+        $orderItem = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->order->setData(
+            \Magento\Sales\Api\Data\OrderInterface::ITEMS,
+            [
+                $realOrderItemId => $orderItem
+            ]
+        );
+
+        $this->assertEquals($orderItem, $this->order->getItemById($realOrderItemId));
+        $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
     }
 
     /**
@@ -308,7 +332,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testCanEditIfHasInvoices()
     {
-        $invoiceCollection = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice\Collection')
+        $invoiceCollection = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['count'])
             ->getMock();
@@ -325,7 +349,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testCanCancelCanReviewPayment()
     {
-        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
             ->getMock();
@@ -343,7 +367,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testCanCancelAllInvoiced()
     {
-        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
             ->getMock();
@@ -354,7 +378,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(false));
         $collectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Item\Collection',
             ['getItems', 'setOrderFilter'],
             [],
             '',
@@ -385,7 +409,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testCanCancelState()
     {
-        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
             ->getMock();
@@ -410,7 +434,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanCancelActionFlag($cancelActionFlag)
     {
-        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo', '__wakeUp'])
             ->getMock();
@@ -498,7 +522,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $iterator = new \ArrayIterator([$paymentMock]);
 
-        $collectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['setOrderFilter', 'getIterator'])
             ->getMock();
@@ -576,7 +600,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareItemMock($qtyInvoiced)
     {
-        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item')
+        $itemMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Item')
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'filterByTypes', 'filterByParent', 'getQtyToInvoice', '__wakeUp'])
             ->getMock();
@@ -587,7 +611,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $iterator = new \ArrayIterator([$itemMock]);
 
-        $itemCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item\Collection')
+        $itemCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Item\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['setOrderFilter', 'getIterator', 'getItems'])
             ->getMock();
@@ -656,7 +680,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $collectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Status\History\Collection',
             [
                 'setOrderFilter',
                 'setOrder',

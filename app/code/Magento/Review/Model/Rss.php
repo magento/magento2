@@ -36,7 +36,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return $this|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this|\Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
      */
     public function getProductCollection()
     {

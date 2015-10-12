@@ -100,7 +100,7 @@ class AbstractAdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         $amountRender = $this->getMock('Magento\Framework\Pricing\Render\Amount', [], [], '', false);
         $price = $this->getMockForAbstractClass('Magento\Framework\Pricing\Price\PriceInterface');
-        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $priceCode = 'regular_price';
 
@@ -140,7 +140,7 @@ class AbstractAdjustmentTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSealableItem()
     {
-        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $amountRender = $this->getMock('Magento\Framework\Pricing\Render\Amount', [], [], '', false);
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
@@ -158,7 +158,7 @@ class AbstractAdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         $amountRender = $this->getMock('Magento\Framework\Pricing\Render\Amount', [], [], '', false);
         $adjustment = $this->getMockForAbstractClass('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
-        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $sealableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $adjustmentCode = 'tax';
 

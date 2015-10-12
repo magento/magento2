@@ -37,7 +37,7 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (customer() == false && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
                     authenticationPopup.showModal();
 
                     return false;
@@ -47,7 +47,7 @@ define([
             events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
                 if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(event.target));
+                    self._removeItem($(event.currentTarget));
                 }
             };
             events['keyup ' + this.options.item.qty] = function(event) {
