@@ -56,9 +56,9 @@ class CartItemRepositoryTest extends WebapiAbstract
         $items = $quote->getAllItems();
         $this->assertGreaterThan(0, count($items));
 
-        /** @var \Magento\Quote\Model\Resource\Quote\Item|null $item */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item|null $item */
         $item = null;
-        /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
         foreach ($items as $quoteItem) {
             if ($quoteItem->getProductType() == Configurable::TYPE_CODE && !$quoteItem->getParentItemId()) {
                 $item = $quoteItem;
@@ -151,9 +151,9 @@ class CartItemRepositoryTest extends WebapiAbstract
         $items = $quote->getAllItems();
         $this->assertGreaterThan(0, count($items));
 
-        /** @var \Magento\Quote\Model\Resource\Quote\Item|null $item */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item|null $item */
         $item = null;
-        /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
         foreach ($items as $quoteItem) {
             if ($quoteItem->getProductType() == Configurable::TYPE_CODE) {
                 $item = $quoteItem;
@@ -236,9 +236,9 @@ class CartItemRepositoryTest extends WebapiAbstract
         $items = $quote->getAllItems();
         $this->assertGreaterThan(0, count($items));
 
-        /** @var \Magento\Quote\Model\Resource\Quote\Item|null $item */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item|null $item */
         $item = null;
-        /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
         foreach ($items as $quoteItem) {
             if ($quoteItem->getProductType() == Configurable::TYPE_CODE) {
                 $item = $quoteItem;

@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
@@ -31,14 +31,14 @@ class SetupFactory
     /**
      * Creates setup
      *
-     * @param Resource $appResource
+     * @param ResourceConnection $appResource
      * @return Setup
      */
-    public function create(Resource $appResource = null)
+    public function create(ResourceConnection $appResource = null)
     {
         $objectManager = $this->objectManagerProvider->get();
         if ($appResource === null) {
-            $appResource = $objectManager->get('Magento\Framework\App\Resource');
+            $appResource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         }
         return new Setup($appResource);
     }

@@ -29,7 +29,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
     protected $_themeCopyService;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected $_themeCollection;
 
@@ -37,13 +37,13 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Theme\Model\CopyService $themeCopyService
-     * @param \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
      */
     public function __construct(
         \Magento\Framework\View\Design\ThemeInterface $theme,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Theme\Model\CopyService $themeCopyService,
-        \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
+        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
     ) {
         $this->_theme = $theme;
         $this->_themeFactory = $themeFactory;
