@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Source;
 
-use Magento\Cms\Model\Resource\Block\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 
 /**
  * Catalog category landing page attribute source

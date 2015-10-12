@@ -20,7 +20,7 @@ class CleanExpiredQuotes
     protected $storesConfig;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $quoteCollectionFactory;
 
@@ -31,11 +31,11 @@ class CleanExpiredQuotes
 
     /**
      * @param StoresConfig $storesConfig
-     * @param \Magento\Quote\Model\Resource\Quote\CollectionFactory $collectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
      */
     public function __construct(
         StoresConfig $storesConfig,
-        \Magento\Quote\Model\Resource\Quote\CollectionFactory $collectionFactory
+        \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
     ) {
         $this->storesConfig = $storesConfig;
         $this->quoteCollectionFactory = $collectionFactory;
@@ -52,7 +52,7 @@ class CleanExpiredQuotes
         foreach ($lifetimes as $storeId => $lifetime) {
             $lifetime *= self::LIFETIME;
 
-            /** @var $quotes \Magento\Quote\Model\Resource\Quote\Collection */
+            /** @var $quotes \Magento\Quote\Model\ResourceModel\Quote\Collection */
             $quotes = $this->quoteCollectionFactory->create();
 
             $quotes->addFieldToFilter('store_id', $storeId);

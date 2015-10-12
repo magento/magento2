@@ -94,8 +94,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertCustomerData(array $expectedData)
     {
-        /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
-        $collection = $this->_objectManager->create('Magento\Customer\Model\Resource\Customer\Collection');
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        $collection = $this->_objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
         $collection->addAttributeToSelect($this->_customerAttributes);
         $customers = $collection->getItems();
 

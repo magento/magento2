@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
-use Magento\Sales\Model\Resource\Order\Invoice\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 
 /**
  * Sales Order Invoice PDF model

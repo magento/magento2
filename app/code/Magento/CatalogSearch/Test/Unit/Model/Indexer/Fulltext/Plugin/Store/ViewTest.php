@@ -15,7 +15,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Resource\Store
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store
      */
     protected $subjectMock;
 
@@ -31,7 +31,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Store', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Store', [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
             'Magento\Framework\Indexer\IndexerInterface',
             [],
