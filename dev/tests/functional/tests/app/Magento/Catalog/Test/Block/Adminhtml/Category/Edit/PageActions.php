@@ -9,8 +9,7 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit;
 use Magento\Backend\Test\Block\FormPageActions;
 
 /**
- * Class PageActions
- * Category page actions
+ * Category page actions.
  */
 class PageActions extends FormPageActions
 {
