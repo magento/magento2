@@ -48,6 +48,6 @@ class Swatch extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Swatches\Model\Resource\Swatch');
+        $this->_init('Magento\Swatches\Model\ResourceModel\Swatch');
     }
 }

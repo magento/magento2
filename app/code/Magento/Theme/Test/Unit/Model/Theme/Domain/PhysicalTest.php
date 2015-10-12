@@ -43,7 +43,7 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($virtualTheme));
 
         $themeCollection = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\Collection',
+            'Magento\Theme\Model\ResourceModel\Theme\Collection',
             ['addTypeFilter', 'addAreaFilter', 'addFilter', 'count'],
             [],
             '',

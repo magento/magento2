@@ -62,7 +62,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->_connection = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->_connection));

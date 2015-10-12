@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
-use Magento\Sales\Model\Resource\Order\Item\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 
 /**
  * Adminhtml order items grid
