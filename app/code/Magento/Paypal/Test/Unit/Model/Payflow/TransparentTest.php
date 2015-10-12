@@ -118,8 +118,11 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     protected function initializationAuthorizeMock()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Framework\DataObject')
-            ->setMethods(['getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail'])
+        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->setMethods([
+                'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
+                'getId', 'getIncrementId'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressBillingMock = $this->getMockBuilder('Magento\Framework\DataObject')
@@ -163,6 +166,12 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);
+        $this->orderMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->orderMock->expects(static::once())
+            ->method('getIncrementId')
+            ->willReturn('0000001');
         $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->addressShippingMock);
@@ -264,6 +273,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthorizeException()
     {
+        $this->initializationAuthorizeMock();
+        $this->buildRequestData();
+
         $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->willThrowException(new \Exception());
@@ -321,6 +333,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $origResultExactlyCall,
         $origResult
     ) {
+        $this->initializationAuthorizeMock();
+        $this->buildRequestData();
+
         $this->responseMock->expects($this->exactly($resultCodeExactlyCall))
             ->method('getResultCode')
             ->willReturn($resultCode);
