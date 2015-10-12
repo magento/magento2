@@ -23,14 +23,14 @@ class EmailSenderHandler
     /**
      * Entity resource model.
      *
-     * @var \Magento\Sales\Model\Resource\EntityAbstract
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract
      */
     protected $entityResource;
 
     /**
      * Entity collection model.
      *
-     * @var \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
      */
     protected $entityCollection;
 
@@ -43,14 +43,14 @@ class EmailSenderHandler
 
     /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\Resource\EntityAbstract $entityResource
-     * @param \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection
+     * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
+     * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
-        \Magento\Sales\Model\Resource\EntityAbstract $entityResource,
-        \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection,
+        \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
+        \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
     ) {
         $this->emailSender = $emailSender;

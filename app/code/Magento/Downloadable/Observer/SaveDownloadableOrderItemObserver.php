@@ -41,7 +41,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     protected $_objectCopyService;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
 
@@ -50,7 +50,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory
-     * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
      */
     public function __construct(
@@ -58,7 +58,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory,
-        \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
         \Magento\Framework\DataObject\Copy $objectCopyService
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -190,7 +190,7 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     }
 
     /**
-     * @return \Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection
+     * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()
     {

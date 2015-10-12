@@ -21,19 +21,19 @@ class AggregateSalesReportOrderData
     protected $localeDate;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\OrderFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory
      */
     protected $orderFactory;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Sales\Model\Resource\Report\OrderFactory $orderFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\OrderFactory $orderFactory
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Sales\Model\Resource\Report\OrderFactory $orderFactory
+        \Magento\Sales\Model\ResourceModel\Report\OrderFactory $orderFactory
     ) {
         $this->localeResolver = $localeResolver;
         $this->localeDate = $timezone;

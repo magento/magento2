@@ -19,7 +19,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\Backend\Config\ObserverConfig;
-use Magento\User\Model\Resource\User;
+use Magento\User\Model\ResourceModel\User;
 use Magento\User\Model\User as ModelUser;
 use Magento\User\Model\UserFactory;
 use Magento\User\Observer\Backend\AuthObserver;
@@ -70,7 +70,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->userMock = $this->getMockBuilder('Magento\User\Model\Resource\User')
+        $this->userMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

@@ -32,7 +32,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     protected $localeDate;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\RuleFactory
+     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
      */
     protected $resourceRuleFactory;
 
@@ -42,13 +42,13 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     /**
      * @param RulePricesStorage $rulePricesStorage
      * @param Registry $coreRegistry
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         Registry $coreRegistry,
-        \Magento\CatalogRule\Model\Resource\RuleFactory $resourceRuleFactory,
+        \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
         TimezoneInterface $localeDate
     ) {
         $this->rulePricesStorage = $rulePricesStorage;

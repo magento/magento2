@@ -8,8 +8,8 @@ namespace Magento\ImportExport\Model;
 /**
  * Import history model
  *
- * @method \Magento\ImportExport\Model\Resource\History _getResource()
- * @method \Magento\ImportExport\Model\Resource\History getResource()
+ * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
+ * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -47,8 +47,8 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\ImportExport\Model\Resource\History $resource
-     * @param \Magento\ImportExport\Model\Resource\History\Collection $resourceCollection
+     * @param \Magento\ImportExport\Model\ResourceModel\History $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
@@ -56,8 +56,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\ImportExport\Model\Resource\History $resource,
-        \Magento\ImportExport\Model\Resource\History\Collection $resourceCollection,
+        \Magento\ImportExport\Model\ResourceModel\History $resource,
+        \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection,
         \Magento\ImportExport\Helper\Report $reportHelper,
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = []
@@ -75,7 +75,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\Resource\History');
+        $this->_init('Magento\ImportExport\Model\ResourceModel\History');
     }
 
     /**

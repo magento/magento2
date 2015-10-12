@@ -10,14 +10,14 @@ use Magento\Framework\Event\ObserverInterface;
 class CatalogProductSaveAfterObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Quote\Model\Resource\Quote
+     * @var \Magento\Quote\Model\ResourceModel\Quote
      */
     protected $_quote;
 
     /**
-     * @param \Magento\Quote\Model\Resource\Quote $quote
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quote
      */
-    public function __construct(\Magento\Quote\Model\Resource\Quote $quote)
+    public function __construct(\Magento\Quote\Model\ResourceModel\Quote $quote)
     {
         $this->_quote = $quote;
     }

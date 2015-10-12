@@ -17,7 +17,7 @@ class GridSyncInsertObserverTest extends \PHPUnit_Framework_TestCase
     protected $unit;
 
     /**
-     * @var \Magento\Sales\Model\Resource\GridInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $gridAggregatorMock;
 
@@ -38,7 +38,7 @@ class GridSyncInsertObserverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\Resource\GridInterface')
+        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\GridInterface')
             ->getMockForAbstractClass();
         $this->eventObserverMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
