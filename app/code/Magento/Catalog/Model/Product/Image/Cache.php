@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
-use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 

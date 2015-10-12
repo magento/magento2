@@ -24,7 +24,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLabelsCollection()
     {
-        /** @var $expectedCollection \Magento\Theme\Model\Resource\Theme\Collection */
+        /** @var $expectedCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $expectedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Design\Theme\Label\ListInterface'
         );

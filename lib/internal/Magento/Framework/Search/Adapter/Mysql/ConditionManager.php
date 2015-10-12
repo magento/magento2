@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class ConditionManager
@@ -18,9 +18,9 @@ class ConditionManager
     private $connection;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->connection = $resource->getConnection();
     }

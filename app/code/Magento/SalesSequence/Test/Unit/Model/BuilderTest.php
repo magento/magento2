@@ -16,7 +16,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $sequenceBuilder;
 
     /**
-     * @var \Magento\SalesSequence\Model\Resource\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceSequenceMeta;
 
@@ -51,7 +51,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $sequence;
 
     /**
-     * @var \Magento\Framework\App\Resource | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
 
@@ -67,7 +67,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->resourceSequenceMeta = $this->getMock(
-            'Magento\SalesSequence\Model\Resource\Meta',
+            'Magento\SalesSequence\Model\ResourceModel\Meta',
             ['loadByEntityTypeAndStore', 'save', 'createSequence'],
             [],
             '',
@@ -88,7 +88,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

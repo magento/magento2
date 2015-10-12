@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
@@ -25,7 +25,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
 
     /**
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {
