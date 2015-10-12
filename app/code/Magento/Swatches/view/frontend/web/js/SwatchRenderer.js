@@ -768,14 +768,14 @@ define(["jquery", "jquery/ui"], function ($) {
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images.shift();
+            var justAnImage = images[0];
 
             if (isProductViewExist) {
                 context
                     .find('[data-gallery-role=gallery-placeholder]')
                     .data('gallery')
                     .updateData(images);
-            } else if (justAnImage.img) {
+            } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
         },
