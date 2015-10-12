@@ -23,8 +23,6 @@ define([
             storage.removeAll();
             var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
             $.localStorage.set('mage-cache-timeout', date);
-        } else {
-            invalidateNonCachedSections(options);
         }
     };
 
@@ -34,12 +32,6 @@ define([
             storage.removeAll();
         }
     };
-
-    var invalidateNonCachedSections = function(options) {
-        _.each(options.nonCachedSections, function (sectionName) {
-            storageInvalidation.set(sectionName, true);
-        });
-    }
 
     var dataProvider = {
         getFromStorage: function (sectionNames) {
