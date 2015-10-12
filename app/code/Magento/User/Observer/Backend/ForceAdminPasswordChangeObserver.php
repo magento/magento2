@@ -29,13 +29,6 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
     protected $authorization;
 
     /**
-     * Admin user resource model
-     *
-     * @var \Magento\User\Model\Resource\User
-     */
-    protected $userResource;
-
-    /**
      * Backend url interface
      *
      * @var \Magento\Backend\Model\UrlInterface
@@ -73,7 +66,6 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\Resource\User $userResource
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Auth\Session $authSession
@@ -83,7 +75,6 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
     public function __construct(
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\Resource\User $userResource,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Auth\Session $authSession,

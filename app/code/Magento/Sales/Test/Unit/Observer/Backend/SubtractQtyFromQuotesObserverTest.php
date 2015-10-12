@@ -31,7 +31,7 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\Resource\Quote', [], [], '', false);
+        $this->_quoteMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
         $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $this->_eventMock = $this->getMock(
             'Magento\Framework\Event',

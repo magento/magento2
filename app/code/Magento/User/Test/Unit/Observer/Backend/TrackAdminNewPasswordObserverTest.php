@@ -18,7 +18,7 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $configInterfaceMock;
 
-    /** @var \Magento\User\Model\Resource\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $userMock;
 
     /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,7 +40,7 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->userMock = $this->getMockBuilder('Magento\User\Model\Resource\User')
+        $this->userMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
