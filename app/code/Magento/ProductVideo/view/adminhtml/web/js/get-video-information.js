@@ -322,7 +322,10 @@ require([
 
         $.widget('mage.videoData', {
             options: {
-                youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!
+                youtubeKey: '',
+                noKeyErrorTxt : 'You have not entered youtube API key. ' +
+                'No information about youtube video will be retrieved.',
+                eventSource : '' //where is data going from - focus out or click on button
             },
 
             _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
@@ -337,6 +340,11 @@ require([
              * @private
              */
             _init: function () {
+                if (!this.options.youtubeKey && this.options.eventSource === 'click') {
+                    alert({
+                        content: this.options.noKeyErrorTxt
+                    });
+                }
                 this._onRequestHandler();
             },
 
