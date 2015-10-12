@@ -731,7 +731,7 @@ class Category extends AbstractResource
         )->setOrder(
             'position',
             \Magento\Framework\DB\Select::SQL_ASC
-        )->joinUrlRewrite()->load();
+        )->joinUrlRewrite();
 
         return $collection;
     }
