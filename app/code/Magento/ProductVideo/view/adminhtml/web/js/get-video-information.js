@@ -373,18 +373,58 @@ require([
                 }
 
                 /**
+                 *
+                 * @param {Object} data
                  * @private
                  */
                 function _onYouTubeLoaded(data) {
                     var tmp,
                         uploadedFormatted,
-                        respData;
+                        respData,
+                        createErrorMessage;
 
-                    if (data.items.length < 1) {
+                    /**
+                     * Create errors message
+                     *
+                     * @returns {String}
+                     */
+                    createErrorMessage = function () {
+                        var error = data.error,
+                            errors = error.errors,
+                            i,
+                            errLength = errors.length,
+                            tmpError,
+                            errReason,
+                            errorsMessage = [];
+
+                        for (i = 0; i < errLength; i++) {
+                            tmpError = errors[i];
+                            errReason = tmpError.reason;
+
+                            if (['keyInvalid'].indexOf(errReason) !== -1) {
+                                errorsMessage.push('Youtube API key is an invalid');
+
+                                break;
+                            }
+
+                            errorsMessage.push(tmpError.message);
+                        }
+
+                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                    };
+
+                    if (data.error && data.error.code === 400) {
+                        this._onRequestError(createErrorMessage());
+
+                        return;
+                    }
+
+                    if (!data.items || data.items.length < 1) {
                         this._onRequestError('Video not found');
 
                         return;
                     }
+
                     tmp = data.items[0];
                     uploadedFormatted = tmp.snippet.publishedAt.replace('T', ' ').replace(/\..+/g, '');
                     respData = {
