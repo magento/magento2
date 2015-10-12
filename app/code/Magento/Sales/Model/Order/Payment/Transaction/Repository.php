@@ -18,9 +18,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\EntityStorage;
 use Magento\Sales\Model\EntityStorageFactory;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction as TransactionResource;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionResource;
 
 /**
  * Repository class for \Magento\Sales\Model\Order\Payment\Transaction

@@ -11,7 +11,7 @@ use Magento\Catalog\Pricing\Price as CatalogPrice;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**

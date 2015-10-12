@@ -23,6 +23,15 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $phrase
+     * @return string
+     */
+    protected function _createMissedPhraseError($phrase)
+    {
+        return "\nMissed Phrase: File: {$phrase['file']} \nLine: {$phrase['line']}";
+    }
+
+    /**
      * @return \RegexIterator
      */
     protected function _getFiles()

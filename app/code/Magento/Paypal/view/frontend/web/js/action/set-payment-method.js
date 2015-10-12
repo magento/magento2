@@ -39,8 +39,9 @@ define(
                 };
             }
             fullScreenLoader.startLoader();
+
             return storage.put(
-                serviceUrl, JSON.stringify(payload), false
+                serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
                     $.mage.redirect(window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]);
