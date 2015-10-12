@@ -122,24 +122,8 @@ class View extends \Magento\Framework\Config\AbstractXml
             }
         }
         if (!count($result)) {
-            switch ($node->nodeValue) {
-                case 'false':
-                    $result = false;
-                    break;
-                case 'true':
-                    $result = true;
-                    break;
-                case 'null':
-                    $result = null;
-                    break;
-                default:
-                    $result = $node->nodeValue;
-                    if ($result == strval(floatval($result))) {
-                        $result = floatval($result);
-                    }
-            };
+            $result = $node->nodeValue;
         }
-
         return $result;
     }
 
