@@ -1907,6 +1907,8 @@ return [
     ['Magento\Core\Model\Session\Context'],
     ['Magento\Core\Model\Session\AbstractSession', 'Magento\Framework\Session\SessionManager'],
     ['Magento\Catalog\Model\ResourceModel\Convert'],
+    ['Magento\Reminder\Model\Resource\HelperFactory'],
+    ['Magento\Reminder\Model\Resource\Helper'],
     ['Magento\Core\Model\ConfigInterface', 'Magento\Framework\App\Config\ScopeConfigInterface'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser'],
     [
@@ -3964,6 +3966,8 @@ return [
         '\Magento\SalesRule\Test\Unit\Model\Plugin\Resource\RuleTest',
         '\Magento\SalesRule\Test\Unit\Model\Plugin\ResourceModel\RuleTest'
     ],
+    ['Magento\Eav\Model\Entity\Increment\Numeric', 'Magento\Eav\Model\Entity\Increment\NumericValue'],
+    ['Magento\Framework\Pricing\Object\SaleableInterface', 'Magento\Framework\Pricing\SaleableInterface'],
     ['Magento\Framework\Acl\Resource', 'Magento\Framework\Acl\AclResource'],
     ['Magento\Framework\Acl\ResourceFactory', 'Magento\Framework\Acl\AclResourceFactory'],
     ['Magento\Framework\App\Resource', 'Magento\Framework\App\ResourceConnection'],
