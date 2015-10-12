@@ -4018,7 +4018,6 @@ return [
     ['Magento\CmsUrlRewrite\Model\Observer', 'Magento\CmsUrlRewrite\Observer\*'],
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],
-    ['Magento\Paypal\Observer\HtmlTransactionIdObserver', 'Magento\Paypal\Observer\*'],
     ['Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals', 'Magento\Quote\Observer\*'],
     ['Magento\Backend\Model\Observer', 'Magento\Backend\Observer\*'],
     ['Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment', 'Magento\Sales\Observer\*'],
