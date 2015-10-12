@@ -210,13 +210,23 @@ define(["jquery", "jquery/ui"], function ($) {
          */
         _create: function () {
             var options = this.options,
-                gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main');
+                gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
+                isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist ?
+                    this.element.parents('.column.main') :
+                    this.element.parents('.product-item-info');
 
-            gallery.on('gallery:loaded', function () {
-                var galleryObject = gallery.data('gallery');
+            if (isProductViewExist) {
+                gallery.on('gallery:loaded', function () {
+                    var galleryObject = gallery.data('gallery');
 
-                options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-            });
+                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+                });
+            } else {
+                options.mediaGalleryInitial.push({
+                    'img': $main.find('.product-image-photo').attr('src')
+                });
+            }
         },
 
         /**
@@ -341,13 +351,13 @@ define(["jquery", "jquery/ui"], function ($) {
                 // Color
                 else if (type == 1) {
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                    '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Image
                 else if (type == 2) {
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                    '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Clear
@@ -758,13 +768,15 @@ define(["jquery", "jquery/ui"], function ($) {
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
+            var justAnImage = images.shift();
+
             if (isProductViewExist) {
                 context
                     .find('[data-gallery-role=gallery-placeholder]')
                     .data('gallery')
                     .updateData(images);
-            } else {
-                context.find('.product-image-photo').attr('src', images.shift().img);
+            } else if (justAnImage.img) {
+                context.find('.product-image-photo').attr('src', justAnImage.img);
             }
         },
 
@@ -777,8 +789,8 @@ define(["jquery", "jquery/ui"], function ($) {
             var $widget = this;
 
             if (
-                $widget.xhr != undefined
-                || $widget.xhr != null
+                $widget.xhr !== undefined
+                || $widget.xhr !== null
             ) {
                 $widget.xhr.abort();
                 $widget.xhr = null;
@@ -792,12 +804,12 @@ define(["jquery", "jquery/ui"], function ($) {
          */
         _EmulateSelected: function () {
             var $widget = this,
-                $this = $widget.element;
-            var request = $.parseParams(window.location.search.substring(1));
+                $this = $widget.element,
+                request = $.parseParams(window.location.search.substring(1));
 
             $.each(request, function (key, value) {
                 $this.find('.' + $widget.options.classes.attributeClass
-                + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
+                    + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
             });
         },
 
@@ -807,11 +819,14 @@ define(["jquery", "jquery/ui"], function ($) {
          * @returns {number}
          * @private
          */
-        _ObjectLength: function(obj) {
-            var size = 0, key;
+        _ObjectLength: function (obj) {
+            var size = 0,
+                key;
+
             for (key in obj) {
                 if (obj.hasOwnProperty(key)) size++;
             }
+
             return size;
         }
     });
