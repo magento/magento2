@@ -67,20 +67,18 @@ class Deployer
     protected $jsTranslationConfig;
 
     /**
-     * @var string
+     * @var AlternativeSourceInterface[]
      */
-    private $targetFileExtension;
+    private $alternativeSources;
 
     /**
-     * @var string[]
-     */
-    private $alternativeSourceNames;
-
-    /**
+     * Constructor
+     *
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
      * @param JsTranslationConfig $jsTranslationConfig
+     * @param AlternativeSourceInterface[] $alternativeSources
      * @param bool $isDryRun
      */
     public function __construct(
@@ -88,8 +86,7 @@ class Deployer
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
-        AlternativeSourceInterface $alternativeSource,
-        $targetFileExtension,
+        array $alternativeSources,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -98,8 +95,9 @@ class Deployer
         $this->isDryRun = $isDryRun;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
-        $this->alternativeSourceNames = $alternativeSource->getAlternatives();
-        $this->targetFileExtension = $targetFileExtension;
+
+        array_map(function (AlternativeSourceInterface $alternative) {}, $alternativeSources);
+        $this->alternativeSources = $alternativeSources;
     }
 
     /**
@@ -299,11 +297,14 @@ class Deployer
     {
         $compiledFile = '';
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        if (in_array($extension, $this->alternativeSourceNames, true)
-            && strpos(basename($filePath), '_') !== 0
-        ) {
-            $compiledFile = substr($filePath, 0, strlen($filePath) - strlen($extension) - 1);
-            $compiledFile = $compiledFile . '.' . $this->targetFileExtension;
+
+        foreach ($this->alternativeSources as $name => $alternative) {
+            if (in_array($extension, $alternative->getAlternatives(), true)
+                && strpos(basename($filePath), '_') !== 0
+            ) {
+                $compiledFile = substr($filePath, 0, strlen($filePath) - strlen($extension) - 1);
+                $compiledFile = $compiledFile . '.' . $name;
+            }
         }
 
         $logMessage = "Processing file '$filePath' for area '$area', theme '$themePath', locale '$locale'";

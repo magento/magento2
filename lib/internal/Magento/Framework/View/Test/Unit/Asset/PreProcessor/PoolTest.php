@@ -147,6 +147,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Run test for process method (exception)
      *
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage "stdClass" has to implement the PreProcessorInterface.
