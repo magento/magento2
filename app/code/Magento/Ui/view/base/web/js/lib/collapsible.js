@@ -9,7 +9,7 @@ define([
 
     return Component.extend({
         defaults: {
-            opened: false,
+            opened: true,
             collapsible: true
         },
 
