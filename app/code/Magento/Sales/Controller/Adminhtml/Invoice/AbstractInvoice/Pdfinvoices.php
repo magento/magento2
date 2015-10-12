@@ -16,6 +16,9 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
