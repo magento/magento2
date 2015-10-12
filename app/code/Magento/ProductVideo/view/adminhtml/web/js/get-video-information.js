@@ -413,7 +413,7 @@ require([
                         return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
                     };
 
-                    if (data.code === 400) {
+                    if (data.error && data.error.code === 400) {
                         this._onRequestError(createErrorMessage());
 
                         return;
@@ -424,6 +424,7 @@ require([
 
                         return;
                     }
+
                     tmp = data.items[0];
                     uploadedFormatted = tmp.snippet.publishedAt.replace('T', ' ').replace(/\..+/g, '');
                     respData = {
