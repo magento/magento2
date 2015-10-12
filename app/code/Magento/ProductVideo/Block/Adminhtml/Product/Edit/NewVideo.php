@@ -214,8 +214,9 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function addMediaRoleAttributes(Fieldset $fieldset)
     {
+        $fieldset->addField('roleLabel', 'note', ['text' => __('Role')]);
         $mediaRoles = $this->getProduct()->getMediaAttributes();
-        asort($mediaRoles);
+        ksort($mediaRoles);
         foreach ($mediaRoles as $mediaRole) {
             $fieldset->addField(
                 'video_' . $mediaRole->getAttributeCode(),
