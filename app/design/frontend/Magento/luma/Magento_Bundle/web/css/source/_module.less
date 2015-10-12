@@ -48,7 +48,6 @@
             .fieldset-bundle-options {
                 .field.choice {
                     .price-notice {
-                        float: left;
                         &:extend(.abs-adjustment-incl-excl-tax all);
                     }
                 }
@@ -58,15 +57,15 @@
                     float: left;
                 }
                 .label {
+                    &:extend(.abs-add-clearfix all);
                     display: block;
                     margin-left: 24px;
                 }
-                .product-name {
-                    display: block;
+
+                .price-notice {
+                    &:extend(.abs-adjustment-incl-excl-tax all);
                 }
-                .label {
-                    &:extend(.abs-add-clearfix all);
-                }
+                
                 .price-excluding-tax {
                     display: inline-block;
                 }
@@ -161,6 +160,12 @@
         }
         .price {
             font-weight: @font-weight__semibold;
+        }
+        .product-options-bottom {
+            border-top: 1px solid @border-color__base;
+            clear: left;
+            margin: 0 0 @indent__xl;
+            padding-top: @indent__base;
         }
     }
 }

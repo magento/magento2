@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {

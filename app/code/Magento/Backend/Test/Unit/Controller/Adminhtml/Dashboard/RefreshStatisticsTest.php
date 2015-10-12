@@ -37,7 +37,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $order;
 
@@ -59,7 +59,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $reportTypes = [
-            'sales' => 'Magento\Sales\Model\Resource\Report\Order'
+            'sales' => 'Magento\Sales\Model\ResourceModel\Report\Order'
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -84,7 +84,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
 
-        $this->order = $this->getMock('Magento\Sales\Model\Resource\Report\Order', [], [], '', false);
+        $this->order = $this->getMock('Magento\Sales\Model\ResourceModel\Report\Order', [], [], '', false);
 
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
 
@@ -118,7 +118,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with('Magento\Sales\Model\Resource\Report\Order')
+            ->with('Magento\Sales\Model\ResourceModel\Report\Order')
             ->willReturn($this->order);
 
         $this->resultRedirect->expects($this->once())

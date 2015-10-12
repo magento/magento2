@@ -13,14 +13,14 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customersFactoryMock;
 
     protected function setUp()
     {
         $this->customersFactoryMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer\CollectionFactory',
+            'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',
             ['create'],
             [],
             '',
@@ -33,7 +33,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $customersMock = $this->getMock('\Magento\Customer\Model\Resource\Customer\Collection', [], [], '', false);
+        $customersMock = $this->getMock('\Magento\Customer\Model\ResourceModel\Customer\Collection', [], [], '', false);
 
         $this->customersFactoryMock
             ->expects($this->once())
