@@ -30,7 +30,7 @@ class Alternative extends Simple
     public function __construct(
         Filesystem $filesystem,
         \Magento\Framework\View\Design\Fallback\RulePool $rulePool,
-        array $alternativeExtensions
+        array $alternativeExtensions = []
     ) {
         foreach ($alternativeExtensions as $extension => $newExtensions) {
             if (!is_string($extension) || !is_array($newExtensions)) {

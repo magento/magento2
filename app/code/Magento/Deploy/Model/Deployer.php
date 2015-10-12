@@ -6,6 +6,7 @@
 
 namespace Magento\Deploy\Model;
 
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
@@ -66,6 +67,16 @@ class Deployer
     protected $jsTranslationConfig;
 
     /**
+     * @var string
+     */
+    private $targetFileExtension;
+
+    /**
+     * @var string[]
+     */
+    private $alternativeSourceNames;
+
+    /**
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
@@ -77,6 +88,8 @@ class Deployer
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
+        AlternativeSourceInterface $alternativeSource,
+        $targetFileExtension,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -85,6 +98,8 @@ class Deployer
         $this->isDryRun = $isDryRun;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
+        $this->alternativeSourceNames = $alternativeSource->getAlternatives();
+        $this->targetFileExtension = $targetFileExtension;
     }
 
     /**
@@ -124,6 +139,7 @@ class Deployer
                             'design' => $design,
                         ]
                     );
+                    /** @var \Magento\RequireJs\Model\FileManager $fileManager */
                     $fileManager = $this->objectManager->create(
                         'Magento\RequireJs\Model\FileManager',
                         [
@@ -148,11 +164,17 @@ class Deployer
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
-                            $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                            if ($compiledFile !== '') {
+                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module);
+                            }
                         }
                     }
                     foreach ($libFiles as $filePath) {
-                        $this->deployFile($filePath, $area, $themePath, $locale, null);
+                        $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
+                        if ($compiledFile !== '') {
+                            $this->deployFile($compiledFile, $area, $themePath, $locale, null);
+                        }
                     }
                     if ($this->jsTranslationConfig->dictionaryEnabled()) {
                         $this->deployFile(
@@ -169,7 +191,7 @@ class Deployer
                 }
             }
         }
-        $this->output->writeln("=== Minify templates ===");
+        $this->output->writeln('=== Minify templates ===');
         $this->count = 0;
         foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
@@ -268,15 +290,22 @@ class Deployer
      * @param string $themePath
      * @param string $locale
      * @param string $module
-     * @return void
+     * @return string
+     * @throws \InvalidArgumentException
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function deployFile($filePath, $area, $themePath, $locale, $module)
     {
-        $requestedPath = $filePath;
-        if (substr($filePath, -5) == '.less') {
-            $requestedPath = preg_replace('/.less$/', '.css', $filePath);
+        $compiledFile = '';
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        if (in_array($extension, $this->alternativeSourceNames, true)
+            && strpos(basename($filePath), '_') !== 0
+        ) {
+            $compiledFile = substr($filePath, 0, strlen($filePath) - strlen($extension) - 1);
+            $compiledFile = $compiledFile . '.' . $this->targetFileExtension;
         }
+
         $logMessage = "Processing file '$filePath' for area '$area', theme '$themePath', locale '$locale'";
         if ($module) {
             $logMessage .= ", module '$module'";
@@ -288,7 +317,7 @@ class Deployer
 
         try {
             $asset = $this->assetRepo->createAsset(
-                $requestedPath,
+                $filePath,
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
             if ($this->output->isVeryVerbose()) {
@@ -303,18 +332,13 @@ class Deployer
                 $this->bundleManager->addAsset($asset);
             }
             $this->count++;
-        } catch (\Less_Exception_Compiler $e) {
-            $this->verboseLog(
-                "\tNotice: Could not parse LESS file '$filePath'. "
-                . "This may indicate that the file is incomplete, but this is acceptable. "
-                . "The file '$filePath' will be combined with another LESS file."
-            );
-            $this->verboseLog("\tCompiler error: " . $e->getMessage());
         } catch (\Exception $e) {
-            $this->output->writeln($e->getMessage() . " ($logMessage)");
+            $this->output->write('.');
             $this->verboseLog($e->getTraceAsString());
             $this->errorCount++;
         }
+
+        return $compiledFile;
     }
 
     /**

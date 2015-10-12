@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,7 +18,6 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Validator\Locale;
@@ -74,11 +74,6 @@ class CssDeployCommand extends Command
     private $state;
 
     /**
-     * @var SourceFileGeneratorPool
-     */
-    private $sourceFileGeneratorPool;
-
-    /**
      * @var Source
      */
     private $assetSource;
@@ -99,6 +94,11 @@ class CssDeployCommand extends Command
     private $validator;
 
     /**
+     * @var Pool
+     */
+    private $pool;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerInterface $objectManager
@@ -106,10 +106,10 @@ class CssDeployCommand extends Command
      * @param ConfigLoader $configLoader
      * @param State $state
      * @param Source $assetSource
-     * @param SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param ChainFactoryInterface $chainFactory
      * @param Filesystem $filesystem
      * @param Locale $validator
+     * @param Pool $pool
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -117,22 +117,22 @@ class CssDeployCommand extends Command
         ConfigLoader $configLoader,
         State $state,
         Source $assetSource,
-        SourceFileGeneratorPool $sourceFileGeneratorPoll,
         ChainFactoryInterface $chainFactory,
         Filesystem $filesystem,
-        Locale $validator
+        Locale $validator,
+        Pool $pool
     ) {
         $this->state = $state;
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
         $this->assetRepo = $assetRepo;
-        $this->sourceFileGeneratorPool = $sourceFileGeneratorPoll;
         $this->assetSource = $assetSource;
         $this->chainFactory = $chainFactory;
         $this->filesystem = $filesystem;
         $this->validator = $validator;
 
         parent::__construct();
+        $this->pool = $pool;
     }
 
     /**
@@ -203,8 +203,6 @@ class CssDeployCommand extends Command
         $this->state->setAreaCode($area);
         $this->objectManager->configure($this->configLoader->load($area));
 
-        $sourceFileGenerator = $this->sourceFileGeneratorPool->create($type);
-
         foreach ($input->getArgument(self::FILE_ARGUMENT) as $file) {
             $file .= '.' . $type;
 
@@ -233,14 +231,11 @@ class CssDeployCommand extends Command
                 ]
             );
 
-            $processedCoreFile = $sourceFileGenerator->generateFileTree($chain);
-
+            $this->pool->process($chain);
             $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-            $source = $rootDir->getRelativePath($processedCoreFile);
-            $destination = $asset->getPath();
-            $rootDir->copyFile($source, $destination, $targetDir);
+            $targetDir->writeFile($chain->getAsset()->getPath(), $chain->getContent());
 
-            $output->writeln("<info>Successfully processed dynamic stylesheet into CSS</info>");
+            $output->writeln('<info>Successfully processed dynamic stylesheet into CSS</info>');
         }
     }
 }
