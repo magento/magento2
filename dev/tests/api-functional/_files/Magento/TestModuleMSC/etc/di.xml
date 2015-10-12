@@ -21,13 +21,13 @@
     </virtualType>
     <type name="Magento\TestModuleMSC\Model\Data\Item">
         <arguments>
-            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\ResourceModel\Item</argument>
             <argument name="metadataService" xsi:type="object">Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig</argument>
         </arguments>
     </type>
     <type name="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject">
         <arguments>
-            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\ResourceModel\Item</argument>
         </arguments>
     </type>
         <virtualType name="CustomAttributeMap" type="Magento\Framework\DataObject">

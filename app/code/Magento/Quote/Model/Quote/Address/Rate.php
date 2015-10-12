@@ -8,8 +8,8 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * @method \Magento\Quote\Model\Resource\Quote\Address\Rate _getResource()
- * @method \Magento\Quote\Model\Resource\Quote\Address\Rate getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate _getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate getResource()
  * @method int getAddressId()
  * @method \Magento\Quote\Model\Quote\Address\Rate setAddressId(int $value)
  * @method string getCreatedAt()
@@ -47,7 +47,7 @@ class Rate extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Address\Rate');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address\Rate');
     }
 
     /**

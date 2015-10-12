@@ -36,7 +36,7 @@ class StockItemTest extends WebapiAbstract
      */
     const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
 
-    /** @var \Magento\Catalog\Model\Resource\Product\Collection */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection */
     protected $productCollection;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -48,7 +48,7 @@ class StockItemTest extends WebapiAbstract
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $this->objectManager->get('Magento\Catalog\Model\Resource\Product\Collection');
+        $this->productCollection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
     }
 
     /**
@@ -137,7 +137,7 @@ class StockItemTest extends WebapiAbstract
 
         $stockItemFactory = $this->objectManager->get('Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory');
         $stockItem = $stockItemFactory->create();
-        $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\Resource\Stock\Item');
+        $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
         $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
         $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));

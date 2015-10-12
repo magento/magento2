@@ -56,7 +56,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     const SECONDS_IN_MINUTE = 60;
 
     /**
-     * @var \Magento\Cron\Model\Resource\Schedule\Collection
+     * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
     protected $_pendingSchedules;
 
@@ -247,7 +247,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * Return job collection from data base with status 'pending'
      *
-     * @return \Magento\Cron\Model\Resource\Schedule\Collection
+     * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
     protected function _getPendingSchedules()
     {
@@ -365,7 +365,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
 
         /**
-         * @var \Magento\Cron\Model\Resource\Schedule\Collection $history
+         * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection $history
          */
         $history = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
             'status',
