@@ -72,7 +72,6 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
         $this->_commentFactory = $commentFactory;
         $this->_blockFactory = $blockFactory;
         $this->_dependencyMapper = $dependencyMapper;
-        $this->moduleManager = $moduleManager;
     }
 
     /**
