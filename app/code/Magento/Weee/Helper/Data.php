@@ -744,7 +744,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storeId
      * @return bool
      */
-    public function getDisplayIncl($storeId = null)
+    public function isDisplayIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_INCL,
@@ -759,7 +759,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storeId
      * @return bool
      */
-    public function getDisplayInclDesc($storeId = null)
+    public function isDisplayInclDesc($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_INCL_DESCR,
@@ -774,7 +774,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storeId
      * @return bool
      */
-    public function getDisplayExlDescIncl($storeId = null)
+    public function isDisplayExlDescIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
@@ -789,7 +789,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storeId
      * @return bool
      */
-    public function getDisplayExcl($storeId = null)
+    public function isDisplayExcl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL,
