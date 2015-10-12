@@ -223,9 +223,9 @@ define(["jquery", "jquery/ui"], function ($) {
                     options.mediaGalleryInitial = galleryObject.returnCurrentImages();
                 });
             } else {
-                options.mediaGalleryInitial.push({
+                options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
-                });
+                }];
             }
         },
 
