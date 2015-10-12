@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {
     /**
-     * @var \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax
+     * @var \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax
      */
     protected $_attributeTax;
 
@@ -31,7 +31,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax $attributeTax
+     * @param \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -40,7 +40,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax $attributeTax
+        \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
     ) {
         $this->_directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;

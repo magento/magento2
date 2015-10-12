@@ -15,6 +15,6 @@ class Users extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\Resource\Users');
+        $this->_init('Magento\NewRelicReporting\Model\ResourceModel\Users');
     }
 }

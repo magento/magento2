@@ -7,7 +7,7 @@
 namespace Magento\Tax\Pricing;
 
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**

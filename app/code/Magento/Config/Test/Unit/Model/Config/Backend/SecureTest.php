@@ -28,7 +28,7 @@ class SecureTest extends \PHPUnit_Framework_TestCase
             $actionValidatorMock
         );
 
-        $resource = $this->getMock('Magento\Config\Model\Resource\Config\Data', [], [], '', false);
+        $resource = $this->getMock('Magento\Config\Model\ResourceModel\Config\Data', [], [], '', false);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
         $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
