@@ -142,8 +142,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
     protected function getWhichCalcPriceToUse($storeId = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->getDisplayExcl($storeId) ||
-            $this->weeeData->getDisplayExlDescIncl($storeId) ||
+        if ($this->weeeData->isDisplayExcl($storeId) ||
+            $this->weeeData->isDisplayExlDescIncl($storeId) ||
             ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
         ) {
             $calcPrice = 'basePrice';
