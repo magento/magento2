@@ -10,7 +10,7 @@
              module="Magento_GiftMessage"
              type="flat"
              entity_type="gift_message"
-             collection="Magento\GiftMessage\Model\Resource\Message\Collection"
+             collection="Magento\GiftMessage\Model\ResourceModel\Message\Collection"
              identifier="gift_message_id"
              repository_class="Magento\GiftMessage\Test\Repository\GiftMessage"
              class="Magento\GiftMessage\Test\Fixture\GiftMessage">
