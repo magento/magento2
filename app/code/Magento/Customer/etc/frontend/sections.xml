@@ -12,5 +12,6 @@
     <action name="customer/account/createPost"/>
     <action name="customer/ajax/login">
         <section name="checkout-data"/>
+        <section name="cart"/>
     </action>
 </config>
