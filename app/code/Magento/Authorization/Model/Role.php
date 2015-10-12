@@ -8,8 +8,8 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Role Model
  *
- * @method \Magento\Authorization\Model\Resource\Role _getResource()
- * @method \Magento\Authorization\Model\Resource\Role getResource()
+ * @method \Magento\Authorization\Model\ResourceModel\Role _getResource()
+ * @method \Magento\Authorization\Model\ResourceModel\Role getResource()
  * @method int getParentId()
  * @method \Magento\Authorization\Model\Role setParentId(int $value)
  * @method int getTreeLevel()
@@ -35,15 +35,15 @@ class Role extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Authorization\Model\Resource\Role $resource
-     * @param \Magento\Authorization\Model\Resource\Role\Collection $resourceCollection
+     * @param \Magento\Authorization\Model\ResourceModel\Role $resource
+     * @param \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Authorization\Model\Resource\Role $resource,
-        \Magento\Authorization\Model\Resource\Role\Collection $resourceCollection,
+        \Magento\Authorization\Model\ResourceModel\Role $resource,
+        \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -65,8 +65,8 @@ class Role extends \Magento\Framework\Model\AbstractModel
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get('Magento\Authorization\Model\Resource\Role');
-        $this->_resourceCollection = $objectManager->get('Magento\Authorization\Model\Resource\Role\Collection');
+        $this->_resource = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role');
+        $this->_resourceCollection = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role\Collection');
     }
 
     /**
@@ -76,7 +76,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\Resource\Role');
+        $this->_init('Magento\Authorization\Model\ResourceModel\Role');
     }
 
     /**

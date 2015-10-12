@@ -53,7 +53,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resourceMock = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set',
             [],
             [],
             '',
@@ -67,7 +67,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
@@ -221,7 +221,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterMock->expects($this->once())->method('getValue')->willReturn($entityTypeCode);
 
         $collectionMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter', 'setCurPage', 'setPageSize', 'getItems', 'getSize'],
             [],
             '',
@@ -276,7 +276,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
 
         $collectionMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setCurPage', 'setPageSize', 'getItems', 'getSize'],
             [],
             '',

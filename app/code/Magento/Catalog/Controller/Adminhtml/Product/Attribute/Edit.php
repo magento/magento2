@@ -15,9 +15,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     public function execute()
     {
         $id = $this->getRequest()->getParam('attribute_id');
-        /** @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */
+        /** @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $model = $this->_objectManager->create(
-            'Magento\Catalog\Model\Resource\Eav\Attribute'
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
         )->setEntityTypeId(
             $this->_entityTypeId
         );
