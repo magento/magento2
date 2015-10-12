@@ -290,9 +290,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function _assertCompareListEquals(array $expectedProductIds)
     {
-        /** @var $compareItems \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection */
+        /** @var $compareItems \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection */
         $compareItems = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Resource\Product\Compare\Item\Collection'
+            'Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection'
         );
         $compareItems->useProductItem(true);
         // important

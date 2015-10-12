@@ -47,7 +47,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
     protected $moduleFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Resource\Module\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleCollectionFactoryMock;
 
@@ -82,7 +82,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->moduleCollectionFactoryMock = $this->getMock(
-            'Magento\NewRelicReporting\Model\Resource\Module\CollectionFactory',
+            'Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory',
             ['create'],
             [],
             '',
@@ -106,7 +106,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModuleDataWithoutRefresh()
     {
-        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Resource\Module\Collection')
+        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Module\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock = $this->getMock('Magento\NewRelicReporting\Model\Module', [], [], '', false);
@@ -194,7 +194,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModuleDataRefresh($data)
     {
-        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Resource\Module\Collection')
+        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Module\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
@@ -289,7 +289,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModuleDataRefreshOrStatement($data)
     {
-        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Resource\Module\Collection')
+        $moduleCollectionMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Module\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */

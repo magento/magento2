@@ -10,7 +10,7 @@ namespace Magento\Weee\Test\Unit\Pricing;
 
 use \Magento\Weee\Pricing\Adjustment;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
@@ -94,7 +94,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractAdjustment($amount, $expectedResult)
     {
-        $saleableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $saleableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
 
         $this->weeeHelper->expects($this->any())
             ->method('getAmount')
@@ -123,7 +123,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
 
         $this->weeeHelper->expects($this->any())
             ->method('getAmount')

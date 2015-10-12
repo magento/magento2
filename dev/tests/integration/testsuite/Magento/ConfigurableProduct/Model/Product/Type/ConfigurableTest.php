@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->_model->getConfigurableAttributes($this->_product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
             $collection
         );
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
@@ -163,7 +163,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->_model->getConfigurableAttributeCollection($this->_product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
             $collection
         );
     }
@@ -188,7 +188,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
             $this->_model->getUsedProductCollection($this->_product)
         );
     }
@@ -417,7 +417,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      * Find and instantiate a catalog attribute model by attribute code
      *
      * @param string $code
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected function _getAttributeByCode($code)
     {

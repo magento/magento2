@@ -42,7 +42,7 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
         $this->_helperMock = $this->getMock('Magento\GoogleAdwords\Helper\Data', [], [], '', false);
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', true);
         $this->_collectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Collection',
             [],
             [],
             '',

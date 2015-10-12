@@ -275,4 +275,15 @@ class ComposerInformation
     {
         return self::$packageTypes;
     }
+
+    /**
+     * @param string $name
+     * @param string $version
+     * @return array
+     */
+    public function getPackageRequirements($name, $version)
+    {
+        $package = $this->composer->getRepositoryManager()->findPackage($name, $version);
+        return $package->getRequires();
+    }
 }
