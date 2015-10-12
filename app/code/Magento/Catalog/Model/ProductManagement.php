@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class ProductManagement implements ProductManagementInterface
 {
@@ -30,7 +30,7 @@ class ProductManagement implements ProductManagementInterface
     public function getCount($status = null)
     {
         $products = $this->productsFactory->create();
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $products */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $products */
         switch ($status) {
             case Status::STATUS_ENABLED:
                 $products->addAttributeToFilter('status', Status::STATUS_ENABLED);

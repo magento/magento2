@@ -16,7 +16,7 @@ class CleanExpiredOrders
     protected $storesConfig;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $orderCollectionFactory;
 
@@ -28,12 +28,12 @@ class CleanExpiredOrders
     /**
      * @param StoresConfig $storesConfig
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      */
     public function __construct(
         StoresConfig $storesConfig,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
     ) {
         $this->storesConfig = $storesConfig;
         $this->logger = $logger;
@@ -49,7 +49,7 @@ class CleanExpiredOrders
     {
         $lifetimes = $this->storesConfig->getStoresConfigByPath('sales/orders/delete_pending_after');
         foreach ($lifetimes as $storeId => $lifetime) {
-            /** @var $orders \Magento\Sales\Model\Resource\Order\Collection */
+            /** @var $orders \Magento\Sales\Model\ResourceModel\Order\Collection */
             $orders = $this->orderCollectionFactory->create();
             $orders->addFieldToFilter('store_id', $storeId);
             $orders->addFieldToFilter('status', Order::STATE_PENDING_PAYMENT);

@@ -325,6 +325,7 @@
 
 .admin__scope-old .tiers_table .col-qty span {
     font-size: 1rem;
+    white-space: nowrap;
 }
 
 .admin__scope-old .tiers_table .col-price .input-text {

@@ -13,7 +13,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\User\Model\Backend\Config\ObserverConfig;
-use Magento\User\Model\Resource\User as ResourceUser;
+use Magento\User\Model\ResourceModel\User as ResourceUser;
 use Magento\User\Model\User;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\User\Model\UserFactory;

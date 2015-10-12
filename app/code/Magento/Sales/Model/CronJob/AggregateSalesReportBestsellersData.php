@@ -24,19 +24,19 @@ class AggregateSalesReportBestsellersData
     protected $localeDate;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\BestsellersFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory
      */
     protected $bestsellersFactory;
 
     /**
      * @param ResolverInterface $localeResolver
      * @param TimezoneInterface $timezone
-     * @param \Magento\Sales\Model\Resource\Report\BestsellersFactory $bestsellersFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory $bestsellersFactory
      */
     public function __construct(
         ResolverInterface $localeResolver,
         TimezoneInterface $timezone,
-        \Magento\Sales\Model\Resource\Report\BestsellersFactory $bestsellersFactory
+        \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory $bestsellersFactory
     ) {
         $this->localeResolver = $localeResolver;
         $this->localeDate = $timezone;

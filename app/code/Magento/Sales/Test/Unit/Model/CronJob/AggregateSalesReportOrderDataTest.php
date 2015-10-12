@@ -23,7 +23,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit_Framework_TestCase
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderFactoryMock;
 
@@ -38,7 +38,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\OrderFactory')
+        $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\OrderFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -56,7 +56,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Report\Order')
+        $orderMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Order')
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock->expects($this->once())

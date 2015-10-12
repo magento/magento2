@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
@@ -58,7 +58,7 @@ class IndexBuilder implements IndexBuilderInterface
     private $tableMapper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
@@ -66,7 +66,7 @@ class IndexBuilder implements IndexBuilderInterface
      * @param TableMapper $tableMapper
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         ScopeConfigInterface $config,
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,

@@ -23,7 +23,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit_Framework_TestCase
     protected $localeDate;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Report\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $reportRule;
 
@@ -46,7 +46,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
         $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', ['date'], [], '', false);
-        $this->reportRule = $this->getMock('Magento\SalesRule\Model\Resource\Report\Rule', [], [], '', false);
+        $this->reportRule = $this->getMock('Magento\SalesRule\Model\ResourceModel\Report\Rule', [], [], '', false);
     }
 
     public function testExecute()
