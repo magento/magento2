@@ -9,9 +9,10 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($, quote, urlBuilder, storage, errorProcessor, customer) {
+    function ($, quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
         'use strict';
 
         return function (messageContainer) {
@@ -37,6 +38,8 @@ define(
                     method: paymentData
                 };
             }
+            fullScreenLoader.startLoader();
+
             return storage.put(
                 serviceUrl, JSON.stringify(payload)
             ).done(
@@ -46,6 +49,7 @@ define(
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                    fullScreenLoader.stopLoader();
                 }
             );
         };

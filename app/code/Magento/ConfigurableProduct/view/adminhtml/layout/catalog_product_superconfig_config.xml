@@ -5,21 +5,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product_tabs">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix">
-                        <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
-                            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
-                                <uiComponent name="product_attributes_listing"/>
-                            </block>
-                            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
-                            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix">
+                    <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                            <uiComponent name="product_attributes_listing"/>
                         </block>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
                     </block>
                 </block>
             </block>

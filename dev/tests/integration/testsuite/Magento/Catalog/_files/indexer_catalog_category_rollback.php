@@ -23,8 +23,8 @@ foreach ($products as $product) {
     }
 }
 
-/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
-$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
+/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+$collection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
 $collection
     ->addAttributeToFilter('level', 2)
     ->load()

@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Design\ThemeInterface;
@@ -16,7 +15,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Registration
 {
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -48,41 +47,27 @@ class Registration
     ];
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read
-     */
-    protected $directoryRead;
-
-    /**
      * Initialize dependencies
      *
-     * @param \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory $collectionFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
-     * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory $collectionFactory,
-        \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection,
-        Filesystem $filesystem
+        \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory,
+        \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_themeCollection = $filesystemCollection;
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 
     /**
      * Theme registration
      *
-     * @param string $pathPattern
      * @return $this
      */
-    public function register($pathPattern = '')
+    public function register()
     {
-        if (empty($pathPattern)) {
-            $this->_themeCollection->addDefaultPattern('*');
-        } else {
-            $this->_themeCollection->addTargetPattern($pathPattern);
-        }
-
+        $this->_themeCollection->clear();
         foreach ($this->_themeCollection as $theme) {
             $this->_registerThemeRecursively($theme);
         }

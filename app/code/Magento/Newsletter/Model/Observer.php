@@ -17,17 +17,17 @@ class Observer
     /**
      * Queue collection factory
      *
-     * @var \Magento\Newsletter\Model\Resource\Queue\CollectionFactory
+     * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
      */
     protected $_queueCollectionFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $queueCollectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $queueCollectionFactory
      */
     public function __construct(
-        \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $queueCollectionFactory
+        \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $queueCollectionFactory
     ) {
         $this->_queueCollectionFactory = $queueCollectionFactory;
     }
@@ -35,16 +35,15 @@ class Observer
     /**
      * Scheduled send handler
      *
-     * @param Schedule $schedule
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function scheduledSend($schedule)
+    public function scheduledSend()
     {
         $countOfQueue  = 3;
         $countOfSubscriptions = 20;
 
-        /** @var \Magento\Newsletter\Model\Resource\Queue\Collection $collection */
+        /** @var \Magento\Newsletter\Model\ResourceModel\Queue\Collection $collection */
         $collection = $this->_queueCollectionFactory->create();
         $collection->setPageSize($countOfQueue)->setCurPage(1)->addOnlyForSendingFilter()->load();
 

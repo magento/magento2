@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Sales\Model\Resource\OrderFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 use \Magento\Sales\Model\Order;
 
 /**

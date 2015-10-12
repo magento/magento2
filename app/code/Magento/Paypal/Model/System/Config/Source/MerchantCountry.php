@@ -16,17 +16,17 @@ class MerchantCountry implements \Magento\Framework\Option\ArrayInterface
     protected $_configFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countryCollectionFactory;
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
     ) {
         $this->_configFactory = $configFactory;
         $this->_countryCollectionFactory = $countryCollectionFactory;

@@ -90,6 +90,6 @@ class SaveInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($product));
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }
