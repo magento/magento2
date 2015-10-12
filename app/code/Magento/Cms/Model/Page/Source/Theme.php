@@ -35,8 +35,6 @@ class Theme implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $options[] = ['label' => '', 'value' => ''];
-        return $options + $this->themeList->getLabels();
-
+        return $this->themeList->getLabels();
     }
 }
