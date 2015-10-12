@@ -26,6 +26,9 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      */
     protected $localeFormat;
 
+    /** @var \Magento\Directory\Helper\Data */
+    protected $directoryHelper;
+
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
@@ -38,8 +41,10 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Locale\Format $localeFormat,
+        \Magento\Directory\Helper\Data $directoryHelper,
         array $data = []
     ) {
+        $this->directoryHelper = $directoryHelper;
         $this->localeFormat = $localeFormat;
         $this->weightSwitcher = $factoryElement->create('radios');
         $this->weightSwitcher->setValue(
@@ -85,7 +90,7 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
                 '<label class="admin__addon-suffix" for="' .
                 $this->getHtmlId() .
                 '"><span>' .
-                __('lbs') .
+                $this->directoryHelper->getWeightUnit() .
                 '</span></label>' .
             '</div>' .
         '</div>';
