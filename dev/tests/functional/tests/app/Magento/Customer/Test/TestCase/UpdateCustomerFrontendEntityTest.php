@@ -127,6 +127,7 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAccountIndex->getInfoBlock()->openEditContactInfo();
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
 
         \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
@@ -134,5 +135,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
     }
 }
