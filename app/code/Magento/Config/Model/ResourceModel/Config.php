@@ -10,8 +10,8 @@ namespace Magento\Config\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-    implements \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
+    \Magento\Framework\App\Config\ConfigResource\ConfigInterface
 {
     /**
      * Define main table
