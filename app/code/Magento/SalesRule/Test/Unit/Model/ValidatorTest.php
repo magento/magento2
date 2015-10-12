@@ -526,7 +526,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAmountForDiscount', 'getQuote'])
+            ->setMethods(['getShippingAmountForDiscount', 'getQuote', 'getCustomAttributesCodes'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getShippingAmountForDiscount')
@@ -534,6 +534,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
+        $addressMock->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn([]);
         return $addressMock;
     }
 
