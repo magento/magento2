@@ -283,6 +283,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
             foreach ($this->_storeManager->getGroups() as $store) {
                 $ids[] = $store->getRootCategoryId();
             }
+            $ids[] = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
             $this->setData('root_ids', $ids);
         }
         return $ids;
