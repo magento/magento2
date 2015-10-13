@@ -44,27 +44,39 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
     public function testArguments()
     {
-        $errors = [];
+        $incorrectNumberOfArgumentsErrors = [];
+        $missedPhraseErrors = [];
         foreach ($this->_getFiles() as $file) {
             if (in_array($file, $this->blackList)) {
                 continue;
             }
             $this->_phraseCollector->parse($file);
             foreach ($this->_phraseCollector->getPhrases() as $phrase) {
+                if (empty(trim($phrase['phrase'], "'\"\t\n\r\0\x0B"))) {
+                    $missedPhraseErrors[] = $this->_createMissedPhraseError($phrase);
+                }
                 if (preg_match_all('/%(\d+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
                     $placeholdersInPhrase = array_unique($matches[1]);
                     if (count($placeholdersInPhrase) != $phrase['arguments']) {
-                        $errors[] = $this->_createPhraseError($phrase);
+                        $incorrectNumberOfArgumentsErrors[] = $this->_createPhraseError($phrase);
                     }
                 }
             }
         }
         $this->assertEmpty(
-            $errors,
+            $missedPhraseErrors,
+            sprintf(
+                "\n%d missed phrases were discovered: \n%s",
+                count($missedPhraseErrors),
+                implode("\n\n", $missedPhraseErrors)
+            )
+        );
+        $this->assertEmpty(
+            $incorrectNumberOfArgumentsErrors,
             sprintf(
                 "\n%d usages of inconsistency the number of arguments and placeholders were discovered: \n%s",
-                count($errors),
-                implode("\n\n", $errors)
+                count($incorrectNumberOfArgumentsErrors),
+                implode("\n\n", $incorrectNumberOfArgumentsErrors)
             )
         );
     }

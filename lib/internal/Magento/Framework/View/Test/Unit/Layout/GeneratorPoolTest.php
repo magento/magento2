@@ -11,21 +11,22 @@ namespace Magento\Framework\View\Test\Unit\Layout;
 
 use \Magento\Framework\View\Layout\GeneratorPool;
 use \Magento\Framework\View\Layout\ScheduledStructure;
+use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
 
 class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Generator\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $generatorContextMock;
 
@@ -35,7 +36,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     protected $scheduledStructure;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $structureMock;
 
@@ -57,7 +58,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
         $this->readerContextMock->expects($this->any())->method('getScheduledStructure')
             ->willReturn($this->scheduledStructure);
 
-        // Data\Structure
+        // DataStructure
         $this->generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,8 +73,8 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject(
+        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $helperObjectManager->getObject(
             'Magento\Framework\View\Layout\GeneratorPool',
             [
                 'helper' => $this->helperMock,
@@ -109,14 +110,19 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             $this->scheduledStructure->setStructureElement($structureElement, []);
         }
 
-        $moveMap = [];
+        $reorderMap = [];
+        foreach ($schedule['sort'] as $elementName => $sort) {
+            list($parentName, $sibling, $isAfter) = $sort;
+            $this->scheduledStructure->setElementToSortList($parentName, $elementName, $sibling, $isAfter);
+            $reorderMap[] = [$parentName, $elementName, $sibling, $isAfter];
+        }
         foreach ($schedule['move'] as $elementName => $move) {
             $this->scheduledStructure->setElementToMove($elementName, $move);
             list($destination, $sibling, $isAfter) = $move;
-            $moveMap[] = [$destination, $elementName, $sibling, $isAfter];
+            $reorderMap[] = [$destination, $elementName, $sibling, $isAfter];
         }
         $invocation = $this->structureMock->expects($this->any())->method('reorderChildElement');
-        call_user_func_array([$invocation, 'withConsecutive'], $moveMap);
+        call_user_func_array([$invocation, 'withConsecutive'], $reorderMap);
 
         foreach ($schedule['remove'] as $remove) {
             $this->scheduledStructure->setElementToRemoveList($remove);
@@ -125,8 +131,10 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
         $this->helperMock->expects($this->atLeastOnce())->method('scheduleElement')
             ->with($this->scheduledStructure, $this->structureMock, $this->anything())
             ->willReturnCallback(function ($scheduledStructure, $structure, $elementName) use ($schedule) {
-                /** @var $scheduledStructure ScheduledStructure */
-                /** @var $structure Data\Structure */
+                /**
+                 * @var $scheduledStructure ScheduledStructure
+                 * @var $structure DataStructure
+                 */
                 $this->assertContains($elementName, $schedule['structure']);
                 $scheduledStructure->unsetStructureElement($elementName);
                 $scheduledStructure->setElement($elementName, []);
@@ -152,14 +160,18 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                         'second.element',
                         'third.element',
                         'remove.element',
+                        'sort.element',
                     ],
                     'move' => [
                         'third.element' => ['second.element', 'sibling', false, 'alias'],
                     ],
                     'remove' => ['remove.element'],
+                    'sort' => [
+                        'sort.element' => ['second.element', 'sibling', false, 'alias'],
+                    ],
                 ],
                 'expectedScheduledElements' => [
-                    'first.element' => [], 'second.element' => [], 'third.element' => [],
+                    'first.element' => [], 'second.element' => [], 'third.element' => [], 'sort.element' => []
                 ],
             ],
         ];

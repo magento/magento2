@@ -10,6 +10,15 @@ namespace Magento\Framework\View\Layout;
  */
 class ScheduledStructure
 {
+    /**#@+
+     * Keys for array of elements to sort
+     */
+    const ELEMENT_NAME = 'elementName';
+    const ELEMENT_PARENT_NAME = 'parentName';
+    const ELEMENT_OFFSET_OR_SIBLING  = 'offsetOrSibling';
+    const ELEMENT_IS_AFTER = 'isAfter';
+    /**#@-*/
+
     /**
      * Information about structural elements, scheduled for creation
      *
@@ -67,6 +76,13 @@ class ScheduledStructure
     protected $brokenParent = [];
 
     /**
+     * Elements that need to sort
+     *
+     * @var array
+     */
+    protected $elementsToSort = [];
+
+    /**
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -80,6 +96,68 @@ class ScheduledStructure
         $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
         $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
         $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+    }
+
+    /**
+     * Set elements to sort
+     *
+     * @param string $parentName
+     * @param string $elementName
+     * @param string|int|null $offsetOrSibling
+     * @param bool $isAfter
+     * @return void
+     */
+    public function setElementToSortList($parentName, $elementName, $offsetOrSibling, $isAfter = true)
+    {
+        $this->elementsToSort[$elementName] = [
+            self::ELEMENT_NAME => $elementName,
+            self::ELEMENT_PARENT_NAME => $parentName,
+            self::ELEMENT_OFFSET_OR_SIBLING => $offsetOrSibling,
+            self::ELEMENT_IS_AFTER => $isAfter
+        ];
+    }
+
+    /**
+     * Check if elements list of sorting is empty
+     *
+     * @return bool
+     */
+    public function isListToSortEmpty()
+    {
+        return empty($this->elementsToSort);
+    }
+
+    /**
+     * Unset specified element from list of sorting
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementToSort($elementName)
+    {
+        unset($this->elementsToSort[$elementName]);
+    }
+
+    /**
+     * Get element to sort by name
+     *
+     * @param string $elementName
+     * @param array $default
+     * @return array
+     */
+    public function getElementToSort($elementName, array $default = [])
+    {
+        return isset($this->elementsToSort[$elementName]) ? $this->elementsToSort[$elementName] : $default;
+    }
+
+    /**
+     * Get elements to sort
+     *
+     * @return array
+     */
+    public function getListToSort()
+    {
+        return $this->elementsToSort;
     }
 
     /**
