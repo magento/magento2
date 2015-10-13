@@ -26,6 +26,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testPreparedCollection()
     {
         $this->_block->toHtml();
-        $this->assertInstanceOf('Magento\User\Model\Resource\Role\User\Collection', $this->_block->getCollection());
+        $this->assertInstanceOf(
+            'Magento\User\Model\ResourceModel\Role\User\Collection',
+            $this->_block->getCollection()
+        );
     }
 }

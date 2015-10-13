@@ -8,7 +8,7 @@ namespace Magento\Store\Model\Service;
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**
-     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactory;
 
@@ -34,15 +34,16 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
         'setBaseCurrencyCode' => 'currency/options/base',
         'setDefaultDisplayCurrencyCode' => 'currency/options/default',
         'setTimezone' => 'general/locale/timezone',
+        'setWeightUnit' => \Magento\Directory\Helper\Data::XML_PATH_WEIGHT_UNIT
     ];
 
     /**
-     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
      */
     public function __construct(
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
     ) {
@@ -90,9 +91,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
             );
             $storeConfig->$methodName($configValue);
         }
-
-        //Hard code the weight unit for now
-        $storeConfig->setWeightUnit('lbs');
 
         $storeConfig->setBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false));
         $storeConfig->setSecureBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true));

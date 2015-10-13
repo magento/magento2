@@ -15,12 +15,12 @@ class MassDeleteTest extends AbstractMassActionTest
     protected $massDeleteController;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageCollectionMock;
 
@@ -29,14 +29,15 @@ class MassDeleteTest extends AbstractMassActionTest
         parent::setUp();
 
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Page\CollectionFactory',
+            'Magento\Cms\Model\ResourceModel\Page\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
 
-        $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', [], [], '', false);
+        $this->pageCollectionMock =
+            $this->getMock('Magento\Cms\Model\ResourceModel\Page\Collection', [], [], '', false);
 
         $this->massDeleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Page\MassDelete',
@@ -85,11 +86,11 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Page Collection Mock
      *
-     * @return \Magento\Cms\Model\Resource\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Cms\Model\ResourceModel\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', ['delete'], [], '', false);
+        $pageMock = $this->getMock('Magento\Cms\Model\ResourceModel\Page\Collection', ['delete'], [], '', false);
         $pageMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $pageMock;

@@ -107,7 +107,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $optionIds = 'a:1:{i:0;i:1;}';
 
-        $collection = $this->getMock('Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $collection = $this->getMock('Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $product = $this->getMock('Magento\Catalog\Model\Product', ['getTypeInstance', '__wakeup'], [], '', false);
         $typeInstance = $this->getMock('Magento\Bundle\Model\Product\Type', ['getOptionsByIds'], [], '', false);
         $selectionOption =
@@ -157,10 +157,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $selectionOption =
             $this->getMock('\Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface', ['getValue']);
         $collection =
-            $this->getMock('Magento\Bundle\Model\Resource\Option\Collection', ['appendSelections'], [], '', false);
+            $this->getMock('Magento\Bundle\Model\ResourceModel\Option\Collection', ['appendSelections'], [], '', false);
         $itemOption =
             $this->getMock('\Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface', ['getValue']);
-        $collection2 = $this->getMock('Magento\Bundle\Model\Resource\Selection\Collection', [], [], '', false);
+        $collection2 = $this->getMock('Magento\Bundle\Model\ResourceModel\Selection\Collection', [], [], '', false);
 
         $this->escaper->expects($this->once())->method('escapeHtml')->with('name')->will($this->returnValue('name'));
         $this->pricingHelper->expects($this->once())->method('currency')->with(15)
