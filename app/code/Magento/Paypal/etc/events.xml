@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_payment_place_end">
-        <observer name="paypal" instance="Magento\Paypal\Observer\AddBillingAgreementToSessionObserver" method="execute"/>
+        <observer name="paypal" instance="Magento\Paypal\Observer\AddBillingAgreementToSessionObserver"/>
     </event>
     <event name="sales_order_payment_transaction_html_txn_id">
-        <observer name="paypal_transaction_html" instance="Magento\Paypal\Observer\HtmlTransactionIdObserver" method="execute"/>
+        <observer name="paypal_transaction_html" instance="Magento\Paypal\Observer\HtmlTransactionIdObserver"/>
     </event>
 </config>
