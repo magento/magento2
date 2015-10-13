@@ -826,11 +826,17 @@ return [
     ['Magento\Framework\Model\ModelResource\Iterator', 'Magento\Framework\Model\ResourceModel\Iterator'],
     ['Magento\Core\Model\Resource\Resource', 'Magento\Framework\Module\ModuleResource'],
     ['Magento\Core\Model\Resource\Type\AbstractType', 'Magento\Framework\Model\ResourceModel\Type\AbstractType'],
-    ['Magento\Framework\Model\ModelResource\Type\AbstractType', 'Magento\Framework\Model\ResourceModel\Type\AbstractType'],
+    [
+        'Magento\Framework\Model\ModelResource\Type\AbstractType',
+        'Magento\Framework\Model\ResourceModel\Type\AbstractType'
+    ],
     ['Magento\Core\Model\Resource\Type\Db', 'Magento\Framework\Model\ResourceModel\Type\Db'],
     ['Magento\Framework\Model\ModelResource\Type\Db', 'Magento\Framework\Model\ResourceModel\Type\Db'],
     ['Magento\Core\Model\Resource\Type\Db\Pdo\Mysql', 'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql'],
-    ['Magento\Framework\Model\ModelResource\Type\Db\Pdo\Mysql', 'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql'],
+    [
+        'Magento\Framework\Model\ModelResource\Type\Db\Pdo\Mysql',
+        'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql'
+    ],
     [
         'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
         'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
