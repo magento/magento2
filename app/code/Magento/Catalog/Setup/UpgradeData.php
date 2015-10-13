@@ -46,21 +46,31 @@ class UpgradeData implements UpgradeDataInterface
             $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
             $attributeSetId = $categorySetup->getDefaultAttributeSetId($entityTypeId);
 
-            $attributeGroupId = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, 'Images');
-
-            // update General Group
-            $categorySetup->updateAttributeGroup(
+            $attributeGroup = $categorySetup->getAttributeGroup(
                 $entityTypeId,
                 $attributeSetId,
-                $attributeGroupId,
-                'attribute_group_name',
-                'Images and Videos'
+                'Images',
+                'attribute_group_name'
             );
+            if (isset($attributeGroup['attribute_group_name']) && $attributeGroup['attribute_group_name'] == 'Images') {
+                // update General Group
+                $categorySetup->updateAttributeGroup(
+                    $entityTypeId,
+                    $attributeSetId,
+                    $attributeGroup['attribute_group_id'],
+                    'attribute_group_name',
+                    'Images and Videos'
+                );
+            }
+        }
+
+        if ($context->getVersion()
+            && version_compare($context->getVersion(), '2.0.1') < 0
+        ) {
             $select = $setup->getConnection()->select()
                 ->from(
                     $setup->getTable('catalog_product_entity_group_price'),
                     [
-                        'value_id',
                         'entity_id',
                         'all_groups',
                         'customer_group_id',
@@ -69,11 +79,10 @@ class UpgradeData implements UpgradeDataInterface
                         'website_id'
                     ]
                 );
-            $setup->getConnection()->insertFromSelect(
+            $select = $setup->getConnection()->insertFromSelect(
                 $select,
-                $setup->getTable('catalog_product_entity_group_price'),
+                $setup->getTable('catalog_product_entity_tier_price'),
                 [
-                    'value_id',
                     'entity_id',
                     'all_groups',
                     'customer_group_id',
@@ -82,6 +91,8 @@ class UpgradeData implements UpgradeDataInterface
                     'website_id'
                 ]
             );
+            $setup->getConnection()->query($select);
+
             $categorySetupManager = $this->categorySetupFactory->create();
             $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
         }
