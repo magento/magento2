@@ -296,7 +296,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
         $availableOrders = $this->getAvailableOrders();
         if (!$this->getSortBy()) {
-            $categorySortBy = $category->getDefaultSortBy();
+            $categorySortBy = $this->getDefaultSortBy() ?: $category->getDefaultSortBy();
             if ($categorySortBy) {
                 if (!$availableOrders) {
                     $availableOrders = $this->_getConfig()->getAttributeUsedForSortByArray();
