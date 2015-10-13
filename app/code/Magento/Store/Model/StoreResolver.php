@@ -137,14 +137,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
-            $error = __('Requested store is inactive');
-        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
-            $error = __('Requested store is not found');
+            throw new NoSuchEntityException(__('Requested store is inactive'));
         }
 
-        if (isset($error, $e)) {
-            throw new NoSuchEntityException($error, $e);
-        }
         return $store;
     }
 
@@ -160,14 +155,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         try {
             $store = $this->storeRepository->getActiveStoreById($id);
         } catch (StoreIsInactiveException $e) {
-            $error = __('Default store is inactive');
-        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
-            $error = __('Default store is not found');
+            throw new NoSuchEntityException(__('Default store is inactive'));
         }
 
-        if (isset($error, $e)) {
-            throw new NoSuchEntityException($error, $e);
-        }
         return $store;
     }
 }
