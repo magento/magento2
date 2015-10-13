@@ -148,7 +148,7 @@ class Cart extends Action\Action implements IndexInterface
         );
 
         try {
-            /** @var \Magento\Wishlist\Model\Resource\Item\Option\Collection $options */
+            /** @var \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection $options */
             $options = $this->optionFactory->create()->getCollection()->addItemFilter([$itemId]);
             $item->setOptions($options->getOptionsByItem($itemId));
 

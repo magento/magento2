@@ -18,7 +18,7 @@ class InstallData implements InstallDataInterface
     /**
      * Theme resource factory
      *
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     private $themeResourceFactory;
 
@@ -32,11 +32,11 @@ class InstallData implements InstallDataInterface
     /**
      * Init
      *
-     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
      */
     public function __construct(
-        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
     ) {
         $this->themeResourceFactory = $themeResourceFactory;
@@ -94,7 +94,7 @@ class InstallData implements InstallDataInterface
     }
 
     /**
-     * @return \Magento\Theme\Model\Resource\Theme\Collection
+     * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     public function createThemeResource()
     {

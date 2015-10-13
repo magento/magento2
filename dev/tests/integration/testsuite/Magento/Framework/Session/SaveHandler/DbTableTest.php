@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class DbTableTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,8 +85,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->get('Magento\Framework\Session\SaveHandler\DbTable');
 
-        /** @var $resource \Magento\Framework\App\Resource */
-        $resource = $this->_objectManager->get('Magento\Framework\App\Resource');
+        /** @var $resource \Magento\Framework\App\ResourceConnection */
+        $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
         $this->_connection = $resource->getConnection();
         $this->_sessionTable = $resource->getTableName('session');
 

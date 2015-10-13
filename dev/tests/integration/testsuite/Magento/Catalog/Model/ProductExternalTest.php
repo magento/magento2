@@ -102,12 +102,12 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     {
         // empty
         $collection = $this->_model->getCategoryCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Collection', $collection);
 
         // fixture
         $this->_model->setId(1);
         $fixtureCollection = $this->_model->getCategoryCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Collection', $fixtureCollection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Collection', $fixtureCollection);
         $this->assertNotSame($fixtureCollection, $collection);
         $ids = [];
         foreach ($fixtureCollection as $category) {
@@ -158,11 +158,11 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->_model->getRelatedProductIds());
 
         $collection = $this->_model->getRelatedProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $this->assertSame($this->_model, $collection->getProduct());
 
         $linkCollection = $this->_model->getRelatedLinkCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Collection', $linkCollection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Link\Collection', $linkCollection);
         $this->assertSame($this->_model, $linkCollection->getProduct());
     }
 
@@ -178,11 +178,11 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->_model->getUpSellProductIds());
 
         $collection = $this->_model->getUpSellProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $this->assertSame($this->_model, $collection->getProduct());
 
         $linkCollection = $this->_model->getUpSellLinkCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Collection', $linkCollection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Link\Collection', $linkCollection);
         $this->assertSame($this->_model, $linkCollection->getProduct());
     }
 
@@ -198,11 +198,11 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->_model->getCrossSellProductIds());
 
         $collection = $this->_model->getCrossSellProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $this->assertSame($this->_model, $collection->getProduct());
 
         $linkCollection = $this->_model->getCrossSellLinkCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Collection', $linkCollection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Link\Collection', $linkCollection);
         $this->assertSame($this->_model, $linkCollection->getProduct());
     }
 
