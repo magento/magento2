@@ -27,6 +27,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
             'Magento\Cookie\Model\Config\Backend\Domain'
         );
         $domain->setValue($value);
+        $domain->setPath('path');
         try {
             $domain->save();
             if ($exceptionMessage) {

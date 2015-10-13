@@ -22,6 +22,7 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
             'Magento\Developer\Model\Config\Backend\AllowedIps'
         );
         $model->setValue($value);
+        $model->setPath('path');
         $model->beforeSave();
         $model->save();
         $this->assertEquals($expected, $model->getValue());

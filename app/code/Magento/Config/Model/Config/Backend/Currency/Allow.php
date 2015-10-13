@@ -38,7 +38,7 @@ class Allow extends AbstractCurrency
         array $data = []
     ) {
         $this->_localeCurrency = $localeCurrency;
-        parent::__construct($context, $registry, $config, $cacheTypeList, $resourceCollection, $resource, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
