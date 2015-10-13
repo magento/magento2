@@ -54,7 +54,7 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable(),
-                    currencySymbol: this.currencySymbol
+                    currencySymbol: this.variationsComponent().getCurrencySymbol()
                 },
                 quantity: {
                     label: 'quantity',

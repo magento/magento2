@@ -129,7 +129,7 @@ define([
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });
-            row.push('$ ' + variation.price);
+            row.push(this.variationsComponent().getCurrencySymbol() +  ' ' + variation.price);
 
             return row;
         },
