@@ -14,40 +14,37 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 class DefinedClasses
 {
     /**
-     * Determine if a class can be loaded without using the Code\Generator\Autoloader.
+     * Determine if a class can be loaded without using Code\Generator\Autoloader.
      *
      * @param string $className
      * @return bool
      */
-    public function classLoadable($className)
+    public function isClassLoadable($className)
     {
-        if ($this->isAlreadyDefined($className)) {
-            return true;
-        }
-        return $this->performAutoload($className);
+        return $this->isClassLoadableFromMemory($className) || $this->isClassLoadableFromDisc($className);
     }
 
     /**
-     * Checks whether class is already defined
+     * Determine if a class exists in memory
      *
      * @param string $className
      * @return bool
      */
-    protected function isAlreadyDefined($className)
+    public function isClassLoadableFromMemory($className)
     {
         return class_exists($className, false) || interface_exists($className, false);
     }
 
     /**
-     * Performs autoload for given class name
+     * Determine if a class exists on disc
      *
      * @param string $className
      * @return bool
      */
-    protected function performAutoload($className)
+    public function isClassLoadableFromDisc($className)
     {
         try {
-            return AutoloaderRegistry::getAutoloader()->loadClass($className);
+            return (bool)AutoloaderRegistry::getAutoloader()->findFile($className);
         } catch (\Exception $e) {
             // Couldn't get access to the autoloader so we need to allow class_exists to call autoloader chain
             return (class_exists($className) || interface_exists($className));
