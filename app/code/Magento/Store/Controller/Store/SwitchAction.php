@@ -9,6 +9,7 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
@@ -78,7 +79,7 @@ class SwitchAction extends Action
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
-        } catch (\InvalidArgumentException $e) {
+        } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found');
         }
 
