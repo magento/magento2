@@ -809,7 +809,6 @@ return [
         'Magento\Framework\Model\ResourceModel\AbstractResource'
     ],
     ['Magento\Core\Model\Resource\Db\AbstractDb', 'Magento\Framework\Model\ResourceModel\Db\AbstractDb'],
-    ['Magento\Framework\Model\ModelResource\Db\AbstractDb', 'Magento\Framework\Model\ResourceModel\Db\AbstractDb'],
     ['Magento\Core\Model\Resource\Db\Profiler', 'Magento\Framework\Model\ResourceModel\Db\Profiler'],
     ['Magento\Framework\Model\ModelResource\Db\Profiler', 'Magento\Framework\Model\ResourceModel\Db\Profiler'],
     [
