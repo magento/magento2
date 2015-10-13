@@ -269,19 +269,19 @@ class UpgradeData implements UpgradeDataInterface
             $customerSetup->updateAttribute(
                 'customer_address',
                 'country_id',
-                'source',
+                'source_model',
                 'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
             );
             $customerSetup->updateAttribute(
                 'customer_address',
                 'region',
-                'backend',
+                'backend_model',
                 'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
             );
             $customerSetup->updateAttribute(
                 'customer_address',
                 'region_id',
-                'source',
+                'source_model',
                 'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
             );
         }
