@@ -92,7 +92,7 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $output = [];
         foreach ($common as $path => $file) {
-            $output[$path] = [$file];
+            $output[substr($path, strlen(BP))] = [$file];
         }
 
         return $output;
