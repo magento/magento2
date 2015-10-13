@@ -356,7 +356,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Compare defined order field vith current order field
+     * Compare defined order field with current order field
      *
      * @param string $order
      * @return bool
