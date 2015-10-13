@@ -365,6 +365,14 @@ define([
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
             });
+        },
+
+        /**
+         * Get currency symbol
+         * @returns {*}
+         */
+        getCurrencySymbol: function () {
+            return this.currencySymbol;
         }
     });
 });
