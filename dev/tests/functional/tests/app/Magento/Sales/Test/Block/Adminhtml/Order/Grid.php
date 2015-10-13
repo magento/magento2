@@ -63,13 +63,6 @@ class Grid extends DataGrid
     protected $createNewOrder = '[data-ui-id="add-button"]';
 
     /**
-     * Purchase Point Filter selector.
-     *
-     * @var string
-     */
-    protected $purchasePointFilter = '[name="filters[store_id]"]';
-
-    /**
      * Order Id td selector.
      *
      * @var string
@@ -101,12 +94,14 @@ class Grid extends DataGrid
     public function getPurchasePointStoreGroups()
     {
         $this->openFilterBlock();
-        $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter)
+
+        $storeGroupElements = $this->_rootElement->find($this->filters['purchase_point']['selector'])
             ->getElements('//option/preceding-sibling::optgroup[1]', Locator::SELECTOR_XPATH);
         $result = [];
 
         foreach ($storeGroupElements as $storeGroupElement) {
-            $result[] = trim($storeGroupElement->getAttribute('label'));
+            // "u" pattern modifier allows to match "&nbsp;" and other similar entities given in invalid encryption
+            $result[] = preg_replace('~^\s*~u', '', $storeGroupElement->getAttribute('label'));
         }
 
         return $result;
