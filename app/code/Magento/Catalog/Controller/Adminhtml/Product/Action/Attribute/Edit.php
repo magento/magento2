@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {

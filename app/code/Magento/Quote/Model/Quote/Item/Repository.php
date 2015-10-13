@@ -33,7 +33,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $itemDataFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[]
+     * @var CartItemProcessorInterface[]
      */
     protected $cartItemProcessors;
 
@@ -41,7 +41,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
-     * @param \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[] $cartItemProcessors
+     * @param CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
@@ -67,7 +67,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {
             if (!$item->isDeleted() && !$item->getParentItemId()) {
-                $output[] = $this->addProductOptions($item->getProductType(), $item);
+                $item = $this->addProductOptions($item->getProductType(), $item);
+                $output[] = $this->applyCustomOptions($item);
             }
         }
         return $output;
@@ -128,7 +129,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $itemId = $cartItem->getId();
         foreach ($quote->getAllItems() as $quoteItem) {
             if ($itemId == $quoteItem->getId()) {
-                return $this->addProductOptions($productType, $quoteItem);
+                $cartItem = $this->addProductOptions($productType, $quoteItem);
+                return $this->applyCustomOptions($cartItem);
             }
         }
         throw new CouldNotSaveException(__('Could not save quote'));
@@ -146,7 +148,47 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $params = (isset($this->cartItemProcessors[$productType]))
             ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
             : null;
-        return ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
+
+        $params = ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
+        return $this->addCustomOptionsToBuyRequest($cartItem, $params);
+    }
+
+    /**
+     * Add to buy request custom options
+     *
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @param \Magento\Framework\DataObject|float $params
+     * @return \Magento\Framework\DataObject|float
+     */
+    protected function addCustomOptionsToBuyRequest(
+        \Magento\Quote\Api\Data\CartItemInterface $cartItem,
+        $params
+    ) {
+        if (isset($this->cartItemProcessors['custom_options'])) {
+            $buyRequestUpdate = $this->cartItemProcessors['custom_options']->convertToBuyRequest($cartItem);
+            if (!$buyRequestUpdate) {
+                return $params;
+            }
+            if ($params instanceof \Magento\Framework\DataObject) {
+                $buyRequestUpdate->addData($params->getData());
+            } else if (is_numeric($params)) {
+                $buyRequestUpdate->setData('qty', $params);
+            }
+            return $buyRequestUpdate;
+        }
+        return $params;
+    }
+
+    /**
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @return \Magento\Quote\Api\Data\CartItemInterface
+     */
+    protected function applyCustomOptions(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
+    {
+        if (isset($this->cartItemProcessors['custom_options'])) {
+            $this->cartItemProcessors['custom_options']->processOptions($cartItem);
+        }
+        return $cartItem;
     }
 
     /**
@@ -159,7 +201,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         \Magento\Quote\Api\Data\CartItemInterface $cartItem
     ) {
         $cartItem = (isset($this->cartItemProcessors[$productType]))
-            ? $this->cartItemProcessors[$productType]->processProductOptions($cartItem)
+            ? $this->cartItemProcessors[$productType]->processOptions($cartItem)
             : $cartItem;
         return $cartItem;
     }

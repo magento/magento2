@@ -8,8 +8,8 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Config\Share;
-use Magento\Customer\Model\Resource\Address\CollectionFactory;
-use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -108,7 +108,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Customer addresses collection
      *
-     * @var \Magento\Customer\Model\Resource\Address\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected $_addressesCollection;
 
@@ -236,10 +236,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Customer\Model\Resource\Customer $resource,
+        \Magento\Customer\Model\ResourceModel\Customer $resource,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\Resource\Address\CollectionFactory $addressesFactory,
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         GroupRepositoryInterface $groupRepository,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -283,7 +283,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Customer');
+        $this->_init('Magento\Customer\Model\ResourceModel\Customer');
     }
 
     /**
@@ -369,7 +369,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param  string $password
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated Use \Magento\Customer\Api\AccountManagementInterface::authenticate
+     * Use \Magento\Customer\Api\AccountManagementInterface::authenticate
      */
     public function authenticate($login, $password)
     {
@@ -476,7 +476,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve not loaded address collection
      *
-     * @return \Magento\Customer\Model\Resource\Address\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     public function getAddressCollection()
     {
@@ -486,7 +486,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Customer addresses collection
      *
-     * @return \Magento\Customer\Model\Resource\Address\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     public function getAddressesCollection()
     {
@@ -531,7 +531,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get customer attribute model object
      *
      * @param   string $attributeCode
-     * @return  \Magento\Customer\Model\Resource\Attribute | null
+     * @return  \Magento\Customer\Model\ResourceModel\Attribute | null
      */
     public function getAttribute($attributeCode)
     {
@@ -768,7 +768,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
-     * @deprecated
      */
     public function isConfirmationRequired()
     {
@@ -1278,7 +1277,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
-     * @deprecated
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1327,7 +1325,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Customer\Model\Resource\Address\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected function _createAddressCollection()
     {

@@ -53,9 +53,9 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(true)
         );
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $collectionMock */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collectionMock */
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
             [],
             [],
             '',
@@ -83,7 +83,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
             [],
             [],
             '',

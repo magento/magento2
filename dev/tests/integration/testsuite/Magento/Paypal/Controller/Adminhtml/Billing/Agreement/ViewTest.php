@@ -25,9 +25,9 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAclHasAccess()
     {
-        /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
+        /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         );
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->uri = $this->uri . '/agreement/' . $agreementId;

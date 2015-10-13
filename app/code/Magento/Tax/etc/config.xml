@@ -51,7 +51,7 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <url>http://www.magentocommerce.com/knowledge-base/entry/magento-ce-18-ee-113-tax-calc</url>
+                <info_url>http://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
             </notification>
         </tax>
     </default>
