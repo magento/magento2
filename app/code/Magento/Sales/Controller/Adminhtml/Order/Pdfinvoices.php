@@ -17,6 +17,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

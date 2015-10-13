@@ -193,4 +193,5 @@ return [
     ['Magento\Framework\Model\Resource', 'Magento\Framework\Model\ResourceModel'],
     ['Magento\Framework\Model\ModelResource', 'Magento\Framework\Model\ResourceModel'],
     ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
+    ['Magento\Framework\Model\Test\Unit\ModelResource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
 ];
