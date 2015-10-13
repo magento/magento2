@@ -1194,7 +1194,7 @@ class Checkout
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
      */
-    private function setShippingOptions(PaypalCart $cart, $address)
+    private function setShippingOptions(PaypalCart $cart, Address $address = null)
     {
         // for included tax always disable line items (related to paypal amount rounding problem)
         $this->_api->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));
