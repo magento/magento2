@@ -252,6 +252,7 @@ abstract class Grid extends Block
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+        $this->waitLoader();
     }
 
     /**
