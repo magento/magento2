@@ -18,7 +18,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Resource\Store\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactoryMock;
 
@@ -39,7 +39,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Store\Model\Resource\Store\CollectionFactory'
+            '\Magento\Store\Model\ResourceModel\Store\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -121,6 +121,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         $timeZone = 'America/Los_Angeles';
         $baseCurrencyCode = 'USD';
         $defaultDisplayCurrencyCode = 'GBP';
+        $weightUnit = 'lbs';
 
         $storeMocks = [];
         $storeConfigs = [
@@ -138,7 +139,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         ];
         $storeMocks[] = $this->getStoreMock($storeConfigs);
 
-        $storeCollectionMock = $this->getMockBuilder('\Magento\Store\Model\Resource\Store\Collection')
+        $storeCollectionMock = $this->getMockBuilder('\Magento\Store\Model\ResourceModel\Store\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $storeCollectionMock->expects($this->once())
@@ -161,6 +162,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
             ['currency/options/base', ScopeInterface::SCOPE_STORES, $code, $baseCurrencyCode],
             ['currency/options/default', ScopeInterface::SCOPE_STORES, $code, $defaultDisplayCurrencyCode],
             ['general/locale/timezone', ScopeInterface::SCOPE_STORES, $code, $timeZone],
+            [\Magento\Directory\Helper\Data::XML_PATH_WEIGHT_UNIT, ScopeInterface::SCOPE_STORES, $code, $weightUnit]
         ];
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -171,7 +173,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($result));
         $this->assertEquals($id, $result[0]->getId());
         $this->assertEquals($code, $result[0]->getCode());
-        $this->assertEquals('lbs', $result[0]->getWeightUnit());
+        $this->assertEquals($weightUnit, $result[0]->getWeightUnit());
         $this->assertEquals($baseUrl, $result[0]->getBaseUrl());
         $this->assertEquals($secureBaseUrl, $result[0]->getSecureBaseUrl());
         $this->assertEquals($baseLinkUrl, $result[0]->getBaseLinkUrl());

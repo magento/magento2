@@ -39,7 +39,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param DatabaseFactory $directoryFactory
-     * @param \Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database $resource
+     * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $connectionName
      * @param array $data
@@ -52,7 +52,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
-        \Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database $resource,
+        \Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database $resource,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $connectionName = null,
         array $data = []

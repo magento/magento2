@@ -22,13 +22,13 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule
      */
     protected $resourceRule;
 
     protected function setUp()
     {
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Resource\Rule');
+        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
     }
 

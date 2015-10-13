@@ -9,8 +9,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Console\Command\ImagesResizeCommand;
 use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
 use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
-use Magento\Catalog\Model\Resource\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -172,14 +172,14 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
     protected function prepareProductCollection()
     {
         $this->productCollectionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\CollectionFactory'
+            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->productCollection = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Collection'
+            'Magento\Catalog\Model\ResourceModel\Product\Collection'
         )
             ->disableOriginalConstructor()
             ->getMock();

@@ -17,7 +17,7 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * Steps:
  * 1. Login to backend.
- * 2. Open Content > Frontend Apps.
+ * 2. Open Content > Widgets.
  * 3. Open Widget from preconditions.
  * 4. Delete.
  * 5. Perform all asserts.

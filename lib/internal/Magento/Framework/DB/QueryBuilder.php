@@ -25,7 +25,7 @@ class QueryBuilder
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb
      */
     protected $resource;
 
@@ -65,10 +65,10 @@ class QueryBuilder
     /**
      * Set Resource
      *
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
      * @return void
      */
-    public function setResource(\Magento\Framework\Model\Resource\Db\AbstractDb $resource)
+    public function setResource(\Magento\Framework\Model\ModelResource\Db\AbstractDb $resource)
     {
         $this->resource = $resource;
     }
