@@ -79,7 +79,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sku', $attributes);
         $this->assertArrayHasKey('name', $attributes);
         foreach ($attributes as $attribute) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Resource\Eav\Attribute', $attribute);
+            $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Eav\Attribute', $attribute);
         }
         /* possibility of fatal error if passing null instead of product */
     }
@@ -115,7 +115,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
         $isTypeExists = false;
         foreach ($attributes as $attribute) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Resource\Eav\Attribute', $attribute);
+            $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Eav\Attribute', $attribute);
             $applyTo = $attribute->getApplyTo();
             if (count($applyTo) > 0 && !in_array('simple', $applyTo)) {
                 $isTypeExists = true;

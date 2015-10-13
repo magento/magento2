@@ -17,13 +17,13 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 
     public function setUp()
     {
-        $this->saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $this->saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Render\FinalPriceBox', [

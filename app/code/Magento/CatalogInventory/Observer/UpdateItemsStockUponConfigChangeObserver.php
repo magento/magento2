@@ -15,14 +15,14 @@ use Magento\Framework\Event\ObserverInterface;
 class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock
      */
     protected $resourceStock;
 
     /**
-     * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock
      */
-    public function __construct(\Magento\CatalogInventory\Model\Resource\Stock $resourceStock)
+    public function __construct(\Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock)
     {
         $this->resourceStock = $resourceStock;
     }

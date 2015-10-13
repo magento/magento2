@@ -37,8 +37,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         );
         $registration->register();
         $this->model = $objectManager->create('Magento\Framework\View\Design\Fallback\RulePool');
-        /** @var \Magento\Theme\Model\Resource\Theme\Collection $collection */
-        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $collection */
+        $collection = $objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
         /** @var \Magento\Theme\Model\Theme $theme */
         $theme = $collection->getThemeByFullPath('frontend/Vendor_ViewTest/custom_theme');
 

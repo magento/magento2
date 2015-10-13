@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Builder\Query;
 
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -52,8 +52,8 @@ class MatchTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        /** @var \Magento\Framework\App\Resource $resource */
-        $resource = $this->objectManager->create('Magento\Framework\App\Resource');
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
+        $resource = $this->objectManager->create('Magento\Framework\App\ResourceConnection');
         /** @var \Magento\Framework\DB\Select $select */
         $select = $resource->getConnection()->select();
         $select->from('someTable');
