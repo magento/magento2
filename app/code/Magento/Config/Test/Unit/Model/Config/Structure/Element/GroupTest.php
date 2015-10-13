@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,17 +17,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_cloneFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_iteratorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,14 +26,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator\Field',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $objectManager = new ObjectManager($this);
         $this->_cloneFactoryMock = $this->getMock(
             'Magento\Config\Model\Config\BackendClone\Factory',
             [],
@@ -57,19 +42,18 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Group(
-            $this->_storeManagerMock,
-            $this->_iteratorMock,
-            $this->_cloneFactoryMock,
-            $this->_depMapperMock
+        $this->_model = $objectManager->getObject(
+            'Magento\Config\Model\Config\Structure\Element\Group',
+            [
+                'cloneModelFactory' => $this->_cloneFactoryMock,
+                'dependencyMapper' => $this->_depMapperMock,
+            ]
         );
     }
 
     protected function tearDown()
     {
         unset($this->_model);
-        unset($this->_iteratorMock);
-        unset($this->_storeManagerMock);
         unset($this->_cloneFactoryMock);
         unset($this->_depMapperMock);
     }
