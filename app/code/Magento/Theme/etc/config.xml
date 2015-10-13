@@ -8,6 +8,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <design>
+            <invalid_caches>
+                <block_html />
+                <layout />
+                <translate />
+            </invalid_caches>
             <head translate="default_description">
                 <default_title>Magento Commerce</default_title>
                 <default_description>Default Description</default_description>
