@@ -59,7 +59,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                 $priceConfig = $this->recurConfigAndInsertWeeePrice(
                     $priceConfigObj->getConfig(),
                     'prices',
-                    $this->getWhichCalcPriceToUse($product->getStoreId()),
+                    $this->getWhichCalcPriceToUse($product->getStoreId(), $weeeAttributes),
                     $weeeAttributes
                 );
                 $priceConfigObj->setConfig($priceConfig);
@@ -137,16 +137,19 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * Returns which product price to use as a basis for the Weee's final price
      *
      * @param  int|null $storeId
+     * @param  array|null $weeeAttributes
      * @return string
      */
-    protected function getWhichCalcPriceToUse($storeId = null)
+    protected function getWhichCalcPriceToUse($storeId = null, $weeeAttributes = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->geDisplayExcl($storeId) ||
-            $this->weeeData->geDisplayExlDescIncl($storeId) ||
-            ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
-        ) {
-            $calcPrice = 'basePrice';
+        if (!empty($weeeAttributes)) {
+            if ($this->weeeData->geDisplayExcl($storeId) ||
+                $this->weeeData->geDisplayExlDescIncl($storeId) ||
+                ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
+            ) {
+                $calcPrice = 'basePrice';
+            }
         }
         return $calcPrice;
     }
