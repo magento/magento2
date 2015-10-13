@@ -81,10 +81,11 @@ class Payment extends Block
      */
     public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
-        $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
-        if ($paymentSelector->isVisible()) {
-            $paymentSelector->click();
-        } else {
+        $paymentSelector = sprintf($this->paymentMethodInput, $payment['method']);
+        try {
+            $this->waitForElementVisible($paymentSelector);
+            $this->_rootElement->find($paymentSelector)->click();
+        } catch (\Exception $exception) {
             $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
             $this->waitForElementNotVisible($this->waitElement);
             if (!$paymentLabel->isVisible()) {
