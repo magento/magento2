@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 
 /**
@@ -63,7 +64,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_direction = \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION;
+    protected $_direction = ProductList::DEFAULT_SORT_DIRECTION;
 
     /**
      * Default View mode
@@ -102,7 +103,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_toolbarModel;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList
+     * @var ProductList
      */
     protected $_productListHelper;
 
@@ -122,7 +123,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param ToolbarModel $toolbarModel
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
+     * @param ProductList $productListHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
@@ -132,7 +133,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\Config $catalogConfig,
         ToolbarModel $toolbarModel,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Catalog\Helper\Product\ProductList $productListHelper,
+        ProductList $productListHelper,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = []
     ) {
@@ -678,7 +679,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'order' => ToolbarModel::ORDER_PARAM_NAME,
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
             'modeDefault' => $defaultMode,
-            'directionDefault' => \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION,
+            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
             'orderDefault' => $this->_productListHelper->getDefaultSortField(),
             'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
