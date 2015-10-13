@@ -35,7 +35,7 @@ class Base extends AbstractCurrency
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $config, $cacheTypeList, $resourceCollection, $resource, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->currencyFactory = $currencyFactory;
     }
 

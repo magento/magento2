@@ -3,24 +3,38 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Rss\Model\System\Config\Backend;
 
 /**
- * Cache cleaner backend model
- *
+ * System config translate inline fields backend model
  */
-class Links extends \Magento\Framework\App\Config\Value
+namespace Magento\Config\Model\Config\Backend;
+
+class Translate extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Invalidate cache type, when value was changed
+     * Path to config node with list of caches
+     *
+     * @var string
+     */
+    const XML_PATH_INVALID_CACHES = 'dev/translate_inline/invalid_caches';
+
+    /**
+     * Set status 'invalidate' for blocks and other output caches
      *
      * @return $this
      */
     public function afterSave()
     {
+        $types = array_keys(
+            $this->_config->getValue(
+                self::XML_PATH_INVALID_CACHES,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         if ($this->isValueChanged()) {
-            $this->cacheTypeList->invalidate(\Magento\Framework\View\Element\AbstractBlock::CACHE_GROUP);
+            $this->cacheTypeList->invalidate($types);
         }
+
         return parent::afterSave();
     }
 }
