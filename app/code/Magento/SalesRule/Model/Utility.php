@@ -26,7 +26,7 @@ class Utility
     protected $_baseRoundingDeltas = [];
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\UsageFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory
      */
     protected $usageFactory;
 
@@ -51,14 +51,14 @@ class Utility
     protected $priceCurrency;
 
     /**
-     * @param Resource\Coupon\UsageFactory $usageFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
      * @param \Magento\Framework\DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
         \Magento\Framework\DataObjectFactory $objectFactory,

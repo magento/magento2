@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use \Braintree_Result_Successful;
 use \Braintree_Result_Error;
@@ -119,6 +119,14 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      */
     protected $appStateMock;
 
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderRepository;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
@@ -134,7 +142,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesTransactionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -169,6 +177,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getAppState')
             ->willReturn($this->appStateMock);
+        $this->orderRepository = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Braintree\Model\PaymentMethod',
@@ -185,6 +195,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->loggerMock,
                 'braintreeTransaction' => $this->braintreeTransactionMock,
                 'braintreeCreditCard' => $this->braintreeCreditCardMock,
+                'orderRepository' => $this->orderRepository
             ]
         );
         $this->infoInstanceMock = $this->getMockForAbstractClass(
@@ -784,6 +795,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                 ->method('getAreaCode')
                 ->willReturn($appState);
         }
+
+        $paymentObject->setParentId('1');
+        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->getMockForAbstractClass();
+        $order->expects($this->once())
+            ->method('getTotalDue')
+            ->willReturn(10.02);
+        $this->orderRepository->expects($this->once())
+            ->method('get')
+            ->willReturn($order);
 
         $this->assertEquals($this->model, $this->model->authorize($paymentObject, $amount));
         foreach ($expectedPaymentFields as $key => $value) {
@@ -1699,7 +1720,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $numberOfTransactions
     ) {
         $transactionCollectionMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $transactionCollectionMock->expects($this->at(0))
@@ -1751,6 +1772,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $this->psrLoggerMock->expects($this->never())
             ->method('critical');
 
+        $paymentObject->setParentId('1');
+        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->getMockForAbstractClass();
+        $order->expects($this->once())
+            ->method('getTotalDue')
+            ->willReturn(10.02);
+        $this->orderRepository->expects($this->once())
+            ->method('get')
+            ->willReturn($order);
+
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
         $this->assertFalse($paymentObject->getShouldCloseParentTransaction());
@@ -1793,7 +1824,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $authTransaction
     ) {
         $authTransactionCollectionMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $authTransactionCollectionMock->expects($this->once())
@@ -1892,6 +1923,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $this->braintreeTransactionMock->expects($this->once())
             ->method('sale')
             ->willReturn($result);
+
+        $paymentObject->setParentId('1');
+        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->getMockForAbstractClass();
+        $order->expects($this->once())
+            ->method('getTotalDue')
+            ->willReturn(10.02);
+        $this->orderRepository->expects($this->once())
+            ->method('get')
+            ->willReturn($order);
 
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
@@ -2074,6 +2115,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             )->willReturn($resultSuccess);
+
+        $paymentObject->setParentId('1');
+        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->getMockForAbstractClass();
+        $order->expects($this->once())
+            ->method('getTotalDue')
+            ->willReturn(10.02);
+        $this->orderRepository->expects($this->once())
+            ->method('get')
+            ->willReturn($order);
 
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(PaymentMethod::STATUS_APPROVED, $paymentObject->getStatus());
@@ -2379,7 +2430,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     protected function setupTransactionIds($orderId, $transactionIds)
     {
         $transactionCollectionMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
             ->getMock();
         $transactionCollectionMock->expects($this->once())
@@ -2471,7 +2522,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $index = 1;
         foreach (array_keys($transactions) as $id) {
             $transactionCollectionMock = $this->getMockBuilder(
-                '\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection'
+                '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
             )->disableOriginalConstructor()
                 ->getMock();
             $transactionCollectionMock->expects($this->at(0))

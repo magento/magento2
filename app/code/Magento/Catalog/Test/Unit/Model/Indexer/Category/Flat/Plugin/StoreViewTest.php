@@ -60,7 +60,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return false;
         };
-        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Store', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Store', [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
             'Magento\Framework\Indexer\IndexerRegistry',
             ['get'],

@@ -21,8 +21,8 @@
             <argument name="inputTypeFactory" xsi:type="object">Magento\Catalog\Model\System\Config\Source\InputtypeFactory</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Product">
-        <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\Resource\Product" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product" />
     </type>
     <type name="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <arguments>
