@@ -4000,7 +4000,6 @@ return [
     ['Magento\Framework\Module\Resource', 'Magento\Framework\Module\ModuleResource'],
     ['Magento\OfflineShipping\Model\Observer\SalesRule\ActionsTab', 'Magento\OfflineShipping\Observer\*'],
     ['Magento\Theme\Model\Observer', 'Magento\Theme\Observer\*'],
-    ['Magento\Catalog\Model\Product\Compare\Item', 'Magento\Catalog\Observer\*'],
     ['Magento\Catalog\Observer\AddCatalogToTopmenuItems', 'Magento\Catalog\Observer\*'],
     ['Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowed', 'Magento\Catalog\Observer\*'],
     [
