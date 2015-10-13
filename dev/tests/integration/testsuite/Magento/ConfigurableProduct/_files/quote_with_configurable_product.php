@@ -5,15 +5,15 @@
  */
 
 require 'product_configurable.php';
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->load(1);
 /* Create simple products per each option */
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+/** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
 );
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 

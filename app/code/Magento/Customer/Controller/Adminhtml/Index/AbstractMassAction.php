@@ -11,7 +11,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class AbstractMassStatus

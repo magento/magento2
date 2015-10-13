@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Model;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 
 class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface
 {
@@ -59,7 +59,9 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     public function getCount($status = null)
     {
         $products = $this->productsFactory->create();
-        /** @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection $products */
+        // @codingStandardsIgnoreStart
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection $products */
+        // @codingStandardsIgnoreEnd
         switch ($status) {
             case Status::STATUS_ENABLED:
                 $products->addAttributeToFilter('status', Status::STATUS_ENABLED);
@@ -83,7 +85,7 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
         foreach ($options as $option) {
             $configurable = $this->objectToArray($option);
-            /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->attributeRepository->get($option->getAttributeId());
             $attributeOptions = $attribute->getOptions() !== null ? $attribute->getOptions() : [];
 
