@@ -40,7 +40,7 @@ define([
         nextLabelText: $.mage.__('Generate Products'),
         variations: [],
         generateGrid: function (variations, getSectionValue) {
-            var productName = this.variationsComponent().getProductValue('name'),
+            var productSku = this.variationsComponent().getProductValue('sku'),
                 productPrice = this.variationsComponent().getProductValue('price'),
                 productWeight = this.variationsComponent().getProductValue('weight'),
                 variationsKeys = [],
@@ -59,7 +59,7 @@ define([
                     });
                 }
                 images = getSectionValue('images', options);
-                sku = productName + _.reduce(options, function (memo, option) {
+                sku = productSku + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
                 quantity = getSectionValue('quantity', options);
