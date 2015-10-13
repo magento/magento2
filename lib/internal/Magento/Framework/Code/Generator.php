@@ -71,6 +71,7 @@ class Generator
      * @return string | void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function generateClass($className)
     {
@@ -91,7 +92,7 @@ class Generator
         }
         if (!$entity || !$entityName) {
             return self::GENERATION_ERROR;
-        } else if ($this->definedClasses->classLoadable($className)) {
+        } else if ($this->definedClasses->isClassLoadableFromDisc($className)) {
             return self::GENERATION_SKIP;
         } else if (!isset($this->_generatedEntities[$entity])) {
             throw new \InvalidArgumentException('Unknown generation entity.');
@@ -107,7 +108,9 @@ class Generator
                     new \Magento\Framework\Phrase(implode(' ', $errors))
                 );
             }
-            $this->includeFile($file);
+            if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
+                $this->includeFile($file);
+            }
             return self::GENERATION_SUCCESS;
         }
     }
@@ -176,7 +179,7 @@ class Generator
     protected function tryToLoadSourceClass($className, $generator)
     {
         $sourceClassName = $generator->getSourceClassName();
-        if (!$this->definedClasses->classLoadable($sourceClassName)) {
+        if (!$this->definedClasses->isClassLoadableFromDisc($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(

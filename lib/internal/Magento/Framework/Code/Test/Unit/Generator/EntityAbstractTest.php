@@ -225,13 +225,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     ) {
         // Configure DefinedClasses mock
         $definedClassesMock = $this->getMock('Magento\Framework\Code\Generator\DefinedClasses');
-        $definedClassesMock->expects($this->at(0))
-            ->method('classLoadable')
+        $definedClassesMock->expects($this->once())
+            ->method('isClassLoadable')
             ->with(self::SOURCE_CLASS)
             ->willReturn($sourceClassExists);
         if ($resultClassExists) {
-            $definedClassesMock->expects($this->at(1))
-                ->method('classLoadable')
+            $definedClassesMock->expects($this->once())
+                ->method('isClassLoadableFromDisc')
                 ->with(self::RESULT_CLASS)
                 ->willReturn($resultClassExists);
         }

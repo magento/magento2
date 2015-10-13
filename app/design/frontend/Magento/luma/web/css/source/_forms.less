@@ -59,11 +59,18 @@ fieldset.field {
     border: 0;
     padding: 0;
 }
-.field.date {
-    .time-picker {
-        white-space: nowrap;
-        margin-top: @indent__s;
-        display: inline-block;
+.field {
+    &.date {
+        .time-picker {
+            white-space: nowrap;
+            margin-top: @indent__s;
+            display: inline-block;
+        }
+    }
+    .message {
+        &.warning {
+            margin-top: @indent__s;
+        }
     }
 }
 
