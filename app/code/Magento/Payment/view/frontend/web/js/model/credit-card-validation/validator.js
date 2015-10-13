@@ -34,14 +34,11 @@
 
                     for (i = 0, l = allowedTypes.length; i < l; i++) {
                         if (cardInfo.title == allowedTypes[i].type) {
-                            break;
                             return true;
                         }
                     }
                     return false;
                 }
-
-                return creditCardNumberValidator(number).isValid;
             },
             'Please enter a valid credit card type number.'
         ],
@@ -52,7 +49,6 @@
              * @return {boolean}
              */
                 function (number) {
-                debugger;
                 return creditCardNumberValidator(number).isValid;
             },
             'Please enter a valid credit card number.'
