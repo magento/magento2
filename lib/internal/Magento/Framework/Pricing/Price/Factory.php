@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Price;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Price factory

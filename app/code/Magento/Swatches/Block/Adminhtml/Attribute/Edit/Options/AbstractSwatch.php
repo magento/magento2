@@ -28,7 +28,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
      * Prepare option values of user defined attribute
      *
      * @codeCoverageIgnore
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option $option
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
      * @param string $inputType
      * @param array $defaultValues
      * @return array
@@ -55,7 +55,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Swatches\Helper\Media $swatchHelper
@@ -64,7 +64,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Swatches\Helper\Media $swatchHelper,
