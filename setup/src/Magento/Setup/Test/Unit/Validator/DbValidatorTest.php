@@ -89,7 +89,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Table prefix length can't be more then
+     * @expectedExceptionMessage Table prefix length can't be more than
      */
     public function testCheckDatabaseTablePrefixWrongLength()
     {
