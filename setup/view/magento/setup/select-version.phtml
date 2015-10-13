@@ -186,14 +186,15 @@
                 <tbody>
             <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
                     <td class="data-grid-indicator-cell">
-                        <div class="onoffswitch">
+                        <div class="actions-switch">
                             <input type="checkbox" name="{{component.checkboxId}}"
-                                   class="onoffswitch-checkbox" id="{{component.checkboxId}}"
+                                   class="actions-switch-checkbox" id="{{component.checkboxId}}"
                                    ng-click="AddRemoveComponentOnSliderMove(component)"
                                    ng-checked="isSelected(component.name)">
-                            <label class="onoffswitch-label" for="{{component.checkboxId}}">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
+                            <label class="actions-switch-label" for="{{component.checkboxId}}">
+                                <span class="actions-switch-inner"></span>
+                                <span class="actions-switch-indicator"></span>
+                                <span class="actions-switch-text" data-label-yes="Yes" data-label-no="No"></span>
                             </label>
                         </div>
                     </td>
