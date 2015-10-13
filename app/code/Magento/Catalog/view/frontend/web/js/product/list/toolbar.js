@@ -68,7 +68,9 @@ define([
                 parameters;
             for (var i = 0; i < urlParams.length; i++) {
                 parameters = urlParams[i].split('=');
-                paramData[parameters[0]] = parameters[1] !== undefined ? parameters[1] : '';
+                paramData[parameters[0]] = parameters[1] !== undefined
+                    ? window.decodeURIComponent(parameters[1].replace(/\+/g, '%20'))
+                    : '';
             }
             paramData[paramName] = paramValue;
             if (paramValue == defaultValue) {
