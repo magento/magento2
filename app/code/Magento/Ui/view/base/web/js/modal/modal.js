@@ -52,6 +52,7 @@ define([
             innerScrollClass: '_inner-scroll',
             responsive: false,
             innerScroll: false,
+            closeOnclickOverlay: true,
             modalBlock: '[data-role="modal"]',
             modalCloseBtn: '[data-role="closeBtn"]',
             modalContent: '[data-role="content"]',
@@ -270,9 +271,11 @@ define([
             if (events) {
                 this.prevOverlayHandler = events.click[0].handler;
             }
-            this.overlay.unbind().on('click', function () {
-                that.closeModal();
-            });
+            if(this.options.closeOnclickOverlay) {
+                this.overlay.unbind().on('click', function() {
+                    that.closeModal();
+                });
+            }
         },
 
         /**
