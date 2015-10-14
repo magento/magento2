@@ -77,14 +77,16 @@ class Reader
             $result = @include $path . '/' . $this->configFilePool->getPath($fileKey);
         } else {
             $configFiles = $this->configFilePool->getPaths();
+            $allFilesData = [];
             $result = [];
             foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
-                $fileData = @include $configFile;
+                $fileData = include $configFile;
+                $allFilesData[$configFile] = $fileData;
                 if (!empty($fileData)) {
                     $intersection = array_intersect_key($result, $fileData);
                     if (!empty($intersection)) {
-                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection), $path, $configFiles);
+                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection), $allFilesData);
                         throw new \Exception(
                             "Key collision! The following keys occur in multiple config files:"
                             . PHP_EOL . $displayMessage
@@ -101,20 +103,17 @@ class Reader
      * Finds list of files that has the key
      *
      * @param array $keys
-     * @param string $configPath
-     * @param array $configFiles
+     * @param array $allFilesData
      * @return string
      */
-    private function findFilesWithKeys($keys, $configPath, $configFiles)
+    private function findFilesWithKeys(array $keys, array $allFilesData)
     {
         $displayMessage = '';
         foreach ($keys as $key) {
             $foundConfigFiles = [];
-            foreach (array_values($configFiles) as $fileValue) {
-                $configFile = $configPath . '/' . $fileValue;
-                $fileData = @include $configFile;
-                if (array_key_exists($key, $fileData)) {
-                    $foundConfigFiles[] = $fileValue;
+            foreach ($allFilesData as $fileName => $fileValues) {
+                if (array_key_exists($key, $fileValues)) {
+                    $foundConfigFiles[] = $fileName;
                 }
             }
             $displayMessage .= 'Key "' . $key . '" found in ' . implode(', ', $foundConfigFiles) . PHP_EOL;
