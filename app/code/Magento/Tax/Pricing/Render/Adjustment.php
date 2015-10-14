@@ -91,6 +91,11 @@ class Adjustment extends AbstractAdjustment
      */
     public function getDisplayAmountExclTax($exclude = null, $includeContainer = false)
     {
+        //If exclude is not supplied, use the default
+        if ($exclude === null) {
+            $exclude = $this->getDefaultExclusions();
+        }
+
         return $this->formatCurrency(
             $this->getRawAmount($exclude),
             $includeContainer
