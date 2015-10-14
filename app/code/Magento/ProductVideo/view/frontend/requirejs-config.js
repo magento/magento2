@@ -6,7 +6,6 @@
 var config = {
     map: {
         '*': {
-            fotoramaAddVideoEvents: 'Magento_ProductVideo/js/fotorama-add-video-events',
             loadPlayer: 'Magento_ProductVideo/js/load-player'
         }
     }
