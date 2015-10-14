@@ -22,7 +22,7 @@ use Magento\Framework\Indexer\StateInterface;
  * Customer model
  *
  * @method int getWebsiteId() getWebsiteId()
- * @method Customer setWebsiteId(int)
+ * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
  * @method ResourceCustomer _getResource()
