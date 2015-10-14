@@ -1803,7 +1803,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'value' => $insertValue['value'],
                     ];
                     $valueToProductId[$insertValue['value']] = $productId;
-                    $imageNames = $insertValue['value'];
+                    $imageNames[] = $insertValue['value'];
                     $multiInsertData[] = $valueArr;
                     $insertedGalleryImgs[] = $insertValue['value'];
                 }
