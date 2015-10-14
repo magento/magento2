@@ -90,7 +90,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Prepare data for export
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-     * @param int $productIds
+     * @param int[] $productIds
      * @return $this
      */
     public function prepareData($collection, $productIds)
