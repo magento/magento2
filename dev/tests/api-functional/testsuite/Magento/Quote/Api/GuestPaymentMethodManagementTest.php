@@ -81,12 +81,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
-                'po_number' => null,
-                'cc_owner' => 'John',
-                'cc_type' => null,
-                'cc_exp_year' => null,
-                'cc_exp_month' => null,
+                'po_number' => null
             ],
         ];
 
@@ -119,12 +114,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -156,12 +146,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
 
@@ -196,12 +181,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'title' => 'title',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -279,7 +259,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
      */
     protected function getPaymentMethodFieldsForAssert()
     {
-        return ['method', 'po_number', 'cc_owner', 'cc_type', 'cc_exp_year', 'cc_exp_month', 'additional_data'];
+        return ['method', 'po_number', 'additional_data'];
     }
 
     /**

@@ -23,22 +23,12 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $_configurableType;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_applicationConfig;
-
-    /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
-     */
-    protected $_localeCurrency;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
@@ -55,52 +45,50 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     protected $productRepository;
 
+    /** @var \Magento\Catalog\Helper\Image */
+    protected $image;
+
+    /** @var null|array */
+    private $productMatrix;
+
+    /** @var null|array */
+    private $productAttributes;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
-     * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Helper\Image $image
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
-        \Magento\Catalog\Model\Config $config,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Helper\Image $image,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_configurableType = $configurableType;
-        $this->_config = $config;
         $this->_coreRegistry = $coreRegistry;
-        $this->_localeCurrency = $localeCurrency;
         $this->stockRegistry = $stockRegistry;
-        parent::__construct($context, $data);
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;
+        $this->image = $image;
     }
 
     /**
-     * Retrieve price rendered according to current locale and currency settings
-     *
-     * @param int|float $price
      * @return string
      */
-    public function renderPrice($price)
+    public function getCurrencySymbol()
     {
-        return $this->_localeCurrency->getCurrency(
-            $this->_scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default')
-        )->toCurrency(
-            sprintf('%f', $price)
-        );
+        return $this->_storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
     }
 
     /**
@@ -168,7 +156,7 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return array
      */
-    public function getUsedAttributes()
+    protected function getUsedAttributes()
     {
         return $this->_configurableType->getUsedProductAttributes($this->getProduct());
     }
@@ -178,13 +166,13 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return Product[]
      */
-    public function getAssociatedProducts()
+    protected function getAssociatedProducts()
     {
         $productByUsedAttributes = [];
         foreach ($this->_getAssociatedProducts() as $product) {
             $keys = [];
             foreach ($this->getUsedAttributes() as $attribute) {
-                /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+                /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 $keys[] = $product->getData($attribute->getAttributeCode());
             }
             $productByUsedAttributes[implode('-', $keys)] = $product;
@@ -215,20 +203,6 @@ class Matrix extends \Magento\Backend\Block\Template
             }
         }
         return $products;
-    }
-
-    /**
-     * Get html class for attribute
-     *
-     * @param string $code
-     * @return string
-     */
-    public function getAttributeFrontendClass($code)
-    {
-        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-        $attribute = $this->_config->getAttribute(Product::ENTITY, $code);
-        return $attribute instanceof
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute ? $attribute->getFrontend()->getClass() : '';
     }
 
     /**
@@ -263,5 +237,103 @@ class Matrix extends \Magento\Backend\Block\Template
             return $wizardBlock->toHtml();
         }
         return '';
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getProductMatrix()
+    {
+        if ($this->productMatrix === null) {
+            $this->prepareVariations();
+        }
+        return $this->productMatrix;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getProductAttributes()
+    {
+        if ($this->productAttributes === null) {
+            $this->prepareVariations();
+        }
+        return $this->productAttributes;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return void
+     * TODO: move to class
+     */
+    protected function prepareVariations()
+    {
+        $variations = $this->getVariations();
+        $productMatrix = [];
+        $attributes = [];
+        if ($variations) {
+            $usedProductAttributes = $this->getUsedAttributes();
+            $productByUsedAttributes = $this->getAssociatedProducts();
+            foreach ($variations as $variation) {
+                $attributeValues = [];
+                foreach ($usedProductAttributes as $attribute) {
+                    $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
+                }
+                $key = implode('-', $attributeValues);
+                if (isset($productByUsedAttributes[$key])) {
+                    $product = $productByUsedAttributes[$key];
+                    $price = $product->getPrice();
+                    $variationOptions = [];
+                    foreach ($usedProductAttributes as $attribute) {
+                        if (!isset($attributes[$attribute->getAttributeId()])) {
+                            $attributes[$attribute->getAttributeId()] = [
+                                'code' => $attribute->getAttributeCode(),
+                                'label' => $attribute->getStoreLabel(),
+                                'id' => $attribute->getAttributeId(),
+                                'position' => $attribute->getPosition(),
+                                'chosen' => [],
+                            ];
+                            foreach ($attribute->getOptions() as $option) {
+                                if (!empty($option->getValue())) {
+                                    $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                                        'attribute_code' => $attribute->getAttributeCode(),
+                                        'attribute_label' => $attribute->getStoreLabel(0),
+                                        'id' => $option->getValue(),
+                                        'label' => $option->getLabel(),
+                                        'value' => $option->getValue(),
+                                    ];
+                                }
+                            }
+                        }
+                        $optionId = $variation[$attribute->getId()]['value'];
+                        $variationOption = [
+                            'attribute_code' => $attribute->getAttributeCode(),
+                            'attribute_label' => $attribute->getStoreLabel(0),
+                            'id' => $optionId,
+                            'label' => $variation[$attribute->getId()]['label'],
+                            'value' => $optionId,
+                        ];
+                        $variationOptions[] = $variationOption;
+                        $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
+                    }
+
+                    $productMatrix[] = [
+                        'productId' => $product->getId(),
+                        'images' => [
+                            'preview' => $this->image->init($product, 'product_thumbnail_image')->getUrl()
+                        ],
+                        'sku' => $product->getSku(),
+                        'name' => $product->getName(),
+                        'quantity' => $this->getProductStockQty($product),
+                        'price' => $price,
+                        'options' => $variationOptions,
+                        'weight' => $product->getWeight(),
+                        'status' => $product->getStatus()
+                    ];
+                }
+            }
+        }
+        $this->productMatrix = $productMatrix;
+        $this->productAttributes = array_values($attributes);
     }
 }

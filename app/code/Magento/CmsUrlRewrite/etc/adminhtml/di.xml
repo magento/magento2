@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Cms\Model\Resource\Page">
-        <plugin name="cms_url_rewrite_plugin" type="Magento\CmsUrlRewrite\Plugin\Cms\Model\Resource\Page"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Cms\Model\ResourceModel\Page">
+        <plugin name="cms_url_rewrite_plugin" type="Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page"/>
     </type>
 </config>

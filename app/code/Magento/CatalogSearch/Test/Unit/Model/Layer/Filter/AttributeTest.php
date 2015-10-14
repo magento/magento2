@@ -22,7 +22,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|MockObject */
     private $frontend;
 
-    /** @var  \Magento\CatalogSearch\Model\Resource\Fulltext\Collection|MockObject */
+    /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject */
     private $fulltextCollection;
 
     /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory|MockObject */
     private $filterAttributeFactory;
 
     /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
@@ -67,7 +67,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
-        $this->fulltextCollection = $this->getMockBuilder('\Magento\CatalogSearch\Model\Resource\Fulltext\Collection')
+        $this->fulltextCollection =
+            $this->getMockBuilder('\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
             ->getMock();
@@ -81,7 +82,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->filterAttributeFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory'
+            '\Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])

@@ -9,15 +9,15 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/action/get-totals',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
+    function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
         'use strict';
 
-        return function (messageContainer) {
+        return function (messageContainer, paymentData) {
             var serviceUrl,
-                payload,
-                paymentData = quote.paymentMethod();
+                payload;
 
             /**
              * Checkout for guest and registered customer.
@@ -42,15 +42,15 @@ define(
             }
 
             fullScreenLoader.startLoader();
+
             return storage.post(
-                serviceUrl, JSON.stringify(payload), false
-            ).done(
-                function () {
-                    //do nothing
-                }
+                serviceUrl, JSON.stringify(payload)
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                }
+            ).always(
+                function () {
                     fullScreenLoader.stopLoader();
                 }
             );

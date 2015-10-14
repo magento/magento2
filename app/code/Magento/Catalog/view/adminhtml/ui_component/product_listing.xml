@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">product_listing.product_listing_data_source</item>
@@ -178,7 +178,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="caption" xsi:type="string" translate="true">All Store Views</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string"></item>
@@ -425,7 +425,7 @@
         </column>
         <column name="websites" class="Magento\Catalog\Ui\Component\Listing\Columns\Websites">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Store\Model\Resource\Website\Collection</item>
+                <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection</item>
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>

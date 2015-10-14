@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
@@ -153,8 +153,8 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
+                        <item name="captionValue" xsi:type="string">0</item>
                     </item>
                 </argument>
             </filterSelect>
@@ -304,7 +304,7 @@
             </filterRange>
             <filterSelect name="custom_theme">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\Theme</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\ThemeFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -317,7 +317,7 @@
             </filterSelect>
             <filterSelect name="custom_root_template">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayoutFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -346,7 +346,7 @@
             </filterInput>
             <filterSelect name="page_layout">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayoutFilter</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

@@ -6,7 +6,6 @@
 namespace Magento\Config\Block\System\Config;
 
 use Magento\Framework\App\Cache\State;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoAppArea adminhtml
@@ -76,19 +75,21 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Config\Block\System\Config\Form::initFields
-     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param string $fieldId uses the test_field_use_config field if true
      * @param bool $isConfigDataEmpty if the config data array should be empty or not
-     * @param $configDataValue the value that the field path should be set to in the config data
+     * @param string $configDataValue The value that the field path should be set to in the config data
+     * @param int $valueSelCtr Number of time that value is selected
      * @param bool $expectedUseDefault
      * @dataProvider initFieldsUseDefaultCheckboxDataProvider
      */
     public function testInitFieldsUseDefaultCheckbox(
-        $useConfigField,
+        $fieldId,
         $isConfigDataEmpty,
         $configDataValue,
-        $expectedUseDefault
+        $expectedUseDefault,
+        $valueSelCtr = 1
     ) {
-        $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
+        $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Config\ScopeInterface'
@@ -127,12 +128,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fieldsetHtml = $fieldset->getElementHtml();
 
         $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount($valueSel, true, $fieldsetHtml, 'Field input not found in fieldset HTML');
+        $this->assertSelectCount(
+            $valueSel,
+            $valueSelCtr,
+            $fieldsetHtml,
+            'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
+        );
         $this->assertSelectCount(
             $useDefaultSel,
-            true,
+            $valueSelCtr,
             $fieldsetHtml,
-            '"Use Default" checkbox not found in fieldset HTML'
+            '"Use Default" checkbox should appear' . $valueSelCtr . ' times  in fieldset HTML.'
         );
 
         if ($expectedUseDefault) {
@@ -160,25 +166,27 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public static function initFieldsUseDefaultCheckboxDataProvider()
     {
         return [
-            [false, true, null, true],
-            [false, false, null, false],
-            [false, false, '', false],
-            [false, false, 'value', false],
-            [true, false, 'config value', false]
+            ['test_field', true, null, true],
+            ['test_field', false, null, false],
+            ['test_field', false, '', false],
+            ['test_field', false, 'value', false],
+            ['test_field_use_config_module_1', false, 'config value', false],
+            ['test_field_use_config_module_0', false, 'config value', false, 0],
         ];
     }
 
     /**
      * @covers \Magento\Config\Block\System\Config\Form::initFields
-     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param string $fieldId uses the test_field_use_config field if true
      * @param bool $isConfigDataEmpty if the config data array should be empty or not
-     * @param $configDataValue the value that the field path should be set to in the config data
+     * @param string $configDataValue Value that the field path should be set to in the config data
+     * @param int $valueSelCtr Number of time that value is selected
      * @dataProvider initFieldsUseConfigPathDataProvider
      * @magentoConfigFixture default/test_config_section/test_group_config_node/test_field_value config value
      */
-    public function testInitFieldsUseConfigPath($useConfigField, $isConfigDataEmpty, $configDataValue)
+    public function testInitFieldsUseConfigPath($fieldId, $isConfigDataEmpty, $configDataValue, $valueSelCtr = 1)
     {
-        $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
+        $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Config\ScopeInterface'
@@ -209,7 +217,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fieldsetHtml = $fieldset->getElementHtml();
 
         $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount($valueSel, true, $fieldsetHtml, 'Field input not found in fieldset HTML');
+        $this->assertSelectCount(
+            $valueSel,
+            $valueSelCtr,
+            $fieldsetHtml,
+            'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
+        );
     }
 
     /**
@@ -218,20 +231,21 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public static function initFieldsUseConfigPathDataProvider()
     {
         return [
-            [false, true, null],
-            [false, false, null],
-            [false, false, ''],
-            [false, false, 'value'],
-            [true, false, 'config value']
+            ['test_field', true, null],
+            ['test_field', false, null],
+            ['test_field', false, ''],
+            ['test_field', false, 'value'],
+            ['test_field_use_config_module_1', false, 'config value'],
+            ['test_field_use_config_module_0', false, 'config value', 0]
         ];
     }
 
     /**
-     * @param bool $useConfigField uses the test_field_use_config field if true
+     * @param string $fieldId uses the test_field_use_config field if true
      * @param bool $isConfigDataEmpty if the config data array should be empty or not
-     * @param $configDataValue the value that the field path should be set to in the config data
+     * @param string $configDataValue the value that the field path should be set to in the config data
      */
-    protected function _setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue)
+    protected function _setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
             State::PARAM_BAN_CACHE => true,
@@ -246,16 +260,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fileResolverMock = $this->getMockBuilder(
             'Magento\Framework\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Filesystem');
-        /** @var $directory  \Magento\Framework\Filesystem\Directory\Read */
-        $directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Config\FileIteratorFactory'
         );
         $fileIterator = $fileIteratorFactory->create(
-            $directory,
-            [$directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml')]
+            [__DIR__ . '/_files/test_section_config.xml']
         );
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
 
@@ -279,11 +288,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $this->_group = $structure->getElement('test_section/test_group');
 
-        if ($useConfigField) {
-            $this->_field = $structure->getElement('test_section/test_group/test_field_use_config');
-        } else {
-            $this->_field = $structure->getElement('test_section/test_group/test_field');
-        }
+        $this->_field = $structure->getElement('test_section/test_group/' . $fieldId);
+
         $fieldPath = $this->_field->getConfigPath();
 
         if ($isConfigDataEmpty) {

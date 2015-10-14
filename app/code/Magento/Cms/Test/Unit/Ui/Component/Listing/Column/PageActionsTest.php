@@ -81,7 +81,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
             );
 
         $model->setName($name);
-        $model->prepareDataSource($items);
+        $items = $model->prepareDataSource($items);
         // Run test
         $this->assertEquals($expectedItems, $items['data']['items']);
     }

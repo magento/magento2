@@ -7,6 +7,7 @@
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
     .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+        $scope.Object = Object;
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
@@ -152,6 +153,7 @@ angular.module('readiness-check', [])
                 process: function(data) {
                     $scope.extensions.processed = true;
                     angular.extend($scope.extensions, data);
+                    $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
                 },
@@ -289,7 +291,8 @@ angular.module('readiness-check', [])
                         item.fail();
                     });
             }
-            return $http.get(item.url, {timeout: 3000})
+            // setting 1 minute timeout to prevent system from timing out
+            return $http.get(item.url, {timeout: 60000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {
                     item.fail();
@@ -302,8 +305,10 @@ angular.module('readiness-check', [])
             angular.forEach($scope.items, function(item) {
                 item.show();
             });
+            var $delay = 0;
             angular.forEach($scope.items, function(item) {
-                $scope.query(item);
+                $timeout(function() { $scope.query(item); }, $delay * 1000);
+                $delay++;
             });
         };
 

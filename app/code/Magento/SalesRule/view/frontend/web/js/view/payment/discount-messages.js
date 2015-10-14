@@ -9,6 +9,8 @@ define([
     'use strict';
 
     return Component.extend({
+
+
         initialize: function (config) {
             return this._super(config, messageContainer);
         }

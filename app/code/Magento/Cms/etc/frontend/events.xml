@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="controller_action_noroute">
-        <observer name="cms" instance="Magento\Cms\Model\Observer" method="noRoute" />
+        <observer name="cms" instance="Magento\Cms\Observer\NoRouteObserver" />
     </event>
     <event name="controller_action_nocookies">
-        <observer name="cms" instance="Magento\Cms\Model\Observer" method="noCookies" />
+        <observer name="cms" instance="Magento\Cms\Observer\NoCookiesObserver" />
     </event>
 </config>

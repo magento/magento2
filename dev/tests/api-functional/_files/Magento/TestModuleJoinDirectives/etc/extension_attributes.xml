@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
         <attribute code="quoteApiTestAttribute" type="Magento\User\Api\Data\UserInterface">
             <join reference_table="admin_user"

@@ -37,7 +37,7 @@
         "zendframework/zend-serializer": "~2.4.6",
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
-        "magento/zendframework1": "1.12.13",
+        "magento/zendframework1": "1.12.16",
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
@@ -71,9 +71,10 @@
         "ext-mbstring": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3"
+        "lusitanian/oauth": "~0.3 <=0.7.0"
     },
     "replace": {
+        "magento/module-marketplace": "self.version",
         "magento/module-admin-notification": "self.version",
         "magento/module-advanced-pricing-import-export": "self.version",
         "magento/module-authorization": "self.version",
@@ -129,6 +130,7 @@
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
+        "magento/module-new-relic-reporting": "self.version",
         "magento/module-newsletter": "self.version",
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
@@ -147,6 +149,7 @@
         "magento/module-sales": "self.version",
         "magento/module-sales-rule": "self.version",
         "magento/module-sales-sequence": "self.version",
+        "magento/module-sample-data": "self.version",
         "magento/module-search": "self.version",
         "magento/module-send-friend": "self.version",
         "magento/module-shipping": "self.version",
@@ -178,7 +181,7 @@
         "magento/language-fr_fr": "self.version",
         "magento/language-nl_nl": "self.version",
         "magento/language-pt_br": "self.version",
-        "magento/language-zh_cn": "self.version",
+        "magento/language-zh_hans_cn": "self.version",
         "magento/framework": "self.version",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",
@@ -215,8 +218,15 @@
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/"
-        }
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/"
+        },
+        "psr-0": {
+            "": "app/code/"
+        },
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

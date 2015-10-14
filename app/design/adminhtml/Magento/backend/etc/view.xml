@@ -5,21 +5,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Catalog/etc/view.xsd">
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>
-    <images module="Magento_Catalog">
-        <image id="product_listing_thumbnail" type="thumbnail">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="product_listing_thumbnail_preview" type="thumbnail"/>
-        <image id="product_thumbnail_image" type="thumbnail">
-            <width>75</width>
-            <height>75</height>
-        </image>
-    </images>
+    <media>
+        <images module="Magento_Catalog">
+            <image id="product_listing_thumbnail" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="product_listing_thumbnail_preview" type="thumbnail"/>
+            <image id="product_thumbnail_image" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+        </images>
+    </media>
     <exclude>
         <item type="file">Lib::mage/common.js</item>
         <item type="file">Lib::mage/cookies.js</item>

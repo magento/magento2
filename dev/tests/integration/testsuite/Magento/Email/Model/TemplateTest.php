@@ -139,15 +139,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * Test template directive to ensure that templates can be loaded from modules
      *
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
-     * @magentoAppIsolation enabled
-     * @dataProvider templateFallbackDataProvider
-     *
-     * @param $area
-     * @param $templateId
-     * @param $expectedOutput
+     * @param string $area
+     * @param string $templateId
+     * @param string $expectedOutput
      * @param bool $mockThemeFallback
+     *
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @dataProvider templateFallbackDataProvider
      */
     public function testTemplateFallback($area, $templateId, $expectedOutput, $mockThemeFallback = false)
     {
@@ -213,8 +214,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * overridden in themes
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider templateDirectiveDataProvider
      *
      * @param string $area
@@ -343,8 +345,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * textarea in backend, depending on whether template was loaded from filesystem or DB.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider templateStylesVariableDataProvider
      *
      * @param string $area
@@ -450,11 +453,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Setup the theme fallback structure and set the Vendor/custom_theme as the current theme for 'fixturestore' store
+     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme for
+     * 'fixturestore' store
      */
     protected function setUpAdminThemeFallback()
     {
-        // The Vendor/custom_theme adminhtml theme is set in the
+        $themes = [BackendFrontNameResolver::AREA_CODE => 'Vendor_EmailTest/custom_theme'];
+        $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
+        $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
+
+        // The Vendor_EmailTest/custom_theme adminhtml theme is set in the
         // dev/tests/integration/testsuite/Magento/Email/Model/_files/design/themes.php file, as it must be set
         // before the adminhtml area is loaded below.
 
@@ -471,25 +484,28 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Setup the theme fallback structure and set the Vendor/custom_theme as the current theme for 'fixturestore' store
+     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme
+     * for 'fixturestore' store
      *
      * @param $area
      */
     protected function setUpThemeFallback($area)
     {
-        $themes = ['frontend' => 'Vendor/custom_theme'];
-        $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
-        $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
 
         // It is important to test from both areas, as emails will get sent from both, so we need to ensure that the
         // inline CSS files get loaded properly from both areas.
         Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $this->objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
+        $collection = $this->objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
 
         // Hard-coding theme as we want to test the fallback structure to ensure that the parent/grandparent themes of
-        // Vendor/custom_theme will be checked for CSS files
-        $themeId = $collection->getThemeByFullPath('frontend/Vendor/custom_theme')->getId();
+        // Vendor_EmailTest/custom_theme will be checked for CSS files
+        $themeId = $collection->getThemeByFullPath('frontend/Vendor_EmailTest/custom_theme')->getId();
 
         $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
             ->setValue(

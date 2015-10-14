@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
@@ -149,13 +149,13 @@ abstract class AbstractEntity
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_localeDate = $localeDate;
@@ -370,10 +370,10 @@ abstract class AbstractEntity
     /**
      * Clean up attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $collection->load();
 
@@ -388,7 +388,7 @@ abstract class AbstractEntity
     /**
      * Entity attributes collection getter.
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     abstract public function getAttributeCollection();
 
@@ -414,7 +414,7 @@ abstract class AbstractEntity
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
                         if (strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
-                            $options[$innerOption['value']] = $innerOption[$index];
+                            $options[$innerOption['value']] = (string)$innerOption[$index];
                         }
                     }
                 }

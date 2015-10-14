@@ -9,7 +9,7 @@ namespace Magento\ProductVideo\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
 
 /**
  * Class InstallSchema adds new table `eav_attribute_option_swatch`

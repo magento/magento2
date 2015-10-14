@@ -151,6 +151,12 @@ class Config extends AbstractConfig
 
     const EC_BA_SIGNUP_NEVER = 'never';
 
+    /**
+     * Paypal setting
+     */
+    const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
+    const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
+
     /**#@-*/
 
     /**
@@ -224,6 +230,7 @@ class Config extends AbstractConfig
         'BG',
         'BR',
         'CA',
+        'CN',
         'CH',
         'CL',
         'CR',
@@ -267,6 +274,7 @@ class Config extends AbstractConfig
         'PH',
         'PL',
         'PT',
+        'RU',
         'RE',
         'RO',
         'SE',
