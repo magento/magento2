@@ -24,7 +24,8 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
-        $collection->addAttributeToFilter(
+        $productCollection = clone $collection;
+        $productCollection->addAttributeToFilter(
             'entity_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
@@ -32,7 +33,7 @@ class RowCustomizer implements RowCustomizerInterface
             ['eq' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE]
         );
 
-        while ($product = $collection->fetchItem()) {
+        while ($product = $productCollection->fetchItem()) {
             $productAttributesOptions = $product->getTypeInstance()->getConfigurableOptions($product);
 
             foreach ($productAttributesOptions as $productAttributeOption) {

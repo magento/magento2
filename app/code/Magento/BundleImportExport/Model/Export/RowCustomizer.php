@@ -95,7 +95,8 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
-        $collection->addAttributeToFilter(
+        $productCollection = clone $collection;
+        $productCollection->addAttributeToFilter(
             'entity_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
@@ -103,7 +104,7 @@ class RowCustomizer implements RowCustomizerInterface
             ['eq' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE]
         );
 
-        return $this->populateBundleData($collection);
+        return $this->populateBundleData($productCollection);
     }
 
     /**
