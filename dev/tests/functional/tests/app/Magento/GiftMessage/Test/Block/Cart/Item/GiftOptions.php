@@ -96,6 +96,7 @@ class GiftOptions extends Form
                         'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
                         ['element' => $this->_rootElement->find($this->giftMessageItemForm)]
                     );
+                    $giftMessage = $giftMessage->getItems()[0];
                     $formData = [
                         'sender' => $giftMessage->getSender(),
                         'recipient' => $giftMessage->getRecipient(),
