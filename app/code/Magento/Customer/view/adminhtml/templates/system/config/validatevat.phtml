@@ -27,11 +27,13 @@ require(['prototype'], function(){
         new Ajax.Request('<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>', {
             parameters: params,
             onSuccess: function(response) {
-                result = '<?php /* @escapeNotVerified */ echo __('Please enter a valid VAT number.') ?>';
+                var result = '<?php /* @escapeNotVerified */ echo __('Error during VAT Number verification.') ?>';
                 try {
-                    response = response.responseText;
-                    if (response == 1) {
-                        result = '<?php /* @escapeNotVerified */ echo __('VAT Number is valid.') ?>';
+                    if (response.responseText.isJSON()) {
+                        response = response.responseText.evalJSON();
+                        result = response.message;
+                    }
+                    if (response.valid == 1) {
                         validationMessage.removeClassName('hidden').addClassName('success')
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('error')
