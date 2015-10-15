@@ -77,5 +77,6 @@ class DeleteWidgetEntityTest extends Injectable
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getWidgetGrid()->searchAndOpen($filter);
         $this->widgetInstanceEdit->getPageActionsBlock()->delete();
+        $this->widgetInstanceEdit->getModalBlock()->acceptAlert();
     }
 }

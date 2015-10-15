@@ -10,7 +10,11 @@
 /** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
 ?>
 <script>
-require(['jquery', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(jQuery, alert){
 
 //<![CDATA[
     // Temporary Class will be replaced after refactoring of import/export functionality
@@ -200,7 +204,11 @@ require(['jquery', 'prototype'], function(jQuery){
          */
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
-                return alert('Invalid response');
+                alert({
+                    content: 'Invalid response'
+                });
+
+                return false;
             }
             $H(response).each(function(pair) {
                 switch (pair.key) {
@@ -231,7 +239,9 @@ require(['jquery', 'prototype'], function(jQuery){
                         });
                         break;
                     default:
-                        alert(pair.key + ': ' + pair.value);
+                        alert({
+                            content: pair.key + ': ' + pair.value
+                        });
                         break;
                 }
             });

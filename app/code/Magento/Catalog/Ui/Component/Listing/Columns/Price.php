@@ -13,7 +13,7 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * Column name
      */
-    const NAME = 'price';
+    const NAME = 'column.price';
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface

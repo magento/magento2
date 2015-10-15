@@ -20,7 +20,7 @@ define([
      * @returns {*} Value of the property or false.
      */
     function getOwn(obj, prop) {
-        return obj.hasOwnProperty(prop) && obj[prop];
+        return _.isObject(obj) && obj.hasOwnProperty(prop) && obj[prop];
     }
 
     /**
@@ -34,13 +34,14 @@ define([
         var constr = consturctor;
 
         if (!constr) {
+
             /**
              * Default constructor function.
              */
             constr = function () {
                 var obj = this;
 
-                if (!obj || !Object.getPrototypeOf(obj) === constr.prototype || obj === window) {
+                if (!_.isObject(obj) || Object.getPrototypeOf(obj) !== constr.prototype) {
                     obj = Object.create(constr.prototype);
                 }
 
@@ -57,6 +58,7 @@ define([
     }
 
     Class = createConstructor({
+
         /**
          * Entry point to the initialization of consturctors' instance.
          *
@@ -112,10 +114,10 @@ define([
                 parentProto = parent.prototype,
                 childProto  = Object.create(parentProto),
                 child       = createConstructor(childProto, getOwn(extender, 'constructor')),
-                defaults    = extender.defaults || {};
+                defaults;
 
-            defaults = defaults || {};
             extender = extender || {};
+            defaults = extender.defaults;
 
             delete extender.defaults;
 
@@ -123,10 +125,16 @@ define([
                 childProto[name] = wrapper.wrapSuper(parentProto[name], method);
             });
 
+            child.defaults = utils.extend({}, parent.defaults || {});
+
+            if (defaults) {
+                utils.extend(child.defaults, defaults);
+                extender.defaults = defaults;
+            }
+
             return _.extend(child, {
                 __super__:  parentProto,
-                extend:     parent.extend,
-                defaults:   utils.extend({}, parent.defaults, defaults)
+                extend:     parent.extend
             });
 
         }
