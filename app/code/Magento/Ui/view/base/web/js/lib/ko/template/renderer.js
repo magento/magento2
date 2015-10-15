@@ -3,17 +3,20 @@
  * See COPYING.txt for license details.
  */
 define([
-    '../loader',
+    './loader',
     'jquery',
     'underscore'
 ], function (loader, $, _) {
     'use strict';
 
     return {
+
         /**
          * Renders template and it's extenders using this._parse function.
-         * Loads all extenders then merges them and wraps into div[data-template-extend="parent"] where parent is target template.
+         * Loads all extenders then merges them and wraps into
+         * div[data-template-extend="parent"] where parent is target template.
          * If no extenders provider, simply loads target template and passes execution to _parse.
+         *
          * @param {String} template - string, representing path to core template and it's extenders.
          * @returns {Deferred} - Promise of template to be rendered. Is being resolved with array of HTML elements.
          */

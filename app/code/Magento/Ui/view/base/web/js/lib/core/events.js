@@ -38,11 +38,16 @@ define([
      * @param {String} name - Name of the event.
      */
     function addHandler(obj, ns, callback, name) {
-        var events = getEvents(obj),
+        var events      = getEvents(obj),
+            observable,
             data;
 
-        if (ko.isObservable(obj[name])) {
-            obj[name].subscribe(callback);
+        observable = !ko.isObservable(obj[name]) ?
+            ko.getObservable(obj, name) :
+            obj[name];
+
+        if (observable) {
+            observable.subscribe(callback);
 
             return;
         }
@@ -86,6 +91,7 @@ define([
     }
 
     return {
+
         /**
          * Calls callback when name event is triggered.
          * @param  {String}   events
@@ -134,9 +140,10 @@ define([
         },
 
         /**
-         * Triggers event and executes all attached callbacks
-         * @param  {String} name
-         * @return {Object} reference to this
+         * Triggers event and executes all attached callbacks.
+         *
+         * @param {String} name - Name of the event to be triggered.
+         * @returns {Boolean}
          */
         trigger: function (name) {
             var handlers,

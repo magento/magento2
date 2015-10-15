@@ -110,7 +110,6 @@ class FormPageActions extends PageActions
     public function delete()
     {
         $this->_rootElement->find($this->deleteButton)->click();
-        $this->browser->acceptAlert();
     }
 
     /**
