@@ -13,7 +13,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     const NOT_SELECTED_IMAGE = 'no_selection';
 
@@ -83,7 +83,7 @@ class Product extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_mediaConfig;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -96,7 +96,7 @@ class Product extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

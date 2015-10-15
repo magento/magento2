@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table name

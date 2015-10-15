@@ -15,7 +15,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -61,7 +61,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->productCollection));
 
         $this->resource = $this->getMock(
-            'Magento\Framework\Model\ModelResource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 'saveProductLinks',
                 'getAttributeTypeTable',
