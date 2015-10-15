@@ -866,7 +866,7 @@ return [
     ['validateDataArray', 'Magento\Framework\Convert\Container\AbstractContainer'],
     ['validateFile', 'Magento\Core\Model\Design\Package'],
     ['validateOrder', 'Magento\Checkout\Model\Type\Onepage'],
-    ['viewTrackAction', 'Magento\Sales\Controller\Adminhtml\Order\Shipment'],
+    ['viewTrackAction', 'Magento\Shipping\Controller\Adminhtml\Order\Shipment'],
     ['_prepareOptionValues', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
     ['_getOptionValuesCollection', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
     [

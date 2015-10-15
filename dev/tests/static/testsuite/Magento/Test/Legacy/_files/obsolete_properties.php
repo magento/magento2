@@ -173,7 +173,7 @@ return [
     ['_dirModel', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'],
     ['_dirModel', 'Magento\Downloadable\Model\Link'],
     ['_dirModel', 'Magento\Downloadable\Model\Sample'],
-    ['_dir', 'Magento\Framework\App\Dir'],
+    ['_dir', 'Magento\Framework\Filesystem'],
     ['_baseDir', 'Magento\Backup\Model\Fs\Collection'],
     ['_filesystem', 'Magento\Backup\Model\Fs\Collection'],
     ['_dir', 'Magento\Backup\Model\Fs\Collection'],
