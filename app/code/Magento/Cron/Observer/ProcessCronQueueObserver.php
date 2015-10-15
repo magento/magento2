@@ -149,7 +149,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
             if ($this->_request->getParam('group') !== null
-                && $this->_request->getParam('group') !== escapeshellarg($groupId)
+                && $this->_request->getParam('group') !== '\'' . ($groupId) . '\''
                 && $this->_request->getParam('group') !== $groupId) {
                 continue;
             }
