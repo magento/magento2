@@ -36,7 +36,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Component\DirSearch');
         $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/view.xml');
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
     }
@@ -60,7 +60,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('\Magento\Framework\Component\ComponentRegistrar');
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-            $result[$themeDir] = [$themeDir];
+            $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
         return $result;
     }
@@ -102,7 +102,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Component\DirSearch');
         $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'theme.xml');
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
     }

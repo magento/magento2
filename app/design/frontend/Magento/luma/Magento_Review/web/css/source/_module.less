@@ -39,40 +39,6 @@
 }
 
 //
-//    Reviews list and form
-//--------------------------------------
-
-.catalog-product-view.ajax-loading {
-    height: 100%;
-    overflow: hidden;
-    &:after {
-        content: "";
-        position:fixed;
-        height: 100%;
-        display: block;
-        width: 100%;
-        z-index: 998;
-        background: rgba(255,255,255,.4);
-    }
-    &:before {
-        content: "";
-        position:fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin:auto;
-        display: block;
-        @loading__size: 74px;
-        width: @loading__size;
-        height: @loading__size;
-        border-radius: @loading__size/2;
-        z-index: 999;
-        background: rgba(255, 255, 255, .7) url('../images/loader-1.gif') no-repeat 50% 50%;
-    }
-}
-
-//
 //    Review product page
 //--------------------------------------
 .review {

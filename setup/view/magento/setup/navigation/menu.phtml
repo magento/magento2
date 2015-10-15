@@ -17,8 +17,8 @@
 
 </head>
 
-<div>
-    <nav ng-controller="navigationController" id="menu" class="nav ng-scope show"
+
+<nav ng-controller="navigationController" id="menu" class="nav ng-scope show"
          ng-hide="$state.current.noMenu || $state.current.main || $state.current.default">
     <ul class="nav-bar">
         <li ng-repeat="menuState in menu | filter: {type: $state.current.type}:true"
@@ -29,4 +29,4 @@
         </li>
     </ul>
 </nav>
-</div>
+

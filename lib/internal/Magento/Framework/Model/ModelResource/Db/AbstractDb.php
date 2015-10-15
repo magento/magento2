@@ -769,7 +769,9 @@ abstract class AbstractDb extends AbstractResource
         }
         $this->getConnection()->insert($this->getMainTable(), $bind);
 
-        $object->setId($this->getConnection()->lastInsertId($this->getMainTable()));
+        if ($this->_isPkAutoIncrement) {
+            $object->setId($this->getConnection()->lastInsertId($this->getMainTable()));
+        }
 
         if ($this->_useIsObjectNew) {
             $object->isObjectNew(false);

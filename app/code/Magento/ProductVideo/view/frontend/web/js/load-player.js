@@ -7,7 +7,7 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-require(['jquery', 'jquery/ui'], function ($) {
+define(['jquery', 'jquery/ui'], function ($) {
     'use strict';
 
     var videoRegister = {
