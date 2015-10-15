@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Event;
 
-class Type extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Main table initialization

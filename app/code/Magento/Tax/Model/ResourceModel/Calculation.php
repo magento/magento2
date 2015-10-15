@@ -10,7 +10,7 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
-class Calculation extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Store ISO 3166-1 alpha-2 USA country code
@@ -37,13 +37,13 @@ class Calculation extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null
