@@ -18,7 +18,7 @@ use Magento\Framework\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tablerate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Import table rates website ID
@@ -122,7 +122,7 @@ class Tablerate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_filesystem;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -133,7 +133,7 @@ class Tablerate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
