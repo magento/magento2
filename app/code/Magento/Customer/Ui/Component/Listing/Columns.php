@@ -24,6 +24,17 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     protected $inlineEditUpdater;
 
     /**
+     * @var array
+     */
+    protected $filterMap = [
+        'default' => 'text',
+        'select' => 'select',
+        'boolean' => 'select',
+        'multiselect' => 'select',
+        'date' => 'dateRange',
+    ];
+
+    /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
@@ -103,6 +114,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function addColumn(array $attributeData, $columnName)
     {
         $config['sortOrder'] = ++$this->columnSortOrder;
+        if ($attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]) {
+            $config['filter'] = $this->getFilterType($attributeData[AttributeMetadata::FRONTEND_INPUT]);
+        }
         $column = $this->columnFactory->create($attributeData, $columnName, $this->getContext(), $config);
         $column->prepare();
         $this->addComponent($attributeData[AttributeMetadata::ATTRIBUTE_CODE], $column);
@@ -128,6 +142,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                         'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );
+                if ($attributeData[AttributeMetadata::IS_FILTERABLE_IN_GRID]) {
+                    $config['filter'] = $this->getFilterType($attributeData[AttributeMetadata::FRONTEND_INPUT]);
+                }
                 $component->setData('config', $config);
             }
         } else {
@@ -167,5 +184,16 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 array_merge($config, [AttributeMetadata::OPTIONS => $attributeData[AttributeMetadata::OPTIONS]])
             );
         }
+    }
+
+    /**
+     * Retrieve filter type by $frontendInput
+     *
+     * @param string $frontendInput
+     * @return string
+     */
+    protected function getFilterType($frontendInput)
+    {
+        return isset($this->filterMap[$frontendInput]) ? $this->filterMap[$frontendInput] : $this->filterMap['default'];
     }
 }

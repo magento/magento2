@@ -27,7 +27,7 @@ class Query implements QueryInterface
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $resource;
 
@@ -78,13 +78,13 @@ class Query implements QueryInterface
     /**
      * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Framework\Api\CriteriaInterface $criteria
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      */
     public function __construct(
         \Magento\Framework\DB\Select $select,
         \Magento\Framework\Api\CriteriaInterface $criteria,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
     ) {
         $this->select = $select;
@@ -224,7 +224,7 @@ class Query implements QueryInterface
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getResource()
     {

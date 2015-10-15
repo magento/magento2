@@ -5,43 +5,61 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
-class Filters extends \Magento\Ui\Component\Filters
+use Magento\Catalog\Ui\Component\FilterFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Framework\View\Element\UiComponent\ObserverInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
+
+class Filters implements ObserverInterface
 {
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
-    protected $attributeRepository;
+    /**
+     * @var FilterFactory
+     */
+    protected $filterFactory;
 
     /**
-     * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-     * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
-     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
-     * @param array $components
-     * @param array $data
+     * @var CollectionFactory
+     */
+    protected $attributeCollectionFactory;
+
+    /**
+     * @param FilterFactory $filterFactory
+     * @param CollectionFactory $attributeCollectionFactory
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
-        \Magento\Catalog\Ui\Component\FilterFactory $filterFactory,
-        \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
-        array $components = [],
-        array $data = []
+        FilterFactory $filterFactory,
+        CollectionFactory $attributeCollectionFactory
     ) {
-        parent::__construct($context, $components, $data);
         $this->filterFactory = $filterFactory;
-        $this->attributeRepository = $attributeRepository;
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function prepare()
+    public function update(UiComponentInterface $component)
     {
-        $attributeIds = $this->getContext()->getRequestParam('attributes_codes');
+        if (!$component instanceof \Magento\Ui\Component\Filters) {
+            return;
+        }
+
+        $attributeIds = $component->getContext()->getRequestParam('attribute_ids');
         if ($attributeIds) {
-            foreach ($this->attributeRepository->getList() as $attribute) {
-                $filter = $this->filterFactory->create($attribute, $this->getContext(), ['component' => '']);
+            foreach ($this->getAttributes($attributeIds) as $attribute) {
+                $filter = $this->filterFactory->create($attribute, $component->getContext());
                 $filter->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $filter);
+                $component->addComponent($attribute->getAttributeCode(), $filter);
             }
         }
-        parent::prepare();
+    }
+
+    /**
+     * @param array $attributeIds
+     * @return mixed
+     */
+    protected function getAttributes($attributeIds)
+    {
+        $attributeCollection = $this->attributeCollectionFactory->create();
+        return $attributeCollection->addFieldToFilter('attribute_code', ['in' => $attributeIds]);
     }
 }

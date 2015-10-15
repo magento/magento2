@@ -5,15 +5,15 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 
 /**
  * Customer group resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Framework\Model\ModelResource\Db\VersionControl\AbstractDb
+class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
 {
     /**
      * Group Management
@@ -28,7 +28,7 @@ class Group extends \Magento\Framework\Model\ModelResource\Db\VersionControl\Abs
     protected $_customersFactory;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Snapshot $entitySnapshot,
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
@@ -36,7 +36,7 @@ class Group extends \Magento\Framework\Model\ModelResource\Db\VersionControl\Abs
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,

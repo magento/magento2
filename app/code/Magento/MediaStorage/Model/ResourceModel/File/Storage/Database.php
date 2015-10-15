@@ -16,12 +16,12 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
         $connectionName = null
     ) {
