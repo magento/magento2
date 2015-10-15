@@ -397,24 +397,24 @@ class Onepage
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-            */
-            public function saveShipping($data, $customerAddressId)
-            {
-                if (empty($data)) {
-                    return ['error' => -1, 'message' => __('Invalid data')];
-                }
-                $address = $this->getQuote()->getShippingAddress();
+     */
+    public function saveShipping($data, $customerAddressId)
+    {
+        if (empty($data)) {
+            return ['error' => -1, 'message' => __('Invalid data')];
+        }
+        $address = $this->getQuote()->getShippingAddress();
 
-                $addressForm = $this->_formFactory->create(
-                    'customer_address',
-                    'customer_address_edit',
-                    [],
-                    $this->_request->isAjax(),
-                    Form::IGNORE_INVISIBLE,
-                    []
-                );
+        $addressForm = $this->_formFactory->create(
+            'customer_address',
+            'customer_address_edit',
+            [],
+            $this->_request->isAjax(),
+            Form::IGNORE_INVISIBLE,
+            []
+        );
 
-                if (!empty($customerAddressId)) {
+        if (!empty($customerAddressId)) {
             $addressData = null;
             try {
                 $addressData = $this->addressRepository->getById($customerAddressId);
