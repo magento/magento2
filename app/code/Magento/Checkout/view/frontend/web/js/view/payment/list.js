@@ -30,11 +30,16 @@ define([
             paymentMethods.subscribe(
                 function (changes) {
                     checkoutDataResolver.resolvePaymentMethod();
+                    //remove renderer for "deleted" payment methods
+                    _.each(changes, function (change) {
+                        if (change.status === 'deleted') {
+                            this.removeRenderer(change.value.method);
+                        }
+                    }, this);
+                    //add renderer for "added" payment methods
                     _.each(changes, function (change) {
                         if (change.status === 'added') {
                             this.createRenderer(change.value);
-                        } else if (change.status === 'deleted') {
-                            this.removeRenderer(change.value.method);
                         }
                     }, this);
                 }, this, 'arrayChange');
