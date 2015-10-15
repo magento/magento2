@@ -19,6 +19,9 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @method string getFile()
+ * @method string getLabel()
+ * @method string getPosition()
  */
 class Image extends \Magento\Framework\Model\AbstractModel
 {

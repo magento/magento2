@@ -23,6 +23,11 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_iteratorMock;
 
     /**
+     * @var \Magento\Framework\Module\Manager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleManagerMock;
+
+    /**
      * Test element data
      *
      * @var array
@@ -44,10 +49,10 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-
+        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Config\Model\Config\Structure\Element\AbstractComposite',
-            [$this->_storeManagerMock, $this->_iteratorMock]
+            [$this->_storeManagerMock, $this->moduleManagerMock, $this->_iteratorMock]
         );
     }
 
