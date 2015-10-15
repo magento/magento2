@@ -8,7 +8,7 @@ namespace Magento\Persistent\Model\ResourceModel;
 /**
  * Persistent Session Resource Model
  */
-class Session extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Use is object new method for object saving
@@ -27,12 +27,12 @@ class Session extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Persistent\Model\SessionFactory $sessionFactory,
         $connectionName = null
     ) {

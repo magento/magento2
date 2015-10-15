@@ -12,7 +12,7 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Queue link table name
@@ -63,7 +63,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Helper\Data $customerHelperData
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -72,7 +72,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Helper\Data $customerHelperData,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_customerHelperData = $customerHelperData;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

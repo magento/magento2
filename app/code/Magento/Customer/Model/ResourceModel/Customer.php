@@ -38,8 +38,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -48,8 +48,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,

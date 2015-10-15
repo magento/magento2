@@ -6,7 +6,7 @@
 
 namespace Magento\Mtf\Util\Generate\Repository;
 
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Class CollectionProvider
@@ -26,7 +26,7 @@ class TableCollection extends AbstractCollection
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param array $fixture
      */
     public function __construct(
@@ -35,7 +35,7 @@ class TableCollection extends AbstractCollection
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
         array $fixture = []
     ) {
         $this->setModel('Magento\Framework\DataObject');

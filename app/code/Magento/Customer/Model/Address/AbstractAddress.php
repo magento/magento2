@@ -127,7 +127,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -146,7 +146,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

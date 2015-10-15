@@ -10,7 +10,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Main table and field initialization

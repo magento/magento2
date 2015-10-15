@@ -13,7 +13,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     /**
      * Helper collection
      *
-     * @var \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection|array
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|array
      */
     protected $_collection;
 
@@ -25,7 +25,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     protected $_params = [];
 
     /**
-     * @return array|\Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {

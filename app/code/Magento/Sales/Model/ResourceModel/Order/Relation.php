@@ -7,7 +7,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\Sales\Model\ResourceModel\Order\Handler\Address as AddressHandler;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationInterface;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\ResourceModel\Order\Payment as OrderPaymentResource;
 use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusHistoryResource;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
