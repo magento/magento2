@@ -19,6 +19,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * Catalog product model
  *
  * @method Product setHasError(bool $value)
+ * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
  * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
