@@ -53,7 +53,15 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
         $orderHistory->open();
         $orderHistory->getOrderHistoryBlock()->openOrderById($orderId);
 
-        foreach ($products as $product) {
+        foreach ($giftMessage->getItems() as $key => $itemGiftMessage) {
+            $product = $products[$key];
+            if ($giftMessage->hasData('items')) {
+                $expectedData = [
+                    'sender' => $itemGiftMessage->getSender(),
+                    'recipient' => $itemGiftMessage->getRecipient(),
+                    'message' => $itemGiftMessage->getMessage(),
+                ];
+            }
             if ($product->getProductHasWeight() !== 'Yes') {
                 $expectedData = [];
             }

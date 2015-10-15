@@ -31,8 +31,7 @@
         <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
         <step name="selectStore" module="Magento_Sales" next="addProducts" />
         <step name="addProducts" module="Magento_Sales" next="addGiftMessageBackend" />
-        <step name="addGiftMessageBackend" module="Magento_GiftMessage" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="addGiftMessageBackend" module="Magento_GiftMessage" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />

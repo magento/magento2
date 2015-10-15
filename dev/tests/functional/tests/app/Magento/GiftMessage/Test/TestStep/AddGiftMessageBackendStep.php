@@ -60,12 +60,15 @@ class AddGiftMessageBackendStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->giftMessage->getAllowGiftMessagesForOrder()) {
-            $this->orderCreateIndex->getGiftMessageForOrderBlock()->fill($this->giftMessage);
+        if ($this->giftMessage->getAllowGiftMessagesForOrder() === 'Yes') {
+            $giftMessageForOrderBlock = $this->orderCreateIndex->getGiftMessageForOrderBlock();
+            $giftMessageForOrderBlock->fill($this->giftMessage);
+            $giftMessageForOrderBlock->waitForElementNotVisible('.loading-mask');
         }
-        if ($this->giftMessage->getAllowGiftOptionsForItems()) {
-            $this->orderCreateIndex->getCreateGiftMessageBlock()
-                ->fillGiftMessageForItems($this->products, $this->giftMessage);
+        if ($this->giftMessage->getAllowGiftOptionsForItems() === 'Yes') {
+            $giftMessageBlock = $this->orderCreateIndex->getCreateGiftMessageBlock();
+            $giftMessageBlock->fillGiftMessageForItems($this->products, $this->giftMessage);
+            $giftMessageBlock->waitForElementNotVisible('.loading-mask');
         }
 
         return ['giftMessage' => $this->giftMessage];
