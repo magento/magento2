@@ -8,6 +8,7 @@ define([
     'use strict';
 
     ko.bindingHandlers.afterRender = {
+
         /**
          * Binding init callback.
          */

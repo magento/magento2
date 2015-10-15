@@ -45,7 +45,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -56,7 +56,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,

@@ -103,7 +103,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -116,7 +116,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
