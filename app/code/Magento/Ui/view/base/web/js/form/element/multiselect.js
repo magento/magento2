@@ -16,12 +16,11 @@ define([
         },
 
         /**
-         * Calls 'getInitialValue' of parent and if the result of it is not empty
-         * string, returs it, else returnes caption or first found option's value
+         * Splits incoming string value.
          *
-         * @returns {Array|String}
+         * @returns {Array}
          */
-        getInitialValue: function () {
+        normalizeData: function () {
             var value = this._super();
 
             return _.isString(value) ? value.split(',') : value;
@@ -29,6 +28,7 @@ define([
 
         /**
          * Defines if value has changed
+         *
          * @returns {Boolean}
          */
         hasChanged: function () {

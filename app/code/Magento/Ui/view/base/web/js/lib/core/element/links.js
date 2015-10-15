@@ -163,13 +163,6 @@ define([
     }
 
     return {
-        defaults: {
-            maps: {
-                exports: {},
-                imports: {}
-            }
-        },
-
         setListeners: function (listeners) {
             var owner = this,
                 data;

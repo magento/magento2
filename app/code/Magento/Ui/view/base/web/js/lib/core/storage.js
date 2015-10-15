@@ -6,19 +6,30 @@ define([
     'underscore',
     'uiRegistry',
     'mageUtils',
-    'Magento_Ui/js/lib/events'
+    'uiEvents'
 ], function (_, registry, utils, EventsBus) {
     'use strict';
 
     var root = 'appData',
         storage;
 
+    /**
+     * Extracts and parses data stored in localStorage by the
+     * key specified in 'root' varaible.
+     *
+     * @returns {Object}
+     */
     function getRoot() {
         var data = localStorage.getItem(root);
 
         return !_.isNull(data) ? JSON.parse(data) : {};
     }
 
+    /**
+     * Writes provided data to the localStorage.
+     *
+     * @param {*} data - Data to be stored.
+     */
     function setRoot(data) {
         localStorage.setItem(root, JSON.stringify(data));
     }
@@ -28,6 +39,7 @@ define([
      * as a single nested structure.
      */
     storage = _.extend({
+
         /**
          * Retrieves value of the specified property.
          *
