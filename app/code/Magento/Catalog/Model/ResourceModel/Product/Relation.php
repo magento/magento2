@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Relation extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize resource model and define main table

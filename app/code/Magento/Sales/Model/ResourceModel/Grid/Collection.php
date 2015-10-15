@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\ResourceModel\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Class Collection
@@ -27,12 +27,12 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null|\Zend_Db_Adapter_Abstract $mainTable
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $eventPrefix
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
      * @param string $eventObject
      * @param string $resourceModel
      * @param string $model
      * @param string|null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -47,7 +47,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $resourceModel,
         $model = 'Magento\Sales\Model\ResourceModel\Grid\Document',
         $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;

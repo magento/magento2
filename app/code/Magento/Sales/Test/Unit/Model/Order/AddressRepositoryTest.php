@@ -86,7 +86,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($entityId);
 
             $mapper = $this->getMockForAbstractClass(
-                'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+                'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
                 [],
                 '',
                 false,
@@ -213,7 +213,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -249,7 +249,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -282,7 +282,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -318,7 +318,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,

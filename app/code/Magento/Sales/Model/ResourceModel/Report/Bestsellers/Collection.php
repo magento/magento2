@@ -240,7 +240,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * Redeclare parent method for applying filters after parent method
      * but before adding unions and calculating totals
      *
-     * @return $this|\Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

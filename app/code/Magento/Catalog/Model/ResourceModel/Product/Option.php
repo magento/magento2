@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Store manager
@@ -36,14 +36,14 @@ class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -69,7 +69,7 @@ class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * Save options store data
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

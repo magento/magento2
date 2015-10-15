@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use \Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -59,7 +59,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $connectionMock;
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -69,7 +69,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $relationCompositeMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectRelationProcessorMock;
     /**
@@ -126,27 +126,27 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Model\Sequence', [], [], '', false);
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             [],
             [],
             '',
             false
         );
         $this->objectRelationProcessorMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor',
+            'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
             [],
             [],
             '',
             false
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')

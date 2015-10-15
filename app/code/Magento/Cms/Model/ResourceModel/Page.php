@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\ResourceModel;
 /**
  * Cms page mysql resource
  */
-class Page extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Store model
@@ -40,14 +40,14 @@ class Page extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,

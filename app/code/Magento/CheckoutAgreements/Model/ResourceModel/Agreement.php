@@ -8,7 +8,7 @@ namespace Magento\CheckoutAgreements\Model\ResourceModel;
 /**
  * Resource Model for Checkout Agreement
  */
-class Agreement extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Filter\FilterManager
@@ -16,13 +16,13 @@ class Agreement extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $filterManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param string $connectionName
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Filter\FilterManager $filterManager,
         $connectionName = null
     ) {

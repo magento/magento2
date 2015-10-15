@@ -45,7 +45,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->getMock('Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->consumerResource = new \Magento\Integration\Model\ResourceModel\Oauth\Consumer(
             $contextMock,
