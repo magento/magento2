@@ -27,12 +27,12 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed|null $mainTable
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $eventPrefix
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model
      * @param null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -48,7 +48,7 @@ class Collection extends PageCollection implements SearchResultInterface
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,

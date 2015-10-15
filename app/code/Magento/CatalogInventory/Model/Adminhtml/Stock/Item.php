@@ -37,7 +37,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -53,7 +53,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
         StockRegistryInterface $stockRegistry,
         StockItemRepositoryInterface $stockItemRepository,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

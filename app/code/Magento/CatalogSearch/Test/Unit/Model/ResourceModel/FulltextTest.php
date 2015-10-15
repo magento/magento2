@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Model\ModelResource\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FulltextTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +33,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\ModelResource\Db\Context')
+        $this->context = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')

@@ -10,7 +10,7 @@ namespace Magento\Eav\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Array of entity types

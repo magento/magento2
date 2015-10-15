@@ -11,7 +11,7 @@
  */
 namespace Magento\Directory\Model\ResourceModel;
 
-class Region extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Table with localized region names
@@ -26,12 +26,12 @@ class Region extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $connectionName = null
     ) {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Translation\Model\ResourceModel;
 
-class Translate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb implements
+class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {
     /**
@@ -19,13 +19,13 @@ class Translate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb imp
     protected $scope;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      * @param null|string $scope
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         $connectionName = null,
         $scope = null
