@@ -194,10 +194,10 @@ class Checkboxes extends AbstractElement
     {
         $id = $this->getHtmlId() . '_' . $this->_escape($option['value']);
 
-        $html = '<div class="field choice"><input id="' . $id . '"';
+        $html = '<div class="field choice admin__field admin__field-option"><input id="' . $id . '"';
         foreach ($this->getHtmlAttributes() as $attribute) {
             if ($value = $this->getDataUsingMethod($attribute, $option['value'])) {
-                $html .= ' ' . $attribute . '="' . $value . '"';
+                $html .= ' ' . $attribute . '="' . $value . '" class="admin__control-checkbox"';
             }
         }
         $html .= ' value="' .
@@ -205,9 +205,9 @@ class Checkboxes extends AbstractElement
             '" />' .
             ' <label for="' .
             $id .
-            '">' .
+            '" class="admin__field-label"><span>' .
             $option['label'] .
-            '</label></div>' .
+            '</span></label></div>' .
             "\n";
         return $html;
     }
