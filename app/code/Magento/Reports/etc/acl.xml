@@ -42,7 +42,7 @@
                         <resource id="Magento_Reports::downloads" title="Downloads" sortOrder="50" />
                     </resource>
                     <resource id="Magento_Reports::statistics" title="Statistics" sortOrder="80">
-                        <resource id="Magento_Reports::statistics_refresh" title="Refresh statistics" sortOrder="10"/>
+                        <resource id="Magento_Reports::statistics_refresh" title="Refresh Statistics" sortOrder="10"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
