@@ -43,7 +43,7 @@ class InstallData implements InstallDataInterface
         /**
          * Add tax_class_id attribute to the 'eav_attribute' table
          */
-        $catalogInstaller = $taxSetup->getCatalogSetup(['resourceName' => 'catalog_setup']);
+        $catalogInstaller = $taxSetup->getCatalogSetup(['resourceName' => 'catalog_setup', 'setup' => $setup]);
         $catalogInstaller->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'tax_class_id',

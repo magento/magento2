@@ -1,3 +1,76 @@
+1.0.0-beta4
+=============
+* Fixed bugs:
+    * Fixed an issue with Paypal WebAPI exception error when placing order within PayPal Payments Pro
+    * Fixed an issue with wrong links on multi website store
+    * Fixed an issue where unable to set a date limit on a promotion for 2016 onwards
+    * Fixed an issue with saving promotions
+    * Fixed an issue with option to pay with Paypal account for Payments Pro when configured on website level
+    * Fixed an issue with search results after filtering
+    * Fixed an issue with catalog product import
+    * Fixed an issue with configurable product special price
+    * Fixed an issue where unable to change type for color and size swatches
+    * Fixed an issue with selected filters on layered navigation
+    * Fixed an issue with related products block
+    * Fixed an issue with product alert for out of stock
+    * Fixed an issue with product selection in Products->Catalog results in no products selected
+    * Fixed an issue where unable to remove item from Minicart
+    * Fixed an issue where unable to deploy to production without downtime
+    * Fixed an issue with minicart inconsistent behavior between http and https
+    * Fixed an issue with CMS page preview on frontend
+    * Fixed an issue where discounts is not showing in the order summary at the shipping section in the checkout
+* Search improvements:    
+    * Improve Catalog Performance. Quick Search
+* GitHub issues and requests:
+    * [#1705](https://github.com/magento/magento2/issues/1705) -- Remove item from Minicart does not work
+    * [#1704](https://github.com/magento/magento2/issues/1704) -- Minicart inconsistant behavior between http and https
+      
+
+1.0.0-beta3
+=============
+* Fixed bugs:
+    * Fixed an issue with cms block cache if the block was added via layout xml
+    * Fixed an issue with error message after click "Get Payment Update" for order placed within Authorize.net Direct Post with incorrect url in "Transaction Details Url"
+    * Fixed an issue where unable to import images for configurable products
+    * Fixed an issue where product links API does not return the linked product's sku and position with flat tables turned on
+    * Fixed an issue where unable to run the CLI tool after the DI compilation
+    * Fixed an issue where copies of LESS source files are created instead of symlinks in client side less compilation
+* Various improvements:
+    * Stores and stores loading improvements
+    * Created APIs to retrieve store information
+    * Added the ability to send the purge requests for multiple servers
+* GitHub issues and requests:
+    * [#1679](https://github.com/magento/magento2/issues/1679) -- Cannot run php bin/magento setup:di:compile (have to delete contents of var/di) first
+    * [#1510](https://github.com/magento/magento2/issues/1510) -- Multisite does not work when Full Page Cache is enabled (FPC ignores MAGE_RUN_CODE)
+    
+1.0.0-beta2
+=============
+* Fixed bugs:
+    * Fixed an issue where unable to export custom product attributes
+    * Fixed an issue where customer account page in Admin produces exception
+    * Fixed an issue where import validation is failed in case of import products for multiple websites
+    * Unable to import or export products with multi-select attributes
+    * Fixed an issue where DI compilation fails on class keyword
+    * Fixed an issue where UK PayPal Website Payments Pro Hosted Solution doesn't work
+    * Fixed an issue where US PayPal payment methods are not working
+    * Fixed an issue where Authorize.net does not work in production mode
+    * Fixed an issue where widgets are not rendered on the CMS preview page
+    * Fixed an issue where CMS page preview not works when changing store view
+    * Fixed an issue where minicart is not cleared after placing an order via PayPal
+    * Fixed an issue where is not possible to use Authorize.net payment on checkout
+    * Fixed an issue where multiple stores at different paths rendering wrong store base_url
+    * Fixed an issue where unable to change the product attribute set (Product Template)
+    * Fixed an issue where there is address validation for guest customer
+    * Fixed an issue where no way to set password for customer after placing order
+
+1.0.0-beta1
+=============
+* Fixed bugs:
+    * Fixed an issue where custom attribute with 'Show on Storefront' = Yes makes the customer edit form empty
+    * Fixed an issue where product import loses images
+    * Fixed an issue where images are not uploaded with import procedure
+    * Fixed JS error when click 'Go to Checkout' button
+
 1.0.0-beta
 =============
 * Framework improvements:

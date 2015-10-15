@@ -26,12 +26,6 @@
 
 & when (@media-common = true) {
     .gift-message {
-        .actions-toolbar {
-            .action-cancel {
-                &:extend(.abs-action-button-as-link all);
-                display: none;
-            }
-        }
         .field {
             .label {
                 .css(color, @gift-message-field-label__color);
@@ -52,7 +46,13 @@
     }
 
     .gift-options {
-        &:extend(.abs-add-clearfix all);
+        margin: @indent__base 0;
+        .actions-toolbar {
+            .action-cancel {
+                &:extend(.abs-action-button-as-link all);
+                display: none;
+            }
+        }
     }
 
     .gift-options-title {
@@ -118,7 +118,8 @@
             padding: @indent__base 0;
             width: 100%;
             &._active {
-                display: block;
+                display: table;
+                table-layout: fixed;
             }
         }
     }
@@ -295,8 +296,21 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .gift-message {
+        .field {
+            &:extend(.abs-clearfix all);
+            .form-field-type-revert(
+            @_type: inline,
+            @_type-inline-label-align: left
+            );
+        }
+    }
+    .gift-options {
+        position: relative;
+        z-index: 1;
         .actions-toolbar {
+            clear: both;
             padding: 0;
+            position: static;
             .secondary {
                 float: right;
                 .action {
@@ -310,13 +324,19 @@
                     margin-top: 6px;
                 }
             }
-        }
-        .field {
-            &:extend(.abs-clearfix all);
-            .form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
+            &:nth-child(3) {
+                &:before {
+                    .css(border-left, 1px solid @gift-item-block__border-color);
+                    bottom: 5rem;
+                    content: "";
+                    display: block;
+                    left: 50%;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                }
+            }
         }
     }
     .gift-options-title {
@@ -358,6 +378,13 @@
                 &:after {
                     content: @icon-up;
                 }
+            }
+        }
+        .gift-options {
+            .actions-toolbar {
+                clear: both;
+                padding: 0;
+                position: static;
             }
         }
     }

@@ -17,6 +17,12 @@ define(
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
+            /**
+             * After place order callback
+             */
+            afterPlaceOrder: function () {
+                //
+            },
             isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
             /**
              * Initialize view.
@@ -63,7 +69,7 @@ define(
 
                     $.when(placeOrder).fail(function(){
                         self.isPlaceOrderActionAllowed(true);
-                    });
+                    }).done(this.afterPlaceOrder);
                     return true;
                 }
                 return false;

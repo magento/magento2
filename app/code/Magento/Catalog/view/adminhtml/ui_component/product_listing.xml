@@ -199,12 +199,17 @@
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">catalog/product/massDelete</item>
                         </item>
-                        <item name="disable" xsi:type="array">
-                            <item name="type" xsi:type="string">status</item>
-                            <item name="label" xsi:type="string" translate="true">Change status</item>
-                            <item name="url" xsi:type="string">catalog/*/massStatus</item>
-                        </item>
                         <item name="enable" xsi:type="array">
+                            <item name="type" xsi:type="string">enable</item>
+                            <item name="label" xsi:type="string" translate="true">Status - Enable</item>
+                            <item name="url" xsi:type="string">catalog/product/massStatus/status/1</item>
+                        </item>
+                        <item name="disable" xsi:type="array">
+                            <item name="type" xsi:type="string">disable</item>
+                            <item name="label" xsi:type="string" translate="true">Status - Disable</item>
+                            <item name="url" xsi:type="string">catalog/product/massStatus/status/2</item>
+                        </item>
+                        <item name="attributes" xsi:type="array">
                             <item name="type" xsi:type="string">attributes</item>
                             <item name="label" xsi:type="string" translate="true">Update attributes</item>
                             <item name="url" xsi:type="string">catalog/product_action_attribute/edit</item>

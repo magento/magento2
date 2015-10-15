@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Module;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,7 +71,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
             'If specified, then db connection validation will be skipped',
             $options[11]->getDescription()
         );
-        $this->assertEquals(12, count($options));
+        $this->assertEquals(13, count($options));
     }
 
     public function testCreateOptions()
@@ -84,7 +85,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(7, count($configData));
+        $this->assertEquals(8, count($configData));
     }
 
     public function testCreateOptionsWithOptionalNull()
@@ -98,6 +99,38 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(6, count($configData));
+        $this->assertEquals(7, count($configData));
+    }
+
+    /**
+     * @param string $hosts
+     * @param bool $expectedError
+     * @dataProvider validateCacheHostsDataProvider
+     */
+    public function testValidateCacheHosts($hosts, $expectedError)
+    {
+        $options = [
+            ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
+            ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => $hosts
+        ];
+        $result = $this->object->validate($options, $this->deploymentConfig);
+        if ($expectedError) {
+            $this->assertCount(1, $result);
+            $this->assertEquals("Invalid http cache hosts '$hosts'", $result[0]);
+        } else {
+            $this->assertCount(0, $result);
+        }
+    }
+
+    public function validateCacheHostsDataProvider()
+    {
+        return [
+            ['localhost', false],
+            ['122.11.2.34:800', false],
+            ['122.11.2.34:800,localhost', false],
+            ['website.com:9000', false],
+            ['website.com/m2ce:9000', true],
+            ['website.com+:9000', true],
+        ];
     }
 }

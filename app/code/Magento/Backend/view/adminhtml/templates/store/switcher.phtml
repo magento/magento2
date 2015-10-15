@@ -30,7 +30,8 @@
             class="admin__action-dropdown"
             data-mage-init='{"dropdown":{}}'
             data-toggle="dropdown"
-            aria-haspopup="true">
+            aria-haspopup="true"
+            id="store-change-button">
             <?php echo $block->getCurrentSelectionName() ?>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
@@ -168,15 +169,35 @@ require(['jquery'], function(jQuery){
             };
             scopeSwitcherHandler(switcherParams);
         } else {
-            var url = '<?php echo $block->getSwitchUrl() ?>' + scopeParams;
+
             <?php if ($block->getUseConfirm()): ?>
             if (confirm("<?php echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>")) {
-                setLocation(url);
+                reload();
             } else {
                 obj.value = '<?php echo $block->getStoreId() ?>';
             }
             <?php else: ?>
+                reload();
+            <?php endif; ?>
+        }
+
+        function reload() {
+            <?php if (!$block->isUsingIframe()): ?>
+            var url = '<?php echo $block->getSwitchUrl() ?>' + scopeParams;
             setLocation(url);
+            <?php else: ?>
+            jQuery('#preview_selected_store').val(scopeId);
+            jQuery('#preview_form').submit();
+
+            jQuery('.store-switcher .dropdown-menu li a').each(function() {
+                var $this = jQuery(this);
+
+                if ($this.data('role') === 'store-view-id' && $this.data('value') == scopeId) {
+                    jQuery('#store-change-button').html($this.text());
+                }
+            });
+
+            jQuery('#store-change-button').click();
             <?php endif; ?>
         }
     }

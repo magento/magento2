@@ -61,6 +61,14 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_WEIGHT = 'invalidWeight';
 
+    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+
+    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+
+    const ERROR_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicatedUniqueAttribute';
+
+    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
+
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */

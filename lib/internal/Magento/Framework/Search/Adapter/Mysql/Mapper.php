@@ -126,12 +126,6 @@ class Mapper
             $queryContainer
         );
 
-        $filtersCount = $queryContainer->getFiltersCount();
-        if ($filtersCount > 1) {
-            $select->group('entity_id');
-            $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
-        }
-
         $select = $this->addMatchQueries(
             $request,
             $queryContainer->getDerivedQueries(),
@@ -141,7 +135,7 @@ class Mapper
         );
 
         $select->limit($request->getSize());
-        $select->order('relevance ' . Select::SQL_DESC);
+        $select->order('score ' . Select::SQL_DESC);
         return $select;
     }
 
@@ -160,7 +154,7 @@ class Mapper
                 ['main_select' => $select],
                 [
                     $this->entityMetadata->getEntityId() => 'entity_id',
-                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+                    'score' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
                 ]
             )
             ->group($this->entityMetadata->getEntityId());
@@ -274,11 +268,6 @@ class Mapper
         foreach ($subQueryList as $subQuery) {
             $select = $this->processQuery($scoreBuilder, $subQuery, $select, $conditionType, $queryContainer);
         }
-        $filters = $queryContainer->getFilters();
-        if ($filters) {
-            $select->where('(' . implode(' OR ', $filters) . ')');
-            $queryContainer->clearFilters();
-        }
         return $select;
     }
 
@@ -312,7 +301,7 @@ class Mapper
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:
-                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType, $queryContainer);
+                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType);
                 if ($filterCondition) {
                     $select->where($filterCondition);
                 }
@@ -356,14 +345,14 @@ class Mapper
             $select = $this->createAroundSelect($select, $scoreBuilder);
             $subSelect = $select;
             $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-            $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
-            $relevance = implode('.relevance + ', $tables);
+            $tables = array_merge(array_keys($matchQueries), ['main_select.score']);
+            $score = implode('.score + ', $tables);
             $select
                 ->from(
                     ['main_select' => $subSelect],
                     [
                         $this->entityMetadata->getEntityId() => 'entity_id',
-                        'relevance' => sprintf('(%s)', $relevance),
+                        'score' => sprintf('(%s)', $score),
                     ]
                 );
 

@@ -153,7 +153,12 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
         $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
 
-        $result = $this->builder->build($this->dataProvider, [], $this->bucket, [1, 2, 3]);
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $result = $this->builder->build($this->dataProvider, [], $this->bucket, $table);
         $this->assertEquals($this->select, $result);
     }
 }

@@ -119,7 +119,7 @@ class ConfigModel
 
         }
 
-        $this->writer->saveConfig($fileConfigStorage);
+        $this->writer->saveConfig($fileConfigStorage, true);
     }
 
     /**
@@ -153,7 +153,7 @@ class ConfigModel
 
         return $errors;
     }
-    
+
     /**
      * Check permissions of directories that are expected to be writable for installation
      *

@@ -113,6 +113,8 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('less')
             ->willReturn($this->getMock('Magento\Framework\Less\FileGenerator', [], [], '', false));
+        $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
+        $asset->expects($this->once())->method('getContentType')->willReturn('type');
         $this->assetRepo->expects($this->once())
             ->method('createAsset')
             ->with(
@@ -123,9 +125,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
                     'locale' => 'en_US'
                 ]
             )
-            ->willReturn(
-                $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface')
-            );
+            ->willReturn($asset);
         $this->assetSource->expects($this->once())->method('findSource')->willReturn('/dev/null');
 
         $this->chainFactory->expects($this->once())->method('create')->willReturn(

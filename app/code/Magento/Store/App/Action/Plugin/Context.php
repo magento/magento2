@@ -76,8 +76,8 @@ class Context
             $this->httpRequest->getParam(
                 '___store',
                 $defaultStore->getStoreCodeFromCookie()
-            ),
-            $this->storeManager->getWebsite()->getDefaultStore()->getCode()
+            ) ?: $defaultStore->getCode(),
+            $this->storeManager->getDefaultStoreView()->getCode()
         );
         return $proceed($request);
     }

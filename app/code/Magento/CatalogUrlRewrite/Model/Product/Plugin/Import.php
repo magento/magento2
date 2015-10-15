@@ -320,12 +320,14 @@ class Import
         $urls = [];
         foreach ($this->products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
-                $urls[] = $this->urlRewriteFactory->create()
-                    ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
-                    ->setEntityId($productId)
-                    ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
-                    ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
-                    ->setStoreId($storeId);
+                if ($this->productUrlPathGenerator->getUrlPath($product)) {
+                    $urls[] = $this->urlRewriteFactory->create()
+                        ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+                        ->setEntityId($productId)
+                        ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
+                        ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
+                        ->setStoreId($storeId);
+                }
             }
         }
 

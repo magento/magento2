@@ -683,7 +683,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     /**
      * Cover canonicalUrlRewriteGenerate().
      */
-    public function testCanonicalUrlRewriteGenerate()
+    public function testCanonicalUrlRewriteGenerateWithUrlPath()
     {
         $productId = 'product_id';
         $requestPath = 'simple-product.html';
@@ -704,6 +704,10 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getUrlPathWithSuffix')
             ->will($this->returnValue($requestPath));
+        $this->productUrlPathGenerator
+            ->expects($this->once())
+            ->method('getUrlPath')
+            ->will($this->returnValue('urlPath'));
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getCanonicalUrlPath')
@@ -745,6 +749,36 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ],
             $actualResult
         );
+    }
+
+    /**
+     * Cover canonicalUrlRewriteGenerate().
+     */
+    public function testCanonicalUrlRewriteGenerateWithEmptyUrlPath()
+    {
+        $productId = 'product_id';
+        $storeId = 10;
+        $product = $this
+            ->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productsByStores = [$storeId => $product];
+        $products = [
+            $productId => $productsByStores,
+        ];
+
+        $this->setPropertyValue($this->import, 'products', $products);
+
+        $this->productUrlPathGenerator
+            ->expects($this->once())
+            ->method('getUrlPath')
+            ->will($this->returnValue(''));
+        $this->urlRewriteFactory
+            ->expects($this->never())
+            ->method('create');
+
+        $actualResult = $this->invokeMethod($this->import, 'canonicalUrlRewriteGenerate');
+        $this->assertEquals([], $actualResult);
     }
 
     /**

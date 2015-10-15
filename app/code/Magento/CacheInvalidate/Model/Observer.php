@@ -5,29 +5,29 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class Observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
+    /**
+     * Default port for purge requests
+     */
+    const DEFAULT_PORT = 80;
+
     /**
      * Application config object
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_config;
-
-    /**
-     * @var \Magento\PageCache\Helper\Data
-     */
-    protected $_helper;
-
-    /**
-     * @var \Magento\Framework\HTTP\Adapter\Curl
-     */
-    protected $_curlAdapter;
+    protected $config;
 
     /**
      * @var InvalidateLogger
@@ -35,23 +35,47 @@ class Observer
     private $logger;
 
     /**
-     * Constructor
-     *
+     * @var UriFactory
+     */
+    protected $uriFactory;
+
+    /**
+     * @var SocketFactory
+     */
+    protected $socketAdapterFactory;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param \Magento\PageCache\Model\Config $config
-     * @param \Magento\PageCache\Helper\Data $helper
-     * @param \Magento\Framework\HTTP\Adapter\Curl $curlAdapter
+     * @param UriFactory $uriFactory
+     * @param SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
+     * @param DeploymentConfig $deploymentConfig
+     * @param RequestInterface $request
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        \Magento\PageCache\Helper\Data $helper,
-        \Magento\Framework\HTTP\Adapter\Curl $curlAdapter,
-        InvalidateLogger $logger
+        UriFactory $uriFactory,
+        SocketFactory $socketAdapterFactory,
+        InvalidateLogger $logger,
+        DeploymentConfig $deploymentConfig,
+        RequestInterface $request
     ) {
-        $this->_config = $config;
-        $this->_helper = $helper;
-        $this->_curlAdapter = $curlAdapter;
+        $this->config = $config;
+        $this->uriFactory = $uriFactory;
+        $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->request = $request;
     }
 
     /**
@@ -63,7 +87,7 @@ class Observer
      */
     public function invalidateVarnish(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->_config->isEnabled()) {
+        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
             if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
                 $tags = [];
@@ -86,7 +110,7 @@ class Observer
      */
     public function flushAllCache(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->_config->isEnabled()) {
+        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
             $this->sendPurgeRequest('.*');
         }
     }
@@ -100,12 +124,31 @@ class Observer
      */
     protected function sendPurgeRequest($tagsPattern)
     {
-        $headers = ["X-Magento-Tags-Pattern: {$tagsPattern}"];
-        $this->_curlAdapter->setOptions([CURLOPT_CUSTOMREQUEST => 'PURGE']);
-        $this->_curlAdapter->write('', $this->_helper->getUrl('*'), '1.1', $headers);
-        $this->_curlAdapter->read();
-        $this->_curlAdapter->close();
+        $uri = $this->uriFactory->create();
+        $socketAdapter = $this->socketAdapterFactory->create();
+        $servers = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS)
+            ?: [['host' => $this->request->getHttpHost()]];
+        $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
+        $socketAdapter->setOptions(['timeout' => 10]);
+        foreach ($servers as $server) {
+            $port = isset($server['port']) ? $server['port'] : self::DEFAULT_PORT;
+            $uri->setScheme('http')
+                ->setHost($server['host'])
+                ->setPort($port);
+            try {
+                $socketAdapter->connect($server['host'], $port);
+                $socketAdapter->write(
+                    'PURGE',
+                    $uri,
+                    '1.1',
+                    $headers
+                );
+                $socketAdapter->close();
+            } catch (Exception $e) {
+                $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
+            }
+        }
 
-        $this->logger->execute(compact('tagsPattern'));
+        $this->logger->execute(compact('servers', 'tagsPattern'));
     }
 }

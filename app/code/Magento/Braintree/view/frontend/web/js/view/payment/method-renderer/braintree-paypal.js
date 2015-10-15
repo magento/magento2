@@ -94,7 +94,7 @@ define(
                     singleUse: true,
                     amount: totals.base_grand_total,
                     currency: totals.base_currency_code,
-                    displayName: this.merchantName,
+                    displayName: this.merchantName || '',
                     locale: this.locale,
                     onPaymentMethodReceived: function (response) {
                         self.paymentMethodNonce(response.nonce);

@@ -530,8 +530,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
+
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
 
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
         $this->assertTrue($result);
@@ -544,89 +546,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
+
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
+        $messages = ['validator message'];
+        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
 
         $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
         $this->assertFalse($result);
-    }
-
-    public function testIsAttributeValidNotValidAddErrorCall()
-    {
-        $attrCode = 'code';
-        $attrParams = [
-            'type' => 'decimal',
-        ];
-        $rowData = [
-            $attrCode => 'incorrect'
-        ];
-        $rowNum = 0;
-
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError'])
-            ->getMock();
-        $importProduct->expects($this->once())->method('addRowError');
-
-        $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
-    }
-
-    public function testIsAttributeValidOnDuplicateAddErrorCall()
-    {
-        $attrCode = 'code';
-        $attrCodeVal = 1000;
-        $expectedSkuVal = 'sku_val';
-        $testSkuVal = 'some_sku';
-        $attrParams = [
-            'type' => 'decimal',
-            'is_unique' => true,
-        ];
-        $rowData = [
-            $attrCode => $attrCodeVal,
-            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => $expectedSkuVal
-        ];
-        $rowNum = 0;
-
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRowError'])
-            ->getMock();
-        $importProduct->expects($this->once())->method('addRowError');
-        $this->setPropertyValue($importProduct, '_uniqueAttributes', [
-            $attrCode => [$attrCodeVal => $testSkuVal]
-        ]);
-
-        $importProduct->expects($this->once())->method('addRowError');
-
-        $return = $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
-
-        $this->assertFalse($return);
-    }
-
-    public function testIsAttributeValidAddIntoUniqueueAttributes()
-    {
-        $attrCode = 'code';
-        $attrCodeVal = 1000;
-        $expectedSkuVal = 'sku_val';
-        $attrParams = [
-            'type' => 'decimal',
-            'is_unique' => true,
-        ];
-        $rowData = [
-            $attrCode => $attrCodeVal,
-            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => $expectedSkuVal
-        ];
-        $rowNum = 0;
-
-        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
-
-        $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
-
-        $_uniqueAttributes = $this->getPropertyValue($importProduct, '_uniqueAttributes');
-        $this->assertEquals($expectedSkuVal, $_uniqueAttributes[$attrCode][$rowData[$attrCode]]);
     }
 
     public function testGetMultipleValueSeparatorDefault()

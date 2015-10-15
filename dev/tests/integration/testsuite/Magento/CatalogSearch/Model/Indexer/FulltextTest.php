@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -40,24 +41,27 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $queryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productApple;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productBanana;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productOrange;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productPapaya;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productCherry;
 
@@ -108,11 +112,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -120,7 +119,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
-        $this->testReindexAll();
+        $this->indexer->reindexAll();
+
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -133,11 +133,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -145,7 +140,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
+
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -171,16 +167,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Common');
         $this->assertCount(2, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -188,23 +177,20 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterDelete()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
 
         $this->productBanana->delete();
 
         $products = $this->search('Simple Product');
+
         $this->assertCount(4, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[1]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[2]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[3]->getId());
     }
 
     /**
      * Search the text and return result collection
      *
      * @param string $text
-     * @return \Magento\Catalog\Model\Product[]
+     * @return Product[]
      */
     protected function search($text)
     {
@@ -212,7 +198,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $query = $this->queryFactory->get();
         $query->unsetData()->setQueryText($text)->prepare();
         $products = [];
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection = Bootstrap::getObjectManager()->create(
+            Collection::class,
+            [
+                'searchRequestName' => 'quick_search_container'
+            ]
+        );
         $collection->addSearchFilter($text);
         foreach ($collection as $product) {
             $products[] = $product;
@@ -224,11 +215,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * Return product by SKU
      *
      * @param string $sku
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     protected function getProductBySku($sku)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product'
         );
