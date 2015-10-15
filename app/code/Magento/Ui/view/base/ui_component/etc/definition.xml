@@ -163,7 +163,7 @@
             </item>
         </argument>
     </select>
-    <multiselect class="Magento\Ui\Component\Form\Element\Select">
+    <multiselect class="Magento\Ui\Component\Form\Element\MultiSelect">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">ui/form/element/multiselect</item>
             <item name="js_config" xsi:type="array">
@@ -172,6 +172,9 @@
                 <item name="config" xsi:type="array">
                     <item name="elementTmpl" xsi:type="string">ui/form/element/multiselect</item>
                 </item>
+            </item>
+            <item name="config" xsi:type="array">
+                <item name="size" xsi:type="string">6</item>
             </item>
         </argument>
     </multiselect>
