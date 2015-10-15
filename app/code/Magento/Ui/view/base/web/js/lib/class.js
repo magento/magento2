@@ -40,7 +40,7 @@ define([
             constr = function () {
                 var obj = this;
 
-                if (!obj || !Object.getPrototypeOf(obj) === constr.prototype) {
+                if (!obj || !Object.getPrototypeOf(obj) === constr.prototype || obj === window) {
                     obj = Object.create(constr.prototype);
                 }
 
