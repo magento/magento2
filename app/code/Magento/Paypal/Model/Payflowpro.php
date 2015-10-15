@@ -271,7 +271,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param ConfigInterfaceFactory $configFactory
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -290,7 +290,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         ConfigInterfaceFactory $configFactory,
         Gateway $gateway,
         HandlerInterface $errorHandler,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

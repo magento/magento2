@@ -36,7 +36,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $managerMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -82,7 +82,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
             ->getMock();

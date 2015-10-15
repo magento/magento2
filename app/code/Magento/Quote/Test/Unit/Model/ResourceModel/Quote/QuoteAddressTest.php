@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 
 /**
  * Class QuoteAddressTest
@@ -38,7 +38,7 @@ class QuoteAddressTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -81,14 +81,14 @@ class QuoteAddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             [],
             [],
             '',

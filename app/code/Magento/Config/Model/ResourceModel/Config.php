@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Model\ResourceModel;
 
 /**
@@ -13,7 +10,8 @@ namespace Magento\Config\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Framework\Model\ModelResource\Db\AbstractDb implements \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
+    \Magento\Framework\App\Config\ConfigResource\ConfigInterface
 {
     /**
      * Define main table

@@ -10,7 +10,7 @@ namespace Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -18,12 +18,12 @@ class Tax extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null
     ) {

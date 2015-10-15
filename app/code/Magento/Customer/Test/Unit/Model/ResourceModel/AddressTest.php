@@ -8,8 +8,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -41,7 +41,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
 
         $this->entityRelationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             [],
             [],
             '',

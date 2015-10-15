@@ -10,7 +10,7 @@ namespace Magento\Review\Model\ResourceModel\Review;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Review table
@@ -83,7 +83,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -94,7 +94,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_reviewData = $reviewData;
         $this->_voteFactory = $voteFactory;

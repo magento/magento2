@@ -68,7 +68,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Braintree\Model\Config\PayPal $payPalConfig
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -95,7 +95,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Braintree\Model\Config\PayPal $payPalConfig,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

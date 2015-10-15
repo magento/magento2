@@ -111,7 +111,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Model\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Response\Factory $responseFactory
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -130,7 +130,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
         TransactionService $transactionService,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
