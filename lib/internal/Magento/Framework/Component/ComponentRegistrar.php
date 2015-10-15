@@ -44,6 +44,8 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($type, $componentName, $path)
     {
+        $path = str_replace('\\', '/', $path);
+        $path = str_replace('magento2ee', 'magento2ce', $path);
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
             throw new \LogicException('\'' . $componentName . '\' component already exists');

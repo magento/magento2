@@ -241,6 +241,13 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $setup->getConnection()->delete(
+                $setup->getTable('customer_form_attribute'),
+                ['form_code = ?' => 'checkout_register']
+            );
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
