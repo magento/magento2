@@ -166,7 +166,8 @@ class Vat
             'is_valid' => false,
             'request_date' => '',
             'request_identifier' => '',
-            'request_success' => false
+            'request_success' => false,
+            'request_message' => __('Error during VAT Number verification.'),
         ]);
 
         if (!extension_loaded('soap')) {
@@ -194,6 +195,12 @@ class Vat
             $gatewayResponse->setRequestDate((string)$result->requestDate);
             $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
             $gatewayResponse->setRequestSuccess(true);
+
+            if ($gatewayResponse->getIsValid()) {
+                $gatewayResponse->setRequestMessage(__('VAT Number is valid.'));
+            } else {
+                $gatewayResponse->setRequestMessage(__('Please enter a valid VAT number.'));
+            }
         } catch (\Exception $exception) {
             $gatewayResponse->setIsValid(false);
             $gatewayResponse->setRequestDate('');
