@@ -8,7 +8,7 @@ namespace Magento\Store\Model\ResourceModel\Website;
 /**
  * Websites collection
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Map field to alias
