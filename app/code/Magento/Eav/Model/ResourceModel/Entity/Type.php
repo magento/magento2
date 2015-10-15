@@ -10,7 +10,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Type extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

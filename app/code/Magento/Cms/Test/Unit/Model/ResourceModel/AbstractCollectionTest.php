@@ -23,7 +23,7 @@ abstract class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -38,7 +38,7 @@ abstract class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->connection->expects($this->any())->method('select')->willReturn($this->select);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $this->resource = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();

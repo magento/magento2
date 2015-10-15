@@ -10,11 +10,10 @@
         css: {
             '_sortable': sortable,
             '_draggable': draggable,
-            '_ascend': sorting() === 'asc',
-            '_descend': sorting() === 'desc'
+            '_ascend': sorting === 'asc',
+            '_descend': sorting === 'desc'
         },
-        click: sort,
-        visible: visible">
+        click: sort">
     <span
         class="data-grid-cell-content"
         data-bind="text: label">

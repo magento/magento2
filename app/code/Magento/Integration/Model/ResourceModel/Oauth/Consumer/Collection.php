@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\ResourceModel\Oauth\Consumer;
 /**
  * OAuth Application resource collection model
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Initialize collection model

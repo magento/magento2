@@ -9,7 +9,7 @@ namespace Magento\TestModuleMSC\Model\ResourceModel;
 /**
  * Sample resource model
  */
-class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
