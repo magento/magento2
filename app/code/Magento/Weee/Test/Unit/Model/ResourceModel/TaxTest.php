@@ -55,7 +55,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn('table_name');
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
         $this->model = $this->objectManager->getObject(

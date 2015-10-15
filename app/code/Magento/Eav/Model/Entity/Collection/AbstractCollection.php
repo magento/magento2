@@ -265,7 +265,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @codeCoverageIgnore
      */
     public function getResource()

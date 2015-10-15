@@ -26,13 +26,13 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $coreHelper
      * @param string $connectionName
      * @param array $arguments
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         $connectionName = null,
         array $arguments = []

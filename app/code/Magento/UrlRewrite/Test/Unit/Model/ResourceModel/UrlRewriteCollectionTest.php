@@ -15,7 +15,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -51,7 +51,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,

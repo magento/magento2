@@ -3,7 +3,12 @@
  * See COPYING.txt for license details.
  */
 
-require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
+define([
+    'jquery',
+    'jquery/ui',
+    'catalogGallery',
+    'Magento_ProductVideo/js/load-player'
+], function ($) {
     'use strict';
 
     /**
@@ -547,13 +552,12 @@ require(['jquery', 'jquery/ui', 'catalogGallery'], function ($) {
         }
     });
 
-    $('.gallery-placeholder').on('fotorama:ready', function () {
-        $(this).find('.fotorama').AddFotoramaVideoEvents({
-            VideoData: $(this).data('fotorama-video-data'),
-            VideoSettings: $(this).data('fotorama-video-settings')
+    return function (config, element) {
+        $('.gallery-placeholder').on('fotorama:ready', function () {
+            $(element).find('.fotorama').AddFotoramaVideoEvents({
+                VideoData: config.fotoramaVideoData || [],
+                VideoSettings: config.fotoramaVideoSettings || {}
+            });
         });
-        //no reason to store video data and settings after - erase it
-        $(this).removeAttr('data-fotorama-video-data');
-        $(this).removeAttr('data-fotorama-video-settings');
-    });
+    };
 });

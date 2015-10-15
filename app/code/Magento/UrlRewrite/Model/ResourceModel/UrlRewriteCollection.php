@@ -7,7 +7,7 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
-class UrlRewriteCollection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store Manager Model
@@ -23,7 +23,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ModelResource\Db\Col
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -32,7 +32,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ModelResource\Db\Col
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;

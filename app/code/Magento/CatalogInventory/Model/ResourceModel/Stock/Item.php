@@ -9,12 +9,12 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Stock item resource model
  */
-class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Whether index events should be processed immediately
@@ -29,12 +29,12 @@ class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $stockIndexerProcessor;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Processor $processor
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Processor $processor,
         $connectionName = null
     ) {

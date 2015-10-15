@@ -23,7 +23,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();
