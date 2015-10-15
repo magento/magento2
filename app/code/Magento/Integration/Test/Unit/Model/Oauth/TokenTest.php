@@ -68,7 +68,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     protected $oauthHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -119,7 +119,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->setMethods(
                 [
                     'getIdFieldName',

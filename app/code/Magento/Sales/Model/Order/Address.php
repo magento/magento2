@@ -61,7 +61,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -72,7 +72,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

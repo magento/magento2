@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -38,7 +38,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -48,7 +48,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $relationCompositeMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectRelationProcessorMock;
 
@@ -76,27 +76,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             [],
             [],
             '',
             false
         );
         $this->objectRelationProcessorMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor',
+            'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
             [],
             [],
             '',
             false
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
@@ -115,7 +115,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('Magento\Framework\Model\ModelResource\Db\VersionControl\AbstractDb', $this->model);
+        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb', $this->model);
     }
 
     public function testSaveNotModifiedItem()

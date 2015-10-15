@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Media extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
 

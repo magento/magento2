@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
 use Magento\Backend\Block\Widget\Grid\Column;
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\SalesRule\Model\Rule;
 
 /**

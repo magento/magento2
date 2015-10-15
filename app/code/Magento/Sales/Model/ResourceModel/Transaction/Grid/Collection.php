@@ -23,20 +23,20 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Payment\Transa
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Registry $registryManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Registry $registryManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->registryManager = $registryManager;
         parent::__construct(

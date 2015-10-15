@@ -186,7 +186,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @param TransactionCollectionFactory $salesTransactionCollectionFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetaData
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -213,7 +213,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
