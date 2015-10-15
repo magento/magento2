@@ -74,5 +74,6 @@ class DeleteCustomerBackendEntityTest extends Injectable
         $this->customerIndexPage->open();
         $this->customerIndexPage->getCustomerGridBlock()->searchAndOpen($filter);
         $this->customerIndexEditPage->getPageActionsBlock()->delete();
+        $this->customerIndexEditPage->getModalBlock()->acceptAlert();
     }
 }

@@ -74,5 +74,6 @@ class DeleteCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category);
         $this->catalogCategoryEdit->getFormPageActions()->delete();
+        $this->catalogCategoryEdit->getModalBlock()->acceptAlert();
     }
 }

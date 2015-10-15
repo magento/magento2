@@ -7,8 +7,7 @@
 <div class="admin__field admin__field-option">
     <input type="checkbox" class="admin__control-checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
 
-    <label class="admin__field-label" data-bind="checked: value, attr: { for: uid }">
-        <span data-bind="text: description || label"></span>
+    <label class="admin__field-label" data-bind="text: description || label, attr: { for: uid }">
     </label>
 
     <!-- ko if: notice -->
