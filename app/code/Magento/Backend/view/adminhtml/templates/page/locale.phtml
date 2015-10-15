@@ -11,16 +11,21 @@
     <label class="label" for="footer_interface_locale"><span><?php /* @escapeNotVerified */ echo __('Interface Locale'); ?></span></label>
     <?php /* @escapeNotVerified */ echo $block->getLocaleSelect(); ?>
     <script>
-        (function () {
-            'use strict';
+        require([
+                'mage/validation/url'
+            ],
+            function (urlValidator) {
+                'use strict';
 
-            var elem = document.getElementById('footer_interface_locale');
+                var elem = document.getElementById('footer_interface_locale');
 
-            function onChange() {
-                window.location.href = '<?php /* @escapeNotVerified */ echo $block->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php /* @escapeNotVerified */ echo $block->getUrlForReferer() ?>';
-            }
+                function onChange() {
+                    urlValidator.redirect('<?php /* @escapeNotVerified */ echo $block->getChangeLocaleUrl() ?>locale/' +
+                    elem.value +
+                    '/<?php /* @escapeNotVerified */ echo $block->getUrlForReferer() ?>');
+                }
 
-            elem.addEventListener('change', onChange);
-        })();
+                elem.addEventListener('change', onChange);
+            });
     </script>
 </div>

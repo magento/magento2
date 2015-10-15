@@ -34,6 +34,9 @@
                     <xs:element type="argumentType" name="argument"/>
                     <xs:element type="bookmark" name="bookmark"/>
                     <xs:element name="filterSearch" type="filterSearch" />
+                    <xs:element name="component" type="component" />
+                    <xs:element name="actionsColumn" type="actionsColumn" />
+                    <xs:element name="selectionsColumn" type="selectionsColumn" />
                     <xs:element type="exportButton" name="exportButton"/>
                 </xs:choice>
             </xs:extension>
@@ -80,6 +83,8 @@
             <xs:extension base="columns">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="column" type="column" />
+                    <xs:element name="actionsColumn" type="actionsColumn" />
+                    <xs:element name="selectionsColumn" type="selectionsColumn" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

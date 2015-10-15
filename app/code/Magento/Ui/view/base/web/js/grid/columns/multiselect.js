@@ -13,14 +13,19 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
+            controlVisibility: false,
             sortable: false,
+            draggable: false,
             menuVisible: false,
             excludeMode: false,
             allSelected: false,
             indetermine: false,
-            selected: [],
             disabled: [],
+            selected: [],
             excluded: [],
+            fieldClass: {
+                'data-grid-checkbox-cell': true
+            },
             actions: [{
                 value: 'selectAll',
                 label: $t('Select All')
@@ -195,10 +200,9 @@ define([
          * @returns {Multiselect} Chainable.
          */
         selectPage: function () {
-            var selected = _.difference(
-                _.union(this.selected(), this.getIds()),
-                this.disabled()
-            );
+            var selected = _.union(this.selected(), this.getIds());
+
+            selected = _.difference(selected, this.disabled());
 
             this.selected(selected);
 
@@ -434,6 +438,16 @@ define([
             this.indetermine(totalSelected && !allSelected);
 
             return this;
+        },
+
+        /**
+         * Overrides base method, because this component
+         * can't have global field action.
+         *
+         * @returns {Boolean} False.
+         */
+        hasFieldAction: function () {
+            return false;
         },
 
         /**

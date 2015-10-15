@@ -17,8 +17,11 @@ define([
             expect(modal).toBeDefined();
         });
         it('Show/hide function check', function () {
-            expect(element.trigger('openDialog')).toBe(element);
-            expect(element.trigger('closeDialog')).toBe(element);
+            expect(element.trigger('openModal')).toBe(element);
+            expect(element.trigger('closeModal')).toBe(element);
+        });
+        it('Integration: modal created on page', function () {
+            expect($(modal).length).toEqual(1);
         });
     });
 });
