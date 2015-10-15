@@ -8,9 +8,9 @@
 
 namespace Magento\Quote\Model\ResourceModel;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\AbstractDb;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\SalesSequence\Model\Manager;
 
 /**
@@ -24,14 +24,14 @@ class Quote extends AbstractDb
     protected $sequenceManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Snapshot $entitySnapshot,
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         Manager $sequenceManager,

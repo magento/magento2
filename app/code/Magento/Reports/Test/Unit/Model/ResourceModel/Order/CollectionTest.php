@@ -84,7 +84,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -102,7 +102,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->managerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->getMock();
-        $snapshotClassName = 'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot';
+        $snapshotClassName = 'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot';
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
             ->getMock();
@@ -155,7 +155,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock

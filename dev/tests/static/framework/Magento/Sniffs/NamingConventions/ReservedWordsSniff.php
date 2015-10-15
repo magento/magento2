@@ -12,7 +12,6 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
 {
     /**
      * source: http://php.net/manual/en/reserved.other-reserved-words.php
-     * disabled(commented) items are not restricted int PHP 7 beta 3, just declared as prohibited
      *
      * @var array PHP 7 reserved words for name spaces
      */

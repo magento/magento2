@@ -86,8 +86,9 @@ $product = $block->getSaleableItem();
         <script type="text/x-magento-init">
             {
                 ".product-info-main": {
-                    "tierPrice": {
+                    "addToCart": {
                         "inputQty": "#qty",
+                        "attr": "[data-tier-price]",
                         "productForm": "#product_addtocart_form"
                     }
                 }

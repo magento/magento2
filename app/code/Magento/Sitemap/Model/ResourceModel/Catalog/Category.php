@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Category extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Collection Zend Db select
@@ -39,13 +39,13 @@ class Category extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_categoryResource;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         $connectionName = null

@@ -444,7 +444,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCategoryCollection',
