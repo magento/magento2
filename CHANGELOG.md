@@ -1,3 +1,21 @@
+1.0.0-beta5
+=============
+* Fixed bugs:
+    * Fixed an issue where search results are not ordered properly for sorting options
+    * Fixed an issue with mini cart qty after checkout login and aborted checkout
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue when invalid postcode allows the customer to continue the checkout process
+    * Fixed an issue with import of configurable products
+    * Fixed an issue with missed attributes during products export
+    * Fixed an issue with naming in resources configuration
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue with color swatches when attribute is out of stock
+    * Fixed an issue with singe tenant compiler
+    * Fixed an issue with Braintree Paypal Checkout button in popup
+* Various improvements:    
+    * Implemented CMS page preview without area emulation
+    
 1.0.0-beta4
 =============
 * Fixed bugs:
