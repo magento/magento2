@@ -81,7 +81,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param CollectionFactory $categoryCollectionFactory
@@ -91,7 +91,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,

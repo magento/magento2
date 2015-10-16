@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Constructor

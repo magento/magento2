@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\VersionControl;
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
  */
-class Metadata extends \Magento\Framework\Model\ModelResource\Db\VersionControl\Metadata
+class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
 {
     /**
      * Returns list of entity fields that are applicable for persistence operations

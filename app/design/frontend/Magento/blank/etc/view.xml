@@ -181,20 +181,65 @@
     </media>
     <vars module="Magento_Catalog">
 
-        <!-- New gallery and magnifier theme settings -->
-        <var name="gallery:nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
-        <var name="gallery:loop">true</var> <!-- Gallery navigation loop (true/false) -->
-        <var name="gallery:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
-        <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
-        <var name="gallery:showCaption">false</var> <!-- Display alt text as image title (true/false) -->
+        <!-- Gallery and magnifier theme settings. Start -->
+        <var name="gallery">
+            <var name="nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+            <var name="loop">true</var> <!-- Gallery navigation loop (true/false) -->
+            <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
+            <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
+            <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
+            <var name="allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
+            <var name="navdir">horizontal</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
+            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides (true/false) -->
+            <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
+            <var name="transition">
+                <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                <var name="duration">500</var> <!-- Sets transition duration in ms -->
+            </var>
+            <var name="fullscreen">
+                <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
+                <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
+                <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
+                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
+                <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
+                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in full screen(horizontal/vertical)  -->
+                <var name="thumbwidth">150</var> <!-- Width of thumbnails in fullscreen -->
+                <var name="thumbheight">150</var> <!-- Height of thumbnails in fullscreen -->
+                <var name="navigation_carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                <var name="transition">
+                    <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                    <var name="duration">500</var> <!-- Sets transition duration in ms -->
+                    <var name="carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                </var>
+            </var>
+        </var>
 
-        <var name="magnifier:top"></var> <!-- Top position of magnifier -->
-        <var name="magnifier:left"></var> <!-- Left position of magnifier -->
-        <var name="magnifier:width"></var> <!-- Width of magnifier block -->
-        <var name="magnifier:height"></var> <!-- Height of magnifier block -->
-        <var name="magnifier:eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
-        <var name="magnifier:enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
-        <!-- end -->
+        <var name="magnifier">
+            <var name="fullscreenzoom">5</var>  <!-- Zoom for fullscreen (integer)-->
+            <var name="top"></var> <!-- Top position of magnifier -->
+            <var name="left"></var> <!-- Left position of magnifier -->
+            <var name="width"></var> <!-- Width of magnifier block -->
+            <var name="height"></var> <!-- Height of magnifier block -->
+            <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
+            <var name="enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+        </var>
+
+        <var name="breakpoints">
+            <var name="mobile">
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                </var>
+                <var name="options">
+                    <var name="options">
+                        <var name="navigation">dots</var>
+                    </var>
+                    <var name="magnifierOpts">
+                        <var name="enabled">false</var>
+                    </var>
+                </var>
+            </var>
+        </var>
+        <!-- end. Gallery and magnifier theme settings -->
 
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
         <var name="product_base_image_size">275</var>           <!-- Override for base product image -->

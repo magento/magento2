@@ -9,7 +9,7 @@ namespace Magento\Swatches\Model\ResourceModel\Swatch;
  * @codeCoverageIgnore
  * Swatch Collection
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Standard collection initialization

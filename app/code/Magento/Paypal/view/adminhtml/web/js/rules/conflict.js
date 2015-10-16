@@ -4,7 +4,9 @@
  */
 (function() {
     var executed = false;
-    define([], function () {
+    define([
+        'Magento_Ui/js/modal/alert'
+    ], function (alert) {
         "use strict";
         return function ($target, $owner, data) {
             if ($owner.find(data.enableButton).val() == 1) {
@@ -22,11 +24,11 @@
 
                 if (!isDisabled && !executed) {
                     executed = true;
-                    alert(
-                        "The following error(s) occured:\n\r"
-                        + "Some PayPal solutions conflict.\n\r"
-                        + "Please re-enable the previously enabled payment solutions."
-                    );
+                    alert({
+                        content: "The following error(s) occured:\n\r"
+                                +"Some PayPal solutions conflict.\n\r"
+                                +"Please re-enable the previously enabled payment solutions."
+                    });
                 }
             }
         };

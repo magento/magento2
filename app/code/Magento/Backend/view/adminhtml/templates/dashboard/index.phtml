@@ -10,7 +10,10 @@
 
 <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
 <script>
-require(['prototype'], function(){
+require([
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(alert){
 
 window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
@@ -25,7 +28,9 @@ window.changeDiagramsPeriod = function(periodObj) {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
                     if (response.error) {
-                        alert(response.message);
+                        alert({
+                            content: response.message
+                        });
                     }
                     if(response.ajaxExpired && response.ajaxRedirect) {
                         setLocation(response.ajaxRedirect);
@@ -47,9 +52,11 @@ window.changeDiagramsPeriod = function(periodObj) {
             tabContentElementId = 'dashboard_diagram_totals';
             try {
                 if (transport.responseText.isJSON()) {
-                    var response = transport.responseText.evalJSON()
+                    var response = transport.responseText.evalJSON();
                     if (response.error) {
-                        alert(response.message);
+                        alert({
+                            content: response.message
+                        });
                     }
                     if(response.ajaxExpired && response.ajaxRedirect) {
                         setLocation(response.ajaxRedirect);

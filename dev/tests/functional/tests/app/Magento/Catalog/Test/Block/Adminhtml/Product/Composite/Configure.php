@@ -44,7 +44,7 @@ class Configure extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $okButton = '.ui-button.action-primary';
+    protected $okButton = '.action-primary[data-role="action"]';
 
     /**
      * Backend abstract block.

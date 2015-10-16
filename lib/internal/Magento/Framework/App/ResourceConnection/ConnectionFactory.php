@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\ResourceConnection;
 
-use Magento\Framework\Model\ModelResource\Type\Db\ConnectionFactory as ModelConnectionFactory;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory as ModelConnectionFactory;
 use Magento\Framework\DB\Adapter\DdlCache;
 
 class ConnectionFactory extends ModelConnectionFactory

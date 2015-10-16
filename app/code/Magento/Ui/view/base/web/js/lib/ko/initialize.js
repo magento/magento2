@@ -7,9 +7,12 @@
 define([
     'ko',
     './template/engine',
+    'knockoutjs/knockout-repeat',
+    'knockoutjs/knockout-fast-foreach',
+    'knockoutjs/knockout-es5',
     './bind/scope',
+    './bind/staticChecked',
     './bind/datepicker',
-    './bind/stop_propagation',
     './bind/outer_click',
     './bind/keyboard',
     './bind/optgroup',
@@ -18,9 +21,9 @@ define([
     './bind/after-render',
     './bind/i18n',
     './bind/collapsible',
+    './bind/autoselect',
     './extender/observable_array',
-    './extender/bound-nodes',
-    './extender/observable_array'
+    './extender/bound-nodes'
 ], function (ko, templateEngine) {
     'use strict';
 

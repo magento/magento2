@@ -10,7 +10,7 @@ namespace Magento\Eav\Model\ResourceModel\Form;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Element extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Element extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
