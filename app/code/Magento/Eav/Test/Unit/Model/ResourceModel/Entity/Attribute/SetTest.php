@@ -56,16 +56,16 @@ class SetTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
         $this->transactionManagerMock = $this->getMock(
-            '\Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface'
+            '\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface'
         );
         $this->relationProcessor = $this->getMock(
-            '\Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor',
+            '\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
             [],
             [],
             '',
             false
         );
-        $contextMock = $this->getMock('Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())
             ->method('getTransactionManager')
             ->willReturn($this->transactionManagerMock);

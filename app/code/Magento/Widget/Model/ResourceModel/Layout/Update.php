@@ -11,7 +11,7 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 /**
  * Layout update resource model
  */
-class Update extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
@@ -19,12 +19,12 @@ class Update extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     private $_cache;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Cache\FrontendInterface $cache,
         $connectionName = null
     ) {
