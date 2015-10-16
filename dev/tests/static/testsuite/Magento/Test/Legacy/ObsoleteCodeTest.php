@@ -901,6 +901,25 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $pattern
+     * @return array
+     * @throws \Exception
+     */
+    private function processPattern($pattern)
+    {
+        $files = [];
+        $appPath = Files::init()->getPathToSource();
+        $relativePathStart = strlen($appPath);
+
+        $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
+        foreach ($fileSet as $file) {
+            $files[] = substr($file, $relativePathStart);
+        }
+
+        return $files;
+    }
+
+    /**
      * Reads list of blacklisted files
      *
      * @return array
@@ -909,13 +928,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
-        $appPath = Files::init()->getPathToSource();
-        $relativePathStart = strlen($appPath);
         foreach ($blackList as $file) {
-            $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT);
-            foreach ($fileSet as $file) {
-                $ignored[] = substr($file, $relativePathStart);
-            }
+            $ignored = array_merge($ignored, $this->processPattern($file));
         }
         return $ignored;
     }
