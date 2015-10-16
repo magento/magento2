@@ -103,8 +103,6 @@ class AlternativeSource implements AlternativeSourceInterface
             /** @var  FallbackContext $context */
             $context = $chain->getAsset()->getContext();
             $chain->setContent($this->processContent($path, $content, $module, $context));
-        } catch (\Exception $e) {
-            throw $e;
         } finally {
             $this->lockerProcess->unlockProcess();
         }
