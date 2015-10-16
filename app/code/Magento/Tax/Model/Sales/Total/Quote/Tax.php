@@ -298,6 +298,10 @@ class Tax extends CommonTaxCollector
         $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
         $amount = $total->getTaxAmount();
+        if (is_null($amount)) {
+            $this->enhanceTotalData($quote, $total);
+            $amount = $total->getTaxAmount();
+        }
         $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
 
         $area = null;
@@ -338,6 +342,43 @@ class Tax extends CommonTaxCollector
             return null;
         }
         return $totals;
+    }
+
+    /**
+     * Adds minimal tax information to the "total" data structure
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param Address\Total $total
+     */
+    protected function enhanceTotalData(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $taxAmount = 0;
+        $shippingTaxAmount = 0;
+        $discountTaxCompensation = 0;
+
+        $subtotalInclTax = $total->getSubtotalInclTax();
+        $computeSubtotalInclTax = true;
+        if ($total->getSubtotalInclTax() > 0) {
+            $computeSubtotalInclTax = false;
+        }
+
+        /** @var \Magento\Quote\Model\Quote\Address $address */
+        foreach ($quote->getAllAddresses() as $address) {
+            $taxAmount += $address->getTaxAmount();
+            $shippingTaxAmount += $address->getShippingTaxAmount();
+            $discountTaxCompensation += $address->getDiscountTaxCompensationAmount();
+            if ($computeSubtotalInclTax) {
+                $subtotalInclTax += $address->getSubtotalInclTax();
+            }
+        }
+
+        $total->setTaxAmount($taxAmount);
+        $total->setShippingTaxAmount($shippingTaxAmount);
+        $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'
+        $total->setSubtotalInclTax($subtotalInclTax);
+        return;
     }
 
     /**
