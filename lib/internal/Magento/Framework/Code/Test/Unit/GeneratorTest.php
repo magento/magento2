@@ -83,31 +83,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->model->generateClass($fullClassName);
     }
 
-    /**
-     * @dataProvider generateValidClassDataProvider
-     */
-    public function testGenerateClassWithExistName($className, $entityType)
-    {
-        $definedClassesMock = $this->getMock('Magento\Framework\Code\Generator\DefinedClasses');
-        $definedClassesMock->expects($this->any())
-            ->method('isClassLoadableFromDisc')
-            ->willReturn(true);
-        $this->model = new \Magento\Framework\Code\Generator(
-            $this->ioObjectMock,
-            [
-                'factory' => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
-                'proxy' => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                'interceptor' => '\Magento\Framework\Interception\Code\Generator\Interceptor'
-            ],
-            $definedClassesMock
-        );
-
-        $this->assertEquals(
-            \Magento\Framework\Code\Generator::GENERATION_SKIP,
-            $this->model->generateClass($className . $entityType)
-        );
-    }
-
     public function testGenerateClassWithWrongName()
     {
         $this->model = new \Magento\Framework\Code\Generator($this->ioObjectMock);

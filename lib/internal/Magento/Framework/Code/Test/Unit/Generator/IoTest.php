@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Phrase;
+
 class IoTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -29,15 +33,14 @@ class IoTest extends \PHPUnit_Framework_TestCase
      */
     protected $_generationDirectory;
 
-    /**
-     * @var \Magento\Framework\Code\Generator\Io
-     */
+    /** @var \Magento\Framework\Code\Generator\Io */
     protected $_object;
 
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $_filesystemDriverMock;
+
+    /** @var string */
+    protected $existingResultClassFile;
 
     protected function setUp()
     {
@@ -49,6 +52,9 @@ class IoTest extends \PHPUnit_Framework_TestCase
             $this->_filesystemDriverMock,
             self::GENERATION_DIRECTORY
         );
+        $this->existingResultClassFile =
+            (new ComponentRegistrar())->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+            . '/Code/Test/Unit/Generator/TestAsset/ExistingResultClass.php';
     }
 
     protected function tearDown()
@@ -88,6 +94,25 @@ class IoTest extends \PHPUnit_Framework_TestCase
             )->willReturn(true);
 
         $this->assertTrue($this->_object->writeResultFile(self::FILE_NAME, self::FILE_CONTENT));
+    }
+
+    public function testWriteResultFileAlreadyExists()
+    {
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('filePutContents')
+            ->with(
+                $this->stringContains($this->existingResultClassFile),
+                "<?php\n" . self::FILE_CONTENT
+            )->willReturn(true);
+
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('rename')
+            ->with(
+                $this->stringContains($this->existingResultClassFile),
+                $this->existingResultClassFile
+            )->willThrowException(new FileSystemException(new Phrase('File already exists')));
+
+        $this->assertTrue($this->_object->writeResultFile($this->existingResultClassFile, self::FILE_CONTENT));
     }
 
     public function testMakeGenerationDirectoryWritable()
