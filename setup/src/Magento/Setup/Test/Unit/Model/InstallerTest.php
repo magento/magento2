@@ -489,3 +489,15 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         return $newObject;
     }
 }
+
+namespace Magento\Setup\Model;
+
+/**
+ * Mocking autoload function
+ * 
+ * @returns array
+ */
+function spl_autoload_functions()
+{
+    return ['mock_function_one', 'mock_function_two'];
+}
