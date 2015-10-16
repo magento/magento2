@@ -21,39 +21,39 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'id' => [
-            'selector' => '[name="filters[increment_id]"]',
+            'selector' => '[name="increment_id"]',
         ],
         'status' => [
-            'selector' => '[name="filters[status]"]',
+            'selector' => '[name="status"]',
             'input' => 'select',
         ],
         'purchase_date_from' => [
-            'selector' => '[name="filters[created_at][from]"]',
+            'selector' => '[name="created_at[from]"]',
         ],
         'purchase_date_to' => [
-            'selector' => '[name="filters[created_at][to]"]',
+            'selector' => '[name="created_at[to]"]',
         ],
         'base_grand_total_from' => [
-            'selector' => '[name="filters[base_grand_total][from]"]',
+            'selector' => '[name="base_grand_total[from]"]',
         ],
         'base_grand_total_to' => [
-            'selector' => '[name="filters[base_grand_total][to]"]',
+            'selector' => '[name="base_grand_total[to]"]',
         ],
         'purchased_gran_total_from' => [
-            'selector' => '[name="filters[grand_total][from]"]',
+            'selector' => '[name="grand_total[from]"]',
         ],
         'purchased_gran_total_to' => [
-            'selector' => '[name="filters[grand_total][to]"]',
+            'selector' => '[name="grand_total[to]"]',
         ],
         'purchase_point' => [
-            'selector' => '[name="filters[store_id]"]',
+            'selector' => '[name="store_id"]',
             'input' => 'selectstore'
         ],
         'bill_to_name' => [
-            'selector' => '[name="filters[billing_name]"]'
+            'selector' => '[name="billing_name"]'
         ],
         'ship_to_name' => [
-            'selector' => '[name="filters[shipping_name]"]',
+            'selector' => '[name="shipping_name"]',
         ]
     ];
 

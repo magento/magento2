@@ -27,37 +27,37 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'name' => [
-            'selector' => '[name="filters[name]"]',
+            'selector' => '[name="name"]',
         ],
         'sku' => [
-            'selector' => '[name="filters[sku]"]',
+            'selector' => '[name="sku"]',
         ],
         'type' => [
-            'selector' => '[name="filters[type_id]"]',
+            'selector' => '[name="type_id"]',
             'input' => 'select',
         ],
         'price_from' => [
-            'selector' => '[name="filters[price][from]"]',
+            'selector' => '[name="price[from]"]',
         ],
         'price_to' => [
-            'selector' => '[name="filters[price][to]"]',
+            'selector' => '[name="price[to]"]',
         ],
         'qty_from' => [
-            'selector' => '[name="filters[qty][from]"]',
+            'selector' => '[name="qty[from]"]',
         ],
         'qty_to' => [
-            'selector' => '[name="filters[qty][to]"]',
+            'selector' => '[name="qty[to]"]',
         ],
         'visibility' => [
-            'selector' => '[name="filters[visibility]"]',
+            'selector' => '[name="visibility"]',
             'input' => 'select',
         ],
         'status' => [
-            'selector' => '[name="filters[status]"]',
+            'selector' => '[name="status"]',
             'input' => 'select',
         ],
         'set_name' => [
-            'selector' => '[name="filters[attribute_set_id]"]',
+            'selector' => '[name="attribute_set_id"]',
             'input' => 'select',
         ],
     ];

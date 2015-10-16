@@ -135,10 +135,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\Validator|\PHPUnit_Framework_MockObject_MockObject */
     protected $validator;
 
-    /** @var  \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectRelationProcessor;
 
-    /** @var  \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $transactionManager;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|\PHPUnit_Framework_MockObject_MockObject */
@@ -302,11 +302,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->objectRelationProcessor =
-            $this->getMockBuilder('\Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor')
+            $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->transactionManager =
-            $this->getMockBuilder('\Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface')
+            $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface')
                 ->getMock();
 
         $this->taxClassProcessor =

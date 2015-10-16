@@ -139,19 +139,19 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="EavVersionControlSnapshot" type="Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot">
+    <virtualType name="EavVersionControlSnapshot" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot">
         <arguments>
             <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
         </arguments>
     </virtualType>
-    <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Relation</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="CustomerAddressRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="CustomerAddressRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Relation</item>

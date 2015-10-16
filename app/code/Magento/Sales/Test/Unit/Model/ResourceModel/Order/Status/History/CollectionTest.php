@@ -34,7 +34,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $historyItemMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -48,7 +48,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityFactoryMock;
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -74,7 +74,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',

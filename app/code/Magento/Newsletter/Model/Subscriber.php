@@ -133,7 +133,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -149,7 +149,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

@@ -17,7 +17,7 @@ class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System
     /**
      * Store new messages in database and remove outdated messages
      *
-     * @return $this|\Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _afterLoad()
     {
