@@ -910,8 +910,12 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
         $appPath = Files::init()->getPathToSource();
+        $relativePathStart = strlen($appPath);
         foreach ($blackList as $file) {
-            $ignored = array_merge($ignored, glob($appPath . '/' . $file, GLOB_NOSORT));
+            $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT);
+            foreach ($fileSet as $file) {
+                $ignored[] = substr($file, $relativePathStart);
+            }
         }
         return $ignored;
     }
