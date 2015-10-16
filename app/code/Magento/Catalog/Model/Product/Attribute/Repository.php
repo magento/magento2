@@ -15,7 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute
      */
     protected $attributeResource;
 
@@ -50,7 +50,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $searchCriteriaBuilder;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Attribute $attributeResource
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
@@ -59,7 +59,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Attribute $attributeResource,
+        \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,

@@ -7,7 +7,7 @@
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler;
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 
 /**
@@ -39,7 +39,7 @@ class ConfigurableProductHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configurableMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             ['getChildrenIds'],
             [],
             '',

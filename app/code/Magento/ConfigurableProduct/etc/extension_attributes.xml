@@ -13,4 +13,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
         <attribute code="configurable_item_options" type="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="configurable_item_options" type="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface[]" />
+    </extension_attributes>
 </config>

@@ -7,7 +7,9 @@ var config = {
     "waitSeconds": 0,
     "map": {
         "*": {
-            "mageUtils": "mage/utils/main"
+            "mageUtils": "mage/utils/main",
+            "ko": "knockoutjs/knockout",
+            "knockout": "knockoutjs/knockout"
         }
     },
     "shim": {
@@ -19,15 +21,11 @@ var config = {
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
         "mage/new-gallery": ["jquery"],
-        "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "jquery/ui": ["jquery"],
         "MutationObserver": ["es6-collections"],
         "tinymce": {
             "exports": "tinymce"
-        },
-        "ko": {
-            "exports": "ko"
         },
         "moment": {
             "exports": "moment"
@@ -48,7 +46,6 @@ var config = {
         "jquery/jquery-storageapi": "jquery/jquery.storageapi.min",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
-        "ko": "ko/ko",
         "tinymce": "tiny_mce/tiny_mce_src"
     },
     "deps": [

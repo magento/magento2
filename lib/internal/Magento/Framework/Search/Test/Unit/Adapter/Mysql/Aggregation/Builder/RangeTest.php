@@ -17,7 +17,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     private $metricsBuilder;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -77,7 +77,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->select);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())

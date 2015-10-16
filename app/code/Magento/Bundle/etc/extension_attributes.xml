@@ -12,4 +12,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
         <attribute code="bundle_options" type="Magento\Bundle\Api\Data\BundleOptionInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="bundle_options" type="Magento\Bundle\Api\Data\BundleOptionInterface[]" />
+    </extension_attributes>
 </config>

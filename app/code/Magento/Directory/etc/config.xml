@@ -44,6 +44,7 @@
                 <language>en</language>
                 <code>en_US</code>
                 <timezone>America/Los_Angeles</timezone>
+                <weight_unit>lbs</weight_unit>
             </locale>
         </general>
     </default>

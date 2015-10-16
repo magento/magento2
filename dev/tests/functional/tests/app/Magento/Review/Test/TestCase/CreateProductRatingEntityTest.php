@@ -127,5 +127,6 @@ class CreateProductRatingEntityTest extends Injectable
         $this->ratingIndex->open();
         $this->ratingIndex->getRatingGrid()->searchAndOpen($filter);
         $this->ratingEdit->getPageActions()->delete();
+        $this->ratingEdit->getModalBlock()->acceptAlert();
     }
 }

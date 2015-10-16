@@ -73,6 +73,18 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/orders/items/:id" method="GET">
+        <service class="Magento\Sales\Api\OrderItemRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/orders/items" method="GET">
+        <service class="Magento\Sales\Api\OrderItemRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/invoices/:id" method="GET">
         <service class="Magento\Sales\Api\InvoiceRepositoryInterface" method="get"/>
         <resources>

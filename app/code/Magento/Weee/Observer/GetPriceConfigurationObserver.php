@@ -53,20 +53,13 @@ class GetPriceConfigurationObserver implements ObserverInterface
         if ($this->weeeData->isEnabled()) {
             $priceConfigObj = $observer->getData('configObj');
             try {
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->registry->registry('current_product');
-
                 $weeeAttributes = $this->weeeData->getWeeeAttributesForBundle($product);
-
-                $calcPrice = 'finalPrice';
-                if ($this->taxData->priceIncludesTax() &&
-                    $this->taxData->displayPriceExcludingTax()
-                ) {
-                    $calcPrice = 'basePrice';
-                }
                 $priceConfig = $this->recurConfigAndInsertWeeePrice(
                     $priceConfigObj->getConfig(),
                     'prices',
-                    $calcPrice,
+                    $this->getWhichCalcPriceToUse($product->getStoreId()),
                     $weeeAttributes
                 );
                 $priceConfigObj->setConfig($priceConfig);
@@ -78,7 +71,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
     }
 
     /**
-     * Recur through the config array and insert the weee price
+     * Recurse through the config array and insert the weee price
      *
      * @param  array $input
      * @param  string $searchKey
@@ -131,10 +124,30 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         ['amount' => (float)$weeeAttribute->getAmount()];
                     $weeeSum += (float)$weeeAttribute->getAmount();
                 }
-
                 $holder[$key]['weeePrice']['amount'] += (float)$weeeSum;
+            } else {
+                //there were no Weee attributes for this option
+                unset($holder[$key]['weeePrice']);
             }
         }
         return $holder;
+    }
+
+    /**
+     * Returns which product price to use as a basis for the Weee's final price
+     *
+     * @param  int|null $storeId
+     * @return string
+     */
+    protected function getWhichCalcPriceToUse($storeId = null)
+    {
+        $calcPrice = 'finalPrice';
+        if ($this->weeeData->geDisplayExcl($storeId) ||
+            $this->weeeData->geDisplayExlDescIncl($storeId) ||
+            ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
+        ) {
+            $calcPrice = 'basePrice';
+        }
+        return $calcPrice;
     }
 }

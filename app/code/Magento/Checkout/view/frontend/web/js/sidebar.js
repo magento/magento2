@@ -8,9 +8,11 @@ define([
     "jquery",
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData){
+], function($, authenticationPopup, customerData, alert, confirm){
 
     $.widget('mage.sidebar', {
         options: {
@@ -37,7 +39,7 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (customer() == false && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
                     authenticationPopup.showModal();
 
                     return false;
@@ -46,9 +48,14 @@ define([
             }, this);
             events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
-                if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(event.target));
-                }
+                confirm({
+                    content: self.options.confirmMessage,
+                    actions: {
+                        confirm: function () {
+                            self._removeItem($(event.currentTarget));
+                        }
+                    }
+                });
             };
             events['keyup ' + this.options.item.qty] = function(event) {
                 self._showItemButton($(event.target));
@@ -169,7 +176,9 @@ define([
                     } else {
                         var msg = response.error_message;
                         if (msg) {
-                            window.alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                         }
                     }
                 })

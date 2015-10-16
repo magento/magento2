@@ -6,7 +6,7 @@
 
 namespace Magento\ProductVideo\Model\Plugin;
 
-use Magento\Customer\Model\Resource\Form\Attribute;
+use Magento\Customer\Model\ResourceModel\Form\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
@@ -37,15 +37,15 @@ class ExternalVideoEntryProcessor
     ];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     protected $resourceEntryMediaGallery;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery
     ) {
         $this->resourceEntryMediaGallery = $resourceEntryMediaGallery;
     }

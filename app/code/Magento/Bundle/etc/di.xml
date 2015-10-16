@@ -109,4 +109,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

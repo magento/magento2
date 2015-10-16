@@ -22,7 +22,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $this->assertInstanceOf('Magento\Translation\Model\Resource\StringUtils', $this->_model->getResource());
+        $this->assertInstanceOf('Magento\Translation\Model\ResourceModel\StringUtils', $this->_model->getResource());
     }
 
     public function testSetGetString()

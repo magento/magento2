@@ -70,7 +70,7 @@ Model3
 \Magento\Mtf\Data\Argument\Interpreter\ArrayType
 \Magento\Mtf\Data\Argument\InterpreterInterface
 \Magento\Mtf\Util\Generate\GenerateResult
-\Magento\Mtf\Util\Generate\Repository\Resource
+\Magento\Mtf\Util\Generate\Repository\RepositoryResource
 \Magento\Mtf\Client\Element
 \Magento\Mtf\TestSuite\AppState
 \Magento\Framework\A

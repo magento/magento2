@@ -46,7 +46,7 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
     protected $curlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\Resource\File\Storage\File
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\ResourceModel\File\Storage\File
      */
     protected $storageFileMock;
 
@@ -93,7 +93,7 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
         $this->adapterFactoryMock->expects($this->once())->method('create')->willReturn($this->abstractAdapter);
         $this->curlMock = $this->getMock('\Magento\Framework\HTTP\Adapter\Curl', [], [], '', false);
         $this->storageFileMock =
-            $this->getMock('\Magento\MediaStorage\Model\Resource\File\Storage\File', [], [], '', false);
+            $this->getMock('\Magento\MediaStorage\Model\ResourceModel\File\Storage\File', [], [], '', false);
         $this->request = $this->getMock('\Magento\Framework\App\RequestInterface');
         $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
 
