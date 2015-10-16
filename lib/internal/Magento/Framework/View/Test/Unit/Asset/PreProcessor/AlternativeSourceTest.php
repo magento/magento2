@@ -82,9 +82,6 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Run test for process method (exception)
-     *
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage "stdClass" has to implement the ContentProcessorInterface.
      */
     public function testProcessException()
     {
@@ -142,8 +139,11 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             'lock',
             $alternatives
         );
-
-        $alternativeSource->process($this->getChainMockExpects('', 0));
+        try {
+            $alternativeSource->process($this->getChainMockExpects('', 0));
+        } catch (\UnexpectedValueException $e) {
+            self::assertInstanceOf('\UnexpectedValueException', $e);
+        }
     }
 
     /**
