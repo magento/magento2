@@ -45,6 +45,20 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->debug($debugData, $debugReplaceKeys, true);
     }
 
+    public function testDebugOnNoReplaceKeys()
+    {
+        $debugData =
+            [
+                'request' => ['data1' => '123', 'data2' => '123']
+            ];
+
+        $this->loggerMock->expects(static::once())
+            ->method('debug')
+            ->with(var_export($debugData, true));
+
+        $this->logger->debug($debugData, [], true);
+    }
+
     public function testDebugOff()
     {
         $debugData =
