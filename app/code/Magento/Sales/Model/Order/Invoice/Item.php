@@ -60,7 +60,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -70,7 +70,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

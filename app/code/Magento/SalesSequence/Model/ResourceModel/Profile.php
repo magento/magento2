@@ -6,13 +6,13 @@
 namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\SalesSequence\Model\Meta as ModelMeta;
-use Magento\Framework\Model\ModelResource\Db\Context as DatabaseContext;
+use Magento\Framework\Model\ResourceModel\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\ProfileFactory;
 
 /**
  * Class Profile represents profile data for sequence as prefix, suffix, start value etc.
  */
-class Profile extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Event prefix

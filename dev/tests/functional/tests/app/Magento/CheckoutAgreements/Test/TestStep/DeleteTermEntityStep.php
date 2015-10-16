@@ -63,5 +63,6 @@ class DeleteTermEntityStep implements TestStepInterface
     {
         $this->agreementIndex->open()->getAgreementGridBlock()->searchAndOpen(['name' => $this->agreement->getName()]);
         $this->agreementNew->getPageActionsBlock()->delete();
+        $this->agreementNew->getModalBlock()->acceptAlert();
     }
 }

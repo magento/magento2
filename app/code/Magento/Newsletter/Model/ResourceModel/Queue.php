@@ -13,7 +13,7 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Queue extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Subscriber collection
@@ -25,12 +25,12 @@ class Queue extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscriberCollection
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscriberCollection,
         $connectionName = null
     ) {

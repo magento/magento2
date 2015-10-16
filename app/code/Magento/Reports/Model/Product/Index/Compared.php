@@ -46,7 +46,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Helper\Product\Compare $productCompare
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -61,7 +61,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Helper\Product\Compare $productCompare,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
