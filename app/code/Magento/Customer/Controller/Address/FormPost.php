@@ -206,11 +206,10 @@ class FormPost extends \Magento\Customer\Controller\Address
             $this->messageManager->addException($e, __('We can\'t save the address.'));
         }
 
+        $url = $redirectUrl;
         if (!$redirectUrl) {
             $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
             $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
-        } else {
-            $url = $redirectUrl;
         }
 
         return $this->resultRedirectFactory->create()->setUrl($this->_redirect->error($url));
