@@ -83,7 +83,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test for process method (exception)
      *
-     * @expectedException \UnexpectedValueException
+     * @expectedException UnexpectedValueException
      * @expectedExceptionMessage "stdClass" has to implement the ContentProcessorInterface.
      */
     public function testProcessException()
