@@ -175,6 +175,7 @@ app/code/Magento/ConfigurableProduct/view/frontend/requirejs-config.js
 app/code/Magento/ConfigurableProduct/view/frontend/web/js/configurable.js
 app/code/Magento/Cookie/view/adminhtml/requirejs-config.js
 app/code/Magento/Cookie/view/frontend/requirejs-config.js
+app/code/Magento/Cookie/view/frontend/web/js/notices.js
 app/code/Magento/Cookie/view/frontend/web/js/require-cookie.js
 app/code/Magento/Customer/view/adminhtml/requirejs-config.js
 app/code/Magento/Customer/view/adminhtml/web/edit/tab/js/addresses.js
