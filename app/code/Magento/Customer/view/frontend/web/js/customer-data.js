@@ -157,7 +157,6 @@ define([
         set: function (sectionName, sectionData) {
             var data = {};
             data[sectionName] = sectionData;
-            console.log(sectionName);
             buffer.update(data);
         },
         reload: function (sectionNames, updateSectionId) {
