@@ -6,7 +6,7 @@
 
 namespace Magento\NewRelicReporting\Model\ResourceModel;
 
-class Module extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Module extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize module status resource model

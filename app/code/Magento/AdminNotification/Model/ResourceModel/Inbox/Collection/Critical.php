@@ -7,7 +7,7 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
-class Critical extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Resource collection initialization
