@@ -292,7 +292,7 @@ class Tax extends CommonTaxCollector
      * @param Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
