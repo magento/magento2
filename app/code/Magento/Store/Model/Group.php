@@ -7,8 +7,8 @@
 /**
  * Store group model
  *
- * @method \Magento\Store\Model\Resource\Group _getResource()
- * @method \Magento\Store\Model\Resource\Group getResource()
+ * @method \Magento\Store\Model\ResourceModel\Group _getResource()
+ * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 
@@ -43,7 +43,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Group Store collection array
      *
-     * @var \Magento\Store\Model\Resource\Store\Collection[]
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     protected $_stores;
 
@@ -81,7 +81,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
@@ -100,10 +100,10 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -113,10 +113,10 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -141,7 +141,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Group');
+        $this->_init('Magento\Store\Model\ResourceModel\Group');
     }
 
     /**
@@ -188,7 +188,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Retrieve new (not loaded) Store collection object with group filter
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection()
     {
@@ -198,7 +198,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Retrieve website store objects
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection[]
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     public function getStores()
     {

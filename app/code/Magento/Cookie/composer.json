@@ -4,8 +4,7 @@
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-store": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "suggest": {
         "magento/module-backend": "1.0.0-beta"
@@ -16,12 +15,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Cookie"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Cookie\\": ""
+        }
     }
 }

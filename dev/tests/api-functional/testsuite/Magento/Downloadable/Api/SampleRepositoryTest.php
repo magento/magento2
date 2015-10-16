@@ -98,7 +98,7 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected function getTargetSample(Product $product, $sampleId = null)
     {
-        /** @var $samples \Magento\Downloadable\Model\Resource\Sample\Collection */
+        /** @var $samples \Magento\Downloadable\Model\ResourceModel\Sample\Collection */
         $samples = $product->getTypeInstance()->getSamples($product);
         if ($sampleId !== null) {
             /* @var $sample \Magento\Downloadable\Model\Sample */

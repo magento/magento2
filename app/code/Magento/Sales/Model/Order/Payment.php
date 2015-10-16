@@ -19,8 +19,8 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 /**
  * Order payment information
  *
- * @method \Magento\Sales\Model\Resource\Order\Payment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Payment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -117,7 +117,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Transaction\BuilderInterface $transactionBuilder
      * @param Payment\Processor $paymentProcessor
      * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -136,7 +136,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -167,7 +167,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Payment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
     }
 
     /**
@@ -188,8 +188,6 @@ class Payment extends Info implements OrderPaymentInterface
      * Retrieve order model object
      *
      * @codeCoverageIgnore
-     * @deprecated
-     *
      * @return Order
      */
     public function getOrder()

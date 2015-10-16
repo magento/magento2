@@ -30,6 +30,11 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     protected $_validationStateMock;
 
     /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
+    protected $urnResolver;
+
+    /**
      * @var string
      */
     protected $_file;
@@ -47,6 +52,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         );
         $this->_schemaLocatorMock = $this->getMock('Magento\Framework\Config\SchemaLocatorInterface');
         $this->_validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
     public function testRead()
@@ -94,7 +100,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getSchema'
         )->will(
-            $this->returnValue(__DIR__ . "/../_files/reader/schema.xsd")
+            $this->returnValue(
+                $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
+            )
         );
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
         $model = new Filesystem(
@@ -121,7 +129,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPerFileSchema'
         )->will(
-            $this->returnValue(__DIR__ . "/../_files/reader/schema.xsd")
+            $this->returnValue(
+                $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
+            )
         );
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 

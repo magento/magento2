@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
 
-use Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
 use Magento\Framework\DB\Ddl\Table;
 
 /**

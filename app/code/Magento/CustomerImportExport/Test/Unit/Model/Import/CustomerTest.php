@@ -108,7 +108,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
 
         // mock to imitate data source model
-        $dataSourceModelMock = $this->getMockBuilder('Magento\ImportExport\Model\Resource\Import\Data')
+        $dataSourceModelMock = $this->getMockBuilder('Magento\ImportExport\Model\ResourceModel\Import\Data')
             ->disableOriginalConstructor()
             ->setMethods([
                     'getNextBunch',

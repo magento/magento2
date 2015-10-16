@@ -31,7 +31,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     /**
      * Retireve associated with element attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttribute()
     {

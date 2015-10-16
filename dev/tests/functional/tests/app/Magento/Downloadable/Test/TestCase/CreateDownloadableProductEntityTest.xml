@@ -271,7 +271,6 @@
             <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
-            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_20</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />

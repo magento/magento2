@@ -9,12 +9,11 @@
         "magento/module-eav": "1.0.0-beta",
         "magento/module-grouped-product": "1.0.0-beta",
         "magento/module-tax": "1.0.0-beta",
-        "magento/module-quote": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "suggest": {
-        "magento/module-bundle": "1.0.0-beta"
+        "magento/module-bundle": "1.0.0-beta",
+        "magento/module-msrp-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -22,12 +21,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Msrp"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Msrp\\": ""
+        }
     }
 }

@@ -31,7 +31,7 @@ class AssertBundleInCategory extends AssertProductInCategory
         //Price from/to verification
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($bundle)->getPriceBlock();
 
-        if ($bundle->hasData('special_price') || $bundle->hasData('group_price')) {
+        if ($bundle->hasData('special_price')) {
             $priceLow = $priceBlock->getPrice();
         } else {
             $priceLow = ($bundle->getPriceView() == 'Price Range')

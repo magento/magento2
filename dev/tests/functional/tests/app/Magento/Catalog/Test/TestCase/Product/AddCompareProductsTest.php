@@ -43,21 +43,21 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
      * Test creation for adding compare products.
      *
      * @param string $products
-     * @param string $requireCustomerLogin
+     * @param string $isCustomerLoggedIn
      * @param AssertProductCompareSuccessAddMessage $assertProductCompareSuccessAddMessage
      * @param CatalogProductCompare $catalogProductCompare
      * @return array
      */
     public function test(
         $products,
-        $requireCustomerLogin,
+        $isCustomerLoggedIn,
         AssertProductCompareSuccessAddMessage $assertProductCompareSuccessAddMessage,
         CatalogProductCompare $catalogProductCompare
     ) {
         //Steps
         $this->catalogProductCompare = $catalogProductCompare;
         $this->cmsIndex->open();
-        if ($requireCustomerLogin == 'Yes') {
+        if ($isCustomerLoggedIn == 'Yes') {
             $this->loginCustomer();
         }
         $this->products = $this->createProducts($products);

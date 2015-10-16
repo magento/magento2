@@ -135,6 +135,11 @@ class Multishipping extends \Magento\Framework\DataObject
     protected $quoteAddressToOrderAddress;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -155,6 +160,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -179,6 +185,7 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -201,6 +208,7 @@ class Multishipping extends \Magento\Framework\DataObject
         $this->quoteItemToOrderItem = $quoteItemToOrderItem;
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
+        $this->totalsCollector = $totalsCollector;
         parent::__construct($data);
         $this->_init();
     }
@@ -523,13 +531,9 @@ class Multishipping extends \Magento\Framework\DataObject
             //
         }
         if (isset($address)) {
-            $this->getQuote()->getShippingAddressByCustomerAddressId(
-                $addressId
-            )->setCollectShippingRates(
-                true
-            )->importCustomerAddressData(
-                $address
-            )->collectTotals();
+            $quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($addressId);
+            $quoteAddress->setCollectShippingRates(true)->importCustomerAddressData($address);
+            $this->totalsCollector->collectAddressTotals($this->getQuote(), $quoteAddress);
             $this->quoteRepository->save($this->getQuote());
         }
 
@@ -554,7 +558,8 @@ class Multishipping extends \Magento\Framework\DataObject
             //
         }
         if (isset($address)) {
-            $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address)->collectTotals();
+            $quoteAddress = $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address);
+            $this->totalsCollector->collectAddressTotals($this->getQuote(), $quoteAddress);
             $this->getQuote()->collectTotals();
             $this->quoteRepository->save($this->getQuote());
         }

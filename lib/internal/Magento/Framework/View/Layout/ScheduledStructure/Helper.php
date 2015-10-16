@@ -203,13 +203,10 @@ class Helper
 
         /**
          * Some elements provide info "after" or "before" which sibling they are supposed to go
-         * Make sure to populate these siblings as well and order them correctly
+         * Add element into list of sorting
          */
         if ($siblingName) {
-            if ($scheduledStructure->hasStructureElement($siblingName)) {
-                $this->scheduleElement($scheduledStructure, $structure, $siblingName);
-            }
-            $structure->reorderChildElement($parentName, $name, $siblingName, $isAfter);
+            $scheduledStructure->setElementToSortList($parentName, $name, $siblingName, $isAfter);
         }
     }
 

@@ -7,8 +7,7 @@
         "magento/module-authorization": "1.0.0-beta",
         "magento/module-integration": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "suggest": {
         "magento/module-user": "1.0.0-beta"
@@ -19,12 +18,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Webapi"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Webapi\\": ""
+        }
     }
 }

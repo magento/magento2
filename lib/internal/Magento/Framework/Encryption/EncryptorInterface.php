@@ -40,7 +40,6 @@ interface EncryptorInterface
      * @param string $hash
      * @return bool
      * @throws \Exception
-     * @deprecated
      */
     public function validateHash($password, $hash);
 

@@ -21,7 +21,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshot;
 
@@ -32,7 +32,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         $objectManager = new ObjectManager($this);
 
         $this->entitySnapshot = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             ['registerSnapshot'],
             [],
             '',
