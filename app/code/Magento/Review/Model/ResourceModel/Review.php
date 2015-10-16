@@ -10,7 +10,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Review resource model
  */
-class Review extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Review table
@@ -90,7 +90,7 @@ class Review extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_ratingOptions;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
@@ -98,7 +98,7 @@ class Review extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\RatingFactory $ratingFactory,

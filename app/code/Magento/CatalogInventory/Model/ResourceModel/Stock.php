@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Stock resource model
  */
-class Stock extends \Magento\Framework\Model\ModelResource\Db\AbstractDb implements QtyCounterInterface
+class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements QtyCounterInterface
 {
     /**
      * @var StockConfigurationInterface
@@ -79,7 +79,7 @@ class Stock extends \Magento\Framework\Model\ModelResource\Db\AbstractDb impleme
     protected $storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
@@ -87,7 +87,7 @@ class Stock extends \Magento\Framework\Model\ModelResource\Db\AbstractDb impleme
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,

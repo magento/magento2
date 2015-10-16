@@ -111,7 +111,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         unset($dependencies['resource'], $dependencies['json_helper']);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

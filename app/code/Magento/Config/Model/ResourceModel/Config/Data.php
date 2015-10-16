@@ -10,7 +10,7 @@ namespace Magento\Config\Model\ResourceModel\Config;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table
