@@ -66,8 +66,8 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         array $data = []
     ) {
         $this->_config = $config;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->cacheTypeList = $cacheTypeList;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
