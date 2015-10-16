@@ -98,9 +98,7 @@ class Deployer
         $this->parentTheme = [];
 
         array_map(
-            function (AlternativeSourceInterface $alternative)
-            {
-                //
+            function (AlternativeSourceInterface $alternative) {
             },
             $alternativeSources
         );
