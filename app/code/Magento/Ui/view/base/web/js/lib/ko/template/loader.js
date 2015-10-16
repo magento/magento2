@@ -46,6 +46,7 @@ define([
     }
 
     return {
+
         /**
          * Loops over arguments and loads template for each.
          * @return {Deferred} - promise of templates to be loaded

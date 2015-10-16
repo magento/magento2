@@ -6,10 +6,11 @@
 /*global Ajax:true alert:true*/
 define([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "mage/backend/form",
     "jquery/ui",
     "prototype"
-], function($){
+], function($, alert){
     "use strict";
 
     $.widget("mage.categoryForm", $.mage.form, {
@@ -55,7 +56,9 @@ define([
             if (transport.responseText.isJSON()) {
                 var response = transport.responseText.evalJSON();
                 if (response.error) {
-                    alert(response.message);
+                    alert({
+                        content: response.message
+                    });
                 } else {
                     if (this.element.find(this.options.categoryIdSelector).prop('value') == response.id) {
                         this.element.find(this.options.categoryPathSelector)

@@ -93,6 +93,7 @@
                     }
                 },{
                     text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
+                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
                         $form.modal('closeModal');
