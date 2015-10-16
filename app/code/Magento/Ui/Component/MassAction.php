@@ -29,6 +29,7 @@ class MassAction extends AbstractComponent
         }
 
         $this->setData('config', $config);
+        $this->components = [];
 
         parent::prepare();
     }

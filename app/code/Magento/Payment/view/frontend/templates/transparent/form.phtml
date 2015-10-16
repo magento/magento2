@@ -10,6 +10,7 @@
 $code = $block->getMethodCode();
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
+$ccType = $block->getInfoData('cc_type');
 $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" title=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />';
@@ -46,10 +47,9 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
                             "validate-cc-type-select":"#<?php /* @noEscape */ echo $code; ?>_cc_number"
                         }'>
                     <option value=""><?php echo $block->escapeHtml(__('--Please Select--'));?></option>
-                <?php $_ccType = $block->getInfoData('cc_type') ?>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
                     <option value="<?php echo $block->escapeHtml($typeCode); ?>"
-                        <?php if ($typeCode == $_ccType): ?> selected="selected"<?php endif; ?>>
+                        <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
                         <?php echo $block->escapeHtml($typeName); ?></option>
                 <?php endforeach ?>
                 </select>
