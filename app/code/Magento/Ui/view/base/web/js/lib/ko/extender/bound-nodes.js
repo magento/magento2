@@ -7,7 +7,7 @@ define([
     'ko',
     'underscore',
     'mage/utils/wrapper',
-    'Magento_Ui/js/lib/events',
+    'uiEvents',
     'es6-collections'
 ], function (ko, _, wrapper, Events) {
     'use strict';
@@ -84,6 +84,7 @@ define([
     }
 
     wrapper.extend(ko, {
+
         /**
          * Extends kncokouts' 'applyBindings'
          * to track nodes associated with model.
@@ -132,6 +133,7 @@ define([
     });
 
     return {
+
         /**
          * Returns root nodes associated with a model. If callback is provided,
          * will iterate through all of the present nodes triggering callback
