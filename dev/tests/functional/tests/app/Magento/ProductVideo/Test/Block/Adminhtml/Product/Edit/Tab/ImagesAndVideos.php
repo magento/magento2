@@ -20,7 +20,7 @@ class ImagesAndVideos extends Tab
      *
      * @var string
      */
-    protected $addVideoButton = '#product_info_tabs_images-and-videos_content #add_video_button';
+    protected $addVideoButton = '#product_info_tabs_image-management_content #add_video_button';
 
     /**
      * Video dialog CSS locator.

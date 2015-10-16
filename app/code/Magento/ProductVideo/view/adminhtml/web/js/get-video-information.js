@@ -322,7 +322,10 @@ require([
 
         $.widget('mage.videoData', {
             options: {
-                youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!
+                youtubeKey: '',
+                noKeyErrorTxt: 'You have not entered youtube API key. ' +
+                'No information about youtube video will be retrieved.',
+                eventSource: '' //where is data going from - focus out or click on button
             },
 
             _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
@@ -337,6 +340,11 @@ require([
              * @private
              */
             _init: function () {
+                if (!this.options.youtubeKey && this.options.eventSource === 'click') {
+                    alert({
+                        content: this.options.noKeyErrorTxt
+                    });
+                }
                 this._onRequestHandler();
             },
 
@@ -365,18 +373,58 @@ require([
                 }
 
                 /**
+                 *
+                 * @param {Object} data
                  * @private
                  */
                 function _onYouTubeLoaded(data) {
                     var tmp,
                         uploadedFormatted,
-                        respData;
+                        respData,
+                        createErrorMessage;
 
-                    if (data.items.length < 1) {
+                    /**
+                     * Create errors message
+                     *
+                     * @returns {String}
+                     */
+                    createErrorMessage = function () {
+                        var error = data.error,
+                            errors = error.errors,
+                            i,
+                            errLength = errors.length,
+                            tmpError,
+                            errReason,
+                            errorsMessage = [];
+
+                        for (i = 0; i < errLength; i++) {
+                            tmpError = errors[i];
+                            errReason = tmpError.reason;
+
+                            if (['keyInvalid'].indexOf(errReason) !== -1) {
+                                errorsMessage.push('Youtube API key is an invalid');
+
+                                break;
+                            }
+
+                            errorsMessage.push(tmpError.message);
+                        }
+
+                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                    };
+
+                    if (data.error && data.error.code === 400) {
+                        this._onRequestError(createErrorMessage());
+
+                        return;
+                    }
+
+                    if (!data.items || data.items.length < 1) {
                         this._onRequestError('Video not found');
 
                         return;
                     }
+
                     tmp = data.items[0];
                     uploadedFormatted = tmp.snippet.publishedAt.replace('T', ' ').replace(/\..+/g, '');
                     respData = {
@@ -429,8 +477,17 @@ require([
                     googleapisUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' +
                         id +
                         '&part=snippet,contentDetails,statistics,status&key=' +
-                        this.options.youtubeKey;
-                    $.get(googleapisUrl, $.proxy(_onYouTubeLoaded, this));
+                        this.options.youtubeKey + '&alt=json&callback=?';
+                    $.getJSON(googleapisUrl,
+                        {
+                            format: 'json'
+                        },
+                        $.proxy(_onYouTubeLoaded, self)
+                    ).fail(
+                        function () {
+                            self._onRequestError('Video not found');
+                        }
+                    );
                 } else if (type === 'vimeo') {
                     $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
                         {
@@ -493,7 +550,8 @@ require([
             _validateURL: function (href, forceVideo) {
                 var id,
                     type,
-                    ampersandPosition;
+                    ampersandPosition,
+                    vimeoRegex;
 
                 if (typeof href !== 'string') {
                     return href;
@@ -518,7 +576,10 @@ require([
                     type = 'youtube';
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
-                    id = href.pathname.replace(/^\/(video\/)?/, '').replace(/\/.*/, '');
+                    vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+                    ].join(''));
+                    id = href.href.match(vimeoRegex)[3];
                 }
 
                 if ((!id || !type) && forceVideo) {

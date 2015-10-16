@@ -28,16 +28,15 @@ define([
     function parseURL(href, forceVideo) {
         var id,
             type,
-            ampersandPosition;
+            ampersandPosition,
+            vimeoRegex;
 
         /**
          * Get youtube ID
-         * @param {String} srchref
+         * @param {String} srcid
          * @returns {{}}
          */
-        function _getYoutubeId(srchref) {
-            var srcid = srchref.search.split('v=')[1];
-
+        function _getYoutubeId(srcid) {
             if (srcid) {
                 ampersandPosition = srcid.indexOf('&');
 
@@ -69,7 +68,10 @@ define([
             type = 'youtube';
         } else if (href.host.match(/vimeo\.com/)) {
             type = 'vimeo';
-            id = href.pathname.replace(/^\/(video\/)?/, '').replace(/\/.*/, '');
+            vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+            ].join(''));
+            id = href.href.match(vimeoRegex)[3];
         }
 
         if ((!id || !type) && forceVideo) {
@@ -283,7 +285,6 @@ define([
         _isVideoBase: function () {
             var allVideoData = this.options.VideoData,
                 videoItem,
-                videoSettings,
                 allVideoDataKeys,
                 key,
                 i;
@@ -293,10 +294,9 @@ define([
             for (i = 0; i < allVideoDataKeys.length; i++) {
                 key = allVideoDataKeys[i];
                 videoItem = allVideoData[key];
-                videoSettings = allVideoData[videoItem];
 
                 if (
-                    videoSettings.mediaType === this.VID && videoSettings.isBase &&
+                    videoItem.mediaType === this.VID && videoItem.isBase &&
                     this.options.VideoSettings[0].playIfBase
                 ) {
                     this.Base = true;
