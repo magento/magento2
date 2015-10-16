@@ -93,7 +93,7 @@ define([
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="https://youtube.com/channel/' +
                     this.options.metaData.data.uploaderUrl +
-                    '">' +
+                    '" target="_blank">' +
                     this.options.metaData.data.uploader +
                     '</a>'
                 );
@@ -102,7 +102,7 @@ define([
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
-                    '">' + this.options.metaData.data.uploader +
+                    '" target="_blank">' + this.options.metaData.data.uploader +
                     '</a>');
             }
             $('.' + this.options.videoClass).productVideoLoader();
@@ -243,7 +243,10 @@ define([
 
             this._on(events);
 
-            this._videoUrlWidget = $(this._videoUrlSelector).videoData();
+            this._videoUrlWidget = $(this._videoUrlSelector).videoData({
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'focusout'
+            });
             this._videoInformationGetBtn = $(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = $(this._videoUrlSelector);
             this._videoInformationGetEditBtn = $(this._editVideoBtnSelector);
@@ -262,7 +265,10 @@ define([
         _onGetVideoInformationClick: function () {
             this._onlyVideoPlayer = false;
             this._isEditPage = false;
-            this._videoInformationGetUrlField.videoData();
+            this._videoInformationGetUrlField.videoData({
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'click'
+            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -271,7 +277,10 @@ define([
          * @private
          */
         _onGetVideoInformationFocusOut: function () {
-            this._videoInformationGetUrlField.videoData();
+            this._videoInformationGetUrlField.videoData({
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'focusout'
+            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -282,7 +291,10 @@ define([
         _onGetVideoInformationEditClick: function () {
             this._onlyVideoPlayer = true;
             this._isEditPage = true;
-            this._videoInformationGetUrlField.videoData();
+            this._videoInformationGetUrlField.videoData({
+                youtubeKey: this.options.youTubeApiKey,
+                eventSource: 'click'
+            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
