@@ -14,6 +14,11 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/onoff',
             bodyTmpl: 'ui/grid/cells/onoff',
+            fieldClass: {
+                'admin__scope-old': true,
+                'data-grid-onoff-cell': true,
+                'data-grid-checkbox-cell': false
+            },
             imports: {
                 selectedData: '${ $.provider }:data.selectedData'
             },

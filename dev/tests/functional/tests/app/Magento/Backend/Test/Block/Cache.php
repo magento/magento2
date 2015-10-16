@@ -59,7 +59,6 @@ class Cache extends Block
     public function flushCacheStorage()
     {
         $this->_rootElement->find($this->flushCacheStorageButton)->click();
-        $this->browser->acceptAlert();
     }
 
     /**
