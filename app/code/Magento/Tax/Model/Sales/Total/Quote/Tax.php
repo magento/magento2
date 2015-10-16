@@ -88,6 +88,7 @@ class Tax extends CommonTaxCollector
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
@@ -291,6 +292,7 @@ class Tax extends CommonTaxCollector
      * @param Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
@@ -298,7 +300,7 @@ class Tax extends CommonTaxCollector
         $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
         $amount = $total->getTaxAmount();
-        if (is_null($amount)) {
+        if ($amount == null) {
             $this->enhanceTotalData($quote, $total);
             $amount = $total->getTaxAmount();
         }
@@ -349,6 +351,7 @@ class Tax extends CommonTaxCollector
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
+     * @return null
      */
     protected function enhanceTotalData(
         \Magento\Quote\Model\Quote $quote,
