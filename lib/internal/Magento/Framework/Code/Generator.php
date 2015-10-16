@@ -104,22 +104,27 @@ class Generator
                     new \Magento\Framework\Phrase(implode(' ', $errors))
                 );
             }
-            $this->tryToIncludeFile($file, $className);
+            $this->tryToIncludeFile($file, $className, true);
             return self::GENERATION_SUCCESS;
         }
     }
 
     /**
-     * Include file only if the class is not already defined in memory
+     * Include file conditionally
      *
      * @param string $fileName
      * @param string $className
+     * @param bool $mustExist Skip inclusion if file doesn't exist and this is false
      * @return void
      */
-    public function tryToIncludeFile($fileName, $className)
+    public function tryToIncludeFile($fileName, $className, $mustExist)
     {
         if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
-            include $fileName;
+            if (!$mustExist && file_exists($fileName)) {
+                include $fileName;
+            } else {
+                include $fileName;
+            }
         }
     }
 
@@ -202,6 +207,9 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
+        } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+            $this->tryToIncludeFile($this->_ioObject->getResultFileName($resultClass), $resultClass, false);
+            return self::GENERATION_SKIP;
         } else if (!isset($this->_generatedEntities[$resultEntityType])) {
             throw new \InvalidArgumentException('Unknown generation entity.');
         }
