@@ -118,7 +118,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resLogFactory = $this->getMock(
-            'Magento\Captcha\Model\Resource\LogFactory',
+            'Magento\Captcha\Model\ResourceModel\LogFactory',
             ['create'],
             [],
             '',
@@ -297,12 +297,12 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get stub for resource model
-     * @return \Magento\Captcha\Model\Resource\Log
+     * @return \Magento\Captcha\Model\ResourceModel\Log
      */
     protected function _getResourceModelStub()
     {
         $resourceModel = $this->getMock(
-            'Magento\Captcha\Model\Resource\Log',
+            'Magento\Captcha\Model\ResourceModel\Log',
             ['countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup'],
             [],
             '',

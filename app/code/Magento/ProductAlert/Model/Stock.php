@@ -5,13 +5,13 @@
  */
 namespace Magento\ProductAlert\Model;
 
-use Magento\ProductAlert\Model\Resource\Stock\Customer\Collection;
+use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
 
 /**
  * ProductAlert for back in stock model
  *
- * @method \Magento\ProductAlert\Model\Resource\Stock _getResource()
- * @method \Magento\ProductAlert\Model\Resource\Stock getResource()
+ * @method \Magento\ProductAlert\Model\ResourceModel\Stock _getResource()
+ * @method \Magento\ProductAlert\Model\ResourceModel\Stock getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Stock setCustomerId(int $value)
  * @method int getProductId()
@@ -32,23 +32,23 @@ use Magento\ProductAlert\Model\Resource\Stock\Customer\Collection;
 class Stock extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var \Magento\ProductAlert\Model\Resource\Stock\Customer\CollectionFactory
+     * @var \Magento\ProductAlert\Model\ResourceModel\Stock\Customer\CollectionFactory
      */
     protected $_customerColFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\ProductAlert\Model\Resource\Stock\Customer\CollectionFactory $customerColFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\ProductAlert\Model\ResourceModel\Stock\Customer\CollectionFactory $customerColFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\ProductAlert\Model\Resource\Stock\Customer\CollectionFactory $customerColFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\ProductAlert\Model\ResourceModel\Stock\Customer\CollectionFactory $customerColFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -61,7 +61,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Resource\Stock');
+        $this->_init('Magento\ProductAlert\Model\ResourceModel\Stock');
     }
 
     /**

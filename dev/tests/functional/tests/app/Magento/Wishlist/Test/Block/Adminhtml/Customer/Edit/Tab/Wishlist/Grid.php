@@ -58,6 +58,13 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $rowTemplateStrict = 'td[contains(.,normalize-space("%s"))]';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Delete product
      *
      * @return void
@@ -65,7 +72,10 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected function delete()
     {
         $this->_rootElement->find($this->rowItem . ' ' . $this->deleteLink)->click();
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal->acceptAlert();
     }
 
     /**

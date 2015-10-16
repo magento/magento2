@@ -16,9 +16,9 @@ $eavConfig->clear();
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setData(
     [

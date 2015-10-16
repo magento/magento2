@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin for \Magento\Customer\Model\Resource\Visitor model
+ * Plugin for \Magento\Customer\Model\ResourceModel\Visitor model
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -42,15 +42,15 @@ class Log
     /**
      * Clean events by old visitors after plugin for clean method
      *
-     * @param \Magento\Customer\Model\Resource\Visitor $subject
-     * @param \Magento\Customer\Model\Resource\Visitor $logResourceModel
+     * @param \Magento\Customer\Model\ResourceModel\Visitor $subject
+     * @param \Magento\Customer\Model\ResourceModel\Visitor $logResourceModel
      *
-     * @return \Magento\Customer\Model\Resource\Visitor
+     * @return \Magento\Customer\Model\ResourceModel\Visitor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @see Global Log Clean Settings
      */
-    public function afterClean(\Magento\Customer\Model\Resource\Visitor $subject, $logResourceModel)
+    public function afterClean(\Magento\Customer\Model\ResourceModel\Visitor $subject, $logResourceModel)
     {
         $this->_reportEvent->clean();
         $this->_comparedProductIdx->clean();

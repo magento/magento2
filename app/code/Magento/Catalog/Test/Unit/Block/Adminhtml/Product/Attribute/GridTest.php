@@ -9,7 +9,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetRowUrl()
     {
-        $attribute = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attribute = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attribute->expects($this->once())->method('getAttributeId')->will($this->returnValue(2));
 
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);

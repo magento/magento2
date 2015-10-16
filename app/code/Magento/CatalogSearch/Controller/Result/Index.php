@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Controller\Result;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 

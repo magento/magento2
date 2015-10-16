@@ -23,12 +23,12 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
-            [],
-            '',
-            false
-        );
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             [],

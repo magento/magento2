@@ -12,7 +12,7 @@ namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionFactory;
 
@@ -31,7 +31,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
             ['create'],
             [],
             '',
@@ -53,7 +53,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $visibleStatuses = [];
 
         $orderCollection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Collection',
             ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
             [],
             '',

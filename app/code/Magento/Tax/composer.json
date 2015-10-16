@@ -18,6 +18,9 @@
         "magento/module-quote": "1.0.0-beta",
         "magento/framework": "1.0.0-beta"
     },
+    "suggest": {
+        "magento/module-tax-sample-data": "Sample Data version:1.0.0-beta"
+    },
     "type": "magento2-module",
     "version": "1.0.0-beta",
     "license": [

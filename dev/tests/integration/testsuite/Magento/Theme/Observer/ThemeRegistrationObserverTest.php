@@ -39,7 +39,7 @@ class ThemeRegistrationObserverTest extends \PHPUnit_Framework_TestCase
             'Magento\Theme\Model\Theme\Registration',
             ['register'],
             [
-                $this->_objectManager->create('Magento\Theme\Model\Resource\Theme\Data\CollectionFactory'),
+                $this->_objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory'),
                 $this->_objectManager->create('Magento\Theme\Model\Theme\Data\Collection'),
                 $this->_objectManager->create('Magento\Framework\Filesystem')
             ]

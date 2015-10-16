@@ -52,7 +52,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Customer\Model\Resource\Customer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
     protected function setUp()
@@ -92,7 +92,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            '\Magento\Customer\Model\Resource\Customer', //'\Magento\Framework\DataObject',
+            '\Magento\Customer\Model\ResourceModel\Customer', //'\Magento\Framework\DataObject',
             ['getIdFieldName'],
             [],
             '',

@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
@@ -103,7 +103,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlPersistInterface $urlPersist
@@ -117,7 +117,7 @@ class AfterImportDataObserver implements ObserverInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory,
         \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlPersistInterface $urlPersist,

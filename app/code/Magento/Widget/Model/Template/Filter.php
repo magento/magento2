@@ -12,7 +12,7 @@ namespace Magento\Widget\Model\Template;
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
     /**
-     * @var \Magento\Widget\Model\Resource\Widget
+     * @var \Magento\Widget\Model\ResourceModel\Widget
      */
     protected $_widgetResource;
 
@@ -35,7 +35,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Email\Model\Source\Variables $configVariables
-     * @param \Magento\Widget\Model\Resource\Widget $widgetResource
+     * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -53,7 +53,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
         \Magento\Email\Model\Source\Variables $configVariables,
-        \Magento\Widget\Model\Resource\Widget $widgetResource,
+        \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
         $this->_widgetResource = $widgetResource;

@@ -85,19 +85,19 @@
     <type name="Magento\Framework\Url\RouteParamsResolver">
         <plugin name="storeUrlRouteParamsResolver" type="Magento\Store\Url\Plugin\RouteParamsResolver"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Website\Collection">
+    <type name="Magento\Store\Model\ResourceModel\Website\Collection">
         <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Website\Collection\FetchStrategy</argument>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection\FetchStrategy</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Group\Collection">
+    <type name="Magento\Store\Model\ResourceModel\Group\Collection">
         <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Group\Collection\FetchStrategy</argument>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Store\Collection">
+    <type name="Magento\Store\Model\ResourceModel\Store\Collection">
         <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Store\Collection\FetchStrategy</argument>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\ResourceModel\Store\Collection\FetchStrategy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Store">
@@ -119,7 +119,7 @@
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+    <virtualType name="Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
@@ -129,7 +129,7 @@
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Store\Model\Resource\Store\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+    <virtualType name="Magento\Store\Model\ResourceModel\Store\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
@@ -139,7 +139,7 @@
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Store\Model\Resource\Website\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+    <virtualType name="Magento\Store\Model\ResourceModel\Website\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>

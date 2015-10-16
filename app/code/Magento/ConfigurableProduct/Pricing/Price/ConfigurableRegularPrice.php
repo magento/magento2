@@ -39,14 +39,14 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     protected $priceResolver;
 
     /**
-     * @param \Magento\Framework\Pricing\Object\SaleableInterface $saleableItem
+     * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
      * @param float $quantity
      * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
      */
     public function __construct(
-        \Magento\Framework\Pricing\Object\SaleableInterface $saleableItem,
+        \Magento\Framework\Pricing\SaleableInterface $saleableItem,
         $quantity,
         \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,

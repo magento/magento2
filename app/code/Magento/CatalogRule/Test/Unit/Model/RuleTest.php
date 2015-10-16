@@ -42,12 +42,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected $_ruleProductProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Iterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Iterator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceIterator;
 
@@ -113,7 +113,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_productCollectionFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -121,7 +121,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resourceIterator = $this->getMock(
-            '\Magento\Framework\Model\Resource\Iterator',
+            '\Magento\Framework\Model\ResourceModel\Iterator',
             ['walk'],
             [],
             '',
