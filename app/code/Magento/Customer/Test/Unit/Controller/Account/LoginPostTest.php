@@ -423,7 +423,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             case '\Exception':
                 $this->messageManager->expects($this->once())
                     ->method('addError')
-                    ->with(__('Something went wrong while validating the login and password.'))
+                    ->with(__('Invalid login or password.'))
                     ->willReturnSelf();
                 break;
         }

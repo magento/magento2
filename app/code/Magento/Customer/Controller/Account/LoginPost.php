@@ -92,15 +92,12 @@ class LoginPost extends Action implements AccountInterface
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
-                }
-                catch (AuthenticationException $e) {
+                } catch (AuthenticationException $e) {
                     $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
-                        __('Something went wrong while validating the login and password.')
-                    );
+                    $this->messageManager->addError(__('Invalid login or password.'));
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));
