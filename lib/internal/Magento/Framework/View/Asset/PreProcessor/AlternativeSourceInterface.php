@@ -13,9 +13,9 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 interface AlternativeSourceInterface extends PreProcessorInterface
 {
     /**
-     * Get names of alternatives
+     * Get extensions names of alternatives
      *
      * @return string[]
      */
-    public function getAlternatives();
+    public function getAlternativesExtensionsNames();
 }

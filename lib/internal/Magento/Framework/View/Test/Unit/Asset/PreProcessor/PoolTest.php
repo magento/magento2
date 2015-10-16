@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
-use Magento\Framework\View\Asset\PreProcessor\Helper\SorterInterface;
+use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
 
 /**
  * Class PoolTest
@@ -31,7 +31,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     private $objectManagerMock;
 
     /**
-     * @var SorterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sorterMock;
 
@@ -44,7 +44,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->getMockForAbstractClass();
-        $this->sorterMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Helper\SorterInterface')
+        $this->sorterMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface')
             ->getMockForAbstractClass();
     }
 
@@ -103,7 +103,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sorterMock->expects(self::once())
-            ->method('sorting')
+            ->method('sort')
             ->with($preprocessors[self::CONTENT_TYPE])
             ->willReturn($preprocessors[self::CONTENT_TYPE]);
 
@@ -134,7 +134,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sorterMock->expects(self::never())
-            ->method('sorting');
+            ->method('sort');
 
         $chainMock = $this->getChainMock(self::CONTENT_TYPE);
 
@@ -170,7 +170,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sorterMock->expects(self::once())
-            ->method('sorting')
+            ->method('sort')
             ->with($preprocessors[self::CONTENT_TYPE])
             ->willReturn($preprocessors[self::CONTENT_TYPE]);
 

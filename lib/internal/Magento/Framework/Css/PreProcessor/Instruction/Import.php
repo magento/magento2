@@ -37,18 +37,20 @@ class Import implements PreProcessorInterface
     /**
      * @var RelatedGenerator
      */
-    private $relatedGenerator;
+    private $relatedFileGenerator;
 
     /**
+     * Constructor
+     *
      * @param NotationResolver\Module $notationResolver
-     * @param RelatedGenerator $relatedGenerator
+     * @param RelatedGenerator $relatedFileGenerator
      */
     public function __construct(
         NotationResolver\Module $notationResolver,
-        RelatedGenerator $relatedGenerator
+        RelatedGenerator $relatedFileGenerator
     ) {
         $this->notationResolver = $notationResolver;
-        $this->relatedGenerator = $relatedGenerator;
+        $this->relatedFileGenerator = $relatedFileGenerator;
     }
 
     /**
@@ -64,7 +66,7 @@ class Import implements PreProcessorInterface
         $content = $this->removeComments($chain->getContent());
 
         $processedContent = preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content);
-        $this->relatedGenerator->generate($this);
+        $this->relatedFileGenerator->generate($this);
 
         if ($processedContent !== $content) {
             $chain->setContent($processedContent);
