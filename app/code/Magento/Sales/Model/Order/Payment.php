@@ -1263,16 +1263,8 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $amountPaid = $this->formatAmount($this->getBaseAmountPaid(), true);
-        $amountToCapture = $this->formatAmount($amountToCapture, true);
-        $orderGrandTotal = $this->formatAmount($this->getOrder()->getBaseGrandTotal(), true);
-        if ($orderGrandTotal == $amountPaid + $amountToCapture) {
-            if (false !== $this->getShouldCloseParentTransaction()) {
-                $this->setShouldCloseParentTransaction(true);
-            }
-            return true;
-        }
-        return false;
+        $total = $this->getOrder()->getTotalDue();
+        return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
     /**
@@ -2406,12 +2398,12 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Whether should close parent transaction
      *
-     * @return bool
+     * @return bool|null
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShouldCloseParentTransaction()
     {
-        return (bool)$this->getData('should_close_parent_transaction');
+        return $this->getData('should_close_parent_transaction');
     }
 
     //@codeCoverageIgnoreEnd

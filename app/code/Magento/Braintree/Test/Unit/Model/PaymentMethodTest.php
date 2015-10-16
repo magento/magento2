@@ -31,6 +31,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     const LNAME = 'Doe';
     const AUTH_TRAN_ID = 'r4z34j';
     const AUTH_AMOUNT = 5.76;
+    const TOTAL_AMOUNT = 10.02;
     const AUTH_CC_LAST_4 = '0004';
     const CUSTOMER_ID = '221b3649effb4bb1b62fc940691bd18c';
 
@@ -324,11 +325,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      * @param $ccType
      * @param null $ccToken
      */
-    protected function setupInfoInstance(
-        $countryId,
-        $ccType,
-        $ccToken = null
-    ) {
+    protected function setupInfoInstance($countryId, $ccType, $ccToken = null)
+    {
         $quoteObj = new \Magento\Framework\DataObject(
             [
                 'billing_address' => new \Magento\Framework\DataObject(
@@ -500,6 +498,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     'getCustomerEmail',
                     'getCustomerId',
                     'getStoreId',
+                    'getTotalDue'
                 ]
             )->getMock();
 
@@ -521,18 +520,25 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
+        $orderMock->expects(static::any())
+            ->method('getTotalDue')
+            ->willReturn(self::TOTAL_AMOUNT);
+
+        $this->orderRepository->expects(static::any())
+            ->method('get')
+            ->willReturn($orderMock);
+
         return $orderMock;
     }
+
     /**
      * @param \Magento\Framework\DataObject $paymentObject
      * @param int $storeId
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setupPaymentObject(
-        \Magento\Framework\DataObject $paymentObject,
-        $storeId
-    ) {
+    protected function setupPaymentObject(\Magento\Framework\DataObject $paymentObject, $storeId)
+    {
         $customerId = '12';
         $customerEmail = 'abc@example.com';
         $company = 'NA';
@@ -563,13 +569,9 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             'address_type' => 'billing',
         ];
 
-        $billingAddress = new \Magento\Framework\DataObject(
-            $addressData
-        );
+        $billingAddress = new \Magento\Framework\DataObject($addressData);
         $addressData['address_type'] = 'shipping';
-        $shippingAddress = new \Magento\Framework\DataObject(
-            $addressData
-        );
+        $shippingAddress = new \Magento\Framework\DataObject($addressData);
 
         $order = $this->setupOrderMock(
             $billingAddress,
@@ -605,26 +607,26 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->willReturn($regionMock);
 
         $braintreeAddressData = [
-            'firstName'         => self::FNAME,
-            'lastName'          => self::LNAME,
-            'company'           => $company,
-            'streetAddress'     => $street,
-            'extendedAddress'   => $street2,
-            'locality'          => $city,
-            'region'            => $regionCode,
-            'postalCode'        => $postcode,
+            'firstName' => self::FNAME,
+            'lastName' => self::LNAME,
+            'company' => $company,
+            'streetAddress' => $street,
+            'extendedAddress' => $street2,
+            'locality' => $city,
+            'region' => $regionCode,
+            'postalCode' => $postcode,
             'countryCodeAlpha2' => $countryId,
         ];
         return [
-            'channel'   => self::CHANNEL,
-            'orderId'   => $orderId,
-            'customer'  => [
+            'channel' => self::CHANNEL,
+            'orderId' => $orderId,
+            'customer' => [
                 'firstName' => self::FNAME,
-                'lastName'  => self::LNAME,
-                'company'   => $company,
-                'phone'     => $phone,
-                'fax'       => $fax,
-                'email'     => $customerEmail,
+                'lastName' => self::LNAME,
+                'company' => $company,
+                'phone' => $phone,
+                'fax' => $fax,
+                'email' => $customerEmail,
             ],
             'billing' => $braintreeAddressData,
             'shipping' => $braintreeAddressData,
@@ -764,8 +766,11 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     ) {
         $storeId = 3;
         $amount = self::AUTH_AMOUNT;
-        $paymentObject = $this->objectManagerHelper->getObject('Magento\Sales\Model\Order\Payment');
-
+        $currencyMock = $this->getPriceCurrencyMock();
+        /** @var \Magento\Sales\Model\Order\Payment $paymentObject */
+        $paymentObject = $this->objectManagerHelper->getObject('Magento\Sales\Model\Order\Payment', [
+            'priceCurrency' => $currencyMock
+        ]);
 
         $expectedRequestAttribs = $this->setupAuthorizeRequest(
             $configData,
@@ -797,14 +802,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         }
 
         $paymentObject->setParentId('1');
-        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
-            ->getMockForAbstractClass();
-        $order->expects($this->once())
-            ->method('getTotalDue')
-            ->willReturn(10.02);
-        $this->orderRepository->expects($this->once())
-            ->method('get')
-            ->willReturn($order);
 
         $this->assertEquals($this->model, $this->model->authorize($paymentObject, $amount));
         foreach ($expectedPaymentFields as $key => $value) {
@@ -1597,13 +1594,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage error
      */
-    public function testAuthorizeError(
-        array $configData,
-        $vault,
-        $registry,
-        $existingCustomer,
-        array $paymentInfo
-    ) {
+    public function testAuthorizeError(array $configData, $vault, $registry, $existingCustomer, array $paymentInfo)
+    {
         $storeId = 3;
         $amount = self::AUTH_AMOUNT;
         $paymentObject = $this->objectManagerHelper->getObject('Magento\Sales\Model\Order\Payment');
@@ -1648,13 +1640,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please try again later
      */
-    public function testAuthorizeException(
-        array $configData,
-        $vault,
-        $registry,
-        $existingCustomer,
-        array $paymentInfo
-    ) {
+    public function testAuthorizeException(array $configData, $vault, $registry, $existingCustomer, array $paymentInfo)
+    {
         $storeId = 3;
         $amount = self::AUTH_AMOUNT;
         $paymentObject = $this->objectManagerHelper->getObject('Magento\Sales\Model\Order\Payment');
@@ -1715,10 +1702,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      * @param int $numberOfTransactions
      * @return $this
      */
-    protected function setupSalesTransaction(
-        $paymentId,
-        $numberOfTransactions
-    ) {
+    protected function setupSalesTransaction($paymentId, $numberOfTransactions)
+    {
         $transactionCollectionMock = $this->getMockBuilder(
             'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
@@ -1740,12 +1725,24 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         return $this;
     }
 
-    protected function setupPaymentObjectForCapture(
-        $paymentId
-    ) {
+    protected function setupPaymentObjectForCapture($paymentId)
+    {
+        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->getMockForAbstractClass();
+        $order->expects(static::any())
+            ->method('getTotalDue')
+            ->willReturn(self::TOTAL_AMOUNT);
+        $this->orderRepository->expects(static::any())
+            ->method('get')
+            ->willReturn($order);
+
+        $currencyMock = $this->getPriceCurrencyMock();
+
         $paymentObject = $this->objectManagerHelper->getObject(
             'Magento\Sales\Model\Order\Payment',
             [
+                'priceCurrency' => $currencyMock,
+                'orderRepository' => $this->orderRepository,
                 'data' => [
                     'id' => $paymentId,
                     'cc_trans_id' => self::AUTH_TRAN_ID,
@@ -1755,6 +1752,11 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
 
         return $paymentObject;
     }
+
+    /**
+     * @covers \Magento\Braintree\Model\PaymentMethod::capture()
+     * @throws LocalizedException
+     */
     public function testCaptureSuccess()
     {
         $amount = self::AUTH_AMOUNT;
@@ -1773,18 +1775,38 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->method('critical');
 
         $paymentObject->setParentId('1');
-        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
-            ->getMockForAbstractClass();
-        $order->expects($this->once())
-            ->method('getTotalDue')
-            ->willReturn(10.02);
-        $this->orderRepository->expects($this->once())
-            ->method('get')
-            ->willReturn($order);
 
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
         $this->assertFalse($paymentObject->getShouldCloseParentTransaction());
+    }
+
+    /**
+     * @covers \Magento\Braintree\Model\PaymentMethod::capture()
+     * @return void
+     */
+    public function testCaptureSuccessAuthTransactionClosed()
+    {
+        $paymentId = 31232;
+        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        $payment = $this->setupPaymentObjectForCapture($paymentId);
+        $this->setupSalesTransaction($paymentId, 0); //no existing capture transaction
+
+        $result = $this->setupSuccessResponse([]);
+        $this->braintreeTransactionMock->expects(static::once())
+            ->method('submitForSettlement')
+            ->with(self::AUTH_TRAN_ID, self::TOTAL_AMOUNT)
+            ->willReturn($result);
+
+        $this->psrLoggerMock->expects(static::never())
+            ->method('critical');
+
+        $payment->setParentId(1);
+        $this->model->capture($payment, self::TOTAL_AMOUNT);
+
+        static::assertFalse($payment->getIsTransactionClosed());
+        static::assertTrue($payment->getShouldCloseParentTransaction());
+
     }
 
     /**
@@ -1819,10 +1841,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $this->model->capture($paymentObject, $amount);
     }
 
-    protected function setupAuthTransaction(
-        $paymentId,
-        $authTransaction
-    ) {
+    protected function setupAuthTransaction($paymentId, $authTransaction)
+    {
         $authTransactionCollectionMock = $this->getMockBuilder(
             'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection'
         )->disableOriginalConstructor()
@@ -1925,14 +1945,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->willReturn($result);
 
         $paymentObject->setParentId('1');
-        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
-            ->getMockForAbstractClass();
-        $order->expects($this->once())
-            ->method('getTotalDue')
-            ->willReturn(10.02);
-        $this->orderRepository->expects($this->once())
-            ->method('get')
-            ->willReturn($order);
 
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
@@ -2114,17 +2126,10 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                         'submitForSettlement' => true,
                     ],
                 ]
-            )->willReturn($resultSuccess);
+            )
+            ->willReturn($resultSuccess);
 
         $paymentObject->setParentId('1');
-        $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
-            ->getMockForAbstractClass();
-        $order->expects($this->once())
-            ->method('getTotalDue')
-            ->willReturn(10.02);
-        $this->orderRepository->expects($this->once())
-            ->method('get')
-            ->willReturn($order);
 
         $this->model->capture($paymentObject, $amount);
         $this->assertEquals(PaymentMethod::STATUS_APPROVED, $paymentObject->getStatus());
@@ -2191,9 +2196,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     //End: test capture
 
     //Start: test refund
-    protected function setupPaymentObjectForRefund(
-        $refundTransactionId
-    ) {
+    protected function setupPaymentObjectForRefund($refundTransactionId)
+    {
         $paymentObject = $this->objectManagerHelper->getObject(
             'Magento\Sales\Model\Order\Payment',
             [
@@ -2459,9 +2463,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
     }
 
-    protected function setupPaymentObjectForVoid(
-        $orderId
-    ) {
+    protected function setupPaymentObjectForVoid($orderId)
+    {
         $paymentObject = $this->objectManagerHelper->getObject(
             'Magento\Sales\Model\Order\Payment'
         );
@@ -2664,4 +2667,23 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orderMock);
         $this->assertEquals(false, $this->model->canVoid());
     }
+
+    /**
+     * @return \Magento\Directory\Model\PriceCurrency|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPriceCurrencyMock()
+    {
+        $currencyMock = $this->getMockBuilder('\Magento\Directory\Model\PriceCurrency')
+            ->disableOriginalConstructor()
+            ->setMethods(['round'])
+            ->getMock();
+        $currencyMock->expects(static::any())
+            ->method('round')
+            ->willReturnMap([
+                [self::TOTAL_AMOUNT, round(self::TOTAL_AMOUNT, 2)],
+                [self::AUTH_AMOUNT, round(self::AUTH_AMOUNT, 2)]
+            ]);
+        return $currencyMock;
+    }
 }
+

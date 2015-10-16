@@ -44,6 +44,9 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
                 $invoice->setOrder($order);
                 $order->addRelatedObject($invoice);
                 $payment->setCreatedInvoice($invoice);
+                if ($payment->getShouldCloseParentTransaction() !== false) {
+                    $payment->setShouldCloseParentTransaction(true);
+                }
             } else {
                 $payment->setIsFraudDetected(!$skipFraudDetection);
                 $this->updateTotals($payment, ['base_amount_paid_online' => $amount]);
