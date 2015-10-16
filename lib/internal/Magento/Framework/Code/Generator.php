@@ -202,8 +202,6 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
-        } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
-            return self::GENERATION_SKIP;
         } else if (!isset($this->_generatedEntities[$resultEntityType])) {
             throw new \InvalidArgumentException('Unknown generation entity.');
         }

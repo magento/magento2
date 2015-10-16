@@ -252,9 +252,6 @@ abstract class EntityAbstract
         if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClassName)) {
-            $this->_addError('Result class ' . $resultClassName . ' already exists.');
-            return false;
         } elseif (
             /**
              * If makeResultFileDirectory only fails because the file is already created,

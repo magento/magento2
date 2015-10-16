@@ -107,12 +107,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 '$validationSuccess' => false,
                 '$sourceClassExists' => false,
             ],
-            'result_class_exists' => [
-                '$errors' => ['Result class ' . self::RESULT_CLASS . ' already exists.'],
-                '$validationSuccess' => false,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => true,
-            ],
             'cant_create_result_directory' => [
                 '$errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
                 '$validationSuccess' => false,
