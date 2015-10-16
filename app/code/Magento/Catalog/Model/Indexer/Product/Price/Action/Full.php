@@ -25,7 +25,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
             $this->_prepareWebsiteDateTable();
             $this->_prepareTierPriceIndex();
-            $this->_prepareGroupPriceIndex();
 
             foreach ($this->getTypeIndexers() as $indexer) {
                 $indexer->reindexAll();

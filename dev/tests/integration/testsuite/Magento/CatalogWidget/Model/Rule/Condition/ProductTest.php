@@ -15,7 +15,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $conditionProduct;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -42,7 +42,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAddGlobalAttributeToCollection()
     {
-        $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
+        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
         $this->conditionProduct->setAttribute('special_price');
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
@@ -54,7 +54,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAddNonGlobalAttributeToCollectionNoProducts()
     {
-        $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
+        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
         $this->conditionProduct->setAttribute('visibility');
         $this->conditionProduct->setOperator('()');
         $this->conditionProduct->setValue('4');
@@ -73,7 +73,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddNonGlobalAttributeToCollection()
     {
-        $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
+        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
         $this->conditionProduct->setAttribute('visibility');
         $this->conditionProduct->setOperator('()');
         $this->conditionProduct->setValue('4');

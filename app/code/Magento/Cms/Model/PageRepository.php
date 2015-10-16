@@ -13,6 +13,8 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 
 /**
  * Class PageRepository
@@ -21,7 +23,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class PageRepository implements PageRepositoryInterface
 {
     /**
-     * @var Resource\Page
+     * @var ResourcePage
      */
     protected $resource;
 
@@ -31,7 +33,7 @@ class PageRepository implements PageRepositoryInterface
     protected $pageFactory;
 
     /**
-     * @var Resource\Page\CollectionFactory
+     * @var PageCollectionFactory
      */
     protected $pageCollectionFactory;
 
@@ -56,19 +58,19 @@ class PageRepository implements PageRepositoryInterface
     protected $dataPageFactory;
 
     /**
-     * @param Resource\Page $resource
+     * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
-     * @param Resource\Page\CollectionFactory $pageCollectionFactory
+     * @param PageCollectionFactory $pageCollectionFactory
      * @param Data\PageSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
-        Resource\Page $resource,
+        ResourcePage $resource,
         PageFactory $pageFactory,
         Data\PageInterfaceFactory $dataPageFactory,
-        Resource\Page\CollectionFactory $pageCollectionFactory,
+        PageCollectionFactory $pageCollectionFactory,
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor
@@ -122,7 +124,7 @@ class PageRepository implements PageRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return Resource\Page\Collection
+     * @return \Magento\Cms\Model\ResourceModel\Page\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {

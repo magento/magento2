@@ -72,7 +72,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Set Attribute instance
      * Rewrite for redefine attribute scope
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setAttribute($attribute)
@@ -85,15 +85,15 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Redefine Attribute scope
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setScope($attribute)
     {
         if ($this->_helper->isPriceGlobal()) {
-            $attribute->setIsGlobal(\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL);
+            $attribute->setIsGlobal(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL);
         } else {
-            $attribute->setIsGlobal(\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE);
+            $attribute->setIsGlobal(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_WEBSITE);
         }
 
         return $this;
@@ -118,7 +118,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return $this;
         }
 
-        if ($this->getAttribute()->getIsGlobal() == \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE) {
+        if ($this->getAttribute()->getIsGlobal() == \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_WEBSITE) {
             $baseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 'default'

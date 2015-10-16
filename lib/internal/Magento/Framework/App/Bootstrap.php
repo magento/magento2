@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Profiler;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -134,7 +135,7 @@ class Bootstrap
     {
         $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
         $autoloadWrapper = AutoloaderRegistry::getAutoloader();
-        Populator::populateMappings($autoloadWrapper, $dirList);
+        Populator::populateMappings($autoloadWrapper, $dirList, new ComponentRegistrar());
     }
 
     /**

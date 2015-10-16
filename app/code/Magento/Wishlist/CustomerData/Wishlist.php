@@ -104,16 +104,16 @@ class Wishlist implements SectionSourceInterface
         $collection->clear()->setPageSize(self::SIDEBAR_ITEMS_NUMBER)
             ->setInStockFilter(true)->setOrder('added_at');
         $items = [];
+        /** @var \Magento\Wishlist\Model\Item $wishlistItem */
         foreach ($collection as $wishlistItem) {
-            /** @var \Magento\Catalog\Model\Product $product */
             $product = $wishlistItem->getProduct();
-            $imageHelper = $this->imageHelper->init($product, 'wishlist_sidebar_block');
+            $this->imageHelper->init($product, 'wishlist_sidebar_block');
             $items[] = [
                 'image' => [
-                    'src' => $imageHelper->getUrl(),
-                    'alt' => $imageHelper->getLabel(),
-                    'width' => $imageHelper->getWidth(),
-                    'height' => $imageHelper->getHeight(),
+                    'src' => $this->imageHelper->getUrl(),
+                    'alt' => $this->imageHelper->getLabel(),
+                    'width' => $this->imageHelper->getWidth(),
+                    'height' => $this->imageHelper->getHeight(),
                 ],
                 'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
                 'product_name' => $product->getName(),
@@ -125,8 +125,8 @@ class Wishlist implements SectionSourceInterface
                 ),
                 'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
                 'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
-                'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
-                'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
+                'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem, true),
+                'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem, true),
             ];
         }
         return $items;

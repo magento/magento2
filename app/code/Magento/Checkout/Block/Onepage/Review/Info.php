@@ -7,7 +7,6 @@ namespace Magento\Checkout\Block\Onepage\Review;
 
 /**
  * One page checkout order review
- * @deprecated
  * @removeCandidate
  */
 class Info extends \Magento\Sales\Block\Items\AbstractItems

@@ -45,7 +45,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Product collection initialize process
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
      */
     protected function _getProductCollection()
     {
@@ -65,11 +65,11 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Prepare collection for recent product list
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
      */
     protected function _getRecentlyAddedProductsCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 

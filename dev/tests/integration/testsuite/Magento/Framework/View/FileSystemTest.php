@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use \Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for the view layer fallback mechanism
- * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ * @magentoComponentsDir Magento/Theme/Model/_files/design
+ * @magentoDbIsolation enabled
  */
 class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,24 +21,21 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(dirname(__DIR__)) . '/Theme/Model/_files/design',
-                    ],
-                ],
-            ]
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        $registration->register();
+        $objectManager->get('Magento\Framework\App\State')
             ->setAreaCode('frontend');
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->_model = $objectManager->create(
             'Magento\Framework\View\FileSystem'
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $objectManager->get(
             'Magento\Framework\View\DesignInterface'
         )->setDesignTheme(
-            'Test/default'
+            'Test_FrameworkThemeTest/default'
         );
     }
 
@@ -56,10 +53,13 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }
 
+    /**
+     * @magentoComponentsDir Magento/Framework/View/_files/Fixture_Module
+     */
     public function testGetViewFile()
     {
         $expected = '%s/frontend/Vendor/custom_theme/Fixture_Module/web/fixture_script.js';
-        $params = ['theme' => 'Vendor/custom_theme'];
+        $params = ['theme' => 'Vendor_FrameworkThemeTest/custom_theme'];
         $actual = $this->_model->getStaticFileName('Fixture_Module::fixture_script.js', $params);
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }

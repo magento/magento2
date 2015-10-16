@@ -41,7 +41,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -51,7 +51,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
         ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -74,7 +74,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock\Status');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Status');
     }
 
     //@codeCoverageIgnoreStart

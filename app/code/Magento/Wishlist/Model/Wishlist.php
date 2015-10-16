@@ -7,15 +7,15 @@ namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Wishlist\Model\Resource\Item\CollectionFactory;
-use Magento\Wishlist\Model\Resource\Wishlist as ResourceWishlist;
-use Magento\Wishlist\Model\Resource\Wishlist\Collection;
+use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
+use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 
 /**
  * Wishlist model
  *
- * @method \Magento\Wishlist\Model\Resource\Wishlist _getResource()
- * @method \Magento\Wishlist\Model\Resource\Wishlist getResource()
+ * @method \Magento\Wishlist\Model\ResourceModel\Wishlist _getResource()
+ * @method \Magento\Wishlist\Model\ResourceModel\Wishlist getResource()
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
  * @method string getSharingCode()
@@ -41,7 +41,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Wishlist item collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_itemCollection;
 
@@ -317,7 +317,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getItemCollection()
     {

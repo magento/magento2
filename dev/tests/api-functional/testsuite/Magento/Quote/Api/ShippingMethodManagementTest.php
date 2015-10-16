@@ -25,10 +25,16 @@ class ShippingMethodManagementTest extends WebapiAbstract
      */
     protected $quote;
 
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $this->totalsCollector = $this->objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
     }
 
     protected function getServiceInfo()
@@ -55,7 +61,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $serviceInfo = $this->getServiceInfo();
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
         $requestData = [
             'cartId' => $this->quote->getId(),
             'carrierCode' => 'flatrate',
@@ -150,7 +157,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
         ]; // cartId 999 will be overridden
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(true, $result);
 
@@ -179,7 +187,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $shippingMethod = $shippingMethodManagementService->get($this->quote->getId());
@@ -247,7 +256,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
 
         $serviceInfo = [
             'rest' => [

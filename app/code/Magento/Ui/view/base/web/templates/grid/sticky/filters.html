@@ -17,6 +17,6 @@
                  attr: {disabled: !hasVisible()}">
             <span data-bind="i18n: 'Filters'"></span>
         </button>
-        <span class="filters-active" data-bind="text: $data.active().length || ''"></span> <!-- Added the amount of selected filters -->
+        <span class="filters-active" data-bind="text: countActive() || ''"></span> <!-- Added the amount of selected filters -->
     </div>
 </div>

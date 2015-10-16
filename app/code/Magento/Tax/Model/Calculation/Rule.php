@@ -12,8 +12,8 @@ use Magento\Tax\Api\Data\TaxRuleInterface;
 /**
  * Tax Rule Model
  *
- * @method \Magento\Tax\Model\Resource\Calculation\Rule _getResource()
- * @method \Magento\Tax\Model\Resource\Calculation\Rule getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rule getResource()
  */
 class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
 {
@@ -70,7 +70,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param Rule\Validator $validator
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -83,7 +83,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Tax\Model\Calculation\Rule\Validator $validator,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -98,7 +98,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $resourceCollection,
             $data
         );
-        $this->_init('Magento\Tax\Model\Resource\Calculation\Rule');
+        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rule');
         $this->_taxClass = $taxClass;
     }
 

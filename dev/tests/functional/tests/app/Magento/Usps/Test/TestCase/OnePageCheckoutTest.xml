@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest">
-        <variation name="OnePageCheckoutTestVariation26" summary="Use USPS Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12444">
+        <variation name="OnePageCheckoutUspsTestVariation1" summary="Use USPS Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12444">
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -22,8 +22,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
-        <variation name="OnePageCheckoutTestVariation27">
-            <data name="description" xsi:type="string">Check Out as Guest using USPS with US shipping origin and UK customer</data>
+        <variation name="OnePageCheckoutUspsTestVariation2" summary="Check Out as Guest using USPS with US shipping origin and UK customer">
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="customer/dataset" xsi:type="string">default</data>

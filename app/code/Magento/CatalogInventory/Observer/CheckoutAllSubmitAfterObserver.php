@@ -6,12 +6,10 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Catalog inventory module observer
- */
-class CheckoutAllSubmitAfterObserver
+class CheckoutAllSubmitAfterObserver implements ObserverInterface
 {
     /**
      * @var SubtractQuoteInventoryObserver
@@ -41,12 +39,12 @@ class CheckoutAllSubmitAfterObserver
      * @param EventObserver $observer
      * @return $this
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
         if (!$quote->getInventoryProcessed()) {
-            $this->subtractQuoteInventoryObserver->invoke($observer);
-            $this->reindexQuoteInventoryObserver->invoke($observer);
+            $this->subtractQuoteInventoryObserver->execute($observer);
+            $this->reindexQuoteInventoryObserver->execute($observer);
         }
         return $this;
     }

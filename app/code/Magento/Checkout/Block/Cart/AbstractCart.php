@@ -149,7 +149,11 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     public function getTotalsCache()
     {
         if (empty($this->_totals)) {
-            $this->_totals = $this->getQuote()->getTotals();
+            if ($this->getQuote()->isVirtual()) {
+                $this->_totals = $this->getQuote()->getBillingAddress()->getTotals();
+            } else {
+                $this->_totals = $this->getQuote()->getShippingAddress()->getTotals();
+            }
         }
         return $this->_totals;
     }

@@ -19,7 +19,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Block
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
     protected $blockResource;
 
@@ -49,7 +49,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Block\Collection
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
      */
     protected $collection;
 
@@ -58,7 +58,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\Resource\Block')
+        $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
@@ -76,7 +76,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -86,7 +86,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->blockSearchResult = $this->getMockBuilder('Magento\Cms\Api\Data\BlockSearchResultsInterface')
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -107,7 +107,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Cms\Model\BlockFactory $blockFactory
          * @var \Magento\Cms\Api\Data\BlockInterfaceFactory $blockDataFactory
          * @var \Magento\Cms\Api\Data\BlockSearchResultsInterfaceFactory $blockSearchResultFactory
-         * @var \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
+         * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
          */
 
         $this->dataHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')

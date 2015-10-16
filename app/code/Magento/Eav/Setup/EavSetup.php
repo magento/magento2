@@ -7,7 +7,7 @@ namespace Magento\Eav\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -108,7 +108,7 @@ class EavSetup
     /**
      * Gets attribute group collection factory
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
     public function getAttributeGroupCollectionFactory()
     {
