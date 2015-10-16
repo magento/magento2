@@ -2686,4 +2686,3 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         return $currencyMock;
     }
 }
-
