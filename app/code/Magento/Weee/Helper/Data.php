@@ -282,14 +282,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shipping = null,
         $billing = null,
         $website = null,
-        $calculateTaxes = false
+        $calculateTaxes = false,
+        $round = true
     ) {
         return $this->_weeeTax->getProductWeeeAttributes(
             $product,
             $shipping,
             $billing,
             $website,
-            $calculateTaxes
+            $calculateTaxes,
+            $round
         );
     }
 

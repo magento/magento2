@@ -49,7 +49,7 @@ class Calculator implements CalculatorInterface
                 $toExclude = true;
             }
             if ($adjustment->isIncludedInBasePrice()) {
-                $adjust = $adjustment->extractAdjustment($fullAmount, $saleableItem, $context);
+                $adjust = $adjustment->extractAdjustment($baseAmount, $saleableItem, $context);
                 $baseAmount -= $adjust;
                 $fullAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem, $context);
                 $adjust = $fullAmount - $baseAmount - $previousAdjustments;

@@ -51,56 +51,56 @@ class Adjustment extends AbstractAdjustment
      */
     protected function apply()
     {
+        // Does catalog price include tax? (true, false)
         $isPriceIncludesTax = $this->isPriceIncludesTax();
+        // Price display configurations (DISPLAY_TYPE_EXCLUDING_TAX, DISPLAY_TYPE_INCLUDING_TAX, DISPLAY_TYPE_BOTH)
         $priceDisplayConfig = $this->getTaxDisplayConfig();
 
-        $weeeTaxAmount = 0;
-        $attributes = $this->weeeHelper->getProductWeeeAttributes($this->getSaleableItem(), null, null, null, true);
-        if ($attributes != null) {
-            foreach ($attributes as $attribute) {
-                $weeeTaxAmount += $attribute->getData('tax_amount');
-            }
-        }
-        if ($isPriceIncludesTax == true &&
-            ($priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
-            $priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH)) {
+        // NOTE: By default, weee_tax is automatically included in the display price even when certain configurations
+        // should not allow it. We must remove the weee_tax adjustments for these configurations in the display and/or
+        // final prices.
+        $weeeAmount = $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode());
+        $weeeTaxAmount =
+            $this->amountRender->getAmount()->getAdjustmentAmount(\Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE);
 
+        $this->amountRender->setDisplayValue(
+            $this->amountRender->getDisplayValue() - $weeeTaxAmount
+        );
+        $this->finalAmount = $this->amountRender->getDisplayValue();
+
+        if ($isPriceIncludesTax == false) {
+            if ($priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX
+                || $priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+            ) {
+                $this->finalAmount += $weeeTaxAmount;
+                if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL]) == false) {
+                    $this->amountRender->setDisplayValue(
+                        $this->amountRender->getDisplayValue() + $weeeTaxAmount
+                    );
+                }
+            }
             if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
-                $this->finalAmount = $this->amountRender->getDisplayValue();
                 $this->amountRender->setDisplayValue(
-                    $this->amountRender->getDisplayValue() -
-                    $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                    $this->amountRender->getDisplayValue() - $weeeAmount
                 );
             }
         } else {
-            if ($this->typeOfDisplay([Tax::DISPLAY_EXCL, Tax::DISPLAY_EXCL_DESCR_INCL])) {
-                $this->finalAmount = $this->amountRender->getDisplayValue();
-
-                if ($this->typeOfDisplay([Tax::DISPLAY_EXCL])) {
+            // If catalog prices already include tax, we need to once again back out weee_tax
+            if ($priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                $this->amountRender->setDisplayValue(
+                    $this->amountRender->getDisplayValue() - $weeeTaxAmount
+                );
+                $this->finalAmount -= $weeeTaxAmount;
+                if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
                     $this->amountRender->setDisplayValue(
-                        $this->amountRender->getDisplayValue() -
-                        $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                        $this->amountRender->getDisplayValue() - $weeeAmount + $weeeTaxAmount
                     );
-                } else {
-                    if ($priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX
-                        && $isPriceIncludesTax == false
-                    ) {
-                        $weeeTaxAmount = 0;
-                    }
-
-                    if ($isPriceIncludesTax == true) {
-                        $this->amountRender->setDisplayValue(
-                            $this->amountRender->getDisplayValue() -
-                            $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode()) +
-                            $weeeTaxAmount
-                        );
-                    } else {
-                        $this->amountRender->setDisplayValue(
-                            $this->amountRender->getDisplayValue() -
-                            $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode()) -
-                            $weeeTaxAmount
-                        );
-                    }
+                }
+            } else {
+                if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
+                    $this->amountRender->setDisplayValue(
+                        $this->amountRender->getDisplayValue() - $weeeAmount
+                    );
                 }
             }
         }
