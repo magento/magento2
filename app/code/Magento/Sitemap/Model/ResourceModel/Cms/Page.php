@@ -10,7 +10,7 @@ namespace Magento\Sitemap\Model\ResourceModel\Cms;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Page extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Init resource model (catalog/category)

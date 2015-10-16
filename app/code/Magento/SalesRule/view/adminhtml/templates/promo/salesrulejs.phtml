@@ -5,7 +5,12 @@
  */
 ?>
 <script>
-require(["jquery", "uiRegistry", "prototype"], function(jQuery, registry){
+require([
+    'jquery',
+    "uiRegistry",
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(jQuery, registry, alert){
 
 //<![CDATA[
 var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
@@ -80,7 +85,11 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
         onComplete : function (transport, param){
             var response = false;
             if (transport && transport.responseText) {
-                response = eval('(' + transport.responseText + ')');
+                try {
+                    response = JSON.parse(transport.responseText);
+                } catch (e) {
+                    console.warn('An error occured while parsing response');
+                }
             }
             if (couponCodesGrid) {
                 couponCodesGrid.reload();
@@ -93,7 +102,9 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 }
             }
             if (response && response.error) {
-                alert(response.error);
+                alert({
+                    content: response.error
+                });
             }
         }
     });

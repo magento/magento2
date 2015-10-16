@@ -32,7 +32,6 @@ define([
                 .on('suggestbeforeselect', function (event) {
                     clearParentCategory();
                     $(event.target).treeSuggest('close');
-                    $('#new_category_name').focus();
                 });
 
             $.validator.addMethod('validate-parent-category', function () {

@@ -9,10 +9,13 @@ define([
 ], function (_, utils) {
     'use strict';
 
+    /**
+     * @constructor
+     */
     function Events(storage) {
         this.id = 0,
 
-        this.requests   = new Map()
+        this.requests   = new Map();
         this.map        = {};
         this.storage    = storage;
 

@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -62,7 +62,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

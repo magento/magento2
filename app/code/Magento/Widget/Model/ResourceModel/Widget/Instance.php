@@ -13,7 +13,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget;
 
 use Magento\Framework\Model\AbstractModel;
 
-class Instance extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

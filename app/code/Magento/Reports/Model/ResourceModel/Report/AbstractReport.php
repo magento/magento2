@@ -10,7 +10,7 @@ namespace Magento\Reports\Model\ResourceModel\Report;
  * Abstract report aggregate resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractReport extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Flag object
@@ -43,7 +43,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ModelResource\Db\
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -52,7 +52,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ModelResource\Db\
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
