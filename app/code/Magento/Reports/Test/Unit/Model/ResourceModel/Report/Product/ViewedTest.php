@@ -20,7 +20,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     protected $viewed;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
@@ -143,7 +143,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Context')
+        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);

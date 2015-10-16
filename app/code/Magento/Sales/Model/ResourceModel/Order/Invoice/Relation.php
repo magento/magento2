@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationInterface;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Item as InvoiceItemResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment as InvoiceCommentResource;
 

@@ -78,5 +78,6 @@ class DeleteSearchTermEntityTest extends Injectable
         $this->indexPage->open();
         $this->indexPage->getGrid()->searchAndOpen(['search_query' => $searchText]);
         $this->editPage->getFormPageActions()->delete();
+        $this->editPage->getModalBlock()->acceptAlert();
     }
 }

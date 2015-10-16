@@ -10,7 +10,7 @@ namespace Magento\Review\Model\ResourceModel\Review;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource status model initialization

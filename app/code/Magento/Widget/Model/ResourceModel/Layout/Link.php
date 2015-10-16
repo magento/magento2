@@ -8,7 +8,7 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 /**
  * Layout Link resource model
  */
-class Link extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

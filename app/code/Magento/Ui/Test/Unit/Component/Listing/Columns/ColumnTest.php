@@ -43,6 +43,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
     }
 
     /**
@@ -78,7 +82,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     public function testPrepareItems()
     {
         $testItems = ['item1','item2', 'item3'];
-        $column = $this->objectManager->getObject('Magento\Ui\Component\Listing\Columns\Column');
+        $column = $this->objectManager->getObject(
+            'Magento\Ui\Component\Listing\Columns\Column',
+            ['context' => $this->contextMock]
+        );
 
         $this->assertEquals($testItems, $column->prepareItems($testItems));
     }

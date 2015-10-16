@@ -7,8 +7,9 @@ define([
     "jquery",
     "braintree",
     'mage/translate',
+    'Magento_Ui/js/modal/alert',
     "jquery/ui"
-], function ($, braintree, $t) {
+], function ($, braintree, $t, alert) {
     'use strict';
 
     $.widget('mage.braintreeEditForm', {
@@ -199,13 +200,17 @@ define([
                                 }
                             },
                             error: function (response) {
-                                alert($t('There was error during saving card data'));
+                                alert({
+                                    content: $t('There was error during saving card data')
+                                });
                             }
                         });
                     } else {
                         //handle error
                         $('body').trigger('processStop');
-                        alert($t('There was error during saving card data'));
+                        alert({
+                            content: $t('There was error during saving card data')
+                        });
                     }
                 });
             }
