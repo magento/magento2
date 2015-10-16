@@ -89,20 +89,19 @@ class AlternativeSource implements AlternativeSourceInterface
      */
     public function process(Chain $chain)
     {
-        try {
-            $path = $chain->getAsset()->getFilePath();
-            $content = $chain->getContent();
+        $path = $chain->getAsset()->getFilePath();
+        $content = $chain->getContent();
+        if (trim($content) !== '') {
+            return;
+        }
 
+        try {
             $this->lockerProcess->lockProcess($this->lockName . sprintf('%x', crc32($path . $content)));
 
-            if (trim($content) !== '') {
-                return;
-            }
-
             $module = $chain->getAsset()->getModule();
+
             /** @var  FallbackContext $context */
             $context = $chain->getAsset()->getContext();
-
             $chain->setContent($this->processContent($path, $content, $module, $context));
 
         } finally {
