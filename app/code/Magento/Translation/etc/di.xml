@@ -58,7 +58,7 @@
         <arguments>
             <argument name="patterns" xsi:type="array">
                 <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~</item>
-                <item name="mage_translation_static" xsi:type="string">~\$t\([\'|\"](.+?)[\'|\"]\)~</item>
+                <item name="mage_translation_static" xsi:type="string">~\$t\((["'])(.+?)\1\)~</item>
             </argument>
         </arguments>
     </type>
