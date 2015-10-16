@@ -17,7 +17,7 @@ define(
         'uiRegistry',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/model/messages',
-        'Magento_Ui/js/core/renderer/layout'
+        'uiLayout'
     ],
     function (
         ko,
@@ -117,18 +117,14 @@ define(
              * Place order.
              */
             placeOrder: function (data, event) {
+                var self = this,
+                    placeOrder;
+
                 if (event) {
                     event.preventDefault();
                 }
-                var self = this,
-                    placeOrder,
-                    emailValidationResult = customer.isLoggedIn(),
-                    loginFormSelector = 'form[data-role=email-with-possible-login]';
-                if (!customer.isLoggedIn()) {
-                    $(loginFormSelector).validation();
-                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
-                }
-                if (emailValidationResult && this.validate() && additionalValidators.validate()) {
+
+                if (this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder, this.messageContainer);
 
@@ -161,11 +157,6 @@ define(
                 return {
                     "method": this.item.method,
                     "po_number": null,
-                    "cc_owner": null,
-                    "cc_number": null,
-                    "cc_type": null,
-                    "cc_exp_year": null,
-                    "cc_exp_month": null,
                     "additional_data": null
                 };
             },

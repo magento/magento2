@@ -27,11 +27,11 @@
         "magento/module-media-storage": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-configurable-product": "self.version",
-        "magento/module-ui": "self.version",
-        "magento/magento-composer-installer": "*"
+        "magento/module-ui": "self.version"
     },
     "suggest": {
-        "magento/module-cookie": "1.0.0-beta"
+        "magento/module-cookie": "1.0.0-beta",
+        "magento/module-catalog-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -39,12 +39,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Catalog"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Catalog\\": ""
+        }
     }
 }

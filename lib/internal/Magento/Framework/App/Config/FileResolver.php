@@ -26,6 +26,13 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     protected $iteratorFactory;
 
     /**
+     * Filesystem
+     *
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
@@ -48,10 +55,11 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         switch ($scope) {
             case 'primary':
                 $directory = $this->filesystem->getDirectoryRead(DirectoryList::CONFIG);
-                $iterator = $this->iteratorFactory->create(
-                    $directory,
-                    $directory->search('{' . $filename . ',*/' . $filename . '}')
-                );
+                $absolutePaths = [];
+                foreach ($directory->search('{' . $filename . ',*/' . $filename . '}') as $path) {
+                    $absolutePaths[] = $directory->getAbsolutePath($path);
+                }
+                $iterator = $this->iteratorFactory->create($absolutePaths);
                 break;
             case 'global':
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);

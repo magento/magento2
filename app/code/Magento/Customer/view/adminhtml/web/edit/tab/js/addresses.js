@@ -5,9 +5,10 @@
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/confirm',
     'jquery/ui',
     'mage/backend/tabs'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, confirm) {
     'use strict';
 
     $.widget('mage.addressTabs', $.mage.tabs, {
@@ -136,9 +137,16 @@ define([
          * @private
          */
         _deleteItemPrompt: function (event, data) {
-            if (window.confirm(this.options.deleteConfirmPrompt)) {
-                this._deleteItem(data.item);
-            }
+            var self = this;
+
+            confirm({
+                content: this.options.deleteConfirmPrompt,
+                actions: {
+                    confirm: function () {
+                        self._deleteItem(data.item);
+                    }
+                }
+            });
         },
 
         /**

@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
-use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SaveDownloadableOrderItemObserverTest extends \PHPUnit_Framework_TestCase
@@ -95,7 +95,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
-            '\Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory'
+            '\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory'
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()

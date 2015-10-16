@@ -6,6 +6,7 @@
 
 namespace Magento\Braintree\Test\Unit\Observer;
 
+use Magento\Braintree\Block\PayPal\Shortcut;
 use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -53,7 +54,13 @@ class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAddPaypalShortcuts()
+    /**
+     * @param bool $isCatalogProduct
+     * @param bool $isInMiniCart
+     *
+     * @dataProvider dataProviderTestAddPaypalShortcuts
+     */
+    public function testAddPaypalShortcuts($isCatalogProduct, $isInMiniCart)
     {
         $orPosition = 'before';
 
@@ -63,7 +70,7 @@ class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
 
         $event = new \Magento\Framework\DataObject(
             [
-                'is_catalog_product' => false,
+                'is_catalog_product' => $isCatalogProduct,
                 'container' => $containerMock,
                 'or_position' => $orPosition,
             ]
@@ -100,7 +107,7 @@ class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
                 '',
                 [
                     'data' => [
-                        'container' => $containerMock,
+                        Shortcut::MINI_CART_FLAG_KEY => $isInMiniCart,
                     ]
                 ]
             )->willReturn($shortcutMock);
@@ -114,6 +121,17 @@ class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
             ->with($shortcutMock);
 
         $this->addPaypalShortcutsObserver->execute($observer);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestAddPaypalShortcuts()
+    {
+        return [
+            ['isCatalogProduct' => true, 'isInMiniCart' => false],
+            ['isCatalogProduct' => false, 'isInMiniCart' => true],
+        ];
     }
 
     public function testAddPaypalShortcutsNotActive()
@@ -160,40 +178,6 @@ class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
         $this->paypalConfigMock->expects($this->once())
             ->method('isShortcutCheckoutEnabled')
             ->willReturn(false);
-
-        $containerMock->expects($this->never())
-            ->method('getLayout');
-
-        $this->addPaypalShortcutsObserver->execute($observer);
-    }
-
-    public function testAddPaypalShortcutsSkipProductView()
-    {
-        $orPosition = 'before';
-
-        $containerMock = $this->getMockBuilder('\Magento\Catalog\Block\ShortcutButtons')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $event = new \Magento\Framework\DataObject(
-            [
-                'is_catalog_product' => true,
-                'container' => $containerMock,
-                'or_position' => $orPosition,
-            ]
-        );
-        $observer = new \Magento\Framework\Event\Observer(
-            [
-                'event' => $event,
-            ]
-        );
-
-        $this->paypalMethodMock->expects($this->once())
-            ->method('isActive')
-            ->willReturn(true);
-        $this->paypalConfigMock->expects($this->once())
-            ->method('isShortcutCheckoutEnabled')
-            ->willReturn(true);
 
         $containerMock->expects($this->never())
             ->method('getLayout');

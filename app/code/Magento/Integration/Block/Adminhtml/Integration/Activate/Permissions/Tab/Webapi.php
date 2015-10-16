@@ -22,7 +22,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Framework\Acl\RootResource */
     protected $_rootResource;
 
-    /** @var \Magento\Framework\Acl\Resource\ProviderInterface */
+    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
     protected $_resourceProvider;
 
     /** @var \Magento\Integration\Helper\Data */
@@ -41,7 +41,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
+     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Json\Encoder $encoder
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
@@ -52,7 +52,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
+        \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Json\Encoder $encoder,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,

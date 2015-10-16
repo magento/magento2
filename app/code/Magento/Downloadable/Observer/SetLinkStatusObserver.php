@@ -18,17 +18,17 @@ class SetLinkStatusObserver implements ObserverInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_itemsFactory = $itemsFactory;
@@ -146,7 +146,7 @@ class SetLinkStatusObserver implements ObserverInterface
     }
 
     /**
-     * @return \Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection
+     * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()
     {

@@ -11,8 +11,8 @@ use Magento\Widget\Test\Fixture\Widget;
 /**
  * Steps:
  * 1. Login to the backend.
- * 2. Open Content > Frontend Apps.
- * 3. Click Add Frontend App.
+ * 2. Open Content > Widgets.
+ * 3. Click Add Widget.
  * 4. Fill settings data according dataset.
  * 5. Click button Continue.
  * 6. Fill widget data according dataset.
@@ -29,7 +29,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     /* end tags */
 
     /**
-     * Create for New Frontend App.
+     * Create for New Widget.
      *
      * @param Widget $widget
      * @return void

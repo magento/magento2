@@ -17,7 +17,7 @@ class LabelGenerator
     /**
      * @var \Magento\Shipping\Model\CarrierFactory
      */
-    protected $_carrierFactory;
+    protected $carrierFactory;
 
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelsFactory
@@ -53,7 +53,7 @@ class LabelGenerator
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->_carrierFactory = $carrierFactory;
+        $this->carrierFactory = $carrierFactory;
         $this->labelFactory = $labelFactory;
         $this->scopeConfig = $scopeConfig;
         $this->trackFactory = $trackFactory;
@@ -69,7 +69,7 @@ class LabelGenerator
     public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
     {
         $order = $shipment->getOrder();
-        $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
+        $carrier = $this->carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if (!$carrier->isShippingLabelsAvailable()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Shipping labels is not available.'));
         }
@@ -99,12 +99,34 @@ class LabelGenerator
             $shipment->getStoreId()
         );
         if (!empty($trackingNumbers)) {
-            foreach ($trackingNumbers as $trackingNumber) {
-                $track = $this->trackFactory->create()
-                    ->setNumber($trackingNumber)
-                    ->setCarrierCode($carrierCode)
-                    ->setTitle($carrierTitle);
-                $shipment->addTrack($track);
+            $this->addTrackingNumbersToShipment($shipment, $trackingNumbers, $carrierCode, $carrierTitle);
+        }
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @param array $trackingNumbers
+     * @param string $carrierCode
+     * @param string $carrierTitle
+     *
+     * @return void
+     */
+    private function addTrackingNumbersToShipment(
+        \Magento\Sales\Model\Order\Shipment $shipment,
+        $trackingNumbers,
+        $carrierCode,
+        $carrierTitle
+    ) {
+        foreach ($trackingNumbers as $number) {
+            if (is_array($number)) {
+                $this->addTrackingNumbersToShipment($shipment, $number, $carrierCode, $carrierTitle);
+            } else {
+                $shipment->addTrack(
+                    $this->trackFactory->create()
+                        ->setNumber($number)
+                        ->setCarrierCode($carrierCode)
+                        ->setTitle($carrierTitle)
+                );
             }
         }
     }
@@ -147,7 +169,7 @@ class LabelGenerator
             DirectoryList::TMP
         );
         $directory->create();
-        $image = imagecreatefromstring($imageString);
+        $image = @imagecreatefromstring($imageString);
         if (!$image) {
             return false;
         }

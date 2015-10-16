@@ -9,12 +9,15 @@ define([
     'use strict';
 
     return Class.extend({
+
+
         initialize: function () {
             this._super()
                 .initObservable();
 
             return this;
         },
+
 
         initObservable: function () {
             this.errorMessages = ko.observableArray([]);
@@ -54,25 +57,31 @@ define([
             return true;
         },
 
+
         addSuccessMessage: function (message) {
-            return this.add(message, this.successMessages)
+            return this.add(message, this.successMessages);
         },
 
+
         addErrorMessage: function (message) {
-            return this.add(message, this.errorMessages)
+            return this.add(message, this.errorMessages);
         },
+
 
         getErrorMessages: function () {
             return this.errorMessages;
         },
 
+
         getSuccessMessages: function () {
             return this.successMessages;
         },
 
-        hasMessages: function() {
-            return (this.errorMessages().length > 0) || (this.successMessages().length > 0);
+
+        hasMessages: function () {
+            return this.errorMessages().length > 0 || this.successMessages().length > 0;
         },
+
 
         clear: function () {
             this.errorMessages.removeAll();

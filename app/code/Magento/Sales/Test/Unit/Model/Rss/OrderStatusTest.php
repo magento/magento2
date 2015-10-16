@@ -89,7 +89,8 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->urlInterface = $this->getMock('Magento\Framework\UrlInterface');
         $this->requestInterface = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->orderStatusFactory = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory')
+        $this->orderStatusFactory =
+            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -137,7 +138,7 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         $this->requestInterface->expects($this->any())->method('getParam')
             ->with('data')
             ->will($this->returnValue('eyJvcmRlcl9pZCI6MSwiaW5jcmVtZW50X2lkIjoiMTAwMDAwMDAxIiwiY3VzdG9tZXJfaWQiOjF9'));
-        $resource = $this->getMockBuilder('\Magento\Sales\Model\Resource\Order\Rss\OrderStatus')
+        $resource = $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatus')
             ->setMethods(['getAllCommentCollection'])
             ->disableOriginalConstructor()
             ->getMock();

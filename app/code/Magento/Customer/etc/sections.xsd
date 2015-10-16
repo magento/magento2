@@ -31,5 +31,15 @@
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
+
+        <xs:unique name="uniqueType">
+            <xs:annotation>
+                <xs:documentation>
+                    Action name should be unique in scope of file
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="action" />
+            <xs:field xpath="@name" />
+        </xs:unique>
     </xs:element>
 </xs:schema>

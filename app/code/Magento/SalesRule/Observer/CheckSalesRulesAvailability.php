@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Observer;
 class CheckSalesRulesAvailability
 {
     /**
-     * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -18,11 +18,11 @@ class CheckSalesRulesAvailability
     protected $messageManager;
 
     /**
-     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
+        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -38,7 +38,7 @@ class CheckSalesRulesAvailability
      */
     public function checkSalesRulesAvailability($attributeCode)
     {
-        /* @var $collection \Magento\SalesRule\Model\Resource\Rule\Collection */
+        /* @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
         $collection = $this->_collectionFactory->create()->addAttributeInConditionFilter($attributeCode);
 
         $disabledRulesCount = 0;

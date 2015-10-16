@@ -7,8 +7,8 @@ namespace Magento\Customer\Console\Command;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Customer\Model\Resource\Customer\Collection;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

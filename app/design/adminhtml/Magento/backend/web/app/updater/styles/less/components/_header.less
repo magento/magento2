@@ -29,6 +29,9 @@
         left: @page-header__indent-horizontal;
         position: absolute;
         right: @page-header__indent-horizontal;
+        .container & {
+            content: normal;
+        }
     }
     .message {
         margin-bottom: 1.8rem;
@@ -40,8 +43,16 @@
     .admin__action-dropdown {
         transition: none;
     }
+    .container & {
+        margin-bottom: 0;
+    }
 }
 
 .page-title-wrapper {
     margin-top: 1.1rem;
+    .container & {
+        background: url('@{path-to-pub}images/logo.svg') no-repeat 0 0;
+        min-height: 41px;
+        padding: 4px 0 0 45px;
+    }
 }

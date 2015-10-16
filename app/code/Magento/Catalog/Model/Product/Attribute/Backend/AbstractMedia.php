@@ -24,7 +24,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     /**
      * Resource model
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     protected $resourceModel;
 
@@ -62,29 +62,29 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     /**
      * Product factory
      *
-     * @var \Magento\Catalog\Model\Resource\ProductFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ProductFactory
      */
     protected $productFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceProductAttribute
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
+        \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceProductAttribute
     ) {
         $this->productFactory = $productFactory;
         $this->eventManager = $eventManager;
@@ -354,7 +354,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     /**
      * Retrieve resource model
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     protected function getResource()
     {
