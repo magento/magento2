@@ -68,49 +68,4 @@ class MatrixTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             $variations
         );
     }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     */
-    public function testAttributesMergingByGetAttributesMethod()
-    {
-        $this->_objectManager->get(
-            'Magento\Framework\Registry'
-        )->register(
-            'current_product',
-            $this->_objectManager->create('Magento\Catalog\Model\Product')->load(1)
-        );
-        $this->_objectManager->get('Magento\Framework\View\LayoutInterface')
-            ->createBlock('Magento\Framework\View\Element\Text', 'head');
-        /** @var \Magento\Catalog\Model\Entity\Attribute $usedAttribute */
-        $usedAttribute = $this->_objectManager->get(
-            'Magento\Catalog\Model\Entity\Attribute'
-        )->loadByCode(
-            $this->_objectManager->get('Magento\Eav\Model\Config')
-                ->getEntityType('catalog_product')->getId(),
-            'test_configurable'
-        );
-        /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
-        $block = $this->_objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
-        )->createBlock(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config'
-        );
-        $productData = [
-            $usedAttribute->getId() => [
-                'label'    => static::ATTRIBUTE_LABEL,
-                'position' => static::ATTRIBUTE_POSITION,
-            ],
-        ];
-        $this->getRequest()->setParam('product', ['configurable_attributes_data' => $productData]);
-        $attributes = $block->getAttributes();
-        $this->assertArrayHasKey($usedAttribute->getId(), $attributes);
-
-        $this->assertArrayHasKey('label', $attributes[$usedAttribute->getId()]);
-        $this->assertEquals('Test Configurable', $attributes[$usedAttribute->getId()]['label']);
-
-        $this->assertArrayHasKey('position', $attributes[$usedAttribute->getId()]);
-        $this->assertEquals(0, $attributes[$usedAttribute->getId()]['position']);
-    }
 }

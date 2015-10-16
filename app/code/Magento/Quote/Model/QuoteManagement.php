@@ -369,7 +369,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quoteItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
             $quoteItems[$quoteItem->getId()] = $quoteItem;
         }
         $orderItems = [];
@@ -445,6 +445,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
+        
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
             [
@@ -467,8 +468,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $this->eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
                 [
-                    'order' => $order,
-                    'quote' => $quote
+                    'order'     => $order,
+                    'quote'     => $quote,
+                    'exception' => $e
                 ]
             );
             throw $e;

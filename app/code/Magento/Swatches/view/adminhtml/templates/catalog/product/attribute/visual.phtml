@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual */
 ?>
-<fieldset class="fieldset">
+<fieldset class="fieldset ignore-validate">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Swatch (values of your attribute)') ?></span></legend>
     <div id="swatch-visual-options-panel">
         <?php //@todo move style to css file ?>
@@ -61,7 +61,7 @@
 
                 <div id="swatch_container_option_<%- data.id %>" class="swatch_submenu_container" style="display: none;">
                     <div class="swatch_row" style="border:1px solid black; position: relative;">
-                        <div id="colorpicker_<%- data.id %>" class="swatch_row_name">
+                        <div class="swatch_row_name colorpicker_handler">
                             <p>Choose a color</p>
                         </div>
                     </div>
@@ -154,161 +154,21 @@
             form.up().up().hide();
         }
     </script>
-    <script>
-        require([
-            'jquery',
-            'mage/template',
-            'jquery/ui',
-            'prototype'
-        ], function(jQuery, mageTemplate){
-
-            var swatchOptionVisualDefaultInputType = 'radio';
-
-            jQuery('body').click(function (event)
-            {
-                element = jQuery(event.target);
-                jQuery.each(jQuery('.swatch_submenu_container'), function(key, elem){
-                    if (element.parents('.swatch_submenu_container').length == 1) {
-                        return false;
-                    }
-                    if (elem.id != element.next().attr('id')) {
-                        elem.hide();
-                    }
-                });
-                if (
-                    element.parents('.swatch_submenu_container').length == 1
-                    || (element.attr('id') && element.attr('id').indexOf('swatch_window_option') >= 0)
-                ) {
-                    return;
-                } else {
-                    jQuery('.swatch_submenu_container').hide();
-                }
-            });
-
-            var swatchVisualOption = {
-                table: $('swatch-visual-options-table'),
-                itemCount: 0,
-                totalItems: 0,
-                isReadOnly: <?php echo (int)$block->getReadOnly(); ?>,
-                add: function(data) {
-                    this.template = mageTemplate('#swatch-visual-row-template');
-
-                    var isNewOption = false;
-                    if (typeof data.id == 'undefined') {
-                        data = {
-                            'id': 'option_' + this.itemCount,
-                            'sort_order': this.itemCount + 1,
-                            'empty_class': "unavailable"
-                        };
-                        isNewOption = true;
-                    } else {
-                        if(data.defaultswatch0 == '') {
-                            data['empty_class'] = "unavailable";
-                        }
-                    }
-                    if (!data.intype) {
-                        data.intype = swatchOptionVisualDefaultInputType;
-                    }
-
-                    Element.insert($$('[data-role=swatch-visual-options-container]')[0], this.template({data: data}));
-                    visibleRadio = $$('#swatch-visual-options-panel [name="defaultvisual[]"]').findAll(function(el) { return el.up().up().visible(); });
-                    if (visibleRadio.length == 1 && isNewOption == true) {
-                        visibleRadio[0].checked = true;
-                    }
-                    if (isNewOption && !this.isReadOnly) {
-                        this.enableNewOptionDeleteButton(data.id);
-                    }
-                    this.bindRemoveButtons();
-                    this.itemCount++;
-                    this.totalItems++;
-                    this.updateItemsCountField();
-                    jQuery('#colorpicker_'+data.id).ColorPicker({
-                        onShow: function(picker) {
-                            var menu = jQuery('#swatch_container_option_'+data.id);
-                            menu.hide();
-                        },
-                        onSubmit: function(hsb, hex, rgb, el) {
-                            jQuery(el).ColorPickerHide();
-                            var container = jQuery(el).parent().parent().prev();
-                            container.parent().removeClass("unavailable");
-                            container.prev('input').val('#'+hex);
-                            container.css('background', '#'+hex);
-                        }
-                    });
-                },
-                remove: function(event) {
-                    var element = $(Event.findElement(event, 'tr')); // !!! Button already have table parent in safari
-                    // Safari workaround
-                    element.ancestors().each(function(parentItem) {
-                        if (parentItem.hasClassName('option-row')) {
-                            element = parentItem;
-                            throw $break;
-                        } else if (parentItem.hasClassName('box')) {
-                            throw $break;
-                        }
-                    });
-
-                    if (element) {
-                        var elementFlags = element.getElementsByClassName('delete-flag');
-                        if (elementFlags[0]) {
-                            elementFlags[0].value = 1;
-                        }
-
-                        element.addClassName('no-display');
-                        element.addClassName('template');
-                        element.hide();
-                        this.totalItems--;
-                        this.updateItemsCountField();
-                    }
-                },
-                updateItemsCountField: function() {
-                    $('swatch-visual-option-count-check').value = this.totalItems > 0 ? '1' : '';
-                },
-                enableNewOptionDeleteButton: function(id) {
-                    $$('#delete_button_swatch_container_' + id + ' button').each(function(button) {
-                        button.enable();
-                        button.removeClassName('disabled');
-                    });
-                },
-                bindRemoveButtons: function() {
-                    var buttons = $$('.delete-option');
-                    for (var i = 0; i < buttons.length; i++) {
-                        if (!$(buttons[i]).binded) {
-                            $(buttons[i]).binded = true;
-                            Event.observe(buttons[i], 'click', this.remove.bind(this));
-                        }
+    <?php
+    $values = [];
+    foreach($block->getOptionValues() as $value) {
+        array_push($values, $value->getData());
+    }
+    ?>
+    <script type="text/x-magento-init">
+        {
+                "*": {
+                    "Magento_Swatches/js/visual": {
+                        "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values); ?>,
+                        "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
+                        "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
                     }
                 }
-            };
-
-            swatchVisualOption.bindRemoveButtons();
-
-            if ($('add_new_swatch_visual_option_button')) {
-                Event.observe('add_new_swatch_visual_option_button', 'click', swatchVisualOption.add.bind(swatchVisualOption));
             }
-            <?php foreach ($block->getOptionValues() as $_value): ?>
-            swatchVisualOption.add(<?php /* @escapeNotVerified */ echo $_value->toJson() ?>);
-            <?php endforeach; ?>
-            <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
-            jQuery(function($) {
-                $('[data-role=swatch-visual-options-container]').sortable({
-                    distance: 8,
-                    tolerance: "pointer",
-                    cancel: 'input, button',
-                    axis: 'y',
-                    update: function() {
-                        $('[data-role=swatch-visual-options-container] [data-role=order]').each(function(index, element) {
-                            $(element).val(index + 1);
-                        });
-                    }
-                });
-            });
-            <?php endif; ?>
-
-            window.swatchVisualOption = swatchVisualOption;
-            window.swatchOptionVisualDefaultInputType = swatchOptionVisualDefaultInputType;
-            //]]>
-
-        });
     </script>
 </fieldset>

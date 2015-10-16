@@ -282,3 +282,7 @@
 "Invalid request format","Invalid request format"
 "Cannot update subscription to a plan with a different billing frequency.","Cannot update subscription to a plan with a different billing frequency."
 "Mismatch currency iso code","Mismatch currency iso code"
+"Enable this Solution","Enable this Solution"
+"Enable PayPal through Braintree","Enable PayPal through Braintree"
+"3D Secure Verification Settings","3D Secure Verification Settings"
+"3D Secure Verification","3D Secure Verification"

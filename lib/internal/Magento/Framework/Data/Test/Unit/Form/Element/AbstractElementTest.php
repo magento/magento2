@@ -206,7 +206,8 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'placeholder',
             'data-form-part',
             'data-role',
-            'data-action'
+            'data-action',
+            'checked',
         ];
         $this->assertEquals($htmlAttributes, $this->_model->getHtmlAttributes());
     }

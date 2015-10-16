@@ -72,7 +72,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -86,7 +86,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

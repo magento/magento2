@@ -19,7 +19,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                 ->getCollection()
                 ->addIdFilter($orderItemIds)
                 ->load();
-            /* @var $itemsCollection \Magento\Sales\Model\Resource\Order\Item\Collection */
+            /* @var $itemsCollection \Magento\Sales\Model\ResourceModel\Order\Item\Collection */
             foreach ($itemsCollection as $item) {
                 try {
                     $this->cart->addOrderItem($item, 1);

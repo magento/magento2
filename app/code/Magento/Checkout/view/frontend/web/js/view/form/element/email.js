@@ -13,8 +13,9 @@ define([
     'Magento_Customer/js/action/login',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/checkout-data',
+    'Magento_Checkout/js/model/full-screen-loader',
     'mage/validation'
-], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData) {
+], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
     var validatedEmail = checkoutData.getValidatedEmailValue();
@@ -147,7 +148,10 @@ define([
             });
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
-                loginAction(loginData);
+                fullScreenLoader.startLoader();
+                loginAction(loginData).always(function() {
+                    fullScreenLoader.stopLoader();
+                });
             }
         }
     });

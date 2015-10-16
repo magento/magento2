@@ -19,23 +19,15 @@
         "ext-gd": "*",
         "ext-openssl": "*",
         "lib-libxml": "*",
-        "ext-xsl": "*",
-        "magento/magento-composer-installer": "*"
+        "ext-xsl": "*"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
     },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Framework"
-            ]
-        ]
-    },
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": ""
-        }
+        },
+        "files": [ "registration.php" ]
     }
 }

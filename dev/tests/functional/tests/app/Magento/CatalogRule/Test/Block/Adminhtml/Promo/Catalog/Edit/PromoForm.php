@@ -9,16 +9,30 @@ namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class PromoForm
- * Form for creation of a Catalog Price Rule
+ * Form for creation of a Catalog Price Rule.
  */
 class PromoForm extends FormTabs
 {
     /**
-     * Fill form with tabs
+     * Add button.
+     *
+     * @var string
+     */
+    protected $addButton = '.rule-param-new-child a';
+
+    /**
+     * Locator for Customer Segment Conditions.
+     *
+     * @var string
+     */
+    protected $conditionFormat = '//*[@id="conditions__1__new_child"]//option[contains(.,"%s")]';
+
+    /**
+     * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement $element
@@ -35,7 +49,7 @@ class PromoForm extends FormTabs
     }
 
     /**
-     * Replace placeholders in each values of data
+     * Replace placeholders in each values of data.
      *
      * @param array $tabs
      * @param array $replace
@@ -56,5 +70,20 @@ class PromoForm extends FormTabs
         }
 
         return $tabs;
+    }
+
+    /**
+     * Check if attribute is available in conditions.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function isAttributeInConditions($name)
+    {
+        $this->_rootElement->find($this->addButton)->click();
+        return $this->_rootElement->find(
+            sprintf($this->conditionFormat, $name),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
     }
 }

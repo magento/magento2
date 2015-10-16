@@ -88,11 +88,11 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
-     * Column header locator
+     * Column header locator.
      *
      * @var string
      */
-    protected $columnHeader = "//th/span[.='%s']";
+    protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
 
     /**
      * @var string
@@ -120,6 +120,13 @@ class DataGrid extends Grid
      * @var string
      */
     protected $noRecords = '[class$=no-data]';
+
+    /**
+     * Selector for alert.
+     *
+     * @var string
+     */
+    protected $alertModal = '._show[data-role=modal]';
 
     /**
      * Clear all applied Filters.
@@ -250,7 +257,10 @@ class DataGrid extends Grid
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if ($acceptAlert) {
-            $this->browser->find($this->actionButton)->click();
+            $element = $this->browser->find($this->alertModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
     }
 

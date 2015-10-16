@@ -5,15 +5,15 @@
 /*jshint browser:true*/
 /*global alert*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/translate'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.payment', {
@@ -79,13 +79,17 @@ define([
                 isValid = false;
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
+                alert({
+                    content: $.mage.__('We can\'t complete your order because you don\'t have a payment method set up.')
+                });
             } else if (this.options.checkoutPrice < this.options.minBalance) {
                 isValid = true;
             } else if (methods.filter('input:radio:checked').length) {
                 isValid = true;
             } else {
-                alert($.mage.__('Please choose a payment method.'));
+                alert({
+                    content: $.mage.__('Please choose a payment method.')
+                });
             }
 
             return isValid;

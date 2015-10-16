@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="aggregate_sales_report_shipment_data" instance="Magento\Shipping\Model\Observer" method="aggregateSalesReportShipmentData">
             <schedule>0 0 * * *</schedule>

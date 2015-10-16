@@ -8,8 +8,7 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-user": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
-        "magento/module-authorization": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-authorization": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -17,12 +16,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Integration"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Integration\\": ""
+        }
     }
 }

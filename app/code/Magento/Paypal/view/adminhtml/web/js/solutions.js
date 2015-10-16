@@ -4,7 +4,7 @@
  */
 define([
     "jquery",
-    "Magento_Ui/js/lib/class",
+    "uiClass",
     "Magento_Paypal/js/solution",
     "underscore"
 ], function ($, Class, Solution, _) {

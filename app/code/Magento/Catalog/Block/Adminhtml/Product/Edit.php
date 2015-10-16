@@ -8,6 +8,7 @@
  * Customer edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
@@ -310,7 +311,8 @@ class Edit extends \Magento\Backend\Block\Widget
         return $this->jsonEncoder->encode(
             [
                 'tab_id' => 'product_info_tabs_downloadable_items',
-                'is_virtual_id' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::VIRTUAL_FIELD_HTML_ID,
+                'weight_switcher' => '[data-role=weight-switcher]',
+                'product_has_weight_flag' => \Magento\Catalog\Model\Product\Edit\WeightResolver::HAS_WEIGHT,
                 'weight_id' => 'weight',
                 'current_type' => $this->getProduct()->getTypeId(),
                 'attributes' => $this->_getAttributes(),

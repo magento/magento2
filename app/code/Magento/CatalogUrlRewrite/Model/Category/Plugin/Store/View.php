@@ -53,14 +53,14 @@ class View
     }
 
     /**
-     * @param \Magento\Store\Model\Resource\Store $object
+     * @param \Magento\Store\Model\ResourceModel\Store $object
      * @param callable $proceed
      * @param AbstractModel $store
-     * @return \Magento\Store\Model\Resource\Store
+     * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Store\Model\Resource\Store $object,
+        \Magento\Store\Model\ResourceModel\Store $object,
         \Closure $proceed,
         AbstractModel $store
     ) {
@@ -134,14 +134,14 @@ class View
     }
 
     /**
-     * @param \Magento\Store\Model\Resource\Store $object
+     * @param \Magento\Store\Model\ResourceModel\Store $object
      * @param callable $proceed
      * @param AbstractModel $store
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Store\Model\Resource\Store $object,
+        \Magento\Store\Model\ResourceModel\Store $object,
         \Closure $proceed,
         AbstractModel $store
     ) {

@@ -50,7 +50,6 @@ class BasePrice extends \Magento\Catalog\Pricing\Price\BasePrice
         if (null === $this->minimumAdditionalPrice) {
             $priceCodes = [
                 \Magento\Catalog\Pricing\Price\SpecialPrice::PRICE_CODE,
-                \Magento\Catalog\Pricing\Price\GroupPrice::PRICE_CODE,
                 \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE,
             ];
             $this->minimumAdditionalPrice = false;
