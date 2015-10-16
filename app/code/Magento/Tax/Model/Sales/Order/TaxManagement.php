@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Tax\Item;
 class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Tax\ItemFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory
      */
     protected $orderItemTaxFactory;
 
@@ -42,14 +42,14 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 
     /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Tax\ItemFactory $orderItemTaxFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\Order\Tax\ItemFactory $orderItemTaxFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory,
         \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory,
         \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory,
         TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory

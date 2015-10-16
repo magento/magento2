@@ -104,7 +104,6 @@ class Design implements \Magento\Framework\View\DesignInterface
      *
      * @param string $area
      * @return $this
-     * @deprecated
      */
     public function setArea($area)
     {

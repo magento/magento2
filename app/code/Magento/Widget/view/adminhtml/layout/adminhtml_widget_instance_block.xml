@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.widget.instance.grid.container">
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.widget.instance.grid" as="grid">
@@ -13,7 +13,7 @@
                     <argument name="id" xsi:type="string">widgetInstanceGrid</argument>
                     <argument name="default_sort" xsi:type="string">instance_id</argument>
                     <argument name="default_dir" xsi:type="string">ASC</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Widget\Model\Resource\Widget\Instance\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Widget\Model\ResourceModel\Widget\Instance\Collection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.widget.instance.grid.columnSet" as="grid.columnSet">
                     <arguments>
@@ -27,7 +27,7 @@
                     </arguments>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="instance_id">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Frontend App ID</argument>
+                            <argument name="header" xsi:type="string" translate="true">Widget ID</argument>
                             <argument name="index" xsi:type="string">instance_id</argument>
                             <argument name="column_css_class" xsi:type="string">col-id</argument>
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
@@ -35,7 +35,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Frontend App</argument>
+                            <argument name="header" xsi:type="string" translate="true">Widget</argument>
                             <argument name="index" xsi:type="string">title</argument>
                         </arguments>
                     </block>
@@ -44,7 +44,7 @@
                             <argument name="header" xsi:type="string" translate="true">Type</argument>
                             <argument name="index" xsi:type="string">instance_type</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\Resource\Widget\Instance\Options\Types"/>
+                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Types"/>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_id">
@@ -52,7 +52,7 @@
                             <argument name="header" xsi:type="string" translate="true">Design Theme</argument>
                             <argument name="index" xsi:type="string">theme_id</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\Resource\Widget\Instance\Options\ThemeId"/>
+                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\ResourceModel\Widget\Instance\Options\ThemeId"/>
                             <argument name="with_empty" xsi:type="string">1</argument>
                         </arguments>
                     </block>

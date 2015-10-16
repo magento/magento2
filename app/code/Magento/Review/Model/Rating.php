@@ -8,8 +8,8 @@ namespace Magento\Review\Model;
 /**
  * Rating model
  *
- * @method Resource\Rating getResource()
- * @method Resource\Rating _getResource()
+ * @method \Magento\Review\Model\ResourceModel\Rating getResource()
+ * @method \Magento\Review\Model\ResourceModel\Rating _getResource()
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()
@@ -35,7 +35,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     protected $_ratingOptionFactory;
 
     /**
-     * @var \Magento\Review\Model\Resource\Rating\Option\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
      */
     protected $_ratingCollectionF;
 
@@ -43,8 +43,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory
-     * @param \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -52,8 +52,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
-        \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -69,7 +69,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Rating');
+        $this->_init('Magento\Review\Model\ResourceModel\Rating');
     }
 
     /**

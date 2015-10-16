@@ -51,14 +51,22 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
 
         $productInstance=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
 
-        $product=$this->getMock('\Magento\Bundle\Model\Product\Type', ['getTypeInstance', 'getTypeId'], [], '', false);
+        $product=$this->getMock(
+            '\Magento\Bundle\Model\Product\Type',
+            ['getTypeInstance', 'getTypeId', 'getStoreId'],
+            [],
+            '',
+            false
+        );
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->will($this->returnValue($productInstance));
-
         $product->expects($this->any())
             ->method('getTypeId')
             ->will($this->returnValue('simple'));
+        $product->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(null));
 
         $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
         $registry->expects($this->any())
@@ -69,8 +77,8 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')
             ->will($this->returnValue([
-                1=> ['fpt1' => $weeeObject1],
-                2 =>[
+                1 => ['fpt1' => $weeeObject1],
+                2 => [
                     'fpt1'=>$weeeObject1,
                     'fpt2'=> $weeeObject2
                 ]

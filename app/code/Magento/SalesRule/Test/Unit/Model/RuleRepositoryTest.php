@@ -68,7 +68,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $className = '\Magento\SalesRule\Api\Data\RuleSearchResultInterface';
         $this->searchResultsMock = $this->getMock($className, [], [], '', false);
 
-        $className = '\Magento\SalesRule\Model\Resource\Rule\CollectionFactory';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory';
         $this->collectionFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor';
@@ -139,7 +139,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $collectionMock = $this->getMock('Magento\SalesRule\Model\Resource\Rule\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('Magento\SalesRule\Model\ResourceModel\Rule\Collection', [], [], '', false);
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);

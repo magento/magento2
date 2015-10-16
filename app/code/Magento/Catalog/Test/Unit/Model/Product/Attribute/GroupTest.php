@@ -33,13 +33,15 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     private function getMockedCollectionFactory()
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory');
+        $mockBuilder = $this->getMockBuilder(
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
+        );
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -52,11 +54,11 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Attribute\Collection');
+        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection');
         $mock = $mockBuilder->disableOriginalConstructor()
             ->getMock();
 

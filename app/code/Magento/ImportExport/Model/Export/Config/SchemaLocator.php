@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Export\Config;
 
+use Magento\Framework\Module\Dir;
+
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
@@ -26,7 +28,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $etcDir = $moduleReader->getModuleDir('etc', 'Magento_ImportExport');
+        $etcDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_ImportExport');
         $this->_schema = $etcDir . '/export_merged.xsd';
         $this->_perFileSchema = $etcDir . '/export.xsd';
     }

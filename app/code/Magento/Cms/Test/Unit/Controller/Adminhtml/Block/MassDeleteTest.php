@@ -15,12 +15,12 @@ class MassDeleteTest extends AbstractMassActionTest
     protected $massDeleteController;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $blockCollectionMock;
 
@@ -29,14 +29,15 @@ class MassDeleteTest extends AbstractMassActionTest
         parent::setUp();
 
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Block\CollectionFactory',
+            'Magento\Cms\Model\ResourceModel\Block\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
 
-        $this->blockCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Block\Collection', [], [], '', false);
+        $this->blockCollectionMock =
+            $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', [], [], '', false);
 
         $this->massDeleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Block\MassDelete',
@@ -85,11 +86,11 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Block Collection Mock
      *
-     * @return \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getBlockMock()
     {
-        $blockMock = $this->getMock('Magento\Cms\Model\Resource\Block\Collection', ['delete'], [], '', false);
+        $blockMock = $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', ['delete'], [], '', false);
         $blockMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $blockMock;

@@ -63,6 +63,7 @@
                                 <div class="actions-primary">
                                     <?php if ($_item->isSaleable()): ?>
                                         <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($_item); ?>" method="post">
+                                            <?php echo $block->getBlockHtml('formkey')?>
                                             <button type="submit" class="action tocart primary">
                                                 <span><?php /* @escapeNotVerified */ echo __('Add to Cart'); ?></span>
                                             </button>

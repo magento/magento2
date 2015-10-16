@@ -7,16 +7,10 @@
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-language",
-    "extra": {
-        "map": [
-            [
-                "*",
-                "magento/pt_br"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

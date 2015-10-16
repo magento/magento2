@@ -22,7 +22,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Order shipments collection
      *
-     * @var array|\Magento\Sales\Model\Resource\Order\Shipment\Collection
+     * @var array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
      */
     protected $shipmentsCollection;
 
@@ -151,7 +151,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve order shipments collection
      *
-     * @return array|\Magento\Sales\Model\Resource\Order\Shipment\Collection
+     * @return array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
      */
     public function getShipmentsCollection()
     {

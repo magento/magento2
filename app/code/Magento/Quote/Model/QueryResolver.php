@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\App\Resource\ConfigInterface;
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
 
 class QueryResolver
 {

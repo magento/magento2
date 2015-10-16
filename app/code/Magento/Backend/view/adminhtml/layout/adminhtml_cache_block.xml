@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.cache.container">
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.cache.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">cache_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Backend\Model\Cache\Resource\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.cache.massaction" as="grid.massaction">

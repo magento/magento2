@@ -64,6 +64,12 @@ class RestTest extends \PHPUnit_Framework_TestCase
      */
     protected $swaggerGeneratorMock;
 
+    /** @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    private $storeManagerMock;
+
+    /** @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    private $storeMock;
+
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
@@ -73,8 +79,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
             ->setMethods(
                 [
-                    'isSecure', 'getRequestData', 'getParams', 'getParam',
-                    'getRequestedServices', 'getPathInfo', 'getHttpHost',
+                    'isSecure', 'getRequestData', 'getParams', 'getParam', 'getRequestedServices', 'getPathInfo',
+                    'getHttpHost', 'getMethod',
                 ]
             )->disableOriginalConstructor()->getMock();
         $this->_requestMock->expects($this->any())
@@ -114,6 +120,10 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $areaListMock = $this->getMock('\Magento\Framework\App\AreaList', [], [], '', false);
         $areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+        $this->storeMock = $this->getMock('\Magento\Store\Api\Data\StoreInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+
         /** Init SUT. */
         $this->_restController =
             $objectManager->getObject('Magento\Webapi\Controller\Rest',
@@ -130,7 +140,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'areaList' => $areaListMock,
                     'paramsOverrider' => $paramsOverriderMock,
                     'dataObjectProcessor' => $dataObjectProcessorMock,
-                    'swaggerGenerator' => $this->swaggerGeneratorMock
+                    'swaggerGenerator' => $this->swaggerGeneratorMock,
+                    'storeManager' => $this->storeManagerMock
                 ]
             );
         // Set default expectations used by all tests
@@ -145,6 +156,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
             ->will($this->returnValue('null'));
         $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
+
         parent::setUp();
     }
 
@@ -265,6 +277,22 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
+    }
+
+    public function testGetMethodAllStoresInvalid()
+    {
+        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
+        $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
+        $this->_requestMock->expects($this->once())->method('getMethod')->willReturn('get');
+
+        $this->_restController->dispatch($this->_requestMock);
+
+        $this->assertTrue($this->_responseMock->isException());
+        $this->assertSame(
+            "Cannot perform GET operation with store code 'all'",
+            $this->_responseMock->getException()[0]->getMessage()
+        );
     }
 }
 

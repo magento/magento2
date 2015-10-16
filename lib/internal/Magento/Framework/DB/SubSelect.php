@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
@@ -34,7 +34,7 @@ class SubSelect extends \Zend_Db_Expr
     protected $targetColumn;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -49,7 +49,7 @@ class SubSelect extends \Zend_Db_Expr
     protected $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param string $connectionName
      * @param string $table
      * @param string[] $columns
@@ -57,12 +57,12 @@ class SubSelect extends \Zend_Db_Expr
      * @param string $targetColumn
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         $table,
         array $columns,
         $originColumn,
         $targetColumn,
-        $connectionName = Resource::DEFAULT_CONNECTION
+        $connectionName = ResourceConnection::DEFAULT_CONNECTION
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;

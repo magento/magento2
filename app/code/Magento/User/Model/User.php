@@ -15,8 +15,8 @@ use Magento\User\Api\Data\UserInterface;
 /**
  * Admin user model
  *
- * @method \Magento\User\Model\Resource\User _getResource()
- * @method \Magento\User\Model\Resource\User getResource()
+ * @method \Magento\User\Model\ResourceModel\User _getResource()
+ * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -124,7 +124,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param UserValidationRules $validationRules
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -142,7 +142,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -165,7 +165,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\Resource\User');
+        $this->_init('Magento\User\Model\ResourceModel\User');
     }
 
     /**

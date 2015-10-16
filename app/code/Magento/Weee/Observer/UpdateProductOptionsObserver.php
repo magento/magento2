@@ -20,15 +20,25 @@ class UpdateProductOptionsObserver implements ObserverInterface
     protected $registry;
 
     /**
+     * Tax data
+     *
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxData;
+
+    /**
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Weee\Helper\Data $weeeData
+     * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
-        \Magento\Weee\Helper\Data $weeeData
+        \Magento\Weee\Helper\Data $weeeData,
+        \Magento\Tax\Helper\Data $taxData
     ) {
         $this->weeeData = $weeeData;
         $this->registry = $registry;
+        $this->taxData = $taxData;
     }
 
     /**
@@ -56,9 +66,10 @@ class UpdateProductOptionsObserver implements ObserverInterface
             // only do processing on bundle product
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 if (!array_key_exists('optionTemplate', $options)) {
+                    $calcPrice = $this->getWhichCalcPriceToUse($product->getStoreId());
                     $options['optionTemplate'] = '<%- data.label %>'
-                        . '<% if (data.finalPrice.value) { %>'
-                        . ' +<%- data.finalPrice.formatted %>'
+                        . '<% if (data.' . $calcPrice . '.value) { %>'
+                        . ' +<%- data.' . $calcPrice . '.formatted %>'
                         . '<% } %>';
                 }
 
@@ -68,7 +79,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                             $options['optionTemplate'] .= sprintf(
                                 ' <%% if (data.weeePrice' . $weeeAttribute->getCode() . ') { %%>'
                                 . '  (' . $weeeAttribute->getName()
-                                . ':<%%= data.weeePrice' . $weeeAttribute->getCode()
+                                . ': <%%- data.weeePrice' . $weeeAttribute->getCode()
                                 . '.formatted %%>)'
                                 . '<%% } %%>'
                             );
@@ -79,7 +90,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                 if ($this->weeeData->geDisplayExlDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
-                        . '<%%= data.weeePrice.formatted %%>'
+                        . '<%%- data.weeePrice.formatted %%>'
                         . '<%% } %%>'
                     );
                 }
@@ -88,5 +99,23 @@ class UpdateProductOptionsObserver implements ObserverInterface
         }
         $response->setAdditionalOptions($options);
         return $this;
+    }
+
+    /**
+     * Returns which product price to use as a basis for the Weee's final price
+     *
+     * @param  int|null $storeId
+     * @return string
+     */
+    protected function getWhichCalcPriceToUse($storeId = null)
+    {
+        $calcPrice = 'finalPrice';
+        if ($this->weeeData->geDisplayExcl($storeId) ||
+            $this->weeeData->geDisplayExlDescIncl($storeId) ||
+            ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
+        ) {
+            $calcPrice = 'basePrice';
+        }
+        return $calcPrice;
     }
 }

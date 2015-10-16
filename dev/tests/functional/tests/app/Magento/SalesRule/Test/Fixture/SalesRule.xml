@@ -10,7 +10,7 @@
              module="Magento_SalesRule"
              type="flat"
              entity_type="salesrule"
-             collection="Magento\SalesRule\Model\Resource\Rule\Collection"
+             collection="Magento\SalesRule\Model\ResourceModel\Rule\Collection"
              repository_class="Magento\SalesRule\Test\Repository\SalesRule"
              handler_interface="Magento\SalesRule\Test\Handler\SalesRule\SalesRuleInterface"
              class="Magento\SalesRule\Test\Fixture\SalesRule">
