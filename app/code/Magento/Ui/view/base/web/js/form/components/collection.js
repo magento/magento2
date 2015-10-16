@@ -7,8 +7,9 @@ define([
     'mageUtils',
     'uiRegistry',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, registry, Component, layout) {
+    'uiLayout',
+    'Magento_Ui/js/modal/confirm'
+], function (_, utils, registry, Component, layout, confirm) {
     'use strict';
 
     var childTemplate = {
@@ -67,6 +68,7 @@ define([
 
             return this;
         },
+
         /**
          * Creates new item of collection, based on incoming 'index'.
          * If not passed creates one with 'new_' prefix.
@@ -152,11 +154,16 @@ define([
          *      it requires function to invoke.
          */
         removeAddress: function (elem) {
-            var confirmed = confirm(this.removeMessage);
+            var self = this;
 
-            if (confirmed) {
-                this._removeAddress(elem);
-            }
+            confirm({
+                content: this.removeMessage,
+                actions: {
+                    confirm: function () {
+                        self._removeAddress(elem)
+                    }
+                }
+            });
         },
 
         /**

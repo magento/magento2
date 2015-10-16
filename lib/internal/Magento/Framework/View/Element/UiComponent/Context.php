@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
@@ -85,14 +86,20 @@ class Context implements ContextInterface
     protected $urlBuilder;
 
     /**
+     * @var Processor
+     */
+    protected $processor;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
      * @param ActionPoolFactory $actionPoolFactory
      * @param ContentTypeFactory $contentTypeFactory
      * @param UrlInterface $urlBuilder
+     * @param Processor $processor
      * @param DataProviderInterface|null $dataProvider
-     * @param string $namespace
+     * @param null $namespace
      */
     public function __construct(
         PageLayoutInterface $pageLayout,
@@ -101,6 +108,7 @@ class Context implements ContextInterface
         ActionPoolFactory $actionPoolFactory,
         ContentTypeFactory $contentTypeFactory,
         UrlInterface $urlBuilder,
+        Processor $processor,
         DataProviderInterface $dataProvider = null,
         $namespace = null
     ) {
@@ -112,7 +120,7 @@ class Context implements ContextInterface
         $this->actionPool = $actionPoolFactory->create(['context' => $this]);
         $this->contentTypeFactory = $contentTypeFactory;
         $this->urlBuilder = $urlBuilder;
-
+        $this->processor = $processor;
         $this->setAcceptType();
     }
 
@@ -361,5 +369,13 @@ class Context implements ContextInterface
             }
         }
         $data = $component->prepareDataSource($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProcessor()
+    {
+        return $this->processor;
     }
 }
