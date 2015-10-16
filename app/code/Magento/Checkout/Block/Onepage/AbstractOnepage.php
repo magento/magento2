@@ -7,8 +7,8 @@ namespace Magento\Checkout\Block\Onepage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
-use Magento\Directory\Model\Resource\Country\Collection;
-use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\Region\Collection as RegionCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 
@@ -54,12 +54,12 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionCollectionFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countryCollectionFactory;
 
@@ -94,8 +94,8 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
@@ -109,8 +109,8 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
@@ -188,7 +188,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return Collection
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryCollection()
@@ -201,7 +200,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return RegionCollection
-     * @deprecated
      * @removeCandidate
      */
     public function getRegionCollection()
@@ -216,7 +214,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return int
-     * @deprecated
      * @removeCandidate
      */
     public function customerHasAddresses()
@@ -231,7 +228,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getAddressesHtmlSelect($type)
@@ -285,7 +281,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryHtmlSelect($type)
@@ -315,7 +310,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @param string $type
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getRegionHtmlSelect($type)
@@ -341,7 +335,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return mixed
-     * @deprecated
      * @removeCandidate
      */
     public function getCountryOptions()
@@ -363,7 +356,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * Get checkout steps codes
      *
      * @return string[]
-     * @deprecated
      * @removeCandidate
      */
     protected function _getStepCodes()
@@ -375,7 +367,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * Retrieve is allow and show block
      *
      * @return bool
-     * @deprecated
      * @removeCandidate
      */
     public function isShow()
@@ -388,7 +379,6 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return string
-     * @deprecated
      * @removeCandidate
      */
     public function getShippingPriceHtml(\Magento\Quote\Model\Quote\Address\Rate $rate)

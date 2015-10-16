@@ -5,9 +5,9 @@
  */
 
 // refresh report statistics
-/** @var \Magento\Sales\Model\Resource\Report\Bestsellers $reportResource */
+/** @var \Magento\Sales\Model\ResourceModel\Report\Bestsellers $reportResource */
 $reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Resource\Report\Bestsellers'
+    'Magento\Sales\Model\ResourceModel\Report\Bestsellers'
 );
 $reportResource->beginTransaction();
 // prevent table truncation by incrementing the transaction nesting level counter

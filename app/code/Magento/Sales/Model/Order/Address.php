@@ -13,8 +13,8 @@ use Magento\Customer\Model\Address\AddressModelInterface;
 /**
  * Sales order address model
  *
- * @method \Magento\Sales\Model\Resource\Order\Address _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Address getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Address _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Address getResource()
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,7 +61,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -72,7 +72,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -98,7 +98,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Address');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Address');
     }
 
     /**

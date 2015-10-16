@@ -12,8 +12,7 @@
         "magento/module-media-storage": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
-        "ext-ctype": "*",
-        "magento/magento-composer-installer": "*"
+        "ext-ctype": "*"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -21,12 +20,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/CatalogImportExport"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\CatalogImportExport\\": ""
+        }
     }
 }

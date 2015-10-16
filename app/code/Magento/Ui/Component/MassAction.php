@@ -23,7 +23,13 @@ class MassAction extends AbstractComponent
             $config['actions'][] = $actionComponent->getConfiguration();
         };
 
-        $this->setData('config', array_replace_recursive($config, $this->getConfiguration()));
+        $origConfig = $this->getConfiguration();
+        if ($origConfig !== $config) {
+            $config = array_replace_recursive($config, $origConfig);
+        }
+
+        $this->setData('config', $config);
+        $this->components = [];
 
         parent::prepare();
     }

@@ -23,20 +23,20 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
      */
     protected $_reviewsColFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
+        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;

@@ -14,6 +14,9 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         parent::setUp();
 
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\DesignInterface'
         )->setDefaultDesignTheme()->getDesignTheme();

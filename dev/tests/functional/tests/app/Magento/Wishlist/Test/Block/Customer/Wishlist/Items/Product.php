@@ -161,7 +161,7 @@ class Product extends Form
      */
     public function hoverProductBlock()
     {
-        $this->_rootElement->find($this->price)->click();
+        $this->_rootElement->find($this->price)->hover();
     }
 
     /**
@@ -172,6 +172,7 @@ class Product extends Form
      */
     public function getWishlistData($qty = null)
     {
+        $this->hoverProductBlock();
         $mapping = $this->dataMapping();
         if (!is_numeric($qty)) {
             unset($mapping['qty']);

@@ -6,18 +6,16 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'uiComponent'
-], function (ko, _, utils, Component) {
+    'uiElement'
+], function (ko, _, utils, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
             value: 20,
             minSize: 1,
             maxSize: 999,
-            customVisible: false,
-            customValue: '',
             options: {
                 '20': {
                     value: 20,
@@ -40,10 +38,9 @@ define([
                     label: 200
                 }
             },
-            optionsArray: [],
-            links: {
-                options: '${ $.storageConfig.path }.options',
-                value: '${ $.storageConfig.path }.value'
+            statefull: {
+                options: true,
+                value: true
             },
             listens: {
                 value: 'onValueChange',
@@ -70,16 +67,18 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe([
-                    'optionsArray',
-                    'editing',
+                .track([
                     'value',
+                    'editing',
                     'customVisible',
                     'customValue'
-                ]);
+                ])
+                .track({
+                    optionsArray: []
+                });
 
             this._value = ko.pureComputed({
-                read: this.value,
+                read: ko.getObservable(this, 'value'),
 
                 /**
                  * Validates input field prior to updating 'value' property.
@@ -87,7 +86,7 @@ define([
                 write: function (value) {
                     value = this.normalize(value);
 
-                    this.value(value);
+                    this.value = value;
                     this._value.notifySubscribers(value);
                 },
 
@@ -104,7 +103,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         edit: function (value) {
-            this.editing(value);
+            this.editing = value;
 
             return this;
         },
@@ -115,7 +114,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         discardEditing: function () {
-            var value = this.editing();
+            var value = this.editing;
 
             if (value) {
                 this.updateSize(value, value);
@@ -142,7 +141,7 @@ define([
          * @returns {Number}
          */
         getFirst: function () {
-            return this.optionsArray()[0].value;
+            return this.optionsArray[0].value;
         },
 
         /**
@@ -162,7 +161,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         setSize: function (value) {
-            this.value(value);
+            this.value = value;
 
             return this;
         },
@@ -283,7 +282,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         showCustom: function () {
-            this.customVisible(true);
+            this.customVisible = true;
 
             return this;
         },
@@ -294,7 +293,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         hideCustom: function () {
-            this.customVisible(false);
+            this.customVisible = false;
 
             return this;
         },
@@ -305,7 +304,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         clearCustom: function () {
-            this.customValue('');
+            this.customValue = '';
 
             return this;
         },
@@ -316,7 +315,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         applyCustom: function () {
-            var value = this.customValue();
+            var value = this.customValue;
 
             value = this.normalize(value);
 
@@ -333,7 +332,7 @@ define([
          * @returns {Boolean}
          */
         isCustomVisible: function () {
-            return this.customVisible();
+            return this.customVisible;
         },
 
         /**
@@ -361,9 +360,7 @@ define([
         updateArray: function () {
             var array = _.values(this.options);
 
-            array = _.sortBy(array, 'value');
-
-            this.optionsArray(array);
+            this.optionsArray = _.sortBy(array, 'value');
 
             return this;
         },
@@ -375,7 +372,7 @@ define([
          * @returns {Boolean}
          */
         isEditing: function (value) {
-            return this.editing() === value;
+            return this.editing === value;
         },
 
         /**
@@ -385,7 +382,7 @@ define([
          * @returns {Boolean}
          */
         isSelected: function (value) {
-            return this.value() === value;
+            return this.value === value;
         },
 
         /**
@@ -400,8 +397,9 @@ define([
          * Listener of the 'options' object changes.
          */
         onSizesChange: function () {
-            this.editing(false)
-                .updateArray();
+            this.editing = false;
+
+            this.updateArray();
         }
     });
 });

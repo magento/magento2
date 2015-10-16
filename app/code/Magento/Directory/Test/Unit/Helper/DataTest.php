@@ -10,12 +10,12 @@ use Magento\Directory\Helper\Data;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_regionCollection;
 
@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $configCacheType = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
 
         $this->_countryCollection = $this->getMock(
-            'Magento\Directory\Model\Resource\Country\Collection',
+            'Magento\Directory\Model\ResourceModel\Country\Collection',
             [],
             [],
             '',
@@ -59,14 +59,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_regionCollection = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\Collection',
+            'Magento\Directory\Model\ResourceModel\Region\Collection',
             [],
             [],
             '',
             false
         );
         $regCollectionFactory = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\CollectionFactory',
+            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory',
             ['create'],
             [],
             '',

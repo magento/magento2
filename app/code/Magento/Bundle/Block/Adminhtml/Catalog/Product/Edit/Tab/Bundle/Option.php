@@ -215,7 +215,7 @@ class Option extends \Magento\Backend\Block\Widget
     public function getOptions()
     {
         if (!$this->_options) {
-            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionCollection */
+            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionCollection */
             $optionCollection = $this->getProduct()->getTypeInstance()->getOptionsCollection($this->getProduct());
 
             $selectionCollection = $this->getProduct()->getTypeInstance()->getSelectionsCollection(

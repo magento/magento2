@@ -13,8 +13,7 @@
         "magento/module-catalog-inventory": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
-        "lib-libxml": "*",
-        "magento/magento-composer-installer": "*"
+        "lib-libxml": "*"
     },
     "suggest": {
         "magento/module-checkout": "1.0.0-beta"
@@ -25,12 +24,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Dhl"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Dhl\\": ""
+        }
     }
 }

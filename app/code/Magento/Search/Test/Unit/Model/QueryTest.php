@@ -15,7 +15,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \Magento\Search\Model\Resource\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\Query|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -23,7 +23,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Search\Model\Resource\Query')
+        $this->resource = $this->getMockBuilder('Magento\Search\Model\ResourceModel\Query')
             ->disableOriginalConstructor()
             ->getMock();
 

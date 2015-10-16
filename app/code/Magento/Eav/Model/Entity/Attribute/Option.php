@@ -11,8 +11,8 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Emtity attribute option model
  *
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Option _getResource()
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Option getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option _getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option getResource()
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *
@@ -28,7 +28,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      */
     public function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute\Option');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option');
     }
 
     /**

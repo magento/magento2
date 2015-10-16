@@ -32,7 +32,6 @@ class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\Abst
     protected $_disabledAttrs = [
         'old_id',
         'tier_price',
-        'group_price',
         'category_ids',
     ];
 }

@@ -10,8 +10,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
-use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -308,9 +308,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         '_tier_price_qty',
         '_tier_price_price',
         '_related_sku',
-        '_group_price_website',
-        '_group_price_customer_group',
-        '_group_price_price',
         '_related_position',
         '_crosssell_sku',
         '_crosssell_position',
@@ -436,17 +433,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_importConfig;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory
      */
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setColFactory;
 
@@ -456,7 +453,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productTypeFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\LinkFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkFactory
      */
     protected $_linkFactory;
 
@@ -476,7 +473,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_mediaDirectory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      */
     protected $_stockResItemFac;
 
@@ -572,10 +569,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -586,13 +583,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
      * @param Product\OptionFactory $optionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param Product\Type\Factory $productTypeFactory
-     * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory
      * @param Proxy\ProductFactory $proxyProdFactory
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $stockResItemFac
      * @param DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
@@ -612,10 +609,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -624,15 +621,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
-        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
+        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,
         \Magento\CatalogImportExport\Model\Import\Product\OptionFactory $optionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\CatalogImportExport\Model\Import\Product\Type\Factory $productTypeFactory,
-        \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory,
         \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
@@ -744,7 +741,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function getMediaGalleryAttributeId()
     {
         if (!$this->_mediaGalleryAttributeId) {
-            /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
+            /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel */
             $resource = $this->_resourceFactory->create();
             $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }
@@ -1322,7 +1319,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProducts()
     {
-        /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
+        /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel */
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
@@ -1335,7 +1332,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->websitesCache = [];
             $this->categoriesCache = [];
             $tierPrices = [];
-            $groupPrices = [];
             $mediaGallery = [];
             $uploadedGalleryFiles = [];
             $previousType = null;
@@ -1420,18 +1416,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'value' => $rowData['_tier_price_price'],
                         'website_id' => self::VALUE_ALL == $rowData['_tier_price_website'] ||
                         $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_tier_price_website']),
-                    ];
-                }
-
-                // 4.2. Group prices phase
-                if (!empty($rowData['_group_price_website'])) {
-                    $groupPrices[$rowSku][] = [
-                        'all_groups' => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
-                        'customer_group_id' => $rowData['_group_price_customer_group'] ==
-                        self::VALUE_ALL ? 0 : $rowData['_group_price_customer_group'],
-                        'value' => $rowData['_group_price_price'],
-                        'website_id' => self::VALUE_ALL == $rowData['_group_price_website'] ||
-                        $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_group_price_website']),
                     ];
                 }
 
@@ -1624,8 +1608,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->categoriesCache
             )->_saveProductTierPrices(
                 $tierPrices
-            )->_saveProductGroupPrices(
-                $groupPrices
             )->_saveMediaGallery(
                 $mediaGallery
             )->_saveProductAttributes(
@@ -1704,45 +1686,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             if ($tierPriceIn) {
                 $this->_connection->insertOnDuplicate($tableName, $tierPriceIn, ['value']);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Save product group prices.
-     *
-     * @param array $groupPriceData
-     * @return $this
-     */
-    protected function _saveProductGroupPrices(array $groupPriceData)
-    {
-        static $tableName = null;
-
-        if (!$tableName) {
-            $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_group_price');
-        }
-        if ($groupPriceData) {
-            $groupPriceIn = [];
-            $delProductId = [];
-
-            foreach ($groupPriceData as $delSku => $groupPriceRows) {
-                $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
-                $delProductId[] = $productId;
-
-                foreach ($groupPriceRows as $row) {
-                    $row['entity_id'] = $productId;
-                    $groupPriceIn[] = $row;
-                }
-            }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $delProductId)
-                );
-            }
-            if ($groupPriceIn) {
-                $this->_connection->insertOnDuplicate($tableName, $groupPriceIn, ['value']);
             }
         }
         return $this;
@@ -1860,7 +1803,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'value' => $insertValue['value'],
                     ];
                     $valueToProductId[$insertValue['value']] = $productId;
-                    $imageNames = $insertValue['value'];
+                    $imageNames[] = $insertValue['value'];
                     $multiInsertData[] = $valueArr;
                     $insertedGalleryImgs[] = $insertValue['value'];
                 }
@@ -1959,7 +1902,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _saveStockItem()
     {
         $indexer = $this->indexerRegistry->get('catalog_product_category');
-        /** @var $stockResource \Magento\CatalogInventory\Model\Resource\Stock\Item */
+        /** @var $stockResource \Magento\CatalogInventory\Model\ResourceModel\Stock\Item */
         $stockResource = $this->_stockResItemFac->create();
         $entityTable = $stockResource->getMainTable();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
