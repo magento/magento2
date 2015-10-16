@@ -17,6 +17,9 @@
             <argument name="adjustments" xsi:type="array">
                 <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
             </argument>
+            <argument name="adjustments" xsi:type="array">
+                <item name="weee_tax" xsi:type="const">Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE</item>
+            </argument>
         </arguments>
     </type>
 
@@ -25,7 +28,11 @@
             <argument name="adjustments" xsi:type="array">
                 <item name="weee" xsi:type="array">
                     <item name="className" xsi:type="string">Magento\Weee\Pricing\Adjustment</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
+                    <item name="sortOrder" xsi:type="string">25</item>
+                </item>
+                <item name="weee_tax" xsi:type="array">
+                    <item name="className" xsi:type="string">Magento\Weee\Pricing\TaxAdjustment</item>
+                    <item name="sortOrder" xsi:type="string">35</item>
                 </item>
             </argument>
         </arguments>
@@ -33,11 +40,13 @@
     <type name="Magento\Bundle\Pricing\Price\BundleSelectionPrice">
         <arguments>
             <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
+            <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Pricing\Price\CustomOptionPrice">
         <arguments>
             <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
+            <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE</argument>
         </arguments>
     </type>
 </config>
