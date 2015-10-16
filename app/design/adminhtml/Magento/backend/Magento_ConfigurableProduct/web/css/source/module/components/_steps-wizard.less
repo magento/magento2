@@ -19,12 +19,20 @@
     padding: @indent__s 0;
     .product-create-configuration-info {
         float: left;
-        width: 50%;
+        width: 60%;
     }
     .product-create-configuration-actions {
         float: right;
         text-align: right;
-        width: 25%;
+        width: 40%;
+        &:extend(.abs-clearfix all);
+    }
+    .product-create-configuration-action {
+        float: right;
+        margin-left: @indent__s;
+    }
+    .action-menu-item {
+        padding-right: 0;
     }
 }
 
@@ -63,9 +71,5 @@
         .note {
             margin: @indent__base 0;
         }
-    }
-
-    .admin__data-grid-pager-wrap {
-        float: right;
     }
 }

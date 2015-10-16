@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class SuggestProductTemplates extends \Magento\Catalog\Controller\Adminhtml\Product
+class SuggestProductTemplates extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -14,25 +14,23 @@ class SuggestProductTemplates extends \Magento\Catalog\Controller\Adminhtml\Prod
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet
      */
-    protected $layoutFactory;
+    protected $suggestedSet;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
     ) {
-        parent::__construct($context, $productBuilder);
+        parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->suggestedSet = $suggestedSet;
     }
 
     /**
@@ -42,11 +40,9 @@ class SuggestProductTemplates extends \Magento\Catalog\Controller\Adminhtml\Prod
      */
     public function execute()
     {
-        $this->productBuilder->build($this->getRequest());
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setData(
-            $this->layoutFactory->create()->createBlock('Magento\Catalog\Block\Product\TemplateSelector')
-                ->getSuggestedTemplates($this->getRequest()->getParam('label_part'))
+            $this->suggestedSet->getSuggestedSets($this->getRequest()->getParam('label_part'))
         );
         return $resultJson;
     }

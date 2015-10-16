@@ -23,8 +23,6 @@ define([
             storage.removeAll();
             var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
             $.localStorage.set('mage-cache-timeout', date);
-        } else {
-            invalidateNonCachedSections(options);
         }
     };
 
@@ -34,12 +32,6 @@ define([
             storage.removeAll();
         }
     };
-
-    var invalidateNonCachedSections = function(options) {
-        _.each(options.nonCachedSections, function (sectionName) {
-            storageInvalidation.set(sectionName, true);
-        });
-    }
 
     var dataProvider = {
         getFromStorage: function (sectionNames) {
@@ -170,7 +162,16 @@ define([
             });
         },
         invalidate: function (sectionNames) {
+            var sectionDataIds;
+
             buffer.remove(_.contains(sectionNames, '*') ? buffer.keys() : sectionNames);
+            sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+
+            // Invalidate section in cookie (increase version of section with 1000)
+            _.each(sectionNames, function (sectionName) {
+                sectionDataIds[sectionName] += 1000;
+            });
+            $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
@@ -182,21 +183,27 @@ define([
 
     /** Events listener **/
     $(document).on('ajaxComplete', function (event, xhr, settings) {
+        var sections,
+            redirects;
+
         if (settings.type.match(/post|put/i)) {
-            var sections = sectionConfig.getAffectedSections(settings.url);
+            sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.invalidate(sections);
-                var redirects = ['redirect', 'backUrl'];
+                redirects = ['redirect', 'backUrl'];
+
                 if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
-                    return ;
+                    return;
                 }
                 customerData.reload(sections, true);
             }
         }
     });
     $(document).on('submit', function (event) {
+        var sections;
+
         if (event.target.method.match(/post|put/i)) {
-            var sections = sectionConfig.getAffectedSections(event.target.action);
+            sections = sectionConfig.getAffectedSections(event.target.action);
             if (sections) {
                 customerData.invalidate(sections);
             }

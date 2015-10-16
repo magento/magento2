@@ -7,7 +7,8 @@
  */
 namespace Magento\Email\Model\Template;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
@@ -27,33 +28,39 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     protected $fileSystem;
 
     /**
-     * Themes directory
-     *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     */
-    protected $themesDirectory;
-
-    /**
      * @var \Magento\Framework\View\FileSystem
      */
     protected $viewFileSystem;
 
     /**
+     * @var ReadFactory
+     */
+    private $readDirFactory;
+
+    /**
+     * @var ThemePackageList
+     */
+    private $themePackages;
+
+    /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
-     * @param \Magento\Framework\Filesystem $fileSystem
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
+     * @param ThemePackageList $themePackages
+     * @param ReadFactory $readDirFactory
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Framework\Filesystem $fileSystem,
-        \Magento\Framework\View\FileSystem $viewFileSystem
+        \Magento\Framework\View\FileSystem $viewFileSystem,
+        ThemePackageList $themePackages,
+        ReadFactory $readDirFactory
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
-        $this->themesDirectory = $fileSystem->getDirectoryRead(DirectoryList::THEMES);
         $this->viewFileSystem = $viewFileSystem;
+        $this->themePackages = $themePackages;
+        $this->readDirFactory = $readDirFactory;
     }
 
     /**
@@ -87,36 +94,33 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
         $templates = [];
 
         $area = $this->getTemplateArea($templateId);
-        $themePath = '*/*';
         $module = $this->getTemplateModule($templateId);
         $filename = $this->_getInfo($templateId, 'file');
-        $searchPattern = "{$area}/{$themePath}/{$module}/email/{$filename}";
-        $files = $this->themesDirectory->search($searchPattern);
 
-        $pattern = "#^(?<area>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)/#i";
-        foreach ($files as $file) {
-            if (!preg_match($pattern, $file, $matches)) {
-                continue;
+        foreach ($this->themePackages->getThemes() as $theme) {
+            if ($theme->getArea() == $area) {
+                $themeDir = $this->readDirFactory->create($theme->getPath());
+                $file = "$module/email/$filename";
+                if ($themeDir->isExist($file)) {
+                    $templates[] = [
+                        'value' => sprintf(
+                            '%s/%s/%s',
+                            $templateId,
+                            $theme->getVendor(),
+                            $theme->getName()
+                        ),
+                        'label' => sprintf(
+                            '%s (%s/%s)',
+                            $this->getTemplateLabel($templateId),
+                            $theme->getVendor(),
+                            $theme->getName()
+                        ),
+                        'group' => $this->getTemplateModule($templateId),
+                    ];
+                }
             }
-            $themeVendor = $matches['themeVendor'];
-            $themeName = $matches['themeName'];
-
-            $templates[] = [
-                'value' => sprintf(
-                    '%s/%s/%s',
-                    $templateId,
-                    $themeVendor,
-                    $themeName
-                ),
-                'label' => sprintf(
-                    '%s (%s/%s)',
-                    $this->getTemplateLabel($templateId),
-                    $themeVendor,
-                    $themeName
-                ),
-                'group' => $this->getTemplateModule($templateId),
-            ];
         }
+
         return $templates;
     }
 

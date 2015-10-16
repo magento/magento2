@@ -11,7 +11,7 @@
     }
 }
 
-// Change Attribute Set
+//  Change Attribute Set
 #product_info_tabs li.removed,
 div.removed,
 .field.removed {
@@ -25,5 +25,29 @@ div.removed,
                 margin-right: 0;
             }
         }
+    }
+}
+
+//
+//  Product weight switcher
+//  ---------------------------------------------
+
+.weight-switcher {
+    .field-weight & {
+        .admin__control-switcher {
+            > .admin__field-label {
+                float: none;
+                padding-top: 7px;
+                text-align: left;
+                width: 100%;
+            }
+        }
+    }
+    .admin__control-radio[type=radio] {
+        margin: 0;
+        position: absolute;
+    }
+    .admin__control-addon {
+        width: auto; // IE9 width fix
     }
 }

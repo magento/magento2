@@ -107,7 +107,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metaData = $this->getMock(
-            'Magento\Sales\Model\Resource\Metadata',
+            'Magento\Sales\Model\ResourceModel\Metadata',
             [],
             [],
             '',
@@ -128,7 +128,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->transactionResource = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction',
             [],
             [],
             '',
@@ -156,7 +156,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection',
             [],
             [],
             '',

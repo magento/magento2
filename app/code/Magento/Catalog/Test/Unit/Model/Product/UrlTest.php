@@ -51,12 +51,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'Magento\UrlRewrite\Model\UrlFinderInterface'
         )->disableOriginalConstructor()->getMock();
 
-        $this->catalogCategory = $this->getMockBuilder(
-            'Magento\Catalog\Helper\Category'
-        )->disableOriginalConstructor()->setMethods(
-            ['getCategoryUrlPath']
-        )->getMock();
-
         $this->url = $this->getMockBuilder(
             'Magento\Framework\Url'
         )->disableOriginalConstructor()->setMethods(
@@ -70,6 +64,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
+        $urlFactory = $this->getMockBuilder('\Magento\Framework\UrlFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $urlFactory->method('create')
+            ->willReturn($this->url);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Catalog\Model\Product\Url',
@@ -77,7 +77,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'filter' => $this->filter,
                 'catalogCategory' => $this->catalogCategory,
                 'storeManager' => $storeManager,
-                'url' => $this->url,
+                'urlFactory' => $urlFactory,
                 'sidResolver' => $this->sidResolver,
             ]
         );

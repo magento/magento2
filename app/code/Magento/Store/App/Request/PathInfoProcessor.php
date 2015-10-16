@@ -5,19 +5,21 @@
  */
 namespace Magento\Store\App\Request;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $_storeManager;
+    private $storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -33,14 +35,15 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
         $storeCode = $pathParts[0];
 
         try {
-            $store = $this->_storeManager->getStore($storeCode);
-        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+            /** @var \Magento\Store\Api\Data\StoreInterface $store */
+            $store = $this->storeManager->getStore($storeCode);
+        } catch (NoSuchEntityException $e) {
             return $pathInfo;
         }
 
         if ($store->isUseStoreInUrl()) {
             if (!$request->isDirectAccessFrontendName($storeCode)) {
-                $this->_storeManager->setCurrentStore($storeCode);
+                $this->storeManager->setCurrentStore($storeCode);
                 $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
                 return $pathInfo;
             } elseif (!empty($storeCode)) {

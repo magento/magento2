@@ -192,6 +192,6 @@ class SetResponseAfterSaveOrderObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($testData['result.setData']);
 
-        $this->_model->invoke($observerMock);
+        $this->_model->execute($observerMock);
     }
 }

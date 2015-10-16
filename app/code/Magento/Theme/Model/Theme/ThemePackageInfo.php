@@ -5,9 +5,8 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Theme\Model\Theme\Data\Collection as DataCollection;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Maps package name to full theme path, and vice versa
@@ -15,14 +14,14 @@ use Magento\Theme\Model\Theme\Data\Collection as DataCollection;
 class ThemePackageInfo
 {
     /**
-     * @var DataCollection
+     * @var ComponentRegistrar
      */
-    private $collection;
+    private $componentRegistrar;
 
     /**
-     * @var Filesystem
+     * @var ReadFactory
      */
-    private $filesystem;
+    private $readDirFactory;
 
     /**
      * @var array
@@ -32,13 +31,15 @@ class ThemePackageInfo
     /**
      * Constructor
      *
-     * @param DataCollection $collection
-     * @param Filesystem $filesystem
+     * @param ComponentRegistrar $componentRegistrar
+     * @param ReadFactory $readDirFactory
      */
-    public function __construct(DataCollection $collection, Filesystem $filesystem)
-    {
-        $this->collection = $collection;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        ReadFactory $readDirFactory
+    ) {
+        $this->componentRegistrar = $componentRegistrar;
+        $this->readDirFactory = $readDirFactory;
     }
 
     /**
@@ -50,10 +51,11 @@ class ThemePackageInfo
      */
     public function getPackageName($themePath)
     {
-        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        if ($themesDirRead->isExist($themePath . '/composer.json')) {
+        $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        $themeDir = $this->readDirFactory->create($themePath);
+        if ($themeDir->isExist('composer.json')) {
             $rawData = [];
-            $themeFile = $themesDirRead->readFile($themePath . '/composer.json');
+            $themeFile = $themeDir->readFile('composer.json');
             if ($themeFile) {
                 $rawData = \Zend_Json::decode($themeFile);
             }
@@ -85,13 +87,12 @@ class ThemePackageInfo
      */
     private function initializeMap()
     {
-        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        $this->collection->addDefaultPattern('*');
+        $themePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
         /** @var \Magento\Theme\Model\Theme $theme */
-        foreach ($this->collection->getIterator() as $theme) {
-            $fullThemePath = $theme->getFullPath();
-            if ($themesDirRead->isExist($fullThemePath . '/composer.json')) {
-                $rawData = \Zend_Json::decode($themesDirRead->readFile($fullThemePath . '/composer.json'));
+        foreach ($themePaths as $fullThemePath => $themeDir) {
+            $themeDirRead = $this->readDirFactory->create($themeDir);
+            if ($themeDirRead->isExist('composer.json')) {
+                $rawData = \Zend_Json::decode($themeDirRead->readFile('composer.json'));
                 if (isset($rawData['name'])) {
                     $this->packageNameToFullPathMap[$rawData['name']] = $fullThemePath;
                 }

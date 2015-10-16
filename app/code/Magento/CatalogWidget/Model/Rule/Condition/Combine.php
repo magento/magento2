@@ -66,7 +66,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * Collect validated attributes for Product Collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)

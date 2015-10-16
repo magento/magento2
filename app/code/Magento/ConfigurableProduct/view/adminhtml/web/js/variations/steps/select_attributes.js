@@ -12,7 +12,7 @@ define([
     'use strict';
 
     var initNewAttributeListener = function (provider) {
-        $('[data-role=product-variations-generator]').on('add', function () {
+        $('[data-role=product-variations-matrix]').on('add', function () {
             provider().reload();
         });
     };

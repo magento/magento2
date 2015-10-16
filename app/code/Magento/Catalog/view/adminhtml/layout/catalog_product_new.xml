@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
         <css src="Magento_Catalog::catalog/category-selector.css"/>
@@ -28,6 +28,7 @@
                 <arguments>
                     <argument name="panels_class" xsi:type="string">admin__scope-old</argument>
                 </arguments>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab" name="product_tabs.child-tab" as="child-tab"  template="Magento_Catalog::product/edit/tabs/child_tab.phtml"/>
                 <block class="Magento\Backend\Block\Widget\Tab" name="product_tabs.customer_options" as="customer_options">
                     <arguments>
                         <argument name="label" xsi:type="string" translate="true">Custom Options</argument>

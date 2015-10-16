@@ -22,7 +22,7 @@ class InvoiceEmailTest extends WebapiAbstract
     public function testInvoiceEmail()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $invoiceCollection = $objectManager->get('Magento\Sales\Model\Resource\Order\Invoice\Collection');
+        $invoiceCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Invoice\Collection');
         $invoice = $invoiceCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../Magento/Customer/etc/sections.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
     <action name="wishlist/index/add">
         <section name="wishlist"/>
     </action>
@@ -21,12 +21,15 @@
     </action>
     <action name="wishlist/index/cart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
     <action name="wishlist/index/fromcart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
     <action name="wishlist/index/allcart">
         <section name="wishlist"/>
+        <section name="cart"/>
     </action>
 
     <action name="wishlist/shared/allcart">
@@ -34,15 +37,6 @@
         <section name="cart"/>
     </action>
     <action name="wishlist/shared/cart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/fromcart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/cart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/allcart">
         <section name="cart"/>
     </action>
 </config>

@@ -6,7 +6,7 @@
 
 namespace Magento\Mtf\Util\Generate\Fixture;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -44,7 +44,7 @@ class FieldsProvider
     public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->eavConfig = $objectManager->create('Magento\Eav\Model\Config');
-        $this->resource = $objectManager->create('Magento\Framework\App\Resource');
+        $this->resource = $objectManager->create('Magento\Framework\App\ResourceConnection');
     }
 
     /**

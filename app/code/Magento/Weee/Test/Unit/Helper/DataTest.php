@@ -284,12 +284,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
 
-    public function testGetAppliedAmountSimple()
+    public function testGetRecursiveAmountSimple()
     {
-        $testResult = 2;
+        $testAmountUnit = 2;
+        $testAmountRow = 34;
+
         $itemProductSimple=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
@@ -300,28 +302,35 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testResult)));
+            ->will($this->returnValue($testAmountUnit));
+        $itemProductSimple->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow));
 
-        $this->assertEquals($testResult, $this->helperData->getAppliedAmount($itemProductSimple));
+        $this->assertEquals($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
+        $this->assertEquals($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
     }
 
-    public function getAppliedAmountBundle()
+    public function testGetRecursiveAmountBundle()
     {
-        $testAmount1 = 1;
-        $testAmount2 = 2;
+        $testAmountUnit1 = 1;
+        $testAmountUnit2 = 2;
+        $testTotalUnit = $testAmountUnit1 + $testAmountUnit2;
 
-        $testArray = $testAmount1 + $testAmount2;
+        $testAmountRow1 = 33;
+        $testAmountRow2 = 444;
+        $testTotalRow = $testAmountRow1 + $testAmountRow2;
 
         $itemProductSimple1=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
         );
         $itemProductSimple2=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
@@ -329,11 +338,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testAmount1)));
+            ->will($this->returnValue($testAmountUnit1));
+        $itemProductSimple1->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow1));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testAmount2)));
+            ->will($this->returnValue($testAmountUnit2));
+        $itemProductSimple2->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow2));
 
         $itemProductBundle=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
@@ -352,6 +367,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getChildren')
             ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
 
-        $this->assertEquals($testArray, $this->helperData->getAppliedAmount($itemProductBundle));
+        $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
+        $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
     }
 }

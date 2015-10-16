@@ -55,7 +55,7 @@ class GiftOptions extends Form
         /** @var \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm $giftMessageForm */
         if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {
             foreach ($products as $product) {
-                if ($product->getIsVirtual() !== 'Yes') {
+                if ($product->getProductHasWeight() == 'Yes') {
                     $this->_rootElement->find(
                         sprintf($this->allowGiftOptions, $product->getName()),
                         Locator::SELECTOR_XPATH

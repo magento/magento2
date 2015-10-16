@@ -7,7 +7,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/Indexer/etc/indexer_merged.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer_merged.xsd">
     <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="NotAClass">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid provider attribute value</description>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Integration\Model\Config;
 
+use Magento\Framework\Module\Dir;
+
 /**
  * Integration config schema locator.
  */
@@ -29,7 +31,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Integration') . '/integration/config.xsd';
+        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Integration')
+            . '/integration/config.xsd';
     }
 
     /**

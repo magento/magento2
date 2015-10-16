@@ -30,22 +30,31 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $weightResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $subjectMock;
 
     protected function setUp()
     {
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->model = new \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable($this->requestMock);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['hasIsVirtual', 'getTypeId', 'setTypeId', '__wakeup'],
+            ['getTypeId', 'setTypeId'],
             [],
             '',
             false
         );
+        $this->weightResolver = $this->getMock('Magento\Catalog\Model\Product\Edit\WeightResolver');
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product\TypeTransitionManager', [], [], '', false);
         $this->closureMock = function () {
         };
+        $this->model = new \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable(
+            $this->requestMock,
+            $this->weightResolver
+        );
     }
 
     /**
@@ -58,7 +67,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->with('downloadable')
             ->will($this->returnValue(['link' => [['is_delete' => '']]]));
-        $this->productMock->expects($this->any())->method('hasIsVirtual')->will($this->returnValue(true));
+        $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn(false);
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
         $this->productMock->expects($this->once())
             ->method('setTypeId')
@@ -80,13 +89,13 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isVirtual
+     * @param bool $hasWeight
      * @param string $currentTypeId
      * @param string|null $downloadableData
      * @dataProvider productThatCannotBeTransformedToDownloadableDataProvider
      */
     public function testAroundProcessProductWithProductThatCannotBeTransformedToDownloadable(
-        $isVirtual,
+        $hasWeight,
         $currentTypeId,
         $downloadableData
     ) {
@@ -94,7 +103,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->with('downloadable')
             ->will($this->returnValue($downloadableData));
-        $this->productMock->expects($this->any())->method('hasIsVirtual')->will($this->returnValue($isVirtual));
+        $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn($hasWeight);
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
         $this->productMock->expects($this->never())->method('setTypeId');
 
@@ -107,11 +116,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     public function productThatCannotBeTransformedToDownloadableDataProvider()
     {
         return [
-            [true, 'custom_product_type', ['link' => [['is_delete' => '']]]],
-            [false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
+            [false, 'custom_product_type', ['link' => [['is_delete' => '']]]],
             [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
-            [false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, ['link' => [['is_delete' => '']]]],
-            [true, \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
+            [false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
+            [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, ['link' => [['is_delete' => '']]]],
+            [false, \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
         ];
     }
 }

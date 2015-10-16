@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -32,7 +33,18 @@ class DiCompileMultiTenantCommandTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $command = new DiCompileMultiTenantCommand($objectManagerProvider, $directoryList);
+        $componentRegistrar = $this->getMock(
+            '\Magento\Framework\Component\ComponentRegistrar',
+            [],
+            [],
+            '',
+            false
+        );
+        $componentRegistrar->expects($this->any())->method('getPaths')->willReturnMap([
+            [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path/to/module/two']],
+            [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path/to/library/two']],
+        ]);
+        $command = new DiCompileMultiTenantCommand($objectManagerProvider, $directoryList, $componentRegistrar);
         $commandTester = new CommandTester($command);
         $commandTester->execute($option);
         $this->assertEquals($error . PHP_EOL, $commandTester->getDisplay());

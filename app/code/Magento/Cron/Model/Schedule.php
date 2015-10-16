@@ -11,8 +11,8 @@ use Magento\Framework\Exception\CronException;
 /**
  * Crontab schedule model
  *
- * @method \Magento\Cron\Model\Resource\Schedule _getResource()
- * @method \Magento\Cron\Model\Resource\Schedule getResource()
+ * @method \Magento\Cron\Model\ResourceModel\Schedule _getResource()
+ * @method \Magento\Cron\Model\ResourceModel\Schedule getResource()
  * @method string getJobCode()
  * @method \Magento\Cron\Model\Schedule setJobCode(string $value)
  * @method string getStatus()
@@ -47,14 +47,14 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -66,7 +66,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Magento\Cron\Model\Resource\Schedule');
+        $this->_init('Magento\Cron\Model\ResourceModel\Schedule');
     }
 
     /**

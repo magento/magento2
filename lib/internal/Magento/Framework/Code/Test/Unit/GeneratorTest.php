@@ -75,7 +75,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $fullClassName = $className . $entityType;
-        $entityGeneratorMock = $this->getMockBuilder($fullClassName)->disableOriginalConstructor()->getMock();
+        $entityGeneratorMock = $this->getMockBuilder('\Magento\Framework\Code\Generator\EntityAbstract')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
         $this->model->setObjectManager($objectManagerMock);
         $this->model->generateClass($fullClassName);
@@ -88,7 +90,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $definedClassesMock = $this->getMock('Magento\Framework\Code\Generator\DefinedClasses');
         $definedClassesMock->expects($this->any())
-            ->method('classLoadable')
+            ->method('isClassLoadableFromDisc')
             ->willReturn(true);
         $this->model = new \Magento\Framework\Code\Generator(
             $this->ioObjectMock,
@@ -133,7 +135,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $entityGeneratorMock = $this->getMockBuilder($resultClassName)->disableOriginalConstructor()->getMock();
+        $entityGeneratorMock = $this->getMockBuilder('\Magento\Framework\Code\Generator\EntityAbstract')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
         $this->model->setObjectManager($objectManagerMock);
         $this->model->generateClass($resultClassName);

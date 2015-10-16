@@ -48,14 +48,14 @@ class Totals extends Block
      *
      * @var string
      */
-    protected $subtotalExclTax = '.totals.sub.excl span';
+    protected $subtotalExclTax = '.totals.sub.excl .price';
 
     /**
      * Subtotal search mask
      *
      * @var string
      */
-    protected $subtotalInclTax = '.totals.sub.incl span';
+    protected $subtotalInclTax = '.totals.sub.incl .price';
 
     /**
      * Tax search mask

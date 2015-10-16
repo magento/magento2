@@ -130,14 +130,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Product collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_entityCollectionFactory;
 
     /**
      * Product collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $_entityCollection;
 
@@ -166,37 +166,37 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_logger;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\ProductFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $_categoryColFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resourceModel;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      */
     protected $_itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     protected $_optionColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     protected $_attributeColFactory;
 
@@ -310,17 +310,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
-     * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
@@ -329,17 +329,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
-        \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
-        \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory,
-        \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
+        \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
@@ -390,7 +390,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function initCategories()
     {
         $collection = $this->_categoryColFactory->create()->addNameToResult();
-        /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
             $pathSize = count($structure);
@@ -476,21 +476,28 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             return [];
         }
         $select = $this->_connection->select()->from(
-            ['mg' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery')],
+            ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                'mg.entity_id',
+                'mgvte.entity_id',
+                'mgvte.value_id'
+            ]
+        )->joinLeft(
+            ['mg' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery')],
+            '(mg.value_id = mgvte.value_id)',
+            [
                 'mg.attribute_id',
                 'filename' => 'mg.value',
-                'mgv.label',
-                'mgv.position',
-                'mgv.disabled'
             ]
         )->joinLeft(
             ['mgv' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value')],
             '(mg.value_id = mgv.value_id AND mgv.store_id = 0)',
-            []
+            [
+                'mgv.label',
+                'mgv.position',
+                'mgv.disabled'
+            ]
         )->where(
-            'mg.entity_id IN(?)',
+            'mgvte.entity_id IN(?)',
             $productIds
         );
 
@@ -1172,7 +1179,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 continue;
             }
             $options = $this->_optionColFactory->create();
-            /* @var \Magento\Catalog\Model\Resource\Product\Option\Collection $options*/
+            /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
             $options->addOrder('sort_order');
             $options->reset()->addOrder('sort_order')->addTitleToResult(
                 $storeId
@@ -1220,10 +1227,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Clean up already loaded attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $validTypes = array_keys($this->_productTypeModels);
         $validTypes = array_combine($validTypes, $validTypes);
@@ -1255,7 +1262,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Entity attributes collection getter.
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getAttributeCollection()
     {

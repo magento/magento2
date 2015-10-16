@@ -255,8 +255,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFixtureQuote()
     {
-        /** @var \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection */
-        $quoteCollection = $this->_objectManager->create('Magento\Quote\Model\Resource\Quote\Collection');
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
+        $quoteCollection = $this->_objectManager->create('Magento\Quote\Model\ResourceModel\Quote\Collection');
 
         return $quoteCollection->getLastItem();
     }
