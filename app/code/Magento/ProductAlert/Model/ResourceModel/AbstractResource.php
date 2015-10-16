@@ -10,7 +10,7 @@ namespace Magento\ProductAlert\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractResource extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Retrieve alert row by object parameters

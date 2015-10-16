@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 /**
  * Catalog Product Website Resource Model
  */
-class Website extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Store manager
@@ -18,12 +18,12 @@ class Website extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null
     ) {

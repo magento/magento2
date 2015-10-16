@@ -42,7 +42,7 @@ define(
             /**
              * @override
              */
-            initProperties: function () {
+            initObservable: function () {
                 var self = this;
                 this._super();
 

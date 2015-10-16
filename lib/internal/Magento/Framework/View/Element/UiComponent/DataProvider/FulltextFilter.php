@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use Magento\Framework\Model\ModelResource\Db\AbstractDb as DbResource;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb as DbResource;
 use Magento\Framework\Api\Filter;
 
 /**
