@@ -23,7 +23,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);
         $connection = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
-        $resource = $this->getMockBuilder('\Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $resource = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();

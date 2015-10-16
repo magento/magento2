@@ -144,7 +144,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
 
@@ -171,7 +171,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->contextMock = $this->getMock('Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);

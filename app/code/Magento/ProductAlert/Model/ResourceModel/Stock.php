@@ -19,12 +19,12 @@ class Stock extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         $connectionName = null
     ) {

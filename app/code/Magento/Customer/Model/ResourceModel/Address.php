@@ -21,16 +21,16 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         $data = []

@@ -9,7 +9,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAssignedToObjects()
     {
-        $collectionClassName = 'Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection';
+        $collectionClassName = 'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection';
         $collectionMock = $this->getMockBuilder($collectionClassName)
             ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()->getMock();
         $collectionMock->expects($this->once())->method('addAttributeToFilter')

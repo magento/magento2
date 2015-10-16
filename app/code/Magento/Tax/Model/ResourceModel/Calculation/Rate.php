@@ -11,7 +11,7 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation;
 
-class Rate extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Rate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

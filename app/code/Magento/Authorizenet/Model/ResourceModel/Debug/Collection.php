@@ -8,7 +8,7 @@ namespace Magento\Authorizenet\Model\ResourceModel\Debug;
 /**
  * Resource Authorize.net debug collection model
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Resource initialization

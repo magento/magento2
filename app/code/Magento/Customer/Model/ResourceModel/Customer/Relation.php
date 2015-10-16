@@ -9,7 +9,7 @@ namespace Magento\Customer\Model\ResourceModel\Customer;
 /**
  * Class Relation
  */
-class Relation implements \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationInterface
+class Relation implements \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface
 {
     /**
      * Save relations for Customer

@@ -55,7 +55,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $dbContextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $dbContextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $dbContextMock->expects($this->once())->method('getResources')->willReturn($appResource);
         $resource = $this->getMock(
             '\Magento\Framework\Flag\FlagResource',
