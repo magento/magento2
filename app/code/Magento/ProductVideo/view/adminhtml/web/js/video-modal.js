@@ -4,17 +4,16 @@
  */
 define([
     'jquery',
+    'productGallery',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation'
-], function ($) {
+], function ($, productGallery) {
     'use strict';
 
-    $.widget('mage.productGallery',
-        $.mage.productGallery,
-        {
+    $.widget('mage.productGallery', productGallery, {
 
             /**
              * Fired when windget initialization start
