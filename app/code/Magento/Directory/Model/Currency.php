@@ -73,7 +73,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param Currency\FilterFactory $currencyFilterFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -86,7 +86,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Directory\Model\Currency\FilterFactory $currencyFilterFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

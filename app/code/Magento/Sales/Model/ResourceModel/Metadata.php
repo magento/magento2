@@ -41,7 +41,7 @@ class Metadata
     }
 
     /**
-     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getMapper()
     {

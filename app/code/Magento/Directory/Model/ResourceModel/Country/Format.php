@@ -10,7 +10,7 @@ namespace Magento\Directory\Model\ResourceModel\Country;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Format extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Format extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

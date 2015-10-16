@@ -11,7 +11,7 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel;
 
-class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table

@@ -8,15 +8,18 @@
     class="data-grid-bulk-edit-panel data-grid-editable-row"
     data-bind="
         visible: active,
-        foreach: fields"
+        foreach: {
+            data: fields,
+            as: '$col'
+        }"
         data-role="data-grid-bulk-row">
+    <!-- ko if: $parent.getColumn(index).visible -->
     <td
         data-bind="
-            visible: $parent.getColumn(index).visible,
             css: {
-                'data-grid-actions-cell': $parent.isActionsColumn($data)
+                'data-grid-actions-cell': $parent.isActionsColumn($col)
             }">
-        <!-- ko if: $parent.isActionsColumn($data) -->
+        <!-- ko if: $parent.isActionsColumn($col) -->
             <!-- ko with: $parent -->
                 <button
                     class="action-default"
@@ -24,7 +27,7 @@
                     data-bind="
                         click: apply,
                         attr: {
-                            disabled: !hasData()
+                            disabled: !hasData
                         }">
                     <span data-bind="i18n: 'Apply'"></span>
                 </button>
@@ -43,4 +46,5 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
     </td>
+    <!-- /ko -->
 </tr>

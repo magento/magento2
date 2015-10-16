@@ -7,7 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Sales\Model\Order\Pdf\Creditmemo;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Backend\App\Action\Context;

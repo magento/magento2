@@ -58,12 +58,12 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false),
             ],
             [
-                'Magento\Framework\Model\ModelResource\Db\TransactionManager',
-                $this->getMock('Magento\Framework\Model\ModelResource\Db\TransactionManager', [], [], '', false),
+                'Magento\Framework\Model\ResourceModel\Db\TransactionManager',
+                $this->getMock('Magento\Framework\Model\ResourceModel\Db\TransactionManager', [], [], '', false),
             ],
             [
-                'Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor',
-                $this->getMock('Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor', [], [], '', false),
+                'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
+                $this->getMock('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor', [], [], '', false),
             ],
             [
                 'Magento\Setup\Model\ConfigModel',

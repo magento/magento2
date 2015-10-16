@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Tax;
 /**
  * Sales order tax resource model
  */
-class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

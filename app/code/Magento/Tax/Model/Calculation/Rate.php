@@ -72,7 +72,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param Rate\TitleFactory $taxTitleFactory
      * @param Region $directoryRegion
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -85,7 +85,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

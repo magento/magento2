@@ -10,7 +10,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Problem extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Problem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table
