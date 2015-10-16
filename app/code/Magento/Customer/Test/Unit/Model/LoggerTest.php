@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Customer log data logger test.
@@ -27,7 +27,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * Resource instance.
      *
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -50,7 +50,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', ['create'], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

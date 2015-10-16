@@ -5,7 +5,7 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Payment\Model\Method\Logger;
+use Magento\Authorizenet\Model\TransactionService;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -18,11 +18,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * AIM gateway url
      */
     const CGI_URL = 'https://secure.authorize.net/gateway/transact.dll';
-
-    /**
-     * Transaction Details gateway url
-     */
-    const CGI_URL_TD = 'https://apitest.authorize.net/xml/v1/request.api';
 
     const REQUEST_METHOD_CC = 'CC';
 
@@ -55,8 +50,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
 
     const RESPONSE_REASON_CODE_PENDING_REVIEW_DECLINED = 254;
-
-    const PAYMENT_UPDATE_STATUS_CODE_SUCCESS = 'Ok';
 
     /**
      * Transaction fraud state key
@@ -93,21 +86,16 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected $responseFactory;
 
     /**
-     * Stored information about transaction
+     * @var \Magento\Authorizenet\Model\TransactionService;
+     */
+    protected $transactionService;
+
+    /**
+     * Fields that should be replaced in debug with '***'
      *
      * @var array
      */
-    protected $transactionDetails = [];
-
-    /**
-     * {@inheritdoc}
-     */
     protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
-
-    /**
-     * @var \Magento\Framework\Xml\Security
-     */
-    protected $xmlSecurityHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -122,8 +110,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @param \Magento\Authorizenet\Model\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Response\Factory $responseFactory
-     * @param \Magento\Framework\Xml\Security $xmlSecurityHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Authorizenet\Model\TransactionService $transactionService
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -141,15 +129,15 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
-        \Magento\Framework\Xml\Security $xmlSecurityHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        TransactionService $transactionService,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->dataHelper = $dataHelper;
         $this->requestFactory = $requestFactory;
         $this->responseFactory = $responseFactory;
-        $this->xmlSecurityHelper = $xmlSecurityHelper;
+        $this->transactionService = $transactionService;
 
         parent::__construct(
             $context,
@@ -216,7 +204,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
-        $responseXmlDocument = $this->getTransactionDetails($transactionId);
+        $responseXmlDocument = $this->transactionService->getTransactionDetails($this, $transactionId);
         $response = new \Magento\Framework\DataObject();
 
         if (empty($responseXmlDocument->transaction->FDSFilters->FDSFilter)) {
@@ -442,115 +430,5 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected function isGatewayActionsLocked($payment)
     {
         return $payment->getAdditionalInformation(self::GATEWAY_ACTIONS_LOCKED_STATE_KEY);
-    }
-
-    /**
-     * This function returns full transaction details for a specified transaction ID.
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\DataObject
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
-     * @link http://developer.authorize.net/api/transaction_details/
-     */
-    protected function getTransactionResponse($transactionId)
-    {
-        $responseXmlDocument = $this->getTransactionDetails($transactionId);
-
-        $response = new \Magento\Framework\DataObject();
-        $response->setXResponseCode((string)$responseXmlDocument->transaction->responseCode)
-            ->setXResponseReasonCode((string)$responseXmlDocument->transaction->responseReasonCode)
-            ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
-
-        return $response;
-    }
-
-    /**
-     * Load transaction details
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\Simplexml\Element
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function loadTransactionDetails($transactionId)
-    {
-        $requestBody = sprintf(
-            '<?xml version="1.0" encoding="utf-8"?>' .
-            '<getTransactionDetailsRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">' .
-            '<merchantAuthentication><name>%s</name><transactionKey>%s</transactionKey></merchantAuthentication>' .
-            '<transId>%s</transId>' .
-            '</getTransactionDetailsRequest>',
-            $this->getConfigData('login'),
-            $this->getConfigData('trans_key'),
-            $transactionId
-        );
-
-        $client = new \Magento\Framework\HTTP\ZendClient();
-        $url = $this->getConfigData('cgi_url_td') ?: self::CGI_URL_TD;
-        $client->setUri($url);
-        $client->setConfig(['timeout' => 45]);
-        $client->setHeaders(['Content-Type: text/xml']);
-        $client->setMethod(\Zend_Http_Client::POST);
-        $client->setRawData($requestBody);
-
-        $debugData = ['url' => $url, 'request' => $this->removePrivateDataFromXml($requestBody)];
-
-        try {
-            $responseBody = $client->request()->getBody();
-            if (!$this->xmlSecurityHelper->scan($responseBody)) {
-                $this->_logger->critical('Attempt loading of external XML entities in response from Authorizenet.');
-                throw new \Exception();
-            }
-            $debugData['response'] = $responseBody;
-            libxml_use_internal_errors(true);
-            $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
-            libxml_use_internal_errors(false);
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Unable to get transaction details. Try again later.')
-            );
-        } finally {
-            $this->_debug($debugData);
-        }
-
-        if (!isset($responseXmlDocument->messages->resultCode)
-            || $responseXmlDocument->messages->resultCode != static::PAYMENT_UPDATE_STATUS_CODE_SUCCESS
-        ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Unable to get transaction details. Try again later.')
-            );
-        }
-
-        $this->transactionDetails[$transactionId] = $responseXmlDocument;
-        return $responseXmlDocument;
-    }
-
-    /**
-     * Get transaction information
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\Simplexml\Element
-     */
-    protected function getTransactionDetails($transactionId)
-    {
-        return isset($this->transactionDetails[$transactionId])
-            ? $this->transactionDetails[$transactionId]
-            : $this->loadTransactionDetails($transactionId);
-    }
-
-    /**
-     * Remove nodes with private data from XML string
-     *
-     * Uses values from $_debugReplacePrivateDataKeys property
-     *
-     * @param string $xml
-     * @return string
-     */
-    protected function removePrivateDataFromXml($xml)
-    {
-        foreach ($this->getDebugReplacePrivateDataKeys() as $key) {
-            $xml = preg_replace(sprintf('~(?<=<%s>).*?(?=</%s>)~', $key, $key), Logger::DEBUG_KEYS_MASK, $xml);
-        }
-        return $xml;
     }
 }

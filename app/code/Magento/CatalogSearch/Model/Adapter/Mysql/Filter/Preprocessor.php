@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
@@ -60,7 +60,7 @@ class Preprocessor implements PreprocessorInterface
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
      */
@@ -68,7 +68,7 @@ class Preprocessor implements PreprocessorInterface
         ConditionManager $conditionManager,
         ScopeResolverInterface $scopeResolver,
         Config $config,
-        Resource $resource,
+        ResourceConnection $resource,
         TableMapper $tableMapper,
         $attributePrefix
     ) {
@@ -97,7 +97,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
         if ($filter->getField() === 'price') {
             $resultQuery = str_replace(

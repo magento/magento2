@@ -10,7 +10,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-class Response extends Http implements \Magento\Framework\App\Response\FileInterface
+class Response extends Http implements
+    \Magento\Framework\App\Response\FileInterface,
+    \Magento\Framework\App\PageCache\NotCacheableInterface
 {
     /**
      * @var \Magento\Framework\File\Transfer\Adapter\Http

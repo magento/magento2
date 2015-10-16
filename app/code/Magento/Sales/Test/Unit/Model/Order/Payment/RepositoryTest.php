@@ -53,7 +53,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metaData = $this->getMock(
-            'Magento\Sales\Model\Resource\Metadata',
+            'Magento\Sales\Model\ResourceModel\Metadata',
             [],
             [],
             '',
@@ -74,14 +74,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Collection',
             [],
             [],
             '',
             false
         );
         $this->paymentResource = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment',
+            'Magento\Sales\Model\ResourceModel\Order\Payment',
             [],
             [],
             '',

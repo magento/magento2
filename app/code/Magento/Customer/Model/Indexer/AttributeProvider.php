@@ -61,7 +61,7 @@ class AttributeProvider implements FieldsetInterface
             $entityType = $this->eavConfig->getEntityType(static::ENTITY);
             /** @var \Magento\Customer\Model\Attribute[] $attributes */
             $attributes = $entityType->getAttributeCollection()->getItems();
-            /** @var \Magento\Customer\Model\Resource\Customer $entity */
+            /** @var \Magento\Customer\Model\ResourceModel\Customer $entity */
             $entity = $entityType->getEntity();
 
             foreach ($attributes as $attribute) {

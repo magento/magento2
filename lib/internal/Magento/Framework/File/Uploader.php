@@ -223,7 +223,7 @@ class Uploader
         $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
 
         if ($this->_result) {
-            chmod($destinationFile, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            $this->chmod($destinationFile);
             if ($this->_enableFilesDispersion) {
                 $fileName = str_replace('\\', '/', self::_addDirSeparator($this->_dispretionPath)) . $fileName;
             }
@@ -237,6 +237,15 @@ class Uploader
         }
 
         return $this->_result;
+    }
+
+    /**
+     * @param string $file
+     * @return void
+     */
+    protected function chmod($file)
+    {
+        chmod($file, DriverInterface::WRITEABLE_DIRECTORY_MODE);
     }
 
     /**

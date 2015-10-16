@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Model\Config\Source;
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactory;
 
@@ -30,7 +30,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->collectionFactory = $this->getMock(
-            'Magento\Cms\Model\Resource\Page\CollectionFactory',
+            'Magento\Cms\Model\ResourceModel\Page\CollectionFactory',
             ['create'],
             [],
             '',
@@ -53,7 +53,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $pageCollectionMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Page\Collection',
+            'Magento\Cms\Model\ResourceModel\Page\Collection',
             [],
             [],
             '',

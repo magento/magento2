@@ -62,11 +62,34 @@ class Cli extends SymfonyApplication
             $modulesCommands = $commandList->getCommands();
         }
 
+        $vendorCommands = $this->getVendorCommands($objectManager);
+
         $commandsList = array_merge(
             $setupCommands,
-            $modulesCommands
+            $modulesCommands,
+            $vendorCommands
         );
 
         return $commandsList;
+    }
+
+    /**
+     * Gets vendor commands
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return array
+     */
+    protected function getVendorCommands($objectManager)
+    {
+        $commands = [];
+        foreach (CommandLocator::getCommands() as $commandListClass) {
+            if (class_exists($commandListClass)) {
+                $commands = array_merge(
+                    $commands,
+                    $objectManager->create($commandListClass)->getCommands()
+                );
+            }
+        }
+        return $commands;
     }
 }

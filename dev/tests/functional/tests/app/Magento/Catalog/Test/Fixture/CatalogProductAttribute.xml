@@ -9,7 +9,7 @@
     <fixture name="catalogProductAttribute"
              module="Magento_Catalog"
              type="composite"
-             collection="Magento\Catalog\Model\Resource\Attribute"
+             collection="Magento\Catalog\Model\ResourceModel\Attribute"
              repository_class="Magento\Catalog\Test\Repository\CatalogProductAttribute"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface"
              class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
@@ -38,7 +38,7 @@
         <field name="is_comparable" is_required="" group="frontend-properties" />
         <field name="is_visible_on_front" is_required="" group="frontend-properties" />
         <field name="is_html_allowed_on_front" is_required="" group="frontend-properties" />
-        <field name="is_used_for_price_rules" is_required="" group="frontend-properties" />
+        <field name="is_used_for_promo_rules" is_required="" group="frontend-properties" />
         <field name="is_filterable_in_search" is_required="" group="frontend-properties" />
         <field name="used_in_product_listing" is_required="" group="frontend-properties" />
         <field name="used_for_sort_by" is_required="" group="frontend-properties" />

@@ -15,7 +15,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_Te
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceStock;
 
@@ -31,7 +31,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->resourceStock = $this->getMock('Magento\CatalogInventory\Model\Resource\Stock', [], [], '', false);
+        $this->resourceStock = $this->getMock('Magento\CatalogInventory\Model\ResourceModel\Stock', [], [], '', false);
 
         $this->event = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
@@ -66,6 +66,6 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_Te
             ->method('getWebsite')
             ->will($this->returnValue($websiteId));
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }

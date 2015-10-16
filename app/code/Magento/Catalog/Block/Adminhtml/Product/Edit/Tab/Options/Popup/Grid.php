@@ -57,6 +57,17 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * @return $this
+     */
+    protected function _prepareCollection()
+    {
+        parent::_prepareCollection();
+        $this->getCollection()->addFieldToFilter('has_options', 1);
+
+        return $this;
+    }
+
+    /**
      * Define grid update URL for ajax queries
      *
      * @return string

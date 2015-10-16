@@ -51,10 +51,11 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     public function render(DataObject $row)
     {
         if ($this->getColumn()->getEditable()) {
-            $value = $this->_getValue($row);
-            return '<div class="admin__grid-control">' .
-            '<span class="admin__grid-control-value">' . $value . '</span>' .
-            $this->_getInputValueElement($row) . '</div>' ;
+            $result = '<div class="admin__grid-control">';
+            $result .= $this->getColumn()->getEditOnly() ? ''
+                : '<span class="admin__grid-control-value">' . $this->_getValue($row) . '</span>';
+
+            return $result . $this->_getInputValueElement($row) . '</div>' ;
         }
         return $this->_getValue($row);
     }

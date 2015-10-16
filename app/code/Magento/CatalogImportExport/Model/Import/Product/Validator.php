@@ -141,6 +141,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 $valid = $this->numericValidation($attrCode, $attrParams['type']);
                 break;
             case 'select':
+            case 'boolean':
             case 'multiselect':
                 $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
                 $valid = true;

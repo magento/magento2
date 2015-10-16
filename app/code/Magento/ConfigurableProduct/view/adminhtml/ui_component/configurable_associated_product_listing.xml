@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">configurable_associated_product_listing.data_source</item>
@@ -37,73 +37,24 @@
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
             </item>
         </argument>
-        <filters name="listing_filters" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters">
+        <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="columnsProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns</item>
                     <item name="params" xsi:type="array">
                         <item name="filters_modifier" xsi:type="array" />
                     </item>
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">filters</item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.${ $.index }:visible</item>
+                        </item>
+                    </item>
+                    <item name="observers" xsi:type="array">
+                        <item name="filters" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters</item>
                     </item>
                 </item>
             </argument>
-            <filterInput name="entity_id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="component" xsi:type="string" />
-                        <item name="dataScope" xsi:type="string">entity_id</item>
-                        <item name="label" xsi:type="string" translate="true">Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="name">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">name</item>
-                        <item name="label" xsi:type="string" translate="true">Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="sku">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">sku</item>
-                        <item name="label" xsi:type="string" translate="true">SKU</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterRange name="price">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">price</item>
-                        <item name="label" xsi:type="string" translate="true">Price</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">from</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">to</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Source\Status</argument>
@@ -121,29 +72,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids</item>
-                    <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="options" xsi:type="array">
-                        <item name="20" xsi:type="array">
-                            <item name="value" xsi:type="number">20</item>
-                            <item name="label" xsi:type="string" translate="true">20</item>
-                        </item>
-                        <item name="30" xsi:type="array">
-                            <item name="value" xsi:type="number">30</item>
-                            <item name="label" xsi:type="string" translate="true">30</item>
-                        </item>
-                        <item name="50" xsi:type="array">
-                            <item name="value" xsi:type="number">50</item>
-                            <item name="label" xsi:type="string" translate="true">50</item>
-                        </item>
-                        <item name="100" xsi:type="array">
-                            <item name="value" xsi:type="number">100</item>
-                            <item name="label" xsi:type="string" translate="true">100</item>
-                        </item>
-                        <item name="200" xsi:type="array">
-                            <item name="value" xsi:type="number">200</item>
-                            <item name="label" xsi:type="string" translate="true">200</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </paging>
@@ -159,31 +87,22 @@
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                         </item>
                     </item>
-                    <item name="controlVisibility" xsi:type="boolean">true</item>
                 </item>
             </item>
         </argument>
-        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+        <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="controlVisibility" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="sortOrder" xsi:type="number">0</item>
                 </item>
             </argument>
-        </column>
+        </selectionsColumn>
         <column name="entity_id">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
@@ -191,15 +110,12 @@
         </column>
         <column name="thumbnail" class="Magento\Catalog\Ui\Component\Listing\Columns\Thumbnail">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="altField" xsi:type="string">name</item>
                     <item name="has_preview" xsi:type="string">1</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Thumbnail</item>
                     <item name="sortOrder" xsi:type="number">20</item>
@@ -208,13 +124,9 @@
         </column>
         <column name="name">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="sortOrder" xsi:type="number">30</item>
                 </item>
@@ -222,12 +134,8 @@
         </column>
         <column name="sku">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">SKU</item>
                     <item name="sortOrder" xsi:type="number">60</item>
                 </item>
@@ -235,13 +143,9 @@
         </column>
         <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
                     <item name="sortOrder" xsi:type="number">70</item>
                 </item>

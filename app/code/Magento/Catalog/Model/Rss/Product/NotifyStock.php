@@ -17,7 +17,7 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
     protected $productFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\StockFactory
+     * @var \Magento\CatalogInventory\Model\ResourceModel\StockFactory
      */
     protected $stockFactory;
 
@@ -35,13 +35,13 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\CatalogInventory\Model\Resource\StockFactory $stockFactory
+     * @param \Magento\CatalogInventory\Model\ResourceModel\StockFactory $stockFactory
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\CatalogInventory\Model\Resource\StockFactory $stockFactory,
+        \Magento\CatalogInventory\Model\ResourceModel\StockFactory $stockFactory,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
@@ -52,15 +52,15 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductsCollection()
     {
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $product->getCollection();
-        /** @var $resourceStock \Magento\CatalogInventory\Model\Resource\Stock */
+        /** @var $resourceStock \Magento\CatalogInventory\Model\ResourceModel\Stock */
         $resourceStock = $this->stockFactory->create();
         $resourceStock->addLowStockFilter(
             $collection,

@@ -111,10 +111,7 @@ class DeployStaticContentCommand extends Command
 
         try {
             // run the deployment logic
-            $filesUtil = $this->objectManager->create(
-                '\Magento\Framework\App\Utility\Files',
-                ['pathToSource' => BP]
-            );
+            $filesUtil = $this->objectManager->create('\Magento\Framework\App\Utility\Files');
 
             $deployer = $this->objectManager->create(
                 'Magento\Deploy\Model\Deployer',

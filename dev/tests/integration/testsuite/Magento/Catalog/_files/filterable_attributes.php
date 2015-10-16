@@ -11,9 +11,9 @@ $entityModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->crea
 $entityTypeId = $entityModel->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setAttributeCode(
     'filterable_attribute_a'
@@ -30,7 +30,7 @@ $attribute->setAttributeCode(
 )->save();
 
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setAttributeCode(
     'filterable_attribute_b'

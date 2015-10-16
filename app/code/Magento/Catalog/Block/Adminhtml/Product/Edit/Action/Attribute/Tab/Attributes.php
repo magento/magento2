@@ -70,7 +70,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
             [
                 'category_ids',
                 'gallery',
-                'group_price',
                 'image',
                 'media_gallery',
                 'quantity_and_stock_status',

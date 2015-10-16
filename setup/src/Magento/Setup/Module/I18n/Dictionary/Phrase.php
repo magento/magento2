@@ -237,4 +237,41 @@ class Phrase
     {
         return $this->getPhrase() . '::' . $this->getContextType();
     }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @return string
+     */
+    public function getCompiledPhrase()
+    {
+        return $this->getCompiledString($this->getPhrase());
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @return string
+     */
+    public function getCompiledTranslation()
+    {
+        return $this->getCompiledString($this->getTranslation());
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @param string $string
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.EvalExpression)
+     */
+    private function getCompiledString($string)
+    {
+        $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
+
+        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
+        $result = @eval($evalString);
+        return is_string($result) ? $result :  $string;
+    }
 }

@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
-use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 
