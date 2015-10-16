@@ -14,6 +14,9 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\TestFramework\Utility\ChangedFiles;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**@#+
@@ -871,7 +874,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testMageMethodsObsolete()
     {
-        $ignored = $this->getBlacklistFiles();
+        $ignored = $this->getBlacklistFiles(true);
         $files = Files::init()->getPhpFiles(
             Files::INCLUDE_APP_CODE
             | Files::INCLUDE_TESTS
@@ -901,17 +904,42 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $appPath
+     * @param string $pattern
+     * @return array
+     * @throws \Exception
+     */
+    private function processPattern($appPath, $pattern)
+    {
+        $files = [];
+        $relativePathStart = strlen($appPath);
+
+        $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
+        foreach ($fileSet as $file) {
+            $files[] = substr($file, $relativePathStart);
+        }
+
+        return $files;
+    }
+
+    /**
      * Reads list of blacklisted files
      *
+     * @param bool $absolutePath
      * @return array
+     * @throws \Exception
      */
-    private function getBlacklistFiles()
+    private function getBlacklistFiles($absolutePath = false)
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
         $appPath = Files::init()->getPathToSource();
         foreach ($blackList as $file) {
-            $ignored = array_merge($ignored, glob($appPath . '/' . $file, GLOB_NOSORT));
+            if ($absolutePath) {
+                $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
+            } else {
+                $ignored = array_merge($ignored, $this->processPattern($appPath, $file));
+            }
         }
         return $ignored;
     }
