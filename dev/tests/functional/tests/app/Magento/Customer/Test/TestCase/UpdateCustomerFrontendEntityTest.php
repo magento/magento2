@@ -124,12 +124,9 @@ class UpdateCustomerFrontendEntityTest extends Injectable
             'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
             ['customer' => $initialCustomer]
         )->run();
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
         $this->customerAccountIndex->getInfoBlock()->openEditContactInfo();
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
 
         \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
@@ -137,8 +134,5 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
     }
 }
