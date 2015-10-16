@@ -42,6 +42,10 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
     }
 
     /**
@@ -105,10 +109,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('addComponentDefinition')
             ->with('columns', ['extends' => 'test_config_extends']);
-        $this->contextMock->expects($this->once())
-            ->method('getUrl')
-            ->with($saveUrl)
-            ->willReturn('http://localhost.com/admin/' . $saveUrl);
 
         $dataProviderMock->expects($this->once())
             ->method('getFieldMetaInfo')
@@ -152,7 +152,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                 'test_config_data' => 'test_config_value',
                 'editorConfig' => [
                     'clientConfig' => [
-                        'saveUrl' => 'http://localhost.com/admin/' . $saveUrl,
+                        'saveUrl' => $saveUrl,
                     ]
                 ]
             ],

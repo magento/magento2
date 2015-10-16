@@ -10,6 +10,7 @@
 $code = $block->getMethodCode();
 $ccType = $block->getInfoData('cc_type');
 $ccExpYear = $block->getInfoData('cc_exp_year');
+$ccExpMonth = $block->getInfoData('cc_exp_month');
 ?>
 
 <!-- IFRAME for request to Payment Gateway -->
@@ -87,11 +88,10 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     data-container="<?php /* @noEscape */ echo $code; ?>-cc-month"
                     class="admin__control-select admin__control-select-month"
                     data-validate='{required:true, "validate-cc-exp":"#<?php /* @noEscape */ echo $code; ?>_expiration_yr"}'>
-                <?php $_ccExpMonth = $block->getInfoData('cc_exp_month') ?>
                 <?php foreach ($block->getCcMonths() as $k => $v): ?>
                     <option
-                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
-                        <?php if ($k == $_ccExpMonth): ?> selected="selected"<?php endif ?>>
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
+                        <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
                         <?php echo $block->escapeHtml($v); ?>
                     </option>
                 <?php endforeach ?>

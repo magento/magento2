@@ -126,7 +126,6 @@ define([
      */
     function setRootListener(data, component) {
         boundedNodes.get(component, function (root) {
-            var ctx = data.ctx || '*'
             if (!$(root).is(data.ctx || '*')) {
                 return;
             }
@@ -223,7 +222,7 @@ define([
         /**
          * Sets removal listener of the specified nodes.
          *
-         * @param {{HTMLElement|Array|ArrayLike}} nodes - Nodes whose removal to track.
+         * @param {(HTMLElement|Array|ArrayLike)} nodes - Nodes whose removal to track.
          * @param {Function} fn - Callback that will be invoked when node is removed.
          */
         remove: function (nodes, fn) {

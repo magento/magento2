@@ -7,6 +7,9 @@ define([
 ], function () {
     'use strict';
 
+    /**
+     * @constructor
+     */
     function Storage() {
         this.data = new Map();
     }
