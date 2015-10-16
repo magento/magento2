@@ -1437,6 +1437,41 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @covers \Magento\Sales\Model\Order\Payment::isCaptureFinal()
+     * @return void
+     */
+    public function testIsCaptureFinal()
+    {
+        $amount = 23.02;
+        $partialAmount = 12.00;
+
+        $this->orderMock->expects(static::exactly(2))
+            ->method('getTotalDue')
+            ->willReturn($amount);
+
+        static::assertFalse($this->payment->isCaptureFinal($partialAmount));
+        static::assertTrue($this->payment->isCaptureFinal($amount));
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order\Payment::getShouldCloseParentTransaction()
+     * @return void
+     */
+    public function testGetShouldCloseParentTransaction()
+    {
+        static::assertNull(
+            $this->payment->getShouldCloseParentTransaction(),
+            'By default method should always return `null`'
+        );
+
+        $this->payment->setShouldCloseParentTransaction(1);
+        static::assertTrue($this->payment->getShouldCloseParentTransaction());
+
+        $this->payment->setShouldCloseParentTransaction(0);
+        static::assertFalse($this->payment->getShouldCloseParentTransaction());
+    }
+
     protected function initPayment()
     {
         return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(

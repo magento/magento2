@@ -603,7 +603,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                     if ($result->success) {
                         $payment->setIsTransactionClosed(false)
                             ->setShouldCloseParentTransaction(false);
-                        if ($this->isFinalCapture($payment->getParentId(), $amount)) {
+                        if ($payment->isCaptureFinal($amount)) {
                             $payment->setShouldCloseParentTransaction(true);
                         }
                     } else {
@@ -902,7 +902,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
             ->setAdditionalInformation($this->getExtraTransactionInformation($result->transaction))
             ->setAmount($amount)
             ->setShouldCloseParentTransaction(false);
-        if ($this->isFinalCapture($payment->getParentId(), $amount)) {
+        if ($payment->isCaptureFinal($amount)) {
             $payment->setShouldCloseParentTransaction(true);
         }
         if (isset($result->transaction->creditCard['token']) && $result->transaction->creditCard['token']) {
@@ -960,22 +960,5 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
     protected function _convertObjToArray($data)
     {
         return json_decode(json_encode($data), true);
-    }
-
-    /**
-     * Checks whether the capture is final
-     *
-     * @param string $orderId
-     * @param string $amount
-     * @return bool
-     */
-    protected function isFinalCapture($orderId, $amount)
-    {
-        if (!empty($orderId)) {
-            $order = $this->orderRepository->get($orderId);
-            return (float)$order->getTotalDue() === (float) $amount;
-        }
-
-        return false;
     }
 }
