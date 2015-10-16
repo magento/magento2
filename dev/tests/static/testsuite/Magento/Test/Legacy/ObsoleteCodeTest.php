@@ -871,7 +871,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testMageMethodsObsolete()
     {
-        $ignored = $this->getBlacklistFiles();
+        $ignored = $this->getBlacklistFiles(true);
         $files = Files::init()->getPhpFiles(
             Files::INCLUDE_APP_CODE
             | Files::INCLUDE_TESTS
@@ -901,14 +901,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $appPath
      * @param string $pattern
      * @return array
      * @throws \Exception
      */
-    private function processPattern($pattern)
+    private function processPattern($appPath, $pattern)
     {
         $files = [];
-        $appPath = Files::init()->getPathToSource();
         $relativePathStart = strlen($appPath);
 
         $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
@@ -922,14 +922,21 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * Reads list of blacklisted files
      *
+     * @param bool $absolutePath
      * @return array
+     * @throws \Exception
      */
-    private function getBlacklistFiles()
+    private function getBlacklistFiles($absolutePath = false)
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
+        $appPath = Files::init()->getPathToSource();
         foreach ($blackList as $file) {
-            $ignored = array_merge($ignored, $this->processPattern($file));
+            if ($absolutePath) {
+                $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
+            } else {
+                $ignored = array_merge($ignored, $this->processPattern($appPath, $file));
+            }
         }
         return $ignored;
     }
