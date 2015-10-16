@@ -14,6 +14,9 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\TestFramework\Utility\ChangedFiles;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**@#+
