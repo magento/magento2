@@ -94,6 +94,12 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        $this->lockerProcessMock->expects(self::once())
+            ->method('lockProcess')
+            ->with(self::isType('string'));
+        $this->lockerProcessMock->expects(self::once())
+            ->method('unlockProcess');
+
         $this->sorterMock->expects(self::once())
             ->method('sort')
             ->with($alternatives)
@@ -137,7 +143,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             $alternatives
         );
 
-        $alternativeSource->process($this->getChainMock('', 0));
+        $alternativeSource->process($this->getChainMockExpects('', 0));
     }
 
     /**
@@ -150,6 +156,12 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
                 AlternativeSource::PROCESSOR_CLASS => 'Magento\Framework\View\Asset\ContentProcessorInterface'
             ]
         ];
+
+        $this->lockerProcessMock->expects(self::once())
+            ->method('lockProcess')
+            ->with(self::isType('string'));
+        $this->lockerProcessMock->expects(self::once())
+            ->method('unlockProcess');
 
         $this->sorterMock->expects(self::once())
             ->method('sort')
@@ -196,7 +208,40 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             $alternatives
         );
 
-        $alternativeSource->process($this->getChainMock());
+        $alternativeSource->process($this->getChainMockExpects());
+    }
+
+    /**
+     * Run test for process method (content not empty)
+     */
+    public function testProcessContentNotEmpty()
+    {
+        $chainMock = $this->getChainMock();
+        $assetMock = $this->getAssetMock();
+
+        $chainMock->expects(self::once())
+            ->method('getContent')
+            ->willReturn('test-content');
+
+        $chainMock->expects(self::once())
+            ->method('getAsset')
+            ->willReturn($assetMock);
+
+        $this->lockerProcessMock->expects(self::never())
+            ->method('lockProcess');
+        $this->lockerProcessMock->expects(self::never())
+            ->method('unlockProcess');
+
+        $alternativeSource = new AlternativeSource(
+            $this->objectManagerMock,
+            $this->lockerProcessMock,
+            $this->sorterMock,
+            $this->assetBuilderMock,
+            'lock',
+            []
+        );
+
+        $alternativeSource->process($chainMock);
     }
 
     /**
@@ -217,22 +262,32 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $content
-     * @param int $contentExactly
      * @return Chain|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getChainMock($content = '', $contentExactly = 1)
+    private function getChainMock()
     {
         $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()
             ->getMock();
+
+        return $chainMock;
+    }
+
+    /**
+     * @param string $content
+     * @param int $contentExactly
+     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getChainMockExpects($content = '', $contentExactly = 1)
+    {
+        $chainMock = $this->getChainMock();
 
         $chainMock->expects(self::once())
             ->method('getContent')
             ->willReturn($content);
         $chainMock->expects(self::exactly(3))
             ->method('getAsset')
-            ->willReturn($this->getAssetMock());
+            ->willReturn($this->getAssetMockExpects());
         $chainMock->expects(self::exactly($contentExactly))
             ->method('setContent')
             ->willReturn(self::NEW_CONTENT);
@@ -260,6 +315,16 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
         $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
+        return $assetMock;
+    }
+
+    /**
+     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getAssetMockExpects()
+    {
+        $assetMock = $this->getAssetMock();
 
         $assetMock->expects(self::once())
             ->method('getContext')
