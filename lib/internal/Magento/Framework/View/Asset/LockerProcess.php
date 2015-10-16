@@ -52,6 +52,7 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @inheritdoc
+     * @throws FileSystemException
      */
     public function lockProcess($lockName)
     {
@@ -68,12 +69,12 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @inheritdoc
+     * @throws FileSystemException
      */
     public function unlockProcess()
     {
         $this->tmpDirectory->delete($this->lockFilePath);
     }
-
 
     /**
      * Check whether generation process has already locked

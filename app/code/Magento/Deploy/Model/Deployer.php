@@ -299,7 +299,7 @@ class Deployer
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
         foreach ($this->alternativeSources as $name => $alternative) {
-            if (in_array($extension, $alternative->getAlternatives(), true)
+            if (in_array($extension, $alternative->getAlternativesExtensionsNames(), true)
                 && strpos(basename($filePath), '_') !== 0
             ) {
                 $compiledFile = substr($filePath, 0, strlen($filePath) - strlen($extension) - 1);

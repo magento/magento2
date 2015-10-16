@@ -22,7 +22,12 @@ class Pool
     private $preprocessors;
 
     /**
-     * @var Helper\SorterInterface
+     * @var array
+     */
+    private $instances;
+
+    /**
+     * @var Helper\SortInterface
      */
     private $sorter;
 
@@ -40,13 +45,13 @@ class Pool
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param Helper\SorterInterface $sorter
+     * @param Helper\SortInterface $sorter
      * @param string $defaultPreprocessor
      * @param array $preprocessors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        Helper\SorterInterface $sorter,
+        Helper\SortInterface $sorter,
         $defaultPreprocessor,
         array $preprocessors = []
     ) {
@@ -79,15 +84,19 @@ class Pool
      */
     private function getPreProcessors($type)
     {
+        if (isset($this->instances[$type])) {
+            return $this->instances[$type];
+        }
+
         if (isset($this->preprocessors[$type])) {
-            $preprocessors = $this->sorter->sorting($this->preprocessors[$type]);
+            $preprocessors = $this->sorter->sort($this->preprocessors[$type]);
         } else {
             $preprocessors = [
                 'default' => [self::PREPROCESSOR_CLASS => $this->defaultPreprocessor]
             ];
         }
 
-        $instances = [];
+        $this->instances[$type] = [];
         foreach ($preprocessors as $preprocessor) {
             $instance = $this->objectManager->get($preprocessor[self::PREPROCESSOR_CLASS]);
             if (!$instance instanceof PreProcessorInterface) {
@@ -95,9 +104,9 @@ class Pool
                     '"' . $preprocessor[self::PREPROCESSOR_CLASS] . '" has to implement the PreProcessorInterface.'
                 );
             }
-            $instances[] = $instance;
+            $this->instances[$type][] = $instance;
         }
 
-        return $instances;
+        return $this->instances[$type];
     }
 }

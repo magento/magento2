@@ -35,7 +35,7 @@ class Processor implements ContentProcessorInterface
     /**
      * @var Temporary
      */
-    private $temporary;
+    private $temporaryFile;
 
     /**
      * Constructor
@@ -43,18 +43,18 @@ class Processor implements ContentProcessorInterface
      * @param LoggerInterface $logger
      * @param State $appState
      * @param Source $assetSource
-     * @param Temporary $temporary
+     * @param Temporary $temporaryFile
      */
     public function __construct(
         LoggerInterface $logger,
         State $appState,
         Source $assetSource,
-        Temporary $temporary
+        Temporary $temporaryFile
     ) {
         $this->logger = $logger;
         $this->appState = $appState;
         $this->assetSource = $assetSource;
-        $this->temporary = $temporary;
+        $this->temporaryFile = $temporaryFile;
     }
 
     /**
@@ -76,7 +76,7 @@ class Processor implements ContentProcessorInterface
                 return '';
             }
 
-            $tmpFilePath = $this->temporary->createFile($asset->getPath(), $content);
+            $tmpFilePath = $this->temporaryFile->createFile($asset->getPath(), $content);
             $parser->parseFile($tmpFilePath, '');
 
             $content = $parser->getCss();

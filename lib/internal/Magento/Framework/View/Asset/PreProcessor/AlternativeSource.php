@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
@@ -22,7 +23,7 @@ class AlternativeSource implements AlternativeSourceInterface
     const PROCESSOR_CLASS = 'class';
 
     /**
-     * @var Helper\SorterInterface
+     * @var Helper\SortInterface
      */
     private $sorter;
 
@@ -61,15 +62,15 @@ class AlternativeSource implements AlternativeSourceInterface
      *
      * @param ObjectManagerInterface $objectManager
      * @param LockerProcessInterface $lockerProcess
-     * @param Helper\SorterInterface $sorter
+     * @param Helper\SortInterface $sorter
      * @param AssetBuilder $assetBuilder
-     * @param $lockName
+     * @param string $lockName
      * @param array $alternatives
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         LockerProcessInterface $lockerProcess,
-        Helper\SorterInterface $sorter,
+        Helper\SortInterface $sorter,
         AssetBuilder $assetBuilder,
         $lockName,
         array $alternatives = []
@@ -89,40 +90,49 @@ class AlternativeSource implements AlternativeSourceInterface
     public function process(Chain $chain)
     {
         try {
-            $this->processContent($chain);
+            $path = $chain->getAsset()->getFilePath();
+            $content = $chain->getContent();
+
+            $this->lockerProcess->lockProcess($this->lockName . sprintf('%x', crc32($path . $content)));
+
+            if (trim($content) !== '') {
+                return;
+            }
+
+            $module = $chain->getAsset()->getModule();
+            /** @var  FallbackContext $context */
+            $context = $chain->getAsset()->getContext();
+
+            $chain->setContent($this->processContent($path, $content, $module, $context));
+
         } finally {
             $this->lockerProcess->unlockProcess();
         }
     }
 
     /**
-     * @param Chain $chain
+     * Preparation of content for the destination file
+     *
+     * @param string $path
+     * @param string $content
+     * @param string $module
+     * @param FallbackContext $context
+     * @return string
      * @throws \UnexpectedValueException
      */
-    public function processContent(Chain $chain)
+    private function processContent($path, $content, $module, FallbackContext $context)
     {
-        $content = $chain->getContent();
-        /** @var  \Magento\Framework\View\Asset\File\FallbackContext $context */
-        $context = $chain->getAsset()->getContext();
-        $path = $chain->getAsset()->getFilePath();
-
-        $this->lockerProcess->lockProcess($this->lockName . sprintf('%x', crc32($path . $content)));
-
-        if (!isset($this->alternativesSorted)) {
-            $this->alternativesSorted = $this->sorter->sorting($this->alternatives);
+        if ($this->alternativesSorted === null) {
+            $this->alternativesSorted = $this->sorter->sort($this->alternatives);
         }
 
         foreach ($this->alternativesSorted as $name => $alternative) {
-            if (trim($content) !== '') {
-                break;
-            }
-
             $asset = $this->assetBuilder->setArea($context->getAreaCode())
                 ->setTheme($context->getThemePath())
                 ->setLocale($context->getLocale())
-                ->setModule($chain->getAsset()->getModule())
+                ->setModule($module)
                 ->setPath(preg_replace(
-                    '#\.' . preg_quote(pathinfo($chain->getAsset()->getFilePath(), PATHINFO_EXTENSION)) . '$#',
+                    '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
                     '.' . $name,
                     $path
                 ))->build();
@@ -130,19 +140,23 @@ class AlternativeSource implements AlternativeSourceInterface
             $processor = $this->objectManager->get($alternative[self::PROCESSOR_CLASS]);
             if (!$processor  instanceof ContentProcessorInterface) {
                 throw new \UnexpectedValueException(
-                    '"' . $alternative[self::PROCESSOR_CLASS] . '" has to implement the PreProcessorInterface.'
+                    '"' . $alternative[self::PROCESSOR_CLASS] . '" has to implement the ContentProcessorInterface.'
                 );
             }
-
             $content = $processor->processContent($asset);
-            $chain->setContent($content);
+
+            if (trim($content) !== '') {
+                return $content;
+            }
         }
+
+        return $content;
     }
 
     /**
      * @inheritdoc
      */
-    public function getAlternatives()
+    public function getAlternativesExtensionsNames()
     {
         return array_keys($this->alternatives);
     }
