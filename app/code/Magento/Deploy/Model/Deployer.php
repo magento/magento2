@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * A service for deploying Magento static view files for production mode
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class Deployer
 {
@@ -96,7 +97,13 @@ class Deployer
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
 
-        array_map(function (AlternativeSourceInterface $alternative) {}, $alternativeSources);
+        array_map(
+            function (AlternativeSourceInterface $alternative)
+            {
+                //
+            },
+            $alternativeSources
+        );
         $this->alternativeSources = $alternativeSources;
     }
 

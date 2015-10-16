@@ -58,6 +58,7 @@ class Sort implements SortInterface
 
     /**
      * @param array $structure
+     * @return void
      */
     private function fillResult(array $structure)
     {

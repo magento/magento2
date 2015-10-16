@@ -145,7 +145,7 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
     /**
      * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function  getTmpDirectoryMock()
+    private function getTmpDirectoryMock()
     {
         $tmpDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->getMockForAbstractClass();
