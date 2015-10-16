@@ -23,8 +23,8 @@
                 class="admin__control-radio"
                 data-bind="
                     attr: {
-                        id: 'export-field-' + value + $index(),
-                        name: 'export'
+                        id: ++ko.bindingHandlers['uniqueName'].currentIndex + '_uid',
+                        name: $parent.name
                     },
                     checkedValue: value,
                     checked: $parent.checked"
@@ -34,7 +34,7 @@
                 data-bind="
                     text: label,
                     attr: {
-                        for:  'export-field-' + value + $index()
+                        for:  ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
                     }"></label>
         </div>
         <!-- /ko -->

@@ -13,7 +13,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Type extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
@@ -71,7 +71,7 @@ class Type extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Save entity types after save form type
      *
-     * @see \Magento\Framework\Model\ModelResource\Db\AbstractDb#_afterSave($object)
+     * @see \Magento\Framework\Model\ResourceModel\Db\AbstractDb#_afterSave($object)
      *
      * @param FormType|AbstractModel $object
      * @return $this

@@ -8,7 +8,7 @@ namespace Magento\Directory\Model\ResourceModel;
 /**
  * Directory Country Resource Model
  */
-class Country extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization
