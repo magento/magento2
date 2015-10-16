@@ -9,11 +9,7 @@ define([
     'use strict';
 
     return Abstract.extend({
-        defaults: {
-            links: {
-                value: ''
-            }
-        },
+        defaults: {},
 
         /**
          * Initializes file component.
