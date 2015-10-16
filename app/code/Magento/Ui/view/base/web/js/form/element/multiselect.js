@@ -20,8 +20,10 @@ define([
          *
          * @returns {Number|String}
          */
-        getInitialValue: function () {
-            var value = this._super();
+        normalizeData: function (value) {
+            if (utils.isEmpty(value)) {
+                value = [];
+            }
 
             return _.isString(value) ? value.split(',') : value;
         },
