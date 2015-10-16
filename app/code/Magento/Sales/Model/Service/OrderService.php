@@ -98,8 +98,8 @@ class OrderService implements OrderManagementInterface
         $this->criteriaBuilder->addFilters(
             [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
-        $criteria = $this->criteriaBuilder->create();
-        return $this->historyRepository->getList($criteria);
+        $searchCriteria = $this->criteriaBuilder->create();
+        return $this->historyRepository->getList($searchCriteria);
     }
 
     /**
