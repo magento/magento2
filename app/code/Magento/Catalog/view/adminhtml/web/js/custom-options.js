@@ -216,7 +216,7 @@ define([
                     var widget = this,
                         currentElement = $(event.target),
                         parentId = '#' + currentElement.closest('.fieldset-alt').attr('id'),
-                        group = currentElement.find('[value="' + currentElement.val() + '"]').closest('optgroup').attr('label'),
+                        group = currentElement.find('[value="' + currentElement.val() + '"]').closest('optgroup').attr('data-name'),
                         previousGroup = $(parentId + '_previous_group').val(),
                         previousBlock = $(parentId + '_type_' + previousGroup),
                         tmpl;

@@ -88,7 +88,7 @@ require([
 ], function(jQuery){
 
 jQuery(function ($) {
-    var fieldSet = $('#Custom_Options');
+    var fieldSet = $('[data-block=product-custom-options]');
     fieldSet.customOptions(<?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
         [
             'fieldId' => $block->getFieldId(),
