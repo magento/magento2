@@ -33,21 +33,24 @@ class Download
     /**
      * @var string
      */
-    protected $allowedDirectory = DirectoryList::MEDIA;
+    protected $rootDirBasePath;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param string $rootDirBasePath
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
         \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        $rootDirBasePath = DirectoryList::MEDIA
     ) {
-        $this->_rootDir = $filesystem->getDirectoryWrite($this->allowedDirectory);
+        $this->rootDirBasePath = $rootDirBasePath;
+        $this->_rootDir = $filesystem->getDirectoryWrite($this->rootDirBasePath);
         $this->_fileStorageDatabase = $fileStorageDatabase;
         $this->_storageDatabaseFactory = $storageDatabaseFactory;
         $this->_fileFactory = $fileFactory;
@@ -68,14 +71,14 @@ class Download
             $relativePath = $info['quote_path'];
             if (!$this->_isCanProcessed($relativePath)) {
                 throw new LocalizedException(
-                    __('Path "%1" is not part of allowed directory "%2"', $relativePath, $this->allowedDirectory)
+                    __('Path "%1" is not part of allowed directory "%2"', $relativePath, $this->rootDirBasePath)
                 );
             }
         }
         $this->_fileFactory->create(
             $info['title'],
             ['value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'],
-            $this->allowedDirectory
+            $this->rootDirBasePath
         );
     }
 
