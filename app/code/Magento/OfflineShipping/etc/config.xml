@@ -39,6 +39,14 @@
                 <title>Free Shipping</title>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
             </freeshipping>
+            <pickup>
+                <active>0</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Magento\OfflineShipping\Model\Carrier\Pickup</model>
+                <name>Pickup</name>
+                <title>Store Pickup</title>
+                <specificerrmsg>Store pickup is not available. To use store pickup, please contact us.</specificerrmsg>
+            </pickup>
         </carriers>
     </default>
 </config>
