@@ -47,7 +47,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Iterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Iterator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceIterator;
 
@@ -121,7 +121,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resourceIterator = $this->getMock(
-            '\Magento\Framework\Model\ModelResource\Iterator',
+            '\Magento\Framework\Model\ResourceModel\Iterator',
             ['walk'],
             [],
             '',

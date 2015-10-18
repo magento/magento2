@@ -170,7 +170,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCategoryCollection()
     {
@@ -279,7 +279,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $ids = $this->getData('root_ids');
         if ($ids === null) {
-            $ids = [];
+            $ids = [\Magento\Catalog\Model\Category::TREE_ROOT_ID];
             foreach ($this->_storeManager->getGroups() as $store) {
                 $ids[] = $store->getRootCategoryId();
             }

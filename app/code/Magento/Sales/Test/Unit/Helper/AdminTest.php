@@ -290,7 +290,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'quote' => $quoteMock,
             'other' => 'other',
         ];
-        $collectionClassName = 'Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection';
+        $collectionClassName = 'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection';
         $collectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
             ->getMock();

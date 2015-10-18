@@ -7,13 +7,13 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiComponent',
+    'uiElement',
     'Magento_Ui/js/modal/alert',
     'mage/translate'
-], function ($, _, utils, Component, alert, $t) {
+], function ($, _, utils, Element, alert, $t) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             listens: {
                 params: 'reload'
@@ -26,7 +26,7 @@ define([
          * @returns {Provider} Chainable.
          */
         initialize: function () {
-            utils.limit(this, 'reload', 200);
+            utils.limit(this, 'reload', 300);
             _.bindAll(this, 'onReload');
 
             return this._super();
@@ -40,10 +40,23 @@ define([
         initConfig: function () {
             this._super();
 
-            _.extend(this.data, {
+            this.setData({
                 items: [],
                 totalRecords: 0
             });
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {Object} data
+         * @returns {Provider} Chainable.
+         */
+        setData: function (data) {
+            data = this.processData(data);
+
+            this.set('data', data);
 
             return this;
         },
@@ -54,14 +67,20 @@ define([
         reload: function () {
             this.trigger('reload');
 
-            $.ajax({
-                url: this.update_url,
+            if (this.request && this.request.readyState !== 4) {
+                this.request.abort();
+            }
+
+            this.request = $.ajax({
+                url: this['update_url'],
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
-            })
-            .error(this.onError)
-            .done(this.onReload);
+            });
+
+            this.request
+                .done(this.onReload)
+                .error(this.onError);
         },
 
         /**
@@ -83,7 +102,11 @@ define([
         /**
          * Handles reload error.
          */
-        onError: function () {
+        onError: function (xhr) {
+            if (xhr.statusText === 'abort') {
+                return;
+            }
+
             alert({
                 content: $t('Something went wrong.')
             });
@@ -95,9 +118,7 @@ define([
          * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
-            data = this.processData(data);
-
-            this.set('data', data)
+            this.setData(data)
                 .trigger('reloaded');
         }
     });

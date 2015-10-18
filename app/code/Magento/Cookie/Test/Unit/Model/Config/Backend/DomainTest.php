@@ -13,7 +13,7 @@ use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
  */
 class DomainTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Model\ModelResource\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Domain */
@@ -37,7 +37,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 '_construct',
                 'getConnection',

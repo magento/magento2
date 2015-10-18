@@ -49,7 +49,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength
      * @param \Magento\Framework\Url\Validator $urlValidator
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -59,7 +59,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

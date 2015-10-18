@@ -59,12 +59,17 @@
         "arrows": "false",
         "thumbwidth": "90",
         "thumbheight": "90",
-        "ratio": "1"
+        "ratio": "1",
+        "allowfullscreen": true
+    },
+    "fullscreen": {
+        "nav": false
     },
     "breakpoints": {
         "alias": {
             "conditions": {
-                "min-width": "0px"
+                "min-width": "0px",
+                "max-width": "1px"
             },
             "options": {
                 "options": {

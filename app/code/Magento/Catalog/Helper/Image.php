@@ -436,11 +436,13 @@ class Image extends AbstractHelper
      */
     public function getPlaceholder($placeholder = null)
     {
-        if (!$this->_placeholder) {
-            $placeholder = $placeholder ? : $this->_getModel()->getDestinationSubdir();
-            $this->_placeholder = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
+        if ($placeholder) {
+            $placeholderFullPath = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
+        } else {
+            $placeholderFullPath = $this->_placeholder
+                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getDestinationSubdir() . '.jpg';
         }
-        return $this->_placeholder;
+        return $placeholderFullPath;
     }
 
     /**
@@ -816,7 +818,7 @@ class Image extends AbstractHelper
      */
     public function getHeight()
     {
-        return $this->getAttribute('height') ? : $this->getAttribute('width');
+        return $this->getAttribute('height') ?: $this->getAttribute('width');
     }
 
     /**

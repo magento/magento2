@@ -64,7 +64,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoresConfig $storesConfig
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -75,7 +75,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoresConfig $storesConfig,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Tax\Model\ClassModelFactory $classModelFactory,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

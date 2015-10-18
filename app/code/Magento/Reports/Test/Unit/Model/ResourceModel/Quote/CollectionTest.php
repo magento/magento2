@@ -43,7 +43,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $entityFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
      */
     protected $entitySnapshotMock;
 
@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $snapshotClassName = 'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot';
+        $snapshotClassName = 'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot';
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
             ->setMethods(['registerSnapshot'])
