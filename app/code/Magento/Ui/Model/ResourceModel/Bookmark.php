@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Model\ResourceModel;
 
-use Magento\Framework\Model\ModelResource\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Bookmark resource
@@ -18,12 +18,12 @@ class Bookmark extends AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {

@@ -14,7 +14,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * Encryption key changer resource model
  * The operation must be done in one transaction
  */
-class Change extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Encryptor interface
@@ -45,7 +45,7 @@ class Change extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $writer;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
@@ -53,7 +53,7 @@ class Change extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Config\Model\Config\Structure $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,

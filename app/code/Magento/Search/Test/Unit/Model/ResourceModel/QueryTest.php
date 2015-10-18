@@ -34,7 +34,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->adapter);
 
-        $context = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Context')
+        $context = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())

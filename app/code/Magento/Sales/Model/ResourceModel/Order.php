@@ -11,8 +11,8 @@ use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 
 /**
  * Flat sales order resource
@@ -52,7 +52,7 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param Snapshot $entitySnapshot
@@ -61,7 +61,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         Attribute $attribute,
