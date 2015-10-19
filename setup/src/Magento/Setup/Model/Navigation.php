@@ -34,12 +34,10 @@ class Navigation
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
-        $objectManager = $objectManagerProvider->get();
-        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+        if (file_exists(BP . \Magento\Setup\Controller\Environment::PATH_TO_CONFIG)) {
             $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
             $this->navType = self::NAV_UPDATER;
             $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];

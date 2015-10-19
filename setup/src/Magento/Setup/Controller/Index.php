@@ -16,9 +16,9 @@ use Magento\Setup\Model\ObjectManagerProvider;
 class Index extends AbstractActionController
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
-    private $objectManager;
+    private $objectManagerProvider;
 
     /**
      * @param ObjectManagerProvider $objectManagerProvider
@@ -26,7 +26,7 @@ class Index extends AbstractActionController
     public function __construct(
         ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->objectManager = $objectManagerProvider->get();
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -34,19 +34,20 @@ class Index extends AbstractActionController
      */
     public function indexAction()
     {
-        if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+        if (file_exists(BP . \Magento\Setup\Controller\Environment::PATH_TO_CONFIG)) {
+            $objectManager = $this->objectManagerProvider->get();
             /** @var \Magento\Framework\App\State $adminAppState */
-            $adminAppState = $this->objectManager->get('Magento\Framework\App\State');
+            $adminAppState = $objectManager->get('Magento\Framework\App\State');
             $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
 
-            $this->objectManager->create(
+            $objectManager->create(
                 'Magento\Backend\Model\Auth\Session',
                 [
-                    'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                    'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
                     'appState' => $adminAppState
                 ]
             );
-            if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+            if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                 $view = new ViewModel();
                 $view->setTemplate('/error/401.phtml');
                 $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_401);

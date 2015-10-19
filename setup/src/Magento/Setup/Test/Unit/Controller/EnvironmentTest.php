@@ -29,24 +29,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     private $cronScriptReadinessCheck;
 
     /**
-     * @var \Magento\Setup\Model\DependencyReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dependencyReadinessCheck;
-
-    /**
      * @var \Magento\Setup\Model\PhpReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
      */
     private $phpReadinessCheck;
-
-    /**
-     * @var \Magento\Setup\Model\UninstallDependencyCheck|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $uninstallDependencyCheck;
-
-    /**
-     * @var \Magento\Setup\Model\ModuleStatusFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $moduleStatusFactory;
 
     /**
      * @var Environment
@@ -57,7 +42,6 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->permissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
-
         $this->cronScriptReadinessCheck = $this->getMock(
             'Magento\Setup\Model\CronScriptReadinessCheck',
             [],
@@ -65,36 +49,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dependencyReadinessCheck = $this->getMock(
-            'Magento\Setup\Model\DependencyReadinessCheck',
-            [],
-            [],
-            '',
-            false
-        );
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
-        $this->uninstallDependencyCheck = $this->getMock(
-            'Magento\Setup\Model\UninstallDependencyCheck',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->moduleStatusFactory = $this->getMock(
-            'Magento\Setup\Model\ModuleStatusFactory',
-            [],
-            [],
-            '',
-            false
-        );
         $this->environment = new Environment(
             $this->permissions,
             $this->filesystem,
             $this->cronScriptReadinessCheck,
-            $this->dependencyReadinessCheck,
-            $this->uninstallDependencyCheck,
-            $this->phpReadinessCheck,
-            $this->moduleStatusFactory
+            $this->phpReadinessCheck
         );
     }
 
