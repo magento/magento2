@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
+use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
@@ -137,10 +137,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $dbConfig = [
-        SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
-        SetupConfigOptionsList::KEY_NAME => 'magento',
-        SetupConfigOptionsList::KEY_USER => 'magento',
-        SetupConfigOptionsList::KEY_PASSWORD => '',
+        ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
+        ConfigOptionsListConstants::KEY_NAME => 'magento',
+        ConfigOptionsListConstants::KEY_USER => 'magento',
+        ConfigOptionsListConstants::KEY_PASSWORD => '',
     ];
 
     /**
@@ -227,11 +227,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testInstall()
     {
         $request = [
-            SetupConfigOptionsList::INPUT_KEY_DB_HOST => '127.0.0.1',
-            SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
-            SetupConfigOptionsList::INPUT_KEY_DB_USER => 'magento',
-            SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
-            BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+            ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
+            ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
+            ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
+            ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+            ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
@@ -436,7 +436,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
             ->method('get')
-            ->with(SetupConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT)
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
