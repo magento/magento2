@@ -1460,11 +1460,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetShouldCloseParentTransaction()
     {
-        static::assertNull(
-            $this->payment->getShouldCloseParentTransaction(),
-            'By default method should always return `null`'
-        );
-
         $this->payment->setShouldCloseParentTransaction(1);
         static::assertTrue($this->payment->getShouldCloseParentTransaction());
 

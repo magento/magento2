@@ -2398,12 +2398,12 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Whether should close parent transaction
      *
-     * @return bool|null
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShouldCloseParentTransaction()
     {
-        return $this->getData('should_close_parent_transaction');
+        return (bool)$this->getData('should_close_parent_transaction');
     }
 
     //@codeCoverageIgnoreEnd
