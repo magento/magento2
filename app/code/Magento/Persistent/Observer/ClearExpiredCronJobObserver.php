@@ -13,7 +13,7 @@ class ClearExpiredCronJobObserver
     /**
      * Website collection factory
      *
-     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
      */
     protected $_websiteCollectionFactory;
 
@@ -25,11 +25,11 @@ class ClearExpiredCronJobObserver
     protected $_sessionFactory;
 
     /**
-     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websiteCollectionFactory
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      */
     public function __construct(
-        \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory,
+        \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websiteCollectionFactory,
         \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_websiteCollectionFactory = $websiteCollectionFactory;

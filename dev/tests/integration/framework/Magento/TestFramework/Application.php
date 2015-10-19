@@ -367,7 +367,6 @@ class Application
                 'core_app_init_current_store_after' => [
                     'integration_tests' => [
                         'instance' => 'Magento\TestFramework\Event\Magento',
-                        'method' => 'initStoreAfter',
                         'name' => 'integration_tests'
                     ]
                 ]

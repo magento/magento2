@@ -10,12 +10,12 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Model\Resource\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
@@ -766,7 +766,7 @@ class Installer
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        $resource = new \Magento\Framework\Module\Resource($this->context);
+        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -931,27 +931,17 @@ class Installer
     /**
      * Updates modules in deployment configuration
      *
+     * @param bool $keepGeneratedCode Cleanup var/generation and reset ObjectManager
      * @return void
      */
-    public function updateModulesSequence()
+    public function updateModulesSequence($keepGeneratedCode = false)
     {
         $this->assertDeploymentConfigExists();
 
         $this->cleanCaches();
 
-        $this->log->log('File system cleanup:');
-        $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
-        // unload Magento autoloader because it may be using compiled definition
-        foreach (spl_autoload_functions() as $autoloader) {
-            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
-                spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
-                break;
-            }
-        }
-        // Corrected Magento autoloader will be loaded upon next get() call on $this->objectManagerProvider
-        $this->objectManagerProvider->reset();
-        foreach ($messages as $message) {
-            $this->log->log($message);
+        if (!$keepGeneratedCode) {
+            $this->cleanupGeneratedCode();
         }
         $this->log->log('Updating modules:');
         $this->createModulesConfig([]);
@@ -1184,7 +1174,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\Resource $resource
+     * @param \Magento\Framework\Module\ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws \Magento\Setup\Exception
@@ -1207,5 +1197,31 @@ class Installer
             }
         }
         return $moduleContextList;
+    }
+
+    /**
+     * Clear var/generation and reset object manager
+     *
+     * @return void
+     */
+    private function cleanupGeneratedCode()
+    {
+        $this->log->log('File system cleanup:');
+        $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
+
+        // unload Magento autoloader because it may be using compiled definition
+        foreach (spl_autoload_functions() as $autoloader) {
+            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
+                break;
+            }
+        }
+
+        // Corrected Magento autoloader will be loaded upon next get() call on $this->objectManagerProvider
+        $this->objectManagerProvider->reset();
+
+        foreach ($messages as $message) {
+            $this->log->log($message);
+        }
     }
 }

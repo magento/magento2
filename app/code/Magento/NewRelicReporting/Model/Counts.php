@@ -15,6 +15,6 @@ class Counts extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\Resource\Counts');
+        $this->_init('Magento\NewRelicReporting\Model\ResourceModel\Counts');
     }
 }

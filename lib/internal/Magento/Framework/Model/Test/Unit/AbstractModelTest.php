@@ -25,7 +25,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -62,7 +62,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         );
         $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [
                 '_construct',
                 'getConnection',

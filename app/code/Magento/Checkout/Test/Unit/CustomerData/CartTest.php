@@ -47,7 +47,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->catalogUrlMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Url',
+            '\Magento\Catalog\Model\ResourceModel\Url',
             ['getRewriteByProductStore'],
             [],
             '',

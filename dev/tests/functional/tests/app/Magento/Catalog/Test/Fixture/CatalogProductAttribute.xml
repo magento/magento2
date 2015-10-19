@@ -9,7 +9,7 @@
     <fixture name="catalogProductAttribute"
              module="Magento_Catalog"
              type="composite"
-             collection="Magento\Catalog\Model\Resource\Attribute"
+             collection="Magento\Catalog\Model\ResourceModel\Attribute"
              repository_class="Magento\Catalog\Test\Repository\CatalogProductAttribute"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface"
              class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">

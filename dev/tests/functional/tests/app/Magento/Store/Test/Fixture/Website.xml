@@ -10,7 +10,7 @@
              module="Magento_Store"
              type="flat"
              entity_type="store_website"
-             collection="Magento\Store\Model\Resource\Website\Collection"
+             collection="Magento\Store\Model\ResourceModel\Website\Collection"
              identifier="code"
              repository_class="Magento\Store\Test\Repository\Website"
              handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface"

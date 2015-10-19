@@ -25,17 +25,19 @@ class Group extends AbstractComposite
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Config\Model\Config\Structure\Element\Iterator\Field $childrenIterator
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Iterator\Field $childrenIterator
      * @param \Magento\Config\Model\Config\BackendClone\Factory $cloneModelFactory
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
+     * @param Dependency\Mapper $dependencyMapper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Config\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Config\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {
-        parent::__construct($storeManager, $childrenIterator);
+        parent::__construct($storeManager, $moduleManager, $childrenIterator);
         $this->_cloneModelFactory = $cloneModelFactory;
         $this->_dependencyMapper = $dependencyMapper;
     }

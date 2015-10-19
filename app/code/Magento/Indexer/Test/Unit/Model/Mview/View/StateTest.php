@@ -23,12 +23,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_registryMock;
 
     /**
-     * @var \Magento\Indexer\Model\Resource\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Indexer\Model\Resource\Mview\View\State\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceCollectionMock;
 
@@ -38,9 +38,10 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
         $this->_contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
         $this->_registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $this->_resourceMock = $this->getMock('\Magento\Indexer\Model\Resource\Mview\View\State', [], [], '', false);
+        $this->_resourceMock =
+            $this->getMock('\Magento\Indexer\Model\ResourceModel\Mview\View\State', [], [], '', false);
         $this->_resourceCollectionMock = $this->getMock(
-            '\Magento\Indexer\Model\Resource\Mview\View\State\Collection',
+            '\Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection',
             [],
             [],
             '',

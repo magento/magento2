@@ -36,7 +36,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->agreementCollFactoryMock = $this->getMock(
-            '\Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory',
+            '\Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory',
             ['create'],
             [],
             '',
@@ -65,7 +65,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $agreementCollection = $this->getMock(
-            '\Magento\CheckoutAgreements\Model\Resource\Agreement\Collection',
+            '\Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection',
             [],
             [],
             '',

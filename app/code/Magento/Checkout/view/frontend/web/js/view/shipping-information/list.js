@@ -8,7 +8,7 @@ define([
     'ko',
     'mageUtils',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Checkout/js/model/quote'
 ], function ($, ko, utils, Component, layout, quote) {
     'use strict';
@@ -35,7 +35,7 @@ define([
             return this;
         },
 
-        initProperties: function () {
+        initConfig: function () {
             this._super();
             // the list of child components that are responsible for address rendering
             this.rendererComponents = {};

@@ -17,8 +17,8 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Perform fetching reports from remote servers with following saving them to database
  * Prepare report rows for \Magento\Paypal\Model\Report\Settlement\Row model
  *
- * @method \Magento\Paypal\Model\Resource\Report\Settlement _getResource()
- * @method \Magento\Paypal\Model\Resource\Report\Settlement getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement _getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement getResource()
  * @method string getReportDate()
  * @method \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
  * @method string getAccountId()
@@ -168,7 +168,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     * @param \Magento\Framework\Filesystem $filesystem
     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+    * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
     * @param array $data
     */
@@ -178,7 +178,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -195,7 +195,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\Resource\Report\Settlement');
+        $this->_init('Magento\Paypal\Model\ResourceModel\Report\Settlement');
     }
 
     /**

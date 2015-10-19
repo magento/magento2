@@ -10,7 +10,7 @@
     <preference for="Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface" type="Magento\TestModule4\Service\V1\Entity\ExtensibleRequest" />
     <type name="Magento\TestModule4\Service\V1\Entity\ExtensibleRequest">
         <arguments>
-            <argument name="resource" xsi:type="object">Magento\TestModule4\Model\Resource\Item</argument>
+            <argument name="resource" xsi:type="object">Magento\TestModule4\Model\ResourceModel\Item</argument>
         </arguments>
     </type>
 </config>

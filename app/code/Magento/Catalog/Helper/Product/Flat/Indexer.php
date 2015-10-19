@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Catalog Product Flat Indexer Helper
@@ -28,7 +28,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -81,7 +81,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_entityTypeId;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Config
+     * @var \Magento\Catalog\Model\ResourceModel\Config
      */
     protected $_catalogConfig;
 
@@ -93,7 +93,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Config factory
      *
-     * @var \Magento\Catalog\Model\Resource\ConfigFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
      */
     protected $_configFactory;
 
@@ -124,10 +124,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mview\View\Changelog $changelog
@@ -138,10 +138,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
+        \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mview\View\Changelog $changelog,
@@ -431,7 +431,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $eavAttributes = [];
         $flatColumnsList = $this->getFlatColumns();
-        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         foreach ($attributes as $attribute) {
             $eavTable = $attribute->getBackend()->getTable();
             $attributeCode = $attribute->getAttributeCode();

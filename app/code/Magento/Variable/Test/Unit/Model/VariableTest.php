@@ -30,7 +30,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Variable\Model\Resource\Variable')
+        $this->resourceMock = $this->getMockBuilder('Magento\Variable\Model\ResourceModel\Variable')
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
@@ -109,7 +109,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
             ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
         ];
 
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\Resource\Variable\Collection')
+        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())
@@ -139,7 +139,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\Resource\Variable\Collection')
+        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())

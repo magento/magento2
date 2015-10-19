@@ -501,7 +501,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // inline CSS files get loaded properly from both areas.
         Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $this->objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
+        $collection = $this->objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
 
         // Hard-coding theme as we want to test the fallback structure to ensure that the parent/grandparent themes of
         // Vendor_EmailTest/custom_theme will be checked for CSS files

@@ -12,8 +12,8 @@ use Magento\Quote\Api\Data\CartItemInterface;
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Quote\Model\Resource\Quote\Item _getResource()
- * @method \Magento\Quote\Model\Resource\Quote\Item getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -187,7 +187,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param Item\OptionFactory $itemOptionFactory
      * @param Item\Compare $quoteItemCompare
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
@@ -205,7 +205,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -234,7 +234,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Item');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Item');
     }
 
     /**

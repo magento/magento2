@@ -10,7 +10,7 @@
              module="Magento_Tax"
              type="flat"
              entity_type="tax_calculation_rule"
-             collection="Magento\Tax\Model\Resource\Calculation\Rule\Collection"
+             collection="Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection"
              identifier="code"
              repository_class="Magento\Tax\Test\Repository\TaxRule"
              handler_interface="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface"

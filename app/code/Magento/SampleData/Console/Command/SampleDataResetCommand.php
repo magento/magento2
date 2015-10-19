@@ -22,7 +22,7 @@ class SampleDataResetCommand extends Command
     private $sampleDataDependency;
 
     /**
-     * @var \Magento\Framework\Module\Resource
+     * @var \Magento\Framework\Module\ModuleResource
      */
     private $moduleResource;
 
@@ -33,12 +33,12 @@ class SampleDataResetCommand extends Command
 
     /**
      * @param Dependency $sampleDataDependency
-     * @param \Magento\Framework\Module\Resource $moduleResource
+     * @param \Magento\Framework\Module\ModuleResource $moduleResource
      * @param \Magento\Framework\Module\PackageInfo $packageInfo
      */
     public function __construct(
         Dependency $sampleDataDependency,
-        \Magento\Framework\Module\Resource $moduleResource,
+        \Magento\Framework\Module\ModuleResource $moduleResource,
         \Magento\Framework\Module\PackageInfo $packageInfo
     ) {
         $this->sampleDataDependency = $sampleDataDependency;

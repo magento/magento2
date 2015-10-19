@@ -37,7 +37,7 @@ class CreditmemoCreateTest extends WebapiAbstract
     public function testInvoke()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $orderCollection = $this->objectManager->get('Magento\Sales\Model\Resource\Order\Collection');
+        $orderCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Collection');
         $order = $orderCollection->getFirstItem();
 
 //        $order = $this->objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');

@@ -83,7 +83,7 @@ class Config
     protected $_entityTypeFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory
      */
     protected $entityTypeCollectionFactory;
 
@@ -95,7 +95,7 @@ class Config
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @codeCoverageIgnore
@@ -103,7 +103,7 @@ class Config
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
-        \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory
     ) {

@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="configurable"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct"
              handler_interface="Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\ConfigurableProductInterface"
