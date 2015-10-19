@@ -129,40 +129,4 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $object = new Reader($this->dirList, $configFilePool);
         $object->load();
     }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Config file
-     */
-    public function testNonExistantConfigFile()
-    {
-        $configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
-        $files = [['configKeyOne', 'nonExistantFile.php']];
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($files));
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'nonExistantFile']);
-        $object = new Reader($this->dirList, $configFilePool);
-        $object->load();
-    }
-}
-
-namespace Magento\Framework\App\DeploymentConfig;
-
-/**
- * Overriding php native function for test
- *
- * @param string $fileName
- * @return bool
- */
-function file_exists($fileName)
-{
-    if (strpos($fileName, 'nonExistantFile.php')) {
-        return false;
-    }
-    return true;
 }
