@@ -31,15 +31,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * Model under test
+     * System under test
      *
      * @var \Magento\Framework\Code\Generator
      */
     protected $model;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Io
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Io */
     protected $ioObjectMock;
 
     /** @var \Magento\Framework\Code\Generator\DefinedClasses | \PHPUnit_Framework_MockObject_MockObject */
@@ -60,11 +58,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ],
             $this->definedClassesMock
         );
-    }
-
-    protected function tearDown()
-    {
-        unset($this->model);
     }
 
     public function testGetGeneratedEntities()
