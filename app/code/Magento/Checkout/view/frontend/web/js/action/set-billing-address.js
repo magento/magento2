@@ -55,10 +55,12 @@ define(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
+                    var deferred = null;
+
                     if (!quote.isVirtual()) {
                         getTotalsAction([]);
                     } else {
-                        var deferred = $.Deferred();
+                        deferred = $.Deferred();
                         getPaymentInformationAction(deferred);
                         $.when(deferred).done(function () {
                             fullScreenLoader.stopLoader();
