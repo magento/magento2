@@ -28,6 +28,7 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTest
     {
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
         $this->cacheManagerMock->expects($this->once())->method('clean')->with($types);
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with($this->cacheEventName);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
