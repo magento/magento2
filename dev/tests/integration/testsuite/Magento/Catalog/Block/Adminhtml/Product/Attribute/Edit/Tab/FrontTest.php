@@ -35,8 +35,8 @@ class FrontTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml($attributeCode)
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
-        $model = $this->objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
+        $model = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
         $model->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
 
         /** @var \Magento\Framework\Registry $coreRegistry */

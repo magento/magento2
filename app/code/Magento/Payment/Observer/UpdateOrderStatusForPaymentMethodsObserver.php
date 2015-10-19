@@ -21,7 +21,7 @@ class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
     protected $_paymentConfig;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config
+     * @var \Magento\Config\Model\ResourceModel\Config
      */
     protected $_resourceConfig;
 
@@ -30,12 +30,12 @@ class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
      *
      * @param \Magento\Sales\Model\Order\Config $salesOrderConfig
      * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param \Magento\Config\Model\Resource\Config $resourceConfig
+     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
      */
     public function __construct(
         \Magento\Sales\Model\Order\Config $salesOrderConfig,
         \Magento\Payment\Model\Config $paymentConfig,
-        \Magento\Config\Model\Resource\Config $resourceConfig
+        \Magento\Config\Model\ResourceModel\Config $resourceConfig
     ) {
         $this->_salesOrderConfig = $salesOrderConfig;
         $this->_paymentConfig = $paymentConfig;

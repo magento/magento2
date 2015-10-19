@@ -20,7 +20,8 @@
         "magento/module-media-storage": "1.0.0-beta"
     },
     "suggest": {
-        "magento/module-webapi": "1.0.0-beta"
+        "magento/module-webapi": "1.0.0-beta",
+        "magento/module-bundle-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",

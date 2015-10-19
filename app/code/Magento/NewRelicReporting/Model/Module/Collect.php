@@ -39,7 +39,7 @@ class Collect
     protected $moduleFactory;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Resource\Module\CollectionFactory
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory
      */
     protected $moduleCollectionFactory;
 
@@ -51,7 +51,7 @@ class Collect
      * @param Manager $moduleManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory
-     * @param \Magento\NewRelicReporting\Model\Resource\Module\CollectionFactory $moduleCollectionFactory
+     * @param \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -59,7 +59,7 @@ class Collect
         Manager $moduleManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory,
-        \Magento\NewRelicReporting\Model\Resource\Module\CollectionFactory $moduleCollectionFactory
+        \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
     ) {
         $this->moduleList = $moduleList;
         $this->fullModuleList = $fullModuleList;

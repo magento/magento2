@@ -87,7 +87,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $_storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -119,12 +119,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -138,12 +138,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -174,7 +174,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute');
     }
 
     /**
@@ -438,7 +438,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Retrieve entity type
      *
-     * @return string
+     * @return \Magento\Eav\Model\Entity\Type
      * @codeCoverageIgnore
      */
     public function getEntityType()

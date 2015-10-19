@@ -17,7 +17,7 @@ class SetConversionValueObserver implements ObserverInterface
     protected $_helper;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $_collection;
 
@@ -26,12 +26,12 @@ class SetConversionValueObserver implements ObserverInterface
      *
      * @param \Magento\GoogleAdwords\Helper\Data $helper
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Resource\Order\Collection $collection
+     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $collection
      */
     public function __construct(
         \Magento\GoogleAdwords\Helper\Data $helper,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Resource\Order\Collection $collection
+        \Magento\Sales\Model\ResourceModel\Order\Collection $collection
     ) {
         $this->_helper = $helper;
         $this->_collection = $collection;

@@ -13,20 +13,20 @@ namespace Magento\Reports\Block\Adminhtml\Wishlist;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Wishlist\Product\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Wishlist\Product\CollectionFactory
      */
     protected $_productsFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Wishlist\Product\CollectionFactory $productsFactory
+     * @param \Magento\Reports\Model\ResourceModel\Wishlist\Product\CollectionFactory $productsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Wishlist\Product\CollectionFactory $productsFactory,
+        \Magento\Reports\Model\ResourceModel\Wishlist\Product\CollectionFactory $productsFactory,
         array $data = []
     ) {
         $this->_productsFactory = $productsFactory;

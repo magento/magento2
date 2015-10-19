@@ -10,7 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\Resource;
+use Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -214,7 +214,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $groupRepository;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory
      */
     protected $_quoteItemCollectionFactory;
 
@@ -244,7 +244,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_quotePaymentFactory;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory
      */
     protected $_quotePaymentCollectionFactory;
 
@@ -357,13 +357,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param Status\ListFactory $statusListFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Quote\PaymentFactory $quotePaymentFactory
-     * @param Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Quote\Item\Processor $itemProcessor
@@ -382,7 +382,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\TotalsReader $totalsReader
      * @param ShippingFactory $shippingFactory
      * @param ShippingAssignmentFactory $shippingAssignmentFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -400,13 +400,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         \Magento\Quote\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
         \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Processor $itemProcessor,
@@ -425,7 +425,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -480,7 +480,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
     }
 
     /**
@@ -1355,7 +1355,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }

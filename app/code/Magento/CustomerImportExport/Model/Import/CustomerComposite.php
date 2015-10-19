@@ -121,7 +121,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     /**
      * DB data source models
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data[]
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data[]
      */
     protected $_dataSourceModels;
 
@@ -152,10 +152,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
      * @param array $data
@@ -167,10 +167,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
         array $data = []

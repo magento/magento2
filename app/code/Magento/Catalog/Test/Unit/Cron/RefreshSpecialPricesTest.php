@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Cron;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,7 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_dateTimeMock = $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false);
         $this->_localeDateMock = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->_eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);

@@ -79,7 +79,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -250,7 +250,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product')
+        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -444,7 +444,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCategoryCollection',
@@ -1281,7 +1281,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->with($productModel)
             ->willReturn($option1Id);
         $optionColl = $this->objectManagerHelper->getCollectionMock(
-            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Option\Collection',
             [$optionMock1, $optionMock2]
         );
 
@@ -1292,7 +1292,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $joinProcessorMock->expects($this->once())
             ->method('process')
-            ->with($this->isInstanceOf('Magento\Catalog\Model\Resource\Product\Option\Collection'));
+            ->with($this->isInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Option\Collection'));
 
         $expectedOptions = [
             $option1Id => $optionMock1,

@@ -26,7 +26,7 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
     protected $_coupon;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\Usage
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage
      */
     protected $_couponUsage;
 
@@ -34,13 +34,13 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory $ruleCustomerFactory
      * @param \Magento\SalesRule\Model\Coupon $coupon
-     * @param \Magento\SalesRule\Model\Resource\Coupon\Usage $couponUsage
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\Usage $couponUsage
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $ruleCustomerFactory,
         \Magento\SalesRule\Model\Coupon $coupon,
-        \Magento\SalesRule\Model\Resource\Coupon\Usage $couponUsage
+        \Magento\SalesRule\Model\ResourceModel\Coupon\Usage $couponUsage
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_ruleCustomerFactory = $ruleCustomerFactory;

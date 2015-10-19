@@ -50,7 +50,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $this->attrOptionCollectionFactoryMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory',
             ['create'],
             [],
             '',
@@ -95,7 +95,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
             $option = $this->getMock(
-                '\Magento\Eav\Model\Resource\Entity\Attribute\Option',
+                '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option',
                 ['getId', 'getValue', 'getLabel'],
                 [],
                 '',
@@ -103,7 +103,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             );
 
             $attrOptionCollectionMock = $objectManager->getCollectionMock(
-                '\Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection',
+                '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection',
                 [$option, $option]
             );
 
@@ -112,7 +112,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
                 ->method('create')
                 ->willReturn($attrOptionCollectionMock);
 
-            $attribute = $this->getMock('\Magento\Eav\Model\Resource\Entity\Attribute', ['getId'], [], '', false);
+            $attribute = $this->getMock('\Magento\Eav\Model\ResourceModel\Entity\Attribute', ['getId'], [], '', false);
             $attribute->expects($this->once())->method('getId')->willReturn(23);
 
             $this->registryMock

@@ -45,8 +45,8 @@ class ShipmentAddCommentTest extends WebapiAbstract
      */
     public function testShipmentAddComment()
     {
-        /** @var \Magento\Sales\Model\Resource\Order\Shipment\Collection $shipmentCollection */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\Resource\Order\Shipment\Collection');
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection $shipmentCollection */
+        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
         $shipment = $shipmentCollection->getFirstItem();
 
         $commentData = [

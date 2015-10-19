@@ -21,8 +21,8 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
             if (\Zend_Validate::is($email, 'EmailAddress')) {
-                $collection = $this->_objectManager->get('Magento\User\Model\Resource\User\Collection');
-                /** @var $collection \Magento\User\Model\Resource\User\Collection */
+                $collection = $this->_objectManager->get('Magento\User\Model\ResourceModel\User\Collection');
+                /** @var $collection \Magento\User\Model\ResourceModel\User\Collection */
                 $collection->addFieldToFilter('email', $email);
                 $collection->load(false);
 

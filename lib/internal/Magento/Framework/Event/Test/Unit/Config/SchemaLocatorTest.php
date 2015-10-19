@@ -8,7 +8,7 @@ namespace Magento\Framework\Event\Test\Unit\Config;
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource\Config\SchemaLocator
+     * @var \Magento\Framework\App\ResourceConnection\Config\SchemaLocator
      */
     protected $model;
 

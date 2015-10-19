@@ -62,7 +62,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Add wishlist conditions to collection
      *
-     * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return $this
      */
     protected function _prepareCollection($collection)

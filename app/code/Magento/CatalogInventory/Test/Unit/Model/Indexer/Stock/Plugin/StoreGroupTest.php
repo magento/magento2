@@ -39,7 +39,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $subjectMock = $this->getMock('Magento\Store\Model\Resource\Group', [], [], '', false);
+        $subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
         $objectMock = $this->getMock(
             'Magento\Framework\Model\AbstractModel',
             ['getId', 'dataHasChangedFor', '__wakeup'],

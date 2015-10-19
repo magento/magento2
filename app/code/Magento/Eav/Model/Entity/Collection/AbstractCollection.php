@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
@@ -106,7 +106,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -116,7 +116,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_eavEntityFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -131,9 +131,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
      * @codeCoverageIgnore
@@ -145,9 +145,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -265,7 +265,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @codeCoverageIgnore
      */
     public function getResource()

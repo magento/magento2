@@ -13,12 +13,12 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $regionCollection;
 
@@ -27,10 +27,10 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $countryCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\Resource\Country\CollectionFactory'
+            'Magento\Directory\Model\ResourceModel\Country\CollectionFactory'
         )->setMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()->getMock();
 
-        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\Resource\Country\Collection')
+        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Country\Collection')
             ->setMethods(['load', 'toOptionArray', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -42,9 +42,9 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $regionCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\Resource\Region\CollectionFactory'
+            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(['create', '__wakeup', '__sleep'])->getMock();
-        $this->regionCollection = $this->getMockBuilder('Magento\Directory\Model\Resource\Region\Collection')
+        $this->regionCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Region\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getIterator', '__wakeup', '__sleep'])
             ->getMock();

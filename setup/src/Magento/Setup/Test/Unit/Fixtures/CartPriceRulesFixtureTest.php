@@ -42,9 +42,9 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue('website_id'));
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [$contextMock],
             '',
             true,

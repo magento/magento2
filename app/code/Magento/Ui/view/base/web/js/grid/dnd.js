@@ -212,15 +212,19 @@ define([
                 return this;
             }
 
+            if (!ko.es5.isTracked(model, 'dragover')) {
+                model.track('dragover');
+            }
+
             this.columns.push(column);
 
             $(column).bindings({
                 css: {
                     '_dragover-left': ko.computed(function () {
-                        return model.dragover() === 'right';
+                        return model.dragover === 'right';
                     }),
                     '_dragover-right': ko.computed(function () {
-                        return model.dragover() === 'left';
+                        return model.dragover === 'left';
                     })
                 }
             });
@@ -468,7 +472,7 @@ define([
                 'left' :
                 'right';
 
-            getModel(dropArea.target).dragover(direction);
+            getModel(dropArea.target).dragover = direction;
         },
 
         /**
@@ -477,7 +481,7 @@ define([
          * @param {Object} dropArea
          */
         dragleave: function (dropArea) {
-            getModel(dropArea.target).dragover(false);
+            getModel(dropArea.target).dragover = false;
         },
 
         /**
@@ -511,7 +515,7 @@ define([
                 dragModel = getModel(dragArea.target);
 
             getModel(this.table).insertChild(dragModel, dropModel);
-            dropModel.dragover(false);
+            dropModel.dragover = false;
         },
 
         /**

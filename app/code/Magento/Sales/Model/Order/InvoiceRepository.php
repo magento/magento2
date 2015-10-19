@@ -7,7 +7,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory as SearchResultFactory;
 
@@ -88,7 +88,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
-        /** @var \Magento\Sales\Model\Resource\Order\Invoice\Collection $collection */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $collection */
         $collection = $this->searchResultFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {

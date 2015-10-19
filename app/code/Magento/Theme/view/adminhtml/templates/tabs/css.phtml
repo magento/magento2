@@ -12,9 +12,10 @@
 <script>
 require([
     "jquery",
+    "Magento_Ui/js/modal/alert",
     "jquery/file-uploader",
     "mage/translate"
-], function($){
+], function($, alert){
 
     $( '#css_file_uploader' ).fileupload({
         dataType: 'json',
@@ -65,7 +66,9 @@ require([
          */
         fail: function(e, data) {
             $(this).val('');
-            alert($.mage.__("We don't recognize this file extension."));
+            alert({
+                content: $.mage.__("We don't recognize this file extension.")
+            });
         }
     });
 

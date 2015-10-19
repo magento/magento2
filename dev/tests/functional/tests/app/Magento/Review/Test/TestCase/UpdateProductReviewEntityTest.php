@@ -132,6 +132,7 @@ class UpdateProductReviewEntityTest extends Injectable
             foreach ($this->review->getRatings() as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();
+                $this->ratingEdit->getModalBlock()->acceptAlert();
             }
         }
     }
