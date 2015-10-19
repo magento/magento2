@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Block\Onepage;
+namespace Magento\Paypal\Block\Express\Review;
 
 use Magento\Customer\Model\Context;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class BillingTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Checkout\Block\Onepage\Billing */
+    /** @var \Magento\Paypal\Block\Express\Review\Billing */
     protected $_block;
 
     /** @var \Magento\Customer\Api\AddressRepositoryInterface */
@@ -67,7 +67,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
             ->setValue(Context::CONTEXT_AUTH, true, false);
         $this->_block = $objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock(
-                'Magento\Checkout\Block\Onepage\Billing',
+                'Magento\Paypal\Block\Express\Review\Billing',
                 '',
                 ['customerSession' => $customerSession, 'checkoutSession' => $checkoutSession]
             );
@@ -135,20 +135,5 @@ class BillingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());
         $this->assertEquals(self::SAMPLE_LAST_NAME, $this->_block->getLastname());
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     */
-    public function testGetAddressesHtmlSelect()
-    {
-        Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session')->setCustomerId(1);
-        // @codingStandardsIgnoreStart
-        $expected = <<<OUTPUT
-<select name="billing_address_id" id="billing:address-select" class="address-select" title="" ><option value="1" selected="selected" >John Smith, Green str, 67, CityM, Alabama 75477, United States</option><option value="" >New Address</option></select>
-OUTPUT;
-        // @codingStandardsIgnoreEnd
-        $this->assertEquals($expected, $this->_block->getAddressesHtmlSelect('billing'));
     }
 }
