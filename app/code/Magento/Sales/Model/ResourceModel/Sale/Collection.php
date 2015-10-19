@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Sales Collection
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Totals data

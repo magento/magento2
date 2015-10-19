@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for \Magento\Framework\Model\ModelResource
+ * Test for \Magento\Framework\Model\ResourceModel
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -51,7 +51,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => [
                     'profiler' => [
-                        'class' => 'Magento\Framework\Model\ModelResource\Db\Profiler',
+                        'class' => 'Magento\Framework\Model\ResourceModel\Db\Profiler',
                         'enabled' => 'true',
                     ],
                     'username' => 'username',
@@ -63,10 +63,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Framework\Model\ModelResource\Db\Profiler $profiler */
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();
 
-        $this->assertInstanceOf('Magento\Framework\Model\ModelResource\Db\Profiler', $profiler);
+        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\Profiler', $profiler);
         $this->assertTrue($profiler->getEnabled());
     }
 }

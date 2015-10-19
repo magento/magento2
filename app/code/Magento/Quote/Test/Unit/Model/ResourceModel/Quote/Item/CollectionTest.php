@@ -34,7 +34,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -49,7 +49,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -70,7 +70,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->selectMock));
 
-        $this->resourceMock = $this->getMock('Magento\Framework\Model\ModelResource\Db\AbstractDb', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\AbstractDb', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
@@ -90,7 +90,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Collection',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection',
             $this->collection
         );
     }

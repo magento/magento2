@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Category;
 
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class ProductCollection extends AbstractCollection
 {
