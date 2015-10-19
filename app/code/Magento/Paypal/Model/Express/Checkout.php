@@ -1191,10 +1191,10 @@ class Checkout
     /**
      * Set shipping options to api
      * @param \Magento\Paypal\Model\Cart $cart
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
      */
-    private function setShippingOptions(PaypalCart $cart, Address $address)
+    private function setShippingOptions(PaypalCart $cart, Address $address = null)
     {
         // for included tax always disable line items (related to paypal amount rounding problem)
         $this->_api->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));
