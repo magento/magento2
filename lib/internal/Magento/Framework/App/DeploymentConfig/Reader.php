@@ -74,14 +74,23 @@ class Reader
     {
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
         if ($fileKey) {
-            $result = @include $path . '/' . $this->configFilePool->getPath($fileKey);
+            $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
+            if (file_exists($filePath)) {
+                $result = include $filePath;
+            } else {
+                throw new \Exception('Config file ' . $fileKey . ' does not exist.');
+            }
         } else {
             $configFiles = $this->configFilePool->getPaths();
             $allFilesData = [];
             $result = [];
             foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
-                $fileData = include $configFile;
+                if (file_exists($configFile)) {
+                    $fileData = include $configFile;
+                } else {
+                    throw new \Exception('Config file ' . $configFile . ' does not exist.');
+                }
                 $allFilesData[$configFile] = $fileData;
                 if (!empty($fileData)) {
                     $intersection = array_intersect_key($result, $fileData);
@@ -112,7 +121,7 @@ class Reader
         foreach ($keys as $key) {
             $foundConfigFiles = [];
             foreach ($allFilesData as $fileName => $fileValues) {
-                if (array_key_exists($key, $fileValues)) {
+                if (isset($fileValues[$key])) {
                     $foundConfigFiles[] = $fileName;
                 }
             }
