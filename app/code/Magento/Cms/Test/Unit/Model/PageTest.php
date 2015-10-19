@@ -58,7 +58,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                     $this->getMockBuilder('Magento\Framework\Registry')
                         ->disableOriginalConstructor()
                         ->getMock(),
-                    $this->getMockBuilder('Magento\Framework\Model\ModelResource\AbstractResource')
+                    $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
                         ->disableOriginalConstructor()
                         ->setMethods(
                             [

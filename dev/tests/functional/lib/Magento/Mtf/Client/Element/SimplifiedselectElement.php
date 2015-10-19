@@ -18,7 +18,7 @@ class SimplifiedselectElement extends SelectElement
      *
      * @var string
      */
-    protected $optionGroupValue = ".//*[@title='%s']";
+    protected $optionGroupValue = ".//*[@data-title='%s']";
 
     /**
      * Select value in ropdown which has option groups.

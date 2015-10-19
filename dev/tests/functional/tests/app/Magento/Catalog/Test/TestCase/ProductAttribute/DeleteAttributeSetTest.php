@@ -93,6 +93,7 @@ class DeleteAttributeSetTest extends Injectable
         $this->productSetIndex->open();
         $this->productSetIndex->getGrid()->searchAndOpen($filter);
         $this->productSetEdit->getPageActions()->delete();
+        $this->productSetEdit->getModalBlock()->acceptAlert();
 
         return ['product' => $product];
     }

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Product Link Attributes Table
@@ -27,12 +27,12 @@ class Link extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Relation $catalogProductRelation
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Relation $catalogProductRelation,
         $connectionName = null
     ) {

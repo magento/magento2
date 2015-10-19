@@ -11,7 +11,7 @@ namespace Magento\Store\Model\ResourceModel;
 /**
  * Website Resource Model
  */
-class Website extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table
