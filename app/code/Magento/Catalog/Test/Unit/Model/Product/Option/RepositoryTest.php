@@ -44,7 +44,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
-        $this->optionResourceMock = $this->getMock('Magento\Catalog\Model\Resource\Product\Option', [], [], '', false);
+        $this->optionResourceMock = $this->getMock(
+            'Magento\Catalog\Model\ResourceModel\Product\Option',
+            [],
+            [],
+            '',
+            false
+        );
         $this->optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);

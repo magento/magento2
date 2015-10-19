@@ -36,7 +36,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected $curl;
 
     /**
-     * @var \Magento\MediaStorage\Model\Resource\File\Storage\File
+     * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
      */
     protected $fileUtility;
 
@@ -47,7 +47,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Filesystem $fileSystem
      * @param \Magento\Framework\Image\AdapterFactory $imageAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
-     * @param \Magento\MediaStorage\Model\Resource\File\Storage\File $fileUtility
+     * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -56,7 +56,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         \Magento\Framework\Filesystem $fileSystem,
         \Magento\Framework\Image\AdapterFactory $imageAdapterFactory,
         \Magento\Framework\HTTP\Adapter\Curl $curl,
-        \Magento\MediaStorage\Model\Resource\File\Storage\File $fileUtility
+        \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;

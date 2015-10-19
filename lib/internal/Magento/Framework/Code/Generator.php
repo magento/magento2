@@ -74,31 +74,28 @@ class Generator
      */
     public function generateClass($className)
     {
-        // check if source class a generated entity
-        $entity = null;
-        $entityName = null;
+        $resultEntityType = null;
+        $sourceClassName = null;
         foreach ($this->_generatedEntities as $entityType => $generatorClass) {
             $entitySuffix = ucfirst($entityType);
-            // if $className string ends on $entitySuffix substring
+            // If $className string ends with $entitySuffix substring
             if (strrpos($className, $entitySuffix) === strlen($className) - strlen($entitySuffix)) {
-                $entity = $entityType;
-                $entityName = rtrim(
+                $resultEntityType = $entityType;
+                $sourceClassName = rtrim(
                     substr($className, 0, -1 * strlen($entitySuffix)),
                     '\\'
                 );
                 break;
             }
         }
-        if (!$entity || !$entityName) {
-            return self::GENERATION_ERROR;
-        } else if ($this->definedClasses->classLoadable($className)) {
-            return self::GENERATION_SKIP;
-        } else if (!isset($this->_generatedEntities[$entity])) {
-            throw new \InvalidArgumentException('Unknown generation entity.');
+
+        if ($skipReason = $this->shouldSkipGeneration($resultEntityType, $sourceClassName, $className)) {
+            return $skipReason;
         }
-        $generatorClass = $this->_generatedEntities[$entity];
+
+        $generatorClass = $this->_generatedEntities[$resultEntityType];
         /** @var EntityAbstract $generator */
-        $generator = $this->createGeneratorInstance($generatorClass, $entityName, $className);
+        $generator = $this->createGeneratorInstance($generatorClass, $sourceClassName, $className);
         if ($generator !== null) {
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
@@ -107,18 +104,23 @@ class Generator
                     new \Magento\Framework\Phrase(implode(' ', $errors))
                 );
             }
-            $this->includeFile($file);
+            $this->tryToIncludeFile($file, $className);
             return self::GENERATION_SUCCESS;
         }
     }
 
     /**
+     * Include file only if the class is not already defined in memory
+     *
      * @param string $fileName
+     * @param string $className
      * @return void
      */
-    public function includeFile($fileName)
+    public function tryToIncludeFile($fileName, $className)
     {
-        include $fileName;
+        if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
+            include $fileName;
+        }
     }
 
     /**
@@ -176,7 +178,7 @@ class Generator
     protected function tryToLoadSourceClass($className, $generator)
     {
         $sourceClassName = $generator->getSourceClassName();
-        if (!$this->definedClasses->classLoadable($sourceClassName)) {
+        if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
@@ -186,5 +188,25 @@ class Generator
                 );
             }
         }
+    }
+
+    /**
+     * Perform validation surrounding source and result classes and entity type
+     *
+     * @param string $resultEntityType
+     * @param string $sourceClassName
+     * @param string $resultClass
+     * @return string|bool
+     */
+    protected function shouldSkipGeneration($resultEntityType, $sourceClassName, $resultClass)
+    {
+        if (!$resultEntityType || !$sourceClassName) {
+            return self::GENERATION_ERROR;
+        } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+            return self::GENERATION_SKIP;
+        } else if (!isset($this->_generatedEntities[$resultEntityType])) {
+            throw new \InvalidArgumentException('Unknown generation entity.');
+        }
+        return false;
     }
 }

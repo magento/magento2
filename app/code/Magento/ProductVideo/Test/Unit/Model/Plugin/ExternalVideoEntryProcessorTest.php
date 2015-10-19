@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Model\Plugin;
 
 class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /** * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\ProductFactory */
+    /** * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\ProductFactory */
     protected $productFactoryMock;
 
     /** * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product */
@@ -30,7 +30,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
     protected $mediaDirectoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceEntryMediaGalleryMock;
 
@@ -48,7 +48,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->productFactoryMock =
-            $this->getMock('\Magento\Catalog\Model\Resource\ProductFactory', ['create'], [], '', false);
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\ProductFactory', ['create'], [], '', false);
 
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
 
@@ -64,7 +64,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->with('media')->willReturn($write);
 
         $this->resourceEntryMediaGalleryMock =
-            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media', [], [], '', false);
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media', [], [], '', false);
 
         $this->attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $this->attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');

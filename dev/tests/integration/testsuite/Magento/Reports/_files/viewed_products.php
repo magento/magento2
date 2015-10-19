@@ -34,9 +34,9 @@ foreach ([1, 2, 1, 21, 1, 21] as $productId) {
 }
 
 // refresh report statistics
-/** @var \Magento\Reports\Model\Resource\Report\Product\Viewed $reportResource */
+/** @var \Magento\Reports\Model\ResourceModel\Report\Product\Viewed $reportResource */
 $reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Reports\Model\Resource\Report\Product\Viewed'
+    'Magento\Reports\Model\ResourceModel\Report\Product\Viewed'
 );
 $reportResource->beginTransaction();
 // prevent table truncation by incrementing the transaction nesting level counter

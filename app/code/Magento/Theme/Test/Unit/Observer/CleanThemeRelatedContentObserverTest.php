@@ -19,7 +19,7 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
     protected $themeImageFactory;
 
     /**
-     * @var \Magento\Widget\Model\Resource\Layout\Update\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $updateCollection;
 
@@ -39,7 +39,7 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->updateCollection = $this->getMockBuilder('Magento\Widget\Model\Resource\Layout\Update\Collection')
+        $this->updateCollection = $this->getMockBuilder('Magento\Widget\Model\ResourceModel\Layout\Update\Collection')
             ->setMethods(['addThemeFilter', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();

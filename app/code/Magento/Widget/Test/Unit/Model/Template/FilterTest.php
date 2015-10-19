@@ -31,7 +31,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Widget\Model\Resource\Widget|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\ResourceModel\Widget|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $widgetResourceMock;
 
@@ -53,7 +53,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->widgetResourceMock = $this->getMock('Magento\Widget\Model\Resource\Widget', [], [], '', false);
+        $this->widgetResourceMock = $this->getMock('Magento\Widget\Model\ResourceModel\Widget', [], [], '', false);
         $this->widgetMock = $this->getMock('Magento\Widget\Model\Widget', [], [], '', false);
         $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
 

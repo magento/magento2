@@ -10,69 +10,12 @@
  * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder"
-     data-mage-init='{"fotoramaAddVideoEvents":{}}'
-     data-fotorama-video-data='<?php /* @escapeNotVerified */ echo $block->getMediaGalleryDataJson(); ?>'
-     data-fotorama-video-settings='<?php /* @escapeNotVerified */ echo $block->getVideoSettingsJson(); ?>'>
-</div>
 <script type="text/x-magento-init">
     {
-        ".gallery-placeholder": {
-            "mage/gallery/gallery": {
-                "mixins":["magnifier/magnify"],
-                "magnifierOpts": {
-                    "enabled": <?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:enabled", "Magento_Catalog"); ?>,
-                    "eventType": "<?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:action", "Magento_Catalog"); ?>",
-                    "width": "<?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:width", "Magento_Catalog"); ?>",
-                    "height": "<?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:height", "Magento_Catalog"); ?>",
-                    "top": "<?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:top", "Magento_Catalog"); ?>",
-                    "left": "<?php /* @escapeNotVerified */
-    echo $block->getVar("magnifier:left", "Magento_Catalog"); ?>"
-                },
-                "data": <?php /* @escapeNotVerified */
-    echo $block->getGalleryImagesJson(); ?>,
-                "options": {
-                    "nav": "<?php /* @escapeNotVerified */
-    echo $block->getVar("gallery:nav", "Magento_Catalog"); ?>",
-                    "loop": <?php /* @escapeNotVerified */
-    echo $block->getVar("gallery:loop", "Magento_Catalog"); ?>,
-                    "keyboard": <?php /* @escapeNotVerified */
-    echo $block->getVar("gallery:keyboard", "Magento_Catalog"); ?>,
-                    "arrows": <?php /* @escapeNotVerified */
-    echo $block->getVar("gallery:arrows", "Magento_Catalog"); ?>,
-                    "showCaption": <?php /* @escapeNotVerified */
-    echo $block->getVar("gallery:showCaption", "Magento_Catalog"); ?>,
-                    "width": <?php /* @escapeNotVerified */
-    echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
-                    "thumbwidth": <?php /* @escapeNotVerified */
-    echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
-                    "thumbheight": <?php /* @escapeNotVerified */
-    echo $block->getImageAttribute('product_page_image_small', 'height')
-        ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
-                    "height": <?php /* @escapeNotVerified */
-    echo $block->getImageAttribute('product_page_image_medium', 'height')
-        ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>
-                },
-                "breakpoints": {
-                    "mobile": {
-                        "conditions": {
-                            "max-width": "767px"
-                        },
-                        "options": {
-                            "options": {
-                                "nav": "dots"
-                            },
-                            "magnifierOpts": {
-                                "enabled": false
-                            }
-                        }
-                    }
-                }
+        "[data-gallery-role=gallery-placeholder]": {
+            "Magento_ProductVideo/js/fotorama-add-video-events": {
+                "fotoramaVideoData": <?php /* @escapeNotVerified */ echo $block->getMediaGalleryDataJson(); ?>,
+                "fotoramaVideoSettings": <?php /* @escapeNotVerified */ echo $block->getVideoSettingsJson(); ?>
             }
         }
     }

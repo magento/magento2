@@ -8,8 +8,8 @@ namespace Magento\Framework;
 /**
  * Flag model
  *
- * @method \Magento\Framework\Flag\Resource _getResource()
- * @method \Magento\Framework\Flag\Resource getResource()
+ * @method \Magento\Framework\Flag\FlagResource _getResource()
+ * @method \Magento\Framework\Flag\FlagResource getResource()
  * @method string getFlagCode()
  * @method \Magento\Framework\Flag setFlagCode(string $value)
  * @method int getState()
@@ -37,7 +37,7 @@ class Flag extends Model\AbstractModel
         if ($this->hasData('flag_code')) {
             $this->_flagCode = $this->getData('flag_code');
         }
-        $this->_init('Magento\Framework\Flag\Resource');
+        $this->_init('Magento\Framework\Flag\FlagResource');
     }
 
     /**

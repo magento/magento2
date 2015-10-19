@@ -194,7 +194,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $error = 'There must be an "autoload->files" node in composer.json of each Magento component.';
         $this->assertObjectHasAttribute('autoload', $json, $error);
         $this->assertObjectHasAttribute('files', $json->autoload, $error);
-        $this->assertEquals([ "registration.php" ], $json->autoload->files, $error);
+        $this->assertTrue(in_array("registration.php", $json->autoload->files), $error);
         $this->assertFileExists("$dir/registration.php");
     }
 

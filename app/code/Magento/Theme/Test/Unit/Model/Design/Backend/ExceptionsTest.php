@@ -36,12 +36,12 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     protected $design;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Design|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Design|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Design\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Design\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 
@@ -55,10 +55,10 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->config = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
         $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\Resource\Design')
+        $this->resource = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Design\Collection')
+        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())

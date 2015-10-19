@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-sample-data",
+    "description": "Sample Data fixtures",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/framework": "~1.0.0-beta"
+    },
+    "suggest": {
+        "magento/sample-data-media": "Sample Data version:~1.0.0-beta"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0-beta",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "cli_commands.php",
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\SampleData\\": ""
+        }
+    }
+}

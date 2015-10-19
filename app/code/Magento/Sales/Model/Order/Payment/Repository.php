@@ -9,7 +9,7 @@ namespace Magento\Sales\Model\Order\Payment;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory as SearchResultFactory;
 
 /**
@@ -52,7 +52,7 @@ class Repository implements OrderPaymentRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
-        /** @var \Magento\Sales\Model\Resource\Order\Payment\Collection $collection */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Payment\Collection $collection */
         $collection = $this->searchResultFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
