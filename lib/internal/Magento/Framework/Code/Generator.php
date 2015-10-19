@@ -104,27 +104,10 @@ class Generator
                     new \Magento\Framework\Phrase(implode(' ', $errors))
                 );
             }
-            $this->tryToIncludeFile($file, $className, true);
-            return self::GENERATION_SUCCESS;
-        }
-    }
-
-    /**
-     * Include file conditionally
-     *
-     * @param string $fileName
-     * @param string $className
-     * @param bool $mustExist Skip inclusion if file doesn't exist and this is false
-     * @return void
-     */
-    public function tryToIncludeFile($fileName, $className, $mustExist)
-    {
-        if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
-            if (!$mustExist && file_exists($fileName)) {
-                include $fileName;
-            } else {
-                include $fileName;
+            if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
+                $this->_ioObject->includeFile($file);
             }
+            return self::GENERATION_SUCCESS;
         }
     }
 
@@ -208,7 +191,16 @@ class Generator
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
         } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
-            $this->tryToIncludeFile($this->_ioObject->getResultFileName($resultClass), $resultClass, false);
+            $generatedFileName = $this->_ioObject->getResultFileName($resultClass);
+            /**
+             * Must handle two edge cases: a competing process has generated the class and written it to disc already,
+             * or the class exists in committed code, despite matching pattern to be generated.
+             */
+            if ($this->_ioObject->fileExists($generatedFileName)
+                && !$this->definedClasses->isClassLoadableFromMemory($resultClass)
+            ) {
+                $this->_ioObject->includeFile($generatedFileName);
+            }
             return self::GENERATION_SKIP;
         } else if (!isset($this->_generatedEntities[$resultEntityType])) {
             throw new \InvalidArgumentException('Unknown generation entity.');

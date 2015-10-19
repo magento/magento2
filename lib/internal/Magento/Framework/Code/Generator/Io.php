@@ -147,6 +147,18 @@ class Io
     }
 
     /**
+     * Wrapper for include
+     *
+     * @param string $fileName
+     * @return mixed
+     * @codeCoverageIgnore
+     */
+    public function includeFile($fileName)
+    {
+        return include $fileName;
+    }
+
+    /**
      * @param string $directory
      * @return bool
      */
