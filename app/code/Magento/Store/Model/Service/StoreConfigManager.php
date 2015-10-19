@@ -34,6 +34,7 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
         'setBaseCurrencyCode' => 'currency/options/base',
         'setDefaultDisplayCurrencyCode' => 'currency/options/default',
         'setTimezone' => 'general/locale/timezone',
+        'setWeightUnit' => \Magento\Directory\Helper\Data::XML_PATH_WEIGHT_UNIT
     ];
 
     /**
@@ -90,9 +91,6 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
             );
             $storeConfig->$methodName($configValue);
         }
-
-        //Hard code the weight unit for now
-        $storeConfig->setWeightUnit('lbs');
 
         $storeConfig->setBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false));
         $storeConfig->setSecureBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true));

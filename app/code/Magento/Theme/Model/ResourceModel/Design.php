@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 // @codingStandardsIgnoreFile
 namespace Magento\Theme\Model\ResourceModel;
 
@@ -14,7 +13,7 @@ use Magento\Framework\Stdlib\DateTime;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Design extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var DateTime
@@ -22,12 +21,12 @@ class Design extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         DateTime $dateTime,
         $connectionName = null
     ) {

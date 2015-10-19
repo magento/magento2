@@ -387,9 +387,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return [
             'large' => $this->imageHelper->init($product, 'product_page_image_large')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')

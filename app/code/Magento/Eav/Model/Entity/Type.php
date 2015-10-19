@@ -86,7 +86,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory
      * @param \Magento\Eav\Model\Entity\StoreFactory $storeFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @codeCoverageIgnore
@@ -98,7 +98,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory,
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -359,7 +359,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource entity object
      *
-     * @return \Magento\Framework\Model\ModelResource\AbstractResource
+     * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      */
     public function getEntity()
     {

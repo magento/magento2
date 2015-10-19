@@ -8,23 +8,13 @@ namespace Magento\Customer\Block;
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Sections that can not be cached on frontend-side
-     *
-     * @var array
-     */
-    protected $nonCachedSections = [];
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
-     * @param array $nonCachedSections
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        array $data = [],
-        array $nonCachedSections = []
+        array $data = []
     ) {
-        $this->nonCachedSections = $nonCachedSections;
         parent::__construct($context, $data);
     }
 
@@ -49,25 +39,5 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     public function getCustomerDataUrl($route)
     {
         return $this->getUrl($route, ['_secure' => $this->getRequest()->isSecure()]);
-    }
-
-    /**
-     * Get sections that can not be cached on frontend-side
-     *
-     * @return array
-     */
-    public function getNotCachedSections()
-    {
-        return $this->nonCachedSections;
-    }
-
-    /**
-     * Get keys of sections that can not be cached on frontend-side
-     *
-     * @return array
-     */
-    public function getNonCachedSectionKeys()
-    {
-        return array_keys($this->nonCachedSections);
     }
 }
