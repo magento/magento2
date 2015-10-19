@@ -5,12 +5,11 @@
 define([
     'jquery',
     'underscore',
-    'uiComponent'
-], function ($, _, Component) {
+    'uiElement'
+], function ($, _, Element) {
     'use strict';
 
-    return Component.extend({
-
+    return Element.extend({
         defaults: {
             template: 'ui/grid/exportButton',
             checked: '',

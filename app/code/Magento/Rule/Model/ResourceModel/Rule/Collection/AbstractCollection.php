@@ -11,7 +11,7 @@
  */
 namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
 
-abstract class AbstractCollection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map

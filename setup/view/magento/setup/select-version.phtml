@@ -5,8 +5,6 @@
  */
 ?>
 
-<h2 class="page-title">{{$state.current.header}}</h2>
-
 <div class="nav-bar-outer-actions">
 
     <div class="outer-actions-inner-wrap">
@@ -29,6 +27,8 @@
         </div>
     </div>
 </div>
+
+<h2 class="page-sub-title">{{$state.current.header}}</h2>
 
 <div class="row form-row">
     <div class="message message-spinner" ng-show="!upgradeProcessed">
@@ -54,7 +54,7 @@
                 id="selectVersion"
                 class="form-el-select"
                 ng-model="selectedOption"
-                ng-options="item.id as item.name for item in versions">
+                ng-options="item.versionInfo as item.version.name for item in versions">
             </select>
         </div>
     </div>

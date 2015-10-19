@@ -22,7 +22,7 @@ class SampleDataResetCommand extends Command
     private $sampleDataDependency;
 
     /**
-     * @var \Magento\Framework\Module\Resource
+     * @var \Magento\Framework\Module\ModuleResource
      */
     private $moduleResource;
 

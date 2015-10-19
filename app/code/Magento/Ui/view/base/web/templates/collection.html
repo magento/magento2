@@ -5,5 +5,7 @@
  */
 -->
 <!-- ko foreach: { data: elems, as: 'element' } -->
-    <!-- ko template: element.getTemplate() --><!-- /ko -->
+    <!-- ko if: hasTemplate() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
 <!-- /ko -->

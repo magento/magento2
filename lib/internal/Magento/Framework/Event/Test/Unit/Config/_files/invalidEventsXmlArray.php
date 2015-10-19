@@ -61,10 +61,7 @@ return [
         '<?xml version="1.0"?><config><event name="some_name"><observer ' .
         'name="observer_name" method="_wrong name"/></event></config>',
         [
-            "Element 'observer', attribute 'method': [facet 'pattern'] The value '_wrong name' is not accepted by" .
-            " the pattern '[a-zA-Z]+'.\nLine: 1\n",
-            "Element 'observer', attribute 'method': '_wrong name' is not a valid value of the atomic type " .
-            "'methodName'.\nLine: 1\n"
+            "Element 'observer', attribute 'method': The attribute 'method' is not allowed.\nLine: 1\n"
         ],
     ]
 ];

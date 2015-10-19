@@ -117,7 +117,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Newsletter\Model\ProblemFactory $problemFactory
      * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -131,7 +131,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory,
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

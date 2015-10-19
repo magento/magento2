@@ -142,5 +142,6 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteIndex->open();
         $this->promoQuoteIndex->getPromoQuoteGrid()->searchAndOpen($filter);
         $this->promoQuoteEdit->getFormPageActions()->delete();
+        $this->promoQuoteEdit->getModalBlock()->acceptAlert();
     }
 }
