@@ -8,6 +8,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Deployment configuration reader
@@ -25,6 +26,11 @@ class Reader
     private $configFilePool;
 
     /**
+     * @var DriverPool
+     */
+    private $driverPool;
+
+    /**
      * Configuration file names
      *
      * @var array
@@ -39,10 +45,15 @@ class Reader
      * @param null|string $file
      * @throws \InvalidArgumentException
      */
-    public function __construct(DirectoryList $dirList, ConfigFilePool $configFilePool, $file = null)
-    {
+    public function __construct(
+        DirectoryList $dirList,
+        DriverPool $driverPool,
+        ConfigFilePool $configFilePool,
+        $file = null
+    ) {
         $this->dirList = $dirList;
         $this->configFilePool = $configFilePool;
+        $this->driverPool = $driverPool;
         if (null !== $file) {
             if (!preg_match('/^[a-z\d\.\-]+\.php$/i', $file)) {
                 throw new \InvalidArgumentException("Invalid file name: {$file}");
@@ -73,9 +84,11 @@ class Reader
     public function load($fileKey = null)
     {
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        $result = [];
         if ($fileKey) {
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
-            if (file_exists($filePath)) {
+            if ($fileDriver->isExists($filePath)) {
                 $result = include $filePath;
             }
         } else {
@@ -84,8 +97,8 @@ class Reader
             $result = [];
             foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
-                if (file_exists($configFile)) {
-                    $fileData = @include $configFile;
+                if ($fileDriver->isExists($configFile)) {
+                    $fileData = include $configFile;
                 } else {
                     continue;
                 }
