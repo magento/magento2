@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Indexer;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -36,12 +36,12 @@ class GridStructure implements IndexStructureInterface
     ];
 
     /**
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param array $columnTypesMap
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         FlatScopeResolver $flatScopeResolver,
         array $columnTypesMap = []
     ) {

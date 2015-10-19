@@ -91,14 +91,14 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             ->method('collectUninstall')
             ->willReturn(['moduleA' => $uninstall, 'moduleB' => $uninstall]);
 
-        $resource = $this->getMock('Magento\Framework\Module\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\Module\ModuleResource', [], [], '', false);
         $resource->expects($this->atLeastOnce())->method('getDbVersion')->willReturn('1.0');
 
         $this->output->expects($this->atLeastOnce())->method('writeln');
 
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Module\Resource')
+            ->with('Magento\Framework\Module\ModuleResource')
             ->willReturn($resource);
         $this->uninstaller->uninstallData($this->output, ['moduleA', 'moduleB']);
     }

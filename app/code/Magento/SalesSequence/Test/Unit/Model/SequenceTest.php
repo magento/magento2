@@ -17,7 +17,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
      */
     private $connectionMock;
     /**
-     * @var \Magento\Framework\App\Resource | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -53,7 +53,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection'],
             [],
             '',

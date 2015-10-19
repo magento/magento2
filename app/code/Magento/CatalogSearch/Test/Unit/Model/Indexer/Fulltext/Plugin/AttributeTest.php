@@ -15,7 +15,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\Attribute
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Attribute
      */
     protected $subjectMock;
 
@@ -31,7 +31,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\Resource\Attribute', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Attribute', [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
             'Magento\Framework\Indexer\IndexerInterface',
             [],
@@ -64,7 +64,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAroundSave($isObjectNew, $isSearchableChanged, $invalidateCounter)
     {
         $attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',
@@ -76,7 +76,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $attributeMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
 
-        $closureMock = function (\Magento\Catalog\Model\Resource\Eav\Attribute $object) use ($attributeMock) {
+        $closureMock = function (\Magento\Catalog\Model\ResourceModel\Eav\Attribute $object) use ($attributeMock) {
             $this->assertEquals($object, $attributeMock);
             return $this->subjectMock;
         };
@@ -113,7 +113,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAroundDelete($isObjectNew, $isSearchable, $invalidateCounter)
     {
         $attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getIsSearchable', 'isObjectNew', '__wakeup'],
             [],
             '',
@@ -122,7 +122,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->any())->method('getIsSearchable')->will($this->returnValue($isSearchable));
         $attributeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
 
-        $closureMock = function (\Magento\Catalog\Model\Resource\Eav\Attribute $object) use ($attributeMock) {
+        $closureMock = function (\Magento\Catalog\Model\ResourceModel\Eav\Attribute $object) use ($attributeMock) {
             $this->assertEquals($object, $attributeMock);
             return $this->subjectMock;
         };

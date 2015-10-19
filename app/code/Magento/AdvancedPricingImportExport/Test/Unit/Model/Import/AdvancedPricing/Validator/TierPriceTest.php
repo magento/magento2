@@ -157,10 +157,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             [
                 '\Magento\Framework\Json\Helper\Data',
                 '\Magento\ImportExport\Helper\Data',
-                '\Magento\ImportExport\Model\Resource\Import\Data',
+                '\Magento\ImportExport\Model\ResourceModel\Import\Data',
                 '\Magento\Eav\Model\Config',
-                '\Magento\Framework\App\Resource',
-                '\Magento\ImportExport\Model\Resource\Helper',
+                '\Magento\Framework\App\ResourceConnection',
+                '\Magento\ImportExport\Model\ResourceModel\Helper',
                 '\Magento\Framework\Stdlib\StringUtils',
                 'ProcessingErrorAggregatorInterface',
             ],

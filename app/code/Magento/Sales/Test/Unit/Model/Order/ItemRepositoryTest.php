@@ -15,7 +15,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $objectFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Metadata | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
@@ -51,7 +51,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->metadata = $this->getMockBuilder('Magento\Sales\Model\Resource\Metadata')
+        $this->metadata = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Metadata')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,7 +109,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn(null);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())
@@ -150,7 +150,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn($orderItemId);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())
@@ -255,7 +255,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getBuyRequest')
             ->willReturn($requestMock);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())

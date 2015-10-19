@@ -6,7 +6,7 @@
 
 namespace Magento\Mtf\Util\Generate\Repository;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Class CollectionProvider
@@ -26,7 +26,7 @@ class TableCollection extends AbstractCollection
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param array $fixture
      */
     public function __construct(
@@ -35,11 +35,11 @@ class TableCollection extends AbstractCollection
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
         array $fixture = []
     ) {
         $this->setModel('Magento\Framework\DataObject');
-        $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\Resource');
+        $this->setResourceModel('Magento\Mtf\Util\Generate\Repository\RepositoryResource');
 
         $resource = $this->getResource();
         $resource->setFixture($fixture);
@@ -50,7 +50,7 @@ class TableCollection extends AbstractCollection
     /**
      * Get resource instance
      *
-     * @return \Magento\Mtf\Util\Generate\Repository\Resource
+     * @return \Magento\Mtf\Util\Generate\Repository\RepositoryResource
      */
     public function getResource()
     {

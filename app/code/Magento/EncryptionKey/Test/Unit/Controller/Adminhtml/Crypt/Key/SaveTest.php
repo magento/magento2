@@ -14,7 +14,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $encryptMock;
-    /** @var \Magento\EncryptionKey\Model\Resource\Key\Change|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change|\PHPUnit_Framework_MockObject_MockObject */
     protected $changeMock;
     /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheMock;
@@ -33,7 +33,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->changeMock = $this->getMockBuilder('Magento\EncryptionKey\Model\Resource\Key\Change')
+        $this->changeMock = $this->getMockBuilder('Magento\EncryptionKey\Model\ResourceModel\Key\Change')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

@@ -46,7 +46,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
      * Prepare price filter model
      *
      * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $priceResource
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $priceResource
      * @param \Magento\TestFramework\Request|null $request
      * @internal param \Magento\CatalogSearch\Model\Price\Interval $interval
      * @return \Magento\Framework\Search\Dynamic\Algorithm
@@ -132,12 +132,12 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $layer
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     protected function createPriceResource($layer)
     {
         return Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Resource\Layer\Filter\Price', ['layer' => $layer]);
+            ->create('Magento\Catalog\Model\ResourceModel\Layer\Filter\Price', ['layer' => $layer]);
     }
 
     /**

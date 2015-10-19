@@ -43,7 +43,7 @@ abstract class Integration extends Action
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
-    /** @var \Magento\Integration\Model\Resource\Integration\Collection */
+    /** @var \Magento\Integration\Model\ResourceModel\Integration\Collection */
     protected $_integrationCollection;
 
     /**
@@ -60,7 +60,7 @@ abstract class Integration extends Action
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
+     * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +71,7 @@ abstract class Integration extends Action
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
+        \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
     ) {
         parent::__construct($context);
         $this->_registry = $registry;

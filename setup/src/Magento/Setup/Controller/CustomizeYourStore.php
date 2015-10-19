@@ -5,9 +5,8 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -17,7 +16,7 @@ use Zend\View\Model\JsonModel;
 class CustomizeYourStore extends AbstractActionController
 {
     /**
-     * @var ModuleList
+     * @var FullModuleList
      */
     protected $moduleList;
 
@@ -32,11 +31,11 @@ class CustomizeYourStore extends AbstractActionController
     protected $objectManagerProvider;
 
     /**
-     * @param ModuleList $moduleList
+     * @param FullModuleList $moduleList
      * @param Lists $list
      * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ModuleList $moduleList, Lists $list, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(FullModuleList $moduleList, Lists $list, ObjectManagerProvider $objectManagerProvider)
     {
         $this->moduleList = $moduleList;
         $this->list = $list;

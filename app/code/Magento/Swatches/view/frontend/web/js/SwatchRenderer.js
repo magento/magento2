@@ -181,7 +181,8 @@ define(["jquery", "jquery/ui"], function ($) {
             onlySwatches: false,                               // show only swatch controls
             enableControlLabel: true,                          // enable label for control
             moreButtonText: 'More',                            // text for more button
-            mediaCallback: ''                                  // Callback url for media
+            mediaCallback: '',                                 // Callback url for media
+            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
         },
 
         /**
@@ -201,6 +202,30 @@ define(["jquery", "jquery/ui"], function ($) {
                 this._RenderControls();
             } else {
                 console.log('SwatchRenderer: No input data received');
+            }
+        },
+
+        /**
+         * @private
+         */
+        _create: function () {
+            var options = this.options,
+                gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
+                isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist ?
+                    this.element.parents('.column.main') :
+                    this.element.parents('.product-item-info');
+
+            if (isProductViewExist) {
+                gallery.on('gallery:loaded', function () {
+                    var galleryObject = gallery.data('gallery');
+
+                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+                });
+            } else {
+                options.mediaGalleryInitial = [{
+                    'img': $main.find('.product-image-photo').attr('src')
+                }];
             }
         },
 
@@ -326,13 +351,13 @@ define(["jquery", "jquery/ui"], function ($) {
                 // Color
                 else if (type == 1) {
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                    '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Image
                 else if (type == 2) {
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                    '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Clear
@@ -696,7 +721,8 @@ define(["jquery", "jquery/ui"], function ($) {
          * @private
          */
         _ProductMediaCallback: function ($this, response) {
-            var $main = ($('body.catalog-product-view').size() > 0)
+            var isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist
                     ? $this.parents('.column.main')
                     : $this.parents('.product-item-info'),
                 $widget = this,
@@ -705,24 +731,52 @@ define(["jquery", "jquery/ui"], function ($) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) > 0) {
-                if (support(response)) {
-                    images.push({large: response.large, medium: response.medium, small: response.small});
-                    if (response.hasOwnProperty('gallery')) {
-                        $.each(response.gallery, function () {
-                            if (!support(this) || response.large == this.large) {
-                                return;
-                            }
-                            images.push({large: this.large, medium: this.medium, small: this.small});
-                        });
-                    }
-                }
+            if ($widget._ObjectLength(response) < 1) {
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
-                if ($('body.catalog-product-view').size() > 0) {
-                    $main.find('[data-role=media-gallery]').gallery('option', 'images', images);
-                } else {
-                    $main.find('.product-image-photo').attr('src', images.shift().medium);
+                return;
+            }
+
+            if (support(response)) {
+                images.push({
+                    full: response.large,
+                    img: response.medium,
+                    thumb: response.small
+                });
+
+                if (response.hasOwnProperty('gallery')) {
+                    $.each(response.gallery, function () {
+                        if (!support(this) || response.large === this.large) {
+                            return;
+                        }
+                        images.push({
+                            full: this.large,
+                            img: this.medium,
+                            thumb: this.small
+                        });
+                    });
                 }
+            }
+
+            this.updateBaseImage(images, $main, isProductViewExist);
+        },
+
+        /**
+         * Update [gallery-placeholder] or [product-image-photo]
+         * @param {Array} images
+         * @param {jQuery} context
+         * @param {Boolean} isProductViewExist
+         */
+        updateBaseImage: function (images, context, isProductViewExist) {
+            var justAnImage = images[0];
+
+            if (isProductViewExist) {
+                context
+                    .find('[data-gallery-role=gallery-placeholder]')
+                    .data('gallery')
+                    .updateData(images);
+            } else if (justAnImage && justAnImage.img) {
+                context.find('.product-image-photo').attr('src', justAnImage.img);
             }
         },
 
@@ -734,10 +788,7 @@ define(["jquery", "jquery/ui"], function ($) {
         _XhrKiller: function () {
             var $widget = this;
 
-            if (
-                $widget.xhr != undefined
-                || $widget.xhr != null
-            ) {
+            if ($widget.xhr !== undefined && $widget.xhr !== null) {
                 $widget.xhr.abort();
                 $widget.xhr = null;
             }
@@ -750,12 +801,12 @@ define(["jquery", "jquery/ui"], function ($) {
          */
         _EmulateSelected: function () {
             var $widget = this,
-                $this = $widget.element;
-            var request = $.parseParams(window.location.search.substring(1));
+                $this = $widget.element,
+                request = $.parseParams(window.location.search.substring(1));
 
             $.each(request, function (key, value) {
                 $this.find('.' + $widget.options.classes.attributeClass
-                + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
+                    + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
             });
         },
 
@@ -765,11 +816,14 @@ define(["jquery", "jquery/ui"], function ($) {
          * @returns {number}
          * @private
          */
-        _ObjectLength: function(obj) {
-            var size = 0, key;
+        _ObjectLength: function (obj) {
+            var size = 0,
+                key;
+
             for (key in obj) {
                 if (obj.hasOwnProperty(key)) size++;
             }
+
             return size;
         }
     });

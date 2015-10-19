@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Test\Unit\App\Request;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -112,8 +114,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
-            // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
-            ->willThrowException(new \InvalidArgumentException());
+            ->willThrowException(new NoSuchEntityException());
         $store->expects($this->never())->method('isUseStoreInUrl');
         $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');
 

@@ -106,7 +106,7 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
     }

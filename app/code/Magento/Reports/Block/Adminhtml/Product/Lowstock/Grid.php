@@ -13,20 +13,20 @@ namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory
      */
     protected $_lowstocksFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory $lowstocksFactory
+     * @param \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory $lowstocksFactory,
+        \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory,
         array $data = []
     ) {
         $this->_lowstocksFactory = $lowstocksFactory;
@@ -54,7 +54,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeId = '';
         }
 
-        /** @var $collection \Magento\Reports\Model\Resource\Product\Lowstock\Collection  */
+        /** @var $collection \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection  */
         $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
             '*'
         )->setStoreId(

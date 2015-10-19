@@ -56,9 +56,9 @@ class ProductRepositoryTest extends WebapiAbstract
 
     protected function getConfigurableAttributeOptions()
     {
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection */
         $optionCollection = $this->objectManager->create(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
         );
         $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
         return $options;

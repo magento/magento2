@@ -42,7 +42,7 @@ class CustomOptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resource = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+        $resource = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->disableOriginalConstructor()
             ->getMock();
 
