@@ -97,7 +97,7 @@ class Totals extends Block
      *
      * @var string
      */
-    protected $blockWaitElement = '._block-content-loading';
+    protected $blockWaitElement = '.loading-mask';
 
     /**
      * Get Grand Total Text
