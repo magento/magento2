@@ -39,7 +39,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 

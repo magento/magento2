@@ -72,5 +72,6 @@ class DeleteSitemapEntityTest extends Injectable
         $this->sitemapIndex->open();
         $this->sitemapIndex->getSitemapGrid()->searchAndOpen($filter);
         $this->sitemapEdit->getFormPageActions()->delete();
+        $this->sitemapEdit->getModalBlock()->acceptAlert();
     }
 }

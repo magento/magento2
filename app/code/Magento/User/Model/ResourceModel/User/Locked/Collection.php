@@ -15,7 +15,7 @@ class Collection extends \Magento\User\Model\ResourceModel\User\Collection
     /**
      * Collection Init Select
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @return $this
      */
     protected function _initSelect()

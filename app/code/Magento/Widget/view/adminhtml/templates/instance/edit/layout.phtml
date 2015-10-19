@@ -22,9 +22,10 @@
 require([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     "prototype",
     "extjs/ext-tree-checkbox"
-], function (jQuery, mageTemplate) {
+], function (jQuery, mageTemplate, alert) {
 
 //<![CDATA[
 
@@ -376,7 +377,9 @@ var WidgetInstance = {
                                 chooser.show();
                             }
                         } catch (e) {
-                            alert('Error occurs during loading chooser.');
+                            alert({
+                                content: 'Error occurs during loading chooser.'
+                            });
                         }
                     }
                 });
@@ -469,7 +472,9 @@ var WidgetInstance = {
                                 }
                             }
                         } catch (e) {
-                            alert('Error occurs during loading chooser.');
+                            alert({
+                                content: 'Error occurs during loading chooser.'
+                            });
                         }
                     }
                 });

@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
@@ -51,13 +50,6 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function indexerConfigFileDataProvider()
     {
-        /** @var Filesystem $filesystem */
-        $utilityFiles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Framework\App\Utility\Files');
-
-        $utilityFiles->getConfigFiles('indexer.xml');
-
-        $dataProviderResult = $utilityFiles->getConfigFiles('indexer.xml');
-        return $dataProviderResult;
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('indexer.xml');
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 /**
  * Class AbstractStorage
  */
-abstract class AbstractStorage extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * File storage connection name
