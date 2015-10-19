@@ -382,7 +382,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->helperData->getProductWeeeAttributesForDisplay($this->product);
     }
 
-    public function getTaxDisplayConfig()
+    public function testGetTaxDisplayConfig()
     {
         $expected = 1;
         $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
