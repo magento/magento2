@@ -7,6 +7,8 @@
  */
 namespace Magento\Backend\Block\Page;
 
+use Magento\Framework\App\ActionInterface;
+
 class Locale extends \Magento\Backend\Block\Template
 {
     /**
@@ -68,7 +70,7 @@ class Locale extends \Magento\Backend\Block\Template
      */
     public function getUrlForReferer()
     {
-        return \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED . '/' . $this->_urlHelper->getEncodedUrl();
+        return ActionInterface::PARAM_NAME_URL_ENCODED . '/' . $this->_urlHelper->getEncodedUrl();
     }
 
     /**

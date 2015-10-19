@@ -125,12 +125,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_productTypesConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -144,7 +144,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Instance of product collection factory.
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productColFac;
 
@@ -184,22 +184,22 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
     ) {
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
@@ -350,11 +350,23 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Array of SKU to array of super attribute values for all products.
      *
+     * @param array $bunch
      * @return $this
      */
-    protected function _loadSkuSuperData()
+    protected function _loadSkuSuperDataForBunch(array $bunch)
     {
-        if (!$this->_skuSuperData) {
+        $newSku = $this->_entityModel->getNewSku();
+        $oldSku = $this->_entityModel->getOldSku();
+        $productIds = [];
+        foreach ($bunch as $rowData) {
+            $sku = $rowData[ImportProduct::COL_SKU];
+            $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
+            $productIds[] = $productData['entity_id'];
+        }
+
+        $this->_productSuperAttrs = [];
+        $this->_skuSuperData = [];
+        if (!empty($productIds)) {
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $optionTable = $this->_resource->getTableName('eav_attribute_option');
             $select = $this->_connection->select()->from(
@@ -368,6 +380,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'o.attribute_id'
                 ),
                 ['option_id']
+            )->where(
+                'product_id IN ( ? )',
+                $productIds
             );
 
             foreach ($this->_connection->fetchAll($select) as $row) {
@@ -703,11 +718,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_productSuperData = [];
         $this->_productData = null;
 
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
-            $this->_loadSkuSuperData();
-        }
-
         while ($bunch = $this->_entityModel->getNextBunch()) {
+            if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+                $this->_loadSkuSuperDataForBunch($bunch);
+            }
             if (!$this->configurableInBunch($bunch)) {
                 continue;
             }

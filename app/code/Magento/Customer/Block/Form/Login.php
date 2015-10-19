@@ -40,7 +40,7 @@ class Login extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->_isScopePrivate = false;
         $this->_customerUrl = $customerUrl;
         $this->_customerSession = $customerSession;
     }

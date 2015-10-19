@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Braintree\Model\Vault;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 
 /**
  * Class PayPal
@@ -66,9 +66,9 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param TransactionCollectionFactory $salesTransactionCollectionFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetaData
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Braintree\Model\Config\PayPal $payPalConfig
-     * @param BraintreeTransaction $braintreeTransaction
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -93,8 +93,9 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
         TransactionCollectionFactory $salesTransactionCollectionFactory,
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Braintree\Model\Config\PayPal $payPalConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -118,6 +119,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
             $salesTransactionCollectionFactory,
             $productMetaData,
             $regionFactory,
+            $orderRepository,
             $resource,
             $resourceCollection,
             $data
@@ -232,7 +234,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
             ->setCcTransId($result->transaction->id)
             ->setLastTransId($result->transaction->id)
             ->setTransactionId($result->transaction->id)
-            ->setIsTransactionClosed(0)
+            ->setIsTransactionClosed(false)
             ->setAdditionalInformation($additionalInformation)
             ->setAmount($amount)
             ->setShouldCloseParentTransaction(false);
@@ -288,13 +290,14 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
     public function capture(InfoInterface $payment, $amount)
     {
         try {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             if ($payment->getCcTransId()) {
                 $result = $this->braintreeTransaction->submitForSettlement($payment->getCcTransId(), $amount);
-                $this->_debug($payment->getCcTransId().' - '.$amount);
-                $this->_debug($result);
+                $this->_debug([$payment->getCcTransId().' - '.$amount]);
+                $this->_debug($this->_convertObjToArray($result));
                 if ($result->success) {
-                    $payment->setIsTransactionClosed(0)
-                        ->setShouldCloseParentTransaction(false);
+                    $payment->setIsTransactionClosed(false)
+                        ->setShouldCloseParentTransaction(true);
                 } else {
                     throw new LocalizedException($this->errorHelper->parseBraintreeError($result));
                 }

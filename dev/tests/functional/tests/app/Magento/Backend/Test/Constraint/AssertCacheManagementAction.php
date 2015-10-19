@@ -6,7 +6,6 @@
 
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Backend\Test\Fixture\GlobalSearch;
 use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -16,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCacheManagementAction extends AbstractConstraint
 {
     /**
-     * Assert that backend page has correct title and 404 Error is absent on the page.
+     * Assert success message for cache flush.
      *
      * @param AdminCache $adminCache
      * @param string $successMessage

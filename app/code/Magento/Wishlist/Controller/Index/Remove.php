@@ -64,7 +64,7 @@ class Remove extends Action\Action implements IndexInterface
         if ($url) {
             $refererUrl = $url;
         }
-        if ($request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED) && $refererUrl) {
+        if ($request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED) && $refererUrl) {
             $redirectUrl = $refererUrl;
         } else {
             $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));

@@ -35,7 +35,7 @@ class Share extends Action\Action implements IndexInterface
      */
     public function execute()
     {
-        if ($this->customerSession->authenticate($this)) {
+        if ($this->customerSession->authenticate()) {
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             return $resultPage;

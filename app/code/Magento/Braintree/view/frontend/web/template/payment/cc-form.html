@@ -1,6 +1,3 @@
-
-
-
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
@@ -22,6 +19,9 @@
     </div>
 
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -58,10 +58,12 @@
                 </div>
                 <div>&nbsp;</div>
                 <!-- /ko -->
-                <div class="field type required" data-bind="visible: isCcFormShown">
+                <div data-bind="visible: isCcFormShown, attr: {class: getCssClass()}">
+                    <!-- ko if: (!isCcDetectionEnabled())-->
                     <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
                         <span><!-- ko i18n: 'Credit Card Type'--><!-- /ko --></span>
                     </label>
+                    <!-- /ko -->
                     <div class="control">
                         <!-- ko if: (!isCcDetectionEnabled())-->
                         <select name="payment[cc_type]" class="select"
@@ -150,7 +152,7 @@
                     <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
                         <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
                     </label>
-                    <div class="control">
+                    <div class="control _with-tooltip">
                         <input type="number"
                                class="input-text cvv"
                                name="payment[cc_cid]"

@@ -92,6 +92,16 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method getDefaultExclusions
+     */
+    public function testGetDefaultExclusions()
+    {
+        $defaultExclusions = $this->model->getDefaultExclusions();
+        $this->assertNotEmpty($defaultExclusions, 'Expected to have at least one default exclusion');
+        $this->assertContains($this->model->getAdjustmentCode(), $defaultExclusions);
+    }
+
+    /**
      * Test for method displayBothPrices
      */
     public function testDisplayBothPrices()
@@ -323,7 +333,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $product = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $product = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $product->expects($this->once())
             ->method('getId');
 

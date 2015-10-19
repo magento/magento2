@@ -9,8 +9,9 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Event\ObserverInterface;
 
-class Store
+class Store implements ObserverInterface
 {
     /**
      * @var DimensionFactory
@@ -61,7 +62,7 @@ class Store
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function onAdd(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $observer->getEvent()->getData('store');

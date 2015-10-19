@@ -134,7 +134,7 @@ class ConfigProvider extends CcGenericConfigProvider
      */
     public function getAjaxGenerateNonceUrl()
     {
-        return $this->urlBuilder->getUrl('braintree/creditcard/generate');
+        return $this->urlBuilder->getUrl('braintree/creditcard/generate', ['_secure' => true]);
     }
 
     /**

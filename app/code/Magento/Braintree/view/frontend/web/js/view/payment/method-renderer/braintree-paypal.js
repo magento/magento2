@@ -47,11 +47,6 @@ define(
                 return {
                     'method': this.item.method,
                     'po_number': null,
-                    'cc_owner': null,
-                    'cc_number': null,
-                    'cc_type': null,
-                    'cc_exp_year': null,
-                    'cc_exp_month': null,
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce()
                     }
@@ -93,7 +88,7 @@ define(
                         singleUse: true,
                         amount: totals.base_grand_total,
                         currency: totals.base_currency_code,
-                        displayName: this.merchantName,
+                        displayName: this.merchantName || '',
                         locale: this.locale,
                         onPaymentMethodReceived: function (response) {
                             self.paymentMethodNonce(response.nonce);
@@ -103,7 +98,7 @@ define(
                         }
                     });
                 } else {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                    this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
                 }
             },
             isValid: function () {

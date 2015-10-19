@@ -14,13 +14,13 @@ class FullTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithAdapterErrorThrowsException()
     {
         $indexerFactoryMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Indexer\StockFactory',
+            'Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory',
             [],
             [],
             '',
             false
         );
-        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
 

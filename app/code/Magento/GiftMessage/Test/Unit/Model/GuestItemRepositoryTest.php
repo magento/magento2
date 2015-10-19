@@ -219,6 +219,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMessage')
             ->with($this->quoteMock, 'quote_item', $this->messageMock, $itemId)
             ->will($this->returnValue($this->giftMessageManagerMock));
+        $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->itemRepository->save($this->cartId, $this->messageMock, $itemId));
     }

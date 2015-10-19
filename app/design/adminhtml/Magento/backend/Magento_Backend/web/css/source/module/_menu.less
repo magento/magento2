@@ -135,7 +135,7 @@
         &:hover {
             .logo-img {
                 -webkit-filter: brightness(1.1);
-                        filter: brightness(1.1);
+                filter: brightness(1.1);
             }
         }
         &:active {
@@ -146,8 +146,8 @@
         .logo-img {
             height: @menu-logo-img__height;
             transition: -webkit-filter .2s linear,
-                                filter .2s linear,
-                        transform .1s linear;
+            filter .2s linear,
+            transform .1s linear;
             width: @menu-logo-img__width;
         }
     }
@@ -156,6 +156,20 @@
 //
 //  First menu level
 //  ---------------------------------------------
+
+.abs-menu-separator {
+    @_menu-separator__width: 68%;
+
+    background-color: @menu-line-before__background-color;
+    content: '';
+    display: block;
+    height: @menu-line-before__height;
+    left: 0;
+    margin-left: (100% - @_menu-separator__width) / 2;
+    position: absolute;
+    top: 0;
+    width: @_menu-separator__width;
+}
 
 .admin__menu {
     li {
@@ -167,17 +181,7 @@
                 position: relative;
                 //  Separator between logo and menu
                 &:after {
-                    @_menu-separator__width: 68%;
-
-                    background-color: @menu-line-before__background-color;
-                    content: '';
-                    display: block;
-                    height: @menu-line-before__height;
-                    left: 0;
-                    margin-left: (100% - @_menu-separator__width) / 2;
-                    position: absolute;
-                    top: 0;
-                    width: @_menu-separator__width;
+                    &:extend(.abs-menu-separator);
                 }
             }
             &._active {
@@ -428,6 +432,18 @@
         > a {
             &:before {
                 content: @icon-systems__content;
+            }
+        }
+    }
+
+    .item-partners {
+        > a {
+            padding-bottom: 1rem;
+            &:before {
+                content: @icon-lego__content;
+            }
+            &:after {
+                &:extend(.abs-menu-separator);
             }
         }
     }

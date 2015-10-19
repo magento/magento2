@@ -20,7 +20,7 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      * @var array
      */
     protected $persistedInstances = [
-        'Magento\Framework\App\Resource',
+        'Magento\Framework\App\ResourceConnection',
         'Magento\Framework\Config\Scope',
         'Magento\Framework\ObjectManager\RelationsInterface',
         'Magento\Framework\ObjectManager\ConfigInterface',

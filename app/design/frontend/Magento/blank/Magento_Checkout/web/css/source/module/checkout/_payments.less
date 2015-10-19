@@ -37,9 +37,16 @@
                     display: block;
                 }
             }
-            .action {
-                &.primary {
-                    &:extend(.abs-button-l all);
+        }
+
+        .payment-method-content {
+            > .actions-toolbar {
+                > .primary {
+                    .action {
+                        &.primary {
+                            &:extend(.abs-button-l all);
+                        }
+                    }
                 }
             }
         }
@@ -68,8 +75,12 @@
                 &:not(:last-child) {
                     margin: 0 0 @indent__base;
                 }
-                > .field {
-                    margin: 0 0 @indent__base;
+            }
+            .field {
+                &.cvv {
+                    .control {
+                        width: 40%;
+                    }
                 }
             }
         }
@@ -133,6 +144,11 @@
                 padding-left: @indent__l;
             }
         }
+        .payments {
+            .legend {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
     }
 }
 
@@ -181,6 +197,23 @@
                 > .control {
                     float: none;
                     width: 100%;
+                }
+            }
+        }
+        .payment-method-content {
+            .fieldset {
+                > .field {
+                    margin: 0 0 @indent__base;
+                    &.type {
+                        .control {
+                            margin-left: 25.8%;
+                        }
+                        &.no-detection {
+                            .control {
+                                margin-left: 0;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@
         <dataset name="default">
             <field name="code" xsi:type="string">CMS Page Link</field>
             <field name="title" xsi:type="string">Cms Page Link %isolation%</field>
-            <field name="theme_id" xsi:type="string">Magento Blank</field>
+            <field name="theme_id" xsi:type="string">Magento Luma</field>
             <field name="store_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">all_store_views</item>
             </field>

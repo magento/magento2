@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Catalog\Model\Resource\Category\Collection">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\ResourceModel\Category\Collection">
         <arguments>
             <argument name="fetchStrategy" xsi:type="object">Magento\Framework\Data\Collection\Db\FetchStrategy\Cache</argument>
         </arguments>
@@ -34,9 +34,6 @@
         <arguments>
             <argument name="isAvailable" xsi:type="boolean">true</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="catalog-app-action-dispatchController-context-plugin" type="Magento\Catalog\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\View\Layout">
         <plugin name="catalog-session-depersonalize"

@@ -33,7 +33,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     private $rootResource;
 
     /**
-     * @var \Magento\Framework\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     private $aclResourceProvider;
 
@@ -59,7 +59,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclResourceProvider = $this->getMockBuilder('Magento\Framework\Acl\Resource\ProviderInterface')
+        $this->aclResourceProvider = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

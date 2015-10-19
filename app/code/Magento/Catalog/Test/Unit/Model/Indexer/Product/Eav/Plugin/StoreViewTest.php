@@ -20,7 +20,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $eavProcessorMock->expects($this->$matcher())
             ->method('markIndexerAsInvalid');
 
-        $subjectMock = $this->getMockBuilder('Magento\Store\Model\Resource\Store')
+        $subjectMock = $this->getMockBuilder('Magento\Store\Model\ResourceModel\Store')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -10,8 +10,8 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Resource\Customer\Collection;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
@@ -122,17 +122,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Customer $customer */
         foreach ($items as $customer) {
             $result['customer'] = $customer->getData();
+            unset($result['address']);
 
-            $addresses = [];
             /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
                 $addressId = $address->getId();
                 $address->load($addressId);
-                $addresses[$addressId] = $address->getData();
-                $this->prepareAddressData($addressId, $addresses, $result['customer']);
+                $result['address'][$addressId] = $address->getData();
+                $this->prepareAddressData($addressId, $result['address'], $result['customer']);
             }
-            $result['address'] = $addresses;
-
             $this->loadedData[$customer->getId()] = $result;
         }
 

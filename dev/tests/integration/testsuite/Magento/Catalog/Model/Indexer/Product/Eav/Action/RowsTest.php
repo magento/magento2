@@ -29,7 +29,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateAttributes()
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attr **/
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
         $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
             ->getAttribute('catalog_product', 'weight');
         $attr->setIsFilterable(1)->save();

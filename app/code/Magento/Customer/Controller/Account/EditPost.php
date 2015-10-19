@@ -6,12 +6,13 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Controller\AccountInterface;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
@@ -19,7 +20,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPost extends \Magento\Customer\Controller\Account
+class EditPost extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
@@ -34,29 +35,32 @@ class EditPost extends \Magento\Customer\Controller\Account
     protected $customerExtractor;
 
     /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
-     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
+        $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**
@@ -74,7 +78,7 @@ class EditPost extends \Magento\Customer\Controller\Account
         }
 
         if ($this->getRequest()->isPost()) {
-            $customerId = $this->_getSession()->getCustomerId();
+            $customerId = $this->session->getCustomerId();
             $currentCustomer = $this->customerRepository->getById($customerId);
 
             // Prepare new customer data
@@ -103,7 +107,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
-                $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
+                $this->session->setCustomerFormData($this->getRequest()->getPostValue());
                 return $resultRedirect->setPath('*/*/edit');
             }
 

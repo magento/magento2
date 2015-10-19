@@ -13,6 +13,9 @@
         <label class="label" data-bind="attr: {'for': getCode()}"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -38,7 +41,7 @@
                 <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
             <!-- ko if: isPaymentReady() -->
-            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}"
+            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}, event: {load: iframeLoaded}"
                     data-container="paypal-iframe"
                     class="paypal iframe"
                     scrolling="no"

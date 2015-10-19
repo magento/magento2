@@ -36,8 +36,12 @@ Model3
 \Magento\Wonderland\Api\Data\FakeAddressInterface
 \Magento\Wonderland\Api\Data\FakeExtensibleOneInterface
 \Magento\Wonderland\Api\Data\FakeExtensibleTwoInterface
+\Magento\Wonderland\Api\Data\FakeAttributeMetadataInterface
+\Magento\Wonderland\Api\Data\FakeCustomerInterface
 \Magento\Wonderland\Model\Data\FakeRegion
 \Magento\Wonderland\Model\Data\FakeAddress
+\Magento\Wonderland\Model\Data\FakeAttributeMetadata
+\Magento\Wonderland\Model\Data\FakeCustomer
 \Magento\Wonderland\Model\Data\FakeExtensibleOne
 \Magento\Wonderland\Model\Data\FakeExtensibleTwo
 \Magento\Framework\Error\Processor
@@ -66,7 +70,7 @@ Model3
 \Magento\Mtf\Data\Argument\Interpreter\ArrayType
 \Magento\Mtf\Data\Argument\InterpreterInterface
 \Magento\Mtf\Util\Generate\GenerateResult
-\Magento\Mtf\Util\Generate\Repository\Resource
+\Magento\Mtf\Util\Generate\Repository\RepositoryResource
 \Magento\Mtf\Client\Element
 \Magento\Mtf\TestSuite\AppState
 \Magento\Framework\A

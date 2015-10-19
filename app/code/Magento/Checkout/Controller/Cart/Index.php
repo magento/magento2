@@ -22,6 +22,7 @@ class Index extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

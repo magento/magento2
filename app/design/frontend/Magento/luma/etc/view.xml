@@ -5,198 +5,245 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <images module="Magento_Catalog">
-        <image id="bundled_product_customization_page" type="thumbnail">
-            <width>140</width>
-            <height>140</height>
-        </image>
-        <image id="cart_cross_sell_products" type="thumbnail">
-            <width>200</width>
-            <height>248</height>
-        </image>
-        <image id="cart_page_product_thumbnail" type="small_image">
-            <width>165</width>
-            <height>165</height>
-        </image>
-        <image id="category_page_grid" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="category_page_grid-1" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="category_page_list" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="customer_account_my_tags_tag_view" type="small_image">
-            <width>100</width>
-            <height>100</height>
-        </image>
-        <image id="customer_account_product_review_page" type="image">
-            <width>285</width>
-            <height>285</height>
-        </image>
-        <image id="customer_shared_wishlist" type="small_image">
-            <width>113</width>
-            <height>113</height>
-        </image>
-        <image id="gift_messages_checkout_small_image" type="small_image">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="gift_messages_checkout_thumbnail" type="thumbnail">
-            <width>100</width>
-            <height>100</height>
-        </image>
-        <image id="mini_cart_product_thumbnail" type="thumbnail">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="new_products_content_widget_grid" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="new_products_content_widget_list" type="small_image">
-            <width>270</width>
-            <height>340</height>
-        </image>
-        <image id="new_products_images_only_widget" type="small_image">
-            <width>78</width>
-            <height>78</height>
-        </image>
-        <image id="product_base_image" type="image">
-            <width>265</width>
-            <height>265</height>
-        </image>
-        <image id="product_comparison_list" type="small_image">
-            <width>140</width>
-            <height>140</height>
-        </image>
-        <image id="product_page_image_large" type="image"/>
-        <image id="product_page_image_medium" type="image">
-            <width>560</width>
-            <height>700</height>
-        </image>
-        <image id="product_page_image_small" type="thumbnail">
-            <width>88</width>
-            <height>110</height>
-        </image>
-        <image id="product_page_main_image" type="image">
-            <width>560</width>
-            <height>700</height>
-        </image>
-        <image id="product_page_main_image_default" type="image">
-            <width>560</width>
-            <height>700</height>
-        </image>
-        <image id="product_page_more_views" type="thumbnail">
-            <width>88</width>
-            <height>110</height>
-        </image>
-        <image id="product_stock_alert_email_product_image" type="small_image">
-            <width>76</width>
-            <height>76</height>
-        </image>
-        <image id="product_small_image" type="small_image">
-            <width>135</width>
-            <height>135</height>
-        </image>
-        <image id="product_thumbnail_image" type="thumbnail">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="recently_compared_products_grid_content_widget" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="recently_compared_products_images_names_widget" type="thumbnail">
-            <width>75</width>
-            <height>90</height>
-        </image>
-        <image id="recently_compared_products_images_only_widget" type="thumbnail">
-            <width>76</width>
-            <height>76</height>
-        </image>
-        <image id="recently_compared_products_list_content_widget" type="small_image">
-            <width>270</width>
-            <height>340</height>
-        </image>
-        <image id="recently_viewed_products_grid_content_widget" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-        <image id="recently_viewed_products_images_names_widget" type="small_image">
-            <width>75</width>
-            <height>90</height>
-        </image>
-        <image id="recently_viewed_products_images_only_widget" type="small_image">
-            <width>76</width>
-            <height>76</height>
-        </image>
-        <image id="recently_viewed_products_list_content_widget" type="small_image">
-            <width>270</width>
-            <height>340</height>
-        </image>
-        <image id="related_products_list" type="small_image">
-            <width>152</width>
-            <height>190</height>
-        </image>
-        <image id="review_page_product_image" type="small_image">
-            <width>285</width>
-            <height>285</height>
-        </image>
-        <image id="rss_thumbnail" type="thumbnail">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="sendfriend_small_image" type="small_image">
-            <width>75</width>
-            <height>75</height>
-        </image>
-        <image id="shared_wishlist_email" type="small_image">
-            <width>135</width>
-            <height>135</height>
-        </image>
-        <image id="side_column_widget_product_thumbnail" type="thumbnail">
-            <width>75</width>
-            <height>90</height>
-        </image>
-        <image id="upsell_products_list" type="small_image">
-            <width>152</width>
-            <height>190</height>
-        </image>
-        <image id="wishlist_sidebar_block" type="thumbnail">
-            <width>75</width>
-            <height>90</height>
-        </image>
-        <image id="wishlist_small_image" type="small_image">
-            <width>113</width>
-            <height>113</height>
-        </image>
-        <image id="wishlist_thumbnail" type="small_image">
-            <width>240</width>
-            <height>300</height>
-        </image>
-    </images>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Catalog/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <image id="bundled_product_customization_page" type="thumbnail">
+                <width>140</width>
+                <height>140</height>
+            </image>
+            <image id="cart_cross_sell_products" type="thumbnail">
+                <width>200</width>
+                <height>248</height>
+            </image>
+            <image id="cart_page_product_thumbnail" type="small_image">
+                <width>165</width>
+                <height>165</height>
+            </image>
+            <image id="category_page_grid" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="category_page_grid-1" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="category_page_list" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="customer_account_my_tags_tag_view" type="small_image">
+                <width>100</width>
+                <height>100</height>
+            </image>
+            <image id="customer_account_product_review_page" type="image">
+                <width>285</width>
+                <height>285</height>
+            </image>
+            <image id="customer_shared_wishlist" type="small_image">
+                <width>113</width>
+                <height>113</height>
+            </image>
+            <image id="gift_messages_checkout_small_image" type="small_image">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="gift_messages_checkout_thumbnail" type="thumbnail">
+                <width>100</width>
+                <height>100</height>
+            </image>
+            <image id="mini_cart_product_thumbnail" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="new_products_content_widget_grid" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="new_products_content_widget_list" type="small_image">
+                <width>270</width>
+                <height>340</height>
+            </image>
+            <image id="new_products_images_only_widget" type="small_image">
+                <width>78</width>
+                <height>78</height>
+            </image>
+            <image id="product_base_image" type="image">
+                <width>265</width>
+                <height>265</height>
+            </image>
+            <image id="product_comparison_list" type="small_image">
+                <width>140</width>
+                <height>140</height>
+            </image>
+            <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_medium" type="image">
+                <width>700</width>
+                <height>560</height>
+            </image>
+            <image id="product_page_image_small" type="thumbnail">
+                <width>88</width>
+                <height>110</height>
+            </image>
+            <image id="product_page_main_image" type="image">
+                <width>700</width>
+                <height>560</height>
+            </image>
+            <image id="product_page_main_image_default" type="image">
+                <width>700</width>
+                <height>560</height>
+            </image>
+            <image id="product_page_more_views" type="thumbnail">
+                <width>88</width>
+                <height>110</height>
+            </image>
+            <image id="product_stock_alert_email_product_image" type="small_image">
+                <width>76</width>
+                <height>76</height>
+            </image>
+            <image id="product_small_image" type="small_image">
+                <width>135</width>
+                <height>135</height>
+            </image>
+            <image id="product_thumbnail_image" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="recently_compared_products_grid_content_widget" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="recently_compared_products_images_names_widget" type="thumbnail">
+                <width>75</width>
+                <height>90</height>
+            </image>
+            <image id="recently_compared_products_images_only_widget" type="thumbnail">
+                <width>76</width>
+                <height>76</height>
+            </image>
+            <image id="recently_compared_products_list_content_widget" type="small_image">
+                <width>270</width>
+                <height>340</height>
+            </image>
+            <image id="recently_viewed_products_grid_content_widget" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="recently_viewed_products_images_names_widget" type="small_image">
+                <width>75</width>
+                <height>90</height>
+            </image>
+            <image id="recently_viewed_products_images_only_widget" type="small_image">
+                <width>76</width>
+                <height>76</height>
+            </image>
+            <image id="recently_viewed_products_list_content_widget" type="small_image">
+                <width>270</width>
+                <height>340</height>
+            </image>
+            <image id="related_products_list" type="small_image">
+                <width>152</width>
+                <height>190</height>
+            </image>
+            <image id="review_page_product_image" type="small_image">
+                <width>285</width>
+                <height>285</height>
+            </image>
+            <image id="rss_thumbnail" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="sendfriend_small_image" type="small_image">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="shared_wishlist_email" type="small_image">
+                <width>135</width>
+                <height>135</height>
+            </image>
+            <image id="side_column_widget_product_thumbnail" type="thumbnail">
+                <width>75</width>
+                <height>90</height>
+            </image>
+            <image id="upsell_products_list" type="small_image">
+                <width>152</width>
+                <height>190</height>
+            </image>
+            <image id="wishlist_sidebar_block" type="thumbnail">
+                <width>75</width>
+                <height>90</height>
+            </image>
+            <image id="wishlist_small_image" type="small_image">
+                <width>113</width>
+                <height>113</height>
+            </image>
+            <image id="wishlist_thumbnail" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+        </images>
+    </media>
     <vars module="Magento_Catalog">
 
-        <!-- New gallery and magnifier theme settings -->
-        <var name="gallery:navigation">dots</var> <!-- Gallery navigation style (false/thumbs/dots) -->
-        <var name="gallery:loop">false</var> <!-- Gallery navigation loop (true/false) -->
-        <var name="gallery:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
-        <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
-        <var name="gallery:show_caption">true</var> <!-- Display alt text as image title (true/false) -->
+        <!-- Gallery and magnifier theme settings. Start -->
+        <var name="gallery">
+            <var name="nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+            <var name="loop">true</var> <!-- Gallery navigation loop (true/false) -->
+            <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
+            <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
+            <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
+            <var name="allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
+            <var name="navdir">horizontal</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
+            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides (true/false) -->
+            <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
+            <var name="transition">
+                <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                <var name="duration">500</var> <!-- Sets transition duration in ms -->
+            </var>
+            <var name="fullscreen">
+                <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
+                <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
+                <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
+                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
+                <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
+                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in full screen(horizontal/vertical)  -->
+                <var name="thumbwidth">150</var> <!-- Width of thumbnails in fullscreen -->
+                <var name="thumbheight">150</var> <!-- Height of thumbnails in fullscreen -->
+                <var name="navigation_carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                <var name="transition">
+                    <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                    <var name="duration">500</var> <!-- Sets transition duration in ms -->
+                    <var name="carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                </var>
+            </var>
+        </var>
 
-        <var name="magnifier:top"></var> <!-- Top position of magnifier -->
-        <var name="magnifier:left"></var> <!-- Right position of magnifier -->
-        <var name="magnifier:width"></var> <!-- Width of magnifier block -->
-        <var name="magnifier:height"></var> <!-- Height of magnifier block -->
-        <var name="magnifier:action">click</var> <!-- Action that atcivates zoom (hover/click) -->
-        <var name="magnifier:enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
-        <!-- end -->
+        <var name="magnifier">
+            <var name="fullscreenzoom">5</var>  <!-- Zoom for fullscreen (integer)-->
+            <var name="top"></var> <!-- Top position of magnifier -->
+            <var name="left"></var> <!-- Left position of magnifier -->
+            <var name="width"></var> <!-- Width of magnifier block -->
+            <var name="height"></var> <!-- Height of magnifier block -->
+            <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
+            <var name="enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+        </var>
+
+        <var name="breakpoints">
+            <var name="mobile">
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                </var>
+                <var name="options">
+                    <var name="options">
+                        <var name="nav">dots</var>
+                    </var>
+                    <var name="magnifierOpts">
+                        <var name="enabled">false</var>
+                    </var>
+                </var>
+            </var>
+        </var>
+        <!-- end. Gallery and magnifier theme settings -->
 
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
         <var name="product_base_image_size">275</var>           <!-- Override for base product image -->

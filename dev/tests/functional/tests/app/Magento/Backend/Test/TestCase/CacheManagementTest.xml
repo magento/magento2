@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Backend\Test\TestCase\CacheManagementTest" summary="Configuration option on backend for singleQuery mode" ticketId="MAGETWO-34502">
+    <testCase name="Magento\Backend\Test\TestCase\CacheManagementTest" summary="Additional Cache Management" ticketId="MAGETWO-34052">
         <variation name="FlushCatalogImagesCacheTest">
             <data name="flushButtonName" xsi:type="string">Flush Catalog Images Cache</data>
             <data name="successMessage" xsi:type="string">The image cache was cleaned.</data>

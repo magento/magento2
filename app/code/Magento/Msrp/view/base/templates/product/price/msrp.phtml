@@ -37,7 +37,7 @@ if ($product->isSaleable()) {
     $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
         $product,
         ['_query' => [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
                 $this->helper('Magento\Framework\Url\Helper\Data')->getEncodedUrl(
                     $addToCartUrlGenerator->getAddToCartUrl($product)
                 ),
@@ -66,7 +66,10 @@ if ($product->isSaleable()) {
         if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
             $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
         } else {
-            $data['addToCart']['cartForm'] = '#product_addtocart_form_from_popup';
+            $data['addToCart']['cartForm'] = sprintf(
+                'form:has(input[type="hidden"][name="product"][value="%s"])',
+                (int) $productId
+            );
         }
     ?>
     <span id="<?php /* @escapeNotVerified */ echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>

@@ -4,7 +4,6 @@
  */
 /*jshint jquery:true*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([

@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     public function testRelocations()
@@ -90,24 +92,27 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $ns = '*';
         $mod = '*';
         $pathsToCheck = [
-            "app/code/{$ns}/{$mod}/view/{$areas}/*" => [
-                'allowed_files' => $allowedFiles,
-                'allowed_dirs'  => ['layout', 'page_layout', 'templates', 'web'],
-            ],
-            "app/design/{$areas}/{$ns}/{$mod}/*" => [
+            BP . "/app/design/{$areas}/{$ns}/{$mod}/*" => [
                 'allowed_files' => $allowedThemeFiles,
                 'allowed_dirs'  => ['layout', 'page_layout', 'templates', 'web', 'etc', 'i18n', 'media', '\w+_\w+'],
             ],
-            "app/design/{$areas}/{$ns}/{$mod}/{$ns}_{$mod}/*" => [
+            BP . "app/design/{$areas}/{$ns}/{$mod}/{$ns}_{$mod}/*" => [
                 'allowed_files' => $allowedThemeFiles,
                 'allowed_dirs'  => ['layout', 'page_layout', 'templates', 'web'],
             ],
         ];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $pathsToCheck[$moduleDir . "/view/{$areas}/*"] = [
+                'allowed_files' => $allowedFiles,
+                'allowed_dirs' => ['layout', 'page_layout', 'templates', 'web']
+            ];
+        }
         $errors = [];
         foreach ($pathsToCheck as $path => $allowed) {
             $allowedFiles = $allowed['allowed_files'];
             $allowedDirs = $allowed['allowed_dirs'];
-            $foundFiles = glob(BP . '/' . $path, GLOB_BRACE);
+            $foundFiles = glob($path, GLOB_BRACE);
             if (!$foundFiles) {
                 $this->fail("Glob pattern returned empty result: {$path}");
             }

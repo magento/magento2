@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Changelog implements ChangelogInterface
 {
@@ -34,14 +34,14 @@ class Changelog implements ChangelogInterface
     protected $viewId;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;

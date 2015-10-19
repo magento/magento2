@@ -38,6 +38,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     /**
      * Initialize EavCustomAttributeTypeLocator
      *
+     * @codeCoverageIgnore
      * @param AttributeRepositoryInterface $attributeRepository Attribute repository service
      * @param \Magento\Framework\Stdlib\StringUtils $stringUtility
      * @param array $serviceEntityTypeMap Service Entity Map

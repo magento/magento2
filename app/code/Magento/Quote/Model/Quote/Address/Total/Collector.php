@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
@@ -103,7 +100,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     /**
      * Get total models array ordered for right display sequence
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
      */
     public function getRetrievers()
     {
@@ -125,7 +122,8 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
+                    'The address total model should be extended from
+                    \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )
             );
         }

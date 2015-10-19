@@ -29,6 +29,11 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     protected $router;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\Http
+     */
+    protected $response;
+
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
@@ -38,7 +43,8 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->router = $this->getMock('Magento\Framework\App\RouterInterface');
         $this->routerList = $this->getMock('Magento\Framework\App\RouterList', [], [], '', false);
-        $this->model = new \Magento\Framework\App\FrontController($this->routerList);
+        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->model = new \Magento\Framework\App\FrontController($this->routerList, $this->response);
     }
 
     /**
@@ -76,9 +82,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
         $controllerInstance->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($response));
-        $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
             ->will($this->returnValue($response));
@@ -110,9 +113,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
-        $controllerInstance->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($response));
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)

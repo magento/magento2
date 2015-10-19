@@ -61,7 +61,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT
         );
-        $this->_schemaLocator = new \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator();
+        $this->_schemaLocator = new \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator(
+            new \Magento\Framework\Config\Dom\UrnResolver()
+        );
     }
 
     public function testMerge()

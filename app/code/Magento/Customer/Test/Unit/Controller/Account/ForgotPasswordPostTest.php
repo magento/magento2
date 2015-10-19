@@ -16,7 +16,6 @@ use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,11 +36,6 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
      * @var Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $session;
-
-    /**
-     * @var PageFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pageFactory;
 
     /**
      * @var AccountManagementInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -81,10 +75,6 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->accountManagement = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
             ->getMockForAbstractClass();
 
@@ -95,7 +85,6 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->controller = new ForgotPasswordPost(
             $this->context,
             $this->session,
-            $this->pageFactory,
             $this->accountManagement,
             $this->escaper
         );

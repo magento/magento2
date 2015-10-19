@@ -33,6 +33,11 @@ class InputTest extends \PHPUnit_Framework_TestCase
     protected $filterBuilderMock;
 
     /**
+     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterModifierMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -43,6 +48,10 @@ class InputTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             ['create'],
@@ -53,6 +62,13 @@ class InputTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock = $this->getMock(
             'Magento\Framework\Api\FilterBuilder',
             [],
+            [],
+            '',
+            false
+        );
+        $this->filterModifierMock = $this->getMock(
+            'Magento\Ui\Component\Filters\FilterModifier',
+            ['applyFilterModifier'],
             [],
             '',
             false
@@ -70,6 +86,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
             $this->contextMock,
             $this->uiComponentFactory,
             $this->filterBuilderMock,
+            $this->filterModifierMock,
             []
         );
 
@@ -109,22 +126,19 @@ class InputTest extends \PHPUnit_Framework_TestCase
             ->method('getRequestParam')
             ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
-
+        $dataProvider = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+            [],
+            '',
+            false
+        );
+        $this->contextMock->expects($this->any())
+            ->method('getDataProvider')
+            ->willReturn($dataProvider);
         if ($expectedCondition !== null) {
-            /** @var DataProviderInterface $dataProvider */
-            $dataProvider = $this->getMockForAbstractClass(
-                'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-                [],
-                '',
-                false
-            );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
                 ->with($expectedCondition, $name);
-
-            $this->contextMock->expects($this->any())
-                ->method('getDataProvider')
-                ->willReturn($dataProvider);
         }
 
         $this->uiComponentFactory->expects($this->any())
@@ -136,6 +150,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
             $this->contextMock,
             $this->uiComponentFactory,
             $this->filterBuilderMock,
+            $this->filterModifierMock,
             [],
             ['name' => $name]
         );

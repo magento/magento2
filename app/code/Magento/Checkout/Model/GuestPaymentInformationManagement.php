@@ -48,6 +48,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param PaymentInformationManagement $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,

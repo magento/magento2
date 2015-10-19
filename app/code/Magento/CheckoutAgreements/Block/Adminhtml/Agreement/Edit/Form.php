@@ -24,6 +24,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

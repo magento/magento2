@@ -99,6 +99,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             $quote->setShippingAddress($shippingAddress);
         }
         $quote->setDataChanges(true);
+        $quote->collectTotals();
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {

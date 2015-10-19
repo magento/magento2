@@ -27,6 +27,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
