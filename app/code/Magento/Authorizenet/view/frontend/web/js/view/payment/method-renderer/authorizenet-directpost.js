@@ -50,9 +50,8 @@ define(
             placeOrder: function () {
                 var self = this;
 
-                fullScreenLoader.startLoader();
-
                 if (this.validateHandler() && additionalValidators.validate()) {
+                    fullScreenLoader.startLoader();
                     this.isPlaceOrderActionAllowed(false);
                     $.when(setPaymentInformationAction(this.messageContainer, {
                         'method': self.getCode()
