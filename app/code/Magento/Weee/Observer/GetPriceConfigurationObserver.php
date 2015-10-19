@@ -142,10 +142,15 @@ class GetPriceConfigurationObserver implements ObserverInterface
     protected function getWhichCalcPriceToUse($storeId = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->geDisplayExcl($storeId) ||
-            $this->weeeData->geDisplayExlDescIncl($storeId) ||
-            ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
-        ) {
+
+        // Does catalog price include tax? (true, false)
+        $isPriceIncludesTax = $this->weeeData->displayTotalsInclTax();
+        // Price display configurations (DISPLAY_TYPE_EXCLUDING_TAX, DISPLAY_TYPE_INCLUDING_TAX, DISPLAY_TYPE_BOTH)
+        $priceDisplayConfig = $this->weeeData->getTaxDisplayConfig();
+
+        if ($isPriceIncludesTax == true &&
+            $priceDisplayConfig == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX &&
+            $this->weeeData->typeOfDisplay([\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL])) {
             $calcPrice = 'basePrice';
         }
         return $calcPrice;
