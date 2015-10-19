@@ -41,6 +41,7 @@ class Reader
      * Constructor
      *
      * @param DirectoryList $dirList
+     * @param DriverPool $driverPool
      * @param ConfigFilePool $configFilePool
      * @param null|string $file
      * @throws \InvalidArgumentException
