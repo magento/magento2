@@ -64,6 +64,7 @@ abstract class AbstractIncrement extends \Magento\Framework\DataObject implement
      *
      * @param mixed $id
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function frontendFormat($id)
     {

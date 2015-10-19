@@ -177,6 +177,15 @@ option:empty {
 }
 
 //
+//  Service text or control. Can be used to add text or "Use Default Value" checkbox
+//  ---------------------------------------------
+
+.admin__control-service {
+    float: left;
+    margin: .8rem 0 0 3rem;
+}
+
+//
 //  Textarea
 //  ---------------------------------------------
 
@@ -205,7 +214,7 @@ option:empty {
         position: relative;
         z-index: 1;
     }
-    [class*='admin__control-'] {
+    [class*='admin__control-'][type] {
         .lib-css(appearence,none);
         .lib-vendor-prefix-flex-grow(1);
         box-shadow: none;

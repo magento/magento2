@@ -18,14 +18,6 @@
     height: auto !important;
     overflow: visible;
 }
-.hidden {
-    display: none;
-    visibility: hidden;
-}
-input.no-display,
-.no-display {
-    display: none;
-}
 .invisible {
     visibility: hidden;
 }
@@ -132,13 +124,6 @@ input.no-display,
         border-width: 1px 0 1px 1px;
     }
 
-//    .addon {direction: rtl; }
-//    .addon > * {direction: ltr; }
-
-    .addon *:focus ~ .addafter {
-
-    }
-
     .addon .addafter {
         border-width: 1px 1px 1px 0;
     }
@@ -160,6 +145,19 @@ input.no-display,
     .field-price .addon .addafter {
         border-width: 1px 0 1px 1px;
         border-radius: 1px 0 0 1px;
+    }
+
+    //  For disabled field with prefix/suffix
+    .admin__field-control {
+        .admin__control-addon {
+            [class*='admin__control-'][type] {
+                &[disabled],
+                &:focus {
+                    background-color: transparent;
+                    border-color: transparent;
+                }
+            }
+        }
     }
 
     //
@@ -4930,7 +4928,7 @@ input.no-display,
     }
 }
 
-//  Content -> Frontend Apps
+//  Content -> Widgets
 .adminhtml-widget-instance-index {
     .admin__scope-old {
         .col-title {
@@ -5309,6 +5307,19 @@ input.no-display,
         padding-left: 0;
         padding-right: 0;
     }
+}
+
+//
+//  Temporary override @todo ui - remove after refactoring of 3-rd party tree styles
+//  _____________________________________________
+
+.ext-strict {
+    .x-small-editor {
+        .x-form-text.x-form-field.folder  {
+            height: auto !important;
+        }
+    }
+
 }
 
 // ==|== print styles =======================================================

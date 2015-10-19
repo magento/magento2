@@ -39,7 +39,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Framework\Indexer\Config\Reader(
             $this->_fileResolverMock,
             $this->_converter,
-            new \Magento\Framework\Indexer\Config\SchemaLocator(),
+            new \Magento\Framework\Indexer\Config\SchemaLocator(
+                new \Magento\Framework\Config\Dom\UrnResolver()
+            ),
             $validationState
         );
     }

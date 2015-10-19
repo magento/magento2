@@ -10,7 +10,7 @@
              module="Magento_User"
              type="flat"
              entity_type="admin_user"
-             collection="Magento\User\Model\Resource\User\Collection"
+             collection="Magento\User\Model\ResourceModel\User\Collection"
              repository_class="Magento\User\Test\Repository\User"
              handler_interface="Magento\User\Test\Handler\User\UserInterface"
              class="Magento\User\Test\Fixture\User">

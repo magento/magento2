@@ -18,26 +18,26 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
     /**
      * Entity attribute factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\AttributeFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory
      */
     protected $entityAttributeFactory;
 
     /**
      * Eav resource helper
      *
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $eavResourceHelper;
 
     /**
      * Construct
      *
-     * @param \Magento\Eav\Model\Resource\Entity\AttributeFactory $entityAttributeFactory
-     * @param \Magento\Eav\Model\Resource\Helper $eavResourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $entityAttributeFactory
+     * @param \Magento\Eav\Model\ResourceModel\Helper $eavResourceHelper
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\AttributeFactory $entityAttributeFactory,
-        \Magento\Eav\Model\Resource\Helper $eavResourceHelper
+        \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $entityAttributeFactory,
+        \Magento\Eav\Model\ResourceModel\Helper $eavResourceHelper
     ) {
         $this->entityAttributeFactory = $entityAttributeFactory;
         $this->eavResourceHelper = $eavResourceHelper;

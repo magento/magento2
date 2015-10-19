@@ -62,6 +62,13 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getCustomerId());
     }
 
+    public function testGetBillingAddressIsNull()
+    {
+        $this->orderMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
+
+        $this->assertSame(null, $this->model->getBillingAddress());
+    }
+
     public function testGetBillingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
@@ -74,9 +81,16 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(['address' => $orderAddressMock])
             ->willReturn($addressAdapterMock);
-        $this->orderMock->expects($this->once())->method('getBillingAddress')->willReturn($orderAddressMock);
+        $this->orderMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($orderAddressMock);
 
         $this->assertSame($addressAdapterMock, $this->model->getBillingAddress());
+    }
+
+    public function testGetShippingAddressIsNull()
+    {
+        $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn(null);
+
+        $this->assertSame(null, $this->model->getShippingAddress());
     }
 
     public function testGetShippingAddress()
@@ -91,7 +105,7 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(['address' => $orderAddressMock])
             ->willReturn($addressAdapterMock);
-        $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn($orderAddressMock);
+        $this->orderMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($orderAddressMock);
 
         $this->assertSame($addressAdapterMock, $this->model->getShippingAddress());
     }

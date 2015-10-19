@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
@@ -106,7 +106,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -116,7 +116,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_eavEntityFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -131,11 +131,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,9 +145,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -177,6 +178,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $table
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTable($table)
     {
@@ -263,7 +265,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @codeCoverageIgnore
      */
     public function getResource()
     {
@@ -332,6 +335,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see self::_getConditionSql for $condition
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -341,7 +345,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         if (is_numeric($attribute)) {
-            $attribute = $this->getEntity()->getAttribute($attribute)->getAttributeCode();
+            $attributeModel = $this->getEntity()->getAttribute($attribute);
+            if (!$attributeModel) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Invalid attribute identifier for filter (%1)', get_class($attribute))
+                );
+            }
+            $attribute = $attributeModel->getAttributeCode();
         } elseif ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             $attribute = $attribute->getAttributeCode();
         }
@@ -376,6 +386,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param mixed $attribute
      * @param mixed $condition
      * @return $this|AbstractDb
+     * @codeCoverageIgnore
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -494,6 +505,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $entityType
      * @param string $prefix
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addEntityTypeToSelect($entityType, $prefix)
     {
@@ -864,6 +876,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param integer $pageNum
      * @param integer $pageSize
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setPage($pageNum, $pageSize)
     {
@@ -1039,6 +1052,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Retrieve row id field name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRowIdFieldName()
     {
@@ -1219,6 +1233,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $type
      * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
@@ -1509,6 +1524,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * After load method
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _afterLoad()
     {
@@ -1538,6 +1554,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Returns already loaded element ids
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getLoadedIds()
     {
@@ -1597,6 +1614,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function addFieldToSelect($field, $alias = null)
     {
@@ -1608,6 +1626,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $field
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @codeCoverageIgnore
      */
     public function removeFieldFromSelect($field)
     {
@@ -1618,6 +1637,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
      *
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @codeCoverageIgnore
      */
     public function removeAllFieldsFromSelect()
     {

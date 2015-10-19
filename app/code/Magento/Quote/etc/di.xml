@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Quote\Api\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
     <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
@@ -38,16 +38,18 @@
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
+    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="\Magento\Quote\Model\Quote\ProductOption" />
+    <!--<preference for="Magento\Quote\Model\Quote\Address\Total\CollectorInterface" type="\Magento\Quote\Model\Quote\Address\Total\Composite" />-->
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
-                <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId</item>
+                <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId\Proxy</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\QuoteRepository">
         <arguments>
-            <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\Resource\Quote\Collection\Proxy</argument>
+            <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\ResourceModel\Quote\Collection\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\Quote\Address">
@@ -55,31 +57,32 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="QuoteAddressRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="QuoteAddressRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Address\Relation</item>
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Quote\Model\Resource\Quote\Address">
+    <type name="Magento\Quote\Model\ResourceModel\Quote\Address">
         <arguments>
             <argument name="entityRelationComposite" xsi:type="object">QuoteAddressRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="QuoteRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+    <virtualType name="QuoteRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Relation</item>
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Quote\Model\Resource\Quote">
+    <type name="Magento\Quote\Model\ResourceModel\Quote">
         <arguments>
             <argument name="entityRelationComposite" xsi:type="object">QuoteRelationsComposite</argument>
         </arguments>
     </type>
     <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
     <preference for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface" type="Magento\Quote\Model\Cart\TotalsAdditionalData" />
-    <preference for="\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="\Magento\Quote\Model\Quote\Address\CustomAttributeList" />
+    <preference for="Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="Magento\Quote\Model\Quote\Address\CustomAttributeList" />
+    <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
 </config>

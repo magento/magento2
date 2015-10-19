@@ -8,11 +8,12 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 
-class ResetPasswordPost extends \Magento\Customer\Controller\Account
+class ResetPasswordPost extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
     protected $accountManagement;
@@ -21,22 +22,26 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
     protected $customerRepository;
 
     /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
-     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository
     ) {
+        $this->session = $customerSession;
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**

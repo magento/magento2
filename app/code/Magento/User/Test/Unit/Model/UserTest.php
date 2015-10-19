@@ -27,7 +27,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
-    /** @var \Magento\User\Model\Resource\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
     /** @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
@@ -76,7 +76,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $this->resourceMock = $this->getMockBuilder(
-            'Magento\User\Model\Resource\User'
+            'Magento\User\Model\ResourceModel\User'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();

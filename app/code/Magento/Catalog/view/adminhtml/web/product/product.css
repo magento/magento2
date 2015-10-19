@@ -87,6 +87,10 @@
     user-select: none;
 }
 
+.admin__scope-old .image .actions [class^="action-"] {
+    z-index: 10;
+}
+
 .admin__scope-old .image .actions [class^="action-"],
 .admin__scope-old .image .image-label,
 .admin__scope-old .image[data-image-hidden] .actions [class^="action-"],
@@ -106,7 +110,7 @@
     position: absolute;
     left: 6px;
     bottom: 6px;
-    z-index: 3;
+    z-index: 10;
 }
 
 .admin__scope-old .image .action-delete:before {
@@ -149,15 +153,11 @@
 
 /* Gallery image panel */
 .admin__scope-old .image-panel {
-    display: none;
     position: relative;
     top: 5px;
     clear: both;
     background: #fff;
-    margin: 0 -2px 15px;
     padding: 20px 15px;
-    box-shadow: 0 1px 3px #aaa inset;
-    border-bottom: 1px solid #cfd0cb;
 }
 
 .admin__scope-old .image .file-row {
@@ -227,11 +227,11 @@
     width: 140px;
     margin-right: 15px;
 }
-
+/*
 .admin__scope-old .field-quantity_and_stock_status select {
     vertical-align: middle;
 }
-
+*/
 /* Weight field */
 .admin__scope-old .field-weight .control {
     display: table;
@@ -308,26 +308,28 @@
 /*
     Tier Price Table
 -------------------------------------- */
+
+.admin__scope-old .tiers_table td {
+    vertical-align: top;
+}
+
 .admin__scope-old .tiers_table .col-qty {
     text-align: left;
     width: 150px;
 }
 
 .admin__scope-old .tiers_table .col-qty > input[type="text"] {
-    width: 40%;
+    width: 60px;
     margin-right: 5px;
 }
 
-.admin__scope-old .tiers_table .col-qty > .nobr {
-    width: 50%;
-    float: right;
-    margin-top: 6px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.admin__scope-old .tiers_table .col-qty span {
+    font-size: 1rem;
+    white-space: nowrap;
 }
 
-.admin__scope-old .tiers_table .col-price {
-    width: 16%;
+.admin__scope-old .tiers_table .col-price .input-text {
+    width: 90px;
 }
 
 .admin__scope-old .new-variation-set {

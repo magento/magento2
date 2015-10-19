@@ -28,6 +28,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      * @param ProductRepositoryInterface $productRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -76,6 +77,10 @@ class Add extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
+        }
+
         $params = $this->getRequest()->getParams();
         try {
             if (isset($params['qty'])) {
@@ -103,7 +108,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             $this->cart->save();
 
             /**
-             * @todo remove wishlist observer processAddToCart
+             * @todo remove wishlist observer \Magento\Wishlist\Observer\AddToCart
              */
             $this->_eventManager->dispatch(
                 'checkout_cart_add_product_complete',

@@ -65,7 +65,6 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                     <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
                 <?php endif;?>
             </div>
-            <?php $cols = 1; ?>
         </td>
 
         <?php if ($canApplyMsrp): ?>
@@ -77,12 +76,10 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                         <span><?php /* @escapeNotVerified */ echo __("What's this?"); ?></span>
                     </a>
                 </span>
-                <?php $cols++; ?>
             </td>
         <?php else: ?>
             <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
                 <?php echo $block->getUnitPriceHtml($_item); ?>
-                <?php $cols++; ?>
             </td>
         <?php endif; ?>
         <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
@@ -104,7 +101,6 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                            data-role="cart-item-qty"/>
                 </div>
             </div>
-            <?php $cols++; ?>
         </td>
 
         <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal'));?>">
@@ -113,11 +109,10 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <?php else: ?>
                 <?php echo $block->getRowTotalHtml($_item); ?>
             <?php endif; ?>
-            <?php $cols++; ?>
         </td>
     </tr>
     <tr class="item-actions">
-        <td colspan="<?php /* @escapeNotVerified */ echo $cols;?>">
+        <td colspan="100">
             <div class="actions-toolbar">
                 <?php /* @escapeNotVerified */ echo $block->getActions($_item) ?>
             </div>

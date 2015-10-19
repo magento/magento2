@@ -28,6 +28,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * @param Entity\Context $context
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Eav\Model\Entity\Context $context, $data = [])
     {

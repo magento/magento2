@@ -9,8 +9,8 @@ namespace Magento\Eav\Model\Entity\Attribute;
 /**
  * @author      Magento Core Team <core@magentocommerce.com>
  *
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Group _getResource()
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Group getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group _getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group getResource()
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
  * @method int getDefaultId()
@@ -27,16 +27,18 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute\Group');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Group');
     }
 
     /**
      * Checks if current attribute group exists
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function itemExists()
     {
@@ -47,6 +49,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Delete groups
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function deleteGroups()
     {
@@ -63,7 +66,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         if (!$this->getAttributeGroupCode()) {
             $groupName = $this->getAttributeGroupName();
             if ($groupName) {
-                $this->setAttributeGroupCode(trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-'));
+                $attributeGroupCode = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
+                if (empty($attributeGroupCode)) {
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5($groupName);
+                }
+                $this->setAttributeGroupCode($attributeGroupCode);
             }
         }
         return parent::beforeSave();

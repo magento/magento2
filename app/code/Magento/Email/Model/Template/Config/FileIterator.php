@@ -6,6 +6,9 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
+
 /**
  * Class FileIterator
  */
@@ -17,16 +20,16 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
     protected $_moduleDirResolver;
 
     /**
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $directory
+     * @param ReadFactory $readFactory
      * @param array $paths
      * @param \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
      */
     public function __construct(
-        \Magento\Framework\Filesystem\Directory\ReadInterface $directory,
+        ReadFactory $readFactory,
         array $paths,
         \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
     ) {
-        parent::__construct($directory, $paths);
+        parent::__construct($readFactory, $paths);
         $this->_moduleDirResolver = $dirResolver;
     }
 
@@ -36,14 +39,17 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
      */
     public function current()
     {
-        $path = $this->directoryRead->getAbsolutePath($this->key());
+        $path = $this->key();
         $moduleName = $this->_moduleDirResolver->getModuleName($path);
         if (!$moduleName) {
             throw new \UnexpectedValueException(
                 sprintf("Unable to determine a module, file '%s' belongs to.", $this->key())
             );
         }
-        $contents = $this->directoryRead->readFile($this->key());
+
+        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
+        $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
+        $contents = $fileRead->readAll();
         return str_replace('<template ', '<template module="' . $moduleName . '" ', $contents);
     }
 }

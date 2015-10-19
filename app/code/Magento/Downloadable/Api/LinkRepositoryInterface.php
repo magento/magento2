@@ -37,7 +37,7 @@ interface LinkRepositoryInterface
      * @param bool $isGlobalScopeContent
      * @return int
      */
-    public function save($sku, LinkInterface $link, $isGlobalScopeContent = false);
+    public function save($sku, LinkInterface $link, $isGlobalScopeContent = true);
 
     /**
      * Delete downloadable link

@@ -3,9 +3,12 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['Magento_Ui/js/lib/component/provider', 'underscore', 'mage/url'],
-    function (provider, _, url) {
-        "use strict";
+define(['uiElement', 'underscore', 'mage/url'],
+    function (uiElement, _, url) {
+        'use strict';
+
+        var provider = uiElement();
+
         return function (itemId) {
             var model = {
                 id: 'message-' + itemId,

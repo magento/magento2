@@ -16,10 +16,13 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 class Area implements \Magento\Framework\App\AreaInterface
 {
     const AREA_GLOBAL = 'global';
-
     const AREA_FRONTEND = 'frontend';
-
     const AREA_ADMIN    = 'admin';
+    const AREA_ADMINHTML = 'adminhtml';
+    const AREA_DOC = 'doc';
+    const AREA_CRONTAB = 'crontab';
+    const AREA_WEBAPI_REST = 'webapi_rest';
+    const AREA_WEBAPI_SOAP = 'webapi_soap';
 
     /**
      * Area parameter.

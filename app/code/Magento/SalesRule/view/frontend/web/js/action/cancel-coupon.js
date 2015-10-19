@@ -13,20 +13,20 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Ui/js/model/messageList',
+        'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
         'Magento_Checkout/js/action/get-payment-information',
         'Magento_Checkout/js/model/totals',
         'mage/translate'
     ],
-    function ($, quote, urlManager, errorProcessor, messageList, storage, getPaymentInformationAction, totals, $t) {
+    function ($, quote, urlManager, errorProcessor, messageContainer, storage, getPaymentInformationAction, totals, $t) {
         'use strict';
 
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId(),
                 url = urlManager.getCancelCouponUrl(quoteId),
                 message = $t('Your coupon was successfully removed');
-            messageList.clear();
+            messageContainer.clear();
 
             return storage.delete(
                 url,
@@ -40,14 +40,14 @@ define(
                         isApplied(false);
                         totals.isLoading(false);
                     });
-                    messageList.addSuccessMessage({
+                    messageContainer.addSuccessMessage({
                         'message': message
                     });
                 }
             ).fail(
                 function (response) {
                     totals.isLoading(false);
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                 }
             ).always(
                 function () {

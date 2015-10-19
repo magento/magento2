@@ -35,6 +35,7 @@ class Items extends \Magento\Backend\Block\Template
      * Get order item
      *
      * @return \Magento\Quote\Model\Quote\Item
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -59,6 +60,7 @@ class Items extends \Magento\Backend\Block\Template
      * Return form html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFormHtml()
     {

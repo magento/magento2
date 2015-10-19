@@ -18,6 +18,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory,

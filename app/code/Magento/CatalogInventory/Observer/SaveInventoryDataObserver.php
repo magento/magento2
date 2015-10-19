@@ -6,15 +6,14 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockIndexInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Catalog inventory module observer
- */
-class SaveInventoryDataObserver
+class SaveInventoryDataObserver implements ObserverInterface
 {
     /**
      * @var StockIndexInterface
@@ -32,7 +31,7 @@ class SaveInventoryDataObserver
     protected $stockRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     * @var StockItemRepositoryInterface
      */
     protected $stockItemRepository;
 
@@ -74,13 +73,13 @@ class SaveInventoryDataObserver
      * @param StockIndexInterface $stockIndex
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+     * @param StockItemRepositoryInterface $stockItemRepository
      */
     public function __construct(
         StockIndexInterface $stockIndex,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+        StockItemRepositoryInterface $stockItemRepository
     ) {
         $this->stockIndex = $stockIndex;
         $this->stockConfiguration = $stockConfiguration;
@@ -94,7 +93,7 @@ class SaveInventoryDataObserver
      * @param EventObserver $observer
      * @return $this
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $product = $observer->getEvent()->getProduct();
 

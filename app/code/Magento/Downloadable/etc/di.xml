@@ -5,15 +5,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Downloadable\Helper\Download">
         <arguments>
             <argument name="coreFileStorageDb" xsi:type="object">Magento\MediaStorage\Helper\File\Storage\Database\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Helper\Product">
-        <arguments>
-            <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
@@ -64,6 +59,20 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="downloadableAroundSave" type="\Magento\Downloadable\Model\Plugin\AroundProductRepositorySave"/>
     </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="downloadable" xsi:type="object">Magento\Downloadable\Model\Quote\Item\CartItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="downloadable" xsi:type="object">Magento\Downloadable\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="\Magento\Downloadable\Api\LinkRepositoryInterface" type="\Magento\Downloadable\Model\LinkRepository" />
     <preference for="\Magento\Downloadable\Api\SampleRepositoryInterface" type="\Magento\Downloadable\Model\SampleRepository" />
     <preference for="\Magento\Downloadable\Api\Data\LinkInterface" type="\Magento\Downloadable\Model\Link" />
@@ -71,4 +80,5 @@
     <preference for="\Magento\Downloadable\Api\Data\File\ContentInterface" type="\Magento\Downloadable\Model\File\Content" />
     <preference for="\Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="\Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
+    <preference for="\Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="\Magento\Downloadable\Model\DownloadableOption" />
 </config>

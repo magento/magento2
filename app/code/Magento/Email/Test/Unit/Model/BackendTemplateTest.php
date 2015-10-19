@@ -33,7 +33,7 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
     protected $structureMock;
 
     /**
-     * @var \Magento\Email\Model\Resource\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\ResourceModel\Template|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceModelMock;
 
@@ -52,12 +52,12 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
         $this->structureMock = $this->getMock('Magento\Config\Model\Config\Structure', [], [], '', false);
         $this->structureMock->expects($this->any())->method('getFieldPathsByAttribute')->willReturn(['path' => 'test']);
 
-        $this->resourceModelMock = $this->getMock('Magento\Email\Model\Resource\Template', [], [], '', false);
+        $this->resourceModelMock = $this->getMock('Magento\Email\Model\ResourceModel\Template', [], [], '', false);
         $this->resourceModelMock->expects($this->any())->method('getSystemConfigByPathsAndTemplateId')->willReturn(['test_config' => 2015]);
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->with('Magento\Email\Model\Resource\Template')
+            ->with('Magento\Email\Model\ResourceModel\Template')
             ->will($this->returnValue($this->resourceModelMock));
 
         try {

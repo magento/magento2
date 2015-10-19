@@ -121,7 +121,8 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
         if ($item->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->isMessagesAllowed('items', $quote, $this->storeManager->getStore())) {
+        $messageText = $giftMessage->getMessage();
+        if ($messageText && !$this->helper->isMessagesAllowed('items', $quote, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
         $this->giftMessageManager->setMessage($quote, 'quote_item', $giftMessage, $itemId);

@@ -20,7 +20,7 @@ define([
             template: 'Magento_Checkout/shipping-address/address-renderer/default'
         },
 
-        initProperties: function () {
+        initObservable: function () {
             this._super();
             this.isSelected = ko.computed(function() {
                 var isSelected = false;

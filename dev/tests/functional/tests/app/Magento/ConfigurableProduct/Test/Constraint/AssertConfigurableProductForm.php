@@ -90,7 +90,7 @@ class AssertConfigurableProductForm extends AssertProductForm
     protected function prepareFormData(array $data, array $sortFields = [])
     {
         // filter values and reset keys in variation matrix
-        $variationsMatrix = $data['configurable_attributes_data']['matrix'];
+        $variationsMatrix = $this->trimCurrencyForPriceInMatrix($data['configurable_attributes_data']['matrix']);
         foreach ($variationsMatrix as $key => $variationMatrix) {
             $variationsMatrix[$key] = array_diff_key($variationMatrix, array_flip($this->skippedVariationMatrixFields));
         }
@@ -100,5 +100,22 @@ class AssertConfigurableProductForm extends AssertProductForm
             $data = $this->sortDataByPath($data, $path);
         }
         return $data;
+    }
+
+    /**
+     * Escape currency for price in matrix
+     *
+     * @param array $variationsMatrix
+     * @param string $currency
+     * @return array
+     */
+    protected function trimCurrencyForPriceInMatrix($variationsMatrix, $currency = '$')
+    {
+        foreach ($variationsMatrix as &$variation) {
+            if (isset($variation['price'])) {
+                $variation['price'] = str_replace($currency, '', $variation['price']);
+            }
+        }
+        return $variationsMatrix;
     }
 }

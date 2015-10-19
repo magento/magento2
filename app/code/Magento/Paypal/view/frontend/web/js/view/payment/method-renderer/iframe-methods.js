@@ -6,9 +6,10 @@ define(
     [
         'Magento_Checkout/js/view/payment/default',
         'ko',
-        'Magento_Paypal/js/model/iframe'
+        'Magento_Paypal/js/model/iframe',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function (Component, ko, iframe) {
+    function (Component, ko, iframe, fullScreenLoader) {
         'use strict';
 
         return Component.extend({
@@ -47,6 +48,13 @@ define(
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);
                 }
+            },
+            /**
+             * Hide loader when iframe is fully loaded.
+             * @returns {void}
+             */
+            iframeLoaded: function() {
+                fullScreenLoader.stopLoader();
             }
         });
     }

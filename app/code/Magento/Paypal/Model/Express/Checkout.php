@@ -12,6 +12,7 @@ use Magento\Paypal\Model\Express\Checkout\Quote as PaypalQuote;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
+use Magento\Paypal\Model\Cart as PaypalCart;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -269,6 +270,11 @@ class Checkout
     protected $quoteManagement;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Tax\Helper\Data $taxData
@@ -284,7 +290,7 @@ class Checkout
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
-     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param DataObject\Copy $objectCopyService
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -293,6 +299,7 @@ class Checkout
      * @param PaypalQuote $paypalQuote
      * @param OrderSender $orderSender
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $params
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -322,6 +329,7 @@ class Checkout
         PaypalQuote $paypalQuote,
         OrderSender $orderSender,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         $params = []
     ) {
         $this->quoteManagement = $quoteManagement;
@@ -347,6 +355,7 @@ class Checkout
         $this->_accountManagement = $accountManagement;
         $this->paypalQuote = $paypalQuote;
         $this->quoteRepository = $quoteRepository;
+        $this->totalsCollector = $totalsCollector;
         $this->_customerSession = isset($params['session'])
             && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 
@@ -529,6 +538,7 @@ class Checkout
         }
 
         // suppress or export shipping address
+        $address = null;
         if ($this->_quote->getIsVirtual()) {
             if ($this->_config->getValue('requireBillingAddress')
                 == PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL
@@ -550,29 +560,13 @@ class Checkout
             $this->_quote->getPayment()->save();
         }
 
-        // add line items
         /** @var $cart \Magento\Payment\Model\Cart */
         $cart = $this->_cartFactory->create(['salesModel' => $this->_quote]);
-        $this->_api->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($this->_config->getValue('lineItemsEnabled'));
 
-        // add shipping options if needed and line items are available
-        $cartItems = $cart->getAllItems();
-        if ($this->_config->getValue('lineItemsEnabled')
-            && $this->_config->getValue('transferShippingOptions')
-            && !empty($cartItems)
-        ) {
-            if (!$this->_quote->getIsVirtual()) {
-                $options = $this->_prepareShippingOptions($address, true);
-                if ($options) {
-                    $this->_api->setShippingOptionsCallbackUrl(
-                        $this->_coreUrl->getUrl(
-                            '*/*/shippingOptionsCallback',
-                            ['quote_id' => $this->_quote->getId()]
-                        )
-                    )->setShippingOptions($options);
-                }
-            }
+        $this->_api->setPaypalCart($cart);
+
+        if (!$this->_taxData->getConfig()->priceIncludesTax()) {
+            $this->setShippingOptions($cart, $address);
         }
 
         $this->_config->exportExpressCheckoutStyleSettings($this->_api);
@@ -582,8 +576,8 @@ class Checkout
         $this->_api->callSetExpressCheckout();
 
         $token = $this->_api->getToken();
-        $this->_redirectUrl = $button ? $this->_config->getExpressCheckoutStartUrl($token)
-            : $this->_config->getPayPalBasicStartUrl($token);
+
+        $this->_setRedirectUrl($button, $token);
 
         $payment = $this->_quote->getPayment();
         $payment->unsAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
@@ -742,7 +736,8 @@ class Checkout
                 foreach ($address->getExportedKeys() as $key) {
                     $quoteAddress->setDataUsingMethod($key, $address->getData($key));
                 }
-                $quoteAddress->setCollectShippingRates(true)->collectTotals();
+                $quoteAddress->setCollectShippingRates(true);
+                $this->totalsCollector->collectAddressTotals($this->_quote, $quoteAddress);
                 $options = $this->_prepareShippingOptions($quoteAddress, false, true);
             }
             $response = $this->_api->setShippingOptions($options)->formatShippingOptionsCallback();
@@ -835,6 +830,7 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
                 $this->orderSender->send($order);
+                $this->_checkoutSession->start();
                 break;
             default:
                 break;
@@ -1159,17 +1155,27 @@ class Checkout
         $customer = $this->_quote->getCustomer();
         $confirmationStatus = $this->_accountManagement->getConfirmationStatus($customer->getId());
         if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
-            $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-            // @codingStandardsIgnoreStart
-                __('Account confirmation is required. Please check your email for confirmation link. To resend confirmation email please <a href="%1">click here</a>.', $url)
-            // @codingStandardsIgnoreEnd
+                __('Thank you for registering with Main Website Store.')
             );
         } else {
             $this->getCustomerSession()->regenerateId();
             $this->getCustomerSession()->loginById($customer->getId());
         }
         return $this;
+    }
+
+    /**
+     * Create payment redirect url
+     * @param bool|null $button
+     * @param string $token
+     * @return void
+     */
+    protected function _setRedirectUrl($button, $token)
+    {
+        $this->_redirectUrl = ($button && !$this->_taxData->getConfig()->priceIncludesTax())
+            ? $this->_config->getExpressCheckoutStartUrl($token)
+            : $this->_config->getPayPalBasicStartUrl($token);
     }
 
     /**
@@ -1180,5 +1186,36 @@ class Checkout
     public function getCustomerSession()
     {
         return $this->_customerSession;
+    }
+
+    /**
+     * Set shipping options to api
+     * @param \Magento\Paypal\Model\Cart $cart
+     * @param \Magento\Quote\Model\Quote\Address|null $address
+     * @return void
+     */
+    private function setShippingOptions(PaypalCart $cart, Address $address = null)
+    {
+        // for included tax always disable line items (related to paypal amount rounding problem)
+        $this->_api->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));
+
+        // add shipping options if needed and line items are available
+        $cartItems = $cart->getAllItems();
+        if ($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS)
+            && $this->_config->getValue(PaypalConfig::TRANSFER_SHIPPING_OPTIONS)
+            && !empty($cartItems)
+        ) {
+            if (!$this->_quote->getIsVirtual()) {
+                $options = $this->_prepareShippingOptions($address, true);
+                if ($options) {
+                    $this->_api->setShippingOptionsCallbackUrl(
+                        $this->_coreUrl->getUrl(
+                            '*/*/shippingOptionsCallback',
+                            ['quote_id' => $this->_quote->getId()]
+                        )
+                    )->setShippingOptions($options);
+                }
+            }
+        }
     }
 }

@@ -51,8 +51,8 @@ define(
                 selectedCardToken: configBraintree ? configBraintree.selectedCardToken : '',
                 storedCards: configBraintree ? configBraintree.storedCards : {},
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
-                creditCardExpMonth: configBraintree ? configBraintree.creditCardExpMonth : null,
-                creditCardExpYear: configBraintree ? configBraintree.creditCardExpYear : null
+                creditCardExpMonth: null,
+                creditCardExpYear: null
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -103,7 +103,7 @@ define(
                         clientToken: this.clientToken
                     });
                 } else {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                    this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
                 }
 
                 return this;
@@ -116,7 +116,7 @@ define(
                     var self = this,
                         cardInfo = null;
 
-                    messageList.clear();
+                    this.messageContainer.clear();
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
 
                     this.isPaymentProcessing = $.Deferred();
@@ -173,15 +173,15 @@ define(
             getData: function () {
                 return {
                     'method': this.item.method,
-                    'cc_type': this.creditCardType(),
-                    'cc_exp_year': this.creditCardExpYear(),
-                    'cc_exp_month': this.creditCardExpMonth(),
                     'additional_data': {
                         'cc_last4': this.creditCardNumber().slice(-4),
                         'store_in_vault': this.storeInVault(),
                         'payment_method_nonce': this.paymentMethodNonce(),
                         'cc_token': this.selectedCardToken(),
-                        'device_data': this.deviceData
+                        'device_data': this.deviceData,
+                        'cc_type': this.creditCardType(),
+                        'cc_exp_year': this.creditCardExpYear(),
+                        'cc_exp_month': this.creditCardExpMonth()
                     }
                 };
             },
@@ -194,9 +194,9 @@ define(
                 this.paymentMethodNonce('');
 
                 if (_.isObject(error)) {
-                    messageList.addErrorMessage(error);
+                    this.messageContainer.addErrorMessage(error);
                 } else {
-                    messageList.addErrorMessage({
+                    this.messageContainer.addErrorMessage({
                         message: error
                     });
                 }
@@ -349,6 +349,10 @@ define(
                         }
                     });
                 }
+            },
+
+            getCssClass: function () {
+                return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
             }
         });
     }

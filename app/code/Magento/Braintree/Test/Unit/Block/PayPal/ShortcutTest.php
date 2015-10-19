@@ -5,6 +5,11 @@
  */
 namespace Magento\Braintree\Test\Unit\Block\PayPal;
 
+use Magento\Braintree\Block\PayPal\Shortcut;
+
+/**
+ * Class ShortcutTest
+ */
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,7 +53,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     protected $container;
 
     /**
-     * @var \Magento\Braintree\Block\PayPal\Shortcut
+     * @var Shortcut
      */
     protected $block;
 
@@ -256,11 +261,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             'Magento\Braintree\Block\PayPal\Shortcut',
             [
                 'data' => [
-                    'container' => new \Magento\Framework\DataObject(
-                        [
-                            'module_name' => 'Magento_Catalog',
-                        ]
-                    )
+                    Shortcut::MINI_CART_FLAG_KEY => 1
                 ]
             ]
         );
@@ -283,11 +284,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             [
                 'mathRandom' => $this->mathRandomMock,
                 'data' => [
-                    'container' => new \Magento\Framework\DataObject(
-                        [
-                            'module_name' => 'Magento_Checkout',
-                        ]
-                    )
+                    Shortcut::MINI_CART_FLAG_KEY => 0
                 ]
             ]
         );
