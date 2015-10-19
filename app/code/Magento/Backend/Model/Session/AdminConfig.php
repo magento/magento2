@@ -35,9 +35,9 @@ class AdminConfig extends Config
     private $backendAppList;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var \Magento\Backend\Model\UrlFactory
      */
-    private $backendUrl;
+    private $backendUrlFactory;
 
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
@@ -49,7 +49,7 @@ class AdminConfig extends Config
      * @param string $scopeType
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -64,7 +64,7 @@ class AdminConfig extends Config
         $scopeType,
         \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
         $sessionName = self::SESSION_NAME_ADMIN
     ) {
@@ -80,7 +80,7 @@ class AdminConfig extends Config
         );
         $this->_frontNameResolver = $frontNameResolver;
         $this->backendAppList = $backendAppList;
-        $this->backendUrl = $backendUrl;
+        $this->backendUrlFactory = $backendUrlFactory;
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
@@ -95,7 +95,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
-        $baseUrl = parse_url($this->backendUrl->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
             return $cookiePath;
