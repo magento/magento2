@@ -9,11 +9,12 @@
 define([
     "jquery",
     "Magento_Catalog/js/product/weight-handler",
+    "Magento_Ui/js/modal/modal",
     "jquery/ui",
     "mage/translate",
     "Magento_Theme/js/sortable",
     "prototype"
-], function ($, weightHandler) {
+], function($, weightHandler, modal){
     'use strict';
 
     $.widget('mage.bundleProduct', {
@@ -81,7 +82,7 @@ define([
             var widget = this;
             this._on({'click .add-selection': function (event) {
                 var $optionBox = $(event.target).closest('.option-box'),
-                    $selectionGrid = $optionBox.find('.selection-search'),
+                    $selectionGrid = $optionBox.find('.selection-search').clone(),
                     optionIndex = $optionBox.attr('id').replace('bundle_option_', ''),
                     productIds = [],
                     productSkus = [],
@@ -114,21 +115,21 @@ define([
                         delete selectedProductList[$(this).val()];
                     }
                 });
-                $selectionGrid.dialog({
+
+                $selectionGrid.modal({
                     title: $optionBox.find('input[name$="[title]"]').val() === '' ?
                         $.mage.__('Add Products to New Option') :
                         $.mage.__('Add Products to Option "%1"')
                             .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
-                    autoOpen: false,
-                    minWidth: 980,
-                    width: '75%',
-                    dialogClass: 'bundle',
-                    modal: true,
-                    resizable: true,
+                    modalClass: 'bundle',
+                    type: 'slide',
+                    closed: function(e, modal) {
+                        modal.modal.remove();
+                    },
                     buttons: [{
                         text: $.mage.__('Add Selected Products'),
                         'class': 'action-primary action-add',
-                        click: function() {
+                        click: function () {
                             $.each(selectedProductList, function() {
                                 window.bSelection.addRow(optionIndex, this);
                             });
@@ -141,34 +142,10 @@ define([
                             );
                             widget.refreshSortableElements();
                             widget._updateSelectionsPositions.apply(widget.element);
-                            $selectionGrid.dialog('close');
+                            $selectionGrid.modal('closeModal');
                         }
-                    }, {
-                        text: $.mage.__('Cancel'),
-                        'class': 'action-close',
-                        click: function() {
-                            $selectionGrid.dialog('close');
-                        }
-                    }],
-                    position: {
-                        my: 'left top',
-                        at: 'center top',
-                        of: 'body'
-                    },
-                    open: function () {
-                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                        var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 45;
-                        $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
-                        $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                    },
-                    close: function() {
-                        $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                        $(this).dialog('destroy');
-                    }
+                    }]
                 });
-
                 $.ajax({
                     url: bSelection.selectionSearchUrl,
                     dataType: 'html',
@@ -179,7 +156,7 @@ define([
                         form_key: FORM_KEY
                     },
                     success: function(data) {
-                        $selectionGrid.html(data).dialog('open');
+                        $selectionGrid.html(data).modal('openModal');
                     },
                     context: $('body'),
                     showLoader: true

@@ -31,7 +31,7 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param string $resourceModel
      * @param string $model
      * @param string|null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -47,7 +47,7 @@ class Collection extends BlockCollection implements SearchResultInterface
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,

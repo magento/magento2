@@ -8,7 +8,7 @@ namespace Magento\Theme\Model\ResourceModel\Theme;
 /**
  * Theme collection
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection implements
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
     \Magento\Framework\View\Design\Theme\Label\ListInterface,
     \Magento\Framework\View\Design\Theme\ListInterface
 {

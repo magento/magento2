@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Option;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store manager
@@ -34,7 +34,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $optionValueCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -44,7 +44,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $optionValueCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_optionValueCollectionFactory = $optionValueCollectionFactory;
         $this->_storeManager = $storeManager;

@@ -56,6 +56,7 @@ class DeleteAllTermsEntityStep implements TestStepInterface
         while ($this->agreementIndex->getAgreementGridBlock()->isFirstRowVisible()) {
             $this->agreementIndex->getAgreementGridBlock()->openFirstRow();
             $this->agreementNew->getPageActionsBlock()->delete();
+            $this->agreementNew->getModalBlock()->acceptAlert();
         }
     }
 }

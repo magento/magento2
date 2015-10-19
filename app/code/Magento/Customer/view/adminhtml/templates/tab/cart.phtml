@@ -24,8 +24,10 @@
 ?>
 <script>
 require([
+    "Magento_Ui/js/modal/alert",
+    "Magento_Ui/js/modal/confirm",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(){
+], function(alert, confirm){
 
 <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>cartControl = {
     reload: function (params) {
@@ -51,17 +53,24 @@ require([
     },
 
     removeItem: function (itemId) {
+        var self = this;
+
         if (!itemId) {
-            alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('No item specified.')) ?>');
-            return false;
-        }
-        if(!confirm('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>')) {
+            alert({
+                content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('No item specified.')) ?>'
+            });
+
             return false;
         }
 
-        this.reload({'delete':itemId});
-
-        return false;
+        confirm({
+            content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>',
+            actions: {
+                confirm: function(){
+                    self.reload({'delete':itemId});
+                }
+            }
+        });
     }
 };
 
