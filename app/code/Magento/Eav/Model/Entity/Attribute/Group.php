@@ -66,7 +66,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         if (!$this->getAttributeGroupCode()) {
             $groupName = $this->getAttributeGroupName();
             if ($groupName) {
-                $this->setAttributeGroupCode(trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-'));
+                $attributeGroupCode = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
+                if (empty($attributeGroupCode)) {
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5($groupName);
+                }
+                $this->setAttributeGroupCode($attributeGroupCode);
             }
         }
         return parent::beforeSave();

@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
+use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 
 /**
  * Abstract class AbstractComponent
@@ -52,6 +53,8 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     ) {
         $this->context = $context;
         $this->components = $components;
+        $this->initObservers($data);
+        $this->context->getProcessor()->register($this);
         $this->_data = array_replace_recursive($this->_data, $data);
     }
 
@@ -92,6 +95,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
+        $this->getContext()->getProcessor()->notify($this->getComponentName());
     }
 
     /**
@@ -238,5 +242,26 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     public function getDataSourceData()
     {
         return [];
+    }
+
+    /**
+     * Initiate observers
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function initObservers(array & $data = [])
+    {
+        if (isset($data['observers']) && is_array($data['observers'])) {
+            foreach ($data['observers'] as $observerType => $observer) {
+                if (!is_object($observer)) {
+                    $observer = $this;
+                }
+                if ($observer instanceof ObserverInterface) {
+                    $this->getContext()->getProcessor()->attach($observerType, $observer);
+                }
+                unset($data['observers']);
+            }
+        }
     }
 }

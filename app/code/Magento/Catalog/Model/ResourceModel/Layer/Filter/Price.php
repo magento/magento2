@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 /**
  * Catalog Layer Price Filter resource model
  */
-class Price extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Minimal possible price
@@ -38,7 +38,7 @@ class Price extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     private $storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
@@ -46,7 +46,7 @@ class Price extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,

@@ -11,7 +11,7 @@ namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
      */
     protected $entitySnapshot;
 
@@ -25,7 +25,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
      * @param mixed $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
@@ -40,7 +40,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->entitySnapshot = $entitySnapshot;

@@ -32,11 +32,18 @@ abstract class AbstractElement implements ElementInterface
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var \Magento\Framework\Module\Manager
      */
-    public function __construct(StoreManagerInterface $storeManager)
+    protected $moduleManager;
+
+    /**
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     */
+    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
     {
         $this->_storeManager = $storeManager;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -134,6 +141,10 @@ abstract class AbstractElement implements ElementInterface
      */
     public function isVisible()
     {
+        if (isset($this->_data['if_module_enabled']) &&
+            !$this->moduleManager->isOutputEnabled($this->_data['if_module_enabled'])) {
+            return false;
+        }
         $showInScope = [
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
             \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),

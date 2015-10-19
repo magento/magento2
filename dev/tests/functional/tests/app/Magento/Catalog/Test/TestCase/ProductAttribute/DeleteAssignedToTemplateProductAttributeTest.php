@@ -78,6 +78,7 @@ class DeleteAssignedToTemplateProductAttributeTest extends Injectable
         $this->attributeIndex->open();
         $this->attributeIndex->getGrid()->searchAndOpen($filter);
         $this->attributeNew->getPageActions()->delete();
+        $this->attributeNew->getModalBlock()->acceptAlert();
 
         return ['productTemplate' => $productTemplate, 'attribute' => $attribute];
     }

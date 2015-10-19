@@ -57,8 +57,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         $store = $this->storeFactory->create();
         $store->load($code, 'code');
         if ($store->getId() === null) {
-            // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
-            throw new \InvalidArgumentException();
+            throw new NoSuchEntityException(__('Requested store is not found'));
         }
         $this->entities[$code] = $store;
         $this->entitiesById[$store->getId()] = $store;
@@ -89,7 +88,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         $store = $this->storeFactory->create();
         $store->load($id);
         if ($store->getId() === null) {
-            throw new NoSuchEntityException();
+            throw new NoSuchEntityException(__('Requested store is not found'));
         }
         $this->entitiesById[$id] = $store;
         $this->entities[$store->getCode()] = $store;

@@ -13,7 +13,7 @@ namespace Magento\Eav\Model\ResourceModel\Form\Type;
 
 use Magento\Eav\Model\Entity\Type;
 
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Initialize collection model

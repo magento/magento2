@@ -173,15 +173,15 @@ define(
             getData: function () {
                 return {
                     'method': this.item.method,
-                    'cc_type': this.creditCardType(),
-                    'cc_exp_year': this.creditCardExpYear(),
-                    'cc_exp_month': this.creditCardExpMonth(),
                     'additional_data': {
                         'cc_last4': this.creditCardNumber().slice(-4),
                         'store_in_vault': this.storeInVault(),
                         'payment_method_nonce': this.paymentMethodNonce(),
                         'cc_token': this.selectedCardToken(),
-                        'device_data': this.deviceData
+                        'device_data': this.deviceData,
+                        'cc_type': this.creditCardType(),
+                        'cc_exp_year': this.creditCardExpYear(),
+                        'cc_exp_month': this.creditCardExpMonth()
                     }
                 };
             },

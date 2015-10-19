@@ -50,11 +50,18 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
         $expectedUrlPath,
         $expectedUrlParam
     ) {
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->model = $this->objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\ViewAction',
             [
                 'urlBuilder' => $this->urlBuilder,
-                'data' => $data
+                'data' => $data,
+                'context' => $contextMock,
             ]
         );
 

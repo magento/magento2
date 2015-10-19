@@ -38,6 +38,11 @@ class DependencyReadinessCheck
     private $file;
 
     /**
+     * @var MagentoComposerApplication
+     */
+    private $magentoComposerApplication;
+
+    /**
      * Constructor
      *
      * @param ComposerJsonFinder $composerJsonFinder
@@ -55,6 +60,7 @@ class DependencyReadinessCheck
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->requireUpdateDryRunCommand = $composerAppFactory->createRequireUpdateDryRunCommand();
+        $this->magentoComposerApplication = $composerAppFactory->create();
     }
 
     /**
@@ -70,6 +76,18 @@ class DependencyReadinessCheck
         $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
+            foreach ($packages as $package) {
+                if (strpos($package, 'magento/product-enterprise-edition') !== false) {
+                    $this->magentoComposerApplication->runComposerCommand(
+                        [
+                            'command' => 'remove',
+                            'packages' => ['magento/product-community-edition'],
+                            '--no-update' => true
+                        ],
+                        $workingDir
+                    );
+                }
+            }
             $this->requireUpdateDryRunCommand->run($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {
