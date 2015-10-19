@@ -75,12 +75,12 @@ class Shipping extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         $this->addressFactory = $addressFactory;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->httpContext = $httpContext;
         $this->customerRepository = $customerRepository;
         $this->checkoutSession = $resourceSession;
         $this->customerSession = $customerSession;
+        parent::__construct($context, $data);
     }
 
     /**
