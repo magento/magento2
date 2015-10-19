@@ -12,6 +12,9 @@ namespace Magento\Paypal\Block\Express\Review;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Billing extends \Magento\Framework\View\Element\Template
 {
     /**
