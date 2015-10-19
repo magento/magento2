@@ -33,7 +33,7 @@
                 if (!isDisabled && !executed) {
                     executed = true;
                     alert({
-                        content: 'The following error(s) occurred:\n\r' +
+                        content: 'The following error(s) occurred:' +
                         newLine +
                         'Some PayPal solutions conflict.' +
                         newLine +
