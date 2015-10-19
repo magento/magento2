@@ -10,7 +10,7 @@ define(['underscore'], function (_) {
 
         _.every(data.argument, function (name) {
             if (data.solutionsElements[name] &&
-                data.solutionsElements[name].find(data.enableButton).val() == 1
+                data.solutionsElements[name].find(data.enableButton).val() === '1'
             ) {
                 isUnlock = false;
 

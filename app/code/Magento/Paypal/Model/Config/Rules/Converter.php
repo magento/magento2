@@ -58,7 +58,6 @@ class Converter implements ConverterInterface
     protected function createEvents(\DOMElement $node)
     {
         $result = [];
-        /** @var \DOMElement $child */
         foreach ($node->childNodes as $child) {
             /** @var \DOMElement $child */
             if ($this->hasNodeElement($child)) {
