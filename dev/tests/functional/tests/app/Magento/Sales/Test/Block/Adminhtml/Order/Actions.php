@@ -111,7 +111,7 @@ class Actions extends Block
      *
      * @var string
      */
-    protected $button = 'button[data-ui-id$="%s-button"]';
+    protected $button = '//button[@title="%s"]';
 
     /**
      * Selector for confirm.
@@ -262,7 +262,6 @@ class Actions extends Block
      */
     public function isActionButtonVisible($buttonName)
     {
-        $buttonName = str_replace(' ', '-', strtolower($buttonName));
-        return $this->_rootElement->find(sprintf($this->button, $buttonName))->isVisible();
+        return $this->_rootElement->find(sprintf($this->button, $buttonName), Locator::SELECTOR_XPATH)->isVisible();
     }
 }
