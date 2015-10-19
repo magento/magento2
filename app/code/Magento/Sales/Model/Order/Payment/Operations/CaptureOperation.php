@@ -84,7 +84,7 @@ class CaptureOperation extends AbstractOperation
         if (!$invoice->wasPayCalled()) {
             $paidWorkaround = (double)$amountToCapture;
         }
-        if ($payment->isCaptureFinal($paidWorkaround) && $payment->getShouldCloseParentTransaction() !== false) {
+        if ($payment->isCaptureFinal($paidWorkaround)) {
             $payment->setShouldCloseParentTransaction(true);
         }
 
