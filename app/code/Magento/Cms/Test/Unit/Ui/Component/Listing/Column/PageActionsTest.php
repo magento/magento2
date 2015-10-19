@@ -18,12 +18,19 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         /** @var \Magento\Cms\Ui\Component\Listing\Column\PageActions $model */
         $model = $objectManager->getObject(
             'Magento\Cms\Ui\Component\Listing\Column\PageActions',
             [
                 'urlBuilder' => $urlBuilderMock,
+                'context' => $contextMock,
             ]
         );
 

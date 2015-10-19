@@ -7,7 +7,7 @@ define([
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, utils, registry, Abstract, layout) {
     'use strict';
 

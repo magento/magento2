@@ -35,6 +35,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -46,21 +47,31 @@ class UpgradeData implements UpgradeDataInterface
             $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
             $attributeSetId = $categorySetup->getDefaultAttributeSetId($entityTypeId);
 
-            $attributeGroupId = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, 'Images');
-
-            // update General Group
-            $categorySetup->updateAttributeGroup(
+            $attributeGroup = $categorySetup->getAttributeGroup(
                 $entityTypeId,
                 $attributeSetId,
-                $attributeGroupId,
-                'attribute_group_name',
-                'Images and Videos'
+                'Images',
+                'attribute_group_name'
             );
+            if (isset($attributeGroup['attribute_group_name']) && $attributeGroup['attribute_group_name'] == 'Images') {
+                // update General Group
+                $categorySetup->updateAttributeGroup(
+                    $entityTypeId,
+                    $attributeSetId,
+                    $attributeGroup['attribute_group_id'],
+                    'attribute_group_name',
+                    'Images and Videos'
+                );
+            }
+        }
+
+        if ($context->getVersion()
+            && version_compare($context->getVersion(), '2.0.1') < 0
+        ) {
             $select = $setup->getConnection()->select()
                 ->from(
                     $setup->getTable('catalog_product_entity_group_price'),
                     [
-                        'value_id',
                         'entity_id',
                         'all_groups',
                         'customer_group_id',
@@ -69,11 +80,10 @@ class UpgradeData implements UpgradeDataInterface
                         'website_id'
                     ]
                 );
-            $setup->getConnection()->insertFromSelect(
+            $select = $setup->getConnection()->insertFromSelect(
                 $select,
-                $setup->getTable('catalog_product_entity_group_price'),
+                $setup->getTable('catalog_product_entity_tier_price'),
                 [
-                    'value_id',
                     'entity_id',
                     'all_groups',
                     'customer_group_id',
@@ -82,8 +92,52 @@ class UpgradeData implements UpgradeDataInterface
                     'website_id'
                 ]
             );
+            $setup->getConnection()->query($select);
+
             $categorySetupManager = $this->categorySetupFactory->create();
             $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
+        }
+
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+            // set new resource model paths
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'entity_model',
+                'Magento\Catalog\Model\ResourceModel\Category'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'entity_attribute_collection',
+                'Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection'
+            );
+            $categorySetup->updateAttribute(
+                \Magento\Catalog\Model\Category::ENTITY,
+                'custom_design_from',
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'entity_model',
+                'Magento\Catalog\Model\ResourceModel\Product'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'attribute_model',
+                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            );
+            $categorySetup->updateEntityType(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'entity_attribute_collection',
+                'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+            );
         }
         $setup->endSetup();
     }

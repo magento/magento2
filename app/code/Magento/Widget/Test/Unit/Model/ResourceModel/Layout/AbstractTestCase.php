@@ -60,7 +60,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
         $resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -77,7 +77,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @abstract
      * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     abstract protected function _getCollection(\Magento\Framework\DB\Select $select);
 

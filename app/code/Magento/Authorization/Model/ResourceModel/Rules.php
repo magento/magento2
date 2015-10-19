@@ -11,7 +11,7 @@ namespace Magento\Authorization\Model\ResourceModel;
 /**
  * Admin rule resource model
  */
-class Rules extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Root ACL resource
@@ -38,7 +38,7 @@ class Rules extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
@@ -46,7 +46,7 @@ class Rules extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * catalog_product entity type id
@@ -41,13 +41,13 @@ class Config extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         $connectionName = null
