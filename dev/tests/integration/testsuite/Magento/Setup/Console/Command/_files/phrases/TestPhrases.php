@@ -8,6 +8,9 @@
 
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class TestPhrases
 {
     public function awesomeFunction()
