@@ -6,11 +6,8 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\Cron\ReadinessCheck;
-use Magento\Setup\Model\CronScriptReadinessCheck;
-use Magento\Setup\Model\PhpReadinessCheck;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Magento\Setup\Model\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
@@ -34,37 +31,37 @@ class Environment extends AbstractActionController
     /**
      * File system
      *
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
     /**
      * Cron Script Readiness Check
      *
-     * @var CronScriptReadinessCheck
+     * @var \Magento\Setup\Model\CronScriptReadinessCheck
      */
     protected $cronScriptReadinessCheck;
 
     /**
      * PHP Readiness Check
      *
-     * @var PhpReadinessCheck
+     * @var \Magento\Setup\Model\PhpReadinessCheck
      */
     protected $phpReadinessCheck;
 
     /**
      * Constructor
      *
-     * @param FilePermissions $permissions
-     * @param Filesystem $filesystem
-     * @param CronScriptReadinessCheck $cronScriptReadinessCheck
-     * @param PhpReadinessCheck $phpReadinessCheck
+     * @param \Magento\Setup\Model\FilePermissions $permissions
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck
+     * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
-        FilePermissions $permissions,
-        Filesystem $filesystem,
-        CronScriptReadinessCheck $cronScriptReadinessCheck,
-        PhpReadinessCheck $phpReadinessCheck
+        \Magento\Setup\Model\FilePermissions $permissions,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck,
+        \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->permissions = $permissions;
         $this->filesystem = $filesystem;
