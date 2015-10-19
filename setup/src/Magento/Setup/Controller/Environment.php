@@ -24,11 +24,6 @@ class Environment extends AbstractActionController
     const UPDATER_DIR = 'update';
 
     /**
-     * Path to Magento config
-     */
-    const PATH_TO_CONFIG = '/app/etc/config.php';
-
-    /**
      * File system
      *
      * @var \Magento\Framework\Filesystem

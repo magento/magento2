@@ -35,9 +35,9 @@ class Navigation
     /**
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ApplicationStatus $applicationStatus)
     {
-        if (file_exists(BP . \Magento\Setup\Controller\Environment::PATH_TO_CONFIG)) {
+        if ($applicationStatus->isApplicationInstalled()) {
             $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
             $this->navType = self::NAV_UPDATER;
             $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];
