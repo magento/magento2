@@ -20,8 +20,6 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
     const CLASS_FILE_NAME = 'class/file/name';
 
-    const FILE_NAME = 'test_file';
-
     const FILE_CONTENT = "content";
 
     /**#@-*/
@@ -40,7 +38,9 @@ class IoTest extends \PHPUnit_Framework_TestCase
     protected $_filesystemDriverMock;
 
     /** @var string */
-    protected $existingResultClassFile;
+    protected $existingFile;
+    /** @var string */
+    protected $nonExistingFile;
 
     protected function setUp()
     {
@@ -52,9 +52,8 @@ class IoTest extends \PHPUnit_Framework_TestCase
             $this->_filesystemDriverMock,
             self::GENERATION_DIRECTORY
         );
-        $this->existingResultClassFile =
-            (new ComponentRegistrar())->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
-            . '/Code/Test/Unit/Generator/TestAsset/ExistingResultClass.php';
+        $this->existingFile = BP . '/Magento/Class/Exists.php';
+        $this->nonExistingFile = BP . '/Magento/Class/Does/Not/Exists.php';
     }
 
     protected function tearDown()
@@ -82,18 +81,18 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->_filesystemDriverMock->expects($this->once())
             ->method('filePutContents')
             ->with(
-                $this->stringContains(self::FILE_NAME),
+                $this->stringContains($this->existingFile),
                 "<?php\n" . self::FILE_CONTENT
             )->willReturn(true);
 
         $this->_filesystemDriverMock->expects($this->once())
             ->method('rename')
             ->with(
-                $this->stringContains(self::FILE_NAME),
-                self::FILE_NAME
+                $this->stringContains($this->existingFile),
+                $this->existingFile
             )->willReturn(true);
 
-        $this->assertTrue($this->_object->writeResultFile(self::FILE_NAME, self::FILE_CONTENT));
+        $this->assertTrue($this->_object->writeResultFile($this->existingFile, self::FILE_CONTENT));
     }
 
     public function testWriteResultFileAlreadyExists()
@@ -101,18 +100,43 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->_filesystemDriverMock->expects($this->once())
             ->method('filePutContents')
             ->with(
-                $this->stringContains($this->existingResultClassFile),
+                $this->stringContains($this->existingFile),
+                "<?php\n" . self::FILE_CONTENT
+            )->willReturn(true);
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('isExists')
+            ->willReturn(true);
+
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('rename')
+            ->with(
+                $this->stringContains($this->existingFile),
+                $this->existingFile
+            )->willThrowException(new FileSystemException(new Phrase('File already exists')));
+
+        $this->assertTrue($this->_object->writeResultFile($this->existingFile, self::FILE_CONTENT));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\FileSystemException
+     */
+    public function testWriteResultFileThrowsException()
+    {
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('filePutContents')
+            ->with(
+                $this->stringContains($this->nonExistingFile),
                 "<?php\n" . self::FILE_CONTENT
             )->willReturn(true);
 
         $this->_filesystemDriverMock->expects($this->once())
             ->method('rename')
             ->with(
-                $this->stringContains($this->existingResultClassFile),
-                $this->existingResultClassFile
+                $this->stringContains($this->nonExistingFile),
+                $this->nonExistingFile
             )->willThrowException(new FileSystemException(new Phrase('File already exists')));
 
-        $this->assertTrue($this->_object->writeResultFile($this->existingResultClassFile, self::FILE_CONTENT));
+        $this->assertTrue($this->_object->writeResultFile($this->nonExistingFile, self::FILE_CONTENT));
     }
 
     public function testMakeGenerationDirectoryWritable()
@@ -161,18 +185,31 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_generationDirectory, $this->_object->getGenerationDirectory());
     }
 
-    public function testFileExists()
+    /**
+     * @dataProvider fileExistsDataProvider
+     * @param $fileName
+     * @param $exists
+     */
+    public function testFileExists($fileName, $exists)
     {
         $this->_filesystemDriverMock->expects(
             $this->once()
         )->method(
             'isExists'
         )->with(
-            $this->equalTo(self::FILE_NAME)
+            $this->equalTo($fileName)
         )->will(
-            $this->returnValue(false)
+            $this->returnValue($exists)
         );
 
-        $this->assertFalse($this->_object->fileExists(self::FILE_NAME));
+        $this->assertSame($exists, $this->_object->fileExists($fileName));
+    }
+
+    public function fileExistsDataProvider()
+    {
+        return [
+            ['fileName' => $this->existingFile, 'exists' => true],
+            ['fileName' => $this->nonExistingFile, 'exists' => false]
+        ];
     }
 }
