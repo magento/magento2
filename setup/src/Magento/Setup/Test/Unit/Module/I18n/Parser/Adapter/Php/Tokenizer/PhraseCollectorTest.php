@@ -215,7 +215,11 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
         $phraseTokens = [$firstPartToken, $concatenationToken, $secondPartToken];
         $phraseString = "'first part' . ' second part'";
 
-        $reflectionMethod = new \ReflectionMethod('\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector', '_collectPhrase');
+        $reflectionMethod = new \ReflectionMethod(
+            '\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector',
+            '_collectPhrase'
+        );
+
         $reflectionMethod->setAccessible(true);
         $this->assertSame($phraseString, $reflectionMethod->invoke($this->phraseCollector, $phraseTokens));
     }
