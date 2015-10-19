@@ -98,7 +98,7 @@ class Io
         try {
             $success = $this->filesystemDriver->rename($tmpFile, $fileName);
         } catch (FileSystemException $e) {
-            if (!file_exists($fileName)) {
+            if (!$this->fileExists($fileName)) {
                 throw $e;
             } else {
                 /**
