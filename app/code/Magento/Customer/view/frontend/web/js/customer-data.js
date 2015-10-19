@@ -107,6 +107,9 @@ define([
             if (_.isEmpty(storage.keys())) {
                 this.reload([], false);
             } else if (this.needReload()) {
+                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                    buffer.notify(sectionName, sectionData);
+                });
                 this.reload(this.getExpiredKeys(), false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
