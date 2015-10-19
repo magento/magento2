@@ -39,6 +39,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
     /** @var string */
     protected $existingFile;
+
     /** @var string */
     protected $nonExistingFile;
 
