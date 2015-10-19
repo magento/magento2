@@ -77,8 +77,6 @@ class Reader
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
             if (file_exists($filePath)) {
                 $result = include $filePath;
-            } else {
-                throw new \Exception('Config file ' . $fileKey . ' does not exist.');
             }
         } else {
             $configFiles = $this->configFilePool->getPaths();
@@ -87,9 +85,9 @@ class Reader
             foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 if (file_exists($configFile)) {
-                    $fileData = include $configFile;
+                    $fileData = @include $configFile;
                 } else {
-                    throw new \Exception('Config file ' . $configFile . ' does not exist.');
+                    continue;
                 }
                 $allFilesData[$configFile] = $fileData;
                 if (!empty($fileData)) {
