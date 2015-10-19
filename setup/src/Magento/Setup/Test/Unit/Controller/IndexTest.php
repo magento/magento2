@@ -21,11 +21,21 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ApplicationStatus
      */
-    private $deploymentConfig;
+    private $applicationStatus;
 
-    public function testIndexAction()
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth
+     */
+    private $auth;
+
+    public function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerProvider = $this->getMock(
@@ -35,12 +45,58 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->applicationStatus = $this->getMock(
+            'Magento\Setup\Model\ApplicationStatus',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->appState = $this->getMock(
+            'Magento\Framework\App\State',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->auth = $this->getMock(
+            'Magento\Backend\Model\Auth',
+            [],
+            [],
+            '',
+            false
+        );
+    }
+
+    public function testIndexActionInstalled()
+    {
+        $this->applicationStatus->expects($this->once())->method('isApplicationInstalled')->willReturn(true);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
-        $this->objectManager->expects($this->once())->method('get')->willReturn($this->deploymentConfig);
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
+        $this->appState->expects($this->once())->method('setAreaCode');
+        $this->auth->expects($this->once())->method('isLoggedIn');
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['Magento\Framework\App\State', $this->appState],
+                        ['Magento\Backend\Model\Auth', $this->auth]
+                    ]
+                )
+            );
         /** @var $controller Index */
-        $controller = new Index($this->objectManagerProvider);
+        $controller = new Index($this->objectManagerProvider, $this->applicationStatus);
+        $viewModel = $controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertFalse($viewModel->terminate());
+    }
+
+    public function testIndexActionNotInstalled()
+    {
+        $this->applicationStatus->expects($this->once())->method('isApplicationInstalled')->willReturn(false);
+        $this->objectManagerProvider->expects($this->exactly(0))->method('get');
+        /** @var $controller Index */
+        $controller = new Index($this->objectManagerProvider, $this->applicationStatus);
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertFalse($viewModel->terminate());

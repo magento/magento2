@@ -16,9 +16,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     private $serviceLocatorMock;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ApplicationStatus
      */
-    private $objectManagerProvider;
+    private $applicationStatus;
 
     /**
      * @var Navigation
@@ -29,12 +29,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceLocatorMock =
             $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $objectManager->expects($this->once())->method('get')->willReturn($deploymentConfig);
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')
@@ -54,7 +48,14 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['main' => false],
                 ]
             ]));
-        $this->navigation = new Navigation($this->serviceLocatorMock, $this->objectManagerProvider);
+        $this->applicationStatus = $this->getMock(
+            'Magento\Setup\Model\ApplicationStatus',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->applicationStatus);
     }
 
     public function testGetType()

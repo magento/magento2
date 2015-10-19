@@ -9,6 +9,7 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\ApplicationStatus;
 
 /**
  * Main controller of the Setup Wizard
@@ -21,12 +22,20 @@ class Index extends AbstractActionController
     private $objectManagerProvider;
 
     /**
+     * @var \Magento\Setup\Model\ApplicationStatus
+     */
+    private $applicationStatus;
+
+    /**
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param ApplicationStatus $applicationStatus
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        ApplicationStatus $applicationStatus
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->applicationStatus = $applicationStatus;
     }
 
     /**
@@ -34,7 +43,7 @@ class Index extends AbstractActionController
      */
     public function indexAction()
     {
-        if (file_exists(BP . \Magento\Setup\Controller\Environment::PATH_TO_CONFIG)) {
+        if ($this->applicationStatus->isApplicationInstalled()) {
             $objectManager = $this->objectManagerProvider->get();
             /** @var \Magento\Framework\App\State $adminAppState */
             $adminAppState = $objectManager->get('Magento\Framework\App\State');
