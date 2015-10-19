@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 class Navigation
 {
@@ -34,10 +35,11 @@ class Navigation
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ApplicationStatus $applicationStatus)
+    public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
     {
-        if ($applicationStatus->isApplicationInstalled()) {
+        if ($deploymentConfig->isAvailable()) {
             $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
             $this->navType = self::NAV_UPDATER;
             $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];

@@ -16,9 +16,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     private $serviceLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ApplicationStatus
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
      */
-    private $applicationStatus;
+    private $deploymentConfig;
 
     /**
      * @var Navigation
@@ -48,14 +48,14 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['main' => false],
                 ]
             ]));
-        $this->applicationStatus = $this->getMock(
-            'Magento\Setup\Model\ApplicationStatus',
+        $this->deploymentConfig = $this->getMock(
+            'Magento\Framework\App\DeploymentConfig',
             [],
             [],
             '',
             false
         );
-        $this->navigation = new Navigation($this->serviceLocatorMock, $this->applicationStatus);
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }
 
     public function testGetType()

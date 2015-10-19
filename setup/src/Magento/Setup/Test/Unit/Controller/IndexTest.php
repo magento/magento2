@@ -21,9 +21,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ApplicationStatus
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
      */
-    private $applicationStatus;
+    private $deploymentConfig;
+
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
@@ -45,8 +46,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->applicationStatus = $this->getMock(
-            'Magento\Setup\Model\ApplicationStatus',
+        $this->deploymentConfig = $this->getMock(
+            'Magento\Framework\App\DeploymentConfig',
             [],
             [],
             '',
@@ -70,7 +71,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionInstalled()
     {
-        $this->applicationStatus->expects($this->once())->method('isApplicationInstalled')->willReturn(true);
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->appState->expects($this->once())->method('setAreaCode');
         $this->auth->expects($this->once())->method('isLoggedIn');
@@ -85,7 +86,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 )
             );
         /** @var $controller Index */
-        $controller = new Index($this->objectManagerProvider, $this->applicationStatus);
+        $controller = new Index($this->objectManagerProvider, $this->deploymentConfig);
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertFalse($viewModel->terminate());
@@ -93,10 +94,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionNotInstalled()
     {
-        $this->applicationStatus->expects($this->once())->method('isApplicationInstalled')->willReturn(false);
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->objectManagerProvider->expects($this->exactly(0))->method('get');
         /** @var $controller Index */
-        $controller = new Index($this->objectManagerProvider, $this->applicationStatus);
+        $controller = new Index($this->objectManagerProvider, $this->deploymentConfig);
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertFalse($viewModel->terminate());
