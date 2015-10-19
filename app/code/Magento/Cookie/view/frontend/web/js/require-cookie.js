@@ -30,6 +30,7 @@ define([
          */
         _bind: function() {
             var events = {};
+
             $.each(this.options.triggers, function(index, value) {
                 events['click ' + value] = '_checkCookie';
             });
