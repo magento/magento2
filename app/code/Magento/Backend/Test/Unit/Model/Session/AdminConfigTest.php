@@ -58,7 +58,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $backendUrl = $this->getMock('\Magento\Backend\Model\Url', [], [], '', false);
         $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
-        $this->backendUrlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', [], [], '', false);
+        $this->backendUrlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', ['create'], [], '', false);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
         $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
