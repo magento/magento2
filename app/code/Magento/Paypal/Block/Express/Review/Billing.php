@@ -89,13 +89,13 @@ class Billing extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         $this->addressFactory = $addressFactory;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->httpContext = $httpContext;
         $this->customerRepository = $customerRepository;
         $this->checkoutSession = $resourceSession;
         $this->customerSession = $customerSession;
         $this->countryCollectionFactory = $countryCollectionFactory;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -107,7 +107,7 @@ class Billing extends \Magento\Framework\View\Element\Template
     {
         $this->getCheckout()->setStepData(
             'billing',
-            ['label' => __('Billing Information'), 'is_show' => $this->isShow()]
+            ['label' => __('Billing Information'), 'is_show' => true]
         );
 
         if ($this->isCustomerLoggedIn()) {

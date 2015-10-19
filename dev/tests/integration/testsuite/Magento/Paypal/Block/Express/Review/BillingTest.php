@@ -69,7 +69,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
             ->createBlock(
                 'Magento\Paypal\Block\Express\Review\Billing',
                 '',
-                ['customerSession' => $customerSession, 'checkoutSession' => $checkoutSession]
+                ['customerSession' => $customerSession, 'resourceSession' => $checkoutSession]
             );
     }
 
