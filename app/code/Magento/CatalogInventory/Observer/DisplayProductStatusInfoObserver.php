@@ -8,11 +8,12 @@ namespace Magento\CatalogInventory\Observer;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
  */
-class DisplayProductStatusInfoObserver
+class DisplayProductStatusInfoObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
@@ -33,7 +34,7 @@ class DisplayProductStatusInfoObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $info = $observer->getEvent()->getStatus();
         $info->setDisplayStatus($this->stockConfiguration->isDisplayProductStockStatus());

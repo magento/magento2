@@ -8,18 +8,17 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiComponent'
-], function (ko, _, utils, layout, Component) {
+    'uiElement'
+], function (ko, _, utils, layout, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
             pageSize: 20,
             current: 1,
             selectProvider: '',
-            componentType: 'paging',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
@@ -38,13 +37,13 @@ define([
 
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
-                current: '${ $.provider }:params.paging.current',
-                pages: '${ $.provider }:data.pages'
+                current: '${ $.provider }:params.paging.current'
             },
 
             listens: {
                 'pages': 'onPagesChange',
-                'pageSize totalRecords': 'countPages',
+                'pageSize': 'onPageSizeChange',
+                'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst'
             },
 
@@ -61,7 +60,7 @@ define([
         initialize: function () {
             this._super()
                 .initSizes()
-                .countPages();
+                .updateCounter();
 
             return this;
         },
@@ -73,17 +72,16 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe([
+                .track([
                     'totalSelected',
                     'totalRecords',
                     'pageSize',
-                    'current',
                     'pages',
-                    'options'
+                    'current'
                 ]);
 
             this._current = ko.pureComputed({
-                read: this.current,
+                read: ko.getObservable(this, 'current'),
 
                 /**
                  * Validates page change according to user's input.
@@ -91,10 +89,8 @@ define([
                  * Calls reload method then.
                  */
                 write: function (value) {
-                    value = this.normalize(value);
-
-                    this.current(value);
-                    this._current.notifySubscribers(value);
+                    this.setPage(value)
+                        ._current.notifySubscribers(this.current);
                 },
 
                 owner: this
@@ -121,7 +117,7 @@ define([
          * @returns {Paging} Chainable.
          */
         setPage: function (value) {
-            this.current(this.normalize(value));
+            this.current = this.normalize(value);
 
             return this;
         },
@@ -132,7 +128,7 @@ define([
          * @returns {Paging} Chainable.
          */
         next: function () {
-            this.setPage(this.current() + 1);
+            this.setPage(this.current + 1);
 
             return this;
         },
@@ -143,7 +139,7 @@ define([
          * @returns {Paging} Chainable.
          */
         prev: function () {
-            this.setPage(this.current() - 1);
+            this.setPage(this.current - 1);
 
             return this;
         },
@@ -154,7 +150,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current(1);
+            this.current = 1;
 
             return this;
         },
@@ -165,7 +161,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goLast: function () {
-            this.current(this.pages());
+            this.current = this.pages;
 
             return this;
         },
@@ -176,7 +172,7 @@ define([
          * @returns {Boolean}
          */
         isFirst: function () {
-            return this.current() === 1;
+            return this.current === 1;
         },
 
         /**
@@ -185,7 +181,41 @@ define([
          * @returns {Boolean}
          */
         isLast: function () {
-            return this.current() === this.pages();
+            return this.current === this.pages;
+        },
+
+        /**
+         * Updates number of pages.
+         */
+        updateCounter: function () {
+            this.pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
+
+            return this;
+        },
+
+        /**
+         * Calculates new page cursor based on the
+         * previous and current page size values.
+         *
+         * @returns {Number} Updated cursor value.
+         */
+        updateCursor: function () {
+            var cursor  = this.current - 1,
+                size    = this.pageSize,
+                oldSize = this.previousSize,
+                delta   = cursor * (oldSize  - size) / size;
+
+            delta = size > oldSize ?
+                Math.ceil(delta) :
+                Math.floor(delta);
+
+            cursor += delta + 1;
+
+            this.previousSize = size;
+
+            this.setPage(cursor);
+
+            return this;
         },
 
         /**
@@ -196,37 +226,28 @@ define([
          * @returns {Number}
          */
         normalize: function (value) {
-            var total = this.pages();
-
             value = +value;
 
             if (isNaN(value)) {
                 return 1;
             }
 
-            return utils.inRange(Math.round(value), 1, total);
+            return utils.inRange(Math.round(value), 1, this.pages);
         },
 
         /**
-         * Calculates number of pages.
+         * Handles changes of the page size.
          */
-        countPages: function () {
-            var pages = Math.ceil(this.totalRecords() / this.pageSize());
-
-            this.pages(pages || 1);
+        onPageSizeChange: function () {
+            this.updateCounter()
+                .updateCursor();
         },
 
         /**
-         * Listens changes of the 'pages' property.
-         * Might change current page if its' value
-         * is greater than total amount of pages.
-         *
-         * @param {Number} pages - Total amount of pages.
+         * Handles changes of the pages amount.
          */
-        onPagesChange: function (pages) {
-            var current = this.current;
-
-            current(utils.inRange(current(), 1, pages));
+        onPagesChange: function () {
+            this.updateCursor();
         }
     });
 });

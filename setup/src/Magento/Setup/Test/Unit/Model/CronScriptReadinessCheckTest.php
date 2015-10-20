@@ -34,7 +34,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->read->expects($this->once())
             ->method('readFile')
-            ->willThrowException(new FileSystemException(new Phrase('')));
+            ->willThrowException(new FileSystemException(new Phrase('message')));
         $expected = [
             'success' => false,
             'error' => 'Cron job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
@@ -111,7 +111,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->read->expects($this->once())
             ->method('readFile')
-            ->willThrowException(new FileSystemException(new Phrase('')));
+            ->willThrowException(new FileSystemException(new Phrase('message')));
         $expected = ['success' => false, 'error' => 'Cron job has not been configured yet'];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }

@@ -13,8 +13,8 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 /**
  * Tax class model
  *
- * @method \Magento\Tax\Model\Resource\TaxClass _getResource()
- * @method \Magento\Tax\Model\Resource\TaxClass getResource()
+ * @method \Magento\Tax\Model\ResourceModel\TaxClass _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\TaxClass getResource()
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -48,7 +48,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -58,7 +58,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -79,7 +79,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\TaxClass');
+        $this->_init('Magento\Tax\Model\ResourceModel\TaxClass');
     }
 
     /**

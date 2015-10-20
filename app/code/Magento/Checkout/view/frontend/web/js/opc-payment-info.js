@@ -7,16 +7,16 @@
 /*jshint browser:true*/
 /*global alert*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/translate',
     'Magento_Checkout/js/opc-shipping-method'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
     'use strict';
 
     // Extension for mage.opcheckout - fifth section(Payment Information) in one page checkout accordion
@@ -121,7 +121,9 @@ define([
             var methods = this.element.find('[name^="payment["]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
+                alert({
+                    content: $.mage.__('We can\'t complete your order because you don\'t have a payment method set up.')
+                });
 
                 return false;
             }
@@ -132,7 +134,9 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please choose a payment method.'));
+            alert({
+                content: $.mage.__('Please choose a payment method.')
+            });
 
             return false;
         },

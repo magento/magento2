@@ -7,16 +7,16 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 /**
- * @deprecated
  * @removeCandidate
  */
 define([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "Magento_Checkout/js/opc-shipping-info",
     "mage/validation",
     "mage/translate"
-], function($){
+], function($, alert){
     'use strict';    
 
     // Extension for mage.opcheckout - fourth section(Shipping Method) in one page checkout accordion
@@ -63,13 +63,20 @@ define([
         _validateShippingMethod: function() {
             var methods = this.element.find('[name="shipping_method"]');
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t ship to this address. Please enter another address or edit this one.'));
+                alert({
+                    content: $.mage.__('We can\'t ship to this address. Please enter another address or edit this one.')
+                });
+
                 return false;
             }
+
             if (methods.filter(':checked').length) {
                 return true;
             }
-            alert($.mage.__('Please specify a shipping method.'));
+            alert({
+                content:$.mage.__('Please specify a shipping method.')
+            });
+
             return false;
         }
     });

@@ -40,14 +40,14 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory,
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
@@ -142,7 +142,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getDeleteButtonHtml()
     {
@@ -151,7 +150,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getSaveButtonHtml()
     {
@@ -163,7 +161,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getResetButtonHtml()
     {

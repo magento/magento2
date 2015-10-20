@@ -22,7 +22,7 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
-use Magento\Wishlist\Model\Resource\Item\Option\Collection as OptionCollection;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollection;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -133,7 +133,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getHasError'])
             ->getMock();
 
-        $this->optionCollection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\Collection')
+        $this->optionCollection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

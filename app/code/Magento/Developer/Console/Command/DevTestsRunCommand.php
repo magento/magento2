@@ -116,7 +116,6 @@ class DevTestsRunCommand extends Command
     {
         $this->commands = [
             'unit'                   => ['../tests/unit', ''],
-            'unit-performance'       => ['../tests/performance/framework/tests/unit', ''],
             'unit-static'            => ['../tests/static/framework/tests/unit', ''],
             'unit-integration'       => ['../tests/integration/framework/tests/unit', ''],
             'integration'            => ['../tests/integration', ''],
@@ -127,7 +126,7 @@ class DevTestsRunCommand extends Command
         ];
         $this->types = [
             'all'             => array_keys($this->commands),
-            'unit'            => ['unit', 'unit-performance', 'unit-static', 'unit-integration'],
+            'unit'            => ['unit', 'unit-static', 'unit-integration'],
             'integration'     => ['integration'],
             'integration-all' => ['integration', 'integration-integrity'],
             'static'          => ['static-default'],
@@ -136,7 +135,6 @@ class DevTestsRunCommand extends Command
             'legacy'          => ['static-legacy'],
             'default'         => [
                 'unit',
-                'unit-performance',
                 'unit-static',
                 'unit-integration',
                 'integration',

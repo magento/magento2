@@ -9,11 +9,11 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "suggest": {
-        "magento/module-import-export": "1.0.0-beta"
+        "magento/module-import-export": "1.0.0-beta",
+        "magento/module-catalog-rule-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -21,12 +21,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/CatalogRule"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\CatalogRule\\": ""
+        }
     }
 }

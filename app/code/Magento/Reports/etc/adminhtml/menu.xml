@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_Reports::report" title="Reports" module="Magento_Reports" sortOrder="60" resource="Magento_Reports::report"/>
         <add id="Magento_Reports::report_marketing" title="Marketing" module="Magento_Backend" sortOrder="10" parent="Magento_Reports::report" resource="Magento_Reports::report_marketing"/>

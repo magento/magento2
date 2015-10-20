@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
-use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
@@ -64,7 +64,7 @@ class Cache
                     'area' => Area::AREA_FRONTEND,
                     'themeModel' => $theme,
                 ]);
-                $images = $config->getImages('Magento_Catalog');
+                $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
                 foreach ($images as $imageId => $imageData) {
                     $this->data[$theme->getCode() . $imageId] = array_merge(['id' => $imageId], $imageData);
                 }

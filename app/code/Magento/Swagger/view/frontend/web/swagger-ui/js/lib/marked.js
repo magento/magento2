@@ -2,6 +2,8 @@
  * marked - a markdown parser
  * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
  * https://github.com/chjj/marked
+ *
+ * Modified by X.Commerce, Inc. d/b/a/ Magento, Inc., Modifications © 2015 X.Commerce, Inc. d/b/a/ Magento, Inc
  */
 
 ;(function() {
@@ -712,17 +714,17 @@ InlineLexer.prototype.smartypants = function(text) {
   if (!this.options.smartypants) return text;
   return text
     // em-dashes
-    .replace(/--/g, '\u2014')
+    .replace('/--/g', '\u2014')
     // opening singles
-    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    .replace('/(^|[-\u2014/(\[{"\s])\'/g', '$1\u2018')
     // closing singles & apostrophes
-    .replace(/'/g, '\u2019')
+    .replace('/\'/g', '\u2019')
     // opening doubles
-    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    .replace('/(^|[-\u2014/(\[{\u2018\s])"/g', '$1\u201c')
     // closing doubles
-    .replace(/"/g, '\u201d')
+    .replace('/"/g', '\u201d')
     // ellipses
-    .replace(/\.{3}/g, '\u2026');
+    .replace('/\.{3}/g', '\u2026');
 };
 
 /**

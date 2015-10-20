@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1e972f74ba4e62737e324c7bfc1738d6",
-    "content-hash": "cc0dfc42e4d933d9cabafc7c52fb20af",
+    "hash": "c4198e8a51c13b0d2c96bb54023cf2c6",
+    "content-hash": "444606690390cbbc73e906d61746c25d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -293,16 +293,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.13",
+            "version": "1.12.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f"
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/07ce4e9fba448f4aa48acbb1605c68897dac595f",
-                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/dbdf178992bfa52d6e978e62131162301ff6b76f",
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
                 "shasum": ""
             },
             "require": {
@@ -336,7 +336,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-06-02 08:04:41"
+            "time": "2015-09-30 13:04:03"
         },
         {
             "name": "monolog/monolog",
@@ -2674,16 +2674,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.6.1",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "4e710c294f41857752b370f16aeff52ba76d48b9"
+                "reference": "a48f63ce1a636c86f901b9bdbdadcdbf473bb07b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/4e710c294f41857752b370f16aeff52ba76d48b9",
-                "reference": "4e710c294f41857752b370f16aeff52ba76d48b9",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/a48f63ce1a636c86f901b9bdbdadcdbf473bb07b",
+                "reference": "a48f63ce1a636c86f901b9bdbdadcdbf473bb07b",
                 "shasum": ""
             },
             "require": {
@@ -2737,7 +2737,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-30 23:32:37"
+            "time": "2015-10-07 00:20:04"
         },
         {
             "name": "pdepend/pdepend",
@@ -2845,16 +2845,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f"
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef1ca6835468857944d5c3b48fa503d5554cff2f",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979",
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979",
                 "shasum": ""
             },
             "require": {
@@ -2903,7 +2903,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-14 06:51:16"
+            "time": "2015-10-06 15:47:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3926,7 +3926,9 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0"
+    },
+    "platform-dev": {
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
@@ -3940,6 +3942,5 @@
         "ext-intl": "*",
         "ext-xsl": "*",
         "ext-mbstring": "*"
-    },
-    "platform-dev": []
+    }
 }

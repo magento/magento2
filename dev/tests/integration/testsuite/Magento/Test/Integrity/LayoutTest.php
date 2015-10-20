@@ -166,7 +166,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Theme\Model\Theme\Collection'
         );
-        $themeCollection->addDefaultPattern('*');
         /** @var $themeLayouts \Magento\Framework\View\File[] */
         $themeLayouts = [];
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
@@ -323,7 +322,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Theme\Model\Theme\Collection'
         );
-        $themeCollection->addDefaultPattern('*');
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {
             foreach ($filesRetriever->getFiles($theme, '*.xml') as $file) {

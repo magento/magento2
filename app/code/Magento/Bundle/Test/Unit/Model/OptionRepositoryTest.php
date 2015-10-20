@@ -80,7 +80,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionResourceMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option',
+            '\Magento\Bundle\Model\ResourceModel\Option',
             ['delete', '__wakeup', 'save'],
             [],
             '',
@@ -139,7 +139,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($productMock);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -174,7 +174,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($productMock);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -247,7 +247,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $optionMock = $this->getMock('\Magento\Bundle\Model\Option', [], [], '', false);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -330,7 +330,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
         $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -383,7 +383,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku, $optionId)
             ->willReturn($existingLinks);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -454,7 +454,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
         $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
 
-        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
@@ -619,7 +619,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $attributeValueFactoryMock = $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
         $resourceMock = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [
                 '_construct',
                 'getIdFieldName'

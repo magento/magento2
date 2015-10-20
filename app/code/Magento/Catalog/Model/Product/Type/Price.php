@@ -56,7 +56,7 @@ class Price
     /**
      * Rule factory
      *
-     * @var \Magento\CatalogRule\Model\Resource\RuleFactory
+     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
      */
     protected $_ruleFactory;
 
@@ -71,11 +71,6 @@ class Price
     protected $_groupManagement;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
-     */
-    protected $groupPriceFactory;
-
-    /**
      * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
      */
     protected $tierPriceFactory;
@@ -86,28 +81,27 @@ class Price
     protected $config;
 
     /**
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
+     * Price constructor.
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
+        \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
@@ -118,7 +112,6 @@ class Price
         $this->_eventManager = $eventManager;
         $this->priceCurrency = $priceCurrency;
         $this->_groupManagement = $groupManagement;
-        $this->groupPriceFactory = $groupPriceFactory;
         $this->tierPriceFactory = $tierPriceFactory;
         $this->config = $config;
     }
@@ -146,7 +139,6 @@ class Price
     {
         $price = (float) $product->getPrice();
         return min(
-            $this->_applyGroupPrice($product, $price),
             $this->_applyTierPrice($product, $qty, $price),
             $this->_applySpecialPrice($product, $price)
         );
@@ -184,6 +176,7 @@ class Price
      * @param Product $childProduct
      * @param float $childProductQty
      * @return float
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
@@ -192,48 +185,7 @@ class Price
     }
 
     /**
-     * Apply group price for product
-     *
-     * @param Product $product
-     * @param float $finalPrice
-     * @return float
-     */
-    protected function _applyGroupPrice($product, $finalPrice)
-    {
-        $groupPrice = $product->getGroupPrice();
-        if (is_numeric($groupPrice)) {
-            $finalPrice = min($finalPrice, $groupPrice);
-        }
-        return $finalPrice;
-    }
-
-    /**
-     * Gets list of product group prices
-     *
-     * @param Product $product
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
-     */
-    public function getGroupPrices($product)
-    {
-        $prices = [];
-        $groupPrices = $this->getExistingPrices($product, 'group_price');
-        foreach ($groupPrices as $price) {
-            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
-            $groupPrice = $this->groupPriceFactory->create();
-            $groupPrice->setCustomerGroupId($price['cust_group']);
-            if (array_key_exists('website_price', $price)) {
-                $value = $price['website_price'];
-            } else {
-                $value = $price['price'];
-            }
-            $groupPrice->setValue($value);
-            $prices[] = $groupPrice;
-        }
-        return $prices;
-    }
-
-    /**
-     * Gets the 'group_price' array from the product
+     * Gets the 'tear_price' array from the product
      *
      * @param Product $product
      * @param string $key
@@ -260,39 +212,6 @@ class Price
     }
 
     /**
-     * Sets list of product group prices
-     *
-     * @param Product $product
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
-     * @return $this
-     */
-    public function setGroupPrices($product, array $groupPrices = null)
-    {
-        // null array means leave everything as is
-        if ($groupPrices === null) {
-            return $this;
-        }
-
-        $websiteId = $this->getWebsiteForPriceScope();
-        $allGroupsId = $this->getAllCustomerGroupsId();
-
-        // build the new array of group prices
-        $prices = [];
-        foreach ($groupPrices as $price) {
-            $prices[] = [
-                'website_id' => $websiteId,
-                'cust_group' => $price->getCustomerGroupId(),
-                'website_price' => $price->getValue(),
-                'price' => $price->getValue(),
-                'all_groups' => ($price->getCustomerGroupId() == $allGroupsId)
-            ];
-        }
-        $product->setData('group_price', $prices);
-
-        return $this;
-    }
-
-    /**
      * Returns the website to use for group or tier prices, based on the price scope setting
      *
      * @return int|mixed
@@ -306,35 +225,6 @@ class Price
             $websiteId = $this->_storeManager->getWebsite()->getId();
         }
         return $websiteId;
-    }
-
-    /**
-     * Get product group price for the customer
-     *
-     * @param Product $product
-     * @return float
-     * @deprecated see \Magento\Catalog\Pricing\Price\GroupPrice (MAGETWO-31468)
-     */
-    public function getGroupPrice($product)
-    {
-        $groupPrices = $this->getGroupPrices($product);
-
-        if (empty($groupPrices)) {
-            return $product->getPrice();
-        }
-
-        $customerGroup = $this->_getCustomerGroupId($product);
-
-        $matchedPrice = $product->getPrice();
-        foreach ($groupPrices as $groupPrice) {
-            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
-            if ($groupPrice->getCustomerGroupId() == $customerGroup && $groupPrice->getValue() < $matchedPrice) {
-                $matchedPrice = $groupPrice->getValue();
-                break;
-            }
-        }
-
-        return $matchedPrice;
     }
 
     /**
@@ -364,7 +254,6 @@ class Price
      * @param   float $qty
      * @param   Product $product
      * @return  float|array
-     * @deprecated (MAGETWO-31465)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -548,7 +437,6 @@ class Price
      *
      * @param   Product $product
      * @return  int
-     * @deprecated
      */
     public function getTierPriceCount($product)
     {
@@ -562,7 +450,6 @@ class Price
      * @param   float $qty
      * @param   Product $product
      * @return  array|float
-     * @deprecated
      */
     public function getFormatedTierPrice($qty, $product)
     {
@@ -598,7 +485,6 @@ class Price
      * @param int $qty
      * @param float $finalPrice
      * @return float
-     * @deprecated (MAGETWO-31469)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _applyOptionsPrice($product, $qty, $finalPrice)
@@ -707,16 +593,6 @@ class Price
      * @return bool
      */
     public function isTierPriceFixed()
-    {
-        return $this->isGroupPriceFixed();
-    }
-
-    /**
-     * Check is group price value fixed or percent of original price
-     *
-     * @return bool
-     */
-    public function isGroupPriceFixed()
     {
         return true;
     }

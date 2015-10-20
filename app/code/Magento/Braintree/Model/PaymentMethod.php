@@ -11,7 +11,8 @@ use \Braintree_Exception;
 use \Braintree_Transaction;
 use \Braintree_Result_Successful;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 use Magento\Payment\Model\InfoInterface;
 
@@ -162,6 +163,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
     protected $braintreeCreditCard;
 
     /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -181,7 +187,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @param TransactionCollectionFactory $salesTransactionCollectionFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetaData
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -206,7 +213,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         TransactionCollectionFactory $salesTransactionCollectionFactory,
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -234,6 +242,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         $this->salesTransactionCollectionFactory = $salesTransactionCollectionFactory;
         $this->productMetaData = $productMetaData;
         $this->regionFactory = $regionFactory;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -521,7 +530,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
 
     /**
      * @param InfoInterface $payment
-     * @param float $amount
+     * @param string $amount
      * @return $this
      * @throws LocalizedException
      */
@@ -574,13 +583,14 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * Captures specified amount
      *
      * @param InfoInterface $payment
-     * @param float $amount
+     * @param string $amount
      * @return $this
      * @throws LocalizedException
      */
     public function capture(InfoInterface $payment, $amount)
     {
         try {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             if ($payment->getCcTransId()) {
                 $collection = $this->salesTransactionCollectionFactory->create()
                     ->addFieldToFilter('payment_id', $payment->getId())
@@ -592,8 +602,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                     $this->_debug([$payment->getCcTransId().' - '.$amount]);
                     $this->_debug($this->_convertObjToArray($result));
                     if ($result->success) {
-                        $payment->setIsTransactionClosed(0)
+                        $payment->setIsTransactionClosed(false)
                             ->setShouldCloseParentTransaction(false);
+                        if ($this->isFinalCapture($payment->getParentId(), $amount)) {
+                            $payment->setShouldCloseParentTransaction(true);
+                        }
                     } else {
                         throw new LocalizedException($this->errorHelper->parseBraintreeError($result));
                     }
@@ -636,6 +649,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 }
             }
 
+            // transaction should be voided if it not settled
             $canVoid = ($transaction->status === \Braintree_Transaction::AUTHORIZED
                 || $transaction->status === \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT);
             $result = $canVoid
@@ -643,7 +657,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 : $this->braintreeTransaction->refund($transactionId, $amount);
             $this->_debug($this->_convertObjToArray($result));
             if ($result->success) {
-                $payment->setIsTransactionClosed(1);
+                $payment->setTransactionId($transactionId . '-' . Transaction::TYPE_REFUND);
+                $payment->setIsTransactionClosed(true);
             } else {
                 throw new LocalizedException($this->errorHelper->parseBraintreeError($result));
             }
@@ -733,7 +748,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 }
             }
             if ($match) {
-                $payment->setIsTransactionClosed(1);
+                $payment->setIsTransactionClosed(true);
             }
         }
         return $this;
@@ -872,7 +887,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\DataObject $payment
      * @param \Braintree_Result_Successful $result
-     * @param float $amount
+     * @param string $amount
      * @return \Magento\Framework\DataObject
      */
     protected function processSuccessResult(
@@ -880,15 +895,19 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         \Braintree_Result_Successful $result,
         $amount
     ) {
+        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment->setStatus(self::STATUS_APPROVED)
             ->setCcTransId($result->transaction->id)
             ->setLastTransId($result->transaction->id)
             ->setTransactionId($result->transaction->id)
-            ->setIsTransactionClosed(0)
+            ->setIsTransactionClosed(false)
             ->setCcLast4($result->transaction->creditCardDetails->last4)
             ->setAdditionalInformation($this->getExtraTransactionInformation($result->transaction))
             ->setAmount($amount)
             ->setShouldCloseParentTransaction(false);
+        if ($this->isFinalCapture($payment->getParentId(), $amount)) {
+            $payment->setShouldCloseParentTransaction(true);
+        }
         if (isset($result->transaction->creditCard['token']) && $result->transaction->creditCard['token']) {
             $payment->setTransactionAdditionalInfo('token', $result->transaction->creditCard['token']);
         }
@@ -944,5 +963,22 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
     protected function _convertObjToArray($data)
     {
         return json_decode(json_encode($data), true);
+    }
+
+    /**
+     * Checks whether the capture is final
+     *
+     * @param string $orderId
+     * @param string $amount
+     * @return bool
+     */
+    protected function isFinalCapture($orderId, $amount)
+    {
+        if (!empty($orderId)) {
+            $order = $this->orderRepository->get($orderId);
+            return (float)$order->getTotalDue() === (float) $amount;
+        }
+
+        return false;
     }
 }

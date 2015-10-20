@@ -13,6 +13,9 @@ use Magento\Framework\Config\Dom;
  */
 class Config
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     /**
      * Data extracted from the configuration file
      *
@@ -24,10 +27,14 @@ class Config
      * Constructor
      *
      * @param string $source
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function __construct($source)
-    {
+    public function __construct(
+        $source,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+    ) {
+        $this->urnResolver = $urnResolver;
         $config = new \DOMDocument();
         $config->loadXML($source);
         $errors = Dom::validateDomDocument($config, $this->getSchemaFile());
@@ -46,7 +53,7 @@ class Config
      */
     protected function getSchemaFile()
     {
-        return __DIR__ . '/package.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd');
     }
 
     /**

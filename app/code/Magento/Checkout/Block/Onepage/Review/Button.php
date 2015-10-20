@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * One page checkout order review button
- * @deprecated
  * @removeCandidate
  */
 class Button extends Template

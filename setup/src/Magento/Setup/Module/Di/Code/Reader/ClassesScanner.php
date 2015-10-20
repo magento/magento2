@@ -58,8 +58,8 @@ class ClassesScanner implements ClassesScannerInterface
             if ($fileItem->getExtension() !== 'php') {
                 continue;
             }
-            foreach ($this->excludePatterns as $excludePattern) {
-                if (preg_match($excludePattern, $fileItem->getRealPath())) {
+            foreach ($this->excludePatterns as $excludePatterns) {
+                if ($this->isExclude($fileItem, $excludePatterns)) {
                     continue 2;
                 }
             }
@@ -73,5 +73,25 @@ class ClassesScanner implements ClassesScannerInterface
             }
         }
         return $classes;
+    }
+
+    /**
+     * Find out if file should be excluded
+     *
+     * @param \SplFileInfo $fileItem
+     * @param string $patterns
+     * @return bool
+     */
+    private function isExclude(\SplFileInfo $fileItem, $patterns)
+    {
+        if (!is_array($patterns)) {
+            $patterns = (array)$patterns;
+        }
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $fileItem->getRealPath())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
