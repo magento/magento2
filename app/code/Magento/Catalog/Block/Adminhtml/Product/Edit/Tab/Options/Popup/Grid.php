@@ -75,8 +75,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
             null
         );
 
-        $this->_productFactory->create()->getMediaGalleryEntries();
-
         return $this;
     }
 
