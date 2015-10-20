@@ -105,7 +105,7 @@ app/code/Magento/Checkout/view/frontend/web/js/model/sidebar.js
 app/code/Magento/Checkout/view/frontend/web/js/model/step-navigator.js
 app/code/Magento/Checkout/view/frontend/web/js/model/totals.js
 app/code/Magento/Checkout/view/frontend/web/js/model/url-builder.js
-app/code/Magento/Checkout/view/frontend/web/js/payment.js app/code/Magento/Checkout/view/frontend/web/js/proceed-to-checkout.js
+app/code/Magento/Checkout/view/frontend/web/js/proceed-to-checkout.js
 app/code/Magento/Checkout/view/frontend/web/js/region-updater.js
 app/code/Magento/Checkout/view/frontend/web/js/shopping-cart.js
 app/code/Magento/Checkout/view/frontend/web/js/sidebar.js
@@ -210,6 +210,7 @@ app/code/Magento/Msrp/view/frontend/requirejs-config.js
 app/code/Magento/Multishipping/view/frontend/requirejs-config.js
 app/code/Magento/Multishipping/view/frontend/web/js/multi-shipping.js
 app/code/Magento/Multishipping/view/frontend/web/js/overview.js
+app/code/Magento/Multishipping/view/frontend/web/js/payment.js
 app/code/Magento/OfflinePayments/view/frontend/web/js/view/payment/method-renderer/banktransfer-method.js
 app/code/Magento/OfflinePayments/view/frontend/web/js/view/payment/method-renderer/cashondelivery-method.js
 app/code/Magento/OfflinePayments/view/frontend/web/js/view/payment/method-renderer/checkmo-method.js
