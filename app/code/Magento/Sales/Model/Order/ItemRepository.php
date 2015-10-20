@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Repository class for @see OrderItemInterface

@@ -65,8 +65,8 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        /** @var \Magento\Config\Model\Resource\Config $config */
-        $config = $this->_objectManager->get('Magento\Config\Model\Resource\Config');
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = $this->_objectManager->get('Magento\Config\Model\ResourceModel\Config');
         $config->saveConfig(
             'payment/checkmo/order_status',
             $statusCode,
@@ -103,8 +103,8 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_
     {
         $statusCode = 'custom_new_status';
 
-        /** @var \Magento\Config\Model\Resource\Config $config */
-        $config = $this->_objectManager->get('Magento\Config\Model\Resource\Config');
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = $this->_objectManager->get('Magento\Config\Model\ResourceModel\Config');
         $config->saveConfig('payment/checkmo/order_status', $statusCode, 'default', 0);
 
         $this->_resetConfig();

@@ -26,22 +26,22 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     protected $_downloadableFile = null;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\SampleFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory
      */
     protected $_sampleResFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link
+     * @var \Magento\Downloadable\Model\ResourceModel\Link
      */
     protected $_linkResource;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory
      */
     protected $_linksFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Sample\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory
      */
     protected $_samplesFactory;
 
@@ -77,10 +77,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
-     * @param \Magento\Downloadable\Model\Resource\Link $linkResource
-     * @param \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory
-     * @param \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory $linksFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory $samplesFactory
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
@@ -97,10 +97,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
-        \Magento\Downloadable\Model\Resource\Link $linkResource,
-        \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory,
-        \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory,
+        \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResFactory,
+        \Magento\Downloadable\Model\ResourceModel\Link $linkResource,
+        \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory $linksFactory,
+        \Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory $samplesFactory,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
@@ -136,7 +136,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     public function getLinks($product)
     {
         if ($product->getDownloadableLinks() === null) {
-            /** @var \Magento\Downloadable\Model\Resource\Link\Collection $linkCollection */
+            /** @var \Magento\Downloadable\Model\ResourceModel\Link\Collection $linkCollection */
             $linkCollection = $this->_linksFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
@@ -208,7 +208,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * Get downloadable product samples
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Downloadable\Model\Resource\Sample\Collection
+     * @return \Magento\Downloadable\Model\ResourceModel\Sample\Collection
      */
     public function getSamples($product)
     {

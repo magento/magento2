@@ -9,6 +9,7 @@
     <update handle="sales_order_transactions_grid_block"/>
     <head>
         <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
+        <link src="Magento_Sales::js/bootstrap/order-post-action.js"/>
     </head>
     <update handle="sales_order_item_price"/>
     <body>

@@ -1,43 +1,17 @@
 /**
- * @category    storage
- * @package     test
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates scope binding and registers in to ko.bindingHandlers object */
 define([
     'ko',
-    'Magento_Ui/js/lib/registry/registry',
+    'uiRegistry',
     'jquery',
     'mage/translate'
 ], function (ko, registry, $) {
     'use strict';
 
     var i18n = $.mage.__;
-
-    /**
-     * Fetches components from registry and stores them to context object, then passes it to callback function.
-     * @param {Object} components - map, representing components to be attached to the new context.
-     * @param {Function} callback - Function to be called when components are fetched.
-     */
-    function getMultiple(components, callback) {
-        var key,
-            paths = [],
-            context = {};
-
-        for (key in components) {
-            paths.push(components[key]);
-        }
-
-        registry.get(paths, function () {
-
-            for (key in components) {
-                context[key] = registry.get(components[key]);
-            }
-
-            callback(context);
-        });
-    }
 
     /**
      * Creates child context with passed component param as $data. Extends context with $t helper.
@@ -57,8 +31,6 @@ define([
 
         ko.applyBindingsToDescendants(component, el);
     }
-
-    ko.virtualElements.allowedBindings.scope = true;
 
     ko.bindingHandlers.scope = {
 
@@ -85,13 +57,13 @@ define([
             var component = valueAccessor(),
                 apply = applyComponents.bind(this, el, bindingContext);
 
-            if (typeof component === 'object') {
-                getMultiple(component, apply);
-            } else if (typeof component === 'string') {
+            if (typeof component === 'string') {
                 registry.get(component, apply);
             } else if (typeof component === 'function') {
                 component(apply);
             }
         }
     };
+
+    ko.virtualElements.allowedBindings.scope = true;
 });

@@ -174,7 +174,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_addressItemFactory;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -184,7 +184,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_rateCollector;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory
      */
     protected $_rateCollectionFactory;
 
@@ -249,10 +249,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Address\ItemFactory $addressItemFactory
-     * @param \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory $itemCollectionFactory
      * @param Address\RateFactory $addressRateFactory
      * @param Address\RateCollectorInterfaceFactory $rateCollector
-     * @param \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
      * @param Address\RateRequestFactory $rateRequestFactory
      * @param Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
@@ -263,7 +263,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\CustomAttributeListInterface $attributeList
      * @param TotalsCollector $totalsCollector
      * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
-     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      *
@@ -285,10 +285,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\ItemFactory $addressItemFactory,
-        \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateFactory $addressRateFactory,
         \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector,
-        \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $addressTotalFactory,
@@ -299,7 +299,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         Address\CustomAttributeListInterface $attributeList,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -347,7 +347,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Address');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address');
     }
 
     /**
@@ -538,7 +538,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve address items collection
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {
@@ -779,7 +779,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve collection of quote shipping rates
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getShippingRatesCollection()
     {

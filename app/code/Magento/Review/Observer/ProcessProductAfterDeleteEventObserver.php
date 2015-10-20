@@ -12,22 +12,22 @@ class ProcessProductAfterDeleteEventObserver implements ObserverInterface
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review
+     * @var \Magento\Review\Model\ResourceModel\Review
      */
     protected $_resourceReview;
 
     /**
-     * @var \Magento\Review\Model\Resource\Rating
+     * @var \Magento\Review\Model\ResourceModel\Rating
      */
     protected $_resourceRating;
 
     /**
-     * @param \Magento\Review\Model\Resource\Review $resourceReview
-     * @param \Magento\Review\Model\Resource\Rating $resourceRating
+     * @param \Magento\Review\Model\ResourceModel\Review $resourceReview
+     * @param \Magento\Review\Model\ResourceModel\Rating $resourceRating
      */
     public function __construct(
-        \Magento\Review\Model\Resource\Review $resourceReview,
-        \Magento\Review\Model\Resource\Rating $resourceRating
+        \Magento\Review\Model\ResourceModel\Review $resourceReview,
+        \Magento\Review\Model\ResourceModel\Rating $resourceRating
     ) {
         $this->_resourceReview = $resourceReview;
         $this->_resourceRating = $resourceRating;

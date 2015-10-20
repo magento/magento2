@@ -12,10 +12,11 @@
 define([
     "jquery",
     "accordion",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "mage/validation/validation",
     "mage/translate"
-], function($, accordion){
+], function($, accordion, alert){
     'use strict';
 
     // Base widget, handle ajax events and first section(Checkout Method) in one page checkout accordion
@@ -182,7 +183,9 @@ define([
             if (json.isGuestCheckoutAllowed) {
                 
                 if( !guestChecked && !registerChecked ){
-                    alert( $.mage.__('Please create an account or check out as a guest.') );
+                    alert({
+                        content: $.mage.__('Please create an account or check out as a guest.')
+                    });
                     
                     return false;
                 }
@@ -244,7 +247,9 @@ define([
 
                                 $(this.options.countrySelector).trigger('change');
 
-                                alert(msg);
+                                alert({
+                                    content: msg
+                                });
                             }
 
                             return;

@@ -13,14 +13,14 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $tableateFactoryMock;
 
     protected function setUp()
     {
         $this->tableateFactoryMock =
-            $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory')
+            $this->getMockBuilder('Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -33,7 +33,7 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSave()
     {
-        $tablerateMock = $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\Tablerate')
+        $tablerateMock = $this->getMockBuilder('Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate')
             ->disableOriginalConstructor()
             ->setMethods(['uploadAndImport'])
             ->getMock();

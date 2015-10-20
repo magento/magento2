@@ -11,7 +11,7 @@ use \Magento\Framework\Search\Adapter\Mysql\Mapper;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -62,7 +62,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     private $scoreBuilderFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource|MockObject
+     * @var \Magento\Framework\App\ResourceConnection|MockObject
      */
     private $resource;
 
@@ -88,7 +88,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')

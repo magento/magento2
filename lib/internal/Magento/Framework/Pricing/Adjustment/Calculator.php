@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing\Adjustment;
 
 use Magento\Framework\Pricing\Amount\AmountFactory;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class Calculator

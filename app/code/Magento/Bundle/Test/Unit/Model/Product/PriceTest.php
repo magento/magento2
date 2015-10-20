@@ -62,7 +62,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\RuleFactory',
+            'Magento\CatalogRule\Model\ResourceModel\RuleFactory',
             ['create'],
             [],
             '',

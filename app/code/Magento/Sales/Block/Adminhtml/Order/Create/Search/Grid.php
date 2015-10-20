@@ -139,7 +139,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $attributes = $this->_catalogConfig->getProductAttributes();
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_productFactory->create()->getCollection();
         $collection->setStore(
             $this->getStore()

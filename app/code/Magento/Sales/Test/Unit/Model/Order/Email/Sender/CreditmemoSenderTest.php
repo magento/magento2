@@ -20,7 +20,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoResourceMock;
 
@@ -29,7 +29,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->creditmemoResourceMock = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order\Creditmemo',
+            '\Magento\Sales\Model\ResourceModel\Order\Creditmemo',
             ['saveAttribute'],
             [],
             '',

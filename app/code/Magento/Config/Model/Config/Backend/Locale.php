@@ -14,7 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Locale extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data\CollectionFactory
+     * @var \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory
      */
     protected $_configsFactory;
 
@@ -37,11 +37,11 @@ class Locale extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Config\Model\Resource\Config\Data\CollectionFactory $configsFactory
+     * @param \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configsFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
@@ -51,11 +51,11 @@ class Locale extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Config\Model\Resource\Config\Data\CollectionFactory $configsFactory,
+        \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configsFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -72,7 +72,7 @@ class Locale extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        /** @var $collection \Magento\Config\Model\Resource\Config\Data\Collection */
+        /** @var $collection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
         $collection = $this->_configsFactory->create();
         $collection->addPathFilter('currency/options');
 

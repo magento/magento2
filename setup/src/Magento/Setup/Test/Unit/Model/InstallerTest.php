@@ -144,7 +144,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
 
@@ -171,7 +171,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
@@ -244,7 +244,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $table->expects($this->any())->method('setComment')->willReturn($table);
         $table->expects($this->any())->method('addIndex')->willReturn($table);
         $connection->expects($this->any())->method('newTable')->willReturn($table);
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
@@ -338,11 +338,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
-        $allModules = [
-            'Foo_One' => [],
-            'Bar_Two' => [],
-            'New_Module' => [],
-        ];
         $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses')->will(
             $this->returnValue(
                 [
@@ -350,39 +345,25 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $installer = $this->prepareForUpdateModulesTests();
 
-        $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
-        $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-        $cacheManager->expects($this->once())->method('clean');
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\App\Cache\Manager', $cacheManager]
-            ]));
-        $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
-
-        $expectedModules = [
-            ConfigFilePool::APP_CONFIG => [
-                'modules' => [
-                    'Bar_Two' => 0,
-                    'Foo_One' => 1,
-                    'New_Module' => 1
-                ]
-            ]
-        ];
-
-        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-
-        $newObject = $this->createObject(false, false);
-        $this->configReader->expects($this->once())->method('load')
-            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
-        $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
         $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
         $this->logger->expects($this->at(1))->method('log')->with('File system cleanup:');
         $this->logger->expects($this->at(2))->method('log')
             ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
         $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
-        $newObject->updateModulesSequence();
+        $installer->updateModulesSequence(false);
+    }
+
+    public function testUpdateModulesSequenceKeepGenerated()
+    {
+        $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
+
+        $installer = $this->prepareForUpdateModulesTests();
+
+        $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('Updating modules:');
+        $installer->updateModulesSequence(true);
     }
 
     public function testUninstall()
@@ -462,5 +443,49 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
         $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
         $this->object->cleanupDb();
+    }
+
+    /**
+     * Prepare mocks for update modules tests and returns the installer to use
+     *
+     * @return Installer
+     */
+    private function prepareForUpdateModulesTests()
+    {
+
+        $allModules = [
+            'Foo_One' => [],
+            'Bar_Two' => [],
+            'New_Module' => [],
+        ];
+
+        $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
+        $cacheManager->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache\Manager', $cacheManager]
+            ]));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
+
+        $expectedModules = [
+            ConfigFilePool::APP_CONFIG => [
+                'modules' => [
+                    'Bar_Two' => 0,
+                    'Foo_One' => 1,
+                    'New_Module' => 1
+                ]
+            ]
+        ];
+
+        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+
+        $newObject = $this->createObject(false, false);
+        $this->configReader->expects($this->once())->method('load')
+            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
+        $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
+
+        return $newObject;
     }
 }

@@ -19,11 +19,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     protected $mediaHelper;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    private $jsonEncoder;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
@@ -33,17 +28,17 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\ProductVideo\Helper\Media $mediaHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\ProductVideo\Helper\Media $mediaHelper,
         array $data = []
     ) {
         parent::__construct(
             $context,
             $arrayUtils,
+            $jsonEncoder,
             $data
         );
         $this->mediaHelper = $mediaHelper;
-        $this->jsonEncoder = $jsonEncoder;
     }
 
     /**

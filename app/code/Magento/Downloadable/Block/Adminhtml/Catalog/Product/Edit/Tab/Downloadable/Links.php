@@ -23,7 +23,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Purchased Separately Attribute cache
      *
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected $_purchasedSeparatelyAttribute = null;
 
@@ -140,7 +140,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Retrieve Purchased Separately Attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getPurchasedSeparatelyAttribute()
     {
