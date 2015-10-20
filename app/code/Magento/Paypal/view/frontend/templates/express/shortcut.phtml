@@ -43,9 +43,7 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
     {
         ".paypal-logo.<?php /* @noEscape */ echo $shortcutHtmlId; ?>": {
             "paypalCheckout": {
-                "confirmMessage": "<?php /* @noEscape */ echo $block->escapeJsQuote(
-                        $block->getConfirmationMessage()
-                    ); ?>",
+                "confirmMessage": "<?php echo $block->escapeJsQuote($block->getConfirmationMessage()); ?>",
                 "confirmUrl": "<?php /* @noEscape */ echo !empty($confirmationUrl) ? $confirmationUrl : false; ?>",
                 "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ?
                         (bool)$isInCatalogProduct : false;
