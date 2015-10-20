@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ConfigurableSampleData\Test\TestCase\NavigateConfigurableProductEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
+        <variation name="NavigateProductsTest1">
+            <data name="product/data/url_key" xsi:type="string">stellar-solar-jacket</data>
+            <data name="product/data/name" xsi:type="string">Stellar Solar Jacket</data>
+            <data name="product/data/sku" xsi:type="string">WJ01</data>
+            <data name="product/data/price/value" xsi:type="string">75</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest2">
+            <data name="product/data/url_key" xsi:type="string">eos-v-neck-hoodie</data>
+            <data name="product/data/name" xsi:type="string">Eos V-Neck Hoodie</data>
+            <data name="product/data/sku" xsi:type="string">WH11</data>
+            <data name="product/data/price/value" xsi:type="string">54</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest3">
+            <data name="product/data/url_key" xsi:type="string">gabrielle-micro-sleeve-top</data>
+            <data name="product/data/name" xsi:type="string">Gabrielle Micro Sleeve Top</data>
+            <data name="product/data/sku" xsi:type="string">WS02</data>
+            <data name="product/data/price/value" xsi:type="string">28</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest4">
+            <data name="product/data/url_key" xsi:type="string">electra-bra-top</data>
+            <data name="product/data/name" xsi:type="string">Electra Bra Top</data>
+            <data name="product/data/sku" xsi:type="string">WB01</data>
+            <data name="product/data/price/value" xsi:type="string">39</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest5">
+            <data name="product/data/url_key" xsi:type="string">karmen-yoga-pant</data>
+            <data name="product/data/name" xsi:type="string">Karmen Yoga Pant</data>
+            <data name="product/data/sku" xsi:type="string">WP01</data>
+            <data name="product/data/price/value" xsi:type="string">39</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest6">
+            <data name="product/data/url_key" xsi:type="string">fiona-fitness-short</data>
+            <data name="product/data/name" xsi:type="string">Fiona Fitness Short</data>
+            <data name="product/data/sku" xsi:type="string">WSH01</data>
+            <data name="product/data/price/value" xsi:type="string">29</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest7">
+            <data name="product/data/url_key" xsi:type="string">beaumont-summit-kit</data>
+            <data name="product/data/name" xsi:type="string">Beaumont Summit Kit</data>
+            <data name="product/data/sku" xsi:type="string">MJ01</data>
+            <data name="product/data/price/value" xsi:type="string">42</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest8">
+            <data name="product/data/url_key" xsi:type="string">chaz-kangeroo-hoodie</data>
+            <data name="product/data/name" xsi:type="string">Chaz Kangeroo Hoodie</data>
+            <data name="product/data/sku" xsi:type="string">MH01</data>
+            <data name="product/data/price/value" xsi:type="string">52</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest9">
+            <data name="product/data/url_key" xsi:type="string">zoltan-gym-tee</data>
+            <data name="product/data/name" xsi:type="string">Zoltan Gym Tee</data>
+            <data name="product/data/sku" xsi:type="string">MS06</data>
+            <data name="product/data/price/value" xsi:type="string">29</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest10">
+            <data name="product/data/url_key" xsi:type="string">atlas-fitness-tank</data>
+            <data name="product/data/name" xsi:type="string">Atlas Fitness Tank</data>
+            <data name="product/data/sku" xsi:type="string">MT11</data>
+            <data name="product/data/price/value" xsi:type="string">18</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest11">
+            <data name="product/data/url_key" xsi:type="string">caesar-warm-up-pant</data>
+            <data name="product/data/name" xsi:type="string">Caesar Warm-Up Pant</data>
+            <data name="product/data/sku" xsi:type="string">MP01</data>
+            <data name="product/data/price/value" xsi:type="string">35</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest12">
+            <data name="product/data/url_key" xsi:type="string">arcadio-gym-short</data>
+            <data name="product/data/name" xsi:type="string">Arcadio Gym Short</data>
+            <data name="product/data/sku" xsi:type="string">MSH11</data>
+            <data name="product/data/price/value" xsi:type="string">20</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+    </testCase>
+</config>

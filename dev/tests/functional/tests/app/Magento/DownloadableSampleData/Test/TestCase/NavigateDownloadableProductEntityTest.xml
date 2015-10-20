@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\DownloadableSampleData\Test\TestCase\NavigateDownloadableProductEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
+        <variation name="NavigateProductsTest1">
+            <data name="product/data/url_key" xsi:type="string">luma-yoga-for-life</data>
+            <data name="product/data/name" xsi:type="string">Luma Yoga For Life</data>
+            <data name="product/data/sku" xsi:type="string">240-LV09</data>
+            <data name="product/data/price/value" xsi:type="string">0</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest2">
+            <data name="product/data/url_key" xsi:type="string">solo-power-circuit</data>
+            <data name="product/data/name" xsi:type="string">Solo Power Circuit</data>
+            <data name="product/data/sku" xsi:type="string">240-LV07</data>
+            <data name="product/data/price/value" xsi:type="string">14</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest3">
+            <data name="product/data/url_key" xsi:type="string">yoga-adventure</data>
+            <data name="product/data/name" xsi:type="string">Yoga Adventure</data>
+            <data name="product/data/sku" xsi:type="string">240-LV06</data>
+            <data name="product/data/price/value" xsi:type="string">22</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+    </testCase>
+</config>

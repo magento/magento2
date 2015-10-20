@@ -168,7 +168,7 @@ class AssertProductPage extends AbstractAssertForm
         $fixtureProductDescription = $this->product->getDescription();
         $formProductDescription = $this->productView->getProductDescription();
 
-        if ($fixtureProductDescription == $formProductDescription) {
+        if ($fixtureProductDescription === null || $fixtureProductDescription == $formProductDescription) {
             return null;
         }
         return "Displayed product description on product page(front-end) not equals passed from fixture. "
@@ -182,14 +182,14 @@ class AssertProductPage extends AbstractAssertForm
      */
     protected function verifyShortDescription()
     {
-        $fixtureProductShortDescription = $this->product->getShortDescription();
+        $fixtureShortDescription = $this->product->getShortDescription();
         $formProductShortDescription = $this->productView->getProductShortDescription();
 
-        if ($fixtureProductShortDescription == $formProductShortDescription) {
+        if ($fixtureShortDescription === null || $fixtureShortDescription == $formProductShortDescription) {
             return null;
         }
         return "Displayed product short description on product page(front-end) not equals passed from fixture. "
-            . "Actual: {$formProductShortDescription}, expected: {$fixtureProductShortDescription}.";
+            . "Actual: {$formProductShortDescription}, expected: {$fixtureShortDescription}.";
     }
 
     /**

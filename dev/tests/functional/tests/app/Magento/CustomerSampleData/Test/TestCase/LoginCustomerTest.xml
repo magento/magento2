@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CustomerSampleData\Test\TestCase\LoginCustomerTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
+        <variation name="SampleDataCustomerLoginVariation1">
+            <data name="description" xsi:type="string">Sample Data customer login</data>
+            <data name="customer/data/firstname" xsi:type="string">Veronica</data>
+            <data name="customer/data/lastname" xsi:type="string">Costello</data>
+            <data name="customer/data/email" xsi:type="string">roni_cost@example.com</data>
+            <data name="customer/data/password" xsi:type="string">roni_cost@example.com</data>
+        </variation>
+    </testCase>
+</config>
