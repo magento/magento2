@@ -99,6 +99,7 @@ class TaxAdjustment implements AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {

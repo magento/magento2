@@ -270,11 +270,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\DataObject     $shipping
-     * @param null|false|\Magento\Framework\DataObject     $billing
-     * @param Website                        $website
-     * @param bool                           $calculateTaxes
+     * @param \Magento\Catalog\Model\Product                $product
+     * @param null|false|\Magento\Framework\DataObject      $shipping
+     * @param null|false|\Magento\Framework\DataObject      $billing
+     * @param Website                                       $website
+     * @param bool                                          $calculateTaxes
+     * @param bool                                          $round
      * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
