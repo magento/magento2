@@ -179,7 +179,7 @@ define([
                     });
                     importContainer.load(
                         this.options.productGridUrl,
-                        {form_key: this.options.formKey},
+                        {form_key: this.options.formKey, current_product_id : this.options.currentProductId},
                         function () {
                             importContainer.modal('openModal');
                         }

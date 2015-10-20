@@ -97,6 +97,7 @@ jQuery(function ($) {
             'customOptionsUrl' => $block->getCustomOptionsUrl(),
             'isReadonly' => $block->isReadonly(),
             'itemCount' => $block->getItemCount(),
+            'currentProductId' => $block->getRequest()->getParam('id'),
         ]
     )?>);
     //adding data to templates
