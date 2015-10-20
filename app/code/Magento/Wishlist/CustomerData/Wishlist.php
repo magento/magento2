@@ -142,6 +142,7 @@ class Wishlist implements SectionSourceInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Block\Product\Image
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
     {
