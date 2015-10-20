@@ -13,9 +13,19 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * Anchor is product video
+     */
+    const PATH_ANCHOR_PRODUCT_VIDEO = 'catalog_product_video-link';
+
+    /**
      * @var \Magento\ProductVideo\Helper\Media
      */
     protected $mediaHelper;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_urlBuilder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -25,6 +35,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -32,14 +43,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\ProductVideo\Helper\Media $mediaHelper,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\ProductVideo\Helper\Media $mediaHelper,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->mediaHelper = $mediaHelper;
+        $this->_urlBuilder = $urlBuilder;
         $this->jsonEncoder = $jsonEncoder;
         $this->setUseContainer(true);
     }
@@ -104,7 +117,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Url'),
                 'required' => true,
                 'name' => 'video_url',
-                'note' => 'Youtube or Vimeo supported',
+                'note' => $this->getNoteVideoUrl(),
+
             ]
         );
 
@@ -158,7 +172,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => '',
                 'title' => __('Get Video Information'),
                 'name' => 'new_video_get',
-                'value' => 'Get Video Information',
+                'value' => __('Get Video Information'),
                 'class' => 'action-default'
             ]
         );
@@ -247,5 +261,41 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
         return $this;
+    }
+
+    /**
+     * Get note for video url
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    protected function getNoteVideoUrl()
+    {
+        $result = __('Youtube or Vimeo supported');
+        if (is_null($this->mediaHelper->getYouTubeApiKey())) {
+            $result = __(
+                '<div class="note_youtube_api_key">'
+                . 'Vimeo supported. '
+                . '<br>In order to add YouTube video please <a href="%1">add YouTube API key</a> in video configuration settings.'
+                . '</div>',
+                $this->getConfigApiKeyUrl()
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * Get url for config params
+     *
+     * @return string
+     */
+    protected function getConfigApiKeyUrl()
+    {
+        return $this->_urlBuilder->getUrl(
+            'adminhtml/system_config/edit',
+            [
+                'section' => 'catalog',
+                '_fragment' => self::PATH_ANCHOR_PRODUCT_VIDEO
+            ]
+        );
     }
 }
