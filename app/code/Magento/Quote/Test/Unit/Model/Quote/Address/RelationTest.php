@@ -40,14 +40,14 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     public function testProcessRelation()
     {
         $itemsCollection = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
+            'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
             [],
             [],
             '',
             false
         );
         $shippingRatesCollection = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
+            'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
             [],
             [],
             '',

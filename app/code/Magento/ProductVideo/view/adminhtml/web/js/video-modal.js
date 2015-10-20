@@ -30,21 +30,27 @@ define([
              */
             _bind: function () {
                 $(this.element).on('click', this.showModal.bind(this));
+                $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
+            },
+
+            /**
+             * Open dialog for external video
+             * @private
+             */
+            _onOpenDialog: function (e, imageData) {
+
+                if (imageData['media_type'] !== 'external-video') {
+                    return;
+                }
+                this.showModal();
             },
 
             /**
              * Fired on trigger "openModal"
              */
             showModal: function () {
-                var videoimgRoleInput = $('.video_image_role');
 
                 $('#new-video').modal('openModal');
-                videoimgRoleInput.prop('disabled', false);
-                $('#new_video_form')[0].reset();
-
-                if ($('.image.item').length < 1) {
-                    videoimgRoleInput.prop('checked', true);
-                }
             }
         }
     );

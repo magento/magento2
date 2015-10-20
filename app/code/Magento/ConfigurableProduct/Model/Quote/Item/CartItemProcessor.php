@@ -70,7 +70,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function processProductOptions(CartItemInterface $cartItem)
+    public function processOptions(CartItemInterface $cartItem)
     {
         $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
         $selectedConfigurableOptions = unserialize($attributesOption->getValue());

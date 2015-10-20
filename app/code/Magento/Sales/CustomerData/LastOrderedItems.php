@@ -15,7 +15,7 @@ class LastOrderedItems implements SectionSourceInterface
     const SIDEBAR_ORDER_LIMIT = 5;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
 
@@ -35,7 +35,7 @@ class LastOrderedItems implements SectionSourceInterface
     protected $httpContext;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $orders;
 
@@ -45,14 +45,14 @@ class LastOrderedItems implements SectionSourceInterface
     protected $stockRegistry;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,

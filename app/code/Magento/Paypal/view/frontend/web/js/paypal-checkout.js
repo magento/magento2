@@ -5,9 +5,10 @@
 /*jshint browser:true jquery:true*/
 define([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'jquery/ui',
     'mage/mage'
-], function ($) {
+], function ($, confirm) {
     'use strict';
 
     $.widget('mage.paypalCheckout', {
@@ -18,26 +19,43 @@ define([
         _create: function () {
             this.element.on('click', '[data-action="checkout-form-submit"]', $.proxy(function (e) {
                 var returnUrl = $(e.target).data('checkout-url'),
-                    form;
+                    self = this;
 
                 e.preventDefault();
 
                 if (this.options.confirmUrl && this.options.confirmMessage) {
-                    if (window.confirm(this.options.confirmMessage)) {
-                        returnUrl = this.options.confirmUrl;
-                    }
+                    confirm({
+                        content: this.options.confirmMessage,
+                        actions: {
+                            confirm: function() {
+                                returnUrl = self.options.confirmUrl;
+                                self._redirect(returnUrl);
+                            },
+                            cancel: function() {
+                                self.redirect(returnUrl);
+                            }
+                        }
+                    });
+
+                    return false;
                 }
 
-                if (this.options.isCatalogProduct) {
-                    // find the form from which the button was clicked
-                    form = $(this.options.shortcutContainerClass).closest('form');
+                this._redirect(returnUrl);
 
-                    $(form).find(this.options.paypalCheckoutSelector).val(returnUrl);
-                    $(form).submit();
-                } else {
-                    $.mage.redirect(returnUrl);
-                }
             }, this));
+        },
+        _redirect: function(returnUrl) {
+            var form;
+
+            if (this.options.isCatalogProduct) {
+                // find the form from which the button was clicked
+                form = $(this.options.shortcutContainerClass).closest('form');
+
+                $(form).find(this.options.paypalCheckoutSelector).val(returnUrl);
+                $(form).submit();
+            } else {
+                $.mage.redirect(returnUrl);
+            }
         }
     });
 

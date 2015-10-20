@@ -37,7 +37,7 @@ class Management extends \Magento\Framework\View\Element\Template
     protected $customer;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      */
     protected $regionCollectionFactory;
 
@@ -60,7 +60,7 @@ class Management extends \Magento\Framework\View\Element\Template
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Braintree\Model\Vault $vault
      * @param \Magento\Braintree\Model\Config\Cc $config
@@ -73,7 +73,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Payment\Model\Config $paymentConfig,
         \Magento\Braintree\Model\Vault $vault,
         \Magento\Braintree\Model\Config\Cc $config,

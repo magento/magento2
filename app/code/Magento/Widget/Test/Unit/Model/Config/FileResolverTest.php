@@ -6,9 +6,8 @@
 
 namespace Magento\Widget\Test\Unit\Model\Config;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Widget\Model\Config\FileResolver;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,31 +17,26 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $themesDir;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleReader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $factory;
 
+    /**
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentDirSearch;
+
     protected function setUp()
     {
-        $this->themesDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($this->themesDir);
         $this->moduleReader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $this->factory = $this->getMock('Magento\Framework\Config\FileIteratorFactory', [], [], '', false);
-        $this->object = new FileResolver($filesystem, $this->moduleReader, $this->factory);
+        $this->componentDirSearch = $this->getMock('\Magento\Framework\Component\DirSearch', [], [], '', false);
+        $this->object = new FileResolver($this->moduleReader, $this->factory, $this->componentDirSearch);
     }
 
     public function testGetGlobal()
@@ -59,15 +53,18 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetDesign()
     {
         $expected = new \StdClass();
-        $this->themesDir->expects($this->once())->method('search')->with('/*/*/etc/file')->willReturn('test');
-        $this->factory->expects($this->once())->method('create')->with($this->themesDir, 'test')->willReturn($expected);
+        $this->componentDirSearch->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::THEME, 'etc/file')
+            ->will($this->returnValue(['test']));
+        $this->factory->expects($this->once())->method('create')->with(['test'])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'design'));
     }
 
     public function testGetDefault()
     {
         $expected = new \StdClass();
-        $this->factory->expects($this->once())->method('create')->with($this->themesDir, [])->willReturn($expected);
+        $this->factory->expects($this->once())->method('create')->with([])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'unknown'));
     }
 }

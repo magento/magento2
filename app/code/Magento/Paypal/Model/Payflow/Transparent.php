@@ -53,7 +53,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
      * @param ResponseValidator $responseValidator
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -73,7 +73,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         Gateway $gateway,
         HandlerInterface $errorHandler,
         ResponseValidator $responseValidator,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -123,9 +123,8 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request = $this->buildBasicRequest();
 
         $order = $payment->getOrder();
-        if (!empty($order)) {
-            $request = $this->fillCustomerContacts($order, $request);
-        }
+        $this->addRequestOrderInfo($request, $order);
+        $request = $this->fillCustomerContacts($order, $request);
 
         $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
         $request->setOrigid($payment->getAdditionalInformation('pnref'));

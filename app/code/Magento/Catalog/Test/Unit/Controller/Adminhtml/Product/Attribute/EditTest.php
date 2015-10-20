@@ -28,7 +28,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavAttribute;
 
@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')->getMock();
 
         $this->eavAttribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName'],
             [],
             '',
@@ -165,7 +165,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerMock->expects($this->any())->method('create')
-            ->with('Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->with('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
             ->with('Magento\Backend\Model\Session')
@@ -215,7 +215,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerMock->expects($this->any())->method('create')
-            ->with('Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->with('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
             ->with('Magento\Backend\Model\Session')

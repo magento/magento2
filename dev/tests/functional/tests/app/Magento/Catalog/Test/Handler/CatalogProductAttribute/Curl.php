@@ -42,7 +42,11 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'No' => 0,
             'Filterable (with results)' => 1,
             'Filterable (no results)' => 2
-        ]
+        ],
+        'is_used_for_promo_rules' => [
+            'No' => 0,
+            'Yes' => 1,
+        ],
     ];
 
     /**
@@ -59,10 +63,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
 
         if (isset($data['options'])) {
             foreach ($data['options'] as $key => $values) {
-                if ($values['is_default'] == 'Yes') {
-                    $data['default'][] = $values['view'];
-                }
                 $index = 'option_' . $key;
+                if ($values['is_default'] == 'Yes') {
+                    $data['default'][] = $index;
+                }
                 $data['option']['value'][$index] = [$values['admin'], $values['view']];
                 $data['option']['order'][$index] = $key;
             }

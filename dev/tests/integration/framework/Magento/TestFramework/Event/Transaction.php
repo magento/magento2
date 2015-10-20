@@ -123,10 +123,11 @@ class Transaction
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|\Magento\TestFramework\Db\Adapter\TransactionInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getConnection($connectionName = \Magento\Framework\App\Resource::DEFAULT_CONNECTION)
+    protected function _getConnection($connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
     {
-        /** @var $resource \Magento\Framework\App\Resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
+        /** @var $resource \Magento\Framework\App\ResourceConnection */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\ResourceConnection');
         return $resource->getConnection($connectionName);
     }
 

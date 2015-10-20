@@ -79,7 +79,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -250,7 +250,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product')
+        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -444,7 +444,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCategoryCollection',
@@ -1129,7 +1129,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'images' => [
                 [
-                    "value_id" => 1,
+                    'value_id' => 1,
                     'file' => 'file1.jpg',
                     'label' => 'label_text',
                     'position' => 4,
@@ -1163,7 +1163,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                           ->getMockForAbstractClass();
 
         $result = [
-            "value_id" => 1,
+            'value_id' => 1,
             'file' => 'file1.jpg',
             'label' => 'label_text',
             'position' => 4,
@@ -1225,56 +1225,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider priceDataProvider
-     */
-    public function testGetGroupPrices($originalGroupPrices)
-    {
-        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getGroupPrices');
-    }
-
-    /**
-     * @dataProvider priceDataProvider
-     */
-    public function testGetTierPrices($originalGroupPrices)
-    {
-        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getTierPrices');
-    }
-
-    protected function invokeGetGroupOrTierPrices($originalPrices, $getter)
-    {
-        // the priceModel's getter method will return the originalPrices
-        $priceModelMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Price')
-            ->disableOriginalConstructor()
-            ->setMethods([$getter])
-            ->getMock();
-        $priceModelMock->expects($this->any())
-            ->method($getter)
-            ->will($this->returnValue($originalPrices));
-
-        // the catalogProductType's priceFactory method will return the above priceModel
-        $catalogProductTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
-            ->disableOriginalConstructor()
-            ->setMethods(['priceFactory'])
-            ->getMock();
-        $catalogProductTypeMock->expects(($this->any()))
-            ->method('priceFactory')
-            ->will($this->returnValue($priceModelMock));
-
-        // the productModel
-        $productModel = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product',
-            [
-                'catalogProductType' => $catalogProductTypeMock
-            ]
-        );
-
-        $expectedResultIsEmpty = (empty($originalPrices) ? true : false);
-        $groupPrices = $productModel->$getter();
-        $actualResultIsEmpty = (empty($groupPrices) ? true : false);
-        $this->assertEquals($expectedResultIsEmpty, $actualResultIsEmpty);
-    }
-
-    /**
      * @return array
      */
     public function priceDataProvider()
@@ -1331,7 +1281,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->with($productModel)
             ->willReturn($option1Id);
         $optionColl = $this->objectManagerHelper->getCollectionMock(
-            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Option\Collection',
             [$optionMock1, $optionMock2]
         );
 
@@ -1342,7 +1292,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $joinProcessorMock->expects($this->once())
             ->method('process')
-            ->with($this->isInstanceOf('Magento\Catalog\Model\Resource\Product\Option\Collection'));
+            ->with($this->isInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Option\Collection'));
 
         $expectedOptions = [
             $option1Id => $optionMock1,

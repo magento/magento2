@@ -44,14 +44,14 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
             'dateTime' => $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false),
             'orderRepository' => $this->orderRepository,
             'shipmentItemCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory',
+                    'Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory',
                     [],
                     [],
                     '',
                     false
                 ),
             'trackCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory',
+                    'Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory',
                     [],
                     [],
                     '',
@@ -65,7 +65,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
                     false
                 ),
             'commentCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory',
+                    'Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory',
                     [],
                     [],
                     '',

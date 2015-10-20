@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
@@ -19,7 +20,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
-    const KEY_GROUP_PRICES = 'group_prices';
     const KEY_TIER_PRICES = 'tier_prices';
 
     /**
@@ -53,7 +53,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
     }
 
-    protected function getProduct($sku)
+    /**
+     * @param string $sku
+     * @param string|null $storeCode
+     * @return array|bool|float|int|string
+     */
+    protected function getProduct($sku, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -67,7 +72,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
         return $response;
     }
 
@@ -131,10 +136,56 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
+    /**
+     * @param array $fixtureProduct
+     *
+     * @dataProvider productCreationProvider
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
+    public function testCreateAllStoreCode($fixtureProduct)
+    {
+        $response = $this->saveProduct($fixtureProduct, 'all');
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
+            'Magento\Store\Model\StoreManagerInterface'
+        );
+
+        foreach ($storeManager->getStores(true) as $store) {
+            $code = $store->getCode();
+            if ($code === Store::ADMIN_CODE) {
+                continue;
+            }
+            $this->assertArrayHasKey(
+                ProductInterface::SKU,
+                $this->getProduct($fixtureProduct[ProductInterface::SKU], $code)
+            );
+        }
+        $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
+    }
+
+    /**
+     * @param array $fixtureProduct
+     *
+     * @dataProvider productCreationProvider
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
+    public function testDeleteAllStoreCode($fixtureProduct)
+    {
+        $sku = $fixtureProduct[ProductInterface::SKU];
+        $this->saveProduct($fixtureProduct);
+        $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
+
+        // Delete all with 'all' store code
+        $this->deleteProduct($sku, 'all');
+        $this->getProduct($sku);
+    }
+
     public function testProductLinks()
     {
         // Create simple product
-        $productData =  [
+        $productData = [
             ProductInterface::SKU => "product_simple_500",
             ProductInterface::NAME => "Product Simple 500",
             ProductInterface::VISIBILITY => 4,
@@ -218,6 +269,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct("product_simple_with_related_500");
     }
 
+    /**
+     * @return array
+     */
     protected function getOptionsData()
     {
         return [
@@ -437,6 +491,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
     }
 
+    /**
+     * @param array $product
+     * @return array|bool|float|int|string
+     */
     protected function updateProduct($product)
     {
         $sku = $product[ProductInterface::SKU];
@@ -518,6 +576,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals('simple', $response['items'][0]['sku']);
     }
 
+    /**
+     * @param $customAttributes
+     * @return array
+     */
     protected function convertCustomAttributesToAssociativeArray($customAttributes)
     {
         $converted = [];
@@ -527,6 +589,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         return $converted;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     protected function convertAssociativeArrayToCustomAttributes($data)
     {
         $customAttributes = [];
@@ -591,9 +657,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @param $product
+     * @param string|null $storeCode
      * @return mixed
      */
-    protected function saveProduct($product)
+    protected function saveProduct($product, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -607,7 +674,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        return $this->_webApiCall($serviceInfo, $requestData);
+        return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
     /**
@@ -632,79 +699,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
-    }
-
-    public function testGroupPrices()
-    {
-        // create a product with group prices
-        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
-        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
-        $productData = $this->getSimpleProductData();
-        $productData[self::KEY_GROUP_PRICES] = [
-            [
-                'customer_group_id' => $custGroup1,
-                'value' => 3.14
-            ],
-            [
-                'customer_group_id' => $custGroup2,
-                'value' => 3.45,
-            ]
-        ];
-        $this->saveProduct($productData);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "CREATE: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "CREATE: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.14, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(3.45, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup2, $groupPrices[1]['customer_group_id']);
-
-        // update the product's group prices: update 1st group price, (delete the 2nd group price), add a new one
-        $custGroup3 = 1;
-        $groupPrices[0]['value'] = 3.33;
-        $groupPrices[1] = [
-            'customer_group_id' => $custGroup3,
-            'value' => 2.10,
-        ];
-        $response[self::KEY_GROUP_PRICES] = $groupPrices;
-        $response = $this->updateProduct($response);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "UPDATE 1: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "UPDATE 1: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.33, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
-
-        // update the product without any mention of group prices; no change expected for group pricing
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        unset($response[self::KEY_GROUP_PRICES]);
-        $response = $this->updateProduct($response);
-
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
-        $groupPrices = $response[self::KEY_GROUP_PRICES];
-        $this->assertNotNull($groupPrices, "UPDATE 2: expected to have group prices");
-        $this->assertCount(2, $groupPrices, "UPDATE 2: expected to have 2 'group_prices' objects");
-        $this->assertEquals(3.33, $groupPrices[0]['value']);
-        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
-        $this->assertEquals(2.10, $groupPrices[1]['value']);
-        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
-
-        // update the product with empty group prices; expect to have the existing group prices removed
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $response[self::KEY_GROUP_PRICES] = [];
-        $response = $this->updateProduct($response);
-        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response, "expected to have the 'group_prices' key");
-        $this->assertEmpty($response[self::KEY_GROUP_PRICES], "expected to have an empty array of 'group_prices'");
-
-        // delete the product with group prices; expect that all goes well
-        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
-        $this->assertTrue($response);
     }
 
     public function testTierPrices()

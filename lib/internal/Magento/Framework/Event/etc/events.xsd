@@ -53,21 +53,9 @@
         </xs:annotation>
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="instance" type="xs:string" use="optional" />
-        <xs:attribute name="method" type="methodName" use="optional" />
         <xs:attribute name="disabled" type="xs:boolean" use="optional" />
         <xs:attribute name="shared" type="xs:boolean" use="optional" />
     </xs:complexType>
-
-    <xs:simpleType name="methodName">
-        <xs:annotation>
-            <xs:documentation>
-                Method name can contain only English letters.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z]+" />
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:simpleType name="eventName">
         <xs:annotation>

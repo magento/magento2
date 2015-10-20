@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
@@ -32,7 +32,7 @@ class Adapter implements AdapterInterface
     protected $responseFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resource;
 
@@ -49,14 +49,14 @@ class Adapter implements AdapterInterface
     /**
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param AggregationBuilder $aggregationBuilder
      * @param TemporaryStorageFactory $temporaryStorageFactory
      */
     public function __construct(
         Mapper $mapper,
         ResponseFactory $responseFactory,
-        Resource $resource,
+        ResourceConnection $resource,
         AggregationBuilder $aggregationBuilder,
         TemporaryStorageFactory $temporaryStorageFactory
     ) {

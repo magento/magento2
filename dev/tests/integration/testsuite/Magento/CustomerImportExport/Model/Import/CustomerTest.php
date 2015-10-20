@@ -84,9 +84,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->directoryWrite
         );
 
-        /** @var $customersCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
         $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
 
@@ -153,9 +153,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->directoryWrite
         );
 
-        /** @var $customerCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customerCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
         $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
 

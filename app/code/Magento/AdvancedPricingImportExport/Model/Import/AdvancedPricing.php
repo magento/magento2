@@ -8,7 +8,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class AdvancedPricing
@@ -32,15 +32,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const COL_TIER_PRICE = 'tier_price';
 
-    const COL_GROUP_PRICE_WEBSITE = 'group_price_website';
-
-    const COL_GROUP_PRICE_CUSTOMER_GROUP = 'group_price_customer_group';
-
-    const COL_GROUP_PRICE = 'group_price';
-
     const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
-
-    const TABLE_GROUPED_PRICE = 'catalog_product_entity_group_price';
 
     const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
 
@@ -50,7 +42,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const VALIDATOR_WEBSITE = 'validator_website';
 
-    const VALIDATOR_GROUP_PRICE = 'validator_group_price';
+    const VALIDATOR_TEAR_PRICE = 'validator_tear_price';
 
     /**
      * Validation failure message template definitions
@@ -65,9 +57,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_SITE => 'Tier Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_GROUP => 'Tier Price customer group is invalid',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
-        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
-        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group is invalid',
-        ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
         ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL =>
             'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
     ];
@@ -90,9 +79,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         self::COL_TIER_PRICE_CUSTOMER_GROUP,
         self::COL_TIER_PRICE_QTY,
         self::COL_TIER_PRICE,
-        self::COL_GROUP_PRICE_WEBSITE,
-        self::COL_GROUP_PRICE_CUSTOMER_GROUP,
-        self::COL_GROUP_PRICE,
     ];
 
     /**
@@ -103,7 +89,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $logInHistory = true;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory
      */
     protected $_resourceFactory;
 
@@ -165,41 +151,41 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
      * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
-     * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+     * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
+        \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,
         \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
-        AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+        AdvancedPricing\Validator\TierPrice $tierPriceValidator
     ) {
         $this->_localeDate = $localeDate;
         $this->jsonHelper = $jsonHelper;
@@ -215,7 +201,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_validators[self::VALIDATOR_MAIN] = $validator->init($this);
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
-        $this->_validators[self::VALIDATOR_GROUP_PRICE] = $groupPriceValidator;
+        $this->_validators[self::VALIDATOR_TEAR_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
@@ -228,7 +214,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Validator object getter.
      *
      * @param string $type
-     * @return AdvancedPricing\Validator|AdvancedPricing\Validator\Website|AdvancedPricing\Validator\GroupPrice
+     * @return AdvancedPricing\Validator|AdvancedPricing\Validator\Website
      */
     protected function _getValidator($type)
     {
@@ -333,8 +319,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
         }
         if ($listSku) {
-            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE);
-            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
+            $this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
             $this->setUpdatedAt($listSku);
         }
         return $this;
@@ -367,7 +352,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $tierPrices = [];
-            $groupPrices = [];
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
@@ -391,33 +375,19 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                         'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                 }
-                if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
-                    $groupPrices[$rowSku][] = [
-                        'all_groups' => self::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
-                        'customer_group_id' => $this->getCustomerGroupId(
-                            $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]
-                        ),
-                        'value' => $rowData[self::COL_GROUP_PRICE],
-                        'website_id' => $this->getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
-                    ];
-                }
             }
             if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
                 if ($listSku) {
-                    $this->processCountNewPrices($tierPrices, $groupPrices);
-                    if ($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
-                        && $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
-                        $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
-                            ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
+                    $this->processCountNewPrices($tierPrices);
+                    if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                        $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
                         $this->setUpdatedAt($listSku);
                     }
                 }
             } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
-                    ->processCountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
-                    ->processCountNewPrices($tierPrices, $groupPrices);
-                $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
-                    ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
+                    ->processCountNewPrices($tierPrices);
+                $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
                 if ($listSku) {
                     $this->setUpdatedAt($listSku);
                 }
@@ -457,13 +427,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     }
 
     /**
-     * Deletes tier prices and group prices.
+     * Deletes tier prices prices.
      *
      * @param array $listSku
      * @param string $tableName
      * @return bool
      */
-    protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
+    protected function deleteProductTierPrices(array $listSku, $tableName)
     {
         if ($tableName && $listSku) {
             if (!$this->_cachedSkuToDelete) {
@@ -530,7 +500,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        $customerGroups = $this->_getValidator(self::VALIDATOR_GROUP_PRICE)->getCustomerGroups();
+        $customerGroups = $this->_getValidator(self::VALIDATOR_TEAR_PRICE)->getCustomerGroups();
         return $customerGroup == self::VALUE_ALL_GROUPS ? 0 : $customerGroups[$customerGroup];
     }
 
@@ -598,15 +568,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Count new prices
      *
      * @param array $tierPrices
-     * @param array $groupPrices
      * @return $this
      */
-    protected function processCountNewPrices(array $tierPrices, array $groupPrices)
+    protected function processCountNewPrices(array $tierPrices)
     {
         foreach ($tierPrices as $productPrices) {
-            $this->countItemsCreated += count($productPrices);
-        }
-        foreach ($groupPrices as $productPrices) {
             $this->countItemsCreated += count($productPrices);
         }
         $this->countItemsCreated -= $this->countItemsUpdated;

@@ -6,15 +6,10 @@
 namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Css\PreProcessor\Adapter\Oyejorge;
 use Magento\Framework\Phrase;
-use Magento\Framework\View\DesignInterface;
 use Magento\Setup\Module\I18n\Locale;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -24,7 +19,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Email\Model\Template\Filter
      */
-    protected $model = null;
+    protected $model;
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -96,8 +91,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider layoutDirectiveDataProvider
      *
      * @param string $area
@@ -106,32 +102,16 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(__DIR__) . '/_files/design',
-                    ],
-                ],
-            ]
-        );
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get('Magento\Theme\Model\Theme\Registration');
+        $registration->register();
         $this->model = $this->objectManager->create('Magento\Email\Model\Template\Filter');
-
-        $themes = ['frontend' => 'Magento/default', 'adminhtml' => 'Magento/default'];
-        $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
-        $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
-
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
-
-        $collection = $this->objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
-        $themeId = $collection->getThemeByFullPath('frontend/Magento/default')->getId();
-        $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
-            ->setValue(DesignInterface::XML_PATH_THEME_ID, $themeId, ScopeInterface::SCOPE_STORE);
-
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $this->objectManager->create('Magento\Framework\View\Layout');
         $this->objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
-        $this->objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/default');
+        $this->objectManager->get('Magento\Framework\View\DesignInterface')
+            ->setDesignTheme('Magento_EmailTest/default');
 
         $actualOutput = $this->model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
@@ -222,8 +202,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * as well as supporting loading files from a theme fallback structure.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider cssDirectiveDataProvider
      *
      * @param int $templateType
@@ -232,6 +213,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCssDirective($templateType, $directiveParams, $expectedOutput)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
         $this->model->setStoreId('fixturestore')
             ->setPlainTemplateMode($templateType == TemplateTypesInterface::TYPE_TEXT);
@@ -254,17 +240,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'CSS from theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-1.css"',
-                'color: #111;'
+                'color: #111'
             ],
             'CSS from parent theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-2.css"',
-                'color: #222;'
+                'color: #222'
             ],
             'CSS from grandparent theme' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-3.css"',
-                'color: #333;'
+                'color: #333'
             ],
             'Missing file parameter' => [
                 TemplateTypesInterface::TYPE_HTML,
@@ -284,7 +270,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/file-with-error.css"',
-                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\View\Asset\ContentProcessorInterface::ERROR_MESSAGE_PREFIX,
             ],
         ];
     }
@@ -294,8 +280,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * as well as supporting loading files from a theme fallback structure.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider inlinecssDirectiveDataProvider
      *
      * @param string $templateText
@@ -311,15 +298,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $plainTemplateMode = false,
         $isChildTemplateMode = false
     ) {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
         $this->model->setPlainTemplateMode($plainTemplateMode);
         $this->model->setIsChildTemplate($isChildTemplateMode);
 
-        if ($productionMode) {
-            $this->objectManager->get('Magento\Framework\App\State')
-                ->setMode(State::MODE_PRODUCTION);
-        }
+        $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
+        $this->objectManager->get('Magento\Framework\App\State')->setMode($appMode);
 
         $this->assertContains($expectedOutput, $this->model->filter($templateText));
     }
@@ -366,7 +356,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\View\Asset\ContentProcessorInterface::ERROR_MESSAGE_PREFIX,
                 false,
             ],
         ];
@@ -374,14 +364,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider
      *
      * @param string $templateText
      */
     public function testInlinecssDirectiveThrowsExceptionWhenMissingParameter($templateText)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
         $this->model->filter($templateText);
@@ -407,7 +403,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUpDesignParams()
     {
-        $themeCode = 'Vendor/custom_theme';
+        $themeCode = 'Vendor_EmailTest/custom_theme';
         $this->model->setDesignParams([
             'area' => Area::AREA_FRONTEND,
             'theme' => $themeCode,

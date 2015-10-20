@@ -34,6 +34,9 @@ return [
             'Magento\Setup\Controller\Maintenance',
             'Magento\Setup\Controller\OtherComponentsGrid',
             'Magento\Setup\Controller\DataOption',
+            'Magento\Setup\Controller\Connect',
+            'Magento\Setup\Controller\SystemConfig',
+            'Magento\Setup\Controller\InstallExtensionGrid',
         ],
         'instance' => [
             'preference' => [
@@ -41,8 +44,9 @@ return [
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
                 'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Quiet',
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
-                'Magento\Framework\Module\ModuleRegistryInterface' => 'Magento\Framework\Module\Registrar',
                 'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',
+                'Magento\Framework\Component\ComponentRegistrarInterface' =>
+                    'Magento\Framework\Component\ComponentRegistrar',
             ],
         ],
     ],

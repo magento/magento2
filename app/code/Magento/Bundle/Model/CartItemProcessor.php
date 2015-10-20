@@ -76,7 +76,7 @@ class CartItemProcessor implements CartItemProcessorInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function processProductOptions(CartItemInterface $cartItem)
+    public function processOptions(CartItemInterface $cartItem)
     {
         if ($cartItem->getProductType() !== \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             return $cartItem;

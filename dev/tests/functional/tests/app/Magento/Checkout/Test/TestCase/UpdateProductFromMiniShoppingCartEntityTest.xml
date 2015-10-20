@@ -41,5 +41,12 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart" />
         </variation>
+        <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation5">
+            <data name="description" xsi:type="string">Update Virtual product in mini shopping cart</data>
+            <data name="originalProduct" xsi:type="string">catalogProductVirtual::default</data>
+            <data name="checkoutData/dataset" xsi:type="string">virtual_update_mini_shopping_cart</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+        </variation>
     </testCase>
 </config>

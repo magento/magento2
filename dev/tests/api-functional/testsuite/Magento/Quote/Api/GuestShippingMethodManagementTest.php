@@ -25,10 +25,16 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
      */
     protected $quote;
 
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $this->totalsCollector = $this->objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
     }
 
     protected function getServiceInfo()
@@ -64,7 +70,8 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $cartId = $quoteIdMask->getMaskedId();
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
         $requestData = [
             'cartId' => $cartId,
             'carrierCode' => 'flatrate',
@@ -166,7 +173,8 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
 
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->quote, $shippingAddress);
+        $shippingAddress->save();
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $data = [

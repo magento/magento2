@@ -11,8 +11,7 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "suggest": {
       "magento/module-multishipping": "1.0.0-beta"
@@ -23,12 +22,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/GiftMessage"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\GiftMessage\\": ""
+        }
     }
 }
