@@ -138,6 +138,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      *
      * @param  int|null $storeId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getWhichCalcPriceToUse($storeId = null)
     {
