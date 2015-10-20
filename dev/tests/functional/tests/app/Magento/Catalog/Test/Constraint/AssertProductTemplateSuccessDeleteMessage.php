@@ -10,18 +10,18 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductTemplateSuccessDeleteMessage
- * Check Product Templates success delete message
+ * Class AssertAttributeSetSuccessDeleteMessage
+ * Check Attribute Sets success delete message
  */
-class AssertProductTemplateSuccessDeleteMessage extends AbstractConstraint
+class AssertAttributeSetSuccessDeleteMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked
      */
-    const SUCCESS_DELETE_MESSAGE = 'The product template has been removed.';
+    const SUCCESS_DELETE_MESSAGE = 'The attribute set has been removed.';
 
     /**
-     * Assert that after deleting product template success delete message appears
+     * Assert that after deleting attribute set success delete message appears
      *
      * @param CatalogProductSetIndex $productSetIndex
      * @return void
@@ -45,6 +45,6 @@ class AssertProductTemplateSuccessDeleteMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Templates success delete message is present.';
+        return 'Attribute Sets success delete message is present.';
     }
 }
