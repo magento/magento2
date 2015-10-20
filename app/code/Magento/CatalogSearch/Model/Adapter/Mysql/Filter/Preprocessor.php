@@ -133,25 +133,15 @@ class Preprocessor implements PreprocessorInterface
                 $value
             );
         } else {
-            $table = $attribute->getBackendTable();
+            $table = $this->resource->getTableName('catalog_product_index_eav_decimal');
             $select = $this->connection->select();
-            $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
 
             $currentStoreId = $this->scopeResolver->getScope()->getId();
 
             $select->from(['main_table' => $table], 'entity_id')
-                ->joinLeft(
-                    ['current_store' => $table],
-                    'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
-                    . $currentStoreId,
-                    null
-                )
-                ->columns([$filter->getField() => $ifNullCondition])
-                ->where(
-                    'main_table.attribute_id = ?',
-                    $attribute->getAttributeId()
-                )
-                ->where('main_table.store_id = ?', Store::DEFAULT_STORE_ID)
+                ->columns([$filter->getField() => 'main_table.value'])
+                ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
+                ->where('main_table.store_id = ?', $currentStoreId)
                 ->having($query);
 
             $resultQuery = 'search_index.entity_id IN (
