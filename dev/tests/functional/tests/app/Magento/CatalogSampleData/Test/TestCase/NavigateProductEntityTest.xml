@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogSampleData\Test\TestCase\NavigateProductEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
+        <variation name="NavigateProductsTest1">
+            <data name="product/data/url_key" xsi:type="string">overnight-duffle</data>
+            <data name="product/data/name" xsi:type="string">Overnight Duffle</data>
+            <data name="product/data/sku" xsi:type="string">24-WB07</data>
+            <data name="product/data/price/value" xsi:type="string">45</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest2">
+            <data name="product/data/url_key" xsi:type="string">sprite-foam-roller</data>
+            <data name="product/data/name" xsi:type="string">Sprite Foam Roller</data>
+            <data name="product/data/sku" xsi:type="string">24-WG088</data>
+            <data name="product/data/price/value" xsi:type="string">19</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest3">
+            <data name="product/data/url_key" xsi:type="string">endurance-watch</data>
+            <data name="product/data/name" xsi:type="string">Endurance Watch</data>
+            <data name="product/data/sku" xsi:type="string">24-MG01</data>
+            <data name="product/data/price/value" xsi:type="string">49</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+    </testCase>
+</config>
