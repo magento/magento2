@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use \Braintree_Result_Successful;
@@ -2378,6 +2379,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
 
         $this->model->refund($paymentObject, $amount);
         $this->assertEquals(1, $paymentObject->getIsTransactionClosed());
+        $this->assertEquals($refundTransactionId . '-' .Transaction::TYPE_REFUND, $paymentObject->getTransactionId());
     }
 
     /**
