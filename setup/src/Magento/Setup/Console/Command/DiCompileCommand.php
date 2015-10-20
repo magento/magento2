@@ -8,8 +8,10 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
@@ -44,6 +46,14 @@ class DiCompileCommand extends Command
     /** @var array */
     private $excludedPathsList;
 
+    /** @var DriverInterface */
+    private $fileDriver;
+
+    /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
     /**
      * Constructor
      *
@@ -52,19 +62,25 @@ class DiCompileCommand extends Command
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Filesystem $filesystem
+     * @param DriverInterface $fileDriver
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
         DirectoryList $directoryList,
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        DriverInterface $fileDriver,
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
+        $this->fileDriver       = $fileDriver;
+        $this->componentRegistrar  = $componentRegistrar;
         parent::__construct();
     }
 
@@ -81,26 +97,66 @@ class DiCompileCommand extends Command
     }
 
     /**
+     * Checks that application is installed and DI resources are cleared
+     *
+     * @return string[]
+     */
+    private function checkEnvironment()
+    {
+        $messages = [];
+        if (!$this->deploymentConfig->isAvailable()) {
+            $messages[] = 'You cannot run this command because the Magento application is not installed.';
+        }
+
+        /**
+         * By the time the command is able to execute, the Object Management configuration is already contaminated
+         * by old config info, and it's too late to just clear the files in code.
+         *
+         * TODO: reconfigure OM in runtime so DI resources can be cleared after command launches
+         *
+         */
+        $path = $this->directoryList->getPath(DirectoryList::DI);
+        if ($this->fileDriver->isExists($path)) {
+            $messages[] = "DI configuration must be cleared before running compiler. Please delete '$path'.";
+        }
+
+        return $messages;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $appCodePath = $this->directoryList->getPath(DirectoryList::MODULES);
-        $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
-        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln('You cannot run this command because the Magento application is not installed.');
+        $errors = $this->checkEnvironment();
+        if ($errors) {
+            foreach ($errors as $line) {
+                $output->writeln($line);
+            }
             return;
         }
+
+        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
+
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
-            'application' => $appCodePath,
-            'library' => $libraryPath . '/Magento/Framework',
+            'application' => $modulePaths,
+            'library' => $libraryPaths,
             'generated_helpers' => $generationPath
         ];
+        $excludedModulePaths = [];
+        foreach ($modulePaths as $appCodePath) {
+            $excludedModulePaths[] = '#^' . $appCodePath . '/Test#';
+        }
+        $excludedLibraryPaths = [];
+        foreach ($libraryPaths as $libraryPath) {
+            $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
+        }
         $this->excludedPathsList = [
-            'application' => '#^' . $appCodePath . '/[\\w]+/[\\w]+/Test#',
-            'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+            'application' => $excludedModulePaths,
+            'framework' => $excludedLibraryPaths
         ];
         $dataAttributesIncludePattern = [
             'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'
@@ -237,11 +293,11 @@ class DiCompileCommand extends Command
     ) {
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [

@@ -47,7 +47,7 @@ class PrintOrderOnFrontendStep implements TestStepInterface
      */
     public function run()
     {
-        $this->salesGuestView->getActionsToolbar()->clickLink('Print Order');
+        $this->salesGuestView->getActionsToolbar()->clickLink('Print');
         $this->browser->selectWindow();
     }
 }

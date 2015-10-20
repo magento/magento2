@@ -5,8 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,21 +13,17 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom($file);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
+        /** @var \Magento\Framework\View\Xsd\Reader $reader */
+        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\Xsd\Reader'
         );
+        $mergeXsd = $reader->read();
+        $domConfig = new \Magento\Framework\Config\Dom($file);
         $result = $domConfig->validate(
-            $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
-                ->getAbsolutePath('Magento/Framework/Config/etc/view.xsd'),
+            $mergeXsd,
             $errors
         );
-        $message = "Invalid XML-file: {$file}\n";
-        foreach ($errors as $error) {
-            $message .= "{$error->message} Line: {$error->line}\n";
-        }
-        $this->assertTrue($result, $message);
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
     /**

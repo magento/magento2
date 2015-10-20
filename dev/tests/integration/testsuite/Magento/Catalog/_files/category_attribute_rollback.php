@@ -10,9 +10,9 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+    ->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
 
 $attribute->loadByCode(3, 'test_attribute_code_666');
 

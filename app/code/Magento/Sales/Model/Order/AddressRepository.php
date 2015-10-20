@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;

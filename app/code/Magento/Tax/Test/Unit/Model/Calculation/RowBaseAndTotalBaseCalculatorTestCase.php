@@ -152,7 +152,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
                     self::MOCK_VALUE => 1,
                 ],
                 [
-                    self::ONCE => true,
+                    self::ONCE => false,
                     self::MOCK_METHOD_NAME => 'getCode',
                     self::MOCK_VALUE => self::CODE
                 ],

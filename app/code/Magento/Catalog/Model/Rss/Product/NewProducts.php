@@ -43,7 +43,7 @@ class NewProducts
 
     /**
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductsCollection($storeId)
     {
@@ -56,7 +56,7 @@ class NewProducts
         $todayEndOfDayDate = $this->localeDate->date()
             ->setTime(23, 59, 59)
             ->format('Y-m-d H:i:s');
-        /** @var $products \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $products \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $products = $product->getResourceCollection();
         $products->setStoreId($storeId);
         $products->addStoreFilter()->addAttributeToFilter(

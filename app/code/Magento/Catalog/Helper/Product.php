@@ -53,11 +53,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_coreRegistry;
 
     /**
-     * @var string
-     */
-    protected $_typeSwitcherLabel;
-
-    /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
     protected $_attributeConfig;
@@ -103,7 +98,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param string $typeSwitcherLabel
      * @param array $reindexPriceIndexerData
      * @param array $reindexProductCategoryIndexerData
      * @param ProductRepositoryInterface $productRepository
@@ -117,14 +111,12 @@ class Product extends \Magento\Framework\Url\Helper\Data
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        $typeSwitcherLabel,
         $reindexPriceIndexerData,
         $reindexProductCategoryIndexerData,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
         $this->_catalogSession = $catalogSession;
-        $this->_typeSwitcherLabel = $typeSwitcherLabel;
         $this->_attributeConfig = $attributeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_assetRepo = $assetRepo;
@@ -581,15 +573,5 @@ class Product extends \Magento\Framework\Url\Helper\Data
     public function getAttributesAllowedForAutogeneration()
     {
         return $this->_attributeConfig->getAttributeNames('used_in_autogeneration');
-    }
-
-    /**
-     * Get label for virtual control
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTypeSwitcherControlLabel()
-    {
-        return __($this->_typeSwitcherLabel);
     }
 }

@@ -36,8 +36,8 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = realpath(__DIR__ . '/_files/invalid.xml');
         $expected = [
-            "Element 'block', attribute 'type': The attribute 'type' is not allowed.",
-            "Element 'actions': This element is not expected. Expected is ( property ).",
+            "Element 'block', attribute 'type': The attribute 'type' is not allowed.\nLine: 9\n",
+            "Element 'actions': This element is not expected. Expected is ( property ).\nLine: 10\n",
         ];
         $xmlString = file_get_contents($xmlFile);
 

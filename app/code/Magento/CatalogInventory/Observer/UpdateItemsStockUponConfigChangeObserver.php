@@ -7,21 +7,22 @@
 namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
  */
-class UpdateItemsStockUponConfigChangeObserver
+class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock
      */
     protected $resourceStock;
 
     /**
-     * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock
      */
-    public function __construct(\Magento\CatalogInventory\Model\Resource\Stock $resourceStock)
+    public function __construct(\Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock)
     {
         $this->resourceStock = $resourceStock;
     }
@@ -32,7 +33,7 @@ class UpdateItemsStockUponConfigChangeObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $website = $observer->getEvent()->getWebsite();
         $this->resourceStock->updateSetOutOfStock($website);

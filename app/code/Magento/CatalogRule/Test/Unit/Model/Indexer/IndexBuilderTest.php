@@ -18,7 +18,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $indexBuilder;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -28,7 +28,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $ruleCollectionFactory;
 
@@ -116,14 +116,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',
             false
         );
         $this->ruleCollectionFactory = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\Rule\CollectionFactory',
+            'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
             ['create', 'addFieldToFilter'],
             [],
             '',
@@ -168,7 +168,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->rules->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
-        $this->rules->expects($this->any())->method('getConditions')->will($this->returnValue($this->combine));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
 
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
@@ -180,7 +179,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->product->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
 
-        $this->combine->expects($this->any())->method('validate')->will($this->returnValue(true));
+        $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
@@ -205,7 +204,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
-        $groupPriceAttrMock = $this->getMock(
+        $priceAttrMock = $this->getMock(
             'Magento\Catalog\Model\Entity\Attribute',
             ['getBackend'],
             [],
@@ -213,39 +212,35 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $backendModelMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice',
+            'Magento\Catalog\Model\Product\Attribute\Backend\Tierprice',
             ['getResource'],
             [],
             '',
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice',
             ['getMainTable'],
             [],
             '',
             false
         );
-        $resourceMock->expects($this->once())
+        $resourceMock->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue('catalog_product_entity_group_price'));
-        $backendModelMock->expects($this->once())
+            ->will($this->returnValue('catalog_product_entity_tear_price'));
+        $backendModelMock->expects($this->any())
             ->method('getResource')
             ->will($this->returnValue($resourceMock));
-        $groupPriceAttrMock->expects($this->once())
+        $priceAttrMock->expects($this->any())
             ->method('getBackend')
             ->will($this->returnValue($backendModelMock));
         $this->eavConfig->expects($this->at(0))
-            ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'group_price')
-            ->will($this->returnValue($groupPriceAttrMock));
-        $this->eavConfig->expects($this->at(1))
             ->method('getAttribute')
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
             ->will($this->returnValue($this->attribute));
 
         $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
-        
+
         $this->indexBuilder->reindexByIds([1]);
     }
 }

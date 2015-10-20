@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.totals">
             <arguments>
@@ -48,9 +48,9 @@
                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/cart/totals/grand-total</item>
                                     <item name="config" xsi:type="array">
                                         <item name="template" xsi:type="string">Magento_Tax/checkout/cart/totals/grand-total</item>
-                                        <item name="exclTaxLabel" xsi:type="string">Grand Total Excl. Tax</item>
-                                        <item name="inclTaxLabel" xsi:type="string">Grand Total Incl. Tax</item>
-                                        <item name="title" xsi:type="string">Grand Total</item>
+                                        <item name="exclTaxLabel" xsi:type="string">Order Total Excl. Tax</item>
+                                        <item name="inclTaxLabel" xsi:type="string">Order Total Incl. Tax</item>
+                                        <item name="title" xsi:type="string">Order Total</item>
                                     </item>
                                 </item>
                             </item>

@@ -243,7 +243,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $eventManager->expects($this->any())->method('dispatch')->will($this->returnValue(true));
 
-        $optionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
+        $optionCollection = $this->getMockBuilder('\Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $optionCollection->expects($this->any())

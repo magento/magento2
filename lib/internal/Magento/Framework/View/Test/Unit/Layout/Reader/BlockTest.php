@@ -11,11 +11,6 @@ namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use Magento\Framework\View\Layout\Reader\Block;
 
-/**
- * Class BlockTest
- *
- * @covers Block
- */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**

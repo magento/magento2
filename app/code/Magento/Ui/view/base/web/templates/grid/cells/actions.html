@@ -4,55 +4,49 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: $col.isSingle($row()._rowIndex) -->
+<a
+    class="action-menu-item"
+    data-bind="
+        repeat: {
+            foreach: $col.getVisibleActions($row()._rowIndex),
+            item: '$action'
+        }"
+    data-repeat-bind="
+        attr: {
+            href: $action().href
+        },
+        click: $col.getActionHandler($action()),
+        text: $action().label"
+    ></a>
+<!-- /ko -->
 
-<td data-bind="visible: visible" class="data-grid-actions-cell">
-    <!-- ko if: isSingle(row._rowIndex) -->
-        <!-- ko foreach: getVisibleActions(row._rowIndex) -->
-    <a
-        class="action-menu-item"
+<!-- ko if: $col.isMultiple($row()._rowIndex) -->
+<div
+    class="action-select-wrap"
+    data-bind="collapsible">
+    <button class="action-select" data-bind="toggleCollapsible">
+        <span data-bind="i18n: 'Select'"></span>
+    </button>
+    <ul
+        class="action-menu"
         data-bind="
-            attr: {
-                href: $data.href
-            },
-            click: $parent.isHandlerRequired(index, rowIndex) ?
-                $parent.applyAction.bind($parent, index, rowIndex) :
-                false,
-            text: $data.label"></a>
-        <!-- /ko -->
-    <!-- /ko -->
-
-    <!-- ko if: isMultiple(row._rowIndex) -->
-    <div
-        class="action-select-wrap"
-        data-bind="
-            css : {
-                '_active' : opened() === row._rowIndex
-            },
-            outerClick: closeList.bind($data, row._rowIndex)">
-        <button class="action-select" data-bind="click: toggleList.bind($data, row._rowIndex)">
-            <span data-bind="i18n: 'Select'"></span>
-        </button>
-        <ul
-            class="action-menu"
+            css: {'_active': $collapsible.opened}">
+        <li
             data-bind="
-                css: {
-                    '_active': opened() === row._rowIndex
-                },
-                foreach: getVisibleActions(row._rowIndex)"
-                >
-            <li>
-                <a
-                    class="action-menu-item"
-                    data-bind="
-                        attr: {
-                            href: $data.href
-                        },
-                        click: $parent.isHandlerRequired(index, rowIndex) ?
-                            $parent.applyAction.bind($parent, index, rowIndex) :
-                            false,
-                        text: $data.label"></a>
-            </li>
-        </ul>
-    </div>
-    <!-- /ko -->
-</td>
+                repeat: {
+                    foreach: $col.getVisibleActions($row()._rowIndex),
+                    item: '$action'
+                }">
+            <a
+                class="action-menu-item"
+                data-bind="
+                    attr: {
+                        href: $action().href
+                    },
+                    click: $col.getActionHandler($action()),
+                    text: $action().label"></a>
+        </li>
+    </ul>
+</div>
+<!-- /ko -->

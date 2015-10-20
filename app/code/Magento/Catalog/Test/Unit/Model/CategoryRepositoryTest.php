@@ -36,7 +36,8 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->categoryResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Category', [], [], '', false);
+        $this->categoryResourceMock =
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\Category', [], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
 
         $this->model = new \Magento\Catalog\Model\CategoryRepository(

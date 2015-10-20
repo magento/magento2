@@ -10,6 +10,7 @@ use Magento\Sales\Model\Download;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use \Magento\Framework\Unserialize\Unserialize;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
@@ -24,18 +25,26 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     protected $download;
 
     /**
+     * @var Unserialize
+     */
+    protected $unserialize;
+
+    /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param Download $download
+     * @param Unserialize $unserialize
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
-        Download $download
+        Download $download,
+        Unserialize $unserialize
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->download = $download;
+        $this->unserialize = $unserialize;
     }
 
     /**
@@ -44,7 +53,6 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @return void|\Magento\Framework\Controller\Result\Forward
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -79,7 +87,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         try {
-            $info = unserialize($option->getValue());
+            $info = $this->unserialize->unserialize($option->getValue());
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
@@ -87,6 +95,17 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             return $resultForward->forward('noroute');
         }
+        $this->endExecute();
+    }
+
+    /**
+     * Ends execution process
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    protected function endExecute()
+    {
         exit(0);
     }
 }

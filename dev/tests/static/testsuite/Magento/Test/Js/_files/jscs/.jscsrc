@@ -1,7 +1,4 @@
 {
-    "plugins": [
-        "jscs-jsdoc"
-    ],
     "disallowKeywords": [
         "with",
         "continue"
@@ -62,6 +59,7 @@
         "beforeOpeningCurlyBrace": true,
         "beforeOpeningRoundBrace": true
     },
+    "disallowNewlineBeforeBlockStatements": true,
     "disallowDanglingUnderscores": null,
     "disallowEmptyBlocks": true,
     "disallowMixedSpacesAndTabs": true,
