@@ -12,7 +12,7 @@
     </head>
     <body>
         <referenceContainer name="product.info.media">
-            <block class="Magento\ProductVideo\Block\Product\View\Gallery" name="product.info.media.video" after="product.info.media.image" template="product/view/gallery.phtml"/>
+            <block class="Magento\ProductVideo\Block\Product\View\Gallery" name="product.info.media.video" after="product.info.media.image" template="Magento_ProductVideo::product/view/gallery.phtml"/>
         </referenceContainer>
     </body>
 </page>
