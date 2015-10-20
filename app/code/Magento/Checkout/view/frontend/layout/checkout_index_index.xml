@@ -334,6 +334,9 @@
                                         <item name="displayArea" xsi:type="string">sidebar</item>
                                         <item name="config" xsi:type="array">
                                             <item name="template" xsi:type="string">Magento_Checkout/sidebar</item>
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkout.steps</item>
+                                            </item>
                                         </item>
                                         <item name="children" xsi:type="array">
                                             <item name="summary" xsi:type="array">
