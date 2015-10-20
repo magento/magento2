@@ -1211,7 +1211,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         if ($fieldName == 'category_id') {
             $collectionMock->expects($this->once())->method('addProductCategoriesFilter')
-                ->with(['attribute' => $fieldName, 'eq' => ['value']]);
+                ->with(['attribute' => $fieldName, 'in' => ['value']]);
         } else {
             $collectionMock->expects($this->once())->method('addFieldToFilter')
                 ->with([['attribute' => $fieldName, 'eq' => 'value']]);
