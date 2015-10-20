@@ -133,7 +133,8 @@ class Preprocessor implements PreprocessorInterface
                 $value
             );
         } else {
-            $table = $this->resource->getTableName('catalog_product_index_eav_decimal');
+            $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
+            $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
             $select = $this->connection->select();
 
             $currentStoreId = $this->scopeResolver->getScope()->getId();
