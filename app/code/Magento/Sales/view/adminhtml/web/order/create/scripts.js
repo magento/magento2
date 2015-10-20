@@ -6,12 +6,11 @@ define([
     "jquery",
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
-    'knockout',
     "mage/translate",
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure",
     'Magento_Ui/js/lib/view/utils/async'
-], function(jQuery, confirm, alert, ko){
+], function(jQuery, confirm, alert){
 
     window.AdminOrder = new Class.create();
 
@@ -38,52 +37,49 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
-            this.areasLoadedFlag = ko.observable(false);
             jQuery.async('#order-items', (function(){
-                this.areasLoadedFlag.subscribe(function(val) {
-                    if (val) {
-                        this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
-                        this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
-                            addControlButton: function(button){
-                                var controlButtonArea = $(this.node).select('.actions')[0];
-                                if (typeof controlButtonArea != 'undefined') {
-                                    var buttons = controlButtonArea.childElements();
-                                    for (var i = 0; i < buttons.length; i++) {
-                                        if (buttons[i].innerHTML.include(button.label)) {
-                                            return ;
-                                        }
-                                    }
-                                    button.insertIn(controlButtonArea, 'top');
+                this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
+                this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
+                    addControlButton: function(button){
+                        var controlButtonArea = $(this.node).select('.actions')[0];
+                        if (typeof controlButtonArea != 'undefined') {
+                            var buttons = controlButtonArea.childElements();
+                            for (var i = 0; i < buttons.length; i++) {
+                                if (buttons[i].innerHTML.include(button.label)) {
+                                    return ;
                                 }
                             }
-                        });
-
-                        var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
-                            searchAreaId = this.getAreaId('search');
-                        searchButton.onClick = function() {
-                            $(searchAreaId).show();
-                            var el = this;
-                            window.setTimeout(function () {
-                                el.remove();
-                            }, 10);
-                        };
-
-                        this.dataArea.onLoad = this.dataArea.onLoad.wrap(function(proceed) {
-                            proceed();
-                            this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
-                            this._parent.itemsArea.onLoad();
-                        });
-
-                        this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
-                            proceed();
-                            if ($(searchAreaId) && !$(searchAreaId).visible()) {
-                                this.addControlButton(searchButton);
-                            }
-                        });
-                        this.areasLoaded();
-                        this.itemsArea.onLoad();
+                            button.insertIn(controlButtonArea, 'top');
+                        }
                     }
-                }, this);
+                });
+
+                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                    searchAreaId = this.getAreaId('search');
+                searchButton.onClick = function() {
+                    $(searchAreaId).show();
+                    var el = this;
+                    window.setTimeout(function () {
+                        el.remove();
+                    }, 10);
+                };
+
+                if (jQuery('#' + this.getAreaId('items')).is(':visible')) {
+                    this.dataArea.onLoad = this.dataArea.onLoad.wrap(function(proceed) {
+                        proceed();
+                        this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
+                        this._parent.itemsArea.onLoad();
+                    });
+
+                    this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
+                        proceed();
+                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                            this.addControlButton(searchButton);
+                        }
+                    });
+                    this.areasLoaded();
+                    this.itemsArea.onLoad();
+                }
             }).bind(this));
 
             jQuery('#edit_form')
