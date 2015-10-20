@@ -33,8 +33,10 @@ class DependencyChecker
      */
     private $graph;
 
-    /** @var PackageInfo */
-    private $packageInfo;
+    /**
+     * @var PackageInfo
+     */
+    protected $packageInfo;
 
     /**
      * Constructor
