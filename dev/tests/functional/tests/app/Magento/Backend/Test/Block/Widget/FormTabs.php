@@ -17,7 +17,7 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Is used to represent any form with tabs on the page
+ * Is used to represent any form with tabs on the page.
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,16 +25,25 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class FormTabs extends Form
 {
     /**
+     * Tabs list.
+     *
      * @var array
      */
     protected $tabs = [];
 
     /**
-     * Fields which aren't assigned to any tab
+     * Fields which aren't assigned to any tab.
      *
      * @var array
      */
     protected $unassignedFields = [];
+
+    /**
+     * Page header selector.
+     *
+     * @var string
+     */
+    protected $header = 'header';
 
     /**
      * @constructor
@@ -55,7 +64,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Initialize block
+     * Initialize block.
      */
     protected function init()
     {
@@ -63,7 +72,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Fill form with tabs
+     * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
@@ -76,7 +85,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Fill specified form with tabs
+     * Fill specified form with tabs.
      *
      * @param array $tabs
      * @param SimpleElement|null $element
@@ -91,14 +100,14 @@ class FormTabs extends Form
             $tab->fillFormTab($tabFields, $context);
         }
         if (!empty($this->unassignedFields)) {
-            $this->fillMissedFields($tabs);
+            $this->fillMissedFields();
         }
 
         return $this;
     }
 
     /**
-     * Fill fields which weren't found on filled tabs
+     * Fill fields which weren't found on filled tabs.
      *
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -130,7 +139,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Get data of the tabs
+     * Get data of the tabs.
      *
      * @param FixtureInterface|null $fixture
      * @param SimpleElement|null $element
@@ -163,7 +172,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Update form with tabs
+     * Update form with tabs.
      *
      * @param FixtureInterface $fixture
      * @return FormTabs
@@ -178,7 +187,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Create data array for filling tabs
+     * Create data array for filling tabs.
      *
      * @param FixtureInterface $fixture
      * @return array
@@ -194,7 +203,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Create data array for filling tabs (new fixture specification)
+     * Create data array for filling tabs (new fixture specification).
      *
      * @param InjectableFixture $fixture
      * @return array
@@ -217,7 +226,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Create data array for filling tabs (deprecated fixture specification)
+     * Create data array for filling tabs (deprecated fixture specification).
      *
      * @param FixtureInterface $fixture
      * @return array
@@ -284,6 +293,7 @@ class FormTabs extends Form
      */
     public function openTab($tabName)
     {
+        $this->browser->find($this->header)->hover();
         $this->getTabElement($tabName)->click();
         return $this;
     }
