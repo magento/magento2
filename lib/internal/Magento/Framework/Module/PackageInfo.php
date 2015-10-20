@@ -53,7 +53,9 @@ class PackageInfo
      */
     private $componentRegistrar;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $nonExistingDependencies = [];
 
     /**
@@ -111,7 +113,7 @@ class PackageInfo
         $moduleName = null;
         if (isset($this->packageModuleMap[$packageName])) {
             $moduleName = $this->packageModuleMap[$packageName];
-        } else if ($this->isInternalPackage($packageName)) {
+        } elseif ($this->isMagentoPackage($packageName)) {
             $moduleName = $this->convertPackageNameToModuleName($packageName);
             $this->addNonExistingDependency($moduleName);
         }
@@ -122,7 +124,8 @@ class PackageInfo
     /**
      * Add non existing dependency
      *
-     * @param $dependency
+     * @param string $dependency
+     * @return void
      */
     protected function addNonExistingDependency($dependency)
     {
@@ -151,8 +154,7 @@ class PackageInfo
     {
         $moduleName = str_replace('magento/module-', '', $packageName);
         $moduleName = str_replace('-', ' ', $moduleName);
-        $moduleName = ucwords($moduleName);
-        $moduleName = str_replace(' ', '', $moduleName);
+        $moduleName = str_replace(' ', '', ucwords($moduleName));
 
         return 'Magento_' . $moduleName;
     }
@@ -163,7 +165,7 @@ class PackageInfo
      * @param string $packageName
      * @return bool
      */
-    protected function isInternalPackage($packageName)
+    protected function isMagentoPackage($packageName)
     {
         return strpos($packageName, 'magento/module-') === 0;
     }
