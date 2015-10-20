@@ -115,6 +115,9 @@ define(
             useShippingAddress: function () {
                 if (this.isAddressSameAsShipping()) {
                     selectBillingAddress(quote.shippingAddress());
+                    if (window.checkoutConfig.reloadOnBillingAddress) {
+                        setBillingAddressAction(globalMessageList);
+                    }
                     this.isAddressDetailsVisible(true);
                 } else {
                     lastSelectedBillingAddress = quote.billingAddress();
