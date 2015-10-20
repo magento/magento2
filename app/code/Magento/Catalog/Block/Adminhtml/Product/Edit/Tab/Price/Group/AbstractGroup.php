@@ -355,7 +355,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     /**
      * Retrieve Group Price entity attribute
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttribute()
     {

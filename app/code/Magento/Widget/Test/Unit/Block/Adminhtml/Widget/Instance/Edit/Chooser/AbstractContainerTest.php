@@ -25,12 +25,12 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollectionMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollectionFactoryMock;
 
@@ -76,13 +76,13 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->themeCollectionFactoryMock = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->themeCollectionMock = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+        $this->themeCollectionMock = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getItemById'])
             ->getMock();

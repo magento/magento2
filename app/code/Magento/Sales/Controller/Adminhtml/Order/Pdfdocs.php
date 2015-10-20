@@ -7,7 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Sales\Model\Order\Pdf\Invoice;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -15,10 +15,10 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Sales\Model\Order\Pdf\Creditmemo;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Sales\Model\Resource\Order\CollectionFactory as OrderCollectionFactory;
-use Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
-use Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
-use Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
 
 /**
  * Class Pdfdocs

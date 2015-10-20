@@ -400,7 +400,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection by setting page number, sorting etc..
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {

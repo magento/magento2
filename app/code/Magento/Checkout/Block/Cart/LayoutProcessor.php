@@ -13,12 +13,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $merger;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $regionCollection;
 
@@ -29,14 +29,14 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
-     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
-     * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
+     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @param \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
-        \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
-        \Magento\Directory\Model\Resource\Region\Collection $regionCollection
+        \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
+        \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;

@@ -6,7 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Store\Api\WebsiteManagementInterface;
-use Magento\Store\Model\Resource\Website\CollectionFactory;
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 /**
  * @api
@@ -31,7 +31,7 @@ class WebsiteManagement implements WebsiteManagementInterface
     public function getCount()
     {
         $websites = $this->websitesFactory->create();
-        /** @var \Magento\Store\Model\Resource\Website\Collection $websites */
+        /** @var \Magento\Store\Model\ResourceModel\Website\Collection $websites */
         return $websites->getSize();
     }
 }

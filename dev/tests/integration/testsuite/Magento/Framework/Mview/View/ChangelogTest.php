@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
@@ -18,7 +18,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -40,7 +40,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
+        $this->resource = $this->objectManager->get('Magento\Framework\App\ResourceConnection');
         $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(

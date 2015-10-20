@@ -38,7 +38,7 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->groupResourceMock = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Group',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group',
             ['load', '__wakeup'],
             [],
             '',

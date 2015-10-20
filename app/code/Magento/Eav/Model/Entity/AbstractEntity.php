@@ -13,13 +13,13 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
-use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
-use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -159,7 +159,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected static $_attributeBackendTables = [];
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -179,7 +179,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 

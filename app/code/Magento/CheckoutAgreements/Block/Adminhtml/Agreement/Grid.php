@@ -8,21 +8,21 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory
+     * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory
+     * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory
      * @param array $data
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory,
+        \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;

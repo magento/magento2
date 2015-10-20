@@ -8,14 +8,14 @@ namespace Magento\Theme\Model\Theme;
 class FileProvider implements \Magento\Framework\View\Design\Theme\FileProviderInterface
 {
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\File\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory
      */
     protected $fileFactory;
 
     /**
-     * @param \Magento\Theme\Model\Resource\Theme\File\CollectionFactory $fileFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory
      */
-    public function __construct(\Magento\Theme\Model\Resource\Theme\File\CollectionFactory $fileFactory)
+    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory)
     {
         $this->fileFactory = $fileFactory;
     }

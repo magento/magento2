@@ -43,14 +43,14 @@ class AuthorizationFactory
     /**
      * Init
      *
-     * @param \Magento\Authorization\Model\Resource\Role\CollectionFactory $roleCollectionFactory
-     * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
+     * @param \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $roleCollectionFactory
+     * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
      */
     public function __construct(
-        \Magento\Authorization\Model\Resource\Role\CollectionFactory $roleCollectionFactory,
-        \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
+        \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $roleCollectionFactory,
+        \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Authorization\Model\RulesFactory $rulesFactory
     ) {
@@ -63,7 +63,7 @@ class AuthorizationFactory
     /**
      * Creates role collection
      *
-     * @return \Magento\Authorization\Model\Resource\Role\Collection
+     * @return \Magento\Authorization\Model\ResourceModel\Role\Collection
      */
     public function createRoleCollection()
     {
@@ -73,7 +73,7 @@ class AuthorizationFactory
     /**
      * Creates rules collection
      *
-     * @return \Magento\Authorization\Model\Resource\Rules\Collection
+     * @return \Magento\Authorization\Model\ResourceModel\Rules\Collection
      */
     public function createRulesCollection()
     {

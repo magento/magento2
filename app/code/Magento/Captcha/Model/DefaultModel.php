@@ -52,7 +52,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     protected $_formId;
 
     /**
-     * @var \Magento\Captcha\Model\Resource\LogFactory
+     * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      */
     protected $_resLogFactory;
 
@@ -71,13 +71,13 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
-     * @param \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
+     * @param \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory
      * @param string $formId
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
         $formId
     ) {
         $this->_session = $session;
@@ -510,7 +510,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * Get resource model
      *
-     * @return \Magento\Captcha\Model\Resource\Log
+     * @return \Magento\Captcha\Model\ResourceModel\Log
      */
     protected function _getResourceModel()
     {

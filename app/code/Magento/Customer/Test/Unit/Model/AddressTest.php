@@ -32,7 +32,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Address | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -59,7 +59,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->customer));
 
-        $this->resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Address')
+        $this->resource = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Address')
             ->disableOriginalConstructor()
             ->getMock();
 

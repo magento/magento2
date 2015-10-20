@@ -33,6 +33,6 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
         $resource = $this->resourceFactory->create(
             $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false)
         );
-        $this->assertInstanceOf('Magento\Framework\App\Resource', $resource);
+        $this->assertInstanceOf('Magento\Framework\App\ResourceConnection', $resource);
     }
 }

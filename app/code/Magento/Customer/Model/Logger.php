@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Customer log data logger.
@@ -27,11 +27,11 @@ class Logger
     protected $logFactory;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Customer\Model\LogFactory $logFactory
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Customer\Model\LogFactory $logFactory
     ) {
         $this->resource = $resource;
@@ -55,7 +55,7 @@ class Logger
         }
 
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-        $connection = $this->resource->getConnection(Resource::DEFAULT_CONNECTION);
+        $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         $connection->insertOnDuplicate(
             $this->resource->getTableName('customer_log'),

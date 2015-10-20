@@ -16,14 +16,14 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Product reviews collection
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\Collection
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
     protected $_collection;
 
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -38,7 +38,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
-     * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
@@ -48,7 +48,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
-        \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
+        \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = []
     ) {
@@ -97,7 +97,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Get reviews
      *
-     * @return bool|\Magento\Review\Model\Resource\Review\Product\Collection
+     * @return bool|\Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
     public function getReviews()
     {

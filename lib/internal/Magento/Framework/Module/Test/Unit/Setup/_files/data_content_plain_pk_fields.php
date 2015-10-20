@@ -22,13 +22,13 @@ return [
             [
                 'table' => 'table',
                 'field' => 'collection',
-                'to' => 'Magento\Customer\Model\Resource\Attribute\Collection',
+                'to' => 'Magento\Customer\Model\ResourceModel\Attribute\Collection',
                 'from' => ['`pk_field1` = ?' => 'pk_value1', '`pk_field2` = ?' => 'pk_value2'],
             ],
         ],
         'aliases_map' => [
             \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_RESOURCE => [
-                'customer/attribute_collection' => 'Magento\Customer\Model\Resource\Attribute\Collection',
+                'customer/attribute_collection' => 'Magento\Customer\Model\ResourceModel\Attribute\Collection',
             ],
         ],
     ]

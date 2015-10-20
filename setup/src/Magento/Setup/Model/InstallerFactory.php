@@ -62,10 +62,10 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
             $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
-            new \Magento\Framework\Model\Resource\Db\Context(
+            new \Magento\Framework\Model\ResourceModel\Db\Context(
                 $this->getResource(),
-                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
-                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
+                $this->serviceLocator->get('Magento\Framework\Model\ResourceModel\Db\TransactionManager'),
+                $this->serviceLocator->get('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
             ),
             $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
             $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles'),

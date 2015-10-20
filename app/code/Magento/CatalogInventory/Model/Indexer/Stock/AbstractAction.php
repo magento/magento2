@@ -9,7 +9,7 @@
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
 use Magento\Catalog\Model\Category;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Abstract action reindex class
@@ -26,7 +26,7 @@ abstract class AbstractAction
     protected $_resource;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory
      */
     protected $_indexerFactory;
 
@@ -67,15 +67,15 @@ abstract class AbstractAction
 
 
     /**
-     * @param Resource $resource
-     * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
+     * @param ResourceConnection $resource
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        Resource $resource,
-        \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory,
+        ResourceConnection $resource,
+        \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager
@@ -112,7 +112,7 @@ abstract class AbstractAction
     /**
      * Retrieve Stock Indexer Models per Product Type
      *
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface[]
+     * @return \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface[]
      */
     protected function _getTypeIndexers()
     {

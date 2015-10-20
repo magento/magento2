@@ -19,17 +19,17 @@ class BuilderComposite implements BuilderInterface
     private $builders;
 
     /**
-     * @param array $builders
      * @param TMapFactory $tmapFactory
+     * @param array $builders
      */
     public function __construct(
-        array $builders,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $builders = []
     ) {
         $this->builders = $tmapFactory->create(
             [
                 'array' => $builders,
-                'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                'type' => BuilderInterface::class
             ]
         );
     }
