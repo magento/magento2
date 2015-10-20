@@ -5,6 +5,9 @@
  */
 namespace Magento\Review\Model;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Store\Model\Store;
+
 /**
  * Rating model
  *
@@ -18,7 +21,7 @@ namespace Magento\Review\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Framework\Model\AbstractModel
+class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
     /**
      * rating entity codes
@@ -160,5 +163,16 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        // skip cache for all store
+        return [Store::CACHE_TAG];
     }
 }
