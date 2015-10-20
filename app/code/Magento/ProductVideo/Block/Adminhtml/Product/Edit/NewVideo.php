@@ -270,15 +270,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function getNoteVideoUrl()
     {
-        $result = __('Youtube or Vimeo supported');
+        $result = __('Youtube and Vimeo services are supported.');
         if (is_null($this->mediaHelper->getYouTubeApiKey())) {
             $result = __(
-                '<div class="note_youtube_api_key">'
-                . 'Vimeo supported. '
-                . '<br>In order to add YouTube video please <a href="%1">add YouTube API key</a> in video configuration settings.'
-                . '</div>',
+                'The vimeo service is supported,'
+                . ' in order to add an support for the youtube service'
+                . ' please <a href="%1">specify</a> an youtube API key within a system configurations.'
+                ,
                 $this->getConfigApiKeyUrl()
             );
+            $result = '<div class="note_youtube_api_key">' . $result . '</div>';
         }
         return $result;
     }
