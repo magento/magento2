@@ -82,11 +82,14 @@ define(
                     });
 
                 quote.billingAddress.subscribe(function (newAddress) {
-                    this.isAddressSameAsShipping(
-                        newAddress != null &&
-                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() &&
-                            !quote.isVirtual()
-                    );
+                    if (quote.isVirtual()) {
+                        this.isAddressSameAsShipping(false);
+                    } else {
+                        this.isAddressSameAsShipping(
+                            newAddress != null &&
+                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                        );
+                    }
 
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
