@@ -997,16 +997,9 @@ class Files
                 || file_exists($fullPath)
             ) {
                 $fileContent = file_get_contents($fullPath);
-                if (strpos(
-                        $fileContent,
-                        'namespace ' . $namespace
-                    ) !== false && (strpos(
-                            $fileContent,
-                            'class ' . $className
-                        ) !== false || strpos(
-                            $fileContent,
-                            'interface ' . $className
-                        ) !== false)
+                if (strpos($fileContent, 'namespace ' . $namespace) !== false
+                    && (strpos($fileContent, 'class ' . $className) !== false
+                        || strpos($fileContent, 'interface ' . $className) !== false)
                 ) {
                     return true;
                 }
