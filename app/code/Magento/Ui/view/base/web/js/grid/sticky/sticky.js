@@ -58,6 +58,7 @@ define([
                 'initListingNode',
                 'initToolbarNode',
                 'initContainerNode',
+                'initColumns',
                 'initStickyListingNode',
                 'initStickyToolbarNode',
                 'initLeftDataGridCap',
@@ -89,7 +90,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe(['visible']);
+                .track('visible');
 
             return this;
         },
@@ -104,7 +105,7 @@ define([
                 return;
             }
             this.listingNode = $(node);
-            this.columns = this.listingNode.find(this.columnSelector);
+            $.async(this.columnSelector, node, this.initColumns);
         },
 
         /**
@@ -153,6 +154,14 @@ define([
             $.async(this.rightDataGridCapSelector,
                 node,
                 this.initRightDataGridCap);
+        },
+
+        /**
+         * Init columns (each time when amount of columns is changed)
+         *
+         */
+        initColumns: function () {
+            this.columns = this.listingNode.find(this.columnSelector);
         },
 
         /**
@@ -237,7 +246,7 @@ define([
                 this.checkPos();
             }
 
-            if (this.visible()) {
+            if (this.visible) {
                 this.checkTableElemsWidth();
 
                 if (this.flags.originalWidthChanged) {
@@ -365,12 +374,21 @@ define([
         },
 
         /**
+         * Get original bulk row height, if is visible
+         *
+         * @returns {Number}.
+         */
+        getBulkRowHeight: function () {
+            return this.listingNode.find(this.bulkRowSelector).filter(':visible').height();
+        },
+
+        /**
          * Get top Y coord of the sticky header
          *
          * @returns {Number}.
          */
         getListingTopYCoord: function () {
-            var bulkRowHeight = (this.listingNode.find(this.bulkRowSelector) || {}).height();
+            var bulkRowHeight = this.getBulkRowHeight();
 
             return this.listingNode.find('tbody').offset().top -
                 this.containerNode.height() -
@@ -387,8 +405,8 @@ define([
             var stickyTopCondition = this.getListingTopYCoord() - this.getOtherStickyElementsSize(),
                 stickyBottomCondition = this.listingNode.offset().top +
                     this.listingNode.height() -
-                    $(window).scrollTop() -
-                    (this.listingNode.find(this.bulkRowSelector) || {}).height() -
+                    $(window).scrollTop() +
+                    this.getBulkRowHeight() -
                     this.getOtherStickyElementsSize();
 
             return stickyTopCondition < 0 && stickyBottomCondition > 0;
@@ -449,9 +467,12 @@ define([
          */
         resizeBulk: function () {
             var bulk = this.containerNode.find(this.bulkRowHeaderSelector)[0];
-            if (bulk){
+
+            if (bulk) {
                 $(bulk).innerWidth(this.getListingWidth());
             }
+
+            return this;
         },
 
         /**
@@ -542,7 +563,7 @@ define([
          * @returns {Object} Chainable.
          */
         toggleContainerVisibility: function () {
-            this.visible(!this.visible());
+            this.visible = !this.visible;
 
             return this;
         },
@@ -553,7 +574,7 @@ define([
          * @returns {Boolean} whether the visibility of the sticky header was toggled.
          */
         checkPos: function () {
-            var isSticky = this.visible(),
+            var isSticky = this.visible,
                 mustBeSticky = this.getMustBeSticky(),
                 needChange = isSticky !== mustBeSticky;
 

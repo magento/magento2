@@ -4,11 +4,14 @@
  */
 
 define([
-    'ko'
-], function (ko) {
+    'ko',
+    'mageUtils'
+    ], function (ko, utils) {
     'use strict';
 
     var captionPlaceholder = {},
+        optgroupTmpl = '<optgroup label="${ $.label }"></optgroup>',
+        nbspRe = /&nbsp;/g,
         optionsText,
         optionsValue,
         optionTitle;
@@ -190,19 +193,22 @@ define([
                     itemUpdate = true;
                 }
 
-                if (arrayEntry === captionPlaceholder) {// empty value, label === caption
+                if (arrayEntry === captionPlaceholder) { // empty value, label === caption
                     option = element.ownerDocument.createElement('option');
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    option = element.ownerDocument.createElement('optgroup');
-                    option.setAttribute('label', arrayEntry[optionsText]);
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option = utils.template(optgroupTmpl, {
+                        label: arrayEntry[optionsText],
+                        title: arrayEntry[optionsText + 'title']
+                    });
+                    option = ko.utils.parseHtmlFragment(option)[0];
+
                 } else {
                     option = element.ownerDocument.createElement('option');
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option.setAttribute('data-title', arrayEntry[optionsText + 'title']);
                     ko.selectExtensions.writeValue(option, arrayEntry[optionsValue]);
-                    ko.utils.setTextContent(option, arrayEntry[optionsText].replace(/^\s+/g, ''));
+                    ko.utils.setTextContent(option, arrayEntry[optionsText]);
                 }
 
                 return [option];
@@ -228,6 +234,15 @@ define([
 
             /**
              *
+             * @param {*} string, times
+             * @returns {Array}
+             */
+            function strPad(string, times) {
+                return  (new Array(times + 1)).join(string);
+            }
+
+            /**
+             *
              * @param {*} options
              * @returns {Array}
              */
@@ -245,20 +260,23 @@ define([
                         }
                     }
                 }
-                ko.utils.arrayForEach(options, function (option) {
-                    var label, title, value, obj = {};
 
-                    value = applyToObject(option, optionsValue, option);
-                    label = applyToObject(option, optionsText, value);
+                ko.utils.arrayForEach(options, function (option) {
+                    var value = applyToObject(option, optionsValue, option),
+                        label = applyToObject(option, optionsText, value) || '',
+                        title = applyToObject(option, optionsText, value) || '',
+                        obj = {};
+
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
+                    label = label.replace(nbspRe, '').trim();
+
                     if (Array.isArray(value)) {
-                        obj[optionsText] = label;
-                        obj[optionsValue] = undefined;
+                        obj[optionsText] = strPad('&nbsp;', nestedOptionsLevel * 4) + label;
                         res.push(obj);
                         res = res.concat(formatOptions(value));
                     } else {
-                        obj[optionsText] = label;
+                        obj[optionsText] = strPad('  ', nestedOptionsLevel * 2) + label;
                         obj[optionsValue] = value;
                         res.push(obj);
                     }

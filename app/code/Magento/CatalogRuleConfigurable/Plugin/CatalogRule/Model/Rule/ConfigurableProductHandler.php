@@ -14,7 +14,7 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProduct
  */
 class ConfigurableProductHandler
 {
-    /** @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable */
+    /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable */
     private $configurable;
 
     /** @var ConfigurableProductsProvider */
@@ -24,11 +24,11 @@ class ConfigurableProductHandler
     private $subProductsValidationResults = [];
 
     /**
-     * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurable
+     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable
      * @param ConfigurableProductsProvider $configurableProductsProvider
      */
     public function __construct(
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurable,
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
         ConfigurableProductsProvider $configurableProductsProvider
     ) {
         $this->configurable = $configurable;

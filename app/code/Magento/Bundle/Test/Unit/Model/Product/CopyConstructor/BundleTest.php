@@ -72,7 +72,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         );
         $options = [$option];
         $optionCollection = $this->objectManager->getCollectionMock(
-            'Magento\Bundle\Model\Resource\Option\Collection',
+            'Magento\Bundle\Model\ResourceModel\Option\Collection',
             $options
         );
         $optionRawData = [
@@ -111,7 +111,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         );
         $selections = [$selection];
         $selectionCollection = $this->getMock(
-            'Magento\Bundle\Model\Resource\Selection\Collection',
+            'Magento\Bundle\Model\ResourceModel\Selection\Collection',
             [],
             [],
             '',

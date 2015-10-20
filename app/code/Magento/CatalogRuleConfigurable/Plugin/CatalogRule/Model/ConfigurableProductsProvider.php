@@ -8,13 +8,13 @@ namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model;
 
 class ConfigurableProductsProvider
 {
-    /** @var \Magento\Framework\App\Resource */
+    /** @var \Magento\Framework\App\ResourceConnection */
     private $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
         $this->resource = $resource;
     }

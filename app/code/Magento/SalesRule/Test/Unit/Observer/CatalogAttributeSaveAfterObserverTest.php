@@ -48,7 +48,7 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
         $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $event = $this->getMock('Magento\Framework\Event', ['getAttribute', '__wakeup'], [], '', false);
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup'],
             [],
             '',

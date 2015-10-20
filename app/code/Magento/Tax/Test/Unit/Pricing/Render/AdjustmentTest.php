@@ -333,7 +333,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $product = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $product = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $product->expects($this->once())
             ->method('getId');
 

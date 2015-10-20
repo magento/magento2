@@ -32,7 +32,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -61,21 +61,21 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attrSetColFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $attrSetCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             [],
             [],
             '',
             false
         );
         $attrColFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
@@ -89,7 +89,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attrCollection = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Collection',
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection',
             [
                 'addFieldToFilter',
             ],
@@ -214,7 +214,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\Resource',
+            '\Magento\Framework\App\ResourceConnection',
             [
                 'getConnection',
                 'getTableName',

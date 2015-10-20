@@ -8,9 +8,9 @@ namespace Magento\CatalogInventory\Helper;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CatalogInventory\Model\Resource\Stock\StatusFactory;
-use Magento\CatalogInventory\Model\Resource\Stock\Status;
-use Magento\Catalog\Model\Resource\Collection\AbstractCollection;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -102,7 +102,7 @@ class Stock
     /**
      * Adds filtering for collection to return only in stock products
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @return void
      */
     public function addInStockFilterToCollection($collection)
@@ -134,7 +134,7 @@ class Stock
     /**
      * Add only is in stock products filter to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return void
      */
     public function addIsInStockFilterToCollection($collection)
