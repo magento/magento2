@@ -10,18 +10,18 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductTemplateSuccessSaveMessage
- * Check Product Templates success save message
+ * Class AssertAttributeSetSuccessSaveMessage
+ * Check Attribute Sets success save message
  */
-class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
+class AssertAttributeSetSuccessSaveMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked
      */
-    const SUCCESS_MESSAGE = 'You saved the product template.';
+    const SUCCESS_MESSAGE = 'You saved the attribute set.';
 
     /**
-     * Assert that after save a product template "You saved the attribute set." successful message appears
+     * Assert that after save a attribute set "You saved the attribute set." successful message appears
      *
      * @param CatalogProductSetIndex $productSetIndex
      * @return void
@@ -45,6 +45,6 @@ class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Templates success save message is present.';
+        return 'Attribute Sets success save message is present.';
     }
 }
