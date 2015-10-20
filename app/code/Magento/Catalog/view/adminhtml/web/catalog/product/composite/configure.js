@@ -7,7 +7,8 @@ define([
     "jquery/ui",
     "mage/translate",
     "prototype",
-    'Magento_Ui/js/modal/modal'
+    'Magento_Ui/js/modal/modal',
+    'domReady!'
 ], function(jQuery){
 
     window.ProductConfigure = Class.create();
@@ -761,8 +762,5 @@ define([
         }
     };
 
-    jQuery(document).ready(function(){
-        productConfigure = new ProductConfigure();
-    });
-
+    productConfigure = new ProductConfigure();
 });
