@@ -73,6 +73,7 @@
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">560</item>
