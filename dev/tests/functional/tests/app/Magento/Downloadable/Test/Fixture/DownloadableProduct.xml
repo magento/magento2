@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="downloadable"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Downloadable\Test\Repository\DownloadableProduct"
              handler_interface="Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface"

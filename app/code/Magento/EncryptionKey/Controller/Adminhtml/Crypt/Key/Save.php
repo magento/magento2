@@ -18,7 +18,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
     protected $encryptor;
 
     /**
-     * @var \Magento\EncryptionKey\Model\Resource\Key\Change
+     * @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change
      */
     protected $change;
 
@@ -30,13 +30,13 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\EncryptionKey\Model\Resource\Key\Change $change
+     * @param \Magento\EncryptionKey\Model\ResourceModel\Key\Change $change
      * @param \Magento\Framework\App\CacheInterface $cache
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\EncryptionKey\Model\Resource\Key\Change $change,
+        \Magento\EncryptionKey\Model\ResourceModel\Key\Change $change,
         \Magento\Framework\App\CacheInterface $cache
     ) {
         $this->encryptor = $encryptor;

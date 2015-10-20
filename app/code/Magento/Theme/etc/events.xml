@@ -7,13 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="theme_delete_before">
-        <observer name="clean_theme_related_content" instance="Magento\Theme\Observer\CleanThemeRelatedContentObserver" method="execute" />
+        <observer name="clean_theme_related_content" instance="Magento\Theme\Observer\CleanThemeRelatedContentObserver" />
     </event>
     <event name="theme_save_after">
-        <observer name="check_theme_is_assigned" instance="Magento\Theme\Observer\CheckThemeIsAssignedObserver" method="execute" />
+        <observer name="check_theme_is_assigned" instance="Magento\Theme\Observer\CheckThemeIsAssignedObserver" />
     </event>
     <event name="theme_registration_from_filesystem">
         <observer name="theme_registration_observer" instance="Magento\Theme\Observer\ThemeRegistrationObserver"
-                  method="execute" />
+                  />
     </event>
 </config>

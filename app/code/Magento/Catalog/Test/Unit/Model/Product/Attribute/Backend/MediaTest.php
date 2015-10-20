@@ -49,7 +49,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $fileStorageDb = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $this->resourceModel = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
             [
                 'getMainTable',
                 '__wakeup',
@@ -76,7 +76,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->mediaDirectory)
         );
 
-        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\ProductFactory')
+        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\ProductFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -146,7 +146,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attributeEntity = $this->getMock(
-            '\Magento\Framework\Model\Resource\AbstractResourceAbstractEntity',
+            '\Magento\Framework\Model\ResourceModel\AbstractResourceAbstractEntity',
             ['checkAttributeUniqueValue']
         );
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));

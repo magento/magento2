@@ -106,13 +106,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::cancel') && $order->canCancel()) {
-            $message = __('Are you sure you want to cancel this order?');
             $this->buttonList->add(
                 'order_cancel',
                 [
                     'label' => __('Cancel'),
                     'class' => 'cancel',
-                    'onclick' => 'deleteConfirm(\'' . $message . '\', \'' . $this->getCancelUrl() . '\')'
+                    'id' => 'order-view-cancel-button',
+                    'data_attribute' => [
+                        'url' => $this->getCancelUrl()
+                    ]
                 ]
             );
         }
@@ -162,7 +164,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Hold'),
                     'class' => __('hold'),
-                    'onclick' => 'setLocation(\'' . $this->getHoldUrl() . '\')'
+                    'id' => 'order-view-hold-button',
+                    'data_attribute' => [
+                        'url' => $this->getHoldUrl()
+                    ]
                 ]
             );
         }
@@ -173,7 +178,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Unhold'),
                     'class' => __('unhold'),
-                    'onclick' => 'setLocation(\'' . $this->getUnholdUrl() . '\')'
+                    'id' => 'order-view-unhold-button',
+                    'data_attribute' => [
+                        'url' => $this->getUnHoldUrl()
+                    ]
                 ]
             );
         }

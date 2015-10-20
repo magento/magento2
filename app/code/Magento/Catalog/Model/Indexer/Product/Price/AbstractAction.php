@@ -15,7 +15,7 @@ abstract class AbstractAction
     /**
      * Default Product Type Price indexer resource model
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      */
     protected $_defaultIndexerResource;
 
@@ -61,7 +61,7 @@ abstract class AbstractAction
     /**
      * Indexer price factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory
      */
     protected $_indexerPriceFactory;
 
@@ -77,8 +77,8 @@ abstract class AbstractAction
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -87,8 +87,8 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory,
-        \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -254,7 +254,7 @@ abstract class AbstractAction
     /**
      * Retrieve price indexers per product type
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\PriceInterface[]
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
      */
     public function getTypeIndexers()
     {
@@ -285,7 +285,7 @@ abstract class AbstractAction
      * Retrieve Price indexer by Product Type
      *
      * @param string $productTypeId
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\PriceInterface
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function _getIndexer($productTypeId)

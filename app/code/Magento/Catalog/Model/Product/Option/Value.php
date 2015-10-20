@@ -15,8 +15,8 @@ use Magento\Catalog\Model\Product\Option;
 /**
  * Catalog product option select type model
  *
- * @method \Magento\Catalog\Model\Resource\Product\Option\Value _getResource()
- * @method \Magento\Catalog\Model\Resource\Product\Option\Value getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
  * @method int getOptionId()
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
@@ -58,23 +58,23 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * Value collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
      */
     protected $_valueCollectionFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -93,7 +93,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Option\Value');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option\Value');
     }
 
     /**
@@ -242,7 +242,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * Enter description here...
      *
      * @param Option $option
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
      */
     public function getValuesCollection(Option $option)
     {
@@ -260,7 +260,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param array $optionIds
      * @param int $option_id
      * @param int $store_id
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
      */
     public function getValuesByOption($optionIds, $option_id, $store_id)
     {

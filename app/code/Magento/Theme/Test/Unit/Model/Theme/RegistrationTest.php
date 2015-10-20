@@ -16,7 +16,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactory;
 
@@ -27,7 +27,8 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Data\CollectionFactory')
+        $this->collectionFactory =
+            $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,7 +76,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $themeFromCollection = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
             ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
             ->getMockForAbstractClass();
-        $collection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Data\Collection')
+        $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $customization = $this->getMockBuilder('Magento\Framework\View\Design\Theme\CustomizationInterface')

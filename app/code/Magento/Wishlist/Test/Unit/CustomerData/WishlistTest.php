@@ -16,7 +16,7 @@ use Magento\Wishlist\CustomerData\Wishlist;
 use Magento\Wishlist\CustomerData\Wishlist as WishlistModel;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item;
-use Magento\Wishlist\Model\Resource\Item\Collection;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -113,7 +113,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->method('loadLayout');
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $itemCollectionMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -290,7 +290,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->method('loadLayout');
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $itemCollectionMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

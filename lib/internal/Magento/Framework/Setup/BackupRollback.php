@@ -246,7 +246,7 @@ class BackupRollback
         }
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
-        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\Resource\Db'));
+        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\ResourceModel\Db'));
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());

@@ -59,7 +59,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->method('getCollection')
             ->willReturn($abstractDbMock);
         
-        $collectionFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\CollectionFactory')
+        $collectionFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -26,7 +26,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $arguments = [
             'orderFactory' => $this->getMock('Magento\Sales\Model\OrderFactory', [], [], '', false),
             'orderResourceFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\OrderFactory',
+                'Magento\Sales\Model\ResourceModel\OrderFactory',
                 [],
                 [],
                 '',
@@ -40,7 +40,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                     false
                 ),
             'invoiceItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory',
                 [],
                 [],
                 '',
@@ -54,7 +54,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'commentCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory',
                 [],
                 [],
                 '',
@@ -84,7 +84,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $arguments = [
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'orderItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory',
                 [],
                 [],
                 '',
@@ -112,7 +112,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'orderTaxCollectionFactory' => $this->getMock(
-                'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory',
+                'Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory',
                 [],
                 [],
                 '',

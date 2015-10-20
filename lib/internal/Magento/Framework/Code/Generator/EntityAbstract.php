@@ -249,10 +249,10 @@ abstract class EntityAbstract
         $resultClassName = $this->_getResultClassName();
         $resultDir = $this->_ioObject->getResultFileDirectory($resultClassName);
 
-        if (!$this->definedClasses->classLoadable($sourceClassName)) {
+        if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($this->definedClasses->classLoadable($resultClassName)) {
+        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClassName)) {
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (

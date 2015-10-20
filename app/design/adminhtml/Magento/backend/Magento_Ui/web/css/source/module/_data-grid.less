@@ -305,13 +305,18 @@ body._in-resize {
         width: 7rem;
         img {
             border: 1px solid @data-grid-td__border-color;
-            max-width: 5rem;
+            width: 5rem;
         }
     }
     .data-grid-multicheck-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
         vertical-align: middle;
+    }
+    .data-grid-onoff-label {
+        > span {
+            .lib-visually-hidden();
+        }
     }
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;

@@ -28,11 +28,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     protected $calculator;
 
     /**
-     * @var DiscountCalculator
-     */
-    protected $discountCalculator;
-
-    /**
      * @var null|ItemInterface
      */
     protected $item;
@@ -42,7 +37,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param DiscountCalculator $discountCalculator
      * @param ItemInterface $item
      */
     public function __construct(
@@ -50,7 +44,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $quantity,
         BundleCalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        DiscountCalculator $discountCalculator,
         ItemInterface $item = null
     ) {
         $this->item = $item;
@@ -70,7 +63,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * Get Options with attached Selections collection
      *
-     * @return array|\Magento\Bundle\Model\Resource\Option\Collection
+     * @return array|\Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions()
     {
@@ -83,7 +76,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
         $bundleOptionsIds = $optionsQuoteItemOption ? unserialize($optionsQuoteItemOption->getValue()) : [];
         if ($bundleOptionsIds) {
-            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $bundleProduct);
             // get and add bundle selections collection
             $selectionsQuoteItemOption = $this->item->getOptionByCode('bundle_selection_ids');

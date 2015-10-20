@@ -10,7 +10,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
     public function testConstructorRequestVarIsOverwrittenCorrectlyInParent()
     {
         $attributeModel = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getAttributeCode', '__wakeup'],
             [],
             '',

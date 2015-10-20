@@ -42,7 +42,7 @@ class ReportCounts
     protected $countsFactory;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Resource\Counts\CollectionFactory
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory
      */
     protected $countsCollectionFactory;
 
@@ -59,7 +59,7 @@ class ReportCounts
      * @param ConfigurableProductManagementInterface $configurableManagement
      * @param CategoryManagementInterface $categoryManagement
      * @param \Magento\NewRelicReporting\Model\CountsFactory $countsFactory
-     * @param \Magento\NewRelicReporting\Model\Resource\Counts\CollectionFactory $countsCollectionFactory
+     * @param \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
@@ -68,7 +68,7 @@ class ReportCounts
         ConfigurableProductManagementInterface $configurableManagement,
         CategoryManagementInterface $categoryManagement,
         \Magento\NewRelicReporting\Model\CountsFactory $countsFactory,
-        \Magento\NewRelicReporting\Model\Resource\Counts\CollectionFactory $countsCollectionFactory,
+        \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         $this->config = $config;
@@ -90,7 +90,7 @@ class ReportCounts
      */
     protected function updateCount($count, \Magento\NewRelicReporting\Model\Counts $model, $type)
     {
-        /** @var \Magento\NewRelicReporting\Model\Resource\Counts\Collection $collection */
+        /** @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection $collection */
         $collection = $this->countsCollectionFactory->create()
             ->addFieldToFilter(
                 'type',
