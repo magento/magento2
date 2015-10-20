@@ -105,16 +105,7 @@ app/code/Magento/Checkout/view/frontend/web/js/model/sidebar.js
 app/code/Magento/Checkout/view/frontend/web/js/model/step-navigator.js
 app/code/Magento/Checkout/view/frontend/web/js/model/totals.js
 app/code/Magento/Checkout/view/frontend/web/js/model/url-builder.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-billing-info.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-checkout-method.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-order-review.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-payment-info.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-shipping-info.js
-app/code/Magento/Checkout/view/frontend/web/js/opc-shipping-method.js
-app/code/Magento/Checkout/view/frontend/web/js/opcheckout.js
-app/code/Magento/Checkout/view/frontend/web/js/payment-authentication.js
-app/code/Magento/Checkout/view/frontend/web/js/payment.js
-app/code/Magento/Checkout/view/frontend/web/js/proceed-to-checkout.js
+app/code/Magento/Checkout/view/frontend/web/js/payment.js app/code/Magento/Checkout/view/frontend/web/js/proceed-to-checkout.js
 app/code/Magento/Checkout/view/frontend/web/js/region-updater.js
 app/code/Magento/Checkout/view/frontend/web/js/shopping-cart.js
 app/code/Magento/Checkout/view/frontend/web/js/sidebar.js
@@ -688,15 +679,6 @@ vendor/magento/module-checkout/view/frontend/web/js/model/step-loader.js
 vendor/magento/module-checkout/view/frontend/web/js/model/step-navigator.js
 vendor/magento/module-checkout/view/frontend/web/js/model/totals.js
 vendor/magento/module-checkout/view/frontend/web/js/model/url-builder.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-billing-info.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-checkout-method.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-order-review.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-payment-info.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-shipping-info.js
-vendor/magento/module-checkout/view/frontend/web/js/opc-shipping-method.js
-vendor/magento/module-checkout/view/frontend/web/js/opcheckout.js
-vendor/magento/module-checkout/view/frontend/web/js/payment-authentication.js
-vendor/magento/module-checkout/view/frontend/web/js/payment.js
 vendor/magento/module-checkout/view/frontend/web/js/proceed-to-checkout.js
 vendor/magento/module-checkout/view/frontend/web/js/region-updater.js
 vendor/magento/module-checkout/view/frontend/web/js/shopping-cart.js
