@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Scan source code for detects invocations of __() function, analyzes placeholders with arguments
- * and see if they not equal
- */
 namespace Magento\Test\Integrity\Phrase;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
+/**
+ * Scan source code for detects invocations of __() function or Phrase object, analyzes placeholders with arguments
+ * and see if they not equal
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ */
 class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 {
     /**
@@ -31,7 +32,9 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
     protected function setUp()
     {
         $this->_phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
-            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
+            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer(),
+            true,
+            'Magento\Framework\Phrase'
         );
 
         $componentRegistrar = new ComponentRegistrar();
@@ -39,6 +42,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
             // the file below is the only file where strings are translated without corresponding arguments
             $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Translation')
                 . '/Model/Js/DataProvider.php',
+            $componentRegistrar->getPath(ComponentRegistrar::MODULE, '')
         ];
     }
 
@@ -55,10 +59,25 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
                 if (empty(trim($phrase['phrase'], "'\"\t\n\r\0\x0B"))) {
                     $missedPhraseErrors[] = $this->_createMissedPhraseError($phrase);
                 }
-                if (preg_match_all('/%(\d+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
-                    $placeholdersInPhrase = array_unique($matches[1]);
-                    if (count($placeholdersInPhrase) != $phrase['arguments']) {
-                        $incorrectNumberOfArgumentsErrors[] = $this->_createPhraseError($phrase);
+                if (preg_match_all('/%(\w+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
+                    $placeholderCount = count(array_unique($matches[1]));
+
+                    if ($placeholderCount != $phrase['arguments']) {
+                        // Check for zend placeholders %placehoder% and sprintf placeholder %s
+                        if (preg_match_all('/(%(s)|(\w+)%)/', $phrase['phrase'], $placeHlders, PREG_OFFSET_CAPTURE)) {
+
+                            foreach ($placeHlders[0] as $ph) {
+                                // Check if char after placeholder is not a digit or letter
+                                $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];
+                                if (!preg_match('/[A-Za-z0-9]/', $charAfterPh)) {
+                                    $placeholderCount--;
+                                }
+                            }
+                        }
+
+                        if ($placeholderCount != $phrase['arguments']) {
+                            $incorrectNumberOfArgumentsErrors[] = $this->_createPhraseError($phrase);
+                        }
                     }
                 }
             }
