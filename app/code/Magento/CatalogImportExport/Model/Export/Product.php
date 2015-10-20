@@ -683,7 +683,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     'crosssell_skus',
                     'upsell_skus',
                 ],
-                ['additional_images', 'additional_image_labels']
+               ['additional_images', 'additional_image_labels', 'hide_from_product_page']
             );
             // have we merge custom options columns
             if ($customOptionsData) {
@@ -1047,14 +1047,21 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if (!empty($multiRawData['mediaGalery'][$productId])) {
                 $additionalImages = [];
                 $additionalImageLabels = [];
+               $additionalImageIsDisabled = [];
                 foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
                     $additionalImages[] = $mediaItem['_media_image'];
                     $additionalImageLabels[] = $mediaItem['_media_label'];
+
+                   if ($mediaItem['_media_is_disabled'] == true) {
+                       $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                   }
                 }
                 $dataRow['additional_images'] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImages);
                 $dataRow['additional_image_labels'] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
+               $dataRow['hide_from_product_page'] =
+                   implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
                 $multiRawData['mediaGalery'][$productId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
