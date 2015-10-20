@@ -42,8 +42,8 @@
                                                             <?php echo($currentRate === $rate) ?
                                                                 ' selected="selected"' : '';
                                                             ?>>
-                                                            <?php /* @noEscape */ echo
-                                                                $block->renderShippingRateOption($rate);
+                                                            <?php echo
+                                                                $block->escapeHtml($block->renderShippingRateOption($rate));
                                                             ?>
                                                         </option>
                                                     <?php endforeach; ?>
@@ -70,8 +70,10 @@
                                 <?php endif; ?>
                             <?php else: ?>
                                 <p>
-                                    <?php /* @noEscape */ echo $block->renderShippingRateOption(
-                                        $block->getCurrentShippingRate()
+                                    <?php echo $block->escapeHtml(
+                                        $block->renderShippingRateOption(
+                                            $block->getCurrentShippingRate()
+                                        )
                                     ); ?>
                                 </p>
                             <?php endif; ?>
@@ -84,7 +86,7 @@
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?php /* @noEscape */ echo $block->renderAddress($block->getShippingAddress()); ?>
+                            <?php echo $block->escapeHtml($block->renderAddress($block->getShippingAddress())); ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
