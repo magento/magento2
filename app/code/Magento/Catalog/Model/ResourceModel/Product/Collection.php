@@ -857,6 +857,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Filter Product by Categories
+     *
+     * @param array $condition
+     * @return void
+     */
+    public function addProductCategoriesFilter(array $condition)
+    {
+        $categorySelect = $this->getConnection()->select()->from(
+            ['cat' => $this->getTable('catalog_category_product')],
+            'cat.product_id'
+        )->where($this->getConnection()->prepareSqlCondition('cat.category_id', $condition));
+        $this->getSelect()->where('e.entity_id IN (?)' , $categorySelect);
+    }
+
+    /**
      * Join minimal price attribute to result
      *
      * @return $this
