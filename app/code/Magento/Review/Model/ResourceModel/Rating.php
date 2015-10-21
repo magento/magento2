@@ -10,7 +10,7 @@ namespace Magento\Review\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     const RATING_STATUS_APPROVED = 'Approved';
 
@@ -32,7 +32,7 @@ class Rating extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -40,7 +40,7 @@ class Rating extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

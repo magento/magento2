@@ -26,7 +26,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
@@ -47,7 +47,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->contextMock = $this->getMock('Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->integrationResourceModel = new \Magento\Integration\Model\ResourceModel\Integration($this->contextMock);

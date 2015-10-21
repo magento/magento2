@@ -13,7 +13,7 @@ use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderIn
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Flat extends \Magento\Framework\Model\ModelResource\Db\AbstractDb implements DefaultAttributesProvider
+class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements DefaultAttributesProvider
 {
     /**
      * Store scope Id
@@ -42,14 +42,14 @@ class Flat extends \Magento\Framework\Model\ModelResource\Db\AbstractDb implemen
     protected $defaultAttributes;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,

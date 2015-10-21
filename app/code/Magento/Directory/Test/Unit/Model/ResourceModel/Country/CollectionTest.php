@@ -21,7 +21,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
 
-        $resource = $this->getMockForAbstractClass('Magento\Framework\Model\ModelResource\Db\AbstractDb',
+        $resource = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
