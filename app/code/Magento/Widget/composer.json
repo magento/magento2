@@ -9,6 +9,7 @@
         "magento/module-catalog": "1.0.0-beta5",
         "magento/module-theme": "1.0.0-beta5",
         "magento/framework": "1.0.0-beta5",
+        "magento/module-email": "1.0.0-beta5",
         "magento/module-variable": "1.0.0-beta5",
         "magento/magento-composer-installer": "*"
     },
