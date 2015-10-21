@@ -8,8 +8,6 @@ namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -17,20 +15,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class PromoForm extends FormTabs
 {
-    /**
-     * Add button.
-     *
-     * @var string
-     */
-    protected $addButton = '.rule-param-new-child a';
-
-    /**
-     * Locator for Customer Segment Conditions.
-     *
-     * @var string
-     */
-    protected $conditionFormat = '//*[@id="conditions__1__new_child"]//option[contains(.,"%s")]';
-
     /**
      * Fill form with tabs.
      *
@@ -70,20 +54,5 @@ class PromoForm extends FormTabs
         }
 
         return $tabs;
-    }
-
-    /**
-     * Check if attribute is available in conditions.
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isAttributeInConditions($name)
-    {
-        $this->_rootElement->find($this->addButton)->click();
-        return $this->_rootElement->find(
-            sprintf($this->conditionFormat, $name),
-            Locator::SELECTOR_XPATH
-        )->isVisible();
     }
 }

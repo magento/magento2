@@ -111,7 +111,8 @@ class Environment extends AbstractActionController
      */
     public function phpVersionAction()
     {
-        $type = $this->getRequest()->getContent();
+        $type = $this->getRequest()->getQuery('type');
+
         $data = [];
         if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpVersion();
@@ -128,7 +129,8 @@ class Environment extends AbstractActionController
      */
     public function phpSettingsAction()
     {
-        $type = $this->getRequest()->getContent();
+        $type = $this->getRequest()->getQuery('type');
+
         $data = [];
         if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpSettings();
@@ -145,7 +147,8 @@ class Environment extends AbstractActionController
      */
     public function phpExtensionsAction()
     {
-        $type = $this->getRequest()->getContent();
+        $type = $this->getRequest()->getQuery('type');
+
         $data = [];
         if ($type == ReadinessCheckInstaller::INSTALLER) {
             $data = $this->phpReadinessCheck->checkPhpExtensions();

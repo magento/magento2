@@ -11,6 +11,7 @@ use \Braintree_Exception;
 use \Braintree_Transaction;
 use \Braintree_Result_Successful;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 use Magento\Payment\Model\InfoInterface;
@@ -186,7 +187,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @param TransactionCollectionFactory $salesTransactionCollectionFactory
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetaData
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -213,7 +214,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\App\ProductMetadataInterface $productMetaData,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -648,6 +649,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 }
             }
 
+            // transaction should be voided if it not settled
             $canVoid = ($transaction->status === \Braintree_Transaction::AUTHORIZED
                 || $transaction->status === \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT);
             $result = $canVoid
@@ -655,6 +657,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 : $this->braintreeTransaction->refund($transactionId, $amount);
             $this->_debug($this->_convertObjToArray($result));
             if ($result->success) {
+                $payment->setTransactionId($transactionId . '-' . Transaction::TYPE_REFUND);
                 $payment->setIsTransactionClosed(true);
             } else {
                 throw new LocalizedException($this->errorHelper->parseBraintreeError($result));

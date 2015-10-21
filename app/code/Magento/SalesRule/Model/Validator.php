@@ -102,7 +102,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Validator\Pool $validators
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -117,7 +117,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\SalesRule\Model\Validator\Pool $validators,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
