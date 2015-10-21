@@ -16,7 +16,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Preconditions:
  * Dataset : AttributeOptions
  * 1. Attribute is created (Attribute)
- * 2. Attribute set is created (Product Template)
+ * 2. Attribute set is created (Attribute Set)
  *
  * Test Flow:
  * 1. Log in to Backend.
@@ -41,7 +41,7 @@ class UpdateProductAttributeEntityTest extends Injectable
      *
      * @param CatalogProductAttribute $productAttributeOriginal
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
      * @return void
@@ -49,12 +49,12 @@ class UpdateProductAttributeEntityTest extends Injectable
     public function testUpdateProductAttribute(
         CatalogProductAttribute $productAttributeOriginal,
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         CatalogProductAttributeIndex $attributeIndex,
         CatalogProductAttributeNew $attributeNew
     ) {
         //Precondition
-        $productTemplate->persist();
+        $attributeSet->persist();
         $productAttributeOriginal->persist();
 
         $filter = [
