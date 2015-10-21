@@ -99,7 +99,8 @@ class DependencyChecker
             $dependenciesMissing = [];
             $paths = $this->graph->findPathsToReachableNodes($moduleName, $graphMode);
             $modules = array_merge(
-                array_keys($this->fullModuleList), $this->packageInfo->getNonExistingDependencies()
+                array_keys($this->fullModuleList),
+                $this->packageInfo->getNonExistingDependencies()
             );
             foreach ($modules as $module) {
                 if (isset($paths[$module])) {
