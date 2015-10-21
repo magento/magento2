@@ -72,7 +72,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $select = $this->getConnection()->select()->union(
             [
                 $this->getConnection()->select()
-                    ->from( $this->getTable('catalog_product_super_link'), 'parent_id')
+                    ->from($this->getTable('catalog_product_super_link'), 'parent_id')
                     ->where('parent_id in (?)', $entityIds),
                 $this->getConnection()->select()
                     ->from($this->getTable('catalog_product_super_link'), 'product_id')
