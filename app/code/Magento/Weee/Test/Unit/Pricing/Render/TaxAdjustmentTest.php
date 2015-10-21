@@ -34,7 +34,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
 
         $this->weeeHelperMock = $this->getMock(
             'Magento\Weee\Helper\Data',
-            ['typeOfDisplay'],
+            ['typeOfDisplay', 'isTaxable'],
             [],
             '',
             false
@@ -57,6 +57,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         //setup
         $this->weeeHelperMock->expects($this->atLeastOnce())->method('typeOfDisplay')->willReturn($weeeIsExcluded);
+        $this->weeeHelperMock->expects($this->atLeastOnce())->method('isTaxable')->willReturn(false);
 
         //test
         $defaultExclusions = $this->model->getDefaultExclusions();

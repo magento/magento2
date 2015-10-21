@@ -12,6 +12,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -269,11 +270,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\DataObject     $shipping
-     * @param null|false|\Magento\Framework\DataObject     $billing
-     * @param Website                        $website
-     * @param bool                           $calculateTaxes
+     * @param \Magento\Catalog\Model\Product                $product
+     * @param null|false|\Magento\Framework\DataObject      $shipping
+     * @param null|false|\Magento\Framework\DataObject      $billing
+     * @param Website                                       $website
+     * @param bool                                          $calculateTaxes
+     * @param bool                                          $round
      * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
@@ -281,14 +283,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shipping = null,
         $billing = null,
         $website = null,
-        $calculateTaxes = false
+        $calculateTaxes = false,
+        $round = true
     ) {
         return $this->_weeeTax->getProductWeeeAttributes(
             $product,
             $shipping,
             $billing,
             $website,
-            $calculateTaxes
+            $calculateTaxes,
+            $round
         );
     }
 
@@ -397,7 +401,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $store = $product->getStore();
 
         if ($this->isEnabled($store)) {
-            return $this->getProductWeeeAttributes($product, null, null, null, $this->typeOfDisplay(1));
+            $calculateTax = ($this->typeOfDisplay(1) || $this->typeOfDisplay(2)) ? 1 : 0;
+            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax);
         }
         return [];
     }
@@ -781,6 +786,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
             $storeId
         );
+    }
+
+    /**
+     * Get tax price display settings
+     *
+     * @param  null|string|bool|int|Store $store
+     * @return int
+     */
+    public function getTaxDisplayConfig($store = null)
+    {
+        return $this->_taxData->getPriceDisplayType($store);
     }
 
     /**
