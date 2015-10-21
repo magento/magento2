@@ -9,22 +9,22 @@ namespace Magento\Customer\Test\Page;
 use Magento\Mtf\Page\Page;
 
 /**
- * Class CustomerAccountLogout
  * Customer frontend logout page.
- *
  */
 class CustomerAccountLogout extends Page
 {
     /**
-     * URL for customer logout
+     * URL for customer logout.
      */
     const MCA = 'customer/account/logout';
 
     /**
-     * Custom constructor
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
+        $this->url = $_ENV['app_frontend_url'] . self::MCA;
     }
 }
