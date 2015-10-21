@@ -71,7 +71,10 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->mockCalculationTool->expects($this->any())
             ->method('round')
             ->withAnyParameters()
-            ->willReturnCallback(function ($price) {return round($price, 2);});
+            ->willReturnCallback(function ($price) {
+                    return round($price, 2);
+                }
+            );
         $this->mockConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
