@@ -346,12 +346,12 @@ class Calculator implements BundleCalculatorInterface
                 unset($adjustments[$exclude]);
             }
         } else {
-           foreach ($exclude as $oneExclusion) {
-               if ($oneExclusion && isset($adjustments[$oneExclusion])) {
-                   $fullAmount -= $adjustments[$oneExclusion];
-                   unset($adjustments[$oneExclusion]);
-               }
-           }
+            foreach ($exclude as $oneExclusion) {
+                if ($oneExclusion && isset($adjustments[$oneExclusion])) {
+                    $fullAmount -= $adjustments[$oneExclusion];
+                    unset($adjustments[$oneExclusion]);
+                }
+            }
         }
         return $this->amountFactory->create($fullAmount, $adjustments);
     }
