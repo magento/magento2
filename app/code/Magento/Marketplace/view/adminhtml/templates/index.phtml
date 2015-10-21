@@ -6,7 +6,7 @@
 ?>
 
 <section class="page-partners">
-    <h2 class="page-sub-title">Platinum Partners</h2>
+    <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Platinum Partners'); ?></h2>
     <p class="partners-description">
         Representing Magento's highest level of partner engagement,
         Magento Platinum Partners have established themselves as
@@ -17,7 +17,7 @@
         functions, and tools, as well as back-end systems and operations,
         to extend and enhance the power of the Magento commerce platform.
     </p>
-    <h3 class="page-sub-sub-title">Featured Platinum Partners</h3>
+    <h3 class="page-sub-sub-title"><?php /* @escapeNotVerified */ echo __('Featured Platinum Partners'); ?></h3>
     <div data-role="partners-block">
         <div data-role="spinner" class="admin__data-grid-loading-mask" data-bind="visible: loading">
             <div class="spinner">
@@ -30,7 +30,7 @@
     <div class="row row-gutter partners-footer">
         <div class="col-m-5">
             <div class="partners-search">
-                <h2 class="page-sub-title">Partner search</h2>
+                <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Partner search'); ?></h2>
                 <p>
                     Magento has a thriving ecosystem of technology partners to
                     help merchants and brands deliver the best possible
@@ -42,7 +42,7 @@
                 </p>
                 <a class="action-secondary" target="_blank"
                    href="http://partners.magento.com/partner_locator/search.aspx">
-                    More Partners
+                    <?php /* @escapeNotVerified */ echo __('More Partners'); ?>
                 </a>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 alt="Partner"/>
         </div>
         <div class="col-m-4">
-            <h2 class="page-sub-title">Magento Marketplace</h2>
+            <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Magento Marketplace'); ?></h2>
             <p class="partner-description">
                 Extensions and Themes are an essential component of the Magento
                 Ecosystem. Please visit the Magento Marketplace
@@ -64,7 +64,7 @@
             </p>
             <a class="action-secondary" target="_blank"
                href="http://www.magentocommerce.com/magento-connect/">
-                Visit Magento Marketplaces
+                <?php /* @escapeNotVerified */ echo __('Visit Magento Marketplaces'); ?>
             </a>
         </div>
     </div>
