@@ -116,7 +116,7 @@
     <?php if ($block->isShowPerPage()): ?>
         <div class="limiter">
             <strong class="limiter-label"><?php echo __('Show') ?></strong>
-            <select id="limiter" data-mage-redirect="{'event':'change'}" class="limiter-options">
+            <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
                     <option value="<?php echo $block->getLimitUrl($_key) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
