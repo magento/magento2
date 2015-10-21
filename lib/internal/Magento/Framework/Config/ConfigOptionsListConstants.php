@@ -97,4 +97,9 @@ class ConfigOptionsListConstants
      * Key for modules
      */
     const KEY_MODULES = 'modules';
+
+    /**
+     * Size of random string generated for store's encryption key
+     */
+    const STORE_KEY_RANDOM_STRING_SIZE = 32;
 }
