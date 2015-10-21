@@ -96,6 +96,7 @@ define([
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
+        isFullscreen: 0,
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -106,10 +107,21 @@ define([
          */
         _init: function () {
             if (this._checkForVideoExist()) {
+                this._checkFullscreen();
                 this._checkForVimeo();
                 this._isVideoBase();
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
+            }
+        },
+
+        /**
+         *
+         * @private
+         */
+        _checkFullscreen: function () {
+            if ($(this.element).find('.fotorama__fullscreen-icon')) {
+                this.isFullscreen = true;
             }
         },
 
@@ -367,6 +379,11 @@ define([
             $(this.element).on('fotorama:showend', $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
+
+            $(this.element).on('fotorama:fullscreenexit', $.proxy(function (e, fotorama) {
+                fotorama.activeFrame.$stageFrame.parent().find('.' + this.PV).remove();
+                this._startPrepareForPlayer(e, fotorama);
+            }, this));
         },
 
         /**
@@ -403,6 +420,7 @@ define([
             if ($image && videoData && videoData.mediaType === this.VID) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
+                $('.fotorama-video-container').addClass('video-unplayed');
             }
         },
 
@@ -470,7 +488,10 @@ define([
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
-                    self._showCloseVideo();
+
+                    if (!self.isFullscreen) {
+                        self._showCloseVideo();
+                    }
                 }
             });
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
