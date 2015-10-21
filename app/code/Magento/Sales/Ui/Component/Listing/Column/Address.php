@@ -17,10 +17,17 @@ use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
 class Address extends Column
 {
     /**
-    * @var Escaper
-    */
+     * @var Escaper
+     */
     protected $escaper;
 
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param Escaper $escaper
+     * @param array $components
+     * @param array $data
+     */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
