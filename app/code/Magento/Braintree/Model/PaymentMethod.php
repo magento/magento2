@@ -657,7 +657,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 : $this->braintreeTransaction->refund($transactionId, $amount);
             $this->_debug($this->_convertObjToArray($result));
             if ($result->success) {
-                $payment->setTransactionId($transactionId . '-' . Transaction::TYPE_REFUND);
                 $payment->setIsTransactionClosed(true);
             } else {
                 throw new LocalizedException($this->errorHelper->parseBraintreeError($result));
