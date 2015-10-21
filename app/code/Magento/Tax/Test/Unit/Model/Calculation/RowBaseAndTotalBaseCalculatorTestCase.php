@@ -244,7 +244,11 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
         );
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('round')
-            ->willReturnCallback(function ($price) {return round($price, 2);});
+            ->willReturnCallback(
+                function ($price) {
+                    return round($price, 2);
+                }
+            );
     }
 
     /**
