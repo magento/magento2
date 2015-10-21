@@ -395,7 +395,7 @@ require([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push('Youtube API key is an invalid');
+                                errorsMessage.push('Youtube API key is invalid');
 
                                 break;
                             }
@@ -403,7 +403,7 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                        return 'Video cannot be shown due to the following reason: ' + $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
