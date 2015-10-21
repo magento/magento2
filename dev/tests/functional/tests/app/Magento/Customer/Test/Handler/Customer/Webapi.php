@@ -26,6 +26,11 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      * @var array
      */
     protected $mappingData = [
+        'gender' => [
+            'Male' => 1,
+            'Female' => 2,
+            'Not Specified' => 3
+        ],
         'country_id' => [
             'United States' => 'US',
             'United Kingdom' => 'GB'
@@ -70,7 +75,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function prepareData(Customer $customer)
     {
-        $data['customer'] = $customer->getData();
+        $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
         unset($data['customer']['password']);
@@ -105,7 +110,6 @@ class Webapi extends AbstractWebapi implements CustomerInterface
             return $data;
         }
         foreach ($data['customer']['address'] as $key => $addressData) {
-            $addressData['country_id'] = $this->mappingData['country_id'][$addressData['country_id']];
             $addressData = $this->prepareRegionData($addressData);
             $addressData = $this->prepareStreetData($addressData);
             $addressData = $this->prepareDefaultAddressData($addressData);
@@ -132,7 +136,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
         if (isset($addressData['region_id'])) {
             $addressData['region'] = [
-                'region_id' => $this->mappingData['region_id'][$addressData['region_id']]
+                'region_id' => $addressData['region_id']
             ];
             unset($addressData['region_id']);
         }
