@@ -7,7 +7,7 @@
 -->
 <tabs>
     <rule_information>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\RuleInformation</class>
         <selector>#promo_catalog_edit_tabs_main_section</selector>
         <strategy>css selector</strategy>
         <fields>
@@ -25,7 +25,7 @@
         </fields>
     </rule_information>
     <conditions>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions</class>
         <selector>#promo_catalog_edit_tabs_conditions_section</selector>
         <strategy>css selector</strategy>
         <fields>
