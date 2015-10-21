@@ -140,52 +140,179 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Sales\Model\Observer\Order\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+    <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+    <virtualType name="SalesInvoiceIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+    <virtualType name="SalesShipmentIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
         <arguments>
             <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+    <virtualType name="SalesCreditmemoIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
         <arguments>
             <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
+
+    <virtualType name="SalesOrderIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridSyncInsert" type="Magento\Sales\Observer\GridSyncInsertObserver">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesOrderIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesInvoiceIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesShipmentIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsertObserver" type="Magento\Sales\Observer\GridAsyncInsertObserver">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesCreditmemoIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesOrderIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesInvoiceIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesShipmentIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoIndexGridAsyncInsertCron" type="Magento\Sales\Cron\GridAsyncInsert">
+        <arguments>
+            <argument name="asyncInsert" xsi:type="object">SalesCreditmemoIndexGridAsyncInsert</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
         <arguments>
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\OrderSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Collection</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Invoice\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderInvoiceSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
         <arguments>
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\InvoiceSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Invoice\Collection</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderShipmentSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
         <arguments>
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\ShipmentSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Shipment\Collection</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
+    <virtualType name="SalesOrderCreditmemoSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
         <arguments>
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\CreditmemoSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SalesOrderSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesInvoiceSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesShipmentSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesCreditmemoSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
+        <arguments>
+            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
     </virtualType>
     <type name="Magento\SalesSequence\Model\EntityPool">
@@ -223,7 +350,7 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <virtualType name="OrderRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="OrderRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Relation</item>
@@ -235,7 +362,7 @@
             <argument name="entityRelationComposite" xsi:type="object">OrderRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="InvoiceRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="InvoiceRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Relation</item>
@@ -247,7 +374,7 @@
             <argument name="entityRelationComposite" xsi:type="object">InvoiceRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="ShipmentRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="ShipmentRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment\Relation</item>
@@ -259,7 +386,7 @@
             <argument name="entityRelationComposite" xsi:type="object">ShipmentRelationsComposite</argument>
         </arguments>
     </type>
-    <virtualType name="CreditmemoRelationsComposite" type="Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite">
+    <virtualType name="CreditmemoRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>

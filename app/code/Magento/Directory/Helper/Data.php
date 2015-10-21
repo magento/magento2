@@ -9,6 +9,8 @@
  */
 namespace Magento\Directory\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -39,6 +41,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Such countries can be shown on the top of the country list.
      */
     const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+
+    /**
+     * Path to config value that contains weight unit
+     */
+    const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
 
     /**
      * Country collection
@@ -214,7 +221,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value = trim(
                 $this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
             );
             $this->_optZipCountries = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
@@ -248,7 +255,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $value = trim(
             $this->scopeConfig->getValue(
                 self::XML_PATH_STATES_REQUIRED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
@@ -267,7 +274,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_DISPLAY_ALL_STATES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -306,7 +313,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_COUNTRY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -352,8 +359,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $configValue = (string)$this->scopeConfig->getValue(
             self::XML_PATH_TOP_COUNTRIES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         return !empty($configValue) ? explode(',', $configValue) : [];
+    }
+
+    /**
+     * Retrieve weight unit
+     *
+     * @return string
+     */
+    public function getWeightUnit()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_WEIGHT_UNIT, ScopeInterface::SCOPE_STORE);
     }
 }

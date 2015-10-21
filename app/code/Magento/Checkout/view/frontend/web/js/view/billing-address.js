@@ -133,6 +133,9 @@ define(
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
                     checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
+                    if (window.checkoutConfig.reloadOnBillingAddress) {
+                        setBillingAddressAction(globalMessageList);
+                    }
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');

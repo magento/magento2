@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Grid;
 
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Eav Resource Attribute Set Collection
@@ -26,7 +26,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\C
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $registryManager
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -36,7 +36,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\C
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Registry $registryManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_registryManager = $registryManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -45,7 +45,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\C
     /**
      *  Add filter by entity type id to collection
      *
-     * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection|$this
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|$this
      */
     protected function _initSelect()
     {

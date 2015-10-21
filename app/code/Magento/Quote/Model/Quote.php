@@ -382,7 +382,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\TotalsReader $totalsReader
      * @param ShippingFactory $shippingFactory
      * @param ShippingAssignmentFactory $shippingAssignmentFactory
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -425,7 +425,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
