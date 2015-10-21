@@ -61,7 +61,7 @@ class Io
      */
     public function getResultFileDirectory($className)
     {
-        $fileName = $this->makeGeneratedClassFileName($className);
+        $fileName = $this->generateResultFileName($className);
         $pathParts = explode('/', $fileName);
         unset($pathParts[count($pathParts) - 1]);
 
@@ -72,7 +72,7 @@ class Io
      * @param string $className
      * @return string
      */
-    public function makeGeneratedClassFileName($className)
+    public function generateResultFileName($className)
     {
         return $this->_generationDirectory . ltrim(str_replace(['\\', '_'], '/', $className), '/') . '.php';
     }

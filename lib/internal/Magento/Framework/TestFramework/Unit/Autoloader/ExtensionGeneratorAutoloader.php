@@ -41,7 +41,7 @@ class ExtensionGeneratorAutoloader
                 return false;
             }
 
-            $resultFileName = $this->generatorIo->makeGeneratedClassFileName($className);
+            $resultFileName = $this->generatorIo->generateResultFileName($className);
 
             if (!$this->generatorIo->fileExists($resultFileName)) {
                 $this->generatorIo->makeResultFileDirectory($className);

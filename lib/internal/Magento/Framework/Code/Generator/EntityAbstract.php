@@ -97,7 +97,7 @@ abstract class EntityAbstract
             if ($this->_validateData()) {
                 $sourceCode = $this->_generateCode();
                 if ($sourceCode) {
-                    $fileName = $this->_ioObject->makeGeneratedClassFileName($this->_getResultClassName());
+                    $fileName = $this->_ioObject->generateResultFileName($this->_getResultClassName());
                     $this->_ioObject->writeResultFile($fileName, $sourceCode);
                     return $fileName;
                 } else {
