@@ -438,15 +438,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
             )
-           ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
+            ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')
             ->withConsecutive(
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
-           )->willReturn([]);
-        $getProductWebsitesCallsCount = $productsCount*2;
+            )->willReturn([]);
+        $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))
             ->method('getProductWebsites')
@@ -529,43 +529,43 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     ' AND entity_id = ?)',
-                   $newSku[0]['entity_id'],
-               ],
-               [
-                   '(store_id = ?',
-                   $storeIds[0],
-               ],
-               [
-                   ' AND entity_id = ?)',
-                   $newSku[1]['entity_id'],
+                    $newSku[0]['entity_id'],
+                ],
+                [
+                    '(store_id = ?',
+                    $storeIds[0],
+                ],
+                [
+                    ' AND entity_id = ?)',
+                    $newSku[1]['entity_id'],
                 ]
             );
-       $this->connection
-           ->expects($this->once())
-           ->method('fetchAll')
-           ->willReturn([]);
-       $this->select->expects($this->any())->method('from')->willReturnSelf();
-       $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn([]);
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
 
-       $this->urlFinder->expects($this->any())->method('findAllByData')->willReturn([]);
+        $this->urlFinder->expects($this->any())->method('findAllByData')->willReturn([]);
 
-       $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-           ->willReturn('urlPathWithSuffix');
-       $this->productUrlPathGenerator->expects($this->any())->method('getUrlPath')
-           ->willReturn('urlPath');
-       $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-           ->willReturn('canonicalUrlPath');
+        $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
+            ->willReturn('urlPathWithSuffix');
+        $this->productUrlPathGenerator->expects($this->any())->method('getUrlPath')
+            ->willReturn('urlPath');
+        $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
+            ->willReturn('canonicalUrlPath');
 
-       $this->urlRewrite->expects($this->any())->method('setStoreId')->willReturnSelf();
-       $this->urlRewrite->expects($this->any())->method('setEntityId')->willReturnSelf();
-       $this->urlRewrite->expects($this->any())->method('setEntityType')->willReturnSelf();
-       $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
-       $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
-       $this->urlRewrite->expects($this->any())->method('getTargetPath')->willReturn('targetPath');
-       $this->urlRewrite->expects($this->any())->method('getStoreId')
-           ->willReturnOnConsecutiveCalls(0, 'not global');
+        $this->urlRewrite->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityId')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityType')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('getTargetPath')->willReturn('targetPath');
+        $this->urlRewrite->expects($this->any())->method('getStoreId')
+            ->willReturnOnConsecutiveCalls(0, 'not global');
 
-       $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
 
         $productUrls = [
            'targetPath-0' => $this->urlRewrite,
