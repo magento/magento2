@@ -77,17 +77,25 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     {
         $values = $this->_getValues();
         $value = $row->getData($this->getColumn()->getIndex());
+        $checked = '';
         if (is_array($values)) {
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
         } else {
-            $checked = $value === $this->getColumn()->getValue() ? ' checked="checked"' : '';
+            $checkedValue = $this->getColumn()->getValue();
+            if ($checkedValue !== null) {
+                $checked = $value === $checkedValue ? ' checked="checked"' : '';
+            }
         }
 
+        $disabled = '';
         $disabledValues = $this->getColumn()->getDisabledValues();
         if (is_array($disabledValues)) {
             $disabled = in_array($value, $disabledValues) ? ' disabled="disabled"' : '';
         } else {
-            $disabled = $value === $this->getColumn()->getDisabledValue() ? ' disabled="disabled"' : '';
+            $disabledValue = $this->getColumn()->getDisabledValue();
+            if ($disabledValue !== null) {
+                $disabled = $value === $disabledValue ? ' disabled="disabled"' : '';
+            }
         }
 
         $this->setDisabled($disabled);
