@@ -120,7 +120,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $resultClassFileName = '/Magento/Path/To/Class.php';
-        $this->ioObjectMock->expects($this->once())->method('makeGeneratedClassFileName')->willReturn($resultClassFileName);
+        $this->ioObjectMock->expects($this->once())->method('generateResultFileName')->willReturn($resultClassFileName);
         $this->ioObjectMock->expects($this->once())->method('fileExists')->willReturn($fileExists);
         $includeFileInvokeCount = $fileExists ? 1 : 0;
         $this->ioObjectMock->expects($this->exactly($includeFileInvokeCount))->method('includeFile');
