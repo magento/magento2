@@ -26,7 +26,7 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
 
-    <div id="<?php echo $this->escapeHtml($block->getId()) ?>" data-grid-id="<?php echo $this->escapeHtml($block->getId()) ?>">
+    <div id="<?php echo $block->escapeHtml($block->getId()) ?>" data-grid-id="<?php echo $block->escapeHtml($block->getId()) ?>">
         <?php else: ?>
             <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
@@ -41,8 +41,8 @@ $numColumns = sizeof($block->getColumns());
                         <div class="admin__data-grid-export">
                             <label
                                 class="admin__control-support-text"
-                                for="<?php echo $this->escapeHtml($block->getId()) ?>_export"><?php echo __('Export to:') ?></label>
-                            <select name="<?php echo $this->escapeHtml($block->getId()) ?>_export" id="<?php echo $this->escapeHtml($block->getId()) ?>_export"
+                                for="<?php echo $block->escapeHtml($block->getId()) ?>_export"><?php echo __('Export to:') ?></label>
+                            <select name="<?php echo $block->escapeHtml($block->getId()) ?>_export" id="<?php echo $block->escapeHtml($block->getId()) ?>_export"
                                     class="admin__control-select">
                                 <?php foreach ($block->getExportTypes() as $_type): ?>
                                     <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
@@ -61,11 +61,11 @@ $numColumns = sizeof($block->getColumns());
                     <?php endif; ?>
                     <?php $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
-                        <span id="<?php echo $this->escapeHtml($block->getHtmlId()) ?>-total-count" <?php echo $block->getUiId('total-count') ?>>
+                        <span id="<?php echo $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?php echo $block->getUiId('total-count') ?>>
                             <?php echo $countRecords ?>
                         </span>
                         <?php echo __('records found') ?>
-                        <span id="<?php echo $this->escapeHtml($block->getHtmlId()) ?>_massaction-count"
+                        <span id="<?php echo $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
                               class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?php echo __('selected') ?></span></span>
                     </div>
 
@@ -133,7 +133,7 @@ $numColumns = sizeof($block->getColumns());
         <?php endif; ?>
 
         <div class="admin__data-grid-wrap">
-            <table class="data-grid" id="<?php echo $this->escapeHtml($block->getId()) ?>_table">
+            <table class="data-grid" id="<?php echo $block->escapeHtml($block->getId()) ?>_table">
                 <?php
                 /* This part is commented to remove all <col> tags from the code. */
                 /* foreach ($block->getColumns() as $_column): ?>
