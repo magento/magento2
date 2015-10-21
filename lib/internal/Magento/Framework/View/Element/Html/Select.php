@@ -125,6 +125,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _toHtml()
     {
