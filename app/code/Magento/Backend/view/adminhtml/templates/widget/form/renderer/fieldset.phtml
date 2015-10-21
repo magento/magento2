@@ -22,7 +22,7 @@ if (!isset($advancedLabel)) {
     $advancedLabel = __('Additional Settings');
 }
 
-$cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset admin__fieldset' . $element->getClass();
+$cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset admin__fieldset ' . $element->getClass();
 
 if ($isField) {
     $count = $element->getCountBasicChildren();
