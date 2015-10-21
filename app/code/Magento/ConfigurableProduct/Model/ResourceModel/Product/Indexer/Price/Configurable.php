@@ -69,35 +69,34 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      */
     private function getRelatedProduct($entityIds)
     {
-        $select = $this->getConnection()->select()->union([
-            $this->getConnection()
-                ->select()
-                ->from(
-                    $this->getTable('catalog_product_super_link'),
-                    'parent_id'
-                )->where(
-                    'parent_id in (?)', $entityIds
-                ),
-            $this->getConnection()
-                ->select()
-                ->from(
-                    $this->getTable('catalog_product_super_link'),
-                    'product_id'
-                )->where(
-                    'parent_id in (?)', $entityIds
-                ),
-            $this->getConnection()
-                 ->select()
-                 ->from(
-                     $this->getTable('catalog_product_super_link'),
-                     'product_id'
-                 )->where(
-                     'product_id in (?)', $entityIds
-                 )
-        ]);
+        $select = $this->getConnection()->select()->union(
+            [
+                $this->getConnection()->select()->from(
+                        $this->getTable('catalog_product_super_link'),
+                        'parent_id'
+                    )->where(
+                        'parent_id in (?)',
+                        $entityIds
+                    ),
+                $this->getConnection()->select()->from(
+                        $this->getTable('catalog_product_super_link'),
+                        'product_id'
+                    )->where(
+                        'parent_id in (?)',
+                        $entityIds
+                    ),
+                $this->getConnection()->select()->from(
+                        $this->getTable('catalog_product_super_link'),
+                        'product_id'
+                    )->where(
+                        'product_id in (?)',
+                        $entityIds
+                    ),
+            ]
+        );
         return array_map(
             'intval',
-             $this->getConnection()->fetchCol($select)
+            $this->getConnection()->fetchCol($select)
         );
     }
 
