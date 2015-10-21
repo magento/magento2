@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\ScheduledStructure;
 
 use Magento\Framework\View\Layout;
+use Magento\Framework\App\State;
 
 class Helper
 {
@@ -32,12 +33,20 @@ class Helper
     protected $logger;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\State $state
     ) {
         $this->logger = $logger;
+        $this->state = $state;
     }
 
     /**
@@ -190,10 +199,13 @@ class Helper
                 }
             } else {
                 $scheduledStructure->setElementToBrokenParentList($key);
-                $this->logger->critical(
-                    "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
-                    'because the latter doesn\'t exist'
-                );
+
+                if ($this->state->getMode() == State::MODE_DEVELOPER) {
+                    $this->logger->critical(
+                        "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
+                        'because the latter doesn\'t exist'
+                    );
+                }
             }
         }
 
