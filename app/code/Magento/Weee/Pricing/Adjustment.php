@@ -10,7 +10,6 @@ use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Pricing\Adjustment as TaxAdjustment;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**
@@ -133,7 +132,8 @@ class Adjustment implements AdjustmentInterface
      */
     public function isExcludedWith($adjustmentCode)
     {
-        return (($adjustmentCode == self::ADJUSTMENT_CODE) || ($adjustmentCode == TaxAdjustment::ADJUSTMENT_CODE));
+        return (($adjustmentCode == self::ADJUSTMENT_CODE) ||
+            ($adjustmentCode == \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE));
     }
 
     /**
