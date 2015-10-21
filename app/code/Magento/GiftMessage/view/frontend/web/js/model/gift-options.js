@@ -23,11 +23,13 @@ define(['underscore', 'ko'],
                 _.each(this.options(), function (data) {
                     if (data.id === itemId) {
                         option = data.value;
+
+                        return false;
                     }
                 });
 
                 return option;
             }
-        }
+        };
     }
 );
