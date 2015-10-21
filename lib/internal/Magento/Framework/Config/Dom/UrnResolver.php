@@ -10,9 +10,18 @@
 namespace Magento\Framework\Config\Dom;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
 
 class UrnResolver
 {
+    /**
+     * Registers libxml entity loader
+     */
+    public function __construct()
+    {
+        libxml_set_external_entity_loader([$this, 'registerEntityLoader']);
+    }
+
     /**
      * Get real file path by it's URN reference
      *
@@ -55,5 +64,28 @@ class UrnResolver
             }
         }
         return $schema;
+    }
+
+    /**
+     * Callback registered for libxml to resolve URN to the file path
+     *
+     * @param $public
+     * @param $system
+     * @param $context
+     * @return resource
+     * @throws LocalizedException
+     */
+    public function registerEntityLoader($public, $system, $context)
+    {
+        if (strpos($system, 'urn:') === 0) {
+            $filePath = $this->getRealPath($system);
+        } else {
+            if (file_exists($system)) {
+                $filePath = $system;
+            } else {
+                throw new LocalizedException(__('File %system cannot be found', ['system' => $system]));
+            }
+        }
+        return fopen($filePath, "r+");
     }
 }
