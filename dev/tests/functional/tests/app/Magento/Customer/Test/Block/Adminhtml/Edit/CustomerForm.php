@@ -141,4 +141,21 @@ class CustomerForm extends FormTabs
 
         return $this;
     }
+
+    /**
+     * Get array of label => js error text.
+     *
+     * @return array
+     */
+    public function getJsErrors()
+    {
+        $tabs = ['account_information', 'addresses'];
+        $jsErrors = [];
+        foreach ($tabs as $tabName) {
+            $tab = $this->getTab($tabName);
+            $this->openTab($tabName);
+            $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
+        }
+        return $jsErrors;
+    }
 }
