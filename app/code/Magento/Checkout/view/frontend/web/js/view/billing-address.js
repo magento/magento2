@@ -150,7 +150,7 @@ define(
                         var addressData = this.source.get(this.dataScopePrefix),
                             newBillingAddress = createBillingAddress(addressData);
 
-                        if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
+                        if (customer.isLoggedIn() && !this.customerHasAddresses) {
                             this.saveInAddressBook(true);
                         }
                         addressData.save_in_address_book = this.saveInAddressBook();
