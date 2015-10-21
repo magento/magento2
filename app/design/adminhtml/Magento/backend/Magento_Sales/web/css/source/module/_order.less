@@ -48,6 +48,7 @@
         #mix-grid .width(9,12);
         margin-left: 0;
     }
+
     .order-sidebar {
         #mix-grid .column(3,12);
         margin-left: 0;
@@ -69,6 +70,34 @@
     .order-view-account-information .order-account-information {
         float: right;
         #mix-grid .width(6,12);
+    }
+}
+
+//
+//  Tablets
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .order-details {
+        .admin__data-grid-header {
+            .admin__filter-actions {
+                float: none;
+                margin-bottom: @indent__base;
+            }
+        }
+
+        .admin__data-grid-header-row {
+            .admin__control-support-text {
+                margin-left: 0;
+            }
+        }
+
+        .order-search-items {
+            .action-configure {
+                display: block;
+                float: none;
+            }
+        }
     }
 }
 
