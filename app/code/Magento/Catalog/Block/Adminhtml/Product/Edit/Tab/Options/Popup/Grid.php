@@ -65,7 +65,8 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 
         if (null !== $this->getRequest()->getParam('current_product_id')) {
             $this->getCollection()->getSelect()->where(
-                'e.entity_id != ?', $this->getRequest()->getParam('current_product_id')
+                'e.entity_id != ?',
+                $this->getRequest()->getParam('current_product_id')
             );
         }
 
