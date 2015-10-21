@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice;
 
-abstract class AbstractGroupPrice extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Load Tier Prices for product

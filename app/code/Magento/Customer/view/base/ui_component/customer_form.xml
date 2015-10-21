@@ -120,10 +120,8 @@
         <container name="container_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Group</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
@@ -351,10 +349,8 @@
         <container name="street_container">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Street Address</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">street</item>

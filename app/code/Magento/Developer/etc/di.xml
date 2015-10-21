@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory"/>
     <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
-    <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge" />
+    <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
 
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
@@ -45,50 +45,56 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative"/>
 
-
-    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
+    <virtualType name="AlternativeSourceProcessors" type="Magento\Framework\View\Asset\PreProcessor\AlternativeSource">
         <arguments>
-            <argument name="alternativeExtensions" xsi:type="array">
-                <item name="css" xsi:type="array">
-                    <item name="less" xsi:type="string">less</item>
+            <argument name="lockName" xsi:type="string">alternative-source-css</argument>
+            <argument name="lockerProcess" xsi:type="object">Magento\Framework\View\Asset\LockerProcess</argument>
+            <argument name="alternatives" xsi:type="array">
+                <item name="less" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Adapter\Less\Processor</item>
                 </item>
             </argument>
         </arguments>
     </virtualType>
+
     <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
-            <argument name="preProcessors" xsi:type="array">
+            <argument name="defaultPreprocessor" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\Passthrough</argument>
+            <argument name="preprocessors" xsi:type="array">
                 <item name="less" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="less" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
+                    <item name="magento_import" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\MagentoImport</item>
                     </item>
-                    <item name="less" xsi:type="array">
-                        <item name="magento_import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\MagentoImport</item>
-                        <item name="import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
+                    <item name="import" xsi:type="array">
+                        <item name="after" xsi:type="string">magento_import</item>
+                        <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
                     </item>
                 </item>
                 <item name="css" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
+                    <item name="alternativeSource" xsi:type="array">
+                        <item name="class" xsi:type="string">AlternativeSourceProcessors</item>
+                    </item>
+                    <item name="variable_notation" xsi:type="array">
+                        <item name="after" xsi:type="string">alternativeSource</item>
+                        <item name="class" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
+                    </item>
+                    <item name="module_notation" xsi:type="array">
+                        <item name="after" xsi:type="string">variable_notation</item>
+                        <item name="class" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                    </item>
+                    <item name="css_min" xsi:type="array">
+                        <item name="after" xsi:type="string">module_notation</item>
+                        <item name="class" xsi:type="string">cssMinificationProcessor</item>
                     </item>
                 </item>
                 <item name="js" xsi:type="array">
-                    <item name="js" xsi:type="array">
-                        <item name="js_min" xsi:type="string">jsMinificationProcessor</item>
+                    <item name="js_min" xsi:type="array">
+                        <item name="class" xsi:type="string">jsMinificationProcessor</item>
                     </item>
                 </item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Css\PreProcessor\Less">
-        <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge</argument>
         </arguments>
     </type>
 
@@ -124,24 +130,6 @@
     <virtualType name="cssSourceOverriddenBaseFiles" type="Magento\Framework\View\File\Collector\Override\Base">
         <arguments>
             <argument name="subDir" xsi:type="string">web</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
-        <arguments>
-            <argument name="fileGeneratorTypes" xsi:type="array">
-                <item name="less" xsi:type="object">fileAssemblerFileGenerator</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="fileAssemblerFileGenerator" type="Magento\Framework\Css\PreProcessor\FileGenerator">
-        <arguments>
-            <argument name="relatedGenerator" xsi:type="object">fileAssemblerRelatedFilesGenerator</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="fileAssemblerRelatedFilesGenerator" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
-        <arguments>
-            <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </virtualType>
 </config>

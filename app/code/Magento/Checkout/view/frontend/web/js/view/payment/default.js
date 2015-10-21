@@ -17,7 +17,7 @@ define(
         'uiRegistry',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/model/messages',
-        'Magento_Ui/js/core/renderer/layout'
+        'uiLayout'
     ],
     function (
         ko,
