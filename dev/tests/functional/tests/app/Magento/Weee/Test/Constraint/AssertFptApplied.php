@@ -172,8 +172,6 @@ class AssertFptApplied extends AbstractConstraint
     protected function getCartPrice(CatalogProductSimple $product, array $actualPrices)
     {
         $this->checkoutCart->open();
-        $this->checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
-        $this->checkoutCart->getShippingBlock()->waitForUpdatedShippingMethods();
         $productItem = $this->checkoutCart->getCartBlock()->getCartItem($product);
         $productWeeeItem = $this->checkoutCart->getWeeeCartBlock()->getCartItem($product);
         $actualPrices['cart_item_price'] = $productItem->getPrice();
