@@ -113,7 +113,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
 
     /**
      * @param float $amount
-     * @param null|bool|string $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface|bool|float
      */

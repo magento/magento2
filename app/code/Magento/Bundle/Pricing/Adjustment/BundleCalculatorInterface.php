@@ -42,7 +42,7 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * Option amount calculation for saleable item
      *
      * @param Product $saleableItem
-     * @param null|string $exclude
+     * @param null|string|array $exclude
      * @param bool $searchMin
      * @param \Magento\Framework\Pricing\Amount\AmountInterface|null $bundleProductAmount
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
@@ -60,7 +60,7 @@ interface BundleCalculatorInterface extends CalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|string $exclude code of adjustment that has to be excluded
+     * @param null|string|array $exclude code of adjustment that has to be excluded
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null);
