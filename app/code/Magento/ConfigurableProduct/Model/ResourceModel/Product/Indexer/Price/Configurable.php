@@ -48,12 +48,56 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     protected function reindex($entityIds = null)
     {
         if ($this->hasEntity() || !empty($entityIds)) {
-            $this->_prepareFinalPriceData($entityIds);
+            if (!empty($entityIds)) {
+                $allEntityIds = $this->getRelatedProduct($entityIds);
+                $this->prepareFinalPriceDataForType($allEntityIds, null);
+            } else {
+                $this->_prepareFinalPriceData($entityIds);
+            }
             $this->_applyCustomOption();
-            $this->_applyConfigurableOption();
-            $this->_movePriceDataToIndexTable();
+            $this->_applyConfigurableOption($entityIds);
+            $this->_movePriceDataToIndexTable($entityIds);
         }
         return $this;
+    }
+
+    /**
+     * Get related product
+     *
+     * @param int[] $entityIds
+     */
+    private function getRelatedProduct($entityIds)
+    {
+        $select = $this->getConnection()->select()->union([
+            $this->getConnection()
+                ->select()
+                ->from(
+                    $this->getTable('catalog_product_super_link'),
+                    'parent_id'
+                )->where(
+                    'parent_id in (?)', $entityIds
+                ),
+            $this->getConnection()
+                ->select()
+                ->from(
+                    $this->getTable('catalog_product_super_link'),
+                    'product_id'
+                )->where(
+                    'parent_id in (?)', $entityIds
+                ),
+            $this->getConnection()
+                 ->select()
+                 ->from(
+                     $this->getTable('catalog_product_super_link'),
+                     'product_id'
+                 )->where(
+                     'product_id in (?)', $entityIds
+                 )
+        ]);
+        return array_map(
+            'intval',
+             $this->getConnection()->fetchCol($select)
+        );
     }
 
     /**
@@ -105,7 +149,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _applyConfigurableOption()
+    protected function _applyConfigurableOption($entityIds)
     {
         $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
