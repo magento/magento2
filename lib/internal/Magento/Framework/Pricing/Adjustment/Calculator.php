@@ -36,6 +36,7 @@ class Calculator implements CalculatorInterface
      * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
