@@ -39,11 +39,11 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add billing agreement filter on orders collection
      *
-     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $orderCollection
      * @param string|int|array $agreementIds
      * @return $this
      */
-    public function addOrdersFilter(\Magento\Sales\Model\ResourceModel\Order\Collection $orderCollection, $agreementIds)
+    public function addOrdersFilter(\Magento\Framework\Data\Collection\AbstractDb $orderCollection, $agreementIds)
     {
         $agreementIds = is_array($agreementIds) ? $agreementIds : [$agreementIds];
         $orderCollection->getSelect()->joinInner(
