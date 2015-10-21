@@ -10,19 +10,19 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Creating catalog rule
+ * Creating catalog rule.
  */
 class CreateCatalogRuleStep implements TestStepInterface
 {
     /**
-     * Catalog Rule dataset name
+     * Catalog Rule dataset name.
      *
      * @var string
      */
     protected $catalogRule;
 
     /**
-     * Factory for Fixture
+     * Factory for Fixture.
      *
      * @var FixtureFactory
      */
@@ -36,7 +36,7 @@ class CreateCatalogRuleStep implements TestStepInterface
     protected $deleteAllCatalogRule;
 
     /**
-     * Preparing step properties
+     * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
@@ -51,7 +51,7 @@ class CreateCatalogRuleStep implements TestStepInterface
     }
 
     /**
-     * Create catalog rule
+     * Create catalog rule.
      *
      * @return array
      */
@@ -76,6 +76,8 @@ class CreateCatalogRuleStep implements TestStepInterface
      */
     public function cleanup()
     {
-        $this->deleteAllCatalogRule->run();
+        if ($this->catalogRule != '-') {
+            $this->deleteAllCatalogRule->run();
+        }
     }
 }
