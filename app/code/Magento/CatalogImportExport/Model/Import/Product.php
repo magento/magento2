@@ -244,6 +244,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         'thumbnail_label' => 'thumbnail_image_label',
         self::COL_MEDIA_IMAGE => 'additional_images',
         '_media_image_label' => 'additional_image_labels',
+        '_media_is_disabled' => 'hide_from_product_page',
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
@@ -326,7 +327,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         self::COL_MEDIA_IMAGE,
         '_media_label',
         '_media_position',
-        '_media_is_disabled',
+        '_media_is_disabled'
     ];
 
     /**
@@ -1202,12 +1203,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 if (empty($rowData[$image])) {
                     continue;
                 }
-                $dispersionPath =
-                    \Magento\Framework\File\Uploader::getDispretionPath($rowData[$image]);
+
                 $importImages = explode($this->getMultipleValueSeparator(), $rowData[$image]);
                 foreach ($importImages as $importImage) {
+                    $imageTmp = str_replace('\\', '/', $importImage);
+                    $imageTmp = explode('/', $imageTmp);
+                    $importImageFileName = array_pop($imageTmp);
+
+                    $dispersionPath =
+                        \Magento\Framework\File\Uploader::getDispretionPath($importImageFileName);
+
                     $imageSting = mb_strtolower(
-                        $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
+                        $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImageFileName)
                     );
                     $allImagesFromBunch[$importImage] = $imageSting;
                 }
@@ -1376,8 +1383,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 }
 
                 // 5. Media gallery phase
-                $mediaGalleryImages = array();
-                $mediaGalleryLabels = array();
+                $mediaGalleryImages = [];
+                $mediaGalleryLabels = [];
+                $additionalImageIsDisabled = [];
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
                     $mediaGalleryImages =
                         explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
@@ -1386,6 +1394,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                             explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
                     } else {
                         $mediaGalleryLabels = [];
+                    }
+                    if (isset($rowData['_media_is_disabled'])) {
+                        $additionalImageIsDisabled =
+                            array_flip(explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled']));
                     }
                     if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                         $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
@@ -1418,6 +1430,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                 trim($mediaImage),
                                 true
                             );
+                            if ($uploadedGalleryFiles[$mediaImage] == '') {
+                                $uploadedGalleryFiles[$mediaImage] = $mediaImage;
+                            }
                         }
                     } elseif (!isset($existingImages[$imagePath])) {
                         if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
@@ -1428,22 +1443,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                             $newImagePath = $uploadedGalleryFiles[$mediaImage];
                             $existingImages[$newImagePath][] = $rowSku;
                         }
-                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                        if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                            $position = array_search($mediaImage, $mediaGalleryImages);
-                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
-                                if (!empty($mediaImage)) {
-                                    $mediaGallery[$rowSku][] = [
-                                        'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                        'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                        'position' => $position,
-                                        'disabled' => '',
-                                        'value' => $mediaImage,
-                                    ];
-                                }
+                    }
+
+                    $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+
+                    if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
+                        $position = array_search($mediaImage, $mediaGalleryImages);
+                        foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
+                            if (!empty($mediaImage)) {
+                                $mediaGallery[$rowSku][] = [
+                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                    'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                    'position' => $position + 1,
+                                    'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
+                                    'value' => $mediaImage,
+                                ];
                             }
                         }
                     }
+
                     foreach ($this->_imagesArrayKeys as $imageCol) {
                         if (empty($rowData[$imageCol]) || ($imageCol == self::COL_MEDIA_IMAGE)) {
                             continue;
@@ -1825,7 +1843,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
             }
         }
         try {
-            $this->_connection->insertOnDuplicate($mediaValueTableName, $multiInsertData, ['value_id']);
+            $this->_connection->insertOnDuplicate(
+                $mediaValueTableName,
+                $multiInsertData,
+                ['value_id', 'store_id', 'entity_id', 'label', 'position', 'disabled']
+            );
         } catch (\Exception $e) {
             $this->_connection->delete(
                 $mediaGalleryTableName,
