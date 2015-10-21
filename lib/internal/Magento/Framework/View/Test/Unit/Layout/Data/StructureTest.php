@@ -3,11 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\View\Test\Unit\Layout\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
 
-class StructureTest extends PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -65,8 +66,10 @@ class StructureTest extends PHPUnit_Framework_TestCase
 
         $this->loggerMock->expects($loggerExpects)
             ->method('critical')
-            ->with("Broken reference: the '{$childName}' tries to reorder itself towards '', but " .
-                "their parents are different: '{$parentName}' and '' respectively.");
+            ->with(
+                "Broken reference: the '{$childName}' tries to reorder itself towards '', but " .
+                "their parents are different: '{$parentName}' and '' respectively."
+            );
 
         $this->dataStructure->reorderChildElement($parentName, $childName, $offsetOrSibling);
     }

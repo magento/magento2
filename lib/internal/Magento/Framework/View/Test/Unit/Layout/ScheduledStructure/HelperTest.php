@@ -185,8 +185,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->loggerMock->expects($loggerExpects)
             ->method('critical')
-            ->with("Broken reference: the '{$key}' element cannot be added as child to '{$parentName}', " .
-                'because the latter doesn\'t exist');
+            ->with(
+                "Broken reference: the '{$key}' element cannot be added as child to '{$parentName}', " .
+                'because the latter doesn\'t exist'
+            );
 
         $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructureMock, $key);
     }
@@ -259,7 +261,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructureMock->expects($this->once())->method('setElement')->with($key, [$block, $data]);
 
         $this->dataStructureMock->expects($this->once())->method('createElement')->with($key, ['type' => $block]);
-        $this->dataStructureMock->expects($this->once())->method('hasElement')->with($parentName)->willReturn($hasParent);
+        $this->dataStructureMock->expects($this->once())
+            ->method('hasElement')
+            ->with($parentName)
+            ->willReturn($hasParent);
         $this->dataStructureMock->expects($this->exactly($setAsChild))
             ->method('setAsChild')
             ->with($key, $parentName, $alias)
