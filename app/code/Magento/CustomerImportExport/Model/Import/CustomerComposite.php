@@ -224,13 +224,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         }
         $this->_initAddressAttributes();
 
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->_customerAttributes,
-            $this->_addressAttributes,
-            $this->_customerEntity->customerFields
-        );
-
         // next customer id
         if (isset($data['next_customer_id'])) {
             $this->_nextCustomerId = $data['next_customer_id'];
@@ -488,5 +481,20 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         $rowData[Address::COLUMN_ADDRESS_ID] = null;
 
         return parent::_prepareRowForDb($rowData);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidColumnNames()
+    {
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->_customerAttributes,
+            $this->_addressAttributes,
+            $this->_customerEntity->customerFields
+        );
+
+        return $this->validColumnNames;
     }
 }
