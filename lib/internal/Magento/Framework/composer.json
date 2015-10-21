@@ -17,6 +17,7 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "ext-gd": "*",
+        "ext-openssl": "*",
         "lib-libxml": "*",
         "ext-xsl": "*"
     },
