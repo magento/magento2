@@ -286,7 +286,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
-        $ioObject->expects($this->any())->method('getResultFileName')->willReturn(self::RESULT_FILE);
+        $ioObject->expects($this->any())->method('makeGeneratedClassFileName')->willReturn(self::RESULT_FILE);
 
         return [
             'source_class' => $mocks['source_class'],

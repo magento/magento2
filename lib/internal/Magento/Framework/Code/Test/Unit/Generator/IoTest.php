@@ -72,7 +72,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     public function testGetResultFileName()
     {
         $expectedFileName = self::GENERATION_DIRECTORY . '/class/name.php';
-        $this->assertEquals($expectedFileName, $this->_object->getResultFileName(self::CLASS_NAME));
+        $this->assertEquals($expectedFileName, $this->_object->makeGeneratedClassFileName(self::CLASS_NAME));
     }
 
     /**

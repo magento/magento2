@@ -109,7 +109,7 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
 
         //Mocking generation
         $this->ioObjectMock->expects($this->any())
-            ->method('getResultFileName')
+            ->method('makeGeneratedClassFileName')
             ->with($this->getResultClassName())
             ->willReturn($resultFileName);
         $this->ioObjectMock->expects($this->once())
