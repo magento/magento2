@@ -151,21 +151,21 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
 
         $isArrayOption = true;
         foreach ($this->getOptions() as $key => $option) {
+            $optgroupName = '';
             if ($isArrayOption && is_array($option)) {
                 $value = $option['value'];
                 $label = (string)$option['label'];
-                $name = $option['label'] instanceof \Magento\Framework\Phrase ? $option['label']->getText() : $label;
+                $optgroupName = isset($option['optgroup-name']) ? $option['optgroup-name'] : $label;
                 $params = !empty($option['params']) ? $option['params'] : [];
             } else {
                 $value = (string)$key;
                 $label = (string)$option;
-                $name = $label;
                 $isArrayOption = false;
                 $params = [];
             }
 
             if (is_array($value)) {
-                $html .= '<optgroup label="' . $label . '" data-name="' . $name . '">';
+                $html .= '<optgroup label="' . $label . '" data-optgroup-name="' . $optgroupName . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
                         $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
