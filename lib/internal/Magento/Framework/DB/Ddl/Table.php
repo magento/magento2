@@ -310,8 +310,8 @@ class Table
             case self::TYPE_DECIMAL:
             case self::TYPE_NUMERIC:
                 $match = [];
-                $scale = 10;
-                $precision = 0;
+                $scale = 0;
+                $precision = 10;
                 // parse size value
                 if (is_array($size)) {
                     if (count($size) == 2) {
