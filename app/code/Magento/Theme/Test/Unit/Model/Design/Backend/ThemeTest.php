@@ -18,9 +18,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context
      */
-    protected $contextMock;
+    protected $context;
 
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -33,29 +33,38 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected $cacheTypeListMock;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheManagerMock;
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $objectManager = new ObjectManager($this);
+        $this->cacheManagerMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->context = $objectManager->getObject(
+            'Magento\Framework\Model\Context',
+            ['cacheManager' => $this->cacheManagerMock,]
+        );
+
         $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
         $this->cacheTypeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->once())
-            ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
         $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(
+
+        $this->model = $objectManager->getObject(
             'Magento\Theme\Model\Design\Backend\Theme',
             [
                 'design' => $this->designMock,
-                'context' => $this->contextMock,
+                'context' => $this->context,
                 'cacheTypeList' => $this->cacheTypeListMock,
                 'config' => $this->configMock,
             ]
@@ -86,25 +95,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheTypeListMock->expects($this->exactly($callNumber))
             ->method('invalidate');
+        $this->cacheManagerMock->expects($this->exactly($callNumber))
+            ->method('clean');
         $this->configMock->expects($this->any())
             ->method('getValue')
-            ->willReturnMap(
-                [
-                    [
-                        Theme::XML_PATH_INVALID_CACHES,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                        null,
-                        ['block_html' => 1, 'layout' => 1, 'translate' => 1]
-                    ],
-                    [
-                        null,
-                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        $oldValue
-                    ],
-
-                ]
-            );
+            ->willReturn($oldValue);
         $this->model->setValue('some_value');
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
@@ -113,7 +108,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [0, 'some_value'],
-            [2, 'other_value'],
+            [1, 'other_value'],
         ];
     }
 }
