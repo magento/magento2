@@ -80,7 +80,10 @@
                         <!-- ko if: (isCcDetectionEnabled())-->
                         <ul class="credit-card-types">
                             <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
-                            <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
+                            <li class="item" data-bind="css: {
+                                                            _active: $parent.selectedCardType() == item.value,
+                                                            _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value
+                                                            } ">
                                 <!--ko if: $parent.getIcons(item.value) -->
                                 <img data-bind="attr: {
                                     'src': $parent.getIcons(item.value).url,
