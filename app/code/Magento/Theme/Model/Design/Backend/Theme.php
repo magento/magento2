@@ -66,22 +66,16 @@ class Theme extends Value
     /**
      * {@inheritdoc}
      *
-     * {@inheritdoc}. In addition, it sets status 'invalidate' for blocks and other output caches
+     * {@inheritdoc}. In addition, it cleans all
      *
      * @return $this
      */
     public function afterSave()
     {
-        $types = array_keys(
-            $this->_config->getValue(
-                self::XML_PATH_INVALID_CACHES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
+        parent::afterSave();
         if ($this->isValueChanged()) {
-            $this->cacheTypeList->invalidate($types);
+            $this->_cacheManager->clean();
         }
-
-        return parent::afterSave();
+        return $this;
     }
 }
