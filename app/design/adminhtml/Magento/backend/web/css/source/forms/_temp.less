@@ -373,8 +373,10 @@ label.mage-error {
     *:after {
         box-sizing: border-box;
     }
+
     .admin__data-grid-header-row {
         &:extend(.abs-cleafix);
+
         .action-select-multiselect {
             height: 38px;
             left: -1rem;
@@ -383,9 +385,15 @@ label.mage-error {
             top: -1.2rem;
             width: 52px;
         }
-        > div + div {
+
+        > div {
             margin-left: @temp_gutter;
+
+            &:first-child {
+                margin-left: 0;
+            }
         }
+
         button {
             vertical-align: top;
         }
