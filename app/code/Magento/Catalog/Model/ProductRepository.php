@@ -684,13 +684,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
 
             if ($filter->getField() == 'category_id') {
-                $categoryFilter[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
+                if ($conditionType == 'eq') {
+                    $conditionType = 'in';
+                }
+                if ($conditionType == 'neq') {
+                    $conditionType = 'nin';
+                }
+                $categoryFilter[$conditionType][] = $filter->getValue();
                 continue;
             }
             $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
-        if ($categoryFilter) {
-            $collection->addProductCategoriesFilter($categoryFilter);
+
+        foreach($categoryFilter as $conditionType => $values) {
+            $collection->addProductCategoriesFilter($conditionType, $values);
         }
 
         if ($fields) {

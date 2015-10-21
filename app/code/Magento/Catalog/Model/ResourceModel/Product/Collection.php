@@ -859,16 +859,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Filter Product by Categories
      *
-     * @param array $condition
-     * @return void
+     * @param string $conditionType
+     * @param array $values
      */
-    public function addProductCategoriesFilter(array $condition)
+    public function addProductCategoriesFilter($conditionType, array $values)
     {
         $categorySelect = $this->getConnection()->select()->from(
             ['cat' => $this->getTable('catalog_category_product')],
             'cat.product_id'
-        )->where($this->getConnection()->prepareSqlCondition('cat.category_id', $condition));
-        $this->getSelect()->where('e.entity_id IN (?)' , $categorySelect);
+        )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
+        $selectCondition = [ $conditionType => $categorySelect ];
+        $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
     }
 
     /**

@@ -139,21 +139,27 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductCategoriesFilter()
     {
-        $condition = ['attribute' => 'category_id', 'nin' => [1,2]];
+        $condition = ['in' => [1,2]];
+        $values = [1,2];
+        $conditionType = 'nin';
         $preparedSql = "category_id IN(1,2)";
         $tableName = "catalog_category_product";
         $this->connectionMock->expects($this->any())->method('getId')->willReturn(1);
-        $this->connectionMock->expects($this->once())->method('prepareSqlCondition')->with(
-            'cat.category_id', $condition
-        )->willReturn($preparedSql);
+        $this->connectionMock->expects($this->exactly(2))->method('prepareSqlCondition')->withConsecutive(
+            ['cat.category_id', $condition],
+            ['e.entity_id' , [$conditionType => $this->selectMock]]
+        )->willReturnOnConsecutiveCalls(
+            $preparedSql,
+            'e.entity_id IN (1,2)'
+        );
         $this->selectMock->expects($this->once())->method('from')->with(
             ['cat' => $tableName],
             'cat.product_id'
         )->willReturnSelf();
         $this->selectMock->expects($this->exactly(2))->method('where')->withConsecutive(
             [$preparedSql],
-            ['e.entity_id IN (?)', $this->selectMock]
+            ['e.entity_id IN (1,2)']
         )->willReturnSelf();
-        $this->collection->addProductCategoriesFilter($condition);
+        $this->collection->addProductCategoriesFilter($conditionType, $values);
     }
 }
