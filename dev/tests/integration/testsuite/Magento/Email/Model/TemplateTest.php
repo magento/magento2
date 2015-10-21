@@ -526,7 +526,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set 'Magento/blank' for the 'fixturestore' store.
+     * Set 'Magento/luma' for the 'fixturestore' store.
      * Application isolation is required, if a test uses this method.
      */
     protected function setNotDefaultThemeForFixtureStore()
