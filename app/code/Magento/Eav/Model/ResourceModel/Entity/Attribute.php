@@ -15,7 +15,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Eav Entity attributes cache
@@ -37,14 +37,14 @@ class Attribute extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      * @param string $connectionName
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Type $eavEntityType,
         $connectionName = null

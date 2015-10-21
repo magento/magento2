@@ -6,16 +6,23 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab\OptionTier;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class AdvancedPricingTab
- * Product advanced pricing tab
+ * Product advanced pricing tab.
  */
 class AdvancedPricingTab extends ProductTab
 {
     /**
-     * Class name 'Subform' of the main tab form
+     * Locator for Tier Price block.
+     *
+     * @var string
+     */
+    protected $tierPrice = '#attribute-tier_price-container';
+
+    /**
+     * Class name 'Subform' of the main tab form.
      *
      * @var array
      */
@@ -24,7 +31,7 @@ class AdvancedPricingTab extends ProductTab
     ];
 
     /**
-     * Fill 'Advanced price' product form on tab
+     * Fill 'Advanced price' product form on tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -61,7 +68,7 @@ class AdvancedPricingTab extends ProductTab
     }
 
     /**
-     * Get data of tab
+     * Get data of tab.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -95,5 +102,18 @@ class AdvancedPricingTab extends ProductTab
         }
 
         return $formData;
+    }
+
+    /**
+     * Get Tier Price block.
+     *
+     * @return OptionTier
+     */
+    public function getTierPriceForm()
+    {
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab\OptionTier',
+            ['element' => $this->_rootElement->find($this->tierPrice)]
+        );
     }
 }

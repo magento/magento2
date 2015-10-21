@@ -41,7 +41,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $_managerMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_db;
 
@@ -52,7 +52,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->_fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->_managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->_db = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,

@@ -13,9 +13,14 @@
         <button
             class="action-previous"
             type="button"
-            data-bind="css: { disabled: isFirst() },
-                   click: prev">
-            <span>Previous page</span>
+            data-bind="
+                attr: {
+                    title: $t('Previous Page')
+                },
+                css: {
+                    disabled: isFirst()
+                },
+                click: prev">
         </button>
         <input
             id="pageCurrent"
@@ -27,9 +32,14 @@
         </label>
         <button
             class="action-next"
-            data-bind="css: { disabled: isLast() },
-                       click: next">
-            <span>Next page</span>
+            data-bind="
+                attr: {
+                    title: $t('Next Page')
+                },
+                css: {
+                    disabled: isLast()
+                },
+                click: next">
         </button>
     </div>
 </div>

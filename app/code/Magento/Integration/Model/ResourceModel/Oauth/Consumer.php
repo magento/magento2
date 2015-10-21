@@ -5,7 +5,7 @@
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
-class Consumer extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -13,12 +13,12 @@ class Consumer extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {

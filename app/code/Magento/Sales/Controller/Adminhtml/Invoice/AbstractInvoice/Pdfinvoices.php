@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\Order\Pdf\Invoice;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -16,6 +16,9 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

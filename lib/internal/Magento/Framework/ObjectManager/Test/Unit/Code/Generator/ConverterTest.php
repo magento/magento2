@@ -77,7 +77,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         //Mocking _validateData call
         $this->definedClassesMock->expects($this->at(0))
-            ->method('classLoadable')
+            ->method('isClassLoadable')
             ->will($this->returnValue(true));
 
         $this->ioObjectMock->expects($this->once())

@@ -10,7 +10,7 @@ use Magento\CatalogInventory\Model\Stock;
 /**
  * CatalogInventory Stock Status per website Resource Model
  */
-class Status extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Store model manager
@@ -32,14 +32,14 @@ class Status extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig,
