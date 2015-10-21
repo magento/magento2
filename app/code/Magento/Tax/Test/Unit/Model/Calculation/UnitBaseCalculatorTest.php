@@ -71,7 +71,8 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->mockCalculationTool->expects($this->any())
             ->method('round')
             ->withAnyParameters()
-            ->willReturnCallback(function ($price) {
+            ->willReturnCallback(
+                function ($price) {
                     return round($price, 2);
                 }
             );
