@@ -14,7 +14,7 @@ namespace Magento\Indexer\Model\ResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 
-abstract class AbstractResource extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Constructor
@@ -26,12 +26,12 @@ abstract class AbstractResource extends \Magento\Framework\Model\ModelResource\D
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         $connectionName = null
     ) {

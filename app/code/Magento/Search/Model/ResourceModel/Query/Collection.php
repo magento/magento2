@@ -11,7 +11,7 @@ use Magento\Store\Model\Store;
  * Search query collection
  *
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store for filter
@@ -42,7 +42,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -52,7 +52,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;

@@ -20,10 +20,12 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initProperties: function () {
+        initConfig: function () {
+            this._super();
+
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
-            return this._super();
+            return this;
         },
 
         /**

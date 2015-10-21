@@ -40,7 +40,7 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return array|\Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
      */
     public function getCollection()
     {

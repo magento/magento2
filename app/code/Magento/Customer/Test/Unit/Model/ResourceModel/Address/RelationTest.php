@@ -69,7 +69,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             false
         );
         $customerResource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
