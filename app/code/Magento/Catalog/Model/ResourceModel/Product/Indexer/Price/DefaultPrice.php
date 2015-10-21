@@ -225,7 +225,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function _prepareFinalPriceData($entityIds = null)
     {
-       return $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
+        return $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
     }
 
     /**
@@ -275,11 +275,9 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
         );
-        if ($type !== null){
-            $select->where(
-                'e.type_id = ?',
-                $type
-            );
+
+        if ($type !== null) {
+            $select->where('e.type_id = ?', $type);
         }
 
         // add enable products limitation
@@ -571,6 +569,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Mode Final Prices index to primary temporary index table
      *
+     * @param int[]|null $entityIds
      * @return $this
      */
     protected function _movePriceDataToIndexTable($entityIds = null)
