@@ -65,6 +65,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Get related product
      *
      * @param int[] $entityIds
+     * @return int[]
      */
     private function getRelatedProduct($entityIds)
     {
@@ -149,7 +150,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _applyConfigurableOption($entityIds)
+    protected function _applyConfigurableOption()
     {
         $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
