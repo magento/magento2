@@ -151,4 +151,9 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">low</argument>
+        </arguments>
+    </type>
 </config>
