@@ -76,6 +76,11 @@ class BuiltinPlugin
                 $this->kernel->process($result);
             }
         } else {
+            json_decode($result->getContent());
+            if (json_last_error() == JSON_ERROR_NONE) {
+                // reset profiler to avoid appending profiling stat to JSON response
+                \Magento\Framework\Profiler::reset();
+            }
             $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'HIT', true);
         }
         return $result;
