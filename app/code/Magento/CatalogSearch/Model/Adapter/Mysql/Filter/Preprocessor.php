@@ -114,8 +114,9 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif ($filter->getType() === FilterInterface::TYPE_TERM
-            && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+        } elseif (
+            $filter->getType() === FilterInterface::TYPE_TERM &&
+            in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
             $alias = $this->tableMapper->getMappingAlias($filter);
             if (is_array($filter->getValue())) {
@@ -132,7 +133,10 @@ class Preprocessor implements PreprocessorInterface
                 $alias,
                 $value
             );
-        } else {
+        } elseif(
+            $filter->getType() === FilterInterface::TYPE_RANGE &&
+            in_array($attribute->getBackendType(), ['decimal', 'int'], true)
+        ) {
             $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
             $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
             $select = $this->connection->select();
@@ -143,6 +147,31 @@ class Preprocessor implements PreprocessorInterface
                 ->columns([$filter->getField() => 'main_table.value'])
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ?', $currentStoreId)
+                ->having($query);
+
+            $resultQuery = 'search_index.entity_id IN (
+                select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
+            )';
+        } else {
+            $table = $attribute->getBackendTable();
+            $select = $this->connection->select();
+            $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
+
+            $currentStoreId = $this->scopeResolver->getScope()->getId();
+
+            $select->from(['main_table' => $table], 'entity_id')
+                ->joinLeft(
+                    ['current_store' => $table],
+                    'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
+                    . $currentStoreId,
+                    null
+                )
+                ->columns([$filter->getField() => $ifNullCondition])
+                ->where(
+                    'main_table.attribute_id = ?',
+                    $attribute->getAttributeId()
+                )
+                ->where('main_table.store_id = ?', Store::DEFAULT_STORE_ID)
                 ->having($query);
 
             $resultQuery = 'search_index.entity_id IN (
