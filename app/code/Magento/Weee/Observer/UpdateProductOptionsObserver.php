@@ -87,7 +87,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                     }
                 }
 
-                if ($this->weeeData->isDisplayExlDescIncl($product->getStoreId())) {
+                if ($this->weeeData->isDisplayExclDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
                         . '<%%- data.weeePrice.formatted %%>'
@@ -111,7 +111,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
     {
         $calcPrice = 'finalPrice';
         if ($this->weeeData->isDisplayExcl($storeId) ||
-            $this->weeeData->isDisplayExlDescIncl($storeId) ||
+            $this->weeeData->isDisplayExclDescIncl($storeId) ||
             ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
         ) {
             $calcPrice = 'basePrice';
