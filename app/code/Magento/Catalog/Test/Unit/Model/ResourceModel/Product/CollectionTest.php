@@ -160,6 +160,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [$preparedSql],
             ['e.entity_id IN (1,2)']
         )->willReturnSelf();
-        $this->collection->addProductCategoriesFilter($conditionType, $values);
+        $this->collection->addProductCategoriesFilter([$conditionType => $values]);
     }
 }

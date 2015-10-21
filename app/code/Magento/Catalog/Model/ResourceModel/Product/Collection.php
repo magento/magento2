@@ -859,17 +859,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Filter Product by Categories
      *
-     * @param string $conditionType
-     * @param array $values
+     * @param array $categoryFilter
      */
-    public function addProductCategoriesFilter($conditionType, array $values)
+    public function addProductCategoriesFilter(array $categoryFilter)
     {
-        $categorySelect = $this->getConnection()->select()->from(
-            ['cat' => $this->getTable('catalog_category_product')],
-            'cat.product_id'
-        )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
-        $selectCondition = [ $conditionType => $categorySelect ];
-        $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+        foreach ($categoryFilter as $conditionType => $values) {
+            if ($conditionType == 'eq') {
+                $conditionType = 'in';
+            } elseif ($conditionType == 'neq') {
+                $conditionType = 'nin';
+            }
+            $categorySelect = $this->getConnection()->select()->from(
+                ['cat' => $this->getTable('catalog_category_product')],
+                'cat.product_id'
+            )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
+            $selectCondition = [$conditionType => $categorySelect];
+            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+        }
     }
 
     /**
