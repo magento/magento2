@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 
 /**
  * Class DirectpostTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectpostTest extends \PHPUnit_Framework_TestCase
 {
