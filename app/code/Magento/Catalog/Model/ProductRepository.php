@@ -691,7 +691,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         if ($categoryFilter) {
-            $collection->addProductCategoriesFilter($categoryFilter);
+            $collection->addCategoriesFilter($categoryFilter);
         }
 
         if ($fields) {
