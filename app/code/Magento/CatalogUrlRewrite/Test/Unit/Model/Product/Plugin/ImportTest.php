@@ -577,7 +577,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('replace')
             ->with($productUrls);
 
-       $this->import->afterImportData($this->observer);
+        $this->import->afterImportData($this->observer);
     }
 
     /**

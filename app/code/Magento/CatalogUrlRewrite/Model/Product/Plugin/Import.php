@@ -172,7 +172,7 @@ class Import
      *
      * @return Import
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NpathComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _populateForUrlGeneration($rowData)
     {
