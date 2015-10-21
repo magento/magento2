@@ -11,7 +11,7 @@
             <group id="product_video" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Product Video</label>
                 <field id="youtube_api_key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Youtube API key</label>
+                    <label>YouTube API Key</label>
                 </field>
             </group>
         </section>
