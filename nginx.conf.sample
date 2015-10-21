@@ -36,7 +36,7 @@ location /setup {
         include        fastcgi_params;
     }
 
-    location ~ /setup/(?!pub/). {
+    location ~ ^/setup/(?!pub/). {
         deny all;
     }
 }
@@ -44,7 +44,7 @@ location /setup {
 location /update {
     root $MAGE_ROOT;
 
-    location ~ /update/index.php {
+    location ~ ^/update/index.php {
         fastcgi_pass   fastcgi_backend;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
@@ -52,7 +52,7 @@ location /update {
     }
 
     # deny everything but index.php
-    location ~ /update/(?!pub/). {
+    location ~ ^/update/(?!pub/). {
         deny all;
     }
 }
