@@ -17,10 +17,10 @@ interface ShipmentRepositoryInterface
     /**
      * Lists shipments that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\ShipmentSearchResultInterface Shipment search results interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Loads a specified shipment.
