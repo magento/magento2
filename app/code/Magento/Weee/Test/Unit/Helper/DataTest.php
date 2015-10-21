@@ -41,6 +41,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $weeeConfig = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
         $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
         $this->weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
         $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
         $arguments = [
@@ -369,5 +370,29 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
         $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
+    }
+
+    public function testGetProductWeeeAttributesForDisplay()
+    {
+        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->product->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
+        $this->helperData->getProductWeeeAttributesForDisplay($this->product);
+    }
+
+    public function testGetTaxDisplayConfig()
+    {
+        $expected = 1;
+        $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
+        $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
+        $arguments = [
+            'taxData' => $taxData,
+        ];
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
+
+        $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
 }

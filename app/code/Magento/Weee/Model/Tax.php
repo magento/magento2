@@ -200,6 +200,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
+     * @param bool $round
      * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -210,7 +211,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $shipping = null,
         $billing = null,
         $website = null,
-        $calculateTax = null
+        $calculateTax = null,
+        $round = true
     ) {
         $result = [];
 
@@ -283,19 +285,29 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                         //round the "golden price"
                         $amountInclTax = $this->priceCurrency->round($amountInclTax);
                         $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
-                        $taxAmount = $this->priceCurrency->round($taxAmount);
+                        if ($round) {
+                            $taxAmount = $this->priceCurrency->round($taxAmount);
+                        }
                     } else {
                         $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
                         if (count($appliedRates) > 1) {
                             $taxAmount = 0;
                             foreach ($appliedRates as $appliedRate) {
                                 $taxRate = $appliedRate['percent'];
-                                $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
+                                if ($round) {
+                                    $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
+                                } else {
+                                    $taxAmount += $value * $taxRate / 100;
+                                }
                             }
                         } else {
-                            $taxAmount = $this->priceCurrency->round(
-                                $value * $currentPercent / 100
-                            );
+                            if ($round) {
+                                $taxAmount = $this->priceCurrency->round(
+                                    $value * $currentPercent / 100
+                                );
+                            } else {
+                                $taxAmount = $value * $currentPercent / 100;
+                            }
                         }
                     }
                 }
