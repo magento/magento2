@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -32,16 +31,11 @@ class CategoryForm extends FormTabs
     protected $dropdownBlock = '.dropdown';
 
     /**
-     * Get Category edit form.
+     *  Selector for confirm.
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid
+     * @var string
      */
-    public function getCategoryProductsGrid()
-    {
-        return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryTabProductGrid(
-            $this->_rootElement->find($this->productsGridBlock)
-        );
-    }
+    protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
      * Fill form with tabs.
@@ -57,8 +51,10 @@ class CategoryForm extends FormTabs
             $store = $fixture->getStoreId();
             $storeSwitcherBlock = $this->browser->find($this->storeSwitcherBlock);
             $storeSwitcherBlock->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')->setValue($store);
-            $this->browser->acceptAlert();
-
+            $element = $this->browser->find($this->confirmModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
 
         return $this->fillTabs($tabs, $element);
