@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:redefine schemaLocation="../../Config/etc/view.xsd">
+    <xs:redefine schemaLocation="urn:magento:framework:Config/etc/view.xsd">
         <xs:complexType name="mediaType" mixed="true">
             <xs:complexContent>
                 <xs:extension base="mediaType">
