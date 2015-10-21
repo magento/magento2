@@ -1210,7 +1210,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function expectAddToFilter($fieldName, $collectionMock)
     {
         if ($fieldName == 'category_id') {
-            $collectionMock->expects($this->once())->method('addProductCategoriesFilter')
+            $collectionMock->expects($this->once())->method('addCategoriesFilter')
                 ->with(['eq' => ['value']]);
         } else {
             $collectionMock->expects($this->once())->method('addFieldToFilter')

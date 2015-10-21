@@ -859,11 +859,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Filter Product by Categories
      *
-     * @param array $categoryFilter
+     * @param array $categoriesFilter
      */
-    public function addProductCategoriesFilter(array $categoryFilter)
+    public function addCategoriesFilter(array $categoriesFilter)
     {
-        foreach ($categoryFilter as $conditionType => $values) {
+        foreach ($categoriesFilter as $conditionType => $values) {
             if ($conditionType == 'eq') {
                 $conditionType = 'in';
             } elseif ($conditionType == 'neq') {
