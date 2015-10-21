@@ -271,7 +271,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation16">
             <data name="description" xsi:type="string">Create product with tax class and check absent special price</data>
