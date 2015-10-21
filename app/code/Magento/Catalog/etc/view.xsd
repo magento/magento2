@@ -20,7 +20,7 @@
 
     <xs:complexType name="imageType">
         <xs:sequence>
-            <xs:element name="image" maxOccurs="unbounded">
+            <xs:element name="image" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="width" type="xs:positiveInteger" minOccurs="0"/>
