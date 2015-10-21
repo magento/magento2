@@ -200,6 +200,8 @@ class Import
             && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
         ) {
             $product->setStoreId($storeId);
+        } elseif (!$product->hasData(\Magento\Catalog\Api\Data\ProductInterface::STORE_ID)) {
+            $product->setStoreId(Store::DEFAULT_STORE_ID);
         }
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
@@ -212,7 +214,7 @@ class Import
     /**
      * Add product to import
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $storeId
      * @return $this
      */
@@ -220,15 +222,15 @@ class Import
     {
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];
-            $this->products[$product->getId()][$storeId] = $product;
         }
+        $this->products[$product->getId()][$storeId] = $product;
         return $this;
     }
 
     /**
      * Populate global product
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function populateGlobalProduct($product)
