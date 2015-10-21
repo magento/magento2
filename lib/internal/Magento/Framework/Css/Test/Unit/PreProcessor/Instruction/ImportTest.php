@@ -8,6 +8,12 @@
 
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 
+use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
+use Magento\Framework\Css\PreProcessor\Instruction\Import;
+
+/**
+ * Class ImportTest
+ */
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -21,18 +27,29 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     private $asset;
 
     /**
-     * @var \Magento\Framework\Css\PreProcessor\Instruction\Import
+     * @var Import
      */
     private $object;
 
+    /**
+     * @var RelatedGenerator
+     */
+    private $relatedFileGeneratorMock;
+
     protected function setUp()
     {
+
         $this->notationResolver = $this->getMock(
             '\Magento\Framework\View\Asset\NotationResolver\Module', [], [], '', false
         );
         $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
-        $this->object = new \Magento\Framework\Css\PreProcessor\Instruction\Import($this->notationResolver);
+
+        $this->relatedFileGeneratorMock = $this->getMockBuilder(RelatedGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->object = new Import($this->notationResolver, $this->relatedFileGeneratorMock);
     }
 
     /**
