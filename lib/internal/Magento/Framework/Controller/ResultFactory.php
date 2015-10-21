@@ -30,12 +30,12 @@ class ResultFactory
      * @var array
      */
     protected $typeMap = [
-        self::TYPE_JSON     => 'Magento\Framework\Controller\Result\Json',
-        self::TYPE_RAW      => 'Magento\Framework\Controller\Result\Raw',
-        self::TYPE_REDIRECT => 'Magento\Framework\Controller\Result\Redirect',
-        self::TYPE_FORWARD  => 'Magento\Framework\Controller\Result\Forward',
-        self::TYPE_LAYOUT   => 'Magento\Framework\View\Result\Layout',
-        self::TYPE_PAGE     => 'Magento\Framework\View\Result\Page',
+        self::TYPE_JSON     => Result\Json::class,
+        self::TYPE_RAW      => Result\Raw::class,
+        self::TYPE_REDIRECT => Result\Redirect::class,
+        self::TYPE_FORWARD  => Result\Forward::class,
+        self::TYPE_LAYOUT   => \Magento\Framework\View\Result\Layout::class,
+        self::TYPE_PAGE     => \Magento\Framework\View\Result\Page::class,
     ];
 
     /**
