@@ -45,6 +45,11 @@ class OrderService implements OrderManagementInterface
     protected $eventManager;
 
     /**
+     * @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
+     */
+    protected $orderCommentSender;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -60,7 +65,8 @@ class OrderService implements OrderManagementInterface
         \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Sales\Model\OrderNotifier $notifier,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
     ) {
         $this->orderRepository = $orderRepository;
         $this->historyRepository = $historyRepository;
@@ -68,6 +74,7 @@ class OrderService implements OrderManagementInterface
         $this->filterBuilder = $filterBuilder;
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
+        $this->orderCommentSender = $orderCommentSender;
     }
 
     /**
@@ -114,6 +121,9 @@ class OrderService implements OrderManagementInterface
         $order = $this->orderRepository->get($id);
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
+        $notify = isset($statusHistory['is_customer_notified']) ? $statusHistory['is_customer_notified'] : false;
+        $comment = trim(strip_tags($statusHistory->getComment()));
+        $this->orderCommentSender->send($order, $notify, $comment);
         return true;
     }
 
