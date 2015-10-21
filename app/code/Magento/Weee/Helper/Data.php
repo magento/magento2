@@ -774,7 +774,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int|null $storeId
      * @return bool
      */
-    public function isDisplayExlDescIncl($storeId = null)
+    public function isDisplayExclDescIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
