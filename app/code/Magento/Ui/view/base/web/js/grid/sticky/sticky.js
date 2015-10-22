@@ -73,12 +73,6 @@ define([
             $.async(this.stickyContainerSelector,
                 this,
                 this.initContainerNode);
-            $.async(this.stickyElementSelector,
-                this.listing(),
-                this.initStickyListingNode);
-            $.async(this.stickyElementSelector,
-                this.toolbar(),
-                this.initStickyToolbarNode);
 
             return this;
         },
@@ -154,6 +148,13 @@ define([
             $.async(this.rightDataGridCapSelector,
                 node,
                 this.initRightDataGridCap);
+
+            $.async(this.stickyElementSelector,
+                this.listing(),
+                this.initStickyListingNode);
+            $.async(this.stickyElementSelector,
+                this.toolbar(),
+                this.initStickyToolbarNode);
         },
 
         /**

@@ -19,7 +19,7 @@ $storedCards = $block->getCurrentCustomerStoredCards();
     <?php endif; ?>
 </div>
 <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml(); ?>
-<?php if (count($_storedCards)): ?>
+<?php if (count($storedCards)): ?>
     <table class="data-table" id="my-quotes-table">
         <col width="1" />
         <col width="1" />
