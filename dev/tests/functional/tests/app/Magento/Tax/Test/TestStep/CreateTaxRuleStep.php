@@ -80,6 +80,8 @@ class CreateTaxRuleStep implements TestStepInterface
      */
     public function cleanup()
     {
-        $this->deleteAllTaxRule->run();
+        if ($this->taxRule !== null) {
+            $this->deleteAllTaxRule->run();
+        }
     }
 }
