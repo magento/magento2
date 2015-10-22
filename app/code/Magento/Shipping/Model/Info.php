@@ -42,7 +42,7 @@ class Info extends \Magento\Framework\DataObject
     protected $_trackFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
      */
     protected $_trackCollectionFactory;
 
@@ -51,7 +51,7 @@ class Info extends \Magento\Framework\DataObject
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
-     * @param \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory
+     * @param \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -59,7 +59,7 @@ class Info extends \Magento\Framework\DataObject
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
         \Magento\Shipping\Model\Order\TrackFactory $trackFactory,
-        \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory,
+        \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory,
         array $data = []
     ) {
         $this->_shippingData = $shippingData;
@@ -205,7 +205,7 @@ class Info extends \Magento\Framework\DataObject
 
     /**
      * @param Shipment $shipment
-     * @return \Magento\Shipping\Model\Resource\Order\Track\Collection
+     * @return \Magento\Shipping\Model\ResourceModel\Order\Track\Collection
      */
     protected function _getTracksCollection(Shipment $shipment)
     {

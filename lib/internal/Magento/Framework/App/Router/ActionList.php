@@ -6,6 +6,8 @@
  */
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\Module\Dir\Reader as ModuleReader;
+
 class ActionList
 {
     /**
@@ -14,6 +16,11 @@ class ActionList
      * @var array
      */
     protected $actions;
+
+    /**
+     * @var ModuleReader
+     */
+    protected $moduleReader;
 
     /**
      * @var array
@@ -30,14 +37,14 @@ class ActionList
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param ActionList\Reader $actionReader
+     * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        ActionList\Reader $actionReader,
+        ModuleReader $moduleReader,
         $actionInterface = '\Magento\Framework\App\ActionInterface',
         $cacheKey = 'app_action_list',
         $reservedWords = []
@@ -45,8 +52,9 @@ class ActionList
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
         $data = $cache->load($cacheKey);
+        $this->moduleReader = $moduleReader;
         if (!$data) {
-            $this->actions = $actionReader->read();
+            $this->actions = $this->moduleReader->getActionFiles();
             $cache->save(serialize($this->actions), $cacheKey);
         } else {
             $this->actions = unserialize($data);

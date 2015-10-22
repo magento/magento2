@@ -47,12 +47,12 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
 
         $taxClassCollection =
             $this->objectManagerHelper->getCollectionMock(
-                'Magento\Tax\Model\Resource\TaxClass\Collection',
+                'Magento\Tax\Model\ResourceModel\TaxClass\Collection',
                 [$taxClass]
             );
 
         $taxClassCollectionFactory = $this->getMock(
-            'Magento\Tax\Model\Resource\TaxClass\CollectionFactory',
+            'Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory',
             ['create'],
             [],
             '',

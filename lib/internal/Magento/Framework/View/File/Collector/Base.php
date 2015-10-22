@@ -5,14 +5,49 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\View\File\AbstractCollector;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of base files introduced by modules
  */
-class Base extends AbstractCollector
+class Base implements CollectorInterface
 {
+    /**
+     * @var DirSearch
+     */
+    protected $componentDirSearch;
+
+    /**
+     * @var string
+     */
+    private $subDir;
+
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * Constructor
+     *
+     * @param DirSearch $dirSearch
+     * @param FileFactory $fileFactory
+     * @param string $subDir
+     */
+    public function __construct(
+        DirSearch $dirSearch,
+        FileFactory $fileFactory,
+        $subDir = ''
+    ) {
+        $this->componentDirSearch = $dirSearch;
+        $this->fileFactory = $fileFactory;
+        $this->subDir = $subDir ? $subDir . '/' : '';
+    }
+
     /**
      * Retrieve files
      *
@@ -23,29 +58,20 @@ class Base extends AbstractCollector
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $result = [];
-        $namespace = $module = '*';
-        $sharedFiles = $this->directory->search("{$namespace}/{$module}/view/base/{$this->subDir}{$filePath}");
-
-        $filePathPtn = $this->pathPatternHelper->translatePatternFromGlob($filePath);
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/base/{$this->subDir}" . $filePathPtn . "$#i";
+        $sharedFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/base/{$this->subDir}{$filePath}"
+        );
         foreach ($sharedFiles as $file) {
-            $filename = $this->directory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
-            $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName(), null, true);
         }
         $area = $theme->getData('area');
-        $themeFiles = $this->directory->search("{$namespace}/{$module}/view/{$area}/{$this->subDir}{$filePath}");
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/{$this->subDir}" . $filePathPtn . "$#i";
+        $themeFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/{$area}/{$this->subDir}{$filePath}"
+        );
         foreach ($themeFiles as $file) {
-            $filename = $this->directory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
-            $result[] = $this->fileFactory->create($filename, $moduleFull);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName());
         }
         return $result;
     }

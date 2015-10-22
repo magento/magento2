@@ -10,9 +10,9 @@ define([
 
     return Abstract.extend({
         defaults: {
-            cols:       15,
-            rows:       2,
-            template:   'ui/form/element/textarea'
+            cols: 15,
+            rows: 2,
+            template: 'ui/form/element/textarea'
         }
     });
 });

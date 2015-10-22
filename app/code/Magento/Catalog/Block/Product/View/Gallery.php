@@ -12,6 +12,8 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Catalog\Helper\Image;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -19,6 +21,27 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @var \Magento\Framework\Config\View
      */
     protected $configView;
+
+    /**
+     * @var \Magento\Framework\Json\EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    /**
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
+     * @param EncoderInterface $jsonEncoder
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
+        EncoderInterface $jsonEncoder,
+        array $data = []
+    ) {
+        $this->jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $arrayUtils, $data);
+    }
 
     /**
      * Retrieve collection of gallery images
@@ -41,12 +64,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 $image->setData(
                     'medium_image_url',
                     $this->_imageHelper->init($product, 'product_page_image_medium')
+                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
                 $image->setData(
                     'large_image_url',
                     $this->_imageHelper->init($product, 'product_page_image_large')
+                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
@@ -54,6 +79,26 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
 
         return $images;
+    }
+
+    /**
+     * Return magnifier options
+     *
+     * @return string
+     */
+    public function getMagnifier()
+    {
+        return $this->jsonEncoder->encode($this->getVar('magnifier'));
+    }
+
+    /**
+     * Return breakpoints options
+     *
+     * @return string
+     */
+    public function getBreakpoints()
+    {
+        return $this->jsonEncoder->encode($this->getVar('breakpoints'));
     }
 
     /**
@@ -68,10 +113,20 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $imagesItems[] = [
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
-                'original' => $image->getData('large_image_url'),
+                'full' => $image->getData('large_image_url'),
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+            ];
+        }
+        if (empty($imagesItems)) {
+            $imagesItems[] = [
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'caption' => '',
+                'position' => '0',
+                'isMain' => true,
             ];
         }
         return json_encode($imagesItems);
@@ -112,7 +167,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
-        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        $attributes =
+            $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
         return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
     }
 

@@ -5,12 +5,13 @@
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
  */
-class SetResponseAfterSaveOrderObserver
+class SetResponseAfterSaveOrderObserver implements ObserverInterface
 {
     /**
      * Core registry
@@ -59,7 +60,7 @@ class SetResponseAfterSaveOrderObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $this->_coreRegistry->registry('hss_order');

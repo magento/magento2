@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Model\Resource\Order\Creditmemo as Resource;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo as Resource;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;

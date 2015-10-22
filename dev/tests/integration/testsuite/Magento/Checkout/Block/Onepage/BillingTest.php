@@ -47,8 +47,8 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         //fetch sample address
         $address = $this->_addressRepository->getById(self::FIXTURE_ADDRESS_ID);
 
-        /** @var \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection */
-        $quoteCollection = $objectManager->get('Magento\Quote\Model\Resource\Quote\Collection');
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
+        $quoteCollection = $objectManager->get('Magento\Quote\Model\ResourceModel\Quote\Collection');
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
         $quote->setCustomer($customer);

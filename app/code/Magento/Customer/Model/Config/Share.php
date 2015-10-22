@@ -27,7 +27,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
     const SHARE_WEBSITE = 1;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
+     * @var \Magento\Customer\Model\ResourceModel\Customer
      */
     protected $_customerResource;
 
@@ -41,8 +41,8 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -51,8 +51,8 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Customer\Model\ResourceModel\Customer $customerResource,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

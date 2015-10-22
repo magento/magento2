@@ -15,12 +15,12 @@ class CountriesTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $countryCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Directory\Model\Resource\Country\CollectionFactory'
+            '\Magento\Directory\Model\ResourceModel\Country\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $countryCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\Resource\Country\Collection')
+        $countryCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'loadData', 'toOptionArray'])
             ->getMock();

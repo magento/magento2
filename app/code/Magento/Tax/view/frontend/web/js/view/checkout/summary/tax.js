@@ -60,9 +60,9 @@ define(
                 return this.getFormattedPrice(amount);
             },
             getDetails: function() {
-                var totals = this.totals();
-                if (totals.extension_attributes) {
-                    return totals.extension_attributes.tax_grandtotal_details;
+                var taxSegment = totals.getSegment('tax');
+                if (taxSegment && taxSegment.extension_attributes) {
+                    return taxSegment.extension_attributes.tax_grandtotal_details;
                 }
                 return [];
             }

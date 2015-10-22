@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="backend_clean_cache" instance="Magento\Backend\Model\Observer" method="cleanCache">
+        <job name="backend_clean_cache" instance="Magento\Backend\Cron\CleanCache" method="execute">
             <schedule>30 2 * * *</schedule>
         </job>
     </group>

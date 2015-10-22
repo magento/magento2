@@ -10,7 +10,7 @@
              module="Magento_Catalog"
              type="eav"
              entity_type="catalog_category_entity"
-             collection="Magento\Catalog\Model\Resource\Category\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Category\Collection"
              repository_class="Magento\Catalog\Test\Repository\Category"
              handler_interface="Magento\Catalog\Test\Handler\Category\CategoryInterface"
              class="Magento\Catalog\Test\Fixture\Category">
@@ -41,5 +41,6 @@
         <field name="landing_page" group="display_setting" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
         <field name="display_mode" group="display_setting" />
         <field name="category_products" group="category_products" source="Magento\Catalog\Test\Fixture\Category\CategoryProducts" />
+        <field name="store_id" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
     </fixture>
 </config>

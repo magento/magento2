@@ -2,15 +2,14 @@
     "name": "magento/module-downloadable-import-export",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-catalog": "1.0.0-beta",
         "magento/module-import-export": "1.0.0-beta",
         "magento/module-catalog-import-export": "1.0.0-beta",
         "magento/module-downloadable": "1.0.0-beta",
         "magento/module-store": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -18,12 +17,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/DownloadableImportExport"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\DownloadableImportExport\\": ""
+        }
     }
 }

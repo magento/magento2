@@ -15,7 +15,7 @@
             <data name="filters" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="name" xsi:type="string">:lastname</item>
-                    <item name="entity_id_from" xsi:type="string">:id</item>
+                    <item name="email" xsi:type="string">:email</item>
                 </item>
                 <item name="1" xsi:type="array">
                     <item name="email" xsi:type="string">:email</item>

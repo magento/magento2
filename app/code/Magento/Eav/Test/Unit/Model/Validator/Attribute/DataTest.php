@@ -44,16 +44,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $validator->setAttributes([$attribute])->setData($data);
         if ($attribute->getDataModel() || $attribute->getFrontendInput()) {
             $dataModel = $this->_getDataModelMock($result);
-            $attrDataFactory->expects(
-                $this->once()
-            )->method(
-                'create'
-            )->with(
-                $attribute,
-                $entity
-            )->will(
-                $this->returnValue($dataModel)
-            );
+            $attrDataFactory->expects($this->any())
+                ->method('create')
+                ->with($attribute, $entity)
+                ->will($this->returnValue($dataModel));
         }
         $this->assertEquals($expected, $validator->isValid($entity));
         $this->assertEquals($messages, $validator->getMessages());
@@ -72,6 +66,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
+                    'is_visible' => true,
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
@@ -82,19 +77,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
+                    'is_visible' => true,
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => false,
                 'messages' => ['attribute' => ['Error']],
             ],
             'no_data_models' => [
-                'attributeData' => ['attribute_code' => 'attribute', 'frontend_input' => 'text'],
+                'attributeData' => [
+                    'attribute_code' => 'attribute',
+                    'frontend_input' => 'text',
+                    'is_visible' => true,
+                ],
                 'attributeReturns' => ['Error'],
                 'isValid' => false,
                 'messages' => ['attribute' => ['Error']],
             ],
             'no_data_models_no_frontend_input' => [
-                'attributeData' => ['attribute_code' => 'attribute'],
+                'attributeData' => [
+                    'attribute_code' => 'attribute',
+                    'is_visible' => true,
+                ],
                 'attributeReturns' => ['Error'],
                 'isValid' => true,
                 'messages' => [],
@@ -104,6 +107,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
+                    'is_visible' => true,
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
@@ -115,12 +119,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
+                    'is_visible' => true,
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
                 'messages' => [],
                 'setData' => [],
-            ]
+            ],
+            'is_invisible' => [
+                'attributeData' => [
+                    'attribute_code' => 'attribute',
+                    'data_model' => $this->_getDataModelMock(null),
+                    'frontend_input' => 'text',
+                    'is_visible' => false,
+                ],
+                'attributeReturns' => ['Error'],
+                'isValid' => true,
+                'messages' => [],
+            ],
         ];
     }
 
@@ -138,6 +154,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code' => 'attribute',
                 'data_model' => $this->_getDataModelMock(null),
                 'frontend_input' => 'text',
+                'is_visible' => true,
             ]
         );
         $collection = $this->getMockBuilder('Magento\Framework\DataObject')->setMethods(['getItems'])->getMock();
@@ -185,6 +202,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code' => 'attribute',
                 'data_model' => $this->_getDataModelMock(null),
                 'frontend_input' => 'text',
+                'is_visible' => true,
             ]
         );
         $secondAttribute = $this->_getAttributeMock(
@@ -192,6 +210,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code' => 'attribute2',
                 'data_model' => $this->_getDataModelMock(null),
                 'frontend_input' => 'text',
+                'is_visible' => true,
             ]
         );
         $data = ['attribute' => 'new_test_data', 'attribute2' => 'some data'];
@@ -279,6 +298,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code' => 'attribute1',
                 'data_model' => $firstDataModel = $this->_getDataModelMock(['Error1']),
                 'frontend_input' => 'text',
+                'is_visible' => true,
             ]
         );
         $secondAttribute = $this->_getAttributeMock(
@@ -286,6 +306,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code' => 'attribute2',
                 'data_model' => $secondDataModel = $this->_getDataModelMock(['Error2']),
                 'frontend_input' => 'text',
+                'is_visible' => true,
             ]
         );
         $expectedMessages = ['attribute1' => ['Error1'], 'attribute2' => ['Error2']];
@@ -354,11 +375,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAttributeMock($attributeData)
     {
-        $attribute = $this->getMockBuilder(
-            'Magento\Eav\Model\Attribute'
-        )->setMethods(
-            ['getAttributeCode', 'getDataModel', 'getFrontendInput', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
+        $attribute = $this->getMockBuilder('Magento\Eav\Model\Attribute')
+            ->setMethods([
+                'getAttributeCode',
+                'getDataModel',
+                'getFrontendInput',
+                '__wakeup',
+                'getIsVisible',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         if (isset($attributeData['attribute_code'])) {
             $attribute->expects(
                 $this->any()
@@ -385,6 +412,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
             )->will(
                 $this->returnValue($attributeData['frontend_input'])
             );
+        }
+        if (isset($attributeData['is_visible'])) {
+            $attribute->expects($this->any())
+                ->method('getIsVisible')
+                ->willReturn($attributeData['is_visible']);
         }
         return $attribute;
     }
