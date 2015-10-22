@@ -129,7 +129,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Bundle\Test\Constraint\AssertGroupedPriceOnBundleProductPage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
