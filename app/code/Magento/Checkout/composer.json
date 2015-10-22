@@ -15,7 +15,6 @@
         "magento/module-tax": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/module-gift-message": "1.0.0-beta",
         "magento/module-page-cache": "1.0.0-beta",
         "magento/module-sales-rule": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
