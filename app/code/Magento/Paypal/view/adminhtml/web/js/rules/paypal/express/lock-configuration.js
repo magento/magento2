@@ -3,7 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([], function () {
-    "use strict";
+    'use strict';
+
     return function ($target, $owner, data) {
         $target.find(data.buttonConfiguration).addClass('disabled')
             .attr('disabled', 'disabled');
