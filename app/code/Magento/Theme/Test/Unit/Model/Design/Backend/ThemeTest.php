@@ -50,7 +50,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->context = $objectManager->getObject(
             'Magento\Framework\Model\Context',
-            ['cacheManager' => $this->cacheManagerMock,]
+            ['cacheManager' => $this->cacheManagerMock]
         );
 
         $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
