@@ -6,7 +6,7 @@
 namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Store;
+use Magento\Review\Model\Review;
 use Magento\Review\Model\Rating;
 
 class RatingTest extends \PHPUnit_Framework_TestCase
@@ -31,6 +31,6 @@ class RatingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIdentities()
     {
-        static::assertEquals([Store::CACHE_TAG], $this->rating->getIdentities());
+        static::assertEquals([Review::CACHE_TAG], $this->rating->getIdentities());
     }
 }

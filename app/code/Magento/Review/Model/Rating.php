@@ -6,7 +6,6 @@
 namespace Magento\Review\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Rating model
@@ -172,7 +171,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     public function getIdentities()
     {
-        // skip cache for all store
-        return [Store::CACHE_TAG];
+        // clear cache for all reviews
+        return [Review::CACHE_TAG];
     }
 }
