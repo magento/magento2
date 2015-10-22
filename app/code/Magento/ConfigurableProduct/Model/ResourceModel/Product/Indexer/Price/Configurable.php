@@ -49,7 +49,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     {
         if ($this->hasEntity() || !empty($entityIds)) {
             if (!empty($entityIds)) {
-                $allEntityIds = $this->getRelatedProduct($entityIds);
+                $allEntityIds = $this->getRelatedProducts($entityIds);
                 $this->prepareFinalPriceDataForType($allEntityIds, null);
             } else {
                 $this->_prepareFinalPriceData($entityIds);
@@ -67,7 +67,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @param int[] $entityIds
      * @return int[]
      */
-    private function getRelatedProduct($entityIds)
+    private function getRelatedProducts($entityIds)
     {
         $select = $this->getConnection()->select()->union(
             [
