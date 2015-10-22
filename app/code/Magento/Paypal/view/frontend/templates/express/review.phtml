@@ -42,8 +42,8 @@
                                                             <?php echo($currentRate === $rate) ?
                                                                 ' selected="selected"' : '';
                                                             ?>>
-                                                            <?php echo
-                                                                $block->escapeHtml($block->renderShippingRateOption($rate));
+                                                            <?php /* @noEscape */ echo
+                                                                $block->renderShippingRateOption($rate);
                                                             ?>
                                                         </option>
                                                     <?php endforeach; ?>
@@ -70,10 +70,8 @@
                                 <?php endif; ?>
                             <?php else: ?>
                                 <p>
-                                    <?php echo $block->escapeHtml(
-                                        $block->renderShippingRateOption(
-                                            $block->getCurrentShippingRate()
-                                        )
+                                    <?php /* @noEscape */ echo $block->renderShippingRateOption(
+                                        $block->getCurrentShippingRate()
                                     ); ?>
                                 </p>
                             <?php endif; ?>
