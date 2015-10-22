@@ -14,7 +14,6 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/price/dataset" xsi:type="string">default</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
@@ -39,7 +38,6 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">2</data>
@@ -60,7 +58,6 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/special_price" xsi:type="string">10</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
@@ -83,7 +80,6 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options_with_assigned_product</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">2</data>
@@ -102,7 +98,6 @@
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="product/data/tax_class_id" xsi:type="string">Taxable Goods</data>
-            <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-12620</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/weight" xsi:type="string">1</data>
@@ -116,7 +111,6 @@
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/price/dataset" xsi:type="string">default</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
