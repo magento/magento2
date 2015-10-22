@@ -10,6 +10,15 @@ namespace Magento\Framework\Component;
  */
 interface ComponentRegistrarInterface
 {
+    /**#@+
+     * Different types of components
+     */
+    const MODULE = 'module';
+    const LIBRARY = 'library';
+    const THEME = 'theme';
+    const LANGUAGE = 'language';
+    /**#@- */
+    
     /**
      * Get list of registered Magento components
      *
