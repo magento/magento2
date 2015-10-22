@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * General class for tabs on product FormTabs with "Add attribute" button.

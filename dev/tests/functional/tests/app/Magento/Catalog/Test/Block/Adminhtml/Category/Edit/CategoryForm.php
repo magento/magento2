@@ -31,7 +31,7 @@ class CategoryForm extends FormTabs
     protected $dropdownBlock = '.dropdown';
 
     /**
-     *  Selector for confirm.
+     * Selector for confirm.
      *
      * @var string
      */

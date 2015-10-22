@@ -63,6 +63,13 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
     protected $catalogProductEdit;
 
     /**
+     * Custom attribute value to set while product creation.
+     *
+     * @var mixed
+     */
+    protected $attributeValue;
+
+    /**
      * @constructor
      * @param CatalogProductSetIndex $catalogProductSetIndex
      * @param CatalogProductSetEdit $catalogProductSetEdit
@@ -71,6 +78,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductIndex $catalogProductIndex
      * @param CatalogProductEdit $catalogProductEdit
+     * @param mixed $attributeValue [optional]
      */
     public function __construct(
         CatalogProductSetIndex $catalogProductSetIndex,
@@ -79,7 +87,8 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         CatalogAttributeSet $productTemplate,
         FixtureFactory $fixtureFactory,
         CatalogProductIndex $catalogProductIndex,
-        CatalogProductEdit $catalogProductEdit
+        CatalogProductEdit $catalogProductEdit,
+        $attributeValue = null
     ) {
         $this->catalogProductSetIndex = $catalogProductSetIndex;
         $this->catalogProductSetEdit = $catalogProductSetEdit;
@@ -88,6 +97,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
         $this->catalogProductEdit = $catalogProductEdit;
+        $this->attributeValue = $attributeValue;
     }
 
     /**
@@ -103,13 +113,17 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         $this->catalogProductSetEdit->getPageActions()->save();
 
         // Create product with attribute set mentioned above:
+        $customAttribute = $this->attribute;
+        if ($this->attributeValue !== null) {
+            $customAttribute = ['value' => $this->attributeValue, 'attribute' => $customAttribute];
+        }
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             [
                 'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $this->productTemplate],
-                    'custom_attribute' => $this->attribute
+                    'custom_attribute' => $customAttribute
                 ],
             ]
         );
