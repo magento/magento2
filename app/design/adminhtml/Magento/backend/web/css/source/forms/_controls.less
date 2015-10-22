@@ -218,10 +218,10 @@ option:empty {
     [class*='admin__control-'][type] {
         .lib-css(appearence,none);
         .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-order(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
-        order: 1;
         vertical-align: top;
         width: auto;
         :focus {
@@ -271,13 +271,14 @@ option:empty {
         padding: 0;
     }
     &-suffix {
-        order: 3;
+        .lib-vendor-prefix-order(3);
+
         &:last-child {
             padding-right: 1rem;
         }
     }
     &-prefix {
-        order: 0;
+        .lib-vendor-prefix-order(0);
     }
 }
 
