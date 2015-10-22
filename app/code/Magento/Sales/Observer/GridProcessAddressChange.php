@@ -35,6 +35,7 @@ class GridProcessAddressChange implements ObserverInterface
      * This is manual admin action, as result we perform this operation without delay
      *
      * @param EventObserver $observer
+     * @return void
      */
     public function execute(EventObserver $observer)
     {

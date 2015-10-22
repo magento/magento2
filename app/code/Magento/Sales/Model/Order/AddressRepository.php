@@ -14,6 +14,8 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\OrderAddressInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInterface
 {

@@ -238,7 +238,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Load all relative data
      *
-     * return void
+     * @return void
      */
     public function loadRelations()
     {
