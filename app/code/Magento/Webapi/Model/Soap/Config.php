@@ -5,8 +5,6 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Webapi\Model\ServiceMetadata;
 
 /**
@@ -16,9 +14,6 @@ use Magento\Webapi\Model\ServiceMetadata;
  */
 class Config
 {
-    /** @var ReadInterface */
-    protected $modulesDirectory;
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
@@ -39,17 +34,14 @@ class Config
      * Initialize dependencies.
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $registry,
         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->objectManager = $objectManager;
         $this->registry = $registry;
         $this->serviceMetadata = $serviceMetadata;

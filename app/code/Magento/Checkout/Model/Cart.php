@@ -51,7 +51,7 @@ class Cart extends DataObject implements CartInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Checkout\Model\Resource\Cart
+     * @var \Magento\Checkout\Model\ResourceModel\Cart
      */
     protected $_resourceCart;
 
@@ -94,7 +94,7 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Resource\Cart $resourceCart
+     * @param \Magento\Checkout\Model\ResourceModel\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -110,7 +110,7 @@ class Cart extends DataObject implements CartInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Checkout\Model\Resource\Cart $resourceCart,
+        \Magento\Checkout\Model\ResourceModel\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -137,7 +137,7 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get shopping cart resource model
      *
-     * @return \Magento\Checkout\Model\Resource\Cart
+     * @return \Magento\Checkout\Model\ResourceModel\Cart
      * @codeCoverageIgnore
      */
     protected function _getResource()

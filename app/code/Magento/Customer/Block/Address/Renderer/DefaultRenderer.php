@@ -93,7 +93,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     /**
      * @param AbstractAddress|null $address
      * @return string
-     * @deprecated All new code should use renderArray based on Metadata service
+     * All new code should use renderArray based on Metadata service
      */
     public function getFormat(AbstractAddress $address = null)
     {

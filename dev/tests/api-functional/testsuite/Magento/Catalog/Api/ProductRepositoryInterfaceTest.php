@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
@@ -52,7 +53,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
     }
 
-    protected function getProduct($sku)
+    /**
+     * @param string $sku
+     * @param string|null $storeCode
+     * @return array|bool|float|int|string
+     */
+    protected function getProduct($sku, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -66,7 +72,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
         return $response;
     }
 
@@ -130,10 +136,56 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
+    /**
+     * @param array $fixtureProduct
+     *
+     * @dataProvider productCreationProvider
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
+    public function testCreateAllStoreCode($fixtureProduct)
+    {
+        $response = $this->saveProduct($fixtureProduct, 'all');
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
+            'Magento\Store\Model\StoreManagerInterface'
+        );
+
+        foreach ($storeManager->getStores(true) as $store) {
+            $code = $store->getCode();
+            if ($code === Store::ADMIN_CODE) {
+                continue;
+            }
+            $this->assertArrayHasKey(
+                ProductInterface::SKU,
+                $this->getProduct($fixtureProduct[ProductInterface::SKU], $code)
+            );
+        }
+        $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
+    }
+
+    /**
+     * @param array $fixtureProduct
+     *
+     * @dataProvider productCreationProvider
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
+    public function testDeleteAllStoreCode($fixtureProduct)
+    {
+        $sku = $fixtureProduct[ProductInterface::SKU];
+        $this->saveProduct($fixtureProduct);
+        $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
+
+        // Delete all with 'all' store code
+        $this->deleteProduct($sku, 'all');
+        $this->getProduct($sku);
+    }
+
     public function testProductLinks()
     {
         // Create simple product
-        $productData =  [
+        $productData = [
             ProductInterface::SKU => "product_simple_500",
             ProductInterface::NAME => "Product Simple 500",
             ProductInterface::VISIBILITY => 4,
@@ -217,6 +269,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct("product_simple_with_related_500");
     }
 
+    /**
+     * @return array
+     */
     protected function getOptionsData()
     {
         return [
@@ -436,6 +491,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
     }
 
+    /**
+     * @param array $product
+     * @return array|bool|float|int|string
+     */
     protected function updateProduct($product)
     {
         $sku = $product[ProductInterface::SKU];
@@ -517,6 +576,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals('simple', $response['items'][0]['sku']);
     }
 
+    /**
+     * @param $customAttributes
+     * @return array
+     */
     protected function convertCustomAttributesToAssociativeArray($customAttributes)
     {
         $converted = [];
@@ -526,6 +589,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         return $converted;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     protected function convertAssociativeArrayToCustomAttributes($data)
     {
         $customAttributes = [];
@@ -590,9 +657,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @param $product
+     * @param string|null $storeCode
      * @return mixed
      */
-    protected function saveProduct($product)
+    protected function saveProduct($product, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -606,7 +674,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        return $this->_webApiCall($serviceInfo, $requestData);
+        return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
     /**

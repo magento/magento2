@@ -45,7 +45,7 @@ class Observer
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -66,14 +66,14 @@ class Observer
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
+        \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
@@ -105,7 +105,7 @@ class Observer
         }
 
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\Resource\Sitemap\Collection */
+        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
 

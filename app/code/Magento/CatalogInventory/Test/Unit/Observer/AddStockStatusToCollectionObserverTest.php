@@ -57,7 +57,7 @@ class AddStockStatusToCollectionObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddStockStatusToCollection()
     {
-        $productCollection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')
+        $productCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

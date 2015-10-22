@@ -15,59 +15,67 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
     private $dirRead;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $collection;
-
-    /**
      * @var ThemePackageInfo
      */
     private $themePackageInfo;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dirReadFactory;
+
     public function setUp()
     {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->collection = $this->getMock('Magento\Theme\Model\Theme\Data\Collection', [], [], '', false);
-        $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->dirRead);
-        $this->themePackageInfo = new ThemePackageInfo($this->collection, $filesystem);
+        $this->dirReadFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->dirReadFactory->expects($this->any())->method('create')->willReturn($this->dirRead);
+        $this->themePackageInfo = new ThemePackageInfo(
+            $this->componentRegistrar,
+            $this->dirReadFactory
+        );
     }
 
     public function testGetPackageName()
     {
-        $this->dirRead->expects($this->once())->method('isExist')->with('themeA/composer.json')->willReturn(true);
+        $this->componentRegistrar->expects($this->once())->method('getPath')->willReturn('path/to/A');
+        $this->dirRead->expects($this->once())->method('isExist')->with('composer.json')->willReturn(true);
         $this->dirRead->expects($this->once())
             ->method('readFile')
-            ->with('themeA/composer.json')
+            ->with('composer.json')
             ->willReturn('{"name": "package"}');
         $this->assertEquals('package', $this->themePackageInfo->getPackageName('themeA'));
     }
 
     public function testGetPackageNameNonExist()
     {
-        $this->dirRead->expects($this->once())->method('isExist')->with('themeA/composer.json')->willReturn(false);
-        $this->dirRead->expects($this->never())->method('readFile')->with('themeA/composer.json');
+        $this->componentRegistrar->expects($this->once())->method('getPath')->willReturn('path/to/A');
+        $this->dirRead->expects($this->once())->method('isExist')->with('composer.json')->willReturn(false);
+        $this->dirRead->expects($this->never())->method('readFile')->with('composer.json');
         $this->assertEquals('', $this->themePackageInfo->getPackageName('themeA'));
     }
 
     public function testGetFullThemePath()
     {
-        $this->collection->expects($this->once())->method('addDefaultPattern')->with('*');
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->once())->method('getFullPath')->willReturn('fullPath');
-        $this->collection->expects($this->once())->method('getIterator')->willReturn([$theme]);
+        $this->componentRegistrar->expects($this->once())->method('getPaths')->willReturn(['themeA' => 'path/to/A']);
         $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->dirRead->expects($this->once())->method('readFile')->willReturn('{"name": "package"}');
-        $this->assertEquals('fullPath', $this->themePackageInfo->getFullThemePath('package'));
+        $this->assertEquals('themeA', $this->themePackageInfo->getFullThemePath('package'));
         // call one more time to make sure only initialize once
-        $this->assertEquals('fullPath', $this->themePackageInfo->getFullThemePath('package'));
+        $this->assertEquals('themeA', $this->themePackageInfo->getFullThemePath('package'));
     }
 
     public function testGetFullThemePathNonExist()
     {
-        $this->collection->expects($this->once())->method('addDefaultPattern')->with('*');
-        $this->collection->expects($this->once())->method('getIterator')->willReturn([]);
-        $this->assertEquals('', $this->themePackageInfo->getFullThemePath('package'));
+        $this->componentRegistrar->expects($this->once())->method('getPaths')->willReturn(['themeA' => 'path/to/A']);
+        $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
+        $this->dirRead->expects($this->once())->method('readFile')->willReturn('{"name": "package"}');
+        $this->assertEquals('', $this->themePackageInfo->getFullThemePath('package-other'));
     }
 
     /**
@@ -75,8 +83,9 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPackageNameInvalidJson()
     {
+        $this->componentRegistrar->expects($this->once())->method('getPath')->willReturn('path/to/A');
         $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->dirRead->expects($this->once())->method('readFile')->willReturn('{"name": }');
-        $this->assertEquals('package', $this->themePackageInfo->getPackageName('themeA'));
+        $this->themePackageInfo->getPackageName('themeA');
     }
 }

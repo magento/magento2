@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class ProductDataProvider
@@ -15,7 +15,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Product collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $collection;
 

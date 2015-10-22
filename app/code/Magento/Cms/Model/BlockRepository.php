@@ -13,6 +13,8 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 
 /**
  * Class BlockRepository
@@ -21,7 +23,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class BlockRepository implements BlockRepositoryInterface
 {
     /**
-     * @var Resource\Block
+     * @var ResourceBlock
      */
     protected $resource;
 
@@ -31,7 +33,7 @@ class BlockRepository implements BlockRepositoryInterface
     protected $blockFactory;
 
     /**
-     * @var Resource\Block\CollectionFactory
+     * @var BlockCollectionFactory
      */
     protected $blockCollectionFactory;
 
@@ -56,19 +58,19 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataBlockFactory;
 
     /**
-     * @param Resource\Block $resource
+     * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
-     * @param Resource\Block\CollectionFactory $blockCollectionFactory
+     * @param BlockCollectionFactory $blockCollectionFactory
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
-        Resource\Block $resource,
+        ResourceBlock $resource,
         BlockFactory $blockFactory,
         \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
-        Resource\Block\CollectionFactory $blockCollectionFactory,
+        BlockCollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor
@@ -122,7 +124,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return Resource\Block\Collection
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {

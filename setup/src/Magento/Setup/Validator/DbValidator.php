@@ -62,8 +62,9 @@ class DbValidator
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
+        // establish connection to information_schema view to retrieve information about user and table privileges
         $connection = $this->connectionFactory->create([
-            ConfigOptionsListConstants::KEY_NAME => $dbName,
+            ConfigOptionsListConstants::KEY_NAME => 'information_schema',
             ConfigOptionsListConstants::KEY_HOST => $dbHost,
             ConfigOptionsListConstants::KEY_USER => $dbUser,
             ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
@@ -86,6 +87,7 @@ class DbValidator
                 }
             }
         }
+
         return $this->checkDatabasePrivileges($connection, $dbName);
     }
 
@@ -99,12 +101,60 @@ class DbValidator
      */
     private function checkDatabasePrivileges(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
     {
-        $grantInfo = $connection->query('SHOW GRANTS FOR current_user()')->fetchAll(\PDO::FETCH_NUM);
-        foreach ($grantInfo as $grantRow) {
-            if (preg_match('/(ALL|ALL\sPRIVILEGES)\sON\s[^a-zA-Z\d\s]?(\*|' . $dbName .  ')/', $grantRow[0]) === 1) {
-                return true;
-            }
+        $requiredPrivileges = [
+            'SELECT',
+            'INSERT',
+            'UPDATE',
+            'DELETE',
+            'CREATE',
+            'DROP',
+            'REFERENCES',
+            'INDEX',
+            'ALTER',
+            'CREATE TEMPORARY TABLES',
+            'LOCK TABLES',
+            'EXECUTE',
+            'CREATE VIEW',
+            'SHOW VIEW',
+            'CREATE ROUTINE',
+            'ALTER ROUTINE',
+            'EVENT',
+            'TRIGGER'
+        ];
+
+        // check global privileges
+        $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES "
+            . "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
+        $grantInfo = $connection->query($userPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
+        if (empty(array_diff($requiredPrivileges, $this->parseGrantInfo($grantInfo)))) {
+            return true;
         }
-        throw new \Magento\Setup\Exception('Database user does not have enough privileges.');
+
+        // check table privileges
+        $schemaPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES " .
+            "WHERE '$dbName' LIKE TABLE_SCHEMA AND REPLACE(GRANTEE, '\'', '') = current_user()";
+        $grantInfo = $connection->query($schemaPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
+        if (empty(array_diff($requiredPrivileges, $this->parseGrantInfo($grantInfo)))) {
+            return true;
+        }
+
+        $errorMessage = 'Database user does not have enough privileges. Please make sure '
+            . implode(', ', $requiredPrivileges) . " privileges are granted to table '$dbName'.";
+        throw new \Magento\Setup\Exception($errorMessage);
+    }
+
+    /**
+     * Parses query result
+     *
+     * @param array $grantInfo
+     * @return array
+     */
+    private function parseGrantInfo(array $grantInfo)
+    {
+        $result = [];
+        foreach ($grantInfo as $grantRow) {
+            $result[] = $grantRow[0];
+        }
+        return $result;
     }
 }

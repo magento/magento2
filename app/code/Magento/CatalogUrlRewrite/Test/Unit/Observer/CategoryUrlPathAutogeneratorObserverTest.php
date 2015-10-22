@@ -89,7 +89,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('setUrlPath')->willReturnSelf();
         $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
         $this->category->expects($this->once())->method('dataHasChangedFor')->with('url_path')->willReturn(true);
-        $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Category')
+        $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category')
             ->disableOriginalConstructor()->getMock();
         $this->category->expects($this->once())->method('getResource')->willReturn($categoryResource);
         $categoryResource->expects($this->once())->method('saveAttribute')->with($this->category, 'url_path');
@@ -99,7 +99,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
             ->disableOriginalConstructor()->getMock();
 
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildren')->willReturn([$childCategory]);
-        $childCategoryResource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Category')
+        $childCategoryResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category')
             ->disableOriginalConstructor()->getMock();
         $childCategory->expects($this->once())->method('unsUrlPath')->willReturnSelf();
         $childCategory->expects($this->once())->method('getResource')->willReturn($childCategoryResource);

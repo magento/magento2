@@ -56,7 +56,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
             'Magento\Catalog\Model\Product'
         );
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $productResource = $product->getResource();
         $productResource->getAttribute('sku')->setData('used_for_sort_by', 1)->save();
 
@@ -77,7 +77,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
             'Magento\Catalog\Model\Product'
         );
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $productResource = $product->getResource();
         $productResource->getAttribute('media_gallery')->delete();
 

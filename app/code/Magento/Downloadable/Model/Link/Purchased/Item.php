@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Link\Purchased;
 
-use Magento\Downloadable\Model\Resource\Link\Purchased\Item as Resource;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
 
 /**
  * Downloadable links purchased item model
@@ -66,7 +66,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Resource\Link\Purchased\Item');
+        $this->_init('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item');
         parent::_construct();
     }
 

@@ -12,13 +12,15 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
+     *
+     * @param array $testArray The initial array that specifies the set of additional options
+     * @param bool $weeeEnabled Whether the Weee module is assumed to be enabled
+     * @param bool $weeeDisplayExclDescIncl Is this Weee display setting assumed to be set
+     * @param array $expectedArray The revised array of the additional options
+     *
      * @dataProvider updateProductOptionsProvider
-     * @param array $testArray
-     * @param bool $weeeDisplay
-     * @param bool $weeeEnabled
-     * @param array $expectedArray
      */
-    public function testUpdateProductOptions($testArray, $weeeDisplay, $weeeEnabled, $expectedArray)
+    public function testUpdateProductOptions($testArray, $weeeEnabled, $weeeDisplayExclDescIncl, $expectedArray)
     {
         $configObj = new \Magento\Framework\DataObject(
             [
@@ -36,7 +38,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt2',
-                'amount' => '15.0000',
+                'amount' => '7.0000',
             ]
         );
 
@@ -44,11 +46,9 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
-
         $weeeHelper->expects($this->any())
             ->method('geDisplayExlDescIncl')
-            ->will($this->returnValue($weeeDisplay));
-
+            ->will($this->returnValue($weeeDisplayExclDescIncl));
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')
             ->will($this->returnValue([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]));
@@ -63,17 +63,10 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($responseObject));
 
-        $product = $this->getMock(
-            '\Magento\Bundle\Model\Product\Type',
-            ['getTypeId', 'getStoreId'],
-            [],
-            '',
-            false
-        );
+        $product = $this->getMock('\Magento\Bundle\Model\Product\Type', ['getTypeId', 'getStoreId'], [], '', false);
         $product->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue(1));
-
         $product->expects($this->any())
             ->method('getTypeId')
             ->will($this->returnValue('bundle'));
@@ -83,7 +76,6 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
-
 
         $objectManager = new ObjectManager($this);
         /** @var \Magento\Weee\Observer\UpdateProductOptionsObserver $weeeObserverObject */
@@ -106,51 +98,53 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
     public function updateProductOptionsProvider()
     {
         return [
-            [
+            'weee not enabled' => [
                 'testArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %>',
                 ],
-                'weeeDisplay' =>  true,
-                'weeeEnabled' =>  false,
+                'weeeEnabled' => false,
+                'weeeDisplayExclDescIncl' => true,
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %>',
                 ],
             ],
-            [
+
+            'weee enabled, but not displaying ExclDescIncl' => [
                 'testArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %>',
                 ],
-                'weeeDisplay' =>  false,
-                'weeeEnabled' =>  true,
+                'weeeEnabled' => true,
+                'weeeDisplayExclDescIncl' => false,
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
-                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %>'
-                        . ' <% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (: <%- data.weeePricefpt1.formatted %>)<% } %>'
+                        . ' <% if (data.weeePricefpt2) { %>  (: <%- data.weeePricefpt2.formatted %>)<% } %>',
                 ],
             ],
-            [
+
+            'weee enabled, and display with ExclDescIncl' => [
                 'testArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %>',
                 ],
-                'weeeDisplay' =>  true,
-                'weeeEnabled' =>  true,
+                'weeeEnabled' => true,
+                'weeeDisplayExclDescIncl' => true,
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
-                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %> '
-                        . '<% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %> '
-                        . '<% if (data.weeePrice) { %><%= data.weeePrice.formatted %><% } %>',
+                        . '{ %> +<%- data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (: <%- data.weeePricefpt1.formatted %>)<% } %> '
+                        . '<% if (data.weeePricefpt2) { %>  (: <%- data.weeePricefpt2.formatted %>)<% } %> '
+                        . '<% if (data.weeePrice) { %><%- data.weeePrice.formatted %><% } %>',
                 ],
             ],
         ];

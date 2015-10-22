@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    "Magento_Ui/js/lib/class",
+    "uiClass",
     "underscore"
 ], function (Class, _) {
     "use strict";

@@ -57,7 +57,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $productCollectionFactory;
 
@@ -78,7 +78,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder
@@ -88,7 +88,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
@@ -197,11 +197,11 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * Prepare and return product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function createCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->productCollectionFactory->create();
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 

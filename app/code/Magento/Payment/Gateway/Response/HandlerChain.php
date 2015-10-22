@@ -16,17 +16,17 @@ class HandlerChain implements HandlerInterface
     private $handlers;
 
     /**
-     * @param array $handlers
      * @param TMapFactory $tmapFactory
+     * @param array $handlers
      */
     public function __construct(
-        array $handlers,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $handlers = []
     ) {
         $this->handlers = $tmapFactory->create(
             [
                 'array' => $handlers,
-                'type' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+                'type' => HandlerInterface::class
             ]
         );
     }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Integration\Test\Unit\Model;
 
-use Magento\Authorization\Model\Resource\Rules;
+use Magento\Authorization\Model\ResourceModel\Rules;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\RootResource;
@@ -72,14 +72,14 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $roleFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->roleMock));
 
         $roleCollectionFactoryMock = $this->getMock(
-            'Magento\Authorization\Model\Resource\Role\CollectionFactory',
+            'Magento\Authorization\Model\ResourceModel\Role\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $roleCollectionMock = $this->getMock(
-            'Magento\Authorization\Model\Resource\Role\Collection',
+            'Magento\Authorization\Model\ResourceModel\Role\Collection',
             ['setUserFilter', 'getFirstItem'],
             [],
             '',
@@ -111,7 +111,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             $roleFactoryMock,
             $roleCollectionFactoryMock,
             $rulesFactoryMock,
-            $this->getMock('Magento\Authorization\Model\Resource\Rules\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->rootAclResourceMock
         );

@@ -18,13 +18,17 @@ var app = angular.module(
         'create-admin-account',
         'install',
         'success',
-        'component-grid',        
+        'component-grid',
+        'install-extension-grid',
         'create-backup',
         'complete-backup',
         'data-option',
         'start-updater',
         'select-version',
-        'updater-success'
+        'updater-success',
+        'home',
+        'auth-dialog',
+        'system-config'
     ]);
 
 app.config(function ($stateProvider) {

@@ -12,14 +12,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Resource\Order\Address\Collection;
-use Magento\Sales\Model\Resource\Order\Creditmemo\Collection as CreditmemoCollection;
-use Magento\Sales\Model\Resource\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\Resource\Order\Item\Collection as ImportCollection;
-use Magento\Sales\Model\Resource\Order\Payment\Collection as PaymentCollection;
-use Magento\Sales\Model\Resource\Order\Shipment\Collection as ShipmentCollection;
-use Magento\Sales\Model\Resource\Order\Shipment\Track\Collection as TrackCollection;
-use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryCollection;
+use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 
 /**
  * Order model
@@ -31,8 +31,8 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  *  sales_order_delete_before
  *  sales_order_delete_after
  *
- * @method \Magento\Sales\Model\Resource\Order _getResource()
- * @method \Magento\Sales\Model\Resource\Order getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()
@@ -188,12 +188,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $productListFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Item\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory
      */
     protected $_orderItemCollectionFactory;
 
@@ -218,37 +218,37 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_orderHistoryFactory;
 
     /**
-     * @var Resource\Order\Address\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory
      */
     protected $_addressCollectionFactory;
 
     /**
-     * @var Resource\Order\Payment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory
      */
     protected $_paymentCollectionFactory;
 
     /**
-     * @var Resource\Order\Status\History\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory
      */
     protected $_historyCollectionFactory;
 
     /**
-     * @var Resource\Order\Invoice\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory
      */
     protected $_invoiceCollectionFactory;
 
     /**
-     * @var Resource\Order\Shipment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory
      */
     protected $_shipmentCollectionFactory;
 
     /**
-     * @var Resource\Order\Creditmemo\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory
      */
     protected $_memoCollectionFactory;
 
     /**
-     * @var Resource\Order\Shipment\Track\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
      */
     protected $_trackCollectionFactory;
 
@@ -271,22 +271,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Order\Status\HistoryFactory $orderHistoryFactory
-     * @param Resource\Order\Address\CollectionFactory $addressCollectionFactory
-     * @param Resource\Order\Payment\CollectionFactory $paymentCollectionFactory
-     * @param Resource\Order\Status\History\CollectionFactory $historyCollectionFactory
-     * @param Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory
-     * @param Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
-     * @param Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
-     * @param Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory $addressCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory $paymentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory $historyCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -300,22 +300,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
-        \Magento\Sales\Model\Resource\Order\Address\CollectionFactory $addressCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Payment\CollectionFactory $paymentCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory $historyCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory $addressCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory $paymentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory $historyCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -356,7 +356,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order');
     }
 
     /**
@@ -427,7 +427,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Load order by system increment identifier
      *
-     * @deprecated
      * @param string $incrementId
      * @return \Magento\Sales\Model\Order
      */
@@ -1303,12 +1302,20 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @param mixed $itemId
-     * @return \Magento\Framework\DataObject
+     * Gets order item by given ID.
+     *
+     * @param int $itemId
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($itemId)
     {
-        return $this->getItemsCollection()->getItemById($itemId);
+        $items = $this->getItems();
+
+        if (isset($items[$itemId])) {
+            return $items[$itemId];
+        }
+
+        return null;
     }
 
     /**

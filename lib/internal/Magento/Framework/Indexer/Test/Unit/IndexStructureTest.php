@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -27,7 +27,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     private $flatScopeResolver;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -46,7 +46,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $this->connectionInterface = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();

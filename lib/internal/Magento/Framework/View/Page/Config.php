@@ -169,8 +169,6 @@ class Config
 
     /**
      * TODO Will be eliminated in MAGETWO-28359
-     *
-     * @deprecated
      * @return void
      */
     public function publicBuild()

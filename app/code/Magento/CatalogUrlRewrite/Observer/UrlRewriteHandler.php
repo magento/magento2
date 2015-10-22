@@ -29,7 +29,7 @@ class UrlRewriteHandler
     /** @var array */
     protected $isSkippedProduct;
 
-    /** @var \Magento\Catalog\Model\Resource\Product\CollectionFactory */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
     protected $productCollectionFactory;
 
     /**
@@ -37,14 +37,14 @@ class UrlRewriteHandler
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -101,7 +101,7 @@ class UrlRewriteHandler
      */
     public function getCategoryProductsUrlRewrites(Category $category, $storeId, $saveRewriteHistory)
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('url_key')
