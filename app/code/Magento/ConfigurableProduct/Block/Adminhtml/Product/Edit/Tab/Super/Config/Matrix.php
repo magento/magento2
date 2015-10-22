@@ -54,6 +54,12 @@ class Matrix extends \Magento\Backend\Block\Template
     /** @var null|array */
     private $productAttributes;
 
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $localeCurrency;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
@@ -72,6 +78,7 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Image $image,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -80,6 +87,7 @@ class Matrix extends \Magento\Backend\Block\Template
         $this->stockRegistry = $stockRegistry;
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;
+        $this->localeCurrency = $localeCurrency;
         $this->image = $image;
     }
 
@@ -88,7 +96,7 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     public function getCurrencySymbol()
     {
-        return $this->_storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
+        return $this->localeCurrency->getCurrency($this->_storeManager->getStore()->getBaseCurrencyCode())->getSymbol();
     }
 
     /**
