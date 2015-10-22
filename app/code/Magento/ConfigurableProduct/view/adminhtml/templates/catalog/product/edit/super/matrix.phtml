@@ -213,7 +213,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                             </li>
                                             <li>
                                                 <a class="action-menu-item" data-bind="
-                                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
+                                                    text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
                                                     click: $parent.toggleProduct.bind($parent, $index())">
                                                 </a>
                                             </li>
