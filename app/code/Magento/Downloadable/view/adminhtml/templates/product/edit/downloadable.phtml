@@ -45,59 +45,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                 '<span class="file-info-name"><%= data.name %></span>' +
                                 ' ' +
                                 '<span class="file-info-size">(<%- data.size %>)</span>' +
-                            '</span>',
-    downloadableCheckbox = jQuery('[data-action=change-type-product]'),
-    toggleTab = function (showTab) {
-        showTab = showTab === undefined ? <?= /* @noEscape */ $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
-        var tab = jQuery('[data-tab=<?= /* @noEscape */ $block->getTabId()?>]');
-        if (tab.data('collapsible')) {
-            tab.collapsible(showTab ? 'activate' : 'deactivate');
-        } else {
-            tab.on('collapsiblecreated', function() {
-                jQuery(this).collapsible(showTab ? 'activate' : 'deactivate');
-            });
-        }
-    },
-    switchConfigurationSectionMessage = function (hasWeight) {
-        if (hasWeight) {
-            configurationSectionMessageHandler.change(false);
-        } else {
-            toggleTab(true);
-            configurationSectionMessageHandler.change(true);
-        }
-    };
-
-    var configurationSectionMessageHandler = (new function(attributeTitle, buttons) {
-        this.title = jQuery(attributeTitle);
-        this.buttons = jQuery(buttons);
-        this.newText = '<?= /* @noEscape */ __('Configurations cannot be created for a standard product with downloadable files.'
-             . ' To create configurations, first remove all downloadable files.');?>';
-        this.oldText = this.title.text();
-        this.change = function (change) {
-            if (change) {
-                this.title.text(this.newText);
-                this.buttons.hide();
-            } else {
-                this.title.text(this.oldText);
-                this.buttons.show();
-            }
-        };
-        if (downloadableCheckbox.is(':checked')) {
-            this.title.text(this.newText);
-            this.buttons.hide();
-        }
-    }('[data-role="product-create-configuration-info"]', '[data-action="product-create-configuration-buttons"]'));
-
-    downloadableCheckbox.on('change', function () {
-        switchConfigurationSectionMessage(!jQuery(this).is(':checked'));
-        jQuery(document).trigger('typeSwitcherOut');
-    });
-
-    jQuery(document).on('typeSwitcher', function (event, data) {
-        downloadableCheckbox.attr('checked', !data.hasWeight);
-        switchConfigurationSectionMessage(data.hasWeight);
-    });
-
+                            '</span>';
     window.Downloadable = {
         uploaderObj : $H({}),
         objCount : 0,
@@ -271,7 +219,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 >
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
 <div class="admin__field admin__field-option admin__field-is-downloaodable">
-    <input type="checkbox" data-action="change-type-product"  class="admin__control-checkbox"
+    <input type="checkbox" data-action="change-type-product-downloadable"  class="admin__control-checkbox"
            name="is_downloadable" id="is-downloaodable" <?= $block->isDownloadable() ? 'checked="checked"' : ''?> />
     <label class="admin__field-label" for="is-downloaodable">
         <span><?= /* @noEscape */ __('Is this downloadable Product?'); ?></span>
@@ -298,3 +246,13 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     </script>
 <?php endif; ?>
 </div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Downloadable/downloadable-type-handler": {
+                "isDownloadable": "<?= /* @noEscape */ $block->isDownloadable() ? 'true' : 'false' ?>",
+                "tabId": "<?= /* @noEscape */ $block->getTabId()?>"
+            }
+        }
+    }
+</script>

@@ -36,13 +36,12 @@ define([
             $(this.messageSelector).notification('clear');
         },
         init: function () {
-            $('[data-form=edit-product]')
-                .on('change_configurable_type', function (event, isConfigurable) {
-                    this.isConfigurable = isConfigurable;
-                    if (this.isPercentPriceTypeExist()) {
-                        this.percentPriceTypeHandler();
-                    }
-                }.bind(this));
+            $(document).on('changeTypeProduct', function (event, controllers) {
+                this.isConfigurable = controllers.type.current === 'configurable';
+                if (this.isPercentPriceTypeExist()) {
+                    this.percentPriceTypeHandler();
+                }
+            }.bind(this));
 
             $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
                 var selected = $('.opt-type > select :selected'),
