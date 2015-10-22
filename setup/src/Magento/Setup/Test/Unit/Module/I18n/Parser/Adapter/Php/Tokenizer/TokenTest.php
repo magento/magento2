@@ -130,6 +130,4 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $token = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token(',', ',');
         $this->assertFalse($token->isConcatenateOperator());
     }
-
-
 }
