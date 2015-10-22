@@ -12,31 +12,21 @@ define([
         defaults: {},
 
         /**
-         * Initializes file component.
-         *
-         * @returns {Media} Chainable.
-         */
-        initialize: function () {
-            this._super()
-                .initFormId();
-
-            return this;
-        },
-
-        /**
          * Defines form ID with which file input will be associated.
          *
          * @returns {Media} Chainable.
          */
-        initFormId: function () {
-            var namespace;
+        initProperties: function () {
+            var scope = this.dataScope,
+                inputName = scope.split('.').slice(1);
 
-            if (this.formId) {
-                return this;
+            this._super();
+
+            this.inputName = utils.serializeName(inputName.join('.'));
+
+            if (!this.formId) {
+                this.formId = this.name.split('.')[0];
             }
-
-            namespace   = this.name.split('.');
-            this.formId = namespace[0];
 
             return this;
         }

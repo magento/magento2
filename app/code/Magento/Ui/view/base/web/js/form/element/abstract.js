@@ -81,16 +81,14 @@ define([
          * @returns {Abstract} Chainable.
          */
         initProperties: function () {
-            var uid     = utils.uniqueid(),
-                scope   = this.dataScope,
-                name    = scope.split('.').slice(1);
+            var uid = utils.uniqueid();
 
             this._super();
 
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
-                inputName: utils.serializeName(name.join('.'))
+                inputName: utils.serializeName(this.dataScope)
             });
 
             return this;
