@@ -77,17 +77,25 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     {
         $values = $this->_getValues();
         $value = $row->getData($this->getColumn()->getIndex());
+        $checked = '';
         if (is_array($values)) {
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
         } else {
-            $checked = $value === $this->getColumn()->getValue() ? ' checked="checked"' : '';
+            $checkedValue = $this->getColumn()->getValue();
+            if ($checkedValue !== null) {
+                $checked = $value === $checkedValue ? ' checked="checked"' : '';
+            }
         }
 
+        $disabled = '';
         $disabledValues = $this->getColumn()->getDisabledValues();
         if (is_array($disabledValues)) {
             $disabled = in_array($value, $disabledValues) ? ' disabled="disabled"' : '';
         } else {
-            $disabled = $value === $this->getColumn()->getDisabledValue() ? ' disabled="disabled"' : '';
+            $disabledValue = $this->getColumn()->getDisabledValue();
+            if ($disabledValue !== null) {
+                $disabled = $value === $disabledValue ? ' disabled="disabled"' : '';
+            }
         }
 
         $this->setDisabled($disabled);
@@ -108,15 +116,18 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      */
     protected function _getCheckboxHtml($value, $checked)
     {
-        $html = '<input type="checkbox" ';
+        $html = '<label class="data-grid-checkbox-cell-inner" ';
+        $html .= ' for="id_' . $this->escapeHtml($value) . '">';
+        $html .= '<input type="checkbox" ';
         $html .= 'name="' . $this->getColumn()->getFieldName() . '" ';
         $html .= 'value="' . $this->escapeHtml($value) . '" ';
+        $html .= 'id="id_' . $this->escapeHtml($value) . '" ';
         $html .= 'class="' .
             ($this->getColumn()->getInlineCss() ? $this->getColumn()->getInlineCss() : 'checkbox') .
-            ' admin__control-checkbox' .
-            '"';
+            ' admin__control-checkbox' . '"';
         $html .= $checked . $this->getDisabled() . '/>';
-        $html .= '<label></label>';
+        $html .= '<label for="id_' . $this->escapeHtml($value) . '"></label>';
+        $html .= '</label>';
         /* ToDo UI: add class="admin__field-label" after some refactoring _fields.less */
         return $html;
     }

@@ -6,6 +6,7 @@
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\ValidatorComposite;
+use Magento\Payment\Gateway\Validator\ValidatorInterface;
 
 class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +33,7 @@ class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
                         'validator1' => 'Magento\Payment\Gateway\Validator\ValidatorInterface',
                         'validator2' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
                     ],
-                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    'type' => ValidatorInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -82,11 +83,11 @@ class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
 
         $validatorComposite = new ValidatorComposite(
             $resultFactory,
+            $tMapFactory,
             [
                 'validator1' => 'Magento\Payment\Gateway\Validator\ValidatorInterface',
                 'validator2' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
-            ],
-            $tMapFactory
+            ]
         );
         static::assertSame($compositeResult, $validatorComposite->validate($validationSubject));
     }
