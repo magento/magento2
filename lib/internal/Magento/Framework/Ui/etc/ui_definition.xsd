@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
-    <xs:include schemaLocation="ui_components.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:Ui/etc/ui_components.xsd"/>
     <!-- Definition the document element -->
     <xs:element name="components" type="definition"/>
     <!-- Registering components in the system -->

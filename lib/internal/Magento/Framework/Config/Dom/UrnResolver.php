@@ -74,6 +74,7 @@ class UrnResolver
      * @param $context
      * @return resource
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function registerEntityLoader($public, $system, $context)
     {
