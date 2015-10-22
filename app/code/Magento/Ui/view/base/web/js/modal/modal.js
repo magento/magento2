@@ -22,7 +22,7 @@ define([
      */
     var transitionEvent =  (function () {
         var transition,
-            elementStyle = document.body.style,
+            elementStyle = document.createElement('div').style,
             transitions = {
                 'transition': 'transitionend',
                 'OTransition': 'oTransitionEnd',
