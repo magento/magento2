@@ -73,10 +73,8 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
         }
 
         $this->_authSession->destroy();
-
-        $route = $this->_backendData->getAreaFrontName();
-
-        $this->_response->setRedirect($this->_storeManager->getStore()->getBaseUrl() . $route)->sendResponse();
+        $adminUrl = $this->_backendData->getHomePageUrl();
+        $this->_response->setRedirect($adminUrl)->sendResponse();
         exit(0);
     }
 }
