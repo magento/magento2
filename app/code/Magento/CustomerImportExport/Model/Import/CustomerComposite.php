@@ -492,7 +492,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             $this->validColumnNames,
             $this->_customerAttributes,
             $this->_addressAttributes,
-            $this->_customerEntity->customerFields
+            $this->_customerEntity->getValidColumnNames()
         );
 
         return $this->validColumnNames;
