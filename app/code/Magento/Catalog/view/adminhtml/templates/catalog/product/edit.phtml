@@ -61,14 +61,17 @@
 <script>
 require([
     "jquery",
-    "Magento_Catalog/catalog/type-switcher",
+    "Magento_Catalog/catalog/type-events",
+    "Magento_Catalog/catalog/apply-to-type-switcher",
     "underscore",
     "mage/mage",
     "mage/backend/tabs",
     "domReady!"
-], function($, TypeSwitcher){
+], function($, TypeSwitcher, ApplyToTypeSwitcher){
     var $form = $('[data-form=edit-product]');
-    $form.data('typeSwitcher', new TypeSwitcher(<?php /* @escapeNotVerified */ echo $block->getTypeSwitcherData();?>).bindAll());
+    $form.data('typeSwitcher', TypeSwitcher.init());
+
+    ApplyToTypeSwitcher.bindAll();
 
     var scriptTagManager = (function($) {
         var hiddenPrefix = 'hidden',

@@ -10,11 +10,36 @@ define([
 
     return {
 
+        $weightSwitcher: $('[data-role=weight-switcher]'),
+        $weight: $('#weight'),
+
         /**
          * Hide weight switcher
          */
         hideWeightSwitcher: function () {
-            $('[data-role=weight-switcher]').hide();
+            this.$weightSwitcher.hide();
+        },
+        isLocked: function () {
+            return this.$weight.is('[data-locked]');
+        },
+        disabled: function () {
+            this.$weight.addClass('ignore-validate').prop('disabled', true);
+        },
+        enabled: function () {
+            this.$weight.removeClass('ignore-validate').prop('disabled', false);
+        },
+        switchWeight: function() {
+            return !this.productHasWeight() ? this.enabled() : this.disable();
+        },
+        productHasWeight: function () {
+            return $('input:checked', this.$weightSwitcher).val() == 1;
+        },
+        notifyProductWeightIsChanged: function () {
+            return $('input:checked', this.$weightSwitcher).trigger('change');
+        },
+        change: function (data) {
+            var value = data !== undefined ? +data : !this.productHasWeight();
+            $('input[value='+ value +']', this.$weightSwitcher).prop('checked', true);
         }
     };
 });

@@ -9,23 +9,25 @@ define([
     'use strict';
 
     return {
+        $links: $('[data-ui-id=product-tabs-tab-link-advanced-pricing]'),
+        $tab: $('[data-tab-panel=advanced-pricing]'),
+        toggleDisabledAttribute: function (disabled) {
+            $('input,select', this.$tab).each(function (index, element) {
+                $(element).attr('disabled', disabled);
+            });
+        },
         init: function () {
-            $('[data-form=edit-product]')
-                .on('change_configurable_type', function (event, isConfigurable) {
-                    var toggleDisabledAttribute = function (disabled) {
-                        $('[data-tab-panel=advanced-pricing]').find('input,select').each(
-                            function (event, element) {
-                                $(element).attr('disabled', disabled);
-                            }
-                        );
-                    };
-                    if (isConfigurable) {
-                        $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').hide();
-                    } else {
-                        $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').show();
-                    }
-                    toggleDisabledAttribute(isConfigurable);
-                });
+            $(document).on('changeTypeProduct', function (event, controllers) {
+                var isConfigurable = controllers.type.current === 'configurable';
+
+                if (isConfigurable) {
+                    this.$links.hide();
+                } else {
+                    this.$links.show();
+                }
+
+                this.toggleDisabledAttribute(isConfigurable);
+            }.bind(this));
         }
     };
 });
