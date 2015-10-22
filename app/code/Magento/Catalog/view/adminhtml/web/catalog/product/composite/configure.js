@@ -761,8 +761,5 @@ define([
         }
     };
 
-    jQuery(document).ready(function(){
-        productConfigure = new ProductConfigure();
-    });
-
+    productConfigure = new ProductConfigure();
 });
