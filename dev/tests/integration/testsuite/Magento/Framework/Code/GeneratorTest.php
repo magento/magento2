@@ -95,7 +95,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // This test is only valid if the factory created the object if Autoloader did not pick it up automatically
         if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
             $content = $this->_clearDocBlock(
-                file_get_contents($this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE . 'Factory'))
+                file_get_contents(
+                    $this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE . 'Factory')
+                )
             );
             $expectedContent = $this->_clearDocBlock(
                 file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceFactory.php.sample')
