@@ -75,7 +75,8 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedResult
      * @dataProvider getLabelDataProvider
      */
-    public function testGetLocalizedLabel($labelText, $attributeCode, $expectedResult) {
+    public function testGetLocalizedLabel($labelText, $attributeCode, $expectedResult)
+    {
         $this->attributeMock->expects($this->exactly(2))
             ->method('getFrontendLabel')
             ->willReturn($labelText);
@@ -90,7 +91,8 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider() {
+    public function getLabelDataProvider()
+    {
         return [
             [null, 'test code', 'test code'],
             ['', 'test code', 'test code'],
