@@ -64,6 +64,9 @@ define([
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
+            events['focusout ' + this.options.item.qty] = function(event) {
+                self._validateQty($(event.currentTarget));
+            };
 
             this._on(this.element, events);
             this._calcHeight();
@@ -92,7 +95,6 @@ define([
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
-                elem.val(itemQty);
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -110,6 +112,18 @@ define([
                 && (changed.length > 0)
                 && (changed - 0 == changed)
                 && (changed - 0 > 0);
+        },
+
+        /**
+         * @param {Object} elem
+         * @private
+         */
+        _validateQty: function(elem) {
+            var itemQty = elem.data('item-qty');
+
+            if (!this._isValidQty(itemQty, elem.val())) {
+                elem.val(itemQty);
+            }
         },
 
         _hideItemButton: function(elem) {
