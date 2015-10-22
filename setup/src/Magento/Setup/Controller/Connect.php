@@ -42,7 +42,10 @@ class Connect extends AbstractActionController
      */
     public function saveAuthJsonAction()
     {
-        $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        $params = [];
+        if ($this->getRequest()->getContent()) {
+            $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        }
         try {
             $userName = isset($params['username']) ? $params['username'] : '';
             $password = isset($params['password']) ? $params['password'] : '';
