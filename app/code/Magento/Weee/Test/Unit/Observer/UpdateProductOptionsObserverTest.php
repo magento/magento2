@@ -50,13 +50,13 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
         $weeeHelper->expects($this->any())
-            ->method('geDisplayIncl')
+            ->method('isDisplayIncl')
             ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_INCL));
         $weeeHelper->expects($this->any())
-            ->method('geDisplayExlDescIncl')
+            ->method('isDisplayExclDescIncl')
             ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL));
         $weeeHelper->expects($this->any())
-            ->method('geDisplayExcl')
+            ->method('isDisplayExcl')
             ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL));
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')

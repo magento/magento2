@@ -75,8 +75,8 @@ class UpdateProductOptionsObserver implements ObserverInterface
                     . '<% } %>';
             }
 
-            if (!$this->weeeData->geDisplayIncl($product->getStoreId()) &&
-                !$this->weeeData->geDisplayExcl($product->getStoreId())) {
+            if (!$this->weeeData->isDisplayIncl($product->getStoreId()) &&
+                !$this->weeeData->isDisplayExcl($product->getStoreId())) {
                 // we need to display the individual Weee amounts
                 foreach ($this->weeeData->getWeeeAttributesForBundle($product) as $weeeAttributes) {
                     foreach ($weeeAttributes as $weeeAttribute) {
@@ -93,7 +93,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                 }
             }
 
-            if ($this->weeeData->geDisplayExlDescIncl($product->getStoreId())) {
+            if ($this->weeeData->isDisplayExclDescIncl($product->getStoreId())) {
                 $options['optionTemplate'] .= sprintf(
                     ' <%% if (data.weeePrice) { %%>'
                     . '<%%- data.weeePrice.formatted %%>'
@@ -114,9 +114,9 @@ class UpdateProductOptionsObserver implements ObserverInterface
     protected function getWhichCalcPriceToUse($storeId = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->geDisplayExlDescIncl($storeId)) {
-            $calcPrice = 'basePrice';
-        } elseif ($this->weeeData->geDisplayExcl($storeId) && $this->taxData->displayPriceExcludingTax()) {
+
+        if ($this->weeeData->isDisplayExclDescIncl($storeId) ||
+            ($this->weeeData->isDisplayExcl($storeId) && $this->taxData->displayPriceExcludingTax())) {
             $calcPrice = 'basePrice';
         }
         return $calcPrice;
