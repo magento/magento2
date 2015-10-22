@@ -43,12 +43,11 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            [],
+            ['getAttributeCode', 'getFrontendLabel'],
             [],
             '',
             false
         );
-        $this->attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('datetime'));
 
         $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);
         $this->model->setAttribute($this->attributeMock);
@@ -59,6 +58,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
         $attributeValue = '11-11-2011';
         $date = new \DateTime($attributeValue);
         $object = new \Magento\Framework\DataObject(['datetime' => $attributeValue]);
+        $this->attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('datetime'));
         $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
             ->will($this->returnValue('text'));
 
@@ -67,5 +67,34 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attributeValue);
 
         $this->assertEquals($attributeValue, $this->model->getValue($object));
+    }
+
+    /**
+     * @param mixed $labelText
+     * @param mixed $attributeCode
+     * @param string $expectedResult
+     * @dataProvider getLabelDataProvider
+     */
+    public function testGetLocalizedLabel($labelText, $attributeCode, $expectedResult) {
+        $this->attributeMock->expects($this->exactly(2))
+            ->method('getFrontendLabel')
+            ->willReturn($labelText);
+        $this->attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+
+        $this->assertInstanceOf('\Magento\Framework\Phrase', $this->model->getLocalizedLabel());
+        $this->assertSame($expectedResult, (string)$this->model->getLocalizedLabel());
+    }
+
+    /**
+     * @return array
+     */
+    public function getLabelDataProvider() {
+        return [
+            [null, 'test code', 'test code'],
+            ['', 'test code', 'test code'],
+            ['test label', 'test code', 'test label'],
+        ];
     }
 }
