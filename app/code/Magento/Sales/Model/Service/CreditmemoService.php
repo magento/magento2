@@ -129,13 +129,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @param bool $offlineRequested
-     * @param bool $notifyCustomer
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
      */
     public function refund(
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        $offlineRequested = false,
-        $notifyCustomer = false
+        $offlineRequested = false
     ) {
         $this->validateForRefund($creditmemo);
         $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);

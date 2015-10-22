@@ -14,6 +14,8 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\ShipmentInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterface
 {
