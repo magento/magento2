@@ -17,7 +17,7 @@ $product->setTypeId(
 )->setName(
     'Simple Product With Custom Options'
 )->setSku(
-    'simple'
+    'simple_dropdown_option'
 )->setPrice(
     200
 )->setMetaTitle(

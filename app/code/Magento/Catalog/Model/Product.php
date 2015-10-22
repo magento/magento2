@@ -337,7 +337,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
-     * @param Product\Option $catalogProductOption
+     * @param Product\OptionFactory $catalogProductOption
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
@@ -376,7 +376,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \Magento\Catalog\Model\Product\Option $catalogProductOption,
+        \Magento\Catalog\Model\Product\OptionFactory $catalogProductOption,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
@@ -405,7 +405,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_stockItemFactory = $stockItemFactory;
-        $this->_optionInstance = $catalogProductOption;
+        $this->_optionInstance = $catalogProductOption->create()->setProduct($this);
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
