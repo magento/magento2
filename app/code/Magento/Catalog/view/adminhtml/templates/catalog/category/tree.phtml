@@ -466,7 +466,7 @@
                         click: function () {
                             (function ($) {
                                 $.ajax({
-                                    url: '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>//',
+                                    url: '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>',
                                     method: 'POST',
                                     data: pd.join(""),
                                     showLoader: true
