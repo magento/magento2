@@ -64,14 +64,16 @@ before_script:
   - composer install --no-interaction --prefer-dist
 script:
   # Unit tests
-  - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist --coverage-html dev/test/coverage/ --testdox-html dev/test/results/unit/results.html; fi"
   # Integration tests
   - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ] || [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; bash IntegationTestsForTravis.sh 2; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis1; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis2; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis1 --coverage-html dev/test/coverage/ --testdox-html dev/test/results/integration_part_1.html; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis2 --coverage-html dev/test/coverage/ --testdox-html dev/test/results/integration_part_2.html; fi"
   # Integration integrity tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity --coverage-html dev/test/coverage/ --testdox-html dev/test/results/integration_integrity.html; fi"
   # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle' --coverage-html dev/test/coverage/ --testdox-html dev/test/results/static_phpcs.html; fi"
   # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard' --coverage-html dev/test/coverage/ --testdox-html dev/test/results/static_annotation.html; fi"
+  - sh -c "cat dev/test/results/*.html"
+  - sh -c "cat dev/test/coverage/*"
