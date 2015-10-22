@@ -148,12 +148,13 @@ define(
 
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix),
-                            newBillingAddress = createBillingAddress(addressData);
+                            newBillingAddress;
 
                         if (customer.isLoggedIn() && !this.customerHasAddresses) {
                             this.saveInAddressBook(true);
                         }
                         addressData.save_in_address_book = this.saveInAddressBook();
+                        newBillingAddress = createBillingAddress(addressData);
 
                         // New address must be selected as a billing address
                         selectBillingAddress(newBillingAddress);
