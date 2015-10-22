@@ -251,4 +251,14 @@ class Totals extends Block
         sleep(1);
         $this->waitForElementNotVisible($this->blockWaitElement);
     }
+
+    /**
+     * Wait for shipping block to appear
+     *
+     * @return bool|null
+     */
+    public function waitForShippingPriceBlock()
+    {
+        $this->waitForElementVisible($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS);
+    }
 }
