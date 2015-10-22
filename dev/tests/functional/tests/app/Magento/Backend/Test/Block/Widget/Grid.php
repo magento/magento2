@@ -302,6 +302,7 @@ abstract class Grid extends Block
     {
         $this->waitLoader();
         $this->_rootElement->find($this->resetButton)->click();
+        $this->waitForElementVisible($this->loader);
         $this->waitLoader();
     }
 
