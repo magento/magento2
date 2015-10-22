@@ -17,13 +17,6 @@ class Theme extends Value
     protected $_design = null;
 
     /**
-     * Path to config node with list of caches
-     *
-     * @var string
-     */
-    const XML_PATH_INVALID_CACHES = 'design/invalid_caches';
-
-    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Model\Context $context
@@ -66,7 +59,7 @@ class Theme extends Value
     /**
      * {@inheritdoc}
      *
-     * {@inheritdoc}. In addition, it cleans all
+     * {@inheritdoc}. In addition, it cleans all Magento cache
      *
      * @return $this
      */
