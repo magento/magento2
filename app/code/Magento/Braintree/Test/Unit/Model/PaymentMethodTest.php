@@ -2383,7 +2383,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
 
         $this->model->refund($paymentObject, $amount);
         $this->assertEquals(1, $paymentObject->getIsTransactionClosed());
-        $this->assertEquals($refundTransactionId . '-' .Transaction::TYPE_REFUND, $paymentObject->getTransactionId());
     }
 
     /**
