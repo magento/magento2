@@ -31,7 +31,7 @@
             <span></span><span></span><span></span><span></span>
         </span>
         <span class="message-text">We're making sure your server environment is ready for
-        {{typeOf(moduleName) !== 'undefined' ? moduleName : title[$state.current.type]}}
+        {{moduleName ? moduleName : ($state.current.type === 'install'? 'Magento' : titles[$state.current.type])}}
             to be {{$state.current.type}}{{endsWith($state.current.type, 'e') ? 'd' : 'ed'}}.</span>
     </div>
 
