@@ -41,7 +41,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param string $excludeAdjustment
+     * @param array $excludeAdjustment
      */
     public function __construct(
         SaleableInterface $saleableItem,

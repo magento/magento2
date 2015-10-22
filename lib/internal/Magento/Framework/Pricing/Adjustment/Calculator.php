@@ -46,7 +46,7 @@ class Calculator implements CalculatorInterface
         foreach ($saleableItem->getPriceInfo()->getAdjustments() as $adjustment) {
             $code = $adjustment->getAdjustmentCode();
             $toExclude = false;
-            if (is_array($exclude) == false) {
+            if (!is_array($exclude)) {
                 if ($exclude === true || ($exclude !== null && $code === $exclude)) {
                     $toExclude = true;
                 }
