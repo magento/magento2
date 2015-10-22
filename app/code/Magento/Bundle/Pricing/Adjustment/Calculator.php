@@ -77,7 +77,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
-     * @param null|string|array $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -92,7 +92,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $amount
      * @param Product $saleableItem
-     * @param null|string $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMinRegularAmount($amount, Product $saleableItem, $exclude = null)
@@ -105,7 +105,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $amount
      * @param Product $saleableItem
-     * @param null|string $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMaxAmount($amount, Product $saleableItem, $exclude = null)
@@ -118,7 +118,7 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $amount
      * @param Product $saleableItem
-     * @param null|string $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMaxRegularAmount($amount, Product $saleableItem, $exclude = null)
@@ -130,7 +130,7 @@ class Calculator implements BundleCalculatorInterface
      * Option amount calculation for bundle product
      *
      * @param Product $saleableItem
-     * @param null|string|array $exclude
+     * @param null|bool|string|array $exclude
      * @param bool $searchMin
      * @param float $baseAmount
      * @param bool $useRegularPrice
@@ -260,7 +260,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|string|array $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null)
@@ -278,7 +278,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|string|array $exclude
+     * @param null|bool|string|arrayy $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
@@ -297,7 +297,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $basePriceValue
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|string|array $exclude
+     * @param null|bool|string|array $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
