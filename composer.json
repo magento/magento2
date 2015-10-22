@@ -69,6 +69,7 @@
         "ext-intl": "*",
         "ext-xsl": "*",
         "ext-mbstring": "*",
+        "ext-openssl": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0"

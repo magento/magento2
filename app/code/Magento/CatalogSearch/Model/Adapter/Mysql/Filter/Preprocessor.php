@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
@@ -97,7 +98,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        /** @var Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
         if ($filter->getField() === 'price') {
             $resultQuery = str_replace(
@@ -114,24 +115,16 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif ($filter->getType() === FilterInterface::TYPE_TERM
-            && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+        } elseif (
+            $filter->getType() === FilterInterface::TYPE_TERM &&
+            in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
-            $alias = $this->tableMapper->getMappingAlias($filter);
-            if (is_array($filter->getValue())) {
-                $value = sprintf(
-                    '%s IN (%s)',
-                    ($isNegation ? 'NOT' : ''),
-                    implode(',', $filter->getValue())
-                );
-            } else {
-                $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
-            }
-            $resultQuery = sprintf(
-                '%1$s.value %2$s',
-                $alias,
-                $value
-            );
+            $resultQuery = $this->processTermSelect($filter, $isNegation);
+        } elseif (
+            $filter->getType() === FilterInterface::TYPE_RANGE &&
+            in_array($attribute->getBackendType(), ['decimal', 'int'], true)
+        ) {
+            $resultQuery = $this->processRangeNumeric($filter, $query, $attribute);
         } else {
             $table = $attribute->getBackendTable();
             $select = $this->connection->select();
@@ -158,6 +151,59 @@ class Preprocessor implements PreprocessorInterface
                 select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
             )';
         }
+
+        return $resultQuery;
+    }
+
+    /**
+     * @param FilterInterface $filter
+     * @param string $query
+     * @param Attribute $attribute
+     * @return string
+     */
+    private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
+    {
+        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
+        $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
+        $select = $this->connection->select();
+
+        $currentStoreId = $this->scopeResolver->getScope()->getId();
+
+        $select->from(['main_table' => $table], 'entity_id')
+            ->columns([$filter->getField() => 'main_table.value'])
+            ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
+            ->where('main_table.store_id = ?', $currentStoreId)
+            ->having($query);
+
+        $resultQuery = 'search_index.entity_id IN (
+                select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
+            )';
+
+        return $resultQuery;
+    }
+
+    /**
+     * @param FilterInterface $filter
+     * @param bool $isNegation
+     * @return string
+     */
+    private function processTermSelect(FilterInterface $filter, $isNegation)
+    {
+        $alias = $this->tableMapper->getMappingAlias($filter);
+        if (is_array($filter->getValue())) {
+            $value = sprintf(
+                '%s IN (%s)',
+                ($isNegation ? 'NOT' : ''),
+                implode(',', $filter->getValue())
+            );
+        } else {
+            $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
+        }
+        $resultQuery = sprintf(
+            '%1$s.value %2$s',
+            $alias,
+            $value
+        );
 
         return $resultQuery;
     }
