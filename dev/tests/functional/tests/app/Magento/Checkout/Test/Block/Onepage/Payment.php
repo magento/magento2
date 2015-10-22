@@ -82,16 +82,19 @@ class Payment extends Block
     public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
         $paymentSelector = sprintf($this->paymentMethodInput, $payment['method']);
+        $paymentLabelSelector = sprintf($this->paymentMethodLabel, $payment['method']);
+
         try {
-            $this->waitForElementVisible($paymentSelector);
-            $this->_rootElement->find($paymentSelector)->click();
+            $this->waitForElementVisible($paymentLabelSelector);
         } catch (\Exception $exception) {
-            $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
-            $this->waitForElementNotVisible($this->waitElement);
-            if (!$paymentLabel->isVisible()) {
-                throw new \Exception('Such payment method is absent.');
-            }
+            throw new \Exception('Such payment method is absent.');
         }
+
+        $paymentRadioButton = $this->_rootElement->find($paymentSelector);
+        if ($paymentRadioButton->isVisible()) {
+            $paymentRadioButton->click();
+        }
+
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
