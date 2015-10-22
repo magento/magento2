@@ -136,7 +136,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\Block\System\Account\Edit\Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password',
         ];
 
-        $testedMessage = 'You saved the account.';
+        $testedMessage = __('You saved the account.');
 
         $this->_authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($this->_userMock));
 
