@@ -163,6 +163,11 @@ define([
          * @private
          */
         _removeItemAfter: function(elem, response) {
+            /** TODO: Extra options support. Should be refactored after MAGETWO-43159. */
+            var self = this;
+            setTimeout(function(){
+                self._calcHeight();
+            }, 500);
         },
         /**
          * @param url - ajax url
