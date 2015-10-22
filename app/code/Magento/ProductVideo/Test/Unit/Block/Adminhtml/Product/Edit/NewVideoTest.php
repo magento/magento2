@@ -37,6 +37,9 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonEncoderMock;
 
+    /**
+     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $mediaHelper;
 
     /**
