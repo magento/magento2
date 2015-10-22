@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Cron;
 class AggregateSalesReportCouponsData
 {
     /**
-     * @var \Magento\SalesRule\Model\Resource\Report\Rule
+     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule
      */
     protected $_reportRule;
 
@@ -23,12 +23,12 @@ class AggregateSalesReportCouponsData
     protected $_localeDate;
 
     /**
-     * @param \Magento\SalesRule\Model\Resource\Report\Rule $reportRule
+     * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\SalesRule\Model\Resource\Report\Rule $reportRule,
+        \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportRule,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {

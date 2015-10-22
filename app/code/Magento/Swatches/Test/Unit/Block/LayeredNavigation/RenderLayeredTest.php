@@ -55,14 +55,14 @@ class RenderLayeredTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->eavAttributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $this->layerAttributeFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory',
+            '\Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->layerAttributeMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Layer\Filter\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute',
             ['getCount'],
             [],
             '',
@@ -91,7 +91,7 @@ class RenderLayeredTest extends \PHPUnit_Framework_TestCase
     public function testSetSwatchFilter()
     {
         $this->block->method('filter')->willReturn($this->filterMock);
-        $eavAttribute = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $eavAttribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->filterMock->expects($this->once())->method('getAttributeModel')->willReturn($eavAttribute);
         $this->block->method('eavAttribute')->willReturn($eavAttribute);
         $result = $this->block->setSwatchFilter($this->filterMock);
@@ -165,7 +165,7 @@ class RenderLayeredTest extends \PHPUnit_Framework_TestCase
         $option4 = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Option', [], [], '', false);
         $option4->expects($this->any())->method('getValue')->willReturn('green');
 
-        $eavAttribute = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $eavAttribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $eavAttribute->expects($this->once())
             ->method('getOptions')
             ->willReturn([$option1, $option2, $option3, $option4]);

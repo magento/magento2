@@ -37,6 +37,16 @@ foreach ($iterator as $file) {
 }
 unset($iterator, $file);
 
+// Register the modules under '_files/'
+$pathPattern = $pathToInstalledMagentoInstanceModules . '/TestModule*/registration.php';
+$files = glob($pathPattern, GLOB_NOSORT);
+if ($files === false) {
+    throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
+}
+foreach ($files as $file) {
+    include $file;
+}
+
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer(), $logger);
@@ -80,5 +90,15 @@ $bootstrap->runBootstrap();
 $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
-\Magento\Framework\App\Utility\Files::setInstance(new \Magento\Framework\App\Utility\Files(BP));
+$dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Framework\Component\DirSearch');
+$themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+\Magento\Framework\App\Utility\Files::setInstance(
+    new \Magento\Framework\App\Utility\Files(
+        new \Magento\Framework\Component\ComponentRegistrar(),
+        $dirSearch,
+        $themePackageList
+    )
+);
 unset($bootstrap, $application, $settings, $shell);

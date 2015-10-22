@@ -32,7 +32,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
+     * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
      */
     protected $_userRolesFactory;
 
@@ -42,7 +42,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
+     * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
@@ -51,7 +51,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
+        \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);

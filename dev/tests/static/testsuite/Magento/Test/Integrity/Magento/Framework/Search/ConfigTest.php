@@ -9,6 +9,14 @@ namespace Magento\Test\Integrity\Magento\Framework\Search;
 
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+    }
+
     /**
      * Returns the name of the XSD file to be used to validate the XML
      *
@@ -16,7 +24,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/lib/internal/Magento/Framework/Search/etc/search_request_merged.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd');
     }
 
     /**
@@ -26,7 +34,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '/lib/internal/Magento/Framework/Search/etc/search_request.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd');
     }
 
     /**

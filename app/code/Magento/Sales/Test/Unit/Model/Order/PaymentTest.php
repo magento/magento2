@@ -221,7 +221,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->transactionCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory',
             ['create'],
             [],
             '',
@@ -1284,7 +1284,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setId($paymentId);
         $this->orderMock->setId($orderId);
         $transaction = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction',
             [],
             [],
             '',

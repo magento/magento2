@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 
 /**
  * Catalog Product Compare Helper
@@ -75,7 +75,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * Product compare item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -100,7 +100,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
@@ -113,7 +113,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,

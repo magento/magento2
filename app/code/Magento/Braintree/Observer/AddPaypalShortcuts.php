@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Braintree\Block\PayPal\Shortcut;
 
 class AddPaypalShortcuts implements ObserverInterface
 {
@@ -43,21 +44,20 @@ class AddPaypalShortcuts implements ObserverInterface
     {
         //Don't display shortcut on product view page
         if (!$this->methodPayPal->isActive() ||
-            !$this->paypalConfig->isShortcutCheckoutEnabled() ||
-            $observer->getEvent()->getIsCatalogProduct()) {
+            !$this->paypalConfig->isShortcutCheckoutEnabled()) {
             return;
         }
 
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        /** @var \Magento\Braintree\Block\PayPal\Shortcut $shortcut */
+        /** @var Shortcut $shortcut */
         $shortcut = $shortcutButtons->getLayout()->createBlock(
             self::PAYPAL_SHORTCUT_BLOCK,
             '',
             [
                 'data' => [
-                    'container' => $shortcutButtons,
+                    Shortcut::MINI_CART_FLAG_KEY => !$observer->getEvent()->getIsCatalogProduct()
                 ]
             ]
         );
@@ -65,9 +65,7 @@ class AddPaypalShortcuts implements ObserverInterface
         if ($shortcut->skipShortcutForGuest()) {
             return;
         }
-        $shortcut->setShowOrPosition(
-            $observer->getEvent()->getOrPosition()
-        );
+        $shortcut->setShowOrPosition($observer->getEvent()->getOrPosition());
         $shortcutButtons->addShortcut($shortcut);
     }
 }

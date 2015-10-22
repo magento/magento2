@@ -23,14 +23,14 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_collectionMock;
 
     protected function setUp()
     {
         $this->_collectionMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Collection',
             ['addAttributeToFilter', 'fetchItem', '__wakeup'],
             [],
             '',

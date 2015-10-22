@@ -16,19 +16,19 @@ class OrdersUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterIn
     protected $_registryManager;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement
      */
     protected $_agreementResource;
 
     /**
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource
      * @param array $data
      * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource,
         array $data = []
     ) {
         $this->_registryManager = isset($data['registry']) ? $data['registry'] : $coreRegistry;

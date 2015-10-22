@@ -122,12 +122,12 @@ class CopyService
     protected function _copyLayoutCustomization(ThemeInterface $source, ThemeInterface $target)
     {
         $update = $this->_updateFactory->create();
-        /** @var $targetUpdates \Magento\Widget\Model\Resource\Layout\Update\Collection */
+        /** @var $targetUpdates \Magento\Widget\Model\ResourceModel\Layout\Update\Collection */
         $targetUpdates = $update->getCollection();
         $targetUpdates->addThemeFilter($target->getId());
         $targetUpdates->delete();
 
-        /** @var $sourceCollection \Magento\Widget\Model\Resource\Layout\Link\Collection */
+        /** @var $sourceCollection \Magento\Widget\Model\ResourceModel\Layout\Link\Collection */
         $sourceCollection = $this->_link->getCollection();
         $sourceCollection->addThemeFilter($source->getId());
         /** @var $layoutLink \Magento\Widget\Model\Layout\Link */

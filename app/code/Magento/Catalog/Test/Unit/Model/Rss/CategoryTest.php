@@ -49,7 +49,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -101,7 +101,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getVisibleInCatalogIds')
             ->will($this->returnValue($visibleInCatalogIds));
         $products = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Collection',
             [
                 'setStoreId',
                 'addAttributeToSort',
@@ -115,7 +115,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceCollection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Collection\AbstractCollection',
+            'Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection',
             [
                 'addAttributeToSelect',
                 'addAttributeToFilter',

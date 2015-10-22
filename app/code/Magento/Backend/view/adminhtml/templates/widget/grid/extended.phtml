@@ -255,6 +255,12 @@ $numColumns = sizeof($block->getColumns());
 
     deps.push('mage/adminhtml/grid');
 
+    <?php if (is_array($block->getRequireJsDependencies())): ?>
+        <?php foreach ($block->getRequireJsDependencies() as $dependency): ?>
+            deps.push('<?php /* @escapeNotVerified */ echo $dependency; ?>');
+        <?php endforeach; ?>
+    <?php endif; ?>
+
     require(deps, function(<?php echo ($block->getDependencyJsObject() ? 'registry' : '') ?>){
         <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 

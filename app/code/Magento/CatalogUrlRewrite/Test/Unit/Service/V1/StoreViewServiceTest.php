@@ -15,7 +15,7 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -29,7 +29,7 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
         $this->config = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->select = $this->getMock('Magento\Framework\Db\Select', [], [], '', false);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
 
         $this->storeViewService = (new ObjectManager($this))->getObject(

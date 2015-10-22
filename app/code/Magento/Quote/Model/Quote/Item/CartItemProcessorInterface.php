@@ -21,10 +21,10 @@ interface CartItemProcessorInterface
     public function convertToBuyRequest(CartItemInterface $cartItem);
 
     /**
-     * Process cart item product options
+     * Process cart item product/custom options
      *
      * @param CartItemInterface $cartItem
      * @return CartItemInterface
      */
-    public function processProductOptions(CartItemInterface $cartItem);
+    public function processOptions(CartItemInterface $cartItem);
 }

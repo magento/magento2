@@ -7,11 +7,11 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiComponent'
-], function (_, utils, layout, Component) {
+    'uiCollection'
+], function (_, utils, layout, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             active: true,
             hasChanges: false,
@@ -79,7 +79,8 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('active fields errorsCount hasChanges');
+                .track('errorsCount hasChanges')
+                .observe('active fields');
 
             return this;
         },
@@ -119,19 +120,18 @@ define([
             var fields = this.templates.fields,
                 field  = column.editor;
 
-            if (typeof field === 'object' && field.editorType) {
+            if (_.isObject(field) && field.editorType) {
                 field = utils.extend({}, fields[field.editorType], field);
-            } else if (typeof field == 'string') {
+            } else if (_.isString(field)) {
                 field = fields[field];
             }
 
             field = utils.extend({}, fields.base, field);
-            field = utils.template(field, {
+
+            return utils.template(field, {
                 record: this,
                 column: column
             }, true, true);
-
-            return field;
         },
 
         /**
@@ -142,24 +142,12 @@ define([
          */
         createFields: function (columns) {
             columns.forEach(function (column) {
-                if (column.editor && !this.getField(column.index)) {
+                if (column.editor && !this.hasChild(column.index)) {
                     this.initField(column);
                 }
             }, this);
 
             return this;
-        },
-
-        /**
-         * Returns instance of a field found by provided identifier.
-         *
-         * @param {String} index - Identifier of a field inside record.
-         * @returns {Object}
-         */
-        getField: function (index) {
-            return this.elems.findWhere({
-                index: index
-            });
         },
 
         /**
@@ -169,7 +157,7 @@ define([
          * @returns {Column}
          */
         getColumn: function (index) {
-            return this.columns().getColumn(index);
+            return this.columns().getChild(index);
         },
 
         /**
@@ -292,7 +280,7 @@ define([
         countErrors: function () {
             var errorsCount = this.elems.filter('error').length;
 
-            this.errorsCount(errorsCount);
+            this.errorsCount = errorsCount;
 
             return errorsCount;
         },
@@ -320,7 +308,7 @@ define([
             var fields;
 
             fields = this.columns().elems.map(function (column) {
-                return this.getField(column.index) || column;
+                return this.getChild(column.index) || column;
             }, this);
 
             this.fields(fields);
@@ -336,7 +324,7 @@ define([
         updateState: function () {
             var diff = this.checkChanges();
 
-            this.hasChanges(!diff.equal);
+            this.hasChanges = !diff.equal;
 
             return this;
         },

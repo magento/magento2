@@ -2640,8 +2640,8 @@
     }
 
     //
-//      Configuration -> Design
-//  --------------------------------------
+    //      Configuration -> Design
+    //  --------------------------------------
 
     #row_design_theme_ua_regexp .design_theme_ua_regexp {
         float: left;
@@ -2652,6 +2652,16 @@
     }
     #row_design_theme_ua_regexp .note {
         clear: both;
+    }
+
+    //
+    //      Configuration -> Advanced -> System -> Notifications section
+    //  --------------------------------------
+
+    #row_system_adminnotification_last_update {
+        .value {
+            vertical-align: bottom;
+        }
     }
 
     //
@@ -4928,7 +4938,7 @@
     }
 }
 
-//  Content -> Frontend Apps
+//  Content -> Widgets
 .adminhtml-widget-instance-index {
     .admin__scope-old {
         .col-title {
@@ -5307,6 +5317,19 @@
         padding-left: 0;
         padding-right: 0;
     }
+}
+
+//
+//  Temporary override @todo ui - remove after refactoring of 3-rd party tree styles
+//  _____________________________________________
+
+.ext-strict {
+    .x-small-editor {
+        .x-form-text.x-form-field.folder  {
+            height: auto !important;
+        }
+    }
+
 }
 
 // ==|== print styles =======================================================

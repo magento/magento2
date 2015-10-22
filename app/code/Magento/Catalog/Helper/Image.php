@@ -15,6 +15,11 @@ use Magento\Framework\App\Helper\AbstractHelper;
 class Image extends AbstractHelper
 {
     /**
+     * Media config node
+     */
+    const MEDIA_TYPE_CONFIG_NODE = 'images';
+
+    /**
      * Current model
      *
      * @var \Magento\Catalog\Model\Product\Image
@@ -172,7 +177,7 @@ class Image extends AbstractHelper
 
         $this->attributes = array_merge(
             $attributes,
-            $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId)
+            $this->getConfigView()->getMediaAttributes('Magento_Catalog', self::MEDIA_TYPE_CONFIG_NODE, $imageId)
         );
 
         $this->setProduct($product);
@@ -425,16 +430,19 @@ class Image extends AbstractHelper
 
     /**
      * Get Placeholder
+     *
      * @param null|string $placeholder
      * @return string
      */
     public function getPlaceholder($placeholder = null)
     {
-        if (!$this->_placeholder) {
-            $placeholder = $placeholder?: $this->_getModel()->getDestinationSubdir();
-            $this->_placeholder = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
+        if ($placeholder) {
+            $placeholderFullPath = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
+        } else {
+            $placeholderFullPath = $this->_placeholder
+                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getDestinationSubdir() . '.jpg';
         }
-        return $this->_placeholder;
+        return $placeholderFullPath;
     }
 
     /**

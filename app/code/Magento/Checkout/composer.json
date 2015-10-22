@@ -15,15 +15,13 @@
         "magento/module-tax": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/module-gift-message": "1.0.0-beta",
         "magento/module-page-cache": "1.0.0-beta",
         "magento/module-sales-rule": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/module-msrp": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-ui": "1.0.0-beta",
-        "magento/module-quote": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-quote": "1.0.0-beta"
     },
     "suggest": {
         "magento/module-cookie": "1.0.0-beta"
@@ -34,12 +32,10 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Checkout"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Checkout\\": ""
+        }
     }
 }

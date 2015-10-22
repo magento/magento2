@@ -19,9 +19,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
     /**
@@ -54,9 +58,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         $factory->setObjectManager($realObjectManager);
         $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock->expects($this->any())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Validator/etc/validation.xsd')
+            ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'));
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
-            ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]
+            [
+                'configFiles' => $configFiles,
+                'builderFactory' => $universalFactory,
+                'urnResolver' => $urnResolverMock
+            ]
         );
     }
 
@@ -295,6 +309,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'),
+            $this->_config->getSchemaFile()
+        );
         $this->assertFileExists($this->_config->getSchemaFile());
     }
 }

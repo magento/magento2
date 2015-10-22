@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
@@ -42,13 +42,6 @@ class PackageInfo
     private $conflictMap;
 
     /**
-     * All modules loader
-     *
-     * @var ModuleList\Loader
-     */
-    private $loader;
-
-    /**
      * Reader of composer.json files
      *
      * @var Dir\Reader
@@ -56,24 +49,20 @@ class PackageInfo
     private $reader;
 
     /**
-     * StringUtils utilities
-     *
-     * @var String
+     * @var ComponentRegistrar
      */
-    private $string;
+    private $componentRegistrar;
 
     /**
      * Constructor
      *
-     * @param ModuleList\Loader $loader
      * @param Dir\Reader $reader
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(ModuleList\Loader $loader, Dir\Reader $reader, StringUtils $string)
+    public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
     {
-        $this->loader = $loader;
         $this->reader = $reader;
-        $this->string = $string;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -85,8 +74,8 @@ class PackageInfo
     {
         if ($this->packageModuleMap === null) {
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
-            foreach (array_keys($this->loader->load()) as $moduleName) {
-                $key = $this->string->upperCaseWords($moduleName, '_', '/') . '/composer.json';
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+                $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
                     $packageData = \Zend_Json::decode($jsonData[$key]);
                     if (isset($packageData['name'])) {

@@ -314,4 +314,12 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             return false;
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function chmod($file)
+    {
+        return;
+    }
 }

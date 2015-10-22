@@ -285,7 +285,7 @@
                 </div>
 
                 <p ng-show="componentDependency.expanded">For additional assistance, see
-                    <a href="http://devdocs.magento.com/guides/v2.0/install-gde/trouble/trouble/php/tshoot_php-set.html"
+                    <a href="http://devdocs.magento.com/guides/v2.0/install-gde/trouble/php/tshoot_php-set.html"
                        target="_blank">PHP settings check help
                     </a>.
                 </p>
@@ -304,7 +304,7 @@
             <span></span><span></span><span></span><span></span>
         </span>
         <h3 class="readiness-check-title">Checking PHP Extensions...</h3>
-    </div>    
+    </div>
     <div ng-show="extensions.processed" ng-switch="extensions.responseType">
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(extensions)">
@@ -314,7 +314,7 @@
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">PHP Extensions Check</h3>
                 <p>
-                    You meet {{extensions.data.required.length}} out of {{extensions.data.required.length}} PHP extensions requirements.
+                    You meet {{extensions.length}} out of {{extensions.length}} PHP extensions requirements.
                     <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
                         <span ng-hide="extensions.expanded">Show detail</span>
                         <span ng-show="extensions.expanded">Hide detail</span>

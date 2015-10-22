@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3544fbc9568fdcc58279fcc2de51e6ec",
-    "content-hash": "963e7bfad082098b3a82bfb445c272d9",
+    "hash": "80867d6202a3ae5d2f4c079e2cfd702f",
+    "content-hash": "41493176956dcfd2401ac1181d4d4782",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -188,16 +188,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.magento.com/_packages/composer-1.0.1.zip",
+                "url": "https://packages.magento.com/_packages/composer-1.0.2.zip",
                 "reference": null,
-                "shasum": "a4ecd6bc55c6b53a74a75a3624d30b529710c4a3"
+                "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
-                "php": "~5.5.0|~5.6.0",
+                "php": "~5.5.0|~5.6.0|~7.0.0",
                 "symfony/console": "~2.3 <2.7"
             },
             "require-dev": {
@@ -293,16 +293,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.13",
+            "version": "1.12.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f"
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/07ce4e9fba448f4aa48acbb1605c68897dac595f",
-                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/dbdf178992bfa52d6e978e62131162301ff6b76f",
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
                 "shasum": ""
             },
             "require": {
@@ -336,7 +336,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-06-02 08:04:41"
+            "time": "2015-09-30 13:04:03"
         },
         {
             "name": "monolog/monolog",
@@ -2571,16 +2571,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.10",
+            "version": "v1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "8e21b4fb32c4618a425817d9f0daf3d57a9808d1"
+                "reference": "12dbcd1462f1e3a5a96c6c7398af26b28e092a8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/8e21b4fb32c4618a425817d9f0daf3d57a9808d1",
-                "reference": "8e21b4fb32c4618a425817d9f0daf3d57a9808d1",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/12dbcd1462f1e3a5a96c6c7398af26b28e092a8a",
+                "reference": "12dbcd1462f1e3a5a96c6c7398af26b28e092a8a",
                 "shasum": ""
             },
             "require": {
@@ -2621,7 +2621,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-07-27 20:56:10"
+            "time": "2015-10-12 20:13:46"
         },
         {
             "name": "league/climate",
@@ -2674,16 +2674,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414"
+                "reference": "a48f63ce1a636c86f901b9bdbdadcdbf473bb07b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/74a5a62457568176d9c1af41a900dd3389b70414",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/a48f63ce1a636c86f901b9bdbdadcdbf473bb07b",
+                "reference": "a48f63ce1a636c86f901b9bdbdadcdbf473bb07b",
                 "shasum": ""
             },
             "require": {
@@ -2737,7 +2737,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-24 00:18:45"
+            "time": "2015-10-07 00:20:04"
         },
         {
             "name": "pdepend/pdepend",
@@ -2845,16 +2845,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f"
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef1ca6835468857944d5c3b48fa503d5554cff2f",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979",
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979",
                 "shasum": ""
             },
             "require": {
@@ -2903,7 +2903,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-14 06:51:16"
+            "time": "2015-10-06 15:47:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3157,16 +3157,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a"
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5e2645ad49d196e020b85598d7c97e482725786a",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983",
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983",
                 "shasum": ""
             },
             "require": {
@@ -3209,7 +3209,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-08-19 09:14:08"
+            "time": "2015-10-02 06:51:40"
         },
         {
             "name": "sebastian/comparator",
@@ -3941,6 +3941,7 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-xsl": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-openssl": "*"
     }
 }

@@ -172,7 +172,7 @@ class Matrix extends \Magento\Backend\Block\Template
         foreach ($this->_getAssociatedProducts() as $product) {
             $keys = [];
             foreach ($this->getUsedAttributes() as $attribute) {
-                /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+                /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 $keys[] = $product->getData($attribute->getAttributeCode());
             }
             $productByUsedAttributes[implode('-', $keys)] = $product;
