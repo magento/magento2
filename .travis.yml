@@ -75,5 +75,5 @@ script:
   - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle' --coverage-html dev/test/coverage/ --testdox-html dev/test/results/static_phpcs.html; fi"
   # Static tests [Code Style]
   - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard' --coverage-html dev/test/coverage/ --testdox-html dev/test/results/static_annotation.html; fi"
-  - sh -c "cat dev/test/results/*.html"
-  - sh -c "cat dev/test/coverage/*"
+  - sh -c "echo \"$(cat dev/test/results/*.html)\""
+  - sh -c "echo \"$(cat dev/test/coverage/*)\""
