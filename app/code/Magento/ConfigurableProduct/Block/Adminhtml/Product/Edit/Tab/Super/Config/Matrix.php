@@ -54,7 +54,6 @@ class Matrix extends \Magento\Backend\Block\Template
     /** @var null|array */
     private $productAttributes;
 
-
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
      */
@@ -68,6 +67,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Image $image
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
