@@ -45,7 +45,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\Catalog\Model\ResourceModel\Product\Flat(
-            $this->getMock('Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false),
+            $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false),
             $this->_storeManagerInterface,
             $this->getMock('Magento\Catalog\Model\Config', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\Product\Attribute\DefaultAttributes')

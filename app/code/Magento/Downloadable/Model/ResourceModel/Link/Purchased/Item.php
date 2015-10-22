@@ -10,7 +10,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Magento class constructor

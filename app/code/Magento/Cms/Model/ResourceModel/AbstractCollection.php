@@ -8,7 +8,7 @@ namespace Magento\Cms\Model\ResourceModel;
 /**
  * Abstract collection of CMS pages and blocks
  */
-abstract class AbstractCollection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Store manager
@@ -24,7 +24,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ModelResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -33,7 +33,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ModelResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;

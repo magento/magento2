@@ -10,7 +10,7 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 /**
  * Admin role resource model
  */
-class Role extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Rule table
@@ -32,13 +32,13 @@ class Role extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null

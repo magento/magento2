@@ -10,7 +10,7 @@ namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\ModelResource\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Search\Model\Query as QueryModel;
 
 /**
@@ -32,13 +32,13 @@ class Query extends AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
@@ -82,7 +82,7 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param int|string $value
      * @param null|string $field
-     * @return $this|\Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings("unused")
      */
     public function load(AbstractModel $object, $value, $field = null)

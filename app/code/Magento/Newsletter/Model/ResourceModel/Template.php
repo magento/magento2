@@ -13,7 +13,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Date
@@ -23,12 +23,12 @@ class Template extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_date;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         $connectionName = null
     ) {

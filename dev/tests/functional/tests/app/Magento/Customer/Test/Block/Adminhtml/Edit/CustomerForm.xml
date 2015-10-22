@@ -10,7 +10,7 @@
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
         <selector>#tab_customer</selector>
         <strategy>css selector</strategy>
-        <wrapper>data[customer]</wrapper>
+        <wrapper>customer</wrapper>
         <fields>
             <website_id>
                 <input>select</input>
