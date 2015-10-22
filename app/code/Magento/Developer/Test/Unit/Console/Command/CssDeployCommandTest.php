@@ -7,17 +7,20 @@
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Developer\Console\Command\CssDeployCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Validator\Locale;
 
+/**
+ * Class CssDeployCommandTest
+ */
 class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,11 +49,6 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
     private $state;
 
     /**
-     * @var SourceFileGeneratorPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sourceFileGeneratorPool;
-
-    /**
      * @var Source|\PHPUnit_Framework_MockObject_MockObject
      */
     private $assetSource;
@@ -70,6 +68,11 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $validator;
 
+    /**
+     * @var Pool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $poolMock;
+
     public function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
@@ -77,18 +80,14 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
         $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->assetSource = $this->getMock('Magento\Framework\View\Asset\Source', [], [], '', false);
-        $this->sourceFileGeneratorPool = $this->getMock(
-            'Magento\Framework\View\Asset\SourceFileGeneratorPool',
-            [],
-            [],
-            '',
-            false
-        );
         $this->chainFactory = $this->getMockForAbstractClass(
             'Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface'
         );
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
+        $this->poolMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Pool')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new CssDeployCommand(
             $this->objectManager,
@@ -96,10 +95,10 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             $this->configLoader,
             $this->state,
             $this->assetSource,
-            $this->sourceFileGeneratorPool,
             $this->chainFactory,
             $this->filesystem,
-            $this->validator
+            $this->validator,
+            $this->poolMock
         );
     }
 
@@ -109,10 +108,6 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->configLoader->expects($this->once())->method('load')->with('frontend')->willReturn([]);
         $this->objectManager->expects($this->once())->method('configure');
-        $this->sourceFileGeneratorPool->expects($this->once())
-            ->method('create')
-            ->with('less')
-            ->willReturn($this->getMock('Magento\Framework\View\Asset\SourceFileGeneratorInterface'));
         $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
         $asset->expects($this->once())->method('getContentType')->willReturn('type');
         $this->assetRepo->expects($this->once())
@@ -128,6 +123,10 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($asset);
         $this->assetSource->expects($this->once())->method('findSource')->willReturn('/dev/null');
 
+        $chainMock = $this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false);
+        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+            ->getMockForAbstractClass();
+
         $this->chainFactory->expects($this->once())
             ->method('create')
             ->with(
@@ -137,8 +136,11 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
                     'origContentType' => 'type',
                     'origAssetPath' => 'relative/path',
                 ]
-            )
-            ->willReturn($this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false));
+            )->willReturn($chainMock);
+
+        $chainMock->expects(self::once())
+            ->method('getAsset')
+            ->willReturn($assetMock);
 
         $rootDir = $this->getMock('\Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false);
         $this->filesystem->expects($this->at(0))->method('getDirectoryWrite')->willReturn($rootDir);
