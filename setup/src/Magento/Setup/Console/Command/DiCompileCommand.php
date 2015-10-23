@@ -28,6 +28,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DiCompileCommand extends Command
 {
+    /** Command name */
+    const NAME = 'setup:di:compile';
+
     /** @var DeploymentConfig */
     private $deploymentConfig;
 
@@ -89,7 +92,7 @@ class DiCompileCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:di:compile')
+        $this->setName(self::NAME)
             ->setDescription(
                 'Generates DI configuration and all non-existing interceptors and factories'
             );
@@ -172,7 +175,6 @@ class DiCompileCommand extends Command
             $this->cleanupFilesystem(
                 [
                     DirectoryList::CACHE,
-                    DirectoryList::GENERATION,
                     DirectoryList::DI,
                 ]
             );
