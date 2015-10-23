@@ -103,4 +103,14 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getPath();
         $this->assertEquals($path, $result);
     }
+
+    public function testGetLifetime()
+    {
+        $lifetime = 3600;
+        $this->sessionConfigMock->expects(static::once())
+            ->method('getCookieLifetime')
+            ->willReturn($lifetime);
+
+        $this->assertEquals($lifetime, $this->model->getLifetime());
+    }
 }

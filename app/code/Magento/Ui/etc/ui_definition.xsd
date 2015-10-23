@@ -48,6 +48,7 @@
             <xs:element type="dataTypeMedia" name="image"/>
             <xs:element type="dataTypeDate" name="date"/>
             <xs:element type="dataTypeEmail" name="email"/>
+            <xs:element type="dataTypeMedia" name="file"/>
             <xs:element type="nav" name="nav"/>
             <xs:element type="actions" name="actions"/>
             <xs:element type="bookmark" name="bookmark"/>
