@@ -28,7 +28,7 @@ class AssertSitemapSuccessSaveAndGenerateMessages extends AbstractConstraint
      */
     public function processAssert(SitemapIndex $sitemapIndex, Sitemap $sitemap)
     {
-        $actualMessages = $sitemapIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessages = $sitemapIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertTrue(
             in_array(self::SUCCESS_SAVE_MESSAGE, $actualMessages) &&
             in_array(sprintf(self::SUCCESS_GENERATE_MESSAGE, $sitemap->getSitemapFilename()), $actualMessages),
