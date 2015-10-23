@@ -32,11 +32,17 @@ class Advanced extends Generic
     protected $_yesNo;
 
     /**
+     * @var array
+     */
+    protected $disableScopeChangeList;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param Yesno $yesNo
      * @param Data $eavData
+     * @param array $disableScopeChangeList
      * @param array $data
      */
     public function __construct(
@@ -45,10 +51,12 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
+        array $disableScopeChangeList = ['sku'],
         array $data = []
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
+        $this->disableScopeChangeList = $disableScopeChangeList;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -229,7 +237,7 @@ class Advanced extends Generic
         );
 
         $this->_eventManager->dispatch('product_attribute_form_build', ['form' => $form]);
-        if ($attributeObject->getId() && !$attributeObject->getIsUserDefined()) {
+        if (in_array($attributeObject->getAttributeCode(), $this->disableScopeChangeList)) {
             $form->getElement('is_global')->setDisabled(1);
         }
         $this->setForm($form);
