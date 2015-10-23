@@ -66,12 +66,8 @@ class ApplicationCodeGenerator implements OperationInterface
             }
             $files = [];
             foreach ($paths as $path) {
-                try {
-                    $this->classesScanner->getList($path);
-                    $files = array_merge_recursive($files, $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns']));
-                } catch(FileSystemException $e) {
-                    // skip
-                }
+                $this->classesScanner->getList($path);
+                $files = array_merge_recursive($files, $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns']));
             }
             $entities = $this->phpScanner->collectEntities($files['php']);
             foreach ($entities as $entityName) {
