@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 class FixtureManager
 {
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -29,11 +29,13 @@ class FixtureManager
     protected $_string;
 
     /**
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(ComponentRegistrar $componentRegistrar, \Magento\Framework\Stdlib\StringUtils $string)
-    {
+    public function __construct(
+        ComponentRegistrarInterface $componentRegistrar,
+        \Magento\Framework\Stdlib\StringUtils $string
+    ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->_string = $string;
     }
@@ -48,7 +50,7 @@ class FixtureManager
         list($moduleName, $filePath) = \Magento\Framework\View\Asset\Repository::extractModule(
             $this->normalizePath($fileId)
         );
-        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) . '/' . $filePath;
+        return $this->componentRegistrar->getPath(ComponentRegistrarInterface::MODULE, $moduleName) . '/' . $filePath;
     }
 
     /**

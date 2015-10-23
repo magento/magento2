@@ -118,10 +118,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         $localePlaceholder = '<locale_placeholder>';
         $params = ['area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder];
         $patternDirs = self::$_fallbackRule->getPatternDirs($params);
-        $themePath =  self::$_componentRegistrar->getPath(
-            \Magento\Framework\Component\ComponentRegistrar::THEME,
-            $theme->getFullPath()
-        );
+        $themePath =  self::$_componentRegistrar->getPath(ComponentRegistrar::THEME, $theme->getFullPath());
         foreach ($patternDirs as $patternDir) {
             $patternPath = $patternDir . '/';
             if ((strpos($patternPath, $themePath) !== false) // It is theme's directory
@@ -229,7 +226,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getFilesToProcess()
     {
         $result = [];
-        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $componentRegistrar = new ComponentRegistrar();
         $dirs = array_merge(
             $componentRegistrar->getPaths(ComponentRegistrar::MODULE),
             $componentRegistrar->getPaths(ComponentRegistrar::THEME)

@@ -5,8 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 
 /**
@@ -31,16 +30,16 @@ class Context
     /**#@-*/
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
     /**
      * Constructor
      *
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(ComponentRegistrar $componentRegistrar)
+    public function __construct(ComponentRegistrarInterface $componentRegistrar)
     {
         $this->componentRegistrar = $componentRegistrar;
     }
@@ -57,9 +56,9 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if ($value = $this->getComponentName(ComponentRegistrar::MODULE, $path)) {
+        if ($value = $this->getComponentName(ComponentRegistrarInterface::MODULE, $path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-        } elseif ($value = $this->getComponentName(ComponentRegistrar::THEME, $path)) {
+        } elseif ($value = $this->getComponentName(ComponentRegistrarInterface::THEME, $path)) {
             $type = self::CONTEXT_TYPE_THEME;
         } elseif ($value = strstr($path, '/lib/web/')) {
             $type = self::CONTEXT_TYPE_LIB;
@@ -100,11 +99,11 @@ class Context
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
+                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrarInterface::MODULE, $value);
                 $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:
-                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $value);
+                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrarInterface::THEME, $value);
                 $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_LIB:

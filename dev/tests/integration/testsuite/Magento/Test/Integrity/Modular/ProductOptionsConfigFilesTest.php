@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class ProductOptionsConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class ProductOptionsConfigFilesTest extends \PHPUnit_Framework_TestCase
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
             $moduleDirSearch->collectFiles(
-                ComponentRegistrar::MODULE,
+                ComponentRegistrarInterface::MODULE,
                 'etc/{*/product_options.xml,product_options.xml}'
             )
         );

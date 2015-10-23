@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\File;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
@@ -68,8 +68,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ->method('collectFilesWithContext')
             ->willReturnMap(
                 [
-                    [ComponentRegistrar::MODULE, 'view/base/layout/*.xml', $files['shared']],
-                    [ComponentRegistrar::MODULE, 'view/frontend/layout/*.xml', $files['theme']]
+                    [ComponentRegistrarInterface::MODULE, 'view/base/layout/*.xml', $files['shared']],
+                    [ComponentRegistrarInterface::MODULE, 'view/frontend/layout/*.xml', $files['theme']]
                 ]
             );
         $this->fileFactoryMock->expects($this->atLeastOnce())

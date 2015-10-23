@@ -6,7 +6,7 @@
 
 namespace Magento\Widget\Test\Unit\Model\Config;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Widget\Model\Config\FileResolver;
 
 class FileResolverTest extends \PHPUnit_Framework_TestCase
@@ -55,7 +55,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new \StdClass();
         $this->componentDirSearch->expects($this->once())
             ->method('collectFiles')
-            ->with(ComponentRegistrar::THEME, 'etc/file')
+            ->with(ComponentRegistrarInterface::THEME, 'etc/file')
             ->will($this->returnValue(['test']));
         $this->factory->expects($this->once())->method('create')->with(['test'])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'design'));

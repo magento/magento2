@@ -6,7 +6,7 @@
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $modulesDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
         $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
-        $fileList = $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/adminhtml/system.xml');
+        $fileList = $moduleDirSearch->collectFiles(ComponentRegistrarInterface::MODULE, 'etc/adminhtml/system.xml');
         $configMock = $this->getMock(
             'Magento\Framework\Module\Dir\Reader',
             ['getConfigurationFiles', 'getModuleDir'],

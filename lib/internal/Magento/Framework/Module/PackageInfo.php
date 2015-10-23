@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
@@ -49,7 +49,7 @@ class PackageInfo
     private $reader;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -62,9 +62,9 @@ class PackageInfo
      * Constructor
      *
      * @param Dir\Reader $reader
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
+    public function __construct(Dir\Reader $reader, ComponentRegistrarInterface $componentRegistrar)
     {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
@@ -79,7 +79,8 @@ class PackageInfo
     {
         if ($this->packageModuleMap === null) {
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE);
+            foreach ($modulePaths as $moduleName => $moduleDir) {
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
                     $packageData = \Zend_Json::decode($jsonData[$key]);

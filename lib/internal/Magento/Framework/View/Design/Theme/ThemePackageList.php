@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
@@ -48,7 +47,7 @@ class ThemePackageList
      */
     public function getTheme($key)
     {
-        $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $key);
+        $themePath = $this->componentRegistrar->getPath(ComponentRegistrarInterface::THEME, $key);
         if (empty($themePath)) {
             throw new \UnexpectedValueException("No theme registered with name '$key'");
         }
@@ -63,7 +62,7 @@ class ThemePackageList
     public function getThemes()
     {
         $themes = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $path) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrarInterface::THEME) as $key => $path) {
             $themes[$key] = $this->factory->create($key, $path);
         }
         return $themes;

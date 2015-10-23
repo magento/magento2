@@ -7,8 +7,8 @@
  */
 namespace Magento\Widget\Model\Config;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\DirSearch;
-use Magento\Framework\Component\ComponentRegistrar;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -54,7 +54,10 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             case 'design':
-                $themePaths = $this->componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/' . $filename);
+                $themePaths = $this->componentDirSearch->collectFiles(
+                    ComponentRegistrarInterface::THEME,
+                    'etc/' . $filename
+                );
                 $iterator = $this->iteratorFactory->create($themePaths);
                 break;
             default:

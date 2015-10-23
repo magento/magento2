@@ -6,12 +6,12 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
@@ -53,7 +53,7 @@ class DiCompileCommand extends Command
     private $fileDriver;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -66,7 +66,7 @@ class DiCompileCommand extends Command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Filesystem $filesystem
      * @param DriverInterface $fileDriver
-     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -75,7 +75,7 @@ class DiCompileCommand extends Command
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
         DriverInterface $fileDriver,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
@@ -139,8 +139,8 @@ class DiCompileCommand extends Command
             return;
         }
 
-        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE);
+        $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrarInterface::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
 
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();

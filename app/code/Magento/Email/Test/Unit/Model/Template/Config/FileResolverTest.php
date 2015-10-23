@@ -5,7 +5,7 @@
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expected));
         $dirSearch->expects($this->once())
             ->method('collectFiles')
-            ->with(ComponentRegistrar::MODULE, 'etc/file');
+            ->with(ComponentRegistrarInterface::MODULE, 'etc/file');
         $model->get('file', 'scope');
     }
 }

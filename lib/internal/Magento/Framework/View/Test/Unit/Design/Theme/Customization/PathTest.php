@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Customization;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,7 +93,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $expectedPath = '/fill/theme/path';
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, 'frontend/Magento/theme')
+            ->with(ComponentRegistrarInterface::THEME, 'frontend/Magento/theme')
             ->will($this->returnValue($expectedPath));
         $this->assertEquals($expectedPath, $this->_model->getThemeFilesPath($this->_theme));
     }

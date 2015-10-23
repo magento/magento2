@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Language;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
@@ -31,7 +31,7 @@ class Dictionary
     /**
      * Component Registrar
      *
-     * @var ReadFactory
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -47,12 +47,12 @@ class Dictionary
 
     /**
      * @param ReadFactory $directoryReadFactory
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param ConfigFactory $configFactory
      */
     public function __construct(
         ReadFactory $directoryReadFactory,
-        ComponentRegistrar $componentRegistrar,
+        ComponentRegistrarInterface $componentRegistrar,
         ConfigFactory $configFactory
     ) {
         $this->directoryReadFactory = $directoryReadFactory;
@@ -72,7 +72,7 @@ class Dictionary
     public function getDictionary($languageCode)
     {
         $languages = [];
-        $this->paths = $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
+        $this->paths = $this->componentRegistrar->getPaths(ComponentRegistrarInterface::LANGUAGE);
         foreach ($this->paths as $path) {
             $directoryRead = $this->directoryReadFactory->create($path);
             if ($directoryRead->isExist('language.xml')) {
@@ -172,7 +172,10 @@ class Dictionary
      */
     private function readPackCsv($vendor, $package)
     {
-        $path = $this->componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, strtolower($vendor . '_' . $package));
+        $path = $this->componentRegistrar->getPath(
+            ComponentRegistrarInterface::LANGUAGE,
+            strtolower($vendor . '_' . $package)
+        );
         $result = [];
         if (isset($path)) {
             $directoryRead = $this->directoryReadFactory->create($path);

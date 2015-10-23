@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -127,7 +127,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $sampleDataState;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $componentRegistrar;
 
@@ -178,7 +178,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
         $this->dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('Magento\Framework\Setup\SampleData\State', [], [], '', false);
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar = $this->getMock(ComponentRegistrarInterface::class, [], [], '', false);
         $this->object = $this->createObject();
     }
 

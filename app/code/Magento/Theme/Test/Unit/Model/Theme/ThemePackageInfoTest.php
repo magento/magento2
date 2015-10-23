@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 
 class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +21,7 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
     private $themePackageInfo;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $componentRegistrar;
 
@@ -31,7 +32,7 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar = $this->getMock(ComponentRegistrarInterface::class, [], [], '', false);
         $this->dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $this->dirReadFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->dirReadFactory->expects($this->any())->method('create')->willReturn($this->dirRead);

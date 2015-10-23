@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class DirTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     {
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, 'Test_Module')
+            ->with(ComponentRegistrarInterface::MODULE, 'Test_Module')
             ->will($this->returnValue('/Test/Module'));
 
         $this->assertEquals('/Test/Module', $this->_model->getDir('Test_Module'));
@@ -47,7 +47,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     {
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, 'Test_Module')
+            ->with(ComponentRegistrarInterface::MODULE, 'Test_Module')
             ->will($this->returnValue('/Test/Module'));
 
         $this->assertEquals('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
@@ -61,7 +61,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     {
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, 'Test_Module')
+            ->with(ComponentRegistrarInterface::MODULE, 'Test_Module')
             ->will($this->returnValue('/Test/Module'));
 
         $this->_model->getDir('Test_Module', 'unknown');

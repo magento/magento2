@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\File\Collector\Override\Base;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\View\File\Factory;
@@ -104,7 +104,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themePath)
+            ->with(ComponentRegistrarInterface::THEME, $themePath)
             ->will($this->returnValue('/full/theme/path'));
         $this->pathPatternHelperMock->expects($this->any())
             ->method('translatePatternFromGlob')

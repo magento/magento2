@@ -5,12 +5,13 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\Module\PackageInfo;
 
 class PackageInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $componentRegistrar;
 
@@ -26,7 +27,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar = $this->getMock(ComponentRegistrarInterface::class, [], [], '', false);
         $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $this->componentRegistrar->expects($this->once())
             ->method('getPaths')

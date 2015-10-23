@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\Css\PreProcessor\File\Collector\Library;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -148,7 +148,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($readerMock));
         $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themePath)
+            ->with(ComponentRegistrarInterface::THEME, $themePath)
             ->will($this->returnValue(['/path/to/theme']));
         $readerMock->expects($this->once())
             ->method('search')

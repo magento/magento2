@@ -5,8 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Dictionary generator options resolver
@@ -29,19 +28,19 @@ class Resolver implements ResolverInterface
     protected $withContext;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     protected $componentRegistrar;
 
     /**
      * Resolver construct
      *
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $directory
      * @param bool $withContext
      */
     public function __construct(
-        ComponentRegistrar $componentRegistrar,
+        ComponentRegistrarInterface $componentRegistrar,
         $directory,
         $withContext
     ) {
@@ -59,8 +58,8 @@ class Resolver implements ResolverInterface
             if ($this->withContext) {
                 $directory = rtrim($this->directory, '\\/');
                 $this->directory = ($directory == '.' || $directory == '..') ? BP : realpath($directory);
-                $moduleDirs = $this->getComponentDirectories(ComponentRegistrar::MODULE);
-                $themeDirs = $this->getComponentDirectories(ComponentRegistrar::THEME);
+                $moduleDirs = $this->getComponentDirectories(ComponentRegistrarInterface::MODULE);
+                $themeDirs = $this->getComponentDirectories(ComponentRegistrarInterface::THEME);
 
                 $this->options = [
                     [

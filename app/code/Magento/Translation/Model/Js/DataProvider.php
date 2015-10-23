@@ -51,7 +51,7 @@ class DataProvider implements DataProviderInterface
      * @param Config $config
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
      * @param \Magento\Framework\Phrase\Renderer\Translate $translate
-     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar
      * @param \Magento\Framework\Component\DirSearch $dirSearch
      * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
      * @param \Magento\Framework\App\Utility\Files|null $filesUtility
@@ -61,7 +61,7 @@ class DataProvider implements DataProviderInterface
         Config $config,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
         \Magento\Framework\Phrase\Renderer\Translate $translate,
-        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
         \Magento\Framework\App\Utility\Files $filesUtility = null

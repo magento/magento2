@@ -6,7 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
 /**
@@ -42,7 +42,7 @@ class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
      */
     protected function buildReport($outputPath)
     {
-        $filesForParse = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
+        $filesForParse = Files::init()->getComposerFiles(ComponentRegistrarInterface::MODULE, false);
 
         asort($filesForParse);
         ServiceLocator::getCircularDependenciesReportBuilder()->build(
