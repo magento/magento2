@@ -11,6 +11,7 @@ namespace Magento\Framework\Config\Dom;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class UrnResolver
 {
@@ -84,7 +85,7 @@ class UrnResolver
             if (file_exists($system)) {
                 $filePath = $system;
             } else {
-                throw new LocalizedException(__('File %system cannot be found', ['system' => $system]));
+                throw new LocalizedException(new Phrase('File %system cannot be found', ['system' => $system]));
             }
         }
         return fopen($filePath, "r+");
