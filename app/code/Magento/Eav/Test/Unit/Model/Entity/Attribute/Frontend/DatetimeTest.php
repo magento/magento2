@@ -71,7 +71,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $labelText
-     * @param mixed $attributeCode
+     * @param string $attributeCode
      * @param string $expectedResult
      * @dataProvider getLabelDataProvider
      */
