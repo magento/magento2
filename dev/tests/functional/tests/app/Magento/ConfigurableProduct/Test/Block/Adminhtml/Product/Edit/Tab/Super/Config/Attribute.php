@@ -283,6 +283,10 @@ class Attribute extends Form
                 $this->getTemplateBlock()->waitLoader();
                 $optionContainer->find('[data-action=save]')->click();
             }
+            //Select option
+            if (!$optionContainer->find('[type="checkbox"]')->isSelected()) {
+                $optionContainer->find('[type="checkbox"]')->click();
+            }
         }
     }
 
