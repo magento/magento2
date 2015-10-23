@@ -529,7 +529,7 @@ define([
                         }
                     }, this), 50);
                 } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
-                    setTimeout($.proxy(function(){
+                    setTimeout($.proxy(function () {
                         $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
                         this.Base = false;
                     }, this), 50);
