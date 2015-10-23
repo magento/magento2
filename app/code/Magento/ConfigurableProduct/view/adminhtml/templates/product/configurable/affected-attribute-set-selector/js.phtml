@@ -33,6 +33,12 @@
             newAttributeSetContainer = $('[data-role=affected-attribute-set-new-name-container]'),
             existingAttributeSetContainer = $('[data-role=affected-attribute-set-existing-name-container]');
 
+        $form.find('input[type=text]').on('keypress',function(e){
+            if(e.keyCode === 13){
+                e.preventDefault();
+                $form.closest('[data-role=modal]').find('button[data-action=confirm]').click();
+            }
+        });
 
         $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
@@ -48,6 +54,9 @@
                 },
                 buttons: [{
                     text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
+                    attr: {
+                        'data-action': 'confirm'
+                    },
                     'class': 'action-secondary',
                     click: function() {
                         var affectedAttributeSetId = $form.find('input[name=affected-attribute-set]:checked').val();
