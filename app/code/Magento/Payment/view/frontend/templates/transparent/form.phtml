@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Payment\Block\Transparent\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 $ccType = $block->getInfoData('cc_type');
@@ -20,7 +20,7 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
 <iframe width="0" height="0" id="<?php /* @noescape */ echo $code; ?>-transparent-iframe"
         data-container="<?php /* @noEscape */ echo $code; ?>-transparent-iframe" allowtransparency="true"
         frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent"
-        src="<?php /* @noEscape */ echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
 <form class="form" id="co-transparent-form" action="#" method="post" data-mage-init='{
     "transparent":{
         "controller":"<?php echo $block->escapeHtml($block->getRequest()->getControllerName()); ?>",
@@ -28,7 +28,7 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
         "orderSaveUrl":"<?php echo $block->escapeUrl($block->getOrderUrl()); ?>",
         "cgiUrl":"<?php echo $block->escapeUrl($block->getCgiUrl()); ?>",
         "dateDelim":"<?php echo $block->escapeHtml($block->getDateDelim()); ?>",
-        "cardFieldsMap":<?php /* @noEscape */ echo $block->getCardFieldsMap(); ?>,
+        "cardFieldsMap":<?php echo $block->escapeHtml($block->getCardFieldsMap()); ?>,
         "nativeAction":"<?php echo $block->escapeUrl($block->getUrl('checkout/onepage/saveOrder', ['_secure' => $block->getRequest()->isSecure()])); ?>"
     }, "validation":[]}'>
     <fieldset class="fieldset ccard <?php /* @noEscape */ echo $code; ?>" id="payment_form_<?php /* @noEscape */ echo $code; ?>">
