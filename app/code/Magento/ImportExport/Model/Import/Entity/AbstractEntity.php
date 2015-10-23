@@ -763,7 +763,7 @@ abstract class AbstractEntity
                             $emptyHeaderColumns[] = $columnNumber;
                         } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
-                        } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                        } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;
                         }
                     }
@@ -817,5 +817,15 @@ abstract class AbstractEntity
     public function getDeletedItemsCount()
     {
         return $this->countItemsDeleted;
+    }
+
+    /**
+     * Retrieve valid column names
+     *
+     * @return array
+     */
+    public function getValidColumnNames()
+    {
+        return $this->validColumnNames;
     }
 }
