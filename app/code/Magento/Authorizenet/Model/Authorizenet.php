@@ -6,6 +6,7 @@
 namespace Magento\Authorizenet\Model;
 
 use Magento\Authorizenet\Model\TransactionService;
+use Magento\Framework\HTTP\ZendClientFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -98,6 +99,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
     /**
+     * @var \Magento\Framework\HTTP\ZendClientFactory
+     */
+    protected $httpClientFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -111,6 +117,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Model\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Response\Factory $responseFactory
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -130,6 +137,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
         TransactionService $transactionService,
+        ZendClientFactory $httpClientFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -138,6 +146,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         $this->requestFactory = $requestFactory;
         $this->responseFactory = $responseFactory;
         $this->transactionService = $transactionService;
+        $this->httpClientFactory = $httpClientFactory;
 
         parent::__construct(
             $context,
@@ -370,7 +379,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
         $result = $this->responseFactory->create();
-        $client = new \Magento\Framework\HTTP\ZendClient();
+        /** @var \Magento\Framework\HTTP\ZendClient $client */
+        $client = $this->httpClientFactory->create();
         $url = $this->getConfigData('cgi_url') ?: self::CGI_URL;
         $debugData = ['url' => $url, 'request' => $request->getData()];
         $client->setUri($url);
