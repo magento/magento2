@@ -11,7 +11,8 @@
  * @see \Magento\Paypal\Block\Payflow\Link\Info
  */
 ?>
-<div id="payment_form_<?php /* @noEscape */ echo $block->getMethodCode(); ?>" style="display:none" class="hss items">
+<div id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>"
+     style="display:none" class="hss items">
     <?php echo $block->escapeHtml(__(
         'You will be required to enter your payment details after you place an order.'
     )); ?>
