@@ -61,7 +61,7 @@ class Io
      */
     public function getResultFileDirectory($className)
     {
-        $fileName = $this->getResultFileName($className);
+        $fileName = $this->generateResultFileName($className);
         $pathParts = explode('/', $fileName);
         unset($pathParts[count($pathParts) - 1]);
 
@@ -72,7 +72,7 @@ class Io
      * @param string $className
      * @return string
      */
-    public function getResultFileName($className)
+    public function generateResultFileName($className)
     {
         return $this->_generationDirectory . ltrim(str_replace(['\\', '_'], '/', $className), '/') . '.php';
     }
@@ -98,7 +98,7 @@ class Io
         try {
             $success = $this->filesystemDriver->rename($tmpFile, $fileName);
         } catch (FileSystemException $e) {
-            if (!file_exists($fileName)) {
+            if (!$this->fileExists($fileName)) {
                 throw $e;
             } else {
                 /**
@@ -144,6 +144,18 @@ class Io
     public function fileExists($fileName)
     {
         return $this->filesystemDriver->isExists($fileName);
+    }
+
+    /**
+     * Wrapper for include
+     *
+     * @param string $fileName
+     * @return mixed
+     * @codeCoverageIgnore
+     */
+    public function includeFile($fileName)
+    {
+        return include $fileName;
     }
 
     /**
