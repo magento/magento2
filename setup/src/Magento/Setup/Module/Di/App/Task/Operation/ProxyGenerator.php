@@ -6,12 +6,10 @@
 
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Scanner;
-use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-class RepositoryGenerator implements OperationInterface
+class ProxyGenerator implements OperationInterface
 {
     /**
      * @var Scanner\DirectoryScanner
@@ -19,9 +17,9 @@ class RepositoryGenerator implements OperationInterface
     private $directoryScanner;
 
     /**
-     * @var Scanner\RepositoryScanner
+     * @var Scanner\XmlScanner
      */
-    private $repositoryScanner;
+    private $proxyScanner;
 
     /**
      * @var array
@@ -29,26 +27,18 @@ class RepositoryGenerator implements OperationInterface
     private $data;
 
     /**
-     * @var ClassesScanner
-     */
-    private $classesScanner;
-
-    /**
      * @param Scanner\DirectoryScanner $directoryScanner
-     * @param ClassesScanner $classesScanner
-     * @param Scanner\RepositoryScanner $repositoryScanner
+     * @param Scanner\XmlScanner $proxyScanner
      * @param array $data
      */
     public function __construct(
         Scanner\DirectoryScanner $directoryScanner,
-        ClassesScanner $classesScanner,
-        Scanner\RepositoryScanner $repositoryScanner,
+        Scanner\XmlScanner $proxyScanner,
         $data = []
     ) {
         $this->directoryScanner = $directoryScanner;
-        $this->repositoryScanner = $repositoryScanner;
+        $this->proxyScanner = $proxyScanner;
         $this->data = $data;
-        $this->classesScanner = $classesScanner;
     }
 
     /**
@@ -63,21 +53,12 @@ class RepositoryGenerator implements OperationInterface
             return;
         }
 
-        try {
-            foreach ($this->data['paths'] as $path) {
-                $this->classesScanner->getList($path);
-            }
-        } catch(FileSystemException $e) {
-            // skip
-        }
-
-        $this->repositoryScanner->setUseAutoload(false);
         $files = [];
         foreach ($this->data['paths'] as $path) {
             $files = array_merge_recursive($files, $this->directoryScanner->scan($path, $this->data['filePatterns']));
         }
-        $repositories = $this->repositoryScanner->collectEntities($files['di']);
-        foreach ($repositories as $entityName) {
+        $proxies = $this->proxyScanner->collectEntities($files['di']);
+        foreach ($proxies as $entityName) {
             class_exists($entityName);
         }
     }
@@ -89,6 +70,6 @@ class RepositoryGenerator implements OperationInterface
      */
     public function getName()
     {
-        return 'Repositories code generation';
+        return 'Proxies code generation';
     }
 }
