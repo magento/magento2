@@ -345,7 +345,9 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $row['value_id'] = $valueIdMap[$row['value_id']];
+            unset($row['record_id']);
             $this->insertGalleryValueInStore($row);
+            $this->bindValueToEntity($row['value_id'], $newProductId);
         }
 
         return $this;
