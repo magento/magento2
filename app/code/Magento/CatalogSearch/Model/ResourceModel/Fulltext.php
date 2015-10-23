@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 /**
  * CatalogSearch Fulltext Index resource model
  */
-class Fulltext extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Core event manager proxy
@@ -18,12 +18,12 @@ class Fulltext extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_eventManager;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = null
     ) {

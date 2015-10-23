@@ -13,7 +13,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * Join fields
@@ -53,7 +53,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param \Magento\Customer\Model\ResourceModel\Customer $customerResource
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -64,7 +64,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,

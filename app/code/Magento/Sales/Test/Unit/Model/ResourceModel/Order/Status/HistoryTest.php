@@ -37,7 +37,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -65,7 +65,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -84,14 +84,14 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->method('lastInsertId');
 
         $relationProcessorMock = $this->getMock(
-            '\Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor',
+            '\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
             [],
             [],
             '',
             false
         );
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ModelResource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 

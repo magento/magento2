@@ -7,9 +7,10 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Payment\Block\Transparent\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpYear = $block->getInfoData('cc_exp_year');
+$ccExpMonth = $block->getInfoData('cc_exp_month');
 ?>
 
 <!-- IFRAME for request to Payment Gateway -->
@@ -28,7 +29,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         "controller":"<?php echo $block->escapeHtml($block->getRequest()->getControllerName()); ?>",
         "gateway":"<?php /* @noEscape */ echo $code; ?>",
         "dateDelim":"<?php echo $block->escapeHtml($block->getDateDelim()); ?>",
-        "cardFieldsMap":<?php /* @noEscape */ echo $block->getCardFieldsMap(); ?>,
+        "cardFieldsMap":<?php echo $block->escapeHtml($block->getCardFieldsMap()); ?>,
         "orderSaveUrl":"<?php echo $block->escapeUrl($block->getOrderUrl()); ?>",
         "cgiUrl":"<?php echo $block->escapeUrl($block->getCgiUrl()); ?>",
         "expireYearLength":"<?php echo $block->escapeHtml($block->getMethodConfigData('cc_year_length')); ?>",
@@ -87,11 +88,10 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     data-container="<?php /* @noEscape */ echo $code; ?>-cc-month"
                     class="admin__control-select admin__control-select-month"
                     data-validate='{required:true, "validate-cc-exp":"#<?php /* @noEscape */ echo $code; ?>_expiration_yr"}'>
-                <?php $_ccExpMonth = $block->getInfoData('cc_exp_month') ?>
                 <?php foreach ($block->getCcMonths() as $k => $v): ?>
                     <option
-                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
-                        <?php if ($k == $_ccExpMonth): ?> selected="selected"<?php endif ?>>
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
+                        <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
                         <?php echo $block->escapeHtml($v); ?>
                     </option>
                 <?php endforeach ?>
@@ -102,7 +102,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     data-container="<?php /* @noEscape */ echo $code; ?>-cc-year" data-validate='{required:true}'>
                 <?php foreach ($block->getCcYears() as $k => $v): ?>
                     <option
-                        value="<?php /* @noEscape */ echo $k ? $k : '' ?>"
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
                         <?php if ($k == $ccExpYear): ?> selected="selected"<?php endif ?>>
                         <?php echo $block->escapeHtml($v); ?>
                     </option>

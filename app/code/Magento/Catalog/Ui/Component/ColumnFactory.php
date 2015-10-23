@@ -53,7 +53,6 @@ class ColumnFactory
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
-            'align' => 'left',
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
         ], $config);
@@ -61,15 +60,16 @@ class ColumnFactory
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
         }
+        
+        $config['component'] = $this->getJsComponent($config['dataType']);
+        
         $arguments = [
             'data' => [
-                'js_config' => [
-                    'component' => $this->getJsComponent($config['dataType']),
-                ],
                 'config' => $config,
             ],
             'context' => $context,
         ];
+        
         return $this->componentFactory->create($columnName, 'column', $arguments);
     }
 

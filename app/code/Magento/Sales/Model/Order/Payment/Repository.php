@@ -47,21 +47,21 @@ class Repository implements OrderPaymentRepositoryInterface
     /**
      * Lists order payments that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderPaymentSearchResultInterface Order payment search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Payment\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
         return $collection;
     }
 

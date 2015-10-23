@@ -130,7 +130,10 @@
 </div>
 
 <script>
-require(['jquery'], function(jQuery){
+require([
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function(jQuery, confirm){
 
     (function($) {
         var $storesList = $('[data-role=stores-list]');
@@ -171,11 +174,19 @@ require(['jquery'], function(jQuery){
         } else {
 
             <?php if ($block->getUseConfirm()): ?>
-            if (confirm("<?php /* @escapeNotVerified */ echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>")) {
-                reload();
-            } else {
-                obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
-            }
+
+            confirm({
+                content:  "<?php /* @escapeNotVerified */ echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
+                actions: {
+                    confirm: function() {
+                        reload();
+                    },
+                    cancel: function() {
+                        obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
+                    }
+                }
+            });
+
             <?php else: ?>
                 reload();
             <?php endif; ?>

@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Media extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
 
@@ -324,11 +324,12 @@ class Media extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
                 'attribute_id' => $attributeId,
-                'entity_id' => $newProductId,
                 'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
             ];
 
             $valueIdMap[$row['value_id']] = $this->insertGallery($data);
+            $this->bindValueToEntity($valueIdMap[$row['value_id']], $newProductId);
+
         }
 
         if (count($valueIdMap) == 0) {
@@ -344,6 +345,8 @@ class Media extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
         );
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
+            unset($row['record_id']);
+            $row['entity_id'] = $newProductId;
             $row['value_id'] = $valueIdMap[$row['value_id']];
             $this->insertGalleryValueInStore($row);
         }

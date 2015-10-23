@@ -6,6 +6,7 @@
 namespace Magento\Payment\Test\Unit\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderComposite;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,7 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [],
-                    'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                    'type' => BuilderInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -32,7 +33,7 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
-        $builder = new BuilderComposite([], $tMapFactory);
+        $builder = new BuilderComposite($tMapFactory, []);
         static::assertEquals([], $builder->build([]));
     }
 
@@ -47,6 +48,7 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             'item' => 'gas cooker',
             'quantity' => 1
         ];
+
         $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -96,7 +98,7 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
                         'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
                         'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
                     ],
-                    'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                    'type' => BuilderInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -105,12 +107,12 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \ArrayIterator([$customerBuilder, $productBuilder, $magentoBuilder]));
 
         $builder = new BuilderComposite(
+            $tMapFactory,
             [
                 'customer' => 'Magento\Payment\Gateway\Request\BuilderInterface',
                 'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
                 'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
-            ],
-            $tMapFactory
+            ]
         );
 
         static::assertEquals($expectedRequest, $builder->build([]));

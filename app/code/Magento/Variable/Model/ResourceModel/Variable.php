@@ -13,7 +13,7 @@ namespace Magento\Variable\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Variable extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Constructor

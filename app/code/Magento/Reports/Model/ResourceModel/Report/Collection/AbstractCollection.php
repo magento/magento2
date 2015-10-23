@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Collection;
 
-class AbstractCollection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * From date

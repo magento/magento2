@@ -323,7 +323,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @param int $fromDate
      * @param int $toDate
-     * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected function _getReport($fromDate, $toDate)
     {

@@ -20,7 +20,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Acl\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $aclCacheMock;
 
-    /** @var \Magento\Framework\Model\ModelResource\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
     /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject */
