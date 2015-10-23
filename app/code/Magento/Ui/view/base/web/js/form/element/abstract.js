@@ -17,7 +17,6 @@ define([
             focused: false,
             required: false,
             disabled: false,
-            tmpPath: 'ui/form/element/',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             input_type: 'input',
             placeholder: '',
@@ -87,9 +86,9 @@ define([
             this._super();
 
             _.extend(this, {
-                'uid': uid,
-                'noticeId': 'notice-' + uid,
-                'inputName': utils.serializeName(this.dataScope)
+                uid: uid,
+                noticeId: 'notice-' + uid,
+                inputName: utils.serializeName(this.dataScope)
             });
 
             return this;

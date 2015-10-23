@@ -10,6 +10,20 @@ define([
     'use strict';
 
     return Component.extend({
+        defaults: {
+            clientConfig: {
+                urls: {
+                    save: '${ $.submit_url }',
+                    beforeSave: '${ $.validate_url }'
+                }
+            }
+        },
+
+        /**
+         * Initializes provider component.
+         *
+         * @returns {Provider} Chainable.
+         */
         initialize: function () {
             this._super()
                 .initClient();
@@ -17,17 +31,23 @@ define([
             return this;
         },
 
+        /**
+         * Initializes client component.
+         *
+         * @returns {Provider} Chainable.
+         */
         initClient: function () {
-            this.client = new Client({
-                urls: {
-                    beforeSave: this.validate_url,
-                    save: this.submit_url
-                }
-            });
+            this.client = new Client(this.clientConfig);
 
             return this;
         },
 
+        /**
+         * Saves currently available data.
+         *
+         * @param {Object} [options] - Addtitional request options.
+         * @returns {Provider} Chainable.
+         */
         save: function (options) {
             var data = this.get('data');
 
