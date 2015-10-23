@@ -134,22 +134,17 @@ define([
          */
         _createVideoData: function (inputData, isJSON) {
             var videoData = {},
-                key,
                 dataUrl,
                 tmpVideoData,
                 tmpInputData,
-                inputDataKeys,
                 i;
 
             if (isJSON) {
                 inputData = $.parseJSON(inputData);
             }
 
-            inputDataKeys = Object.keys(inputData);
-
-            for (i = 0; i < inputDataKeys.length; i++) {
-                key = inputDataKeys[i];
-                tmpInputData = inputData[key];
+            for (i = 0; i < inputData.length; i++) {
+                tmpInputData = inputData[i];
                 dataUrl = '';
                 tmpVideoData = {
                     mediaType: '',
@@ -172,7 +167,7 @@ define([
                     tmpVideoData.provider = dataUrl.type;
                 }
 
-                videoData[key] = tmpVideoData;
+                videoData[i] = tmpVideoData;
             }
 
             return videoData;
