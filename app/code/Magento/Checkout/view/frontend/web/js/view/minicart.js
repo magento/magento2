@@ -74,7 +74,7 @@ define([
                 initSidebar();
 
                 /**TODO: Extra options support. Should be refactored after MAGETWO-43159. */
-                setInterval(function(){
+                setTimeout(function(){
                     minicart.trigger('contentUpdated');
                 }, 500);
 
