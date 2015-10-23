@@ -58,9 +58,8 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 $designConfigData
             ));
         $emailFactory = $this->getMock('Magento\Email\Model\TemplateFactory', ['create'], [], '', false);
-        $emailFactory->expects($this->once())
+        $emailFactory->expects($this->any())
             ->method('create')
-            ->with([])
             ->willReturn($template);
 
         $request = $this->getMock('Magento\Framework\App\RequestInterface');
@@ -109,6 +108,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($requestParamMap[1][2]))
             ->willReturn(self::MALICIOUS_TEXT);
 
+        /** @var \Magento\Email\Block\Adminhtml\Template\Preview $preview */
         $preview = $this->objectManagerHelper->getObject(
             'Magento\Email\Block\Adminhtml\Template\Preview',
             [
