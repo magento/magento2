@@ -6,9 +6,11 @@
 
 namespace Magento\Framework\Console;
 
+use Magento\Framework\Filesystem\Driver\File;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Shell\ComplexParameter;
+use Symfony\Component\Console\Input\ArgvInput;
 
 /**
  * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
@@ -37,7 +39,8 @@ class Cli extends SymfonyApplication
          * Temporary workaround until the compiler is able to clear the generation directory. (MAGETWO-44493)
          */
         if (class_exists('Magento\Setup\Console\CompilerPreparation')) {
-            (new \Magento\Setup\Console\CompilerPreparation($this->serviceManager))->handleCompilerEnvironment();
+            (new \Magento\Setup\Console\CompilerPreparation($this->serviceManager, new ArgvInput(), new File()))
+                ->handleCompilerEnvironment();
         }
 
         parent::__construct($name, $version);

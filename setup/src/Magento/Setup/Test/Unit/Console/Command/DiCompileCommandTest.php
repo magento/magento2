@@ -149,5 +149,6 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             'Generated code and dependency injection configuration successfully.',
             explode(PHP_EOL, $tester->getDisplay())
         );
+        $this->assertSame(DiCompileCommand::NAME, $this->command->getName());
     }
 }

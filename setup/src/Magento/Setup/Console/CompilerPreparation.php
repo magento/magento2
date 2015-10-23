@@ -20,12 +20,26 @@ class CompilerPreparation
     /** @var \Zend\ServiceManager\ServiceManager */
     private $serviceManager;
 
+    /** @var ArgvInput */
+    private $input;
+
+    /** @var File */
+    private $filesystemDriver;
+
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param ArgvInput $input
+     * @param File $filesystemDriver
      */
-    public function __construct(\Zend\ServiceManager\ServiceManager $serviceManager)
+    public function __construct(
+        \Zend\ServiceManager\ServiceManager $serviceManager,
+        \Symfony\Component\Console\Input\ArgvInput $input,
+        \Magento\Framework\Filesystem\Driver\File $filesystemDriver
+    )
     {
-        $this->serviceManager = $serviceManager;
+        $this->serviceManager   = $serviceManager;
+        $this->input            = $input;
+        $this->filesystemDriver = $filesystemDriver;
     }
 
     /**
@@ -35,17 +49,16 @@ class CompilerPreparation
      */
     public function handleCompilerEnvironment()
     {
-        $input = new ArgvInput();
         $compilationCommands = [DiCompileCommand::NAME, DiCompileMultiTenantCommand::NAME];
-        $cmdName = $input->getFirstArgument();
-        $isHelpOption = $input->hasParameterOption('--help') || $input->hasParameterOption('-h');
+        $cmdName = $this->input->getFirstArgument();
+        $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
 
         if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
             return;
         }
 
         $generationDir = ($cmdName === DiCompileMultiTenantCommand::NAME)
-            ? $input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
+            ? $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
             : null;
 
         if (!$generationDir) {
@@ -56,9 +69,8 @@ class CompilerPreparation
             $generationDir = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::GENERATION);
         }
 
-        $filesystemDriver = new File();
-        if ($filesystemDriver->isExists($generationDir)) {
-            $filesystemDriver->deleteDirectory($generationDir);
+        if ($this->filesystemDriver->isExists($generationDir)) {
+            $this->filesystemDriver->deleteDirectory($generationDir);
         }
     }
 }
