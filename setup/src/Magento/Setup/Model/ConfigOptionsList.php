@@ -271,6 +271,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $this->validSaveHandlers)
         ) {
             $errors[] = "Invalid session handler '{$options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]}'";
+        } else if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
+            && $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
+            === ConfigOptionsListConstants::SESSION_SAVE_REDIS
+            && !extension_loaded('redis')
+        ) {
+            $errors[] = "Session handler has been chosen as 'redis', but PHP extension Redis is not loaded";
         }
 
         return $errors;

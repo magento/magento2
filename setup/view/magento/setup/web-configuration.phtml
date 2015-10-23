@@ -280,6 +280,40 @@ $hints = [
             </div>
         </div>
 
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label required">
+                    Session Save
+                </label>
+            </div>
+            <div class="col-m-4">
+                <select
+                    name="session"
+                    class="form-el-select"
+                    ng-model="config.sessionSave.type"
+                    ng-class="{'invalid': webconfig.session.$invalid && webconfig.submitted}"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="The location of session. You can change this later in Magento Admin."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    ng-change="$scope.validate()"
+                    check-Redis
+                    >
+                    <?php foreach ( $this->sessionSave as $value): ?>
+                        <?php echo "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>"; ?>
+                    <?php endforeach; ?>
+                </select>
+
+                <div class="error-container">
+                    <span ng-show="webconfig.session.$error.checkRedis">
+                        Redis PHP extension is not loaded, please follow instructions on
+                        <a href="http://devdocs.magento.com/guides/v2.0/config-guide/redis/config-redis.html"
+                           target="_blank">how to setup Redis</a>,
+                        before selecting this option.
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
 </fieldset>
