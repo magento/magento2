@@ -11,6 +11,8 @@ define([
 ], function ($) {
     'use strict';
 
+    var allowBase = true; //global var is needed because fotorama always fully reloads events in case of fullscreen
+
     /**
      * @private
      */
@@ -309,13 +311,16 @@ define([
 
                 if (
                     videoItem.mediaType === this.VID && videoItem.isBase &&
-                    this.options.VideoSettings[0].playIfBase
+                    this.options.VideoSettings[0].playIfBase && allowBase
                 ) {
                     this.Base = true;
+                    allowBase = false;
                 }
             }
 
-            this._createCloseVideo($(this.element).data('fotorama'), this.Base);
+            if (!this.isFullscreen) {
+                this._createCloseVideo($(this.element).data('fotorama'), this.Base);
+            }
         },
 
         /**
@@ -523,9 +528,11 @@ define([
                             this.Base = false;
                         }
                     }, this), 50);
-                } else { //if not a vimeo - play it immediately
-                    $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                    this.Base = false;
+                } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
+                    setTimeout($.proxy(function(){
+                        $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                        this.Base = false;
+                    }, this), 50);
                 }
             }
         },
