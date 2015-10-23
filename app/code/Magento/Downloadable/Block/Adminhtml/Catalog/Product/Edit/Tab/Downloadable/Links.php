@@ -463,4 +463,13 @@ class Links extends \Magento\Backend\Block\Template
     {
         return $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
     }
+
+    /**
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
+     * @return string
+     */
+    public function getBaseCurrencySymbol($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getBaseCurrency()->getCurrencySymbol();
+    }
 }
