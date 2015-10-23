@@ -31,32 +31,32 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Review\Model\ResourceModel\Review\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $collectionMock;
+    private $collection;
 
     /**
      * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $collectionFactoryMock;
+    private $collectionFactory;
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $registryMock;
+    private $registry;
 
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productMock;
+    private $product;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $contextMock;
+    private $storeManager;
 
     /**
-     * @va rMagento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeMock;
+    private $store;
 
     protected function setUp()
     {
@@ -66,9 +66,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $helper = new ObjectManager($this);
         $this->block = $helper->getObject(ReviewBlock::class, [
-            'context' => $this->contextMock,
-            'registry' => $this->registryMock,
-            'collectionFactory' => $this->collectionFactoryMock,
+            'storeManager' => $this->storeManager,
+            'registry' => $this->registry,
+            'collectionFactory' => $this->collectionFactory,
         ]);
     }
 
@@ -85,32 +85,32 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     private function initCollectionMocks()
     {
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
+        $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addStoreFilter', 'addStatusFilter', 'addEntityFilter', 'getSize', '__wakeup'])
             ->getMock();
 
-        $this->collectionMock->expects(static::any())
+        $this->collection->expects(static::any())
             ->method('addStoreFilter')
             ->willReturnSelf();
 
-        $this->collectionMock->expects(static::any())
+        $this->collection->expects(static::any())
             ->method('addStatusFilter')
             ->with(Review::STATUS_APPROVED)
             ->willReturnSelf();
 
-        $this->collectionMock->expects(static::any())
+        $this->collection->expects(static::any())
             ->method('addEntityFilter')
             ->willReturnSelf();
 
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', '__wakeup'])
             ->getMock();
 
-        $this->collectionFactoryMock->expects(static::once())
+        $this->collectionFactory->expects(static::once())
             ->method('create')
-            ->willReturn($this->collectionMock);
+            ->willReturn($this->collection);
     }
 
     /**
@@ -119,15 +119,15 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     private function initRegistryMock()
     {
         $this->initProductMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
             ->getMock();
 
-        $this->registryMock->expects(static::once())
+        $this->registry->expects(static::once())
             ->method('registry')
             ->with('product')
-            ->willReturn($this->productMock);
+            ->willReturn($this->product);
     }
 
     /**
@@ -135,7 +135,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     private function initProductMock()
     {
-        $this->productMock = $this->getMockBuilder(Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -146,27 +146,18 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     private function initContextMock()
     {
-        $this->storeMock = $this->getMockBuilder(Store::class)
+        $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
 
-        $storeManager = $this->getMockBuilder(StoreManager::class)
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', '__wakeup'])
             ->getMock();
 
-        $storeManager->expects(static::once())
+        $this->storeManager->expects(static::any())
             ->method('getStore')
-            ->willReturn($this->storeMock);
-
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStoreManager'])
-            ->getMock();
-
-        $this->contextMock->expects(static::once())
-            ->method('getStoreManager')
-            ->willReturn($storeManager);
+            ->willReturn($this->store);
     }
 }
