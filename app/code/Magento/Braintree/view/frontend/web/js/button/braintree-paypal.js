@@ -7,12 +7,29 @@ define([
     'Magento_Braintree/js/button/builder',
     'Magento_Braintree/js/button/action/get-data',
     'Magento_Customer/js/customer-data',
-    'Magento_Ui/js/lib/view/utils/dom-observer'
-], function ($, builder, actionGetData, customerData, domObserver) {
+    'Magento_Ui/js/lib/view/utils/dom-observer',
+    'mageUtils'
+], function ($, builder, actionGetData, customerData, domObserver, utils) {
     'use strict';
 
-    return function (config) {
+    /**
+     * Ensure that several widget initializations that share common template
+     * will provide uniqueIds
+     *
+     * @param {Object} config
+     * @param {HTMLElement} element
+     */
+    var ensureUniqueIds = function (config, element) {
+        var id = utils.uniqueid();
 
+        config.containerId += id;
+        config.options.container += id;
+        element.id += id;
+        config.detailsId += id;
+        config.paymentId += id;
+    };
+
+    return function (config, element) {
         var button = {
             isClick: false,
 
@@ -96,8 +113,12 @@ define([
             }
         };
 
-        $(config.containerId).on('mousedown', button.mousedown.bind(button));
-        $(config.containerId).on('click', button.click.bind(button));
+        ensureUniqueIds(config, element);
+
+        console.log('Br: ', element, config);
+        $(element)
+            .on('mousedown', button.mousedown.bind(button))
+            .on('click', button.click.bind(button));
 
         customerData.get('cart')
             .subscribe(function () {
