@@ -37,22 +37,22 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     }
 
     /**
-     * @param \Magento\Framework\Pricing\SaleableInterface $product
+     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
      * @return float
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
-        $selectedConfigurableOption = $product->getSelectedConfigurableOption();
-        if ($selectedConfigurableOption) {
-            $price = $this->priceResolver->resolvePrice($selectedConfigurableOption);
-        } else {
-            $price = null;
-            foreach ($this->configurable->getUsedProducts($product) as $subProduct) {
-                $productPrice = $this->priceResolver->resolvePrice($subProduct);
-                $price = $price ? min($price, $productPrice) : $productPrice;
-            }
+        $price = null;
+        foreach ($this->configurable->getUsedProducts($product) as $subProduct) {
+            $productPrice = $this->priceResolver->resolvePrice($subProduct);
+            $price = $price ? min($price, $productPrice) : $productPrice;
         }
-        $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
-        return $priceInCurrentCurrency ? (float)$priceInCurrentCurrency : false;
+        if (!$price) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Configurable product "%s" do not have sub-products', $product->getName())
+            );
+        }
+        return (float)$price;
     }
 }
