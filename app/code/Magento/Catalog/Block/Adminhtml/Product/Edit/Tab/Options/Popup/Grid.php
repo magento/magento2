@@ -62,7 +62,19 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     protected function _prepareCollection()
     {
         parent::_prepareCollection();
-        $this->getCollection()->addFieldToFilter('has_options', 1);
+
+        if (null !== $this->getRequest()->getParam('current_product_id')) {
+            $this->getCollection()->getSelect()->where(
+                'e.entity_id != ?',
+                $this->getRequest()->getParam('current_product_id')
+            );
+        }
+
+        $this->getCollection()->getSelect()->distinct()->join(
+            ['opt' => $this->getCollection()->getTable('catalog_product_option')],
+            'opt.product_id = e.entity_id',
+            null
+        );
 
         return $this;
     }
