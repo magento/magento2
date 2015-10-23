@@ -53,14 +53,12 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
             $store = $this->storeManager->getStore(
                 $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
-            $currencyCode = $store->getCurrentCurrencyCode();
-            $currencyRate = $store->getCurrentCurrencyRate();
-            $currency = $this->localeCurrency->getCurrency($currencyCode);
+            $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
 
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$fieldName])) {
-                    $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName] * $currencyRate));
+                    $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName]));
                 }
             }
         }
