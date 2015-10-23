@@ -11,6 +11,9 @@ define([
 ], function ($) {
     'use strict';
 
+    /**
+     * @private
+     */
     var allowBase = true; //global var is needed because fotorama always fully reloads events in case of fullscreen
 
     /**
