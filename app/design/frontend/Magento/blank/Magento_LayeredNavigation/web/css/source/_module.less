@@ -11,21 +11,25 @@
 
 .block.filter {
     margin-bottom: 40px;
-    .title {
+    .filter-title {
         margin-bottom: 20px;
         strong {
             font-size: 18px;
         }
     }
-    .subtitle {
+    .filter-subtitle {
         display: none;
     }
+    .filter-options-title {
+        word-break: break-all;
+    }
+
     .filter-options-content {
         .filter-count-label {
             &:extend(.abs-visually-hidden all);
         }
     }
-    .options {
+    .filter-options {
         margin: 0;
         > dt {
             .lib-heading(h4);
