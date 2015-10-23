@@ -8,7 +8,7 @@ define([
     'jquery/ui',
     'mage/dropdown',
     'mage/template'
-], function ($, _) {
+], function ($) {
     'use strict';
 
     $.widget('mage.addToCart', {
@@ -62,14 +62,17 @@ define([
          * @private
          */
         _create: function () {
-            var tierOptions;
+            var tierOptions,
+                popupClone;
 
             this.popupDOM = $(this.options.popUpAttr)[0];
             this.infoPopupDOM = $('[data-role=msrp-info-template]')[0];
 
             if (this.options.popupId) {
-                $('body').append($(this.popupDOM).html());
-                this.$popup = $($(this.popupDOM).html());
+                popupClone  = $($(this.popupDOM).html()).clone();
+                $('body').append(popupClone);
+                this.$popup = popupClone;
+                popupClone.trigger('contentUpdated');
 
                 $(this.options.popupId).on('click', function (e) {
                     this.popUpOptions.position.of = $(e.target);
@@ -104,8 +107,8 @@ define([
                     tierOptions = JSON.parse($(e.target).attr('data-tier-price'));
                     this.$popup.find(this.options.msrpLabelId).html(tierOptions.msrp);
                     this.$popup.find(this.options.priceLabelId).html(tierOptions.price);
-                    this.$popup.find('button').on('click', function (e) {
-                        e.preventDefault();
+                    this.$popup.find('button').on('click', function (ev) {
+                        ev.preventDefault();
                         this.$popup.find('form').attr('action', tierOptions.addToCartUrl).submit();
                     }.bind(this));
                     this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
@@ -116,7 +119,7 @@ define([
 
         /**
          *
-         * @param $elem
+         * @param {HTMLElement} $elem
          * @private
          */
         _toggle: function ($elem) {
@@ -127,12 +130,12 @@ define([
             }.bind(this));
             $(window).on('resize', function () {
                 this.closePopup($elem);
-            }.bind(this))
+            }.bind(this));
         },
 
         /**
          *
-         * @param $elem
+         * @param {HTMLElement} $elem
          */
         closePopup: function ($elem) {
             $elem.dropdownDialog('close');
