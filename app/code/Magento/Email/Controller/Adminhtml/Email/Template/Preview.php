@@ -13,7 +13,7 @@ class Preview extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_view->loadLayout('systemPreview');

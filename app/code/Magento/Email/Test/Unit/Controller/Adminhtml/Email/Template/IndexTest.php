@@ -118,7 +118,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::executeInternal
      */
     public function testExecute()
     {
@@ -157,11 +157,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('addLink')
             ->willReturnSelf();
 
-        $this->assertNull($this->indexController->execute());
+        $this->assertNull($this->indexController->executeInternal());
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::executeInternal
      */
     public function testExecuteAjax()
     {

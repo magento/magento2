@@ -30,7 +30,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_setTypeId();
         $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')

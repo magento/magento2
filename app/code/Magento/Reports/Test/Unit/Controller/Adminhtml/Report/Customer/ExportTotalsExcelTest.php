@@ -45,6 +45,6 @@ class ExportTotalsExcelTest extends \Magento\Reports\Test\Unit\Controller\Adminh
             ->expects($this->once())
             ->method('create')
             ->with('customer_totals.xml', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportTotalsExcel->execute();
+        $this->exportTotalsExcel->executeInternal();
     }
 }

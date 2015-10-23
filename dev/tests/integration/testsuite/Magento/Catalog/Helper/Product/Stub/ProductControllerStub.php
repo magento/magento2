@@ -8,7 +8,7 @@ namespace Magento\Catalog\Helper\Product\Stub;
 
 class ProductControllerStub extends \Magento\Catalog\Controller\Product
 {
-    protected function execute()
+    protected function executeInternal()
     {
         // Empty method stub for test
     }
