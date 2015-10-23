@@ -26,7 +26,7 @@ class Structure extends DataStructure
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $state;
 
@@ -34,12 +34,12 @@ class Structure extends DataStructure
      * Constructor
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\App\State $state
+     * @param State $state
      * @param array $elements
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\State $state,
+        State $state,
         array $elements = null
     ) {
         $this->logger = $logger;
@@ -118,7 +118,7 @@ class Structure extends DataStructure
             if ($childName !== $sibling) {
                 $siblingParentName = $this->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
-                    if ($this->state->getMode() == State::MODE_DEVELOPER) {
+                    if ($this->state->getMode() === State::MODE_DEVELOPER) {
                         $this->logger->critical(
                             "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
                             "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively."

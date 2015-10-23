@@ -16,7 +16,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateMock;
 
@@ -63,7 +63,6 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($stateMode);
-
         $this->loggerMock->expects($loggerExpects)
             ->method('critical')
             ->with(
