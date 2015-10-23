@@ -146,6 +146,6 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult $controller */
         $controller = new ShowUpdateResult($context, $productBuilder, $productCompositeHelper);
-        $controller->execute();
+        $controller->executeInternal();
     }
 }

@@ -41,7 +41,7 @@ class ReviewGrid extends ProductController
     /**
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $layout = $this->layoutFactory->create();
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */

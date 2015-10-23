@@ -70,6 +70,6 @@ class OrdersTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->expects($this->at(2))
             ->method('addLink')
             ->with(new Phrase('Customers by Number of Orders'), new Phrase('Customers by Number of Orders'));
-        $this->orders->execute();
+        $this->orders->executeInternal();
     }
 }

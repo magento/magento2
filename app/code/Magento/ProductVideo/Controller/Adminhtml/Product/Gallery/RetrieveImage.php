@@ -70,7 +70,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');

@@ -40,7 +40,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'varnish.vcl';
         $varnishVersion = $this->getRequest()->getParam('varnish');

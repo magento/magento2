@@ -13,7 +13,7 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $symbolsDataArray = $this->getRequest()->getParam('custom_currency_symbol', null);
         if (is_array($symbolsDataArray)) {

@@ -12,7 +12,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $customerId = $this->initCurrentCustomer();
         $itemId = (int)$this->getRequest()->getParam('delete');
