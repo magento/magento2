@@ -38,9 +38,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-
         $this->attributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
             ['getAttributeCode', 'getFrontendLabel'],
@@ -58,11 +56,16 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
         $attributeValue = '11-11-2011';
         $date = new \DateTime($attributeValue);
         $object = new \Magento\Framework\DataObject(['datetime' => $attributeValue]);
-        $this->attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('datetime'));
-        $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
-            ->will($this->returnValue('text'));
 
-        $this->localeDateMock->expects($this->once())->method('formatDateTime')
+        $this->attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn('datetime');
+        $this->attributeMock->expects($this->any())
+            ->method('getData')
+            ->with('frontend_input')
+            ->willReturn('text');
+        $this->localeDateMock->expects($this->once())
+            ->method('formatDateTime')
             ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE, null, null, null)
             ->willReturn($attributeValue);
 
