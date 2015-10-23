@@ -85,7 +85,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             // For duplicating we need copy original images.
             $duplicate = [];
             foreach ($value['images'] as &$image) {
-                if (empty($image['value_id'])) {
+                if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
                 $duplicate[$image['value_id']] = $this->copyImage($image['file']);
