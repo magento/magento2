@@ -88,6 +88,6 @@ class UrnResolver
                 throw new LocalizedException(new Phrase('File %system cannot be found', ['system' => $system]));
             }
         }
-        return fopen($filePath, "r+");
+        return fopen($filePath, "r");
     }
 }
