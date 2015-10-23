@@ -103,8 +103,9 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * Format URN dictionary for PhpStorm
      *
-     * @param $dictionary
-     * @param $ideFilePath
+     * @param array $dictionary
+     * @param string $ideFilePath
+     * @return null
      */
     private function formatForPhpStorm($dictionary, $ideFilePath)
     {
@@ -129,8 +130,6 @@ class XmlCatalogGenerateCommand extends Command
         }
 
         $xpath = new \DOMXPath($dom);
-        $nodeList = $xpath->query('/project');
-        $projectNode = $nodeList->item(0);
         $nodeList = $xpath->query("/project/component[@name='ProjectResources']");
         $componentNode = $nodeList->item(0);
         if ($componentNode == null) {
