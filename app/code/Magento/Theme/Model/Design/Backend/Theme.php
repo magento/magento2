@@ -68,6 +68,7 @@ class Theme extends Value
         parent::afterSave();
         if ($this->isValueChanged()) {
             $this->_cacheManager->clean();
+            $this->_eventManager->dispatch('adminhtml_cache_flush_system');
         }
         return $this;
     }

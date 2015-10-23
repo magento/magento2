@@ -33,6 +33,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected $cacheTypeListMock;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * @var \Magento\Framework\App\CacheInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheManagerMock;
@@ -48,9 +53,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->cacheManagerMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context = $objectManager->getObject(
             'Magento\Framework\Model\Context',
-            ['cacheManager' => $this->cacheManagerMock]
+            [
+                'cacheManager' => $this->cacheManagerMock,
+                'eventDispatcher' => $this->eventManagerMock,
+            ]
         );
 
         $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
@@ -100,6 +111,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->any())
             ->method('getValue')
             ->willReturn($oldValue);
+        if ($callNumber) {
+            $this->eventManagerMock->expects($this->at(3))
+                ->method('dispatch')
+                ->with('adminhtml_cache_flush_system');
+        }
         $this->model->setValue('some_value');
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
