@@ -513,6 +513,13 @@ class AccountManagement implements AccountManagementInterface
             $customer->setStoreId($storeId);
         }
 
+        // Update 'created_in' value with actual store name
+        if ($customer->getId() === null) {
+            $storeName = $this->storeManager->getStore($customer->getStoreId())
+                ->getName();
+            $customer->setCreatedIn($storeName);
+        }
+
         $customerAddresses = $customer->getAddresses() ?: [];
         $customer->setAddresses(null);
         try {
