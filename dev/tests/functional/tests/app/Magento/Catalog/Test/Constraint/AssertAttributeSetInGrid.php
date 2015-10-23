@@ -11,13 +11,13 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductTemplateInGrid
- * Checks present product template in Product Templates grid
+ * Class AssertAttributeSetInGrid
+ * Checks present attribute set in Attribute Sets grid
  */
-class AssertProductTemplateInGrid extends AbstractConstraint
+class AssertAttributeSetInGrid extends AbstractConstraint
 {
     /**
-     * Assert that new product template displays in Product Templates grid
+     * Assert that new attribute set displays in Attribute Sets grid
      *
      * @param CatalogProductSetIndex $productSetPage
      * @param CatalogAttributeSet $attributeSet
@@ -32,17 +32,17 @@ class AssertProductTemplateInGrid extends AbstractConstraint
         $productSetPage->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $productSetPage->getGrid()->isRowVisible($filterAttributeSet),
-            'Product Template \'' . $filterAttributeSet['set_name'] . '\' is absent in Product Template grid.'
+            'Attribute Set \'' . $filterAttributeSet['set_name'] . '\' is absent in Attribute Set grid.'
         );
     }
 
     /**
-     * Text present new product template in grid
+     * Text present new attribute set in grid
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product template is present in Product Templates grid';
+        return 'Attribute set is present in Attribute Sets grid';
     }
 }
