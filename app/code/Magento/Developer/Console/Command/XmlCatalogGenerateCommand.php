@@ -164,6 +164,4 @@ class XmlCatalogGenerateCommand extends Command
                 break;
         }
     }
-
-
 }
