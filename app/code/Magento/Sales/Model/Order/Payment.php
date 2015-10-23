@@ -629,7 +629,7 @@ class Payment extends Info implements OrderPaymentInterface
                     $this->getOrder()->getId()
                 );
                 if ($captureTxn) {
-                    $this->setParentTransactionId($captureTxn->getTxnId());
+                    $this->setTransactionIdsForRefund($captureTxn);
                 }
                 $this->setShouldCloseParentTransaction(true);
                 // TODO: implement multiple refunds per capture
@@ -638,10 +638,7 @@ class Payment extends Info implements OrderPaymentInterface
                         $this->getOrder()->getStoreId()
                     );
                     $this->setRefundTransactionId($invoice->getTransactionId());
-                    $gateway->refund(
-                        $this,
-                        $baseAmountToRefund
-                    );
+                    $gateway->refund($this, $baseAmountToRefund);
 
                     $creditmemo->setTransactionId($this->getLastTransId());
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1263,16 +1260,8 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $amountPaid = $this->formatAmount($this->getBaseAmountPaid(), true);
-        $amountToCapture = $this->formatAmount($amountToCapture, true);
-        $orderGrandTotal = $this->formatAmount($this->getOrder()->getBaseGrandTotal(), true);
-        if ($orderGrandTotal == $amountPaid + $amountToCapture) {
-            if (false !== $this->getShouldCloseParentTransaction()) {
-                $this->setShouldCloseParentTransaction(true);
-            }
-            return true;
-        }
-        return false;
+        $total = $this->getOrder()->getTotalDue();
+        return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
     /**
@@ -2412,6 +2401,25 @@ class Payment extends Info implements OrderPaymentInterface
     public function getShouldCloseParentTransaction()
     {
         return (bool)$this->getData('should_close_parent_transaction');
+    }
+
+    /**
+     * Set payment parent transaction id and current transaction id if it not set
+     * @param Transaction $transaction
+     * @return void
+     */
+    private function setTransactionIdsForRefund(Transaction $transaction)
+    {
+        if (!$this->getTransactionId()) {
+            $this->setTransactionId(
+                $this->transactionManager->generateTransactionId(
+                    $this,
+                    Transaction::TYPE_REFUND,
+                    $transaction
+                )
+            );
+        }
+        $this->setParentTransactionId($transaction->getTxnId());
     }
 
     //@codeCoverageIgnoreEnd

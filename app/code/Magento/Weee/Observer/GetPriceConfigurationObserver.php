@@ -147,8 +147,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
     {
         $calcPrice = 'finalPrice';
         if (!empty($weeeAttributesForBundle)) {
-            if ($this->weeeData->geDisplayExcl($storeId) ||
-                $this->weeeData->geDisplayExlDescIncl($storeId) ||
+            if ($this->weeeData->isDisplayExcl($storeId) ||
+                $this->weeeData->isDisplayExclDescIncl($storeId) ||
                 ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
             ) {
                 $calcPrice = 'basePrice';
