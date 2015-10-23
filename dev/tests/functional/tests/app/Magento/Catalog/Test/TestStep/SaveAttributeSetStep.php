@@ -12,7 +12,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 /**
  * Save attributeSet on attribute set page.
  */
-class SaveProductTemplateStep implements TestStepInterface
+class SaveAttributeSetStep implements TestStepInterface
 {
     /**
      * Catalog ProductSet Edit page.
