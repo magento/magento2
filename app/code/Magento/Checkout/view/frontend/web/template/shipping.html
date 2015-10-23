@@ -122,7 +122,7 @@
                         <tr class="row row-error">
                             <td class="col col-error" colspan="4">
                                 <div class="message error">
-                                    <div data-bind="i18n: method.error_message"></div>
+                                    <div data-bind="text: method.error_message"></div>
                                 </div>
                                 <span class="no-display">
                                     <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
