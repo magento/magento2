@@ -16,7 +16,7 @@
                     <container name="main" label="Main Content Container" htmlTag="div" htmlClass="column main"/>
                 </container>
             </container>
-            <container name="page.bottom" as="page_bottom" label="Before Page Footer Container" after="main.content" htmlTag="div" htmlClass="page-bottom"/>
+            <container name="page.bottom.container" as="page_bottom_container" label="Before Page Footer Container" after="main.content" htmlTag="div" htmlClass="page-bottom"/>
             <container name="before.body.end" as="before_body_end" after="-" label="Page Bottom"/>
         </container>
     </container>
