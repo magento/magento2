@@ -1740,6 +1740,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * @return Uploader
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getUploader()
+    {
+        return $this->_getUploader();
+    }
+
+    /**
      * Uploading files into the "catalog/product" media folder.
      * Return a new file name if the same file is already exists.
      *
