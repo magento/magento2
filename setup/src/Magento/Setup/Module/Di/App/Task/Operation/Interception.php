@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
@@ -81,11 +80,7 @@ class Interception implements OperationInterface
                 $paths = (array)$paths;
             }
             foreach ($paths as $path) {
-                try {
-                    $classesList = array_merge($classesList, $this->classesScanner->getList($path));
-                } catch(FileSystemException $e) {
-                    // skip
-                }
+                $classesList = array_merge($classesList, $this->classesScanner->getList($path));
             }
         }
 

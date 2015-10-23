@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
@@ -63,14 +62,9 @@ class RepositoryGenerator implements OperationInterface
             return;
         }
 
-        try {
-            foreach ($this->data['paths'] as $path) {
-                $this->classesScanner->getList($path);
-            }
-        } catch(FileSystemException $e) {
-            // skip
+        foreach ($this->data['paths'] as $path) {
+            $this->classesScanner->getList($path);
         }
-
         $this->repositoryScanner->setUseAutoload(false);
         $files = [];
         foreach ($this->data['paths'] as $path) {
