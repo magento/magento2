@@ -132,7 +132,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $this->curl->write('GET', $fileUrl);
         $image = $this->curl->read();
         if (empty($image)) {
-            throw new \InvalidArgumentException("Couldn't retrive a remote preview image file. Service is inaccessible.");
+            throw new \InvalidArgumentException(__('Couldn\'t retrive a remote preview image file. Service is inaccessible.'));
         }
         $this->fileUtility->saveFile($localFilePath, $image);
     }
