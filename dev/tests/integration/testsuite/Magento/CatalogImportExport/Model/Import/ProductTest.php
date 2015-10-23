@@ -645,14 +645,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that an import will still work with an invalid import line and
-     * SKU data.
+     * Tests that no products imported if source file contains errors
      *
      * In this case, the second product data has an invalid attribute set.
      *
      * @magentoDbIsolation enabled
      */
-    public function testInvalidSkuLink()
+    public function _testInvalidSkuLink()
     {
         $this->_stockStateProvider->method('verifyStock')->willReturn(true);
 
@@ -664,12 +663,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
         )->setSource(
             $source
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 1);
+        $this->assertEquals(
+            'Invalid value for Product Template column (set doesn\'t exist?)',
+            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
+        );
         $this->_model->importData();
 
         $productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -681,16 +687,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         foreach ($productCollection as $product) {
             $products[$product->getSku()] = $product;
         }
-        $this->assertArrayHasKey("simple1", $products, "Simple Product should have been imported");
-        $this->assertArrayHasKey("simple3", $products, "Simple Product 3 should have been imported");
+        $this->assertArrayNotHasKey("simple1", $products, "Simple Product should not have been imported");
+        $this->assertArrayNotHasKey("simple3", $products, "Simple Product 3 should not have been imported");
         $this->assertArrayNotHasKey("simple2", $products, "Simple Product2 should not have been imported");
-
-        $upsellProductIds = $products["simple3"]->getUpSellProductIds();
-        $this->assertEquals(
-            0,
-            count($upsellProductIds),
-            "There should not be any linked upsell SKUs. The original  product SKU linked does not import cleanly."
-        );
     }
 
     /**
@@ -699,29 +698,26 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function _testValidateInvalidMultiselectValues()
     {
-        // import data from CSV file
-        $pathToFile = __DIR__ . '/_files/products_with_invalid_multiselect_values.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Filesystem'
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/products_with_invalid_multiselect_values.csv',
+            $directory
+        );
         $errors = $this->_model->setParameters(
             ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0);
-
-        $errors = $this->_model->getErrorMessages();
-        $expectedErrors = [
-            "Please correct the value for 'multiselect_attribute'." => [2],
-        ];
-        foreach ($expectedErrors as $message => $invalidRows) {
-            $this->assertArrayHasKey($message, $errors);
-            $this->assertEquals($invalidRows, $errors[$message]);
-        }
+        $this->assertTrue($errors->getErrorsCount() == 1);
+        $this->assertEquals(
+            "Value for 'multiselect_attribute' attribute contains incorrect value, "
+            ."see acceptable values on settings specified for Admin",
+            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
+        );
     }
 
     /**
@@ -731,7 +727,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppIsolation enabled
      */
-    public function _testProductsWithMultipleStores()
+    public function testProductsWithMultipleStores()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -762,7 +758,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
         $simpleProduct = $objectManager->create('Magento\Catalog\Model\Product');
-        $id = $simpleProduct->getIdBySku('Configurable 03-option_0');
+        $id = $simpleProduct->getIdBySku('Configurable 03-Option 1');
         $simpleProduct->load($id);
         $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
     }

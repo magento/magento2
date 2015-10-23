@@ -1596,7 +1596,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         }
                     }
                     foreach ($storeIds as $storeId) {
-                        $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
+                        if (!isset($attributes[$attrTable][$rowSku][$attrId][$storeId])) {
+                            $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
+                        }
                     }
                     // restore 'backend_model' to avoid 'default' setting
                     $attribute->setBackendModel($backModel);
@@ -1819,12 +1821,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
         $this->_connection->insertOnDuplicate($mediaGalleryTableName, $multiInsertData, []);
         $multiInsertData = [];
-        $dataForSkinnyTable = [];
-        $newMediaValues = $this->_connection->fetchAssoc(
-            $this->_connection->select()->from($mediaGalleryTableName, ['value_id', 'value'])
-                ->where('value IN (?)', $imageNames)
-                ->where('value_id NOT IN (?)', array_keys($oldMediaValues))
-        );
+        $newMediaSelect = $this->_connection->select()
+            ->from($mediaGalleryTableName, ['value_id', 'value'])
+            ->where('value IN (?)', $imageNames);
+        if (array_keys($oldMediaValues)) {
+            $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
+        }
+
+        $newMediaValues = $this->_connection->fetchAssoc($newMediaSelect);
         foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
             foreach ($mediaGalleryRows as $insertValue) {
                 foreach ($newMediaValues as $value_id => $values) {
@@ -1959,12 +1963,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 } else {
                     $row['qty'] = 0;
                 }
-                $stockData[] = $row;
+                if (!isset($stockData[$rowData[self::COL_SKU]])) {
+                    $stockData[$rowData[self::COL_SKU]] = $row;
+                }
             }
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->_connection->insertOnDuplicate($entityTable, $stockData);
+                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
             }
 
             if ($productIdsToReindex) {
@@ -2247,7 +2253,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function _customFieldsMapping($rowData)
     {
         foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
-            if (isset($rowData[$fileFieldName])) {
+            if (array_key_exists($fileFieldName, $rowData)) {
                 $rowData[$systemFieldName] = $rowData[$fileFieldName];
             }
         }
@@ -2255,10 +2261,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $rowData = $this->_parseAdditionalAttributes($rowData);
 
         $rowData = $this->_setStockUseConfigFieldsValues($rowData);
-        if (isset($rowData['status'])) {
-            if (($rowData['status'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) || $rowData['status'] == 'yes') {
+        if (array_key_exists('status', $rowData)
+            && $rowData['status'] != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        ) {
+            if ($rowData['status'] == 'yes') {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
-            } else {
+            } elseif (!empty($rowData['status']) || $this->getRowScope($rowData) == self::SCOPE_DEFAULT) {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
             }
         }
