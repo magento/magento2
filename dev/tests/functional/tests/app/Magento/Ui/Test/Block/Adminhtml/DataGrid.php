@@ -307,8 +307,9 @@ class DataGrid extends Grid
     /**
      * Sort grid by field.
      *
-     * @param $field
+     * @param string $field
      * @param string $sort
+     * @return void
      */
     public function sortGridByField($field, $sort = "desc")
     {
