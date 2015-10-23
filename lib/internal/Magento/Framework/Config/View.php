@@ -10,7 +10,6 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\View\Xsd\Reader;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
@@ -35,14 +34,12 @@ class View extends \Magento\Framework\Config\AbstractXml
 
     /**
      * @param array $configFiles
-     * @param Reader $xsdReader
      * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
      * @param array $xpath
      */
     public function __construct(
         $configFiles,
-        Reader $xsdReader,
         UrnResolver $urnResolver,
         TypeDataExtractorPool $extractorPool,
         $xpath = []
@@ -50,19 +47,17 @@ class View extends \Magento\Framework\Config\AbstractXml
         $this->xpath = $xpath;
         $this->extractorPool = $extractorPool;
         $this->urnResolver = $urnResolver;
-        $this->xsdReader = $xsdReader;
         parent::__construct($configFiles);
     }
-    
+
     /**
-     * Merged file view.xsd
+     * Path to view.xsd
      *
      * @return string
      */
     public function getSchemaFile()
     {
-        $configXsd = $this->xsdReader->read();
-        return $configXsd;
+        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
     }
 
     /**
@@ -97,7 +92,7 @@ class View extends \Magento\Framework\Config\AbstractXml
                                     $mediaNode,
                                     $childNode->tagName
                                 );
-                            $result = array_merge($result, $mediaNodesArray);
+                            $result = array_merge_recursive($result, $mediaNodesArray);
                         }
                     }
                     break;
