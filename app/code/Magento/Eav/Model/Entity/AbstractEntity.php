@@ -1337,11 +1337,11 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 } elseif (!is_numeric($v) && $v !== $origData[$k] || is_numeric($v) && $v != $origData[$k]) {
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
-                        'value' => $v,
+                        'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182
                     ];
                 }
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
-                $insert[$attrId] = $v;
+                $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
             }
         }
 

@@ -70,4 +70,12 @@ class Cookie extends Template
     {
         return $this->sessionConfig->getCookiePath();
     }
+
+    /**
+     * @return int
+     */
+    public function getLifetime()
+    {
+        return $this->sessionConfig->getCookieLifetime();
+    }
 }
