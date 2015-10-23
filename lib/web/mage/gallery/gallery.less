@@ -1141,6 +1141,15 @@
             right: 0;
             top: 0;
         }
+        .fotorama__img--full {
+            display:block;
+            width: auto;
+            max-height: 100%;
+            max-width: 100%;
+            vertical-align: middle;
+            transition-duration: @fotorama-fullscreen-zoom-time;
+            transition-property: width, height, top, left;
+        }
     }
 }
 

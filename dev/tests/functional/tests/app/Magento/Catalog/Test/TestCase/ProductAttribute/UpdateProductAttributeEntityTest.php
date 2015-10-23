@@ -8,8 +8,10 @@ namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -37,6 +39,24 @@ class UpdateProductAttributeEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Factory for fixtures.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
+     * Prepare data.
+     *
+     * @param FixtureFactory $fixtureFactory
+     * @return void
+     */
+    public function __prepare(FixtureFactory $fixtureFactory)
+    {
+        $this->fixtureFactory = $fixtureFactory;
+    }
+
+    /**
      * Run UpdateProductAttributeEntity test
      *
      * @param CatalogProductAttribute $productAttributeOriginal
@@ -44,14 +64,16 @@ class UpdateProductAttributeEntityTest extends Injectable
      * @param CatalogAttributeSet $productTemplate
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
-     * @return void
+     * @param CatalogProductSimple $productSimple
+     * @return array
      */
     public function testUpdateProductAttribute(
         CatalogProductAttribute $productAttributeOriginal,
         CatalogProductAttribute $attribute,
         CatalogAttributeSet $productTemplate,
         CatalogProductAttributeIndex $attributeIndex,
-        CatalogProductAttributeNew $attributeNew
+        CatalogProductAttributeNew $attributeNew,
+        CatalogProductSimple $productSimple
     ) {
         //Precondition
         $productTemplate->persist();
@@ -66,5 +88,42 @@ class UpdateProductAttributeEntityTest extends Injectable
         $attributeIndex->getGrid()->searchAndOpen($filter);
         $attributeNew->getAttributeForm()->fill($attribute);
         $attributeNew->getPageActions()->save();
+        $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
+        $productSimple->persist();
+
+        return ['product' => $this->prepareProduct($productSimple, $attribute, $productTemplate)];
+    }
+
+    /**
+     * Prepare product data.
+     *
+     * @param CatalogProductSimple $product
+     * @param CatalogProductAttribute $attribute
+     * @param CatalogAttributeSet $productTemplate
+     * @return CatalogProductSimple
+     */
+    protected function prepareProduct($product, $attribute, $productTemplate)
+    {
+        $data = [
+            'attribute_set_id' => ['attribute_set' => $productTemplate],
+            'custom_attribute' => $attribute
+        ];
+        $data = array_merge($data, $product->getData());
+
+        return $this->fixtureFactory->createByCode('catalogProductSimple', ['data' => $data]);
+    }
+
+    /**
+     * Prepare attribute data.
+     *
+     * @param CatalogProductAttribute $attribute
+     * @param CatalogProductAttribute $productAttributeOriginal
+     * @return CatalogProductAttribute
+     */
+    protected function prepareAttribute($attribute, $productAttributeOriginal)
+    {
+        $attributeData = array_merge($attribute->getData(), $productAttributeOriginal->getData());
+
+        return $this->fixtureFactory->createByCode('catalogProductAttribute', ['data' => $attributeData]);
     }
 }
