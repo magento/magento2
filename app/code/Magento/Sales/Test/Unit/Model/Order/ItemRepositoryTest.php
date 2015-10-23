@@ -109,7 +109,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn(null);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())
@@ -150,7 +150,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn($orderItemId);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())
@@ -200,10 +200,10 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filterMock]);
 
-        $criteriaMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
+        $searchCriteriaMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
-        $criteriaMock->expects($this->once())
+        $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
@@ -230,7 +230,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($searchResultMock);
 
         $model = $this->getModel($orderItemMock, $productType);
-        $this->assertSame($searchResultMock, $model->getList($criteriaMock));
+        $this->assertSame($searchResultMock, $model->getList($searchCriteriaMock));
     }
 
     public function testDeleteById()
@@ -255,7 +255,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getBuyRequest')
             ->willReturn($requestMock);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())

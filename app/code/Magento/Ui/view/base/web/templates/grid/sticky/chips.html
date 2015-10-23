@@ -6,7 +6,7 @@
 -->
 <div
     class="admin__data-grid-filters-current"
-    data-bind="css: {_show: hasData()}">
+    data-bind="css: {_show: hasPreviews()}">
     <div class="admin__current-filters-title-wrap">
         <span
             class="admin__current-filters-title"
@@ -50,7 +50,7 @@
                 i18n: 'Clear all',
                 click: clear,
                 attr: {
-                    'data-action': hasData() ? 'grid-filter-reset' : ''
+                    'data-action': hasPreviews() ? 'grid-filter-reset' : ''
                 }"
             ></button>
     </div>

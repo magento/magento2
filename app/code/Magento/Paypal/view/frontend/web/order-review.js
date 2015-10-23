@@ -6,11 +6,12 @@
 /*global alert*/
 define([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "mage/translate",
     "mage/mage",
     "mage/validation"
-], function($){
+], function($, alert){
     "use strict";
 
     $.widget('mage.orderReview', {
@@ -129,7 +130,9 @@ define([
                                     msg = msg.join("\n");
                                 }
                             }
-                            alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                             return false;
                         }
                         if (response.redirect) {
@@ -141,11 +144,15 @@ define([
                             return false;
                         }
                         this._ajaxComplete();
-                        alert($.mage.__('Sorry, something went wrong.'));
+                        alert({
+                            content: $.mage.__('Sorry, something went wrong.')
+                        });
                     }
                 },
                 error: function () {
-                    alert($.mage.__('Sorry, something went wrong. Please try again later.'));
+                    alert({
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                    });
                     this._ajaxComplete();
                 }
             });

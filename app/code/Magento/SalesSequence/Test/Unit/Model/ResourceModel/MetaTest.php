@@ -19,7 +19,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context | \PHPUnit_Framework_MockObject_MockObject
      */
     private $dbContext;
 
@@ -73,7 +73,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->dbContext = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\Context',
+            'Magento\Framework\Model\ResourceModel\Db\Context',
             [],
             [],
             '',

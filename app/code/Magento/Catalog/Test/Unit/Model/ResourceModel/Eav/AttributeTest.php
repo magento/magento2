@@ -88,7 +88,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->will($this->returnValue(1));
 
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             ['_construct', 'getConnection', 'getIdFieldName',
                 'save', 'saveInSetIncluding', 'isUsedBySuperProducts', 'delete'],
             [], '', false

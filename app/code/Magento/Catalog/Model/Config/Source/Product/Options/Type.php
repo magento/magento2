@@ -43,7 +43,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
                 $types[] = ['label' => __($type['label']), 'value' => $type['name']];
             }
             if (count($types)) {
-                $groups[] = ['label' => __($option['label']), 'value' => $types];
+                $groups[] = ['label' => __($option['label']), 'value' => $types, 'optgroup-name' => $option['label']];
             }
         }
 

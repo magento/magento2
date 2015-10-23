@@ -37,7 +37,7 @@ class Grid extends GridInterface
      *
      * @var string
      */
-    protected $selectItem = '[data-column=entity_id] input';
+    protected $selectItem = '[data-column=entity_ids] input';
 
     /**
      * Press 'Add Selected Products' button

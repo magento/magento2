@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Framework\Model\ModelResource\Db\VersionControl\RelationInterface;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 class Relation implements RelationInterface
 {

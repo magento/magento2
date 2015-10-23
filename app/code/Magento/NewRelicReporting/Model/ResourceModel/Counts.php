@@ -6,7 +6,7 @@
 
 namespace Magento\NewRelicReporting\Model\ResourceModel;
 
-class Counts extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Counts extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize users resource model
