@@ -70,9 +70,9 @@ class UrnResolver
     /**
      * Callback registered for libxml to resolve URN to the file path
      *
-     * @param $public
-     * @param $system
-     * @param $context
+     * @param string $public
+     * @param string $system
+     * @param array $context
      * @return resource
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
