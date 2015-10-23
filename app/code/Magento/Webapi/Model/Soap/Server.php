@@ -107,6 +107,9 @@ class Server
         $rawRequestBody = file_get_contents('php://input');
         $this->_checkRequest($rawRequestBody);
         $options = ['encoding' => $this->getApiCharset(), 'soap_version' => SOAP_1_2];
+
+        //disable external entity loaders which affect the work of SOAP server
+        libxml_set_external_entity_loader(null);
         $soapServer = $this->_soapServerFactory->create($this->generateUri(true), $options);
         $soapServer->handle($rawRequestBody);
     }
