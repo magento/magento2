@@ -33,7 +33,7 @@ class Helper
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $state;
 
