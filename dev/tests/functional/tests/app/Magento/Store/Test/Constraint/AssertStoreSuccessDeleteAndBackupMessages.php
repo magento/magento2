@@ -33,7 +33,7 @@ class AssertStoreSuccessDeleteAndBackupMessages extends AbstractConstraint
      */
     public function processAssert(StoreIndex $storeIndex)
     {
-        $actualMessages = $storeIndex->getMessagesBlock()->getSuccessMessage();
+        $actualMessages = $storeIndex->getMessagesBlock()->getSuccessMessages();
         \PHPUnit_Framework_Assert::assertTrue(
             in_array(self::SUCCESS_BACKUP_MESSAGE, $actualMessages) &&
             in_array(self::SUCCESS_DELETE_MESSAGE, $actualMessages),

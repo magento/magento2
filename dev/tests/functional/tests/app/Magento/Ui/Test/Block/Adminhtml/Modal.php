@@ -56,7 +56,6 @@ class Modal extends Block
     public function acceptAlert()
     {
         $this->_rootElement->find($this->acceptButtonSelector)->click();
-        $this->waitModalWindowToDisappear();
     }
 
     /**
@@ -67,7 +66,6 @@ class Modal extends Block
     public function dismissAlert()
     {
         $this->_rootElement->find($this->dismissButtonSelector)->click();
-        $this->waitModalWindowToDisappear();
     }
 
     /**
@@ -78,7 +76,6 @@ class Modal extends Block
     public function closeAlert()
     {
         $this->_rootElement->find($this->closeButtonSelector)->click();
-        $this->waitModalWindowToDisappear();
     }
 
     /**
@@ -107,7 +104,7 @@ class Modal extends Block
      *
      * @return void
      */
-    protected function waitModalWindowToDisappear()
+    public function waitModalWindowToDisappear()
     {
         $this->browser->waitUntil(
             function () {
