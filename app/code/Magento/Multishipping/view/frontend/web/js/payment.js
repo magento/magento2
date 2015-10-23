@@ -4,9 +4,7 @@
  */
 /*jshint browser:true*/
 /*global alert*/
-/**
- * @removeCandidate
- */
+
 define([
     'jquery',
     'mage/template',
