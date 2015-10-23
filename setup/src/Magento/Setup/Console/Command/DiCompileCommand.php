@@ -294,6 +294,10 @@ class DiCompileCommand extends Command
         array $dataAttributesIncludePattern
     ) {
         $operations = [
+            OperationFactory::PROXY_GENERATOR => [
+                'paths' => $compiledPathsList['application'],
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+            ],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
@@ -303,9 +307,13 @@ class DiCompileCommand extends Command
                 'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
+                'paths' => [
+                    $compiledPathsList['application'],
+                    $compiledPathsList['library'],
+                    $compiledPathsList['generated_helpers'],
+                ],
+                'filePatterns' => ['php' => '/\.php$/'],
+                'excludePatterns' => ['/\/Test\//']
             ],
             OperationFactory::INTERCEPTION => [
                 'intercepted_paths' => [
