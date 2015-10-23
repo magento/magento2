@@ -42,11 +42,17 @@ define([
          */
         initProperties: function () {
             this.actions = [{
+                value: 'selectAll',
+                label: $t('Select All')
+            }, {
+                value: 'deselectAll',
+                label: $t('Deselect All')
+            }, {
                 value: 'selectPage',
-                label: $t('Select all on this page')
+                label: $t('Select All on This Page')
             }, {
                 value: 'deselectPage',
-                label: $t('Deselect all on this page')
+                label: $t('Deselect All on This Page')
             }];
 
             return this._super();
