@@ -214,7 +214,6 @@ app/code/Magento/GroupedProduct/view/adminhtml/requirejs-config.js
 app/code/Magento/GroupedProduct/view/adminhtml/web/js/grouped-product.js
 app/code/Magento/Integration/view/adminhtml/requirejs-config.js
 app/code/Magento/Integration/view/adminhtml/web/js/integration.js
-app/code/Magento/Msrp/view/base/web/js/msrp.js
 app/code/Magento/Msrp/view/frontend/requirejs-config.js
 app/code/Magento/Multishipping/view/frontend/requirejs-config.js
 app/code/Magento/Multishipping/view/frontend/web/js/multi-shipping.js

@@ -27,6 +27,15 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
 <div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
      class="paypal checkout <?php /* @noEscape */ echo $labelPosition; ?> paypal-logo
         <?php /* @noEscape */ echo $shortcutHtmlId; ?>"
+     data-mage-init='{
+     "paypalCheckout": {
+                "confirmMessage": "<?php /* @noEscape */ echo $block->escapeJsQuote($block->getConfirmationMessage()); ?>",
+                "confirmUrl": "<?php /* @noEscape */ echo !empty($confirmationUrl) ? $confirmationUrl : false; ?>",
+                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false;?>",
+                "paypalCheckoutSelector": "#pp-checkout-url",
+                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
+            }
+     }'
     >
     <input type="image" data-action="checkout-form-submit"
            data-checkout-url="<?php echo $block->escapeUrl($block->getCheckoutUrl()); ?>"
@@ -39,21 +48,4 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
             <img src="<?php echo $block->escapeHtml($linkImage['src']);?>" />
         </a>
     <?php endif; ?>
-<script type="text/x-magento-init">
-    {
-        ".paypal-logo.<?php /* @noEscape */ echo $shortcutHtmlId; ?>": {
-            "paypalCheckout": {
-                "confirmMessage": "<?php /* @noEscape */ echo $block->escapeJsQuote(
-                        $block->getConfirmationMessage()
-                    ); ?>",
-                "confirmUrl": "<?php /* @noEscape */ echo !empty($confirmationUrl) ? $confirmationUrl : false; ?>",
-                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ?
-                        (bool)$isInCatalogProduct : false;
-                    ?>",
-                "paypalCheckoutSelector": "#pp-checkout-url",
-                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
-            }
-        }
-    }
-</script>
 </div>
