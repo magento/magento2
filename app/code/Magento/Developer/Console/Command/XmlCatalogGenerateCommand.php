@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Dom\UrnResolver;
 
-class XMLCatalogGenerateCommand extends Command
+class XmlCatalogGenerateCommand extends Command
 {
     /**
      * Option for the type of IDE
