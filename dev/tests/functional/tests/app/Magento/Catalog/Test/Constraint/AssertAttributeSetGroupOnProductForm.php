@@ -17,15 +17,15 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
- * Class AssertProductTemplateGroupOnProductForm
- * Check that created product template displays in product template suggest container dropdown and
+ * Class AssertAttributeSetGroupOnProductForm
+ * Check that created attribute set displays in attribute set suggest container dropdown and
  * can be used for new created product
  */
-class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
+class AssertAttributeSetGroupOnProductForm extends AbstractConstraint
 {
     /**
-     * Assert that created product template:
-     * 1. Displays in product template suggest container dropdown
+     * Assert that created attribute set:
+     * 1. Displays in attribute set suggest container dropdown
      * 2. Can be used for new created product.
      *
      * @param FixtureFactory $fixtureFactory
