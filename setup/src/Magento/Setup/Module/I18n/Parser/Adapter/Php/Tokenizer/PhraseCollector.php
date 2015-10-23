@@ -146,7 +146,7 @@ class PhraseCollector
         if ($phraseTokens) {
             /** @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token $phraseToken */
             foreach ($phraseTokens as $phraseToken) {
-                if ($phraseToken->isConstantEncapsedString()) {
+                if ($phraseToken->isConstantEncapsedString() || $phraseToken->isConcatenateOperator()) {
                     $phrase[] = $phraseToken->getValue();
                 }
             }

@@ -16,14 +16,14 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Class AssertProductTemplateOnProductForm
+ * Class AssertAttributeSetOnProductForm
  * Check Attribute Set and Product Attribute on Product form
  */
-class AssertProductTemplateOnProductForm extends AbstractConstraint
+class AssertAttributeSetOnProductForm extends AbstractConstraint
 {
     /**
-     * Assert that created product template:
-     * 1. Displays in product template suggest container dropdown
+     * Assert that created attribute set:
+     * 1. Displays in attribute set suggest container dropdown
      * 2. Can be used for new created product.
      *
      * @param FixtureFactory $fixtureFactory
@@ -66,7 +66,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $attributeSet->getAttributeSetName(),
             $formAttributeSet,
-            'Product Template not found on Product form.'
+            'Attribute Set not found on Product form.'
             . "\nExpected: " . $attributeSet->getAttributeSetName()
             . "\nActual: " . $formAttributeSet
         );
@@ -88,6 +88,6 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Attribute and Product Template are present on the Product form.';
+        return 'Product Attribute and Attribute Set are present on the Product form.';
     }
 }
