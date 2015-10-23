@@ -34,3 +34,7 @@
 "Sign Static Files","Sign Static Files"
 "Grid Settings","Grid Settings"
 "Asynchronous indexing","Asynchronous indexing"
+"Client side less compilation","Client side less compilation"
+"Server side less compilation","Server side less compilation"
+"Disable","Disable"
+"Enable","Enable"
