@@ -3,19 +3,33 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['underscore'],
-    function (_) {
-        "use strict";
+define(['underscore', 'ko'],
+    function (_, ko) {
+
+        'use strict';
+
         return {
-            options: [],
-            addOption: function(option) {
-                if(!this.options.hasOwnProperty(option.itemId)) {
-                    this.options[option.itemId] = option;
+            options: ko.observableArray([]),
+            addOption: function (option) {
+                if (!this.options().hasOwnProperty(option.itemId)) {
+                    this.options.push({
+                            id: option.itemId, value: option
+                        }
+                    );
                 }
             },
-            getOptionByItemId: function(itemId) {
-                return this.options.hasOwnProperty(itemId) ? this.options[itemId] : null;
+            getOptionByItemId: function (itemId) {
+                var option = null;
+                _.each(this.options(), function (data) {
+                    if (data.id === itemId) {
+                        option = data.value;
+
+                        return false;
+                    }
+                });
+
+                return option;
             }
-        }
+        };
     }
 );
