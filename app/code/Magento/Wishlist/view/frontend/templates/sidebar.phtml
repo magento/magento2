@@ -26,7 +26,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
-                                <!-- ko template: {name: 'Magento_Wishlist/product_image', data: $data.image} --><!-- /ko -->
+                                <!-- ko template: {name: $data.image.template, data: $data.image} --><!-- /ko -->
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">

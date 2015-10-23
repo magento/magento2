@@ -265,7 +265,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultStore')
             ->willReturn($store);
         $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
-        $customer->expects($this->once())
+        $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
         $customer->expects($this->once())
@@ -341,7 +341,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultStore')
             ->willReturn($store);
         $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
-        $customer->expects($this->once())
+        $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
         $customer->expects($this->once())
@@ -476,6 +476,61 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($customer);
 
         $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException()
+    {
+        $storeId = 1;
+        $storeName = 'store_name';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(null);
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customerMock->expects($this->once())
+            ->method('setCreatedIn')
+            ->with($storeName)
+            ->willReturnSelf();
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+        $customerMock->expects($this->once())
+            ->method('setAddresses')
+            ->with(null)
+            ->willReturnSelf();
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $storeMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($storeName);
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($storeMock);
+
+        $exception = new \Magento\Framework\Exception\LocalizedException(
+            new \Magento\Framework\Phrase('Exception message')
+        );
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customerMock, $hash)
+            ->willThrowException($exception);
+
+        $this->accountManagement->createAccountWithPasswordHash($customerMock, $hash);
     }
 
     /**
