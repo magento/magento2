@@ -53,14 +53,18 @@
             <block class="Magento\Framework\View\Element\Template" name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml" after="-"/>
         </referenceContainer>
         <referenceContainer name="footer">
-            <container name="legal" htmlTag="div" htmlClass="footer-legal col-m-12">
-                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
-                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
-                <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
-                    <arguments>
-                        <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
-                    </arguments>
-                </block>
+            <container name="legal" htmlTag="div" htmlClass="footer-legal">
+                <container name="legal.copyright" htmlTag="p" htmlClass="copyright col-m-6">
+                    <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                </container>
+                <container name="legal.system" htmlTag="div" htmlClass="footer-legal-system col-m-6">
+                    <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                    <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
+                        <arguments>
+                            <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
+                        </arguments>
+                    </block>
+                </container>
             </container>
         </referenceContainer>
         <referenceContainer name="backend.page">
