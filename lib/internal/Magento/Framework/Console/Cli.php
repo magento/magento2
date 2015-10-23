@@ -22,6 +22,27 @@ class Cli extends SymfonyApplication
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
+    /** @var \Zend\ServiceManager\ServiceManager */
+    private $serviceManager;
+
+    /**
+     * @param string $name    The name of the application
+     * @param string $version The version of the application
+     */
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+    {
+        $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+            ->getServiceManager();
+        /**
+         * Temporary workaround until the compiler is able to clear the generation directory. (MAGETWO-44493)
+         */
+        if (class_exists('Magento\Setup\Console\CompilerPreparation')) {
+            (new \Magento\Setup\Console\CompilerPreparation($this->serviceManager))->handleCompilerEnvironment();
+        }
+
+        parent::__construct($name, $version);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,14 +66,12 @@ class Cli extends SymfonyApplication
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $bootstrap = Bootstrap::create(BP, $params);
         $objectManager = $bootstrap->getObjectManager();
-        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
         /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-        $omProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+        $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
         $omProvider->setObjectManager($objectManager);
 
         if (class_exists('Magento\Setup\Console\CommandList')) {
-            $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
+            $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
             $setupCommands = $setupCommandList->getCommands();
         }
 
