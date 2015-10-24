@@ -200,10 +200,10 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filterMock]);
 
-        $criteriaMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
+        $searchCriteriaMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
-        $criteriaMock->expects($this->once())
+        $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
@@ -230,7 +230,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($searchResultMock);
 
         $model = $this->getModel($orderItemMock, $productType);
-        $this->assertSame($searchResultMock, $model->getList($criteriaMock));
+        $this->assertSame($searchResultMock, $model->getList($searchCriteriaMock));
     }
 
     public function testDeleteById()
