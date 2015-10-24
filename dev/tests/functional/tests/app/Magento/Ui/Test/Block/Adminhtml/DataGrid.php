@@ -139,6 +139,7 @@ class DataGrid extends Grid
         if ($chipsHolder->isVisible()) {
             parent::resetFilter();
         }
+        $this->waitLoader();
     }
 
     /**
