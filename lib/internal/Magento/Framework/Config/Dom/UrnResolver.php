@@ -16,14 +16,6 @@ use Magento\Framework\Phrase;
 class UrnResolver
 {
     /**
-     * Registers libxml entity loader
-     */
-    public function __construct()
-    {
-        libxml_set_external_entity_loader([$this, 'registerEntityLoader']);
-    }
-
-    /**
      * Get real file path by it's URN reference
      *
      * @param string $schema
