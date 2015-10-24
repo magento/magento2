@@ -34,7 +34,34 @@
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : ''; ?>>
         <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php /* @escapeNotVerified */ echo __('Links can be purchased separately')?></span></label>
         <div class="admin__field-control">
-            <?php /* @escapeNotVerified */ echo $block->getPurchasedSeparatelySelect()?>
+            <div class="admin__field-control link-switcher" data-role="link-switcher">
+                <div class="admin__field-control-group">
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="1"
+                               class="admin__control-radio"
+                               id="link-switcher1"
+                           <?php if($block->getProductLinksCanBePurchasedSeparately()): ?>
+                               checked="checked"
+                           <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher1">
+                            <span>Yes</span>
+                        </label>
+                    </div>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="0"
+                                class="admin__control-radio"
+                                id="link-switcher0"
+                            <?php if(!$block->getProductLinksCanBePurchasedSeparately()): ?>
+                                checked="checked"
+                            <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher0">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="admin__field admin__field-wide">
@@ -357,9 +384,9 @@ require([
                 }
             },
             togglePriceFields : function(){
-                var toogleTo = $('downloadable_link_purchase_type').value;
+                var toogleTo = jQuery('#link-switcher1').is(':checked');
                 var disableFlag = true;
-                if (toogleTo == '1') {
+                if (toogleTo) {
                     disableFlag = false;
                 }
                 $$('.link-prices[type="text"]').each(function(elm){
@@ -443,8 +470,10 @@ require([
         };
 
 
-        if ($('downloadable_link_purchase_type')) {
-            Event.observe('downloadable_link_purchase_type', 'change', linkItems.togglePriceFields.bind());
+        if (jQuery('#link-switcher1')) {
+            jQuery('#link-switcher1, #link-switcher0').on('change', function () {
+                linkItems.togglePriceFields.bind()
+            });
         }
 
         if($('add_link_item')) {
