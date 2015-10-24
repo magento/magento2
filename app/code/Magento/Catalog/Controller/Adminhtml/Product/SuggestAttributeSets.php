@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class SuggestProductTemplates extends \Magento\Backend\App\Action
+class SuggestAttributeSets extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -34,7 +34,7 @@ class SuggestProductTemplates extends \Magento\Backend\App\Action
     }
 
     /**
-     * Action for product template selector
+     * Action for attribute set selector
      *
      * @return \Magento\Framework\Controller\Result\Json
      */

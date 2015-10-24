@@ -656,7 +656,7 @@ class Product extends AbstractResource
         $entityType = $this->typeFactory->create()->loadByCode(\Magento\Catalog\Model\Product::ENTITY);
         $attributeSet = $this->setFactory->create()->load($object->getAttributeSetId());
         if ($attributeSet->getEntityTypeId() != $entityType->getId()) {
-            return ['attribute_set' => 'Invalid product template entity type'];
+            return ['attribute_set' => 'Invalid attribute set entity type'];
         }
 
         return parent::validate($object);
