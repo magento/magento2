@@ -10,18 +10,18 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductTemplateSuccessSaveMessage
- * Check Product Templates success save message
+ * Class AssertAttributeSetSuccessDeleteMessage
+ * Check Attribute Sets success delete message
  */
-class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
+class AssertAttributeSetSuccessDeleteMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked
      */
-    const SUCCESS_MESSAGE = 'You saved the product template.';
+    const SUCCESS_DELETE_MESSAGE = 'The attribute set has been removed.';
 
     /**
-     * Assert that after save a product template "You saved the attribute set." successful message appears
+     * Assert that after deleting attribute set success delete message appears
      *
      * @param CatalogProductSetIndex $productSetIndex
      * @return void
@@ -30,10 +30,10 @@ class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
     {
         $actualMessage = $productSetIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
+            self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'
-            . "\nExpected: " . self::SUCCESS_MESSAGE
+            . "\nExpected: " . self::SUCCESS_DELETE_MESSAGE
             . "\nActual: " . $actualMessage
         );
     }
@@ -45,6 +45,6 @@ class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Templates success save message is present.';
+        return 'Attribute Sets success delete message is present.';
     }
 }

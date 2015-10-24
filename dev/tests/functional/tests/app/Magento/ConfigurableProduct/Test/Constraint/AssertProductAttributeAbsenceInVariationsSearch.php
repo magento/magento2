@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that deleted attribute can't be added to product template on Product Page via Add Attribute control.
+ * Check that deleted attribute can't be added to attribute set on Product Page via Add Attribute control.
  */
 class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
 {
@@ -25,7 +25,7 @@ class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
     const TAB_VARIATIONS = 'variations';
 
     /**
-     * Assert that deleted attribute can't be added to product template on Product Page via Add Attribute control.
+     * Assert that deleted attribute can't be added to attribute set on Product Page via Add Attribute control.
      *
      * @param CatalogProductAttribute $productAttribute
      * @param ConfigurableProduct $assertProduct
