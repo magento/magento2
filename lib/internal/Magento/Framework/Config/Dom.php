@@ -274,7 +274,8 @@ class Dom
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
-            if (file_exists($schema)) {
+            // 4096 is the maximum length allowed by file_exists for the filename
+            if (strlen($schema) < 4096 && file_exists($schema)) {
                 $result = $dom->schemaValidate($schema);
             } else {
                 $result = $dom->schemaValidateSource($schema);
