@@ -10,9 +10,10 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
+    'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData, alert, confirm){
+], function($, authenticationPopup, customerData, alert, confirm, customerData){
 
     $.widget('mage.sidebar', {
         options: {
@@ -21,8 +22,18 @@ define([
         },
         scrollHeight: 0,
 
-        _create: function() {
+        /**
+         * Create sidebar.
+         * @private
+         */
+        _create: function () {
+            var self = this;
+
             this._initContent();
+            customerData.get('cart').subscribe(function () {
+                $(self.options.targetElement).trigger('contentUpdated');
+                self._calcHeight();
+            });
         },
 
         _initContent: function() {
@@ -163,11 +174,6 @@ define([
          * @private
          */
         _removeItemAfter: function(elem, response) {
-            /** TODO: Extra options support. Should be refactored after MAGETWO-43159. */
-            var self = this;
-            setTimeout(function(){
-                self._calcHeight();
-            }, 500);
         },
         /**
          * @param url - ajax url
