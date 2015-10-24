@@ -7,7 +7,7 @@
 /**
  * Product attribute set selector form
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\ProductTemplate;
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -57,7 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'radio',
             [
                 'after_element_html' => __(
-                    'Add configurable attributes to the current Product Template ("%1")',
+                    'Add configurable attributes to the current Attribute Set ("%1")',
                     sprintf('<span data-role="name-container">%s</span>', $this->getCurrentAttributeSetName())
                 ),
                 'name' => 'affected-attribute-set',
@@ -70,7 +70,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'new-affected-attribute-set',
             'radio',
             [
-                'after_element_html' => __('Add configurable attributes to the new Product Template based on current'),
+                'after_element_html' => __('Add configurable attributes to the new Attribute Set based on current'),
                 'name' => 'affected-attribute-set',
                 'class' => 'admin__control-radio',
                 'value' => 'new'
@@ -80,7 +80,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'new-attribute-set-name',
             'text',
             [
-                'label' => __('New product template name'),
+                'label' => __('New attribute set name'),
                 'name' => 'new-attribute-set-name',
                 'required' => true,
                 'css_class' => 'no-display',
@@ -92,7 +92,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'existing-affected-attribute-set',
             'radio',
             [
-                'after_element_html' => __('Add configurable attributes to the existing Product Template'),
+                'after_element_html' => __('Add configurable attributes to the existing Attribute Set'),
                 'name' => 'affected-attribute-set',
                 'required' => true,
                 'class' => 'admin__control-radio no-display',
@@ -103,7 +103,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'choose-affected-attribute-set',
             'select',
             [
-                'label' => __('Choose existing Product Template'),
+                'label' => __('Choose existing Attribute Set'),
                 'name' => 'attribute-set-name',
                 'required' => true,
                 'css_class' => 'no-display',
