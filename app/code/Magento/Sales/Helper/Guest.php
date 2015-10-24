@@ -139,8 +139,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             $lastName = $post['oar_billing_lastname'];
             $email = $post['oar_email'];
             $zip = $post['oar_zip'];
+            $storeId = $this->_storeManager->getStore()->getId();
 
-            if (empty($incrementId) || empty($lastName) || empty($type) || !in_array(
+            if (empty($incrementId) || empty($lastName) || empty($type) || empty($storeId) || !in_array(
                 $type,
                 ['email', 'zip']
             ) || $type == 'email' && empty($email) || $type == 'zip' && empty($zip)
@@ -149,7 +150,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             if (!$errors) {
-                $order->loadByIncrementId($incrementId);
+                $order = $order->loadByIncrementIdAndStore($incrementId, $storeId);
             }
 
             $errors = true;
