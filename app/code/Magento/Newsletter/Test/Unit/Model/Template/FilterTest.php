@@ -30,8 +30,13 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->storeManager = $this->getMockForAbstractClass(
+            '\Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false
+        );
         $logger = $this->getMockForAbstractClass('\Psr\Log\LoggerInterface', [], '', false);
-        $this->storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface', [], '', false);
         $layout = $this->getMockForAbstractClass('\Magento\Framework\View\LayoutInterface', [], '', false);
         $urlModel = $this->getMockForAbstractClass('\Magento\Framework\UrlInterface', [], '', false);
         $string = $this->getMock('\Magento\Framework\Stdlib\StringUtils', [], [], '', false);
@@ -91,18 +96,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             )
-            ->willReturn('<div class="widget block block-cms-link-inline">
-    <a href="http://magento.test/">
-        <span>Home page</span>
-    </a>
-</div>');
+            ->willReturn(
+                '<div class="widget block block-cms-link-inline">
+                    <a href="http://magento.test/">
+                        <span>Home page</span>
+                    </a>
+                </div>'
+            );
 
-        $this->filter->widgetDirective(
-            [
+        $this->filter->widgetDirective([
                 1 => $construction,
                 2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
-            ]
-        );
+            ]);
     }
 
     public function testWidgetDirectiveWithoutRequiredVariable()
@@ -121,6 +126,3 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($construction, $result);
     }
 }
-
-
-
