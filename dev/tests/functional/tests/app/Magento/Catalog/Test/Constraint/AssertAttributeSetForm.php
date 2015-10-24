@@ -13,14 +13,14 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductTemplateForm
- * Checking data from Product Template form with data fixture
+ * Class AssertAttributeSetForm
+ * Checking data from Attribute Set form with data fixture
  */
-class AssertProductTemplateForm extends AbstractConstraint
+class AssertAttributeSetForm extends AbstractConstraint
 {
     /**
-     * Assert that after save a product template on edit product set page displays:
-     * 1. Correct product template name in Attribute set name field passed from fixture
+     * Assert that after save a attribute set on edit product set page displays:
+     * 1. Correct attribute set name in Attribute set name field passed from fixture
      * 2. Created Product Attribute (if was added)
      *
      * @param CatalogProductSetIndex $productSet
@@ -43,7 +43,7 @@ class AssertProductTemplateForm extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $filterAttribute['set_name'],
             $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName(),
-            'Product Template not found'
+            'Attribute Set not found'
             . "\nExpected: " . $filterAttribute['set_name']
             . "\nActual: " . $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName()
         );
@@ -51,7 +51,7 @@ class AssertProductTemplateForm extends AbstractConstraint
             $attributeLabel = $productAttribute->getFrontendLabel();
             \PHPUnit_Framework_Assert::assertTrue(
                 $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeLabel),
-                "Product Attribute is absent on Product Template Groups"
+                "Product Attribute is absent on Attribute Set Groups"
             );
         }
     }
@@ -63,6 +63,6 @@ class AssertProductTemplateForm extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Data from the Product Template form matched with fixture';
+        return 'Data from the Attribute Set form matched with fixture';
     }
 }
