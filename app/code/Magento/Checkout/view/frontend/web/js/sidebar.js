@@ -33,6 +33,7 @@ define([
             customerData.get('cart').subscribe(function () {
                 $(self.options.targetElement).trigger('contentUpdated');
                 self._calcHeight();
+                self._isOverflowed();
             });
         },
 
