@@ -60,14 +60,21 @@ class Config extends Tab
      *
      * @var string
      */
-    protected $attributeElement = '.entry-edit.have-price';
+    protected $attributeElement = 'tr[data-row-number]';
 
     /**
      * Delete variation button selector.
      *
      * @var string
      */
-    protected $deleteVariationButton = '.action-delete';
+    protected $deleteVariation = '[data-bind*="removeProduct"]';
+
+    /**
+     * Action menu
+     *
+     * @var string
+     */
+    protected $actionMenu = '.action-select';
 
     /**
      * Variations content selector.
@@ -199,9 +206,10 @@ class Config extends Tab
     public function deleteAttributes()
     {
         $attributeElements = $this->_rootElement->getElements($this->attributeElement);
-        $this->_rootElement->find($this->variationsContent)->click();
         foreach (array_reverse($attributeElements) as $element) {
-            $element->find($this->deleteVariationButton)->click();
+            $element->find($this->actionMenu)->hover();
+            $element->find($this->actionMenu)->click();
+            $element->find($this->deleteVariation)->click();
         }
     }
 }

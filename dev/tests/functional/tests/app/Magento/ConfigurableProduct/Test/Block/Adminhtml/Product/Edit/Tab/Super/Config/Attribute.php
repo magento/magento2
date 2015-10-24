@@ -272,6 +272,7 @@ class Attribute extends Form
             $label = isset($option['admin']) ? $option['admin'] : $option['label'];
             $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
+            //Create option
             if (!$optionContainer->isVisible()) {
                 $mapping = $this->dataMapping($option);
                 $attributeBlock->find($this->addOption)->click();
@@ -282,6 +283,7 @@ class Attribute extends Form
                     ->setValue($mapping['label']['value']);
                 $this->getTemplateBlock()->waitLoader();
                 $optionContainer->find('[data-action=save]')->click();
+                $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
             }
             //Select option
             if (!$optionContainer->find('[type="checkbox"]')->isSelected()) {
