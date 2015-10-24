@@ -5,8 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model;
 
-use \Magento\Sales\Model\Order;
-
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 
 /**
@@ -54,6 +53,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $salesOrderCollectionFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $salesOrderCollectionMock;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -78,6 +87,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->salesOrderCollectionFactoryMock = $this->getMock(
+            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->item = $this->getMock(
             'Magento\Sales\Model\ResourceModel\Order\Item',
             ['isDeleted', 'getQtyToInvoice', 'getParentItemId', 'getQuoteItemId', 'getLockedDoInvoice'],
@@ -85,6 +101,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->salesOrderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'load', 'getFirstItem'])
+            ->getMock();
         $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Item\Collection', [], [], '', false);
         $collection->expects($this->any())
             ->method('setOrderFilter')
@@ -121,6 +141,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'data' => ['increment_id' => $this->incrementId],
                 'context' => $context,
                 'historyCollectionFactory' => $this->historyCollectionFactoryMock,
+                'salesOrderCollectionFactory' => $this->salesOrderCollectionFactoryMock,
                 'priceCurrency' => $this->priceCurrency
             ]
         );
@@ -720,6 +741,20 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         for ($i = 10; --$i;) {
             $this->assertEquals($collectionItems, $this->order->getStatusHistories());
         }
+    }
+
+    public function testLoadByIncrementIdAndStore()
+    {
+        $incrementId = '000000001';
+        $storeId = '2';
+        $this->salesOrderCollectionFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->salesOrderCollectionMock);
+        $this->salesOrderCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
+        $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
+        $this->assertSame($this->order , $this->order->loadByIncrementIdAndStore($incrementId, $storeId));
     }
 
     public function notInvoicingStatesProvider()
