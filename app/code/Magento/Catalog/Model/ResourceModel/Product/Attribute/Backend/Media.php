@@ -315,6 +315,7 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'value' => isset($newFiles[$valueId]) ? $newFiles[$valueId] : $row['value'],
             ];
             $valueIdMap[$valueId] = $this->insertGallery($data);
+            $this->bindValueToEntity($valueIdMap[$valueId], $newProductId);
         }
 
 
@@ -332,6 +333,8 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
+            unset($row['record_id']);
+            $row['entity_id'] = $newProductId;
             $row['value_id'] = $valueIdMap[$row['value_id']];
             unset($row['record_id']);
             $this->insertGalleryValueInStore($row);
