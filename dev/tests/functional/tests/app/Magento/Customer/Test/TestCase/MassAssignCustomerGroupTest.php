@@ -91,7 +91,8 @@ class MassAssignCustomerGroupTest extends Injectable
         $this->customerIndex->open();
         $this->customerIndex->getCustomerGridBlock()->massaction(
             [['email' => $customer->getEmail()]],
-            [$this->customersGridActions => $customerGroup->getCustomerGroupCode()]
+            [$this->customersGridActions => $customerGroup->getCustomerGroupCode()],
+            true
         );
     }
 }

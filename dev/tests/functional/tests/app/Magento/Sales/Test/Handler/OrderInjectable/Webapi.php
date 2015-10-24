@@ -31,6 +31,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         ],
         'country_id' => [
             'United States' => 'US',
+            'United Kingdom' => 'GB',
         ],
     ];
 
