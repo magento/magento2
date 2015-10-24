@@ -18,7 +18,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Preconditions:
  * Dataset : AttributeOptions
  * 1. Attribute is created (Attribute)
- * 2. Attribute set is created (Product Template)
+ * 2. Attribute set is created (Attribute Set)
  *
  * Test Flow:
  * 1. Log in to Backend.
@@ -61,7 +61,7 @@ class UpdateProductAttributeEntityTest extends Injectable
      *
      * @param CatalogProductAttribute $productAttributeOriginal
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
      * @param CatalogProductSimple $productSimple
@@ -70,13 +70,13 @@ class UpdateProductAttributeEntityTest extends Injectable
     public function testUpdateProductAttribute(
         CatalogProductAttribute $productAttributeOriginal,
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         CatalogProductAttributeIndex $attributeIndex,
         CatalogProductAttributeNew $attributeNew,
         CatalogProductSimple $productSimple
     ) {
         //Precondition
-        $productTemplate->persist();
+        $attributeSet->persist();
         $productAttributeOriginal->persist();
 
         $filter = [
@@ -91,7 +91,7 @@ class UpdateProductAttributeEntityTest extends Injectable
         $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
         $productSimple->persist();
 
-        return ['product' => $this->prepareProduct($productSimple, $attribute, $productTemplate)];
+        return ['product' => $this->prepareProduct($productSimple, $attribute, $attributeSet)];
     }
 
     /**
@@ -99,13 +99,13 @@ class UpdateProductAttributeEntityTest extends Injectable
      *
      * @param CatalogProductSimple $product
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @return CatalogProductSimple
      */
-    protected function prepareProduct($product, $attribute, $productTemplate)
+    protected function prepareProduct($product, $attribute, $attributeSet)
     {
         $data = [
-            'attribute_set_id' => ['attribute_set' => $productTemplate],
+            'attribute_set_id' => ['attribute_set' => $attributeSet],
             'custom_attribute' => $attribute
         ];
         $data = array_merge($data, $product->getData());
