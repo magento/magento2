@@ -18,7 +18,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 /**
  * Move attribute To attribute set.
  */
-class AddAttributeToProductTemplateStep implements TestStepInterface
+class AddAttributeToAttributeSetStep implements TestStepInterface
 {
     /**
      * Catalog ProductSet Index page.
@@ -46,7 +46,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
      *
      * @var CatalogAttributeSet
      */
-    protected $productTemplate;
+    protected $attributeSet;
 
     /**
      * Catalog Product Index page.
@@ -67,7 +67,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
      * @param CatalogProductSetIndex $catalogProductSetIndex
      * @param CatalogProductSetEdit $catalogProductSetEdit
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductIndex $catalogProductIndex
      * @param CatalogProductEdit $catalogProductEdit
@@ -76,7 +76,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         CatalogProductSetIndex $catalogProductSetIndex,
         CatalogProductSetEdit $catalogProductSetEdit,
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         FixtureFactory $fixtureFactory,
         CatalogProductIndex $catalogProductIndex,
         CatalogProductEdit $catalogProductEdit
@@ -84,7 +84,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
         $this->catalogProductSetIndex = $catalogProductSetIndex;
         $this->catalogProductSetEdit = $catalogProductSetEdit;
         $this->attribute = $attribute;
-        $this->productTemplate = $productTemplate;
+        $this->attributeSet = $attributeSet;
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
         $this->catalogProductEdit = $catalogProductEdit;
@@ -97,7 +97,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
      */
     public function run()
     {
-        $filterAttribute = ['set_name' => $this->productTemplate->getAttributeSetName()];
+        $filterAttribute = ['set_name' => $this->attributeSet->getAttributeSetName()];
         $this->catalogProductSetIndex->open()->getGrid()->searchAndOpen($filterAttribute);
         $this->catalogProductSetEdit->getAttributeSetEditBlock()->moveAttribute($this->attribute->getData());
         $this->catalogProductSetEdit->getPageActions()->save();
@@ -108,7 +108,7 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
             [
                 'dataset' => 'product_with_category_with_anchor',
                 'data' => [
-                    'attribute_set_id' => ['attribute_set' => $this->productTemplate],
+                    'attribute_set_id' => ['attribute_set' => $this->attributeSet],
                     'custom_attribute' => $this->attribute
                 ],
             ]
