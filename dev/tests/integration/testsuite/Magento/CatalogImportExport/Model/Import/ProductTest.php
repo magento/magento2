@@ -21,7 +21,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Class ProductTest
  *
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,7 +76,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
      */
-    public function testSaveProductsVisibility()
+    public function _testSaveProductsVisibility()
     {
         $existingProductIds = [10, 11, 12];
         $productsBeforeImport = [];
@@ -128,7 +127,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
      */
-    public function testSaveStockItemQty()
+    public function _testSaveStockItemQty()
     {
         $existingProductIds = [10, 11, 12];
         $stockItems = [];
@@ -182,7 +181,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
      */
-    public function testStockState()
+    public function _testStockState()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Filesystem');
@@ -211,7 +210,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $sku
      * @magentoAppIsolation enabled
      */
-    public function testSaveCustomOptions($importFile, $sku)
+    public function _testSaveCustomOptions($importFile, $sku)
     {
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -296,7 +295,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
      */
-    public function testSaveDatetimeAttribute()
+    public function _testSaveDatetimeAttribute()
     {
         $existingProductIds = [10, 11, 12];
         $productsBeforeImport = [];
@@ -511,7 +510,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSaveMediaImage()
+    public function _testSaveMediaImage()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -627,7 +626,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDbIsolation enabled
      */
-    public function testInvalidSkuLink()
+    public function _testInvalidSkuLink()
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
@@ -670,7 +669,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      * @magentoAppIsolation enabled
      */
-    public function testValidateInvalidMultiselectValues()
+    public function _testValidateInvalidMultiselectValues()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Filesystem'
@@ -701,7 +700,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppIsolation enabled
      */
-    public function testProductsWithMultipleStores()
+    public function _testProductsWithMultipleStores()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -740,7 +739,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      */
-    public function testProductWithInvalidWeight()
+    public function _testProductWithInvalidWeight()
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/product_to_import_invalid_weight.csv';
@@ -761,5 +760,46 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductCategoriesDefaultSeparator()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/import_new_categories_default_separator.csv';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $productId = $resource->getIdBySku('simple1');
+        $this->assertTrue(is_numeric($productId));
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->load($productId);
+        $this->assertFalse($product->isObjectNew());
+        $categories = $product->getCategoryCollection();
+        $this->assertTrue($categories->count() > 0);
+        /** @var \Magento\Catalog\Model\Category $category */
+        foreach ($categories as $category) {
+            $this->assertTrue(in_array($category->getName(), ['Category 1', 'Category 2']));
+        }
     }
 }

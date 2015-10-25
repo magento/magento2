@@ -93,6 +93,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         return $valid;
     }
 
+    /**
+     * @param string $attrCode
+     * @param array $attributeParams
+     * @param array $rowData
+     * @return bool
+     */
     public function isRequiredAttributeValid($attrCode, array $attributeParams, array $rowData)
     {
         $doCheck = false;
