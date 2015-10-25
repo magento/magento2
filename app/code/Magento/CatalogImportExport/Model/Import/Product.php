@@ -710,18 +710,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieve instance of product custom options import entity
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Option
-     */
-    public function getOptionEntity()
-    {
-        return $this->_optionEntity;
-    }
-
-    /**
      * Multiple value separator getter.
-     *
      * @return string
      */
     public function getMultipleValueSeparator()
@@ -730,6 +720,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this->_parameters[\Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
         }
         return self::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+    }
+
+    /**
+     * Retrieve instance of product custom options import entity
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Option
+     */
+    public function getOptionEntity()
+    {
+        return $this->_optionEntity;
     }
 
     /**
@@ -1246,7 +1246,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Retrieving images from all columns and rows
      *
-     * @param $bunch
+     * @param array $bunch
      * @return array
      */
     protected function getBunchImages($bunch)
@@ -1279,7 +1279,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Prepare all media files
      *
-     * @param $images
+     * @param array $images
      * @return array
      */
     protected function getExistingImages($images)
@@ -1318,11 +1318,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $result;
     }
 
-    /*
+    /**
      * @param array $rowData
      * @return array
      */
-    public function getImagesFromRow($rowData)
+    public function getImagesFromRow(array $rowData)
     {
         $images = [];
         $labels = [];
@@ -1440,7 +1440,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
                 $separatorName = \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR;
                 $multipleSeparatorValue = empty($this->_parameters[$separatorName])
-                    ? static::PSEUDO_MULTI_LINE_SEPARATOR
+                    ? static::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     : $this->_parameters[$separatorName];
                 $this->categoriesCache[$rowSku] = [];
                 if (!empty($categoriesString)) {
@@ -1629,7 +1629,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * @param $productSku
+     * @param string $productSku
      * @return array
      */
     public function getProductWebsites($productSku)
@@ -1638,7 +1638,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * @param $productSku
+     * @param string $productSku
      * @return array
      */
     public function getProductCategories($productSku)
@@ -1647,7 +1647,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * @param $storeCode
+     * @param string $storeCode
      * @return array|int|null|string
      */
     public function getStoreIdByCode($storeCode)
@@ -1781,22 +1781,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         static $mediaGalleryTableName = null;
         static $mediaValueTableName = null;
         static $mediaEntityToValueTableName = null;
-        static $productId = null;
-        if (!$mediaGalleryTableName) {
-            $mediaGalleryTableName = $this->_resourceFactory->create()->getTable(
-                'catalog_product_entity_media_gallery'
-            );
-        }
-        if (!$mediaValueTableName) {
-            $mediaValueTableName = $this->_resourceFactory->create()->getTable(
-                'catalog_product_entity_media_gallery_value'
-            );
-        }
-        if (!$mediaEntityToValueTableName) {
-            $mediaEntityToValueTableName = $this->_resourceFactory->create()->getTable(
-                'catalog_product_entity_media_gallery_value_to_entity'
-            );
-        }
+        $mediaGalleryTableName = $mediaGalleryTableName ?: $this->_resourceFactory->create()->getTable(
+            'catalog_product_entity_media_gallery'
+        );
+        $mediaValueTableName = $mediaValueTableName ?: $this->_resourceFactory->create()->getTable(
+            'catalog_product_entity_media_gallery_value'
+        );
+        $mediaEntityToValueTableName = $mediaEntityToValueTableName ?: $this->_resourceFactory->create()->getTable(
+            'catalog_product_entity_media_gallery_value_to_entity'
+        );
+
         $productIds = [];
         $imageNames = [];
         $multiInsertData = [];
@@ -1830,8 +1824,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
         $this->_connection->insertOnDuplicate($mediaGalleryTableName, $multiInsertData, []);
         $multiInsertData = [];
-        $newMediaSelect = $this->_connection->select()
-            ->from($mediaGalleryTableName, ['value_id', 'value'])
+        $newMediaSelect = $this->_connection->select()->from($mediaGalleryTableName, ['value_id', 'value'])
             ->where('value IN (?)', $imageNames);
         if (array_keys($oldMediaValues)) {
             $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
