@@ -64,9 +64,6 @@
                 </block>
             </container>
         </referenceContainer>
-        <referenceContainer name="backend.page">
-            <block class="Magento\Framework\View\Element\Template" name="page.loader" template="Magento_Backend::admin/loader.phtml" after="-"/>
-        </referenceContainer>
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
             <block class="Magento\Translation\Block\Html\Head\Config" name="translate-config"/>
