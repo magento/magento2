@@ -20,7 +20,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Products collection
      *
-     * @var \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected $_collection = null;
 
@@ -198,7 +198,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Return products collection instance
      *
-     * @return \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {

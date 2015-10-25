@@ -73,7 +73,7 @@
 <script>
 require([
     'jquery',
-    'Magento_Ui/js/lib/registry/registry',
+    'uiRegistry',
     'mage/template',
     'jquery/file-uploader',
     'mage/mage',
@@ -107,8 +107,10 @@ require([
             '</td>'+
             <?php if ($block->getCanReadPrice() !== false) : ?>
                 '<td class="col-price">'+
-                    '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
-                    '<div class="note">[<?php /* @escapeNotVerified */ echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</div>' +
+                    '<div class="admin__control-addon">' +
+                        '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                        '<label class="admin__addon-prefix"><span><?php echo $block->escapeHtml($block->getBaseCurrencySymbol($_product->getStoreId())) ?></span></label>' +
+                    '</div>' +
                     <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
                         '<div class="admin__field admin__field-option">'+
                             '<input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> class="admin__control-checkbox" />'+

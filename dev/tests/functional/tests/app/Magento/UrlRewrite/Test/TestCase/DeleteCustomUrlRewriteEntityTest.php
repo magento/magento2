@@ -78,5 +78,6 @@ class DeleteCustomUrlRewriteEntityTest extends Injectable
         $filter = ['request_path' => $urlRewrite->getRequestPath()];
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getPageMainActions()->delete();
+        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
     }
 }

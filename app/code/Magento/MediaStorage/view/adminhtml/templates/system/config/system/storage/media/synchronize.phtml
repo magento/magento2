@@ -102,7 +102,7 @@ require([
                 var response;
 
                 try {
-                    response = eval('(' + transport.responseText + ')');
+                    response = JSON.parse(transport.responseText);
                     if (response.state == '<?php /* @escapeNotVerified */ echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING ?>'
                         && response.message
                     ) {

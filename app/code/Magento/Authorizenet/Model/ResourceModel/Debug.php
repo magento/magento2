@@ -8,7 +8,7 @@ namespace Magento\Authorizenet\Model\ResourceModel;
 /**
  * Resource Authorize.net debug model
  */
-class Debug extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Debug extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Resource initialization

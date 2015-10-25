@@ -16,11 +16,11 @@ use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Eav\Model\Form\Type;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Model\ModelResource\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var StoreManagerInterface
