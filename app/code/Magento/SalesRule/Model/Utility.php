@@ -188,7 +188,6 @@ class Utility
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
         \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
-        $store = $item->getQuote()->getStore();
         $discountAmount = $discountData->getAmount();
         $baseDiscountAmount = $discountData->getBaseAmount();
 
