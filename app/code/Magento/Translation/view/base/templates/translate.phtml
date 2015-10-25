@@ -11,8 +11,11 @@
         {
             "*": {
                 "Magento_Translation/js/add-to-translate": {
-                    "config": "text!<?php /* @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
-                }
+                    "config": "text!<?php /* @escapeNotVerified */
+                    echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>",
+                    "timestamp": "<?php /* @escapeNotVerified */ echo $block->getJsonTimestamp()?>",
+                    "path": "<?php /* @escapeNotVerified */ echo $block->getTranslationPath()?>"
+                 }
             }
         }
     </script>
