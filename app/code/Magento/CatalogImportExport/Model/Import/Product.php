@@ -1437,20 +1437,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 3. Categories phase
-                $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
-                $separatorName = \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR;
-                $multipleSeparatorValue = empty($this->_parameters[$separatorName])
-                    ? static::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                    : $this->_parameters[$separatorName];
-                $this->categoriesCache[$rowSku] = [];
-                if (!empty($categoriesString)) {
-                    $categoryIds = $this->categoryProcessor->upsertCategories(
-                        $categoriesString,
-                        $multipleSeparatorValue
-                    );
-                    foreach ($categoryIds as $id) {
-                        $this->categoriesCache[$rowSku][$id] = true;
-                    }
+                $categoryIds = $this->processRowCategories($rowData);
+                $this->categoriesCache[$rowData[Product::COL_SKU]] = [];
+                foreach ($categoryIds as $id) {
+                    $this->categoriesCache[$rowData[Product::COL_SKU]][$id] = true;
                 }
 
                 // 4.1. Tier prices phase
@@ -1626,6 +1616,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
         return $this;
+    }
+
+    /**
+     * @param array $rowData
+     * @return array
+     */
+    protected function processRowCategories($rowData)
+    {
+        $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
+        $categoryIds = [];
+        if (!empty($categoriesString)) {
+            $categoryIds = $this->categoryProcessor->upsertCategories(
+                $categoriesString,
+                $this->getMultipleValueSeparator()
+            );
+        }
+        return $categoryIds;
     }
 
     /**
