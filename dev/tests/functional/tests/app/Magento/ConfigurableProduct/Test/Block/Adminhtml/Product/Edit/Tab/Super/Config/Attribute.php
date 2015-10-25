@@ -160,16 +160,27 @@ class Attribute extends Form
      */
     public function fillAttributes(array $attributes)
     {
+        $attributesFilters = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
             }
+            $attributesFilters[] = ['frontend_label' => $attribute['frontend_label']];
         }
 
-        foreach ($attributes as $attribute) {
-            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            $this->browser->find($this->nextButton)->click();
-            $this->getTemplateBlock()->waitLoader();
+        //select attributes
+        $this->getAttributesGrid()->resetFilter();
+        if ($this->_rootElement->find('[class$=no-data]')->isVisible()) {
+            return;
+        }
+        $this->getAttributesGrid()->selectItems($attributesFilters);
+
+        $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
+
+        //update attributes options
+        foreach ($attributes as $attribute)
+        {
             $this->updateOptions($attribute);
         }
 
