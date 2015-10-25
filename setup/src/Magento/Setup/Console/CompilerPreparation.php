@@ -35,8 +35,7 @@ class CompilerPreparation
         \Zend\ServiceManager\ServiceManager $serviceManager,
         \Symfony\Component\Console\Input\ArgvInput $input,
         \Magento\Framework\Filesystem\Driver\File $filesystemDriver
-    )
-    {
+    ) {
         $this->serviceManager   = $serviceManager;
         $this->input            = $input;
         $this->filesystemDriver = $filesystemDriver;
@@ -46,6 +45,7 @@ class CompilerPreparation
      * Determine whether a CLI command is for compilation, and if so, clear the directory
      *
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @return void
      */
     public function handleCompilerEnvironment()
     {
