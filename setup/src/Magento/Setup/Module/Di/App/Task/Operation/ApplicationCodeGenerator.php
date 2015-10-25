@@ -36,6 +36,8 @@ class ApplicationCodeGenerator implements OperationInterface
 
     /**
      * @param ClassesScanner $classesScanner
+     * @param PhpScanner $phpScanner
+     * @param DirectoryScanner $directoryScanner
      * @param array $data
      */
     public function __construct(
