@@ -181,7 +181,7 @@ class Attribute extends Form
     /**
      * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
-    protected function getAttributesGrid()
+    public function getAttributesGrid()
     {
         return $this->blockFactory->create(
             'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
