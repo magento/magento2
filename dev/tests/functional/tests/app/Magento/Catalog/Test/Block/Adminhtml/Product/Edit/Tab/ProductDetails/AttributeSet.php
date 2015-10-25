@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
 use Magento\Mtf\Client\Element\SuggestElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class AttributeSet
@@ -36,6 +37,13 @@ class AttributeSet extends SuggestElement
     protected $loader = '[data-role="loader"]';
 
     /**
+     * Page header selector.
+     *
+     * @var string
+     */
+    protected $header = 'header';
+
+    /**
      * Set value
      *
      * @param string $value
@@ -44,8 +52,27 @@ class AttributeSet extends SuggestElement
     public function setValue($value)
     {
         if ($value !== $this->find($this->actionToggle)->getText()) {
+            $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
             $this->find($this->actionToggle)->click();
-            parent::setValue($value);
+            $this->clear();
+            if ($value == '') {
+                return;
+            }
+            foreach (str_split($value) as $symbol) {
+                $this->keys([$symbol]);
+                $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+                if ($searchedItem->isVisible()) {
+                    try {
+                        $searchedItem->hover();
+                        $this->driver->find($this->header)->hover();
+                        $searchedItem->click();
+                        break;
+                    } catch (\Exception $e) {
+                        // In parallel run on windows change the focus is lost on element
+                        // that causes disappearing of category suggest list.
+                    }
+                }
+            }
         }
         // Wait loader
         $element = $this->driver;
