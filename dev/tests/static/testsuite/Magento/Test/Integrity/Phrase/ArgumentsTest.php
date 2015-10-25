@@ -12,7 +12,6 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 /**
  * Scan source code for detects invocations of __() function or Phrase object, analyzes placeholders with arguments
  * and see if they not equal
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 {
@@ -42,7 +41,6 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
             // the file below is the only file where strings are translated without corresponding arguments
             $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Translation')
                 . '/Model/Js/DataProvider.php',
-            $componentRegistrar->getPath(ComponentRegistrar::MODULE, '')
         ];
     }
 
@@ -55,31 +53,10 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
                 continue;
             }
             $this->_phraseCollector->parse($file);
+
             foreach ($this->_phraseCollector->getPhrases() as $phrase) {
-                if (empty(trim($phrase['phrase'], "'\"\t\n\r\0\x0B"))) {
-                    $missedPhraseErrors[] = $this->_createMissedPhraseError($phrase);
-                }
-                if (preg_match_all('/%(\w+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
-                    $placeholderCount = count(array_unique($matches[1]));
-
-                    if ($placeholderCount != $phrase['arguments']) {
-                        // Check for zend placeholders %placehoder% and sprintf placeholder %s
-                        if (preg_match_all('/(%(s)|(\w+)%)/', $phrase['phrase'], $placeHlders, PREG_OFFSET_CAPTURE)) {
-
-                            foreach ($placeHlders[0] as $ph) {
-                                // Check if char after placeholder is not a digit or letter
-                                $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];
-                                if (!preg_match('/[A-Za-z0-9]/', $charAfterPh)) {
-                                    $placeholderCount--;
-                                }
-                            }
-                        }
-
-                        if ($placeholderCount != $phrase['arguments']) {
-                            $incorrectNumberOfArgumentsErrors[] = $this->_createPhraseError($phrase);
-                        }
-                    }
-                }
+                $this->checkEmptyPhrases($phrase, $missedPhraseErrors);
+                $this->checkArgumentMismatch($phrase, $incorrectNumberOfArgumentsErrors);
             }
         }
         $this->assertEmpty(
@@ -98,5 +75,47 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
                 implode("\n\n", $incorrectNumberOfArgumentsErrors)
             )
         );
+    }
+
+    /**
+     * Will check if phrase is empty
+     *
+     * @param $phrase
+     * @param $missedPhraseErrors
+     */
+    private function checkEmptyPhrases($phrase, &$missedPhraseErrors)
+    {
+        if (empty(trim($phrase['phrase'], "'\"\t\n\r\0\x0B"))) {
+            $missedPhraseErrors[] = $this->_createMissedPhraseError($phrase);
+        }
+    }
+
+    /**
+     * Will check if the number of arguments does not match the number of placeholders
+     *
+     * @param $phrase
+     * @param $incorrectNumberOfArgumentsErrors
+     */
+    private function checkArgumentMismatch($phrase, &$incorrectNumberOfArgumentsErrors)
+    {
+        if (preg_match_all('/%(\w+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
+            $placeholderCount = count(array_unique($matches[1]));
+
+            // Check for zend placeholders %placeholder% and sprintf placeholder %s
+            if (preg_match_all('/%((s)|([A-Za-z]+)%)/', $phrase['phrase'], $placeHolders, PREG_OFFSET_CAPTURE)) {
+
+                foreach ($placeHolders[0] as $ph) {
+                    // Check if char after placeholder is not a digit or letter
+                    $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];
+                    if (!preg_match('/[A-Za-z0-9]/', $charAfterPh)) {
+                        $placeholderCount--;
+                    }
+                }
+            }
+
+            if ($placeholderCount != $phrase['arguments']) {
+                $incorrectNumberOfArgumentsErrors[] = $this->_createPhraseError($phrase);
+            }
+        }
     }
 }
