@@ -105,7 +105,7 @@ class Config extends Tab
         foreach ($attributesValue as $key => $value) {
             $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
-        $this->_rootElement->find($this->createConfigurationsButton)->click();
+        $this->createConfigurations();
         $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
@@ -127,6 +127,16 @@ class Config extends Tab
             $this->_rootElement->find($this->variationsTabTrigger)->click();
             $this->waitForElementVisible($this->variationsTabContent);
         }
+    }
+
+    /**
+     * Click 'Create Configurations' button.
+     *
+     * @return void
+     */
+    public function createConfigurations()
+    {
+        $this->_rootElement->find($this->createConfigurationsButton)->click();
     }
 
     /**
