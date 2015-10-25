@@ -672,7 +672,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_ATTR_SET,
                     self::COL_TYPE,
                     self::COL_CATEGORY,
-                    '_product_websites',
+                    self::COL_PRODUCT_WEBSITES,
                 ],
                 $this->_getExportMainAttrCodes(),
                 [self::COL_ADDITIONAL_ATTRIBUTES],
@@ -1040,7 +1040,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
                 }
-                $dataRow['_product_websites'] =
+                $dataRow[self::COL_PRODUCT_WEBSITES] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
