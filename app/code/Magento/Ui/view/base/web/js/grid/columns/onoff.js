@@ -69,7 +69,7 @@ define([
 
             registry.set('position_cache_valid', true);
 
-            if (this.selected().length === this.selectedData.length || positionCacheValid) {
+            if (this.selected().length === this.selectedData.length && positionCacheValid) {
                 return;
             }
             // Check selected data
