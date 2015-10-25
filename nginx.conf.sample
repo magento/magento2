@@ -11,7 +11,7 @@
 # }
 # server {
 #    listen 80;
-#    server_name mage.dev;
+#    server_name mage2.dev;
 #    set $MAGE_ROOT /var/www/magento2;
 #    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
