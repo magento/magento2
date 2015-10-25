@@ -10,7 +10,7 @@ namespace Magento\Downloadable\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize connection

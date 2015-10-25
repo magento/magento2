@@ -81,7 +81,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param CollectionFactory $categoryCollectionFactory
@@ -91,7 +91,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
@@ -670,5 +670,24 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         );
 
         return $this->getConnection()->fetchCol($select);
+    }
+
+    /**
+     * Get positions of associated to category products
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @return array
+     */
+    public function getProductsPosition($category)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getTable('catalog_category_product'),
+            ['product_id', 'position']
+        )->where(
+            'category_id = :category_id'
+        );
+        $bind = ['category_id' => (int)$category->getId()];
+
+        return $this->getConnection()->fetchPairs($select, $bind);
     }
 }

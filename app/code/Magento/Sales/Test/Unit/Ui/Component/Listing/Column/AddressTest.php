@@ -27,10 +27,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
         $this->model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\Address',
-            ['escaper' => $this->escaper]
+            [
+                'context' => $contextMock,
+                'escaper' => $this->escaper,
+            ]
         );
     }
 

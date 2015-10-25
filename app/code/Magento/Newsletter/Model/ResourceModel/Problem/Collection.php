@@ -13,7 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * True when subscribers info joined
@@ -63,7 +63,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
      * @param CustomerRepository $customerRepository
      * @param \Magento\Customer\Helper\View $customerView
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -73,7 +73,7 @@ class Collection extends \Magento\Framework\Model\ModelResource\Db\Collection\Ab
         CustomerRepository $customerRepository,
         \Magento\Customer\Helper\View $customerView,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ModelResource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->customerRepository = $customerRepository;

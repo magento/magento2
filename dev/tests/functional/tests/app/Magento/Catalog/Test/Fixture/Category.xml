@@ -41,5 +41,6 @@
         <field name="landing_page" group="display_setting" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
         <field name="display_mode" group="display_setting" />
         <field name="category_products" group="category_products" source="Magento\Catalog\Test\Fixture\Category\CategoryProducts" />
+        <field name="store_id" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
     </fixture>
 </config>

@@ -144,7 +144,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                 </td>
                                 <td class="col-price" data-column="price">
                                     <!-- ko ifnot: variation.editable -->
-                                        <!-- ko text: '<?= /* @noEscape */ $currencySymbol?>' + variation.price --><!--/ko-->
+                                        <!-- ko text: $parent.getCurrencySymbol() + variation.price --><!--/ko-->
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
                                         <div class="addon">
@@ -156,7 +156,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                      value: variation.price}"/>
                                             <label class="addafter"
                                                    data-bind="attr: {for: $parent.getRowId(variation, 'price')">
-                                                <strong>$</strong>
+                                                <strong data-bind="text: $parent.getCurrencySymbol()"></strong>
                                             </label>
                                         </div>
                                     <!-- /ko -->
@@ -255,6 +255,7 @@ $currencySymbol = $block->getCurrencySymbol();
                         "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
                         "configurableProductGrid": "configurableProductGrid"
                     }
                 }

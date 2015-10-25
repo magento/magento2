@@ -16,7 +16,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     protected $event;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
@@ -50,7 +50,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\ModelResource\Db\Context')
+        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
             ->disableOriginalConstructor()
             ->getMock();
 

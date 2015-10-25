@@ -18,7 +18,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resourceMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             ['_construct', 'getConnection', 'getIdFieldName'],
             [],
             '',

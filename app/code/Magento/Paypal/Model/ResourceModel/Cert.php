@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model\ResourceModel;
 /**
  * PayPal resource model for certificate based authentication
  */
-class Cert extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Cert extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
@@ -21,13 +21,13 @@ class Cert extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
@@ -51,7 +51,7 @@ class Cert extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
      * Set date of last update
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -190,6 +190,8 @@ return [
     ['Magento\Catalog\Test\Unit\Plugin\Model\Resource', 'Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel'],
     ['Magento\Framework\Acl\Resource', 'Magento\Framework\Acl\AclResource'],
     ['Magento\Framework\App\Resource', 'Magento\Framework\App\ResourceConnection'],
-    ['Magento\Framework\Model\Resource', 'Magento\Framework\Model\ModelResource'],
-    ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ModelResource'],
+    ['Magento\Framework\Model\Resource', 'Magento\Framework\Model\ResourceModel'],
+    ['Magento\Framework\Model\ModelResource', 'Magento\Framework\Model\ResourceModel'],
+    ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
+    ['Magento\Framework\Model\Test\Unit\ModelResource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
 ];

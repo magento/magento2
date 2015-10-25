@@ -9,7 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 /**
  * Reports Product Index Abstract Resource Model
  */
-abstract class AbstractIndex extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * DateItime instance
@@ -28,13 +28,13 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ModelResource\Db\A
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Reports\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
@@ -132,7 +132,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ModelResource\Db\A
      * Save Product Index data (forced save)
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this|\Magento\Framework\Model\ModelResource\Db\AbstractDb
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

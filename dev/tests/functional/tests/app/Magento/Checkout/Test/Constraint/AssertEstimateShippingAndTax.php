@@ -10,6 +10,7 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Assert that grand total is equal to expected.
@@ -54,6 +55,7 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
     /**
      * @constructor
      * @param ObjectManager $objectManager
+     * @param EventManagerInterface $eventManager
      * @param AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart
      * @param AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart
      * @param AssertTaxInShoppingCart $assertTaxInShoppingCart
@@ -61,12 +63,13 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
      */
     public function __construct(
         ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
         AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart,
         AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart,
         AssertTaxInShoppingCart $assertTaxInShoppingCart,
         AssertShippingInShoppingCart $assertShippingInShoppingCart
     ) {
-        parent::__construct($objectManager);
+        parent::__construct($objectManager, $eventManager);
         $this->assertSubtotalInShoppingCart = $assertSubtotalInShoppingCart;
         $this->assertGrandTotalInShoppingCart = $assertGrandTotalInShoppingCart;
         $this->assertTaxInShoppingCart = $assertTaxInShoppingCart;

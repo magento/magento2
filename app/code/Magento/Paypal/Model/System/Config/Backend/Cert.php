@@ -35,7 +35,7 @@ class Cert extends \Magento\Framework\App\Config\Value
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -46,7 +46,7 @@ class Cert extends \Magento\Framework\App\Config\Value
         \Magento\Paypal\Model\CertFactory $certFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
