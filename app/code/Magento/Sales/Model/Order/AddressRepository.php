@@ -60,10 +60,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
 
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\OrderAddressInterface $entity */
-            $entity = $this->metadata->getNewInstance();
-
-            $this->metadata->getMapper()->load($entity, $id);
-
+            $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }

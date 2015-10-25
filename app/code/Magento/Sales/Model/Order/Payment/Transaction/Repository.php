@@ -95,9 +95,7 @@ class Repository implements TransactionRepositoryInterface
             throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!$this->entityStorage->has($id)) {
-            $entity = $this->metaData->getNewInstance();
-            /** @var \Magento\Sales\Api\Data\TransactionInterface $entity */
-            $this->metaData->getMapper()->load($entity, $id);
+            $entity = $this->metaData->getNewInstance()->load($id);
             if (!$entity->getTransactionId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
