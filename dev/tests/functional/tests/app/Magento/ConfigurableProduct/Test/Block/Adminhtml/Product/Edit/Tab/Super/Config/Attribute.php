@@ -179,8 +179,7 @@ class Attribute extends Form
         $this->getTemplateBlock()->waitLoader();
 
         //update attributes options
-        foreach ($attributes as $attribute)
-        {
+        foreach ($attributes as $attribute) {
             $this->updateOptions($attribute);
         }
 
