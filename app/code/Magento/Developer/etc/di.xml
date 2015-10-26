@@ -15,6 +15,13 @@
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>
         </arguments>
     </type>
+    <type name="\Magento\Developer\Console\Command\XmlCatalogGenerateCommand">
+        <arguments>
+            <argument name="formats" xsi:type="array">
+                <item name="phpstorm" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\PhpStorm</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Developer\Model\View\Page\Config\RendererFactory">
         <arguments>
             <argument name="rendererTypes" xsi:type="array">
