@@ -150,7 +150,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             if (!$errors) {
-                $order = $order->loadByIncrementIdAndStore($incrementId, $storeId);
+                $order = $order->loadByIncrementIdAndStoreId($incrementId, $storeId);
             }
 
             $errors = true;

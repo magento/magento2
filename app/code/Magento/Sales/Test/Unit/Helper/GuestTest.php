@@ -75,7 +75,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderMock = $this->getMock(
             'Magento\Sales\Model\Order',
             [
-                'getProtectCode', 'loadByIncrementIdAndStore', 'loadByIncrementId',
+                'getProtectCode', 'loadByIncrementIdAndStoreId', 'loadByIncrementId',
                 'getId', 'getBillingAddress', '__wakeup'
             ],
             [],
@@ -119,7 +119,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerInterfaceMock->expects($this->once())->method('getStore')->willReturn($this->storeModelMock);
         $this->storeModelMock->expects($this->once())->method('getId')->willReturn($storeId);
         $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($this->salesOrderMock);
-        $this->salesOrderMock->expects($this->once())->method('loadByIncrementIdAndStore')->willReturnSelf();
+        $this->salesOrderMock->expects($this->once())->method('loadByIncrementIdAndStoreId')->willReturnSelf();
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
 
         $billingAddressMock = $this->getMock(
