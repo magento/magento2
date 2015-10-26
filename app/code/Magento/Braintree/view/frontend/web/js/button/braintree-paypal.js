@@ -115,7 +115,6 @@ define([
 
         ensureUniqueIds(config, element);
 
-        console.log('Br: ', element, config);
         $(element)
             .on('mousedown', button.mousedown.bind(button))
             .on('click', button.click.bind(button));
