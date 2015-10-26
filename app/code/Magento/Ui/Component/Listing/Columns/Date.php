@@ -20,8 +20,6 @@ class Date extends Column
     protected $timezone;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param TimezoneInterface $timezone
@@ -40,8 +38,6 @@ class Date extends Column
     }
 
     /**
-     * Prepare Data Source
-     *
      * @param array $dataSource
      * @return array
      */
