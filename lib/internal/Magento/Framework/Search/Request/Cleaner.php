@@ -90,7 +90,8 @@ class Cleaner
                 }
                 break;
             case QueryInterface::TYPE_MATCH:
-                if (preg_match('/\$(.+)\$/si', $query['value'], $matches)) {
+                if (preg_match('/\$(.+)\$/si', $query['value'], $matches)
+                    && !preg_match('/^\$+$/si', $query['value'], $matches)) {
                     unset($this->requestData['queries'][$queryName]);
                 }
                 break;
