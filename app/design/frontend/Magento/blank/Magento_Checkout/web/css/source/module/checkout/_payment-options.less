@@ -105,6 +105,58 @@
                 filter: gray; // For IE 6 - 9
             }
         }
+
+        .ccard {
+            .legend {
+                &:extend(.abs-visually-hidden all);
+            }
+            .fields {
+                > .year {
+                    padding-left: @indent__xs;
+                }
+                .select {
+                    padding-left: @indent__xs;
+                    padding-right: @indent__xs;
+                }
+            }
+            .month {
+                .select {
+                    width: 140px;
+                }
+            }
+            .year {
+                .select {
+                    width: 80px;
+                }
+            }
+            .number {
+                .input-text {
+                    width: 225px;
+                }
+            }
+
+            > .field.cvv {
+                > .control {
+                    padding-right: @indent__base;
+                    width: auto;
+                }
+            }
+            .cvv {
+                .input-text {
+                    width: 55px;
+                }
+            }
+
+            &.fieldset {
+                > .field {
+                    .fields.group.group-2 {
+                        .field {
+                            width: auto !important;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
