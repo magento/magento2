@@ -207,12 +207,14 @@
 }
 
 /* action in fieldset wrapper */
-.admin__scope-old #group-fields-product-details-wrapper .attribute-selector {
+.admin__scope-old .admin__collapsible-block-wrapper .attribute-selector {
     visibility: hidden;
+    height: 0;
 }
 
-.admin__scope-old #group-fields-product-details-wrapper.opened .attribute-selector {
+.admin__scope-old .admin__collapsible-block-wrapper.opened .attribute-selector {
     visibility: visible;
+    height: auto;
 }
 
 .admin__scope-old .action-manage-images {
