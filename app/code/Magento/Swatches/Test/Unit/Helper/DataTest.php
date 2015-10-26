@@ -335,6 +335,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with($image)
             ->willReturnSelf();
         $this->imageHelperMock->expects($this->any())
+            ->method('constrainOnly')
+            ->willReturnSelf();
+        $this->imageHelperMock->expects($this->any())
+            ->method('keepAspectRatio')
+            ->willReturnSelf();
+        $this->imageHelperMock->expects($this->any())
+            ->method('keepFrame')
+            ->willReturnSelf();
+        $this->imageHelperMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('http://full_path_to_image/magento1.png');
 

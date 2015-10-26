@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice;
 
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**
@@ -31,18 +31,18 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
     protected $validator;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
-     * @param \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Snapshot $entitySnapshot,
-        \Magento\Framework\Model\ModelResource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\ResourceModel\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,

@@ -7,7 +7,7 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
-class UrlRewrite extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Define main table

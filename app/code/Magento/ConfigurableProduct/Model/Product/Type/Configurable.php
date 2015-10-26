@@ -440,7 +440,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             $usedProducts = [];
-            $collection = $this->getUsedProductCollection($product)->addAttributeToSelect('*')
+            $collection = $this->getUsedProductCollection($product)
+                ->addAttributeToSelect('*')
+                ->addAttributeToSelect('media_gallery')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
@@ -454,6 +456,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             foreach ($collection as $item) {
+                /** @var \Magento\Catalog\Model\Product $item */
+                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
                 $usedProducts[] = $item;
             }
 

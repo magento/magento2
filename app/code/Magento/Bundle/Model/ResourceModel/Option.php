@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Bundle\Model\Option\Validator
@@ -18,12 +18,12 @@ class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     private $validator;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Bundle\Model\Option\Validator $validator
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Bundle\Model\Option\Validator $validator,
         $connectionName = null
     ) {

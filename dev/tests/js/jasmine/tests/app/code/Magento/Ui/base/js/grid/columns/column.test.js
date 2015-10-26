@@ -24,17 +24,17 @@ define([
         describe('sort method', function () {
             it('apply sorting first time', function () {
                 column.sort(true);
-                expect(column.sorting()).toBe('asc');
+                expect(column.sorting).toBe('asc');
             });
 
             it('apply sorting in other direction', function () {
                 column.sort(true).sort(true);
-                expect(column.sorting()).toBe('desc');
+                expect(column.sorting).toBe('desc');
             });
 
             it('remove sorting', function () {
                 column.sort(false);
-                expect(column.sorting()).toBeFalsy();
+                expect(column.sorting).toBeFalsy();
             });
         });
 

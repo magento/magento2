@@ -11,7 +11,7 @@ namespace Magento\Paypal\Model\ResourceModel\Report;
 /**
  * Report settlement resource model
  */
-class Settlement extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Table name
@@ -26,12 +26,12 @@ class Settlement extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_coreDate;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         $connectionName = null
     ) {

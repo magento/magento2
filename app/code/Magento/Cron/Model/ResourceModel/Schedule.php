@@ -10,7 +10,7 @@ namespace Magento\Cron\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Schedule extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize resource

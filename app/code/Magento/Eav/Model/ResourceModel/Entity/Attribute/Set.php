@@ -10,7 +10,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Set extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * EAV cache ids
@@ -28,14 +28,14 @@ class Set extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Config $eavConfig,
         $connectionName = null

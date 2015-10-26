@@ -38,7 +38,7 @@ class CountrycreditcardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMockForAbstractClass('\Magento\Framework\Model\ModelResource\AbstractResource');
+        $this->resourceMock = $this->getMockForAbstractClass('\Magento\Framework\Model\ResourceModel\AbstractResource');
         $this->mathRandomMock = $this->getMockBuilder(
             '\Magento\Framework\Math\Random'
         )->disableOriginalConstructor()
