@@ -48,14 +48,17 @@ class ProxyGenerator implements OperationInterface
      */
     public function doOperation()
     {
-        if (array_diff(array_keys($this->data), ['filePatterns', 'paths'])
-            !== array_diff(['filePatterns', 'paths'], array_keys($this->data))) {
+        if (array_diff(array_keys($this->data), ['filePatterns', 'paths', 'excludePatterns'])
+            !== array_diff(['filePatterns', 'paths', 'excludePatterns'], array_keys($this->data))) {
             return;
         }
 
         $files = [];
         foreach ($this->data['paths'] as $path) {
-            $files = array_merge_recursive($files, $this->directoryScanner->scan($path, $this->data['filePatterns']));
+            $files = array_merge_recursive(
+                $files,
+                $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns'])
+            );
         }
         $proxies = $this->proxyScanner->collectEntities($files['di']);
         foreach ($proxies as $entityName) {

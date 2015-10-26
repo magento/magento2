@@ -296,11 +296,13 @@ class DiCompileCommand extends Command
         $operations = [
             OperationFactory::PROXY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
+                'excludePatterns' => ['/\/Test\//']
             ],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
+                'excludePatterns' => ['/\/Test\//']
             ],
             OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
