@@ -168,6 +168,6 @@ class SourceThemeDeployCommand extends Command
             $output->writeln('<comment>-> ' . $asset->getFilePath() . '</comment>');
         }
 
-        $output->writeln('<info>Successfully processed stylesheet</info>');
+        $output->writeln('<info>Successfully processed.</info>');
     }
 }
