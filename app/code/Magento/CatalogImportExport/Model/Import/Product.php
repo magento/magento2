@@ -1435,10 +1435,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 3. Categories phase
+                if (!array_key_exists($rowSku, $this->categoriesCache)) {
+                    $this->categoriesCache[$rowSku] = [];
+                }
                 $categoryIds = $this->processRowCategories($rowData);
-                $this->categoriesCache[$rowData[Product::COL_SKU]] = [];
                 foreach ($categoryIds as $id) {
-                    $this->categoriesCache[$rowData[Product::COL_SKU]][$id] = true;
+                    $this->categoriesCache[$rowSku][$id] = true;
                 }
 
                 // 4.1. Tier prices phase
