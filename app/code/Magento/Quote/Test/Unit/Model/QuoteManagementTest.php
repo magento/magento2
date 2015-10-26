@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteManagement;
+use \Magento\Quote\Api\CartManagementInterface;
 use \Magento\Quote\Model\CustomerManagement;
 
 use \Magento\Framework\Exception\NoSuchEntityException;
@@ -18,7 +18,7 @@ use \Magento\Framework\Exception\NoSuchEntityException;
 class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QuoteManagement
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $model;
 
@@ -221,7 +221,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\QuoteManagement',
+            '\Magento\Quote\Api\CartManagementInterface',
             [
                 'eventManager' => $this->eventManager,
                 'quoteValidator' => $this->quoteValidator,
@@ -663,9 +663,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerGroupId')
             ->with(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartManagementInterface $service */
         $service = $this->getMock(
-            '\Magento\Quote\Model\QuoteManagement',
+            '\Magento\Quote\Api\CartManagementInterface',
             ['submit'],
             [
                 'eventManager' => $this->eventManager,
@@ -719,9 +719,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $orderIncrementId = 100003332;
         $orderStatus = 'status1';
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartManagementInterface $service */
         $service = $this->getMock(
-            '\Magento\Quote\Model\QuoteManagement',
+            '\Magento\Quote\Api\CartManagementInterface',
             ['submit'],
             [
                 'eventManager' => $this->eventManager,

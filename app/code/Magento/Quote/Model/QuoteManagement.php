@@ -343,7 +343,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * Delete quote item
+     * Submit quote
      *
      * @param Quote $quote
      * @param array $orderData
