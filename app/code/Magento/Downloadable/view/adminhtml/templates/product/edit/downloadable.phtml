@@ -67,9 +67,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         }
     };
 
-    var configurationSectionMessageHandler = (new function(attributeTitle, attributeTab) {
+    var configurationSectionMessageHandler = (new function(attributeTitle, buttons) {
         this.title = jQuery(attributeTitle);
-        this.buttons = jQuery('button', attributeTab);
+        this.buttons = jQuery(buttons);
         this.newText = '<?= /* @noEscape */ __('Configurations cannot be created for a standard product with downloadable files.'
              . ' To create configurations, first remove all downloadable files.');?>';
         this.oldText = this.title.text();
@@ -86,7 +86,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
             this.title.text(this.newText);
             this.buttons.hide();
         }
-    }('[data-role="product-create-configuration-info"]', '[data-tab="super_config"]'));
+    }('[data-role="product-create-configuration-info"]', '[data-action="product-create-configuration-buttons"]'));
 
     downloadableCheckbox.on('change', function () {
         switchConfigurationSectionMessage(!jQuery(this).is(':checked'));
