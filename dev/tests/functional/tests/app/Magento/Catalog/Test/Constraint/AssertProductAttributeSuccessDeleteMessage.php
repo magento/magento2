@@ -25,12 +25,13 @@ class AssertProductAttributeSuccessDeleteMessage extends AbstractConstraint
      */
     public function processAssert(CatalogProductAttributeIndex $attributeIndex)
     {
+        $actualMessage = $attributeIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $attributeIndex->getMessagesBlock()->getSuccessMessages(),
+            $actualMessage,
             'Wrong success message is displayed.'
             . "\nExpected: " . self::SUCCESS_MESSAGE
-            . "\nActual: " . $attributeIndex->getMessagesBlock()->getSuccessMessages()
+            . "\nActual: " . $actualMessage
         );
     }
 
