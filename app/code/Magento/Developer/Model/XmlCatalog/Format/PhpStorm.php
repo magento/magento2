@@ -6,11 +6,37 @@
 
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
+
 /**
  * Class PhpStormNine generates URN catalog for PhpStorm 9
  */
 class PhpStorm implements FormatInterface
 {
+    /**
+     * @var ReadInterface
+     */
+    private $currentDirRead;
+
+    /**
+     * @var WriteInterface
+     */
+    private $currentDirWrite;
+
+    /**
+     * @param ReadFactory $readFactory
+     * @param WriteFactory $writeFactory
+     */
+    public function __construct(
+        ReadFactory $readFactory,
+        WriteFactory $writeFactory
+    ) {
+        $this->currentDirRead = $readFactory->create(getcwd());
+        $this->currentDirWrite = $writeFactory->create(getcwd());
+    }
+
     /**
      * Generate Catalog of URNs for the PhpStorm 9
      *
@@ -22,7 +48,8 @@ class PhpStorm implements FormatInterface
     {
         $componentNode = null;
         $projectNode = null;
-        if (file_exists($path)) {
+        $path = $this->currentDirRead->getRelativePath($path);
+        if ($this->currentDirRead->isExist($path) && $this->currentDirRead->isFile($path)) {
             $dom = new \DOMDocument();
             $dom->load($path);
             $xpath = new \DOMXPath($dom);
@@ -41,7 +68,6 @@ class PhpStorm implements FormatInterface
             $rootComponentNode->setAttribute('version', '2');
             $rootComponentNode->setAttribute('name', 'ProjectRootManager');
             $projectNode->appendChild($rootComponentNode);
-
         }
 
         $xpath = new \DOMXPath($dom);
@@ -60,6 +86,6 @@ class PhpStorm implements FormatInterface
             $componentNode->appendChild($node);
         }
         $dom->formatOutput = true;
-        file_put_contents($path, $dom->saveXML(), FILE_TEXT);
+        $this->currentDirWrite->writeFile($path, $dom->saveXML());
     }
 }

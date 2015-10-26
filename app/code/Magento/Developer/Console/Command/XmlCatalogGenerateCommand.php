@@ -15,6 +15,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Developer\Model\XmlCatalog\Format\FormatInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 class XmlCatalogGenerateCommand extends Command
 {
@@ -39,6 +43,16 @@ class XmlCatalogGenerateCommand extends Command
     private $urnResolver;
 
     /**
+     * @var ReadInterface
+     */
+    private $currentDirRead;
+
+    /**
+     * @var ReadInterface
+     */
+    private $rootDirRead;
+
+    /**
      * Supported formats
      *
      * @var FormatInterface[]
@@ -48,16 +62,22 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * @param Files $filesUtility
      * @param UrnResolver $urnResolver
+     * @param Filesystem $filesystemFactory
+     * @param ReadFactory $readFactory
      * @param FormatInterface[] $formats
      */
     public function __construct(
         Files $filesUtility,
         UrnResolver $urnResolver,
+        Filesystem $filesystemFactory,
+        ReadFactory $readFactory,
         array $formats = []
     ) {
         $this->filesUtility = $filesUtility;
         $this->urnResolver = $urnResolver;
         $this->formats = $formats;
+        $this->currentDirRead = $readFactory->create(getcwd());
+        $this->rootDirRead = $filesystemFactory->getDirectoryRead(DirectoryList::ROOT);
         parent::__construct();
     }
 
@@ -99,13 +119,14 @@ class XmlCatalogGenerateCommand extends Command
 
         $urns = [];
         foreach ($files as $file) {
-            $content = file_get_contents($file[0]);
+            $content = $this->rootDirRead->readFile(
+                $this->rootDirRead->getRelativePath($file[0])
+            );
             $matches = [];
             preg_match_all('/schemaLocation="(urn\:magento\:[^"]*)"/i', $content, $matches);
             $urns = array_merge($urns, $matches[1]);
         }
         $urns = array_unique($urns);
-
         $paths = [];
         foreach ($urns as $urn) {
             try {
@@ -125,9 +146,11 @@ class XmlCatalogGenerateCommand extends Command
     {
         $ideName = $input->getOption(self::IDE_OPTION);
         $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
+        $absolutePath = $this->currentDirRead->getAbsolutePath($ideFilePath);
+
         $urnDictionary = $this->getUrnDictionary();
         if ($formatter = $this->getFormatters($ideName)) {
-            $formatter->generateCatalog($urnDictionary, $ideFilePath);
+            $formatter->generateCatalog($urnDictionary, $absolutePath);
         } else {
             throw new InputException(__("Format for IDE '%ide' is not supported", ['ide' => $ideName]));
         }
