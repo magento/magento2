@@ -205,7 +205,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteManagement
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $quoteManagement;
 
@@ -243,7 +243,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
-     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
      * @param array $data
@@ -273,7 +273,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
-        \Magento\Quote\Model\QuoteManagement $quoteManagement,
+        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         array $data = []

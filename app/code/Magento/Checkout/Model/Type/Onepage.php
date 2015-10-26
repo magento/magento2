@@ -156,7 +156,7 @@ class Onepage
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \Magento\Quote\Model\QuoteManagement
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $quoteManagement;
 
@@ -195,7 +195,7 @@ class Onepage
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @codeCoverageIgnore
@@ -226,7 +226,7 @@ class Onepage
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        \Magento\Quote\Model\QuoteManagement $quoteManagement,
+        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {

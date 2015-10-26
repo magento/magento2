@@ -142,7 +142,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
+        $this->quoteManagementMock = $this->getMock('\Magento\Quote\Api\CartManagementInterface');
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');

@@ -7,12 +7,12 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item\Repository;
+use Magento\Quote\Api\CartItemRepositoryInterface;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Repository
+     * @var \Magento\Quote\Api\CartItemRepositoryInterface
      */
     protected $repository;
 
@@ -77,7 +77,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->repository = new Repository(
+        $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,
