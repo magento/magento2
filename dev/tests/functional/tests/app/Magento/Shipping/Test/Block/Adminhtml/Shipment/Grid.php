@@ -27,16 +27,16 @@ class Grid extends GridInterface
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="filters[increment_id]"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'order_id' => [
-            'selector' => 'input[name="filters[order_increment_id]"]',
+            'selector' => 'input[name="order_increment_id"]',
         ],
         'total_qty_from' => [
-            'selector' => 'input[name="filters[total_qty][from]"]',
+            'selector' => 'input[name="total_qty[from]"',
         ],
         'total_qty_to' => [
-            'selector' => 'input[name="filters[total_qty][to]"]',
+            'selector' => 'input[name="total_qty][to]"',
         ],
     ];
 }

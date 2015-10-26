@@ -25,7 +25,7 @@ class AssertUrlRewriteSaveMessage extends AbstractConstraint
      */
     public function processAssert(UrlRewriteIndex $index)
     {
-        $actualMessage = $index->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $index->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

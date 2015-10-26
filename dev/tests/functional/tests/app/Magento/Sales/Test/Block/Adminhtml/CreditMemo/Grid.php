@@ -25,16 +25,16 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="filters[increment_id]"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'order_id' => [
-            'selector' => 'input[name="filters[order_increment_id]"]',
+            'selector' => 'input[name="order_increment_id"]',
         ],
         'grand_total_from' => [
-            'selector' => 'input[name="filters[base_grand_total][from]"]',
+            'selector' => 'input[name="base_grand_total[from]"]',
         ],
         'grand_total_to' => [
-            'selector' => 'input[name="filters[base_grand_total][to]"]',
+            'selector' => 'input[name="base_grand_total[to]"]',
         ],
     ];
 }
