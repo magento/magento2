@@ -62,16 +62,13 @@
 require([
     "jquery",
     "Magento_Catalog/catalog/type-events",
-    "Magento_Catalog/catalog/apply-to-type-switcher",
     "underscore",
     "mage/mage",
     "mage/backend/tabs",
     "domReady!"
-], function($, TypeSwitcher, ApplyToTypeSwitcher){
+], function($, TypeSwitcher){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', TypeSwitcher.init());
-
-    ApplyToTypeSwitcher.bindAll();
 
     var scriptTagManager = (function($) {
         var hiddenPrefix = 'hidden',
@@ -413,7 +410,8 @@ require([
 <script type="text/x-magento-init">
     {
         "*": {
-            "Magento_Catalog/js/product/weight-handler": {}
+            "Magento_Catalog/js/product/weight-handler": {},
+            "Magento_Catalog/catalog/apply-to-type-switcher": {}
         }
     }
 </script>

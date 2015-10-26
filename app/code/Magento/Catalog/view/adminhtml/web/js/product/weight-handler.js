@@ -42,13 +42,11 @@ define([
             $('input[value='+ value +']', this.$weightSwitcher).prop('checked', true);
         },
         'Magento_Catalog/js/product/weight-handler': function () {
-            this.switchWeight();
             this.bindAll();
+            this.switchWeight();
         },
         bindAll: function () {
-            this.$weightSwitcher.find('input').on('change', function () {
-                this.switchWeight();
-            }.bind(this));
+            this.$weightSwitcher.find('input').on('change', this.switchWeight.bind(this));
         }
     };
 });

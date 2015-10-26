@@ -5,9 +5,10 @@
 
 define([
     'jquery',
+    'Magento_Catalog/catalog/type-events',
     'notification',
     'mage/translate'
-], function ($) {
+], function ($, productType) {
     'use strict';
 
     return {
@@ -36,12 +37,7 @@ define([
             $(this.messageSelector).notification('clear');
         },
         init: function () {
-            $(document).on('changeTypeProduct', function (event, controllers) {
-                this.isConfigurable = controllers.type.current === 'configurable';
-                if (this.isPercentPriceTypeExist()) {
-                    this.percentPriceTypeHandler();
-                }
-            }.bind(this));
+            $(document).on('changeTypeProduct', this._initType.bind(this));
 
             $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
                 var selected = $('.opt-type > select :selected'),
@@ -59,6 +55,14 @@ define([
                     this.percentPriceTypeHandler();
                 }
             }.bind(this));
+
+            this._initType();
+        },
+        _initType: function () {
+            this.isConfigurable = productType.type.current === 'configurable';
+            if (this.isPercentPriceTypeExist()) {
+                this.percentPriceTypeHandler();
+            }
         },
         percentPriceTypeHandler: function () {
             var priceType = $('[data-attr="price-type"]'),

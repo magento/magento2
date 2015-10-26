@@ -4,8 +4,10 @@
  */
 /*jshint browser:true jquery:true expr:true*/
 define([
-    'jquery'
-], function($) {
+    'jquery',
+    'Magento_Catalog/js/product/weight-handler',
+    'Magento_Catalog/catalog/type-events'
+], function($, weight, productType) {
     "use strict";
 
     return {
@@ -25,25 +27,25 @@ define([
             this.$tab = $('[data-tab='+data.tabId+']');
             this.isDownloadable = data.isDownloadable;
             this.bindAll();
+            this._initType();
         },
         bindAll: function () {
             this.$checkbox.on('change', function (event) {
                 $(document).trigger('setTypeProduct', $(event.target).prop('checked') ? 'downloadable' : null);
             }.bind(this));
 
-            $(document).on('changeTypeProduct', function (event, controllers) {
-                if (controllers.type.current == 'downloadable') {
-                    controllers.weight.change(false);
-                    controllers.weight.$weightSwitcher.one('change', function () {
-                        $(document).trigger('setTypeProduct', null);
-                    });
-                    controllers.downloadable.show();
-                    controllers.configurable.hide();
-                } else {
-                    controllers.downloadable.hide();
-                    controllers.configurable.show();
-                }
-            });
+            $(document).on('changeTypeProduct', this._initType.bind(this));
+        },
+        _initType: function () {
+            if (productType.type.current == 'downloadable') {
+                weight.change(false);
+                weight.$weightSwitcher.one('change', function () {
+                    $(document).trigger('setTypeProduct', null);
+                });
+                this.show();
+            } else {
+                this.hide();
+            }
         }
     };
 });
