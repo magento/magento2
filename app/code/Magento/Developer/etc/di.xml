@@ -24,7 +24,8 @@
         </arguments>
     </type>
 
-    <virtualType name="AssetMaterializationStrategySourceThemeDeployFactory" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
+    <!-- Configuration for \Magento\Developer\Console\Command\SourceThemeDeployCommand -->
+    <virtualType name="AssetMaterializationStrategyFactoryForSourceThemeDeploy" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
         <arguments>
             <argument name="strategiesList" xsi:type="array">
                 <item name="symlink" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink</item>
@@ -32,23 +33,23 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetPublisherSourceThemeDeploy" type="Magento\Framework\App\View\Asset\Publisher">
+    <virtualType name="AssetPublisherForSourceThemeDeploy" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
-            <argument name="materializationStrategyFactory" xsi:type="object">AssetMaterializationStrategySourceThemeDeployFactory</argument>
+            <argument name="materializationStrategyFactory" xsi:type="object">AssetMaterializationStrategyFactoryForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
         <arguments>
-            <argument name="assetRepo" xsi:type="object">AssetRepositorySourceThemeDeploy</argument>
-            <argument name="assetPublisher" xsi:type="object">AssetPublisherSourceThemeDeploy</argument>
+            <argument name="assetRepo" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
+            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSourceThemeDeploy</argument>
         </arguments>
     </type>
-    <virtualType name="PreProcessorInstructionImportSourceThemeDeploy" type="Magento\Framework\Css\PreProcessor\Instruction\Import">
+    <virtualType name="PreProcessorInstructionImportForSourceThemeDeploy" type="Magento\Framework\Css\PreProcessor\Instruction\Import">
         <arguments>
             <argument name="relatedFileGenerator" xsi:type="object">Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetPreProcessorPoolSourceThemeDeploy" type="Magento\Framework\View\Asset\PreProcessor\Pool">
+    <virtualType name="AssetPreProcessorPoolForSourceThemeDeploy" type="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
                 <item name="less" xsi:type="array">
@@ -57,28 +58,29 @@
                     </item>
                     <item name="import" xsi:type="array">
                         <item name="after" xsi:type="string">magento_import</item>
-                        <item name="class" xsi:type="string">PreProcessorInstructionImportSourceThemeDeploy</item>
+                        <item name="class" xsi:type="string">PreProcessorInstructionImportForSourceThemeDeploy</item>
                     </item>
                 </item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetSourceSourceThemeDeploy" type="Magento\Framework\View\Asset\Source">
+    <virtualType name="AssetSourceForSourceThemeDeploy" type="Magento\Framework\View\Asset\Source">
         <arguments>
-            <argument name="preProcessorPool" xsi:type="object">AssetPreProcessorPoolSourceThemeDeploy</argument>
+            <argument name="preProcessorPool" xsi:type="object">AssetPreProcessorPoolForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetRepositorySourceThemeDeploy" type="Magento\Framework\View\Asset\Repository">
+    <virtualType name="AssetRepositoryForSourceThemeDeploy" type="Magento\Framework\View\Asset\Repository">
         <arguments>
-            <argument name="assetSource" xsi:type="object">AssetSourceSourceThemeDeploy</argument>
+            <argument name="assetSource" xsi:type="object">AssetSourceForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Developer\Console\Command\SourceThemeDeployCommand">
         <arguments>
-            <argument name="assetPublisher" xsi:type="object">AssetPublisherSourceThemeDeploy</argument>
-            <argument name="assetRepository" xsi:type="object">AssetRepositorySourceThemeDeploy</argument>
+            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSourceThemeDeploy</argument>
+            <argument name="assetRepository" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
         </arguments>
     </type>
+    <!-- End configuration for \Magento\Developer\Console\Command\SourceThemeDeployCommand -->
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
