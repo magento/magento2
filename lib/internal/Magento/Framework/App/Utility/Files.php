@@ -400,7 +400,6 @@ class Files
      * @param array $excludedFileNames
      * @param bool $asDataSet
      * @return array
-     * @codingStandardsIgnoreStart
      */
     public function getXmlCatalogFiles(
         $fileNamePattern = '*.xsd',
@@ -448,9 +447,6 @@ class Files
         }
         return self::$_cache[$cacheKey];
     }
-    // @codingStandardsIgnoreEnd
-
-
 
     /**
      * Returns a list of configuration files found under theme directories.
