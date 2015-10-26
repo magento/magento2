@@ -56,20 +56,23 @@ class FileManager
     /**
      * gets current js-translation.json timestamp
      *
-     * @return string|null
+     * @return string|void
      */
-    public function getJsonTimestamp()
+    public function getTranslationFileTimestamp()
     {
-        if ($this->driverFile->isExists($this->getTranslationFileFullPath())) {
-            return filemtime($this->getTranslationFileFullPath());
+        $translationFilePath = $this->getTranslationFileFullPath();
+        if ($this->driverFile->isExists($translationFilePath)) {
+            $statArray = $this->driverFile->stat($translationFilePath);
+            if (array_key_exists('mtime', $statArray)) {
+                return $statArray['mtime'];
+            }
         }
-        return null;
     }
 
     /**
      * @return string
      */
-    public function getTranslationFileFullPath()
+    protected function getTranslationFileFullPath()
     {
         return $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
         \DIRECTORY_SEPARATOR .
@@ -81,9 +84,8 @@ class FileManager
     /**
      * @return string
      */
-    public function getTranslationPath()
+    public function getTranslationFilePath()
     {
         return $this->assetRepo->getStaticViewFileContext()->getPath();
-
     }
 }

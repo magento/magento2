@@ -11,17 +11,23 @@ define([
     'use strict';
 
     return function (config) {
-        var translationStorage = $.initNamespaceStorage('mage-translation-storage').localStorage;
-        var translationStorageInvalidation = $.initNamespaceStorage('mage-translation-timeout').localStorage;
-        var timeout = $.localStorage.get('mage-translation-timeout');
-        if ((timeout.timestamp != config.timestamp) || (!timeout.timestamp)) {
+        var translationStorage = $.initNamespaceStorage('mage-translation-storage').localStorage,
+            translationStorageInvalidation = $.initNamespaceStorage('mage-translation-file-version').localStorage,
+            timeout = $.localStorage.get('mage-translation-file-version');
+
+        if (timeout.version !== config.version || !timeout.version) {
             require([config.config], function (string) {
                 if (string.length) {
                     $.mage.translate.add(JSON.parse(string));
                     translationStorage.removeAll();
                     translationStorageInvalidation.removeAll();
                     $.localStorage.set('mage-translation-storage', string);
-                    $.localStorage.set('mage-translation-timeout', {timestamp: config.timestamp});
+                    $.localStorage.set(
+                        'mage-translation-file-version',
+                        {
+                            version: config.version
+                        }
+                    );
                 }
             });
         } else {

@@ -53,17 +53,17 @@ class Js extends Template
      *
      * @return string
      */
-    public function getJsonTimestamp()
+    public function getTranslationFileTimestamp()
     {
-        return $this->fileManager->getJsonTimestamp();
+        return $this->fileManager->getTranslationFileTimestamp();
     }
 
     /**
      * @return string
      */
-    public function getTranslationPath()
+    public function getTranslationFilePath()
     {
-        return $this->fileManager->getTranslationPath();
+        return $this->fileManager->getTranslationFilePath();
 
     }
 }
