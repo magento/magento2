@@ -1052,9 +1052,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $additionalImages[] = $mediaItem['_media_image'];
                     $additionalImageLabels[] = $mediaItem['_media_label'];
 
-                   if ($mediaItem['_media_is_disabled'] == true) {
-                       $additionalImageIsDisabled[] = $mediaItem['_media_image'];
-                   }
+                    if ($mediaItem['_media_is_disabled'] == true) {
+                        $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                    }
                 }
                 $dataRow['additional_images'] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImages);
