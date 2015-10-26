@@ -754,7 +754,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
-        $this->assertSame($this->order , $this->order->loadByIncrementIdAndStore($incrementId, $storeId));
+        $this->assertSame($this->order, $this->order->loadByIncrementIdAndStore($incrementId, $storeId));
     }
 
     public function notInvoicingStatesProvider()
