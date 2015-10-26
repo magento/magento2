@@ -87,7 +87,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepositoryMock;
 
-    /** @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $quoteRepositoryMock;
 
     /**
@@ -181,13 +181,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Quote\Model\QuoteRepository',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             'Magento\Framework\Api\ExtensibleDataObjectConverter'

@@ -15,7 +15,7 @@ use Magento\Customer\Model\Url as CustomerUrlManager;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Locale\CurrencyInterface as CurrencyManager;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
@@ -68,7 +68,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $currencyManager;
 
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
 
@@ -175,7 +175,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param CustomerUrlManager $customerUrlManager
      * @param HttpContext $httpContext
      * @param CurrencyManager $currencyManager
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
@@ -206,7 +206,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         CustomerUrlManager $customerUrlManager,
         HttpContext $httpContext,
         CurrencyManager $currencyManager,
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
         ConfigurationPool $configurationPool,

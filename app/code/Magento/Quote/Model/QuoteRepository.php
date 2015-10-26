@@ -89,12 +89,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @throws NoSuchEntityException
-     * @return \Magento\Quote\Api\Data\CartInterface
+     * {@inheritdoc}
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -107,12 +102,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -125,12 +115,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -142,12 +127,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -159,12 +139,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Save quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function save(Quote $quote)
+    public function save(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         $quote->save();
         unset($this->quotesById[$quote->getId()]);
@@ -172,12 +149,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Delete quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function delete(Quote $quote)
+    public function delete(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         $quoteId = $quote->getId();
         $customerId = $quote->getCustomerId();

@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -15,7 +15,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $model;
 
@@ -98,7 +98,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\QuoteRepository',
+            'Magento\Quote\Api\CartRepositoryInterface',
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,

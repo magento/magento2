@@ -19,7 +19,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -53,7 +53,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
     protected $totalsCollector;
 
     /**
-     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
@@ -62,7 +62,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
      *
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,

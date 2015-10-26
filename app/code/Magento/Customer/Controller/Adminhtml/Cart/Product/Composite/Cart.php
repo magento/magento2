@@ -37,17 +37,17 @@ abstract class Cart extends \Magento\Backend\App\Action
     protected $_quoteItem = null;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         parent::__construct($context);

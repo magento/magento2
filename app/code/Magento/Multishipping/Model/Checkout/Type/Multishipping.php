@@ -100,7 +100,7 @@ class Multishipping extends \Magento\Framework\DataObject
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -157,7 +157,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
@@ -182,7 +182,7 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,

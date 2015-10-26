@@ -80,7 +80,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $userContext;
 
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -130,7 +130,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param ToOrderItemConverter $quoteItemToOrderItem
      * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
      * @param UserContextInterface $userContext
-     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -151,7 +151,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         ToOrderItemConverter $quoteItemToOrderItem,
         ToOrderPaymentConverter $quotePaymentToOrderPayment,
         UserContextInterface $userContext,
-        QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
