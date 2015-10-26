@@ -32,7 +32,7 @@ class AssertSitemapSuccessGenerateMessage extends AbstractConstraint
         SitemapIndex $sitemapPage,
         Sitemap $sitemap
     ) {
-        $actualMessage = $sitemapPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $sitemapPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_GENERATE_MESSAGE, $sitemap->getSitemapFilename()),
             $actualMessage,

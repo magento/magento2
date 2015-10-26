@@ -30,7 +30,7 @@ class AssertOrderCancelMassActionFailMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::FAIL_CANCEL_MESSAGE,
-            $orderIndex->getMessagesBlock()->getErrorMessages()
+            $orderIndex->getMessagesBlock()->getErrorMessage()
         );
     }
 
