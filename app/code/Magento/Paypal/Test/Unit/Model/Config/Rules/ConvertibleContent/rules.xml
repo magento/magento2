@@ -52,6 +52,10 @@
                 <argument name="argument1">argument1</argument>
                 <argument name="argument2">argument2</argument>
             </rule>
+            <rule type="test-two" event="event2">
+                <argument name="argument1">argument1</argument>
+                <argument name="argument2">argument2</argument>
+            </rule>
         </relation>
     </payment>
 </rules>
