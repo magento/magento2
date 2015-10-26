@@ -864,18 +864,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function addCategoriesFilter(array $categoriesFilter)
     {
         foreach ($categoriesFilter as $conditionType => $values) {
-            if ($conditionType == 'eq') {
-                $conditionType = 'in';
-            } elseif ($conditionType == 'neq') {
-                $conditionType = 'nin';
-            }
             $categorySelect = $this->getConnection()->select()->from(
                 ['cat' => $this->getTable('catalog_category_product')],
                 'cat.product_id'
             )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
-            $selectCondition = [$conditionType => $categorySelect];
+            $selectCondition = [
+                $this->mapConditionType($conditionType) => $categorySelect
+            ];
             $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
         }
+    }
+
+    /**
+     * @param $conditionType
+     * @return mixed
+     */
+    private function mapConditionType($conditionType)
+    {
+        $conditionsMap = [
+            'eq' => 'in',
+            'neq' => 'nin'
+        ];
+        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
     }
 
     /**
