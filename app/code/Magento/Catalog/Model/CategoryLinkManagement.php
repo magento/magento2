@@ -36,10 +36,10 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     public function getAssignedProducts($categoryId)
     {
         $category = $this->categoryRepository->get($categoryId);
-        $productsPosition = $category->getProductsPosition();
 
-        /** @var \Magento\Framework\Data\Collection\AbstractDb $products */
+        /** @var \Magento\Catalog\Model\Resource\Product\Collection $products */
         $products = $category->getProductCollection();
+        $products->addFieldToSelect('position');
 
         /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface[] $links */
         $links = [];
@@ -49,7 +49,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
             /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface $link */
             $link = $this->productLinkFactory->create();
             $link->setSku($product->getSku())
-                ->setPosition($productsPosition[$productId])
+                ->setPosition($product->getData('cat_index_position'))
                 ->setCategoryId($category->getId());
             $links[] = $link;
         }
