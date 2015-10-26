@@ -32,11 +32,13 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
         $messageType = MessageInterface::TYPE_HTML,
         $bodyText = '<h1>Html message</h1>'
     ) {
+        $filter = $this->getMock('Magento\Email\Model\Template\Filter', [], [], '', false);
         $data = [
             'template_subject' => 'Email Subject',
             'template_text' => $bodyText,
             'template_styles' => 'Styles',
             'template_type' => $templateType,
+            'template_filter' => $filter,
         ];
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
         $options = ['area' => 'frontend', 'store' => 1];
@@ -52,8 +54,14 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
             $this->returnSelf()
         );
         $template->expects($this->once())->method('getSubject')->will($this->returnValue('Email Subject'));
-        $template->expects($this->once())->method('getProcessedTemplate')->will($this->returnValue($bodyText));
         $template->expects($this->once())->method('setData')->with($this->equalTo($data))->will($this->returnSelf());
+        $template->expects($this->once())
+            ->method('getProcessedTemplate')
+            ->with($vars)
+            ->will($this->returnValue($bodyText));
+        $template->expects($this->once())
+            ->method('setTemplateFilter')
+            ->with($filter);
 
         $this->templateFactoryMock->expects(
             $this->once()
