@@ -25,7 +25,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $_urlBuilder;
+    protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -35,7 +35,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -44,7 +43,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
-        \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -52,7 +50,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->mediaHelper = $mediaHelper;
-        $this->_urlBuilder = $urlBuilder;
+        $this->urlBuilder = $context->getUrlBuilder();
         $this->jsonEncoder = $jsonEncoder;
         $this->setUseContainer(true);
     }
@@ -273,7 +271,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         $result = __('YouTube and Vimeo supported.');
         if (is_null($this->mediaHelper->getYouTubeApiKey())) {
             $result = __(
-                'Vimeo supported.<br>'
+                'Vimeo supported.<br />'
                 . 'To add YouTube video, please <a href="%1">enter YouTube API Key</a> first.'
                 ,
                 $this->getConfigApiKeyUrl()
@@ -289,7 +287,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function getConfigApiKeyUrl()
     {
-        return $this->_urlBuilder->getUrl(
+        return $this->urlBuilder->getUrl(
             'adminhtml/system_config/edit',
             [
                 'section' => 'catalog',

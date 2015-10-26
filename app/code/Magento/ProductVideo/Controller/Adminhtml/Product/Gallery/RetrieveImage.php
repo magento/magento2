@@ -124,7 +124,8 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @param string $fileUrl
      * @param string $localFilePath
-     * @return bool|void
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function retrieveRemoteImage($fileUrl, $localFilePath)
     {
