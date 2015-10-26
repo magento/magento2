@@ -39,6 +39,7 @@
     </virtualType>
     <type name="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
         <arguments>
+            <argument name="assetRepo" xsi:type="object">AssetRepositorySourceThemeDeploy</argument>
             <argument name="assetPublisher" xsi:type="object">AssetPublisherSourceThemeDeploy</argument>
         </arguments>
     </type>
