@@ -68,7 +68,7 @@ class CreditmemoListTest extends WebapiAbstract
         );
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
-        $requestData = ['criteria' => $searchData];
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),

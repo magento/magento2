@@ -148,10 +148,10 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filter]);
 
-        $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
+        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
-        $criteria->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn($filterGroups);
 
@@ -166,7 +166,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->invoice->getList($criteria));
+        $this->assertEquals($collection, $this->invoice->getList($searchCriteria));
     }
 
     public function testDelete()
