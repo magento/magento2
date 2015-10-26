@@ -93,6 +93,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $isQuoteMasked;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -110,8 +115,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @throws \Magento\Framework\Exception\SessionException
-     * @codeCoverageIgnore
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,7 +135,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -141,6 +146,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_storeManager = $storeManager;
         $this->customerRepository = $customerRepository;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct(
             $request,
             $sidResolver,
@@ -203,7 +209,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_eventManager->dispatch('custom_quote_process', ['checkout_session' => $this]);
 
         if ($this->_quote === null) {
-            $quote = $this->quoteRepository->create();
+            $quote = $this->quoteFactory->create();
             if ($this->getQuoteId()) {
                 try {
                     if ($this->_loadInactive) {
@@ -321,7 +327,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         try {
             $customerQuote = $this->quoteRepository->getForCustomer($this->_customerSession->getCustomerId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $customerQuote = $this->quoteRepository->create();
+            $customerQuote = $this->quoteFactory->create();
         }
         $customerQuote->setStoreId($this->_storeManager->getStore()->getId());
 

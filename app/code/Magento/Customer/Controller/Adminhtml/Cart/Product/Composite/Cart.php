@@ -42,14 +42,22 @@ abstract class Cart extends \Magento\Backend\App\Action
     protected $quoteRepository;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->quoteRepository = $quoteRepository;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($context);
     }
 
@@ -72,7 +80,7 @@ abstract class Cart extends \Magento\Backend\App\Action
         try {
             $this->_quote = $this->quoteRepository->getForCustomer($this->_customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $this->_quote = $this->quoteRepository->create();
+            $this->_quote = $this->quoteFactory->create();
         }
         $this->_quote->setWebsite(
             $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)

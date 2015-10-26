@@ -28,7 +28,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
             try {
                 $quote = $quoteRepository->getForCustomer($customerId);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $quote = $quoteRepository->create();
+                $quote = $this->_objectManager->create('\Magento\Quote\Model\QuoteFactory')->create();
             }
             $quote->setWebsite(
                 $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)

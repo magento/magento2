@@ -109,21 +109,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreate()
-    {
-        $this->quoteFactoryMock->expects($this->once())
-            ->method('create')
-            ->with([1, 2, 3])
-            ->willReturn($this->quoteMock);
-        $this->storeManagerMock->expects($this->never())->method('getStore');
-        $this->storeMock->expects($this->never())->method('getId');
-        $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
-        $this->quoteMock->expects($this->never())->method('load');
-        $this->quoteMock->expects($this->never())->method('getId');
-
-        $this->assertEquals($this->quoteMock, $this->model->create([1, 2, 3]));
-    }
-
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with cartId = 14
