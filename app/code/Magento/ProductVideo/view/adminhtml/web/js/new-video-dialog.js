@@ -662,7 +662,7 @@ define([
                     roles.prop('disabled', false);
                     file = $('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = $('.modal-title');
+                    modalTitleElement = $('.mage-new-video-dialog .modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);
