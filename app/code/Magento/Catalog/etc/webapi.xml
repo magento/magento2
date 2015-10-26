@@ -385,4 +385,22 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <route url="/V1/products/:sku/websites" method="POST">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:sku/websites" method="PUT">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:sku/websites/:websiteId" method="DELETE">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="deleteById" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
 </routes>
