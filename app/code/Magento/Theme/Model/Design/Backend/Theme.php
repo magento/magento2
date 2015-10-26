@@ -17,6 +17,13 @@ class Theme extends Value
     protected $_design = null;
 
     /**
+     * Path to config node with list of caches
+     *
+     * @var string
+     */
+    const XML_PATH_INVALID_CACHES = 'design/invalid_caches';
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Model\Context $context
@@ -59,17 +66,22 @@ class Theme extends Value
     /**
      * {@inheritdoc}
      *
-     * {@inheritdoc}. In addition, it cleans all Magento cache
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for blocks and other output caches
      *
      * @return $this
      */
     public function afterSave()
     {
-        parent::afterSave();
+        $types = array_keys(
+            $this->_config->getValue(
+                self::XML_PATH_INVALID_CACHES,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         if ($this->isValueChanged()) {
-            $this->_cacheManager->clean();
-            $this->_eventManager->dispatch('adminhtml_cache_flush_system');
+            $this->cacheTypeList->invalidate($types);
         }
-        return $this;
+
+        return parent::afterSave();
     }
 }
