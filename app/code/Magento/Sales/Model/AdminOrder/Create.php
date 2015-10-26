@@ -220,6 +220,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $orderManagement;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -246,6 +251,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -276,6 +282,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = []
     ) {
         $this->_objectManager = $objectManager;
@@ -304,6 +311,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->quoteManagement = $quoteManagement;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($data);
     }
 
@@ -681,7 +689,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             return $this->_cart;
         }
 
-        $this->_cart = $this->quoteRepository->create();
+        $this->_cart = $this->quoteFactory->create();
 
         $customerId = (int)$this->getSession()->getCustomerId();
         if ($customerId) {

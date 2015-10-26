@@ -87,6 +87,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $groupManagementMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteFactoryMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -190,6 +195,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', [], [], '', false);
+
         $this->quote = $this->getMock(
             'Magento\Backend\Model\Session\Quote',
             ['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'],
@@ -208,6 +215,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'orderFactory' => $this->orderFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'groupManagement' => $this->groupManagementMock,
+                'quoteFactory' => $this->quoteFactoryMock
             ],
             '',
             true
@@ -296,7 +304,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('setIsSuperMode')
             ->with(true);
 
-        $this->quoteRepositoryMock->expects($this->once())
+        $this->quoteFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($quoteMock));
         $this->quoteRepositoryMock->expects($this->once())
@@ -371,7 +379,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->will($this->returnValue($quoteCustomerId));
 
-        $this->quoteRepositoryMock->expects($this->once())
+        $this->quoteFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($quoteMock));
         $this->quoteRepositoryMock->expects($this->once())

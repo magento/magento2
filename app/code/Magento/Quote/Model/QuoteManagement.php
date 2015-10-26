@@ -120,6 +120,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $accountManagement;
 
     /**
+     * @var QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -138,6 +143,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -158,7 +164,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -178,6 +185,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession = $checkoutSession;
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
+        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -256,7 +264,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function createAnonymousCart($storeId)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->create();
+        $quote = $this->quoteFactory->create();
         $quote->setStoreId($storeId);
         return $quote;
     }
@@ -277,7 +285,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             /** @var \Magento\Quote\Model\Quote $quote */
-            $quote = $this->quoteRepository->create();
+            $quote = $this->quoteFactory->create();
             $quote->setStoreId($storeId);
             $quote->setCustomer($customer);
             $quote->setCustomerIsGuest(0);

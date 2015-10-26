@@ -75,6 +75,11 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $groupManagement;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -89,7 +94,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
-     * @throws \Magento\Framework\Exception\SessionException
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,13 +111,15 @@ class Quote extends \Magento\Framework\Session\SessionManager
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
         $this->_orderFactory = $orderFactory;
         $this->_storeManager = $storeManager;
         $this->groupManagement = $groupManagement;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct(
             $request,
             $sidResolver,
@@ -137,7 +144,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     public function getQuote()
     {
         if ($this->_quote === null) {
-            $this->_quote = $this->quoteRepository->create();
+            $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
                     $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId())

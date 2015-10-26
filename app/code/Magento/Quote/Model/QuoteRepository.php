@@ -78,17 +78,6 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Create new quote
-     *
-     * @param array $data
-     * @return Quote
-     */
-    public function create(array $data = [])
-    {
-        return $this->quoteFactory->create($data);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function get($cartId, array $sharedStoreIds = [])
