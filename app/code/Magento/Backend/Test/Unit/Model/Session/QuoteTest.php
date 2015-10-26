@@ -122,13 +122,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             true,
             ['getValue']
         );
-        $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Quote\Model\QuoteRepository',
-            ['create', 'save', 'get'],
-            [],
-            '',
-            false
-        );
+        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Api\CartRepositoryInterface');
 
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\Request\Http',

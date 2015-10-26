@@ -20,7 +20,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     /**
      * Quote repository.
      *
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -46,13 +46,13 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     /**
      * Constructs a shipping method read service object.
      *
-     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param Cart\ShippingMethodConverter $converter
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
      */
     public function __construct(
-        QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         Cart\ShippingMethodConverter $converter,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector

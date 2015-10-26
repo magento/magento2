@@ -260,7 +260,7 @@ class Checkout
     protected $paypalQuote;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -298,7 +298,7 @@ class Checkout
      * @param AccountManagement $accountManagement
      * @param PaypalQuote $paypalQuote
      * @param OrderSender $orderSender
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $params
      * @throws \Exception
@@ -328,7 +328,7 @@ class Checkout
         AccountManagement $accountManagement,
         PaypalQuote $paypalQuote,
         OrderSender $orderSender,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         $params = []
     ) {

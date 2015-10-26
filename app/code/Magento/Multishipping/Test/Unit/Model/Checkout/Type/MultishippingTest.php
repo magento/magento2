@@ -75,7 +75,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $this->helperMock = $this->getMock('\Magento\Multishipping\Helper\Data', [], [], '', false);
         $orderSenderMock = $this->getMock('\Magento\Sales\Model\Order\Email\Sender\OrderSender', [], [], '', false);
         $priceMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
-        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->filterBuilderMock = $this->getMock('\Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->searchCriteriaBuilderMock = $this->getMock(
             '\Magento\Framework\Api\SearchCriteriaBuilder',

@@ -60,7 +60,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     /**
      * Sales quote repository
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -85,7 +85,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\State $appState
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
@@ -103,7 +103,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\State $appState,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         GroupManagementInterface $groupManagement

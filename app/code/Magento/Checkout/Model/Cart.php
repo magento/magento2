@@ -81,7 +81,7 @@ class Cart extends DataObject implements CartInterface
     protected $stockState;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -100,7 +100,7 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
      * @codeCoverageIgnore
@@ -116,7 +116,7 @@ class Cart extends DataObject implements CartInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         ProductRepositoryInterface $productRepository,
         array $data = []
     ) {

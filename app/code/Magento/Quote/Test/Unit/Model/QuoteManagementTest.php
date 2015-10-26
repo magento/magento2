@@ -63,7 +63,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     protected $orderManagement;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -157,7 +157,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemToOrderItem = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
         $this->orderManagement = $this->getMock('Magento\Sales\Api\OrderManagementInterface', [], [], '', false);
         $this->customerManagement = $this->getMock('Magento\Quote\Model\CustomerManagement', [], [], '', false);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $this->userContextMock = $this->getMock('\Magento\Authorization\Model\UserContextInterface', [], [], '', false);
         $this->customerRepositoryMock = $this->getMock(

@@ -200,7 +200,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $customerMapper;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -239,7 +239,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Item\Updater $quoteItemUpdater
      * @param \Magento\Framework\DataObject\Factory $objectFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
@@ -269,7 +269,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater,
         \Magento\Framework\DataObject\Factory $objectFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,

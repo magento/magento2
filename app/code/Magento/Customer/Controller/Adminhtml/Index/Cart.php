@@ -22,8 +22,8 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
         if ($deleteItemId) {
-            /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
-            $quoteRepository = $this->_objectManager->create('Magento\Quote\Model\QuoteRepository');
+            /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+            $quoteRepository = $this->_objectManager->create('Magento\Quote\Api\CartRepositoryInterface');
             /** @var \Magento\Quote\Model\Quote $quote */
             try {
                 $quote = $quoteRepository->getForCustomer($customerId);

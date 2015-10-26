@@ -59,10 +59,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->quoteRepositoryMock =
-            $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->productRepositoryMock =
-            $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
+        $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->itemDataFactoryMock =
             $this->getMock('Magento\Quote\Api\Data\CartItemInterfaceFactory', ['create'], [], '', false);
         $this->dataMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
