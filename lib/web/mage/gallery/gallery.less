@@ -1131,7 +1131,11 @@
 
 .fotorama--fullscreen {
     .fotorama__stage__frame {
-        .fotorama__img, .fotorama__img--full {
+        .fotorama__img {
+            display: none;
+        }
+        .fotorama__img,
+        .fotorama__img--full {
             bottom: 0;
             left: 0;
             margin: auto;
@@ -1149,6 +1153,7 @@
             vertical-align: middle;
             transition-duration: @fotorama-fullscreen-zoom-time;
             transition-property: width, height, top, left;
+            margin: auto;
         }
     }
 }
