@@ -4,14 +4,13 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
     'Magento_ProductVideo/js/get-video-information'
-], function ($, alert) {
+], function ($) {
     'use strict';
 
     $.widget('mage.createVideoPlayer', {
@@ -527,10 +526,13 @@ define([
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
+            if ($('#video_url').parent().find('.image-upload-error').length > 0) {
+                $('.image-upload-error').remove();
+            }
+
             if (data.errorcode || data.error) {
-                alert({
-                    content: data.error
-                });
+                $('#video_url').parent().append('<div class="image-upload-error">' +
+                '<div class="image-upload-error-cross"></div><span>' + data.error + '</span></div>');
 
                 return;
             }
