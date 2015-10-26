@@ -377,7 +377,9 @@ class Customer extends AbstractCustomer
                 $attributeParameters = $this->_attributes[$attributeCode];
 
                 if ('select' == $attributeParameters['type']) {
-                    $value = $attributeParameters['options'][strtolower($value)];
+                    $value = isset($attributeParameters['options'][strtolower($value)])
+                        ? $attributeParameters['options'][strtolower($value)]
+                        : 0;
                 } elseif ('datetime' == $attributeParameters['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($value));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
