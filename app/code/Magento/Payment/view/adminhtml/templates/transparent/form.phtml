@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Payment\Block\Transparent\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 $ccExpMonth = $block->getInfoData('cc_exp_month');
@@ -29,7 +29,7 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
         "controller":"<?php echo $block->escapeHtml($block->getRequest()->getControllerName()); ?>",
         "gateway":"<?php /* @noEscape */ echo $code; ?>",
         "dateDelim":"<?php echo $block->escapeHtml($block->getDateDelim()); ?>",
-        "cardFieldsMap":<?php /* @noEscape */ echo $block->getCardFieldsMap(); ?>,
+        "cardFieldsMap":<?php echo $block->escapeHtml($block->getCardFieldsMap()); ?>,
         "orderSaveUrl":"<?php echo $block->escapeUrl($block->getOrderUrl()); ?>",
         "cgiUrl":"<?php echo $block->escapeUrl($block->getCgiUrl()); ?>",
         "expireYearLength":"<?php echo $block->escapeHtml($block->getMethodConfigData('cc_year_length')); ?>",
@@ -102,7 +102,7 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                     data-container="<?php /* @noEscape */ echo $code; ?>-cc-year" data-validate='{required:true}'>
                 <?php foreach ($block->getCcYears() as $k => $v): ?>
                     <option
-                        value="<?php /* @noEscape */ echo $k ? $k : '' ?>"
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
                         <?php if ($k == $ccExpYear): ?> selected="selected"<?php endif ?>>
                         <?php echo $block->escapeHtml($v); ?>
                     </option>

@@ -5,7 +5,8 @@
 define([
     'Magento_Paypal/js/rules/simple/disable'
 ], function (disable) {
-    "use strict";
+    'use strict';
+
     return function ($target, $owner, data) {
         disable($target, $owner, data);
         $target.find(data.enableButton).change();

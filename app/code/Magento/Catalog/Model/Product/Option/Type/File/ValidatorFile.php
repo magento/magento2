@@ -21,21 +21,21 @@ class ValidatorFile extends Validator
      *
      * @var string
      */
-    protected $path = '/custom_options';
+    protected $path = 'custom_options';
 
     /**
      * Relative path for quote folder
      *
      * @var string
      */
-    protected $quotePath = '/custom_options/quote';
+    protected $quotePath = 'custom_options/quote';
 
     /**
      * Relative path for order folder
      *
      * @var string
      */
-    protected $orderPath = '/custom_options/order';
+    protected $orderPath = 'custom_options/order';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
@@ -175,12 +175,12 @@ class ValidatorFile extends Validator
                     $_height = $imageSize[1];
                 }
             }
-            $uri = $this->filesystem->getUri(DirectoryList::MEDIA);
+
             $userValue = [
                 'type' => $fileInfo['type'],
                 'title' => $fileInfo['name'],
-                'quote_path' => $uri . $this->quotePath . $filePath,
-                'order_path' => $uri . $this->orderPath . $filePath,
+                'quote_path' => $this->quotePath . $filePath,
+                'order_path' => $this->orderPath . $filePath,
                 'fullpath' => $fileFullPath,
                 'size' => $fileInfo['size'],
                 'width' => $_width,
