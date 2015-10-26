@@ -743,7 +743,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testLoadByIncrementIdAndStore()
+    public function testLoadByIncrementIdAndStoreId()
     {
         $incrementId = '000000001';
         $storeId = '2';
@@ -754,7 +754,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
-        $this->assertSame($this->order, $this->order->loadByIncrementIdAndStore($incrementId, $storeId));
+        $this->assertSame($this->order, $this->order->loadByIncrementIdAndStoreId($incrementId, $storeId));
     }
 
     public function notInvoicingStatesProvider()

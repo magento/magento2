@@ -444,13 +444,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Load order by system increment identifier and store
+     * Load order by system increment and store identifiers
      *
      * @param string $incrementId
      * @param string $storeId
      * @return \Magento\Sales\Model\Order
      */
-    public function loadByIncrementIdAndStore($incrementId, $storeId)
+    public function loadByIncrementIdAndStoreId($incrementId, $storeId)
     {
         $orderCollection = $this->getSalesOrderCollection(
             [
