@@ -181,7 +181,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, $this->sortOrder],
-            [false, -1]
+            [false, $this->sortOrder]
         ];
     }
 }
