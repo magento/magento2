@@ -1799,7 +1799,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $mediaEntityToValueTableName = $mediaEntityToValueTableName ?: $this->_resourceFactory->create()->getTable(
             'catalog_product_entity_media_gallery_value_to_entity'
         );
-
         $productIds = [];
         $imageNames = [];
         $multiInsertData = [];
@@ -1880,7 +1879,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->_connection->quoteInto('value_id IN (?)', $newMediaValues)
             );
         }
-
         return $this;
     }
 
