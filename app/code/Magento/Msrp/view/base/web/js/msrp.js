@@ -74,17 +74,18 @@ define([
                 this.$popup = popupClone;
                 popupClone.trigger('contentUpdated');
 
+                this.$popup.find('button').on('click', function () {
+                    if (this.options.addToCartButton) {
+                        $(this.options.addToCartButton).click();
+                        this.closePopup(this.$popup);
+                    }
+                }.bind(this));
+
                 $(this.options.popupId).on('click', function (e) {
                     this.popUpOptions.position.of = $(e.target);
                     this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
                     this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
                     this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-
-                    this.$popup.find('button').on('click', function () {
-                        if (this.options.addToCartButton) {
-                            $(this.options.addToCartButton).click();
-                        }
-                    }.bind(this));
                     this._toggle(this.$popup);
                 }.bind(this));
             }
@@ -102,15 +103,17 @@ define([
                 this.popupDOM = $(this.options.popUpAttr)[0];
                 this.$popup = $(this.popupDOM.innerText).appendTo('body');
                 this.popUpOptions.position.of = $(this.options.helpLinkId);
+
+                this.$popup.find('button').on('click', function (ev) {
+                    ev.preventDefault();
+                    this.$popup.find('form').attr('action', tierOptions.addToCartUrl).submit();
+                }.bind(this));
+
                 $(this.options.attr).on('click', function (e) {
                     this.popUpOptions.position.of = $(e.target);
                     tierOptions = JSON.parse($(e.target).attr('data-tier-price'));
                     this.$popup.find(this.options.msrpLabelId).html(tierOptions.msrp);
                     this.$popup.find(this.options.priceLabelId).html(tierOptions.price);
-                    this.$popup.find('button').on('click', function (ev) {
-                        ev.preventDefault();
-                        this.$popup.find('form').attr('action', tierOptions.addToCartUrl).submit();
-                    }.bind(this));
                     this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
                     this._toggle(this.$popup);
                 }.bind(this));
