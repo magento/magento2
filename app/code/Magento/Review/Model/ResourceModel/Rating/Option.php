@@ -10,7 +10,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Review table
@@ -79,14 +79,14 @@ class Option extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
     protected $_ratingOptionVoteF;
 
     /**
-     * @param \Magento\Framework\Model\ModelResource\Db\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ModelResource\Db\Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,

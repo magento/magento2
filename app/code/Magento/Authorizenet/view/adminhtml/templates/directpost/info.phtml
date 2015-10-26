@@ -5,12 +5,11 @@
  */
 
 // @codingStandardsIgnoreFile
-
 /**
  * @var \Magento\Authorizenet\Block\Transparent\Iframe $block
  * @see \Magento\Authorizenet\Block\Transparent\Iframe
  */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $method = $block->getMethod();
 $controller = $block->escapeHtml($block->getRequest()->getControllerName());
 $orderUrl = $block->escapeUrl($this->helper('Magento\Authorizenet\Helper\Backend\Data')->getPlaceOrderAdminUrl());
@@ -21,13 +20,15 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
 <!-- IFRAME for request to our server -->
 <iframe id="order-directpost-iframe" allowtransparency="true" frameborder="0" name="iframeSubmitOrder"
         style="display:none;width:100%;background-color:transparent"
-        src="<?php /* @noEscape */ echo $block->getViewFileUrl('blank.html'); ?>">
+        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')); ?>">
 </iframe>
 <!-- IFRAME for request to Authorize.net -->
-<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent"
-        src="<?php /* @noEscape */ echo $block->getViewFileUrl('blank.html'); ?>">
+<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost"
+        style="display:none;width:100%;background-color:transparent"
+        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')); ?>">
 </iframe>
-<fieldset class="admin__fieldset payment-method" id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?php /* @noEscape */ echo $code; ?>"
+          style="display:none;">
     <div class="admin__field _required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_type" class="admin__field-label">
             <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
@@ -81,11 +82,11 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                             <?php if ($k == $ccExpYear): ?>selected="selected"<?php endif; ?>>
                         <?php echo $block->escapeHtml($v); ?>
                     </option>
-                <?php endforeach ?>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>
-    <?php if ($_form->hasVerification()): ?>
+    <?php if ($block->hasVerification()): ?>
     <div class="admin__field _required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_cid">
             <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
@@ -123,7 +124,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             '<?php /* @noEscape */ echo $controller; ?>',
             '<?php /* @noEscape */ echo $orderUrl; ?>',
             '<?php echo $block->escapeUrl($method->getCgiUrl()); ?>',
-            '<?php /* @noEscape */ echo $block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()]) ?>');
+            '<?php echo $block->escapeUrl($block->getUrl('*/*/save', [
+                '_secure' => $block->getRequest()->isSecure()
+            ]));?>');
 
         <?php if (!$block->isAjaxRequest()): ?>
             });

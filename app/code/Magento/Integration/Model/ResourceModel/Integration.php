@@ -9,7 +9,7 @@ namespace Magento\Integration\Model\ResourceModel;
 /**
  * Integration resource model
  */
-class Integration extends \Magento\Framework\Model\ModelResource\Db\AbstractDb
+class Integration extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize resource model

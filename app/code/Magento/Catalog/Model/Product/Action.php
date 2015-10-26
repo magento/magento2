@@ -42,7 +42,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
-     * @param \Magento\Framework\Model\ModelResource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -53,7 +53,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
-        \Magento\Framework\Model\ModelResource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

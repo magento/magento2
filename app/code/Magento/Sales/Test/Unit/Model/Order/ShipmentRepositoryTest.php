@@ -86,7 +86,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($entityId);
 
             $mapper = $this->getMockForAbstractClass(
-                'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+                'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
                 [],
                 '',
                 false,
@@ -170,14 +170,14 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filter]);
 
-        $criteria = $this->getMock(
+        $searchCriteria = $this->getMock(
             'Magento\Framework\Api\SearchCriteria',
             ['getFilterGroups'],
             [],
             '',
             false
         );
-        $criteria->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
 
@@ -196,7 +196,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->subject->getList($criteria));
+        $this->assertEquals($collection, $this->subject->getList($searchCriteria));
     }
 
     public function testDelete()
@@ -213,7 +213,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -249,7 +249,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -282,7 +282,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -318,7 +318,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,

@@ -8,8 +8,9 @@ define([
     'uiComponent',
     'jquery',
     'ko',
-    'underscore'
-], function (Component, $, ko, _) {
+    'underscore',
+    'Magento_Ui/js/modal/alert'
+], function (Component, $, ko, _, alert) {
     'use strict';
 
     function UserException(message) {
@@ -337,7 +338,9 @@ define([
                                 parentElement.find('[name$="[image]"]').val(data.result.file);
                                 parentElement.find('[data-toggle=dropdown]').dropdown().show();
                             } else {
-                                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                                alert({
+                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
+                                });
                             }
                         },
                         start: function (event) {
@@ -365,6 +368,14 @@ define([
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
             });
+        },
+
+        /**
+         * Get currency symbol
+         * @returns {*}
+         */
+        getCurrencySymbol: function () {
+            return this.currencySymbol;
         }
     });
 });

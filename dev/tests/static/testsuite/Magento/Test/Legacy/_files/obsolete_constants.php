@@ -19,7 +19,7 @@ return [
     ['CACHE_TAG', 'Magento\Framework\AppInterface'],
     [
         'CACHE_TAG',
-        'Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection',
+        'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG',
     ],
     ['CACHE_TAG', 'Magento\Framework\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'],
@@ -148,11 +148,6 @@ return [
     ['XML_CHARSET_NODE', 'Magento\SalesRule\Helper\Coupon'],
     ['XML_CHARSET_SEPARATOR', 'Magento\SalesRule\Helper\Coupon'],
     ['XML_NODE_RELATED_CACHE', 'Magento\CatalogRule\Model\Rule'],
-    [
-        'XML_NODE_ATTRIBUTE_NODES',
-        'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer',
-        'XML_NODE_ATTRIBUTE_GROUPS',
-    ],
     [
         'XML_PATH_ALLOW_DUPLICATION',
         'Magento\Core\Model\Design\PackageInterface',
@@ -310,8 +305,6 @@ return [
     ['XML_NODE_ADD_FILTERABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_NODE_ADD_CHILD_DATA', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_PATH_CONTENT_TEMPLATE_FILTER', 'Magento\Catalog\Helper\Data'],
-    ['XML_NODE_MAX_INDEX_COUNT', 'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer'],
-    ['XML_NODE_ATTRIBUTE_GROUPS', 'Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer'],
     ['XML_PATH_UNASSIGNABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_PRODUCT_TYPE_SWITCHER_LABEL', 'Magento\Catalog\Helper\Product'],

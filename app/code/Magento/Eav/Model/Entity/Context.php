@@ -42,12 +42,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $universalFactory;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface
+     * @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
      */
     protected $transactionManager;
 
     /**
-     * @var \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor
+     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
      */
     protected $objectRelationProcessor;
 
@@ -58,8 +58,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface $transactionManager
-     * @param \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor $objectRelationProcessor
+     * @param \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor $objectRelationProcessor
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -68,8 +68,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface $transactionManager,
-        \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor $objectRelationProcessor
+        \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor $objectRelationProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
@@ -130,7 +130,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\ModelResource\Db\ObjectRelationProcessor
+     * @return \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
      */
     public function getObjectRelationProcessor()
     {
@@ -138,7 +138,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\ModelResource\Db\TransactionManagerInterface
+     * @return \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
      */
     public function getTransactionManager()
     {

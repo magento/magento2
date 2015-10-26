@@ -46,16 +46,24 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->sidebarMock = $this->getMockBuilder('Magento\Wishlist\Block\Customer\Sidebar')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
+            ->getMockForAbstractClass();
+
         $this->catalogImageHelperMock = $this->getMockBuilder('Magento\Catalog\Helper\Image')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
-            ->getMockForAbstractClass();
+        $imageHelperFactory = $this->getMockBuilder('Magento\Catalog\Helper\ImageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $imageHelperFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->catalogImageHelperMock);
 
         $this->model = new Wishlist(
             $this->wishlistHelperMock,
             $this->sidebarMock,
-            $this->catalogImageHelperMock,
+            $imageHelperFactory,
             $this->viewMock
         );
     }
@@ -83,6 +91,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             'items' => [
                 [
                     'image' => [
+                        'template' => 'Magento_Catalog/product/image',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
@@ -165,6 +174,12 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->catalogImageHelperMock->expects($this->once())
             ->method('getHeight')
             ->willReturn($imageHeight);
+        $this->catalogImageHelperMock->expects($this->any())
+            ->method('getFrame')
+            ->willReturn(true);
+        $this->catalogImageHelperMock->expects($this->once())
+            ->method('getResizedImageInfo')
+            ->willReturn([]);
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getProductUrl')
@@ -251,6 +266,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             'items' => [
                 [
                     'image' => [
+                        'template' => 'Magento_Catalog/product/image',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
@@ -266,6 +282,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     'image' => [
+                        'template' => 'Magento_Catalog/product/image',
                         'src' => $imageUrl,
                         'alt' => $imageLabel,
                         'width' => $imageWidth,
@@ -342,6 +359,12 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->catalogImageHelperMock->expects($this->exactly(2))
             ->method('getHeight')
             ->willReturn($imageHeight);
+        $this->catalogImageHelperMock->expects($this->any())
+            ->method('getFrame')
+            ->willReturn(true);
+        $this->catalogImageHelperMock->expects($this->exactly(2))
+            ->method('getResizedImageInfo')
+            ->willReturn([]);
 
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getProductUrl')

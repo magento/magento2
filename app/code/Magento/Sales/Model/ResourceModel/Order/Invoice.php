@@ -9,7 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\ResourceModel\Attribute;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
-use Magento\Framework\Model\ModelResource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 
 /**

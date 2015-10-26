@@ -619,7 +619,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $attributeValueFactoryMock = $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
         $resourceMock = $this->getMock(
-            'Magento\Framework\Model\ModelResource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [
                 '_construct',
                 'getIdFieldName'

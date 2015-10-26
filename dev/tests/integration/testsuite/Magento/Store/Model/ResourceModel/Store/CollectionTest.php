@@ -88,8 +88,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::addFieldToSelect
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::removeFieldFromSelect
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::addFieldToSelect
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::removeFieldFromSelect
      */
     public function testAddRemoveFieldToSelect()
     {
@@ -108,7 +108,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::addExpressionFieldToSelect
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::addExpressionFieldToSelect
      */
     public function testAddExpressionFieldToSelect()
     {
@@ -118,7 +118,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::getAllIds
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::getAllIds
      */
     public function testGetAllIds()
     {
@@ -126,7 +126,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::getData
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::getData
      */
     public function testGetData()
     {
@@ -134,7 +134,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Model\ModelResource\Db\Collection\AbstractCollection::join
+     * @covers \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::join
      */
     public function testJoin()
     {

@@ -8,15 +8,33 @@ namespace Magento\Framework\Setup\SampleData;
 class Executor
 {
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Setup\SampleData\State $state
+     * @param State $state
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Setup\SampleData\State $state
+        \Magento\Framework\Setup\SampleData\State $state,
+        \Magento\Framework\App\State $appState
     ) {
         $this->logger = $logger;
         $this->state = $state;
+        $this->appState = $appState;
     }
 
     /**
@@ -29,7 +47,7 @@ class Executor
     public function exec(InstallerInterface $installer)
     {
         try {
-            $installer->install();
+            $this->appState->emulateAreaCode('setup', [$installer, 'install']);
             $this->state->setInstalled();
         } catch (\Exception $e) {
             $this->state->setError();

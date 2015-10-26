@@ -4,15 +4,26 @@
  */
 define(
     [
+        'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/action/get-totals',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/action/get-payment-information'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
+    function ($,
+              quote,
+              urlBuilder,
+              storage,
+              errorProcessor,
+              customer,
+              getTotalsAction,
+              fullScreenLoader,
+              getPaymentInformationAction
+    ) {
         'use strict';
 
         return function (messageContainer) {
@@ -44,14 +55,22 @@ define(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
-                    getTotalsAction([]);
+                    var deferred = null;
+
+                    if (!quote.isVirtual()) {
+                        getTotalsAction([]);
+                        fullScreenLoader.stopLoader();
+                    } else {
+                        deferred = $.Deferred();
+                        getPaymentInformationAction(deferred);
+                        $.when(deferred).done(function () {
+                            fullScreenLoader.stopLoader();
+                        });
+                    }
                 }
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
-                }
-            ).always(
-                function () {
                     fullScreenLoader.stopLoader();
                 }
             );
