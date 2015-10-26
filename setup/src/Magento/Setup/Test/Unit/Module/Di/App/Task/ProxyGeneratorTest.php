@@ -70,6 +70,7 @@ class ProxyGeneratorTest extends \PHPUnit_Framework_TestCase
         $data = [
             'paths' => ['path/to/app'],
             'filePatterns' => ['di' => 'di.xml'],
+            'excludePatterns' => ['/\/Test\//'],
         ];
         $files = ['di' => []];
         $model = new ProxyGenerator(
