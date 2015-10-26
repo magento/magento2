@@ -188,10 +188,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
- 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-	        Please open your php.ini file and set always_populate_raw_post_data to -1.
- 	        If you need more help please call your hosting provider.
- 	        ',
+            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and is removed from PHP 7.0 onwards.
+            This will stop the installer from running.
+            Please open your php.ini file and remove always_populate_raw_post_data.
+            If you need more help please call your hosting provider.',
             PHP_VERSION
         );
         $expected = [
@@ -224,10 +224,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
- 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-	        Please open your php.ini file and set always_populate_raw_post_data to -1.
- 	        If you need more help please call your hosting provider.
- 	        ',
+            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and is removed from PHP 7.0 onwards.
+            This will stop the installer from running.
+            Please open your php.ini file and remove always_populate_raw_post_data.
+            If you need more help please call your hosting provider.',
             PHP_VERSION
         );
         $expected = [
@@ -252,10 +252,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn([]);
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
- 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-	        Please open your php.ini file and set always_populate_raw_post_data to -1.
- 	        If you need more help please call your hosting provider.
- 	        ',
+            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and is removed from PHP 7.0 onwards.
+            This will stop the installer from running.
+            Please open your php.ini file and remove always_populate_raw_post_data.
+            If you need more help please call your hosting provider.',
             PHP_VERSION
         );
         $expected = [
