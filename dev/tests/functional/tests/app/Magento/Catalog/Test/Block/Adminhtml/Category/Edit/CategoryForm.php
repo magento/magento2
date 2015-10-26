@@ -31,7 +31,7 @@ class CategoryForm extends FormTabs
     protected $dropdownBlock = '.dropdown';
 
     /**
-     *  Selector for confirm.
+     * Selector for confirm.
      *
      * @var string
      */
@@ -51,9 +51,9 @@ class CategoryForm extends FormTabs
             $store = $fixture->getStoreId();
             $storeSwitcherBlock = $this->browser->find($this->storeSwitcherBlock);
             $storeSwitcherBlock->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')->setValue($store);
-            $element = $this->browser->find($this->confirmModal);
+            $modalElement = $this->browser->find($this->confirmModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
             $modal->acceptAlert();
         }
 
