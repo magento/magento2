@@ -46,14 +46,42 @@ class StoreViewService
      */
     public function doesEntityHaveOverriddenUrlKeyForStore($storeId, $entityId, $entityType)
     {
-        $attribute = $this->eavConfig->getAttribute($entityType, 'url_key');
+        return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'url_key');
+    }
+
+    /**
+     * Check that entity has overridden url path for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function doesEntityHaveOverriddenUrlPathForStore($storeId, $entityId, $entityType)
+    {
+        return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'url_path');
+    }
+
+    /**
+     * Check that entity has overridden url attribute for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    protected function doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, $attributeName)
+    {
+        $attribute = $this->eavConfig->getAttribute($entityType, $attributeName);
         if (!$attribute) {
             throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
         }
         $select = $this->connection->select()
-        ->from($attribute->getBackendTable(), 'store_id')
-        ->where('attribute_id = ?', $attribute->getId())
-        ->where('entity_id = ?', $entityId);
+            ->from($attribute->getBackendTable(), 'store_id')
+            ->where('attribute_id = ?', $attribute->getId())
+            ->where('entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
     }
