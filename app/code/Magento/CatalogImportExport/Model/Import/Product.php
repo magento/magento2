@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -35,11 +36,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Size of bunch to delete attributes of products in one step.
      */
     const ATTRIBUTE_DELETE_BUNCH = 1000;
-
-    /**
-     * default delimiter for several values in one cell
-     */
-    const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
      * Pseudo multi line separator in one cell.
@@ -727,10 +723,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function getMultipleValueSeparator()
     {
-        if (!empty($this->_parameters[\Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])) {
-            return $this->_parameters[\Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
+        if (!empty($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])) {
+            return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
         }
-        return self::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        return Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 
     /**
@@ -781,7 +777,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function deleteProductsForReplacement()
     {
-        $this->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE));
+        $this->setParameters(array('behavior' => Import::BEHAVIOR_DELETE));
         $this->_deleteProducts();
 
         return $this;
@@ -837,9 +833,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _importData()
     {
         $this->_validatedRows = null;
-        if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
+        if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             $this->_deleteProducts();
-        } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
+        } elseif (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
             $this->_replaceFlag = true;
             $this->_replaceProducts();
         } else {
@@ -859,7 +855,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->deleteProductsForReplacement();
         $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
         $this->_validatedRows = null;
-        $this->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND));
+        $this->setParameters(array('behavior' => Import::BEHAVIOR_APPEND));
         $this->_saveProductsData();
 
         return $this;
@@ -975,7 +971,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         static $lastSku = null;
 
-        if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
+        if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             return $rowData;
         }
 
@@ -1092,7 +1088,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior() && $productIds) {
+            if (Import::BEHAVIOR_APPEND != $this->getBehavior() && $productIds) {
                 $this->_connection->delete(
                     $mainTable,
                     $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds))
@@ -1186,7 +1182,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 1];
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
+            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $tableName,
                     $this->_connection->quoteInto('product_id IN (?)', $delProductId)
@@ -1547,7 +1543,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
                 }
 
-                if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND ||
+                if ($this->getBehavior() == Import::BEHAVIOR_APPEND ||
                     empty($rowData[self::COL_SKU])
                 ) {
                     $rowData = $productTypeModel->clearEmptyData($rowData);
@@ -1678,7 +1674,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $tierPriceIn[] = $row;
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
+            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $tableName,
                     $this->_connection->quoteInto('entity_id IN (?)', $delProductId)
@@ -1709,8 +1705,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $DS = DIRECTORY_SEPARATOR;
 
-            if (!empty($this->_parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
-                $tmpPath = $this->_parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
+            if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
+                $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
             } else {
                 $tmpPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath('import');
             }
@@ -1790,7 +1786,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $productId = $this->skuProcessor->getNewSku($productSku)['entity_id'];
             $productIds[] = $productId;
             $insertedGalleryImgs = [];
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
+            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $mediaGalleryTableName,
                     $this->_connection->quoteInto('entity_id IN (?)', $productId)
@@ -1881,7 +1877,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $websitesData[] = ['product_id' => $productId, 'website_id' => $websiteId];
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
+            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $tableName,
                     $this->_connection->quoteInto('product_id IN (?)', $delProductId)
@@ -2084,7 +2080,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $rowScope = $this->getRowScope($rowData);
 
         // BEHAVIOR_DELETE use specific validation logic
-        if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
+        if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$rowData[self::COL_SKU]])) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
                 return false;
