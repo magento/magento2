@@ -5,13 +5,15 @@
  */
 namespace Magento\Review\Block\Product;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Product Review Tab
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\Framework\View\Element\Template
+class Review extends Template implements IdentityInterface
 {
     /**
      * Core registry
@@ -97,5 +99,15 @@ class Review extends \Magento\Framework\View\Element\Template
         );
 
         return $collection->getSize();
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [\Magento\Review\Model\Review::CACHE_TAG];
     }
 }
