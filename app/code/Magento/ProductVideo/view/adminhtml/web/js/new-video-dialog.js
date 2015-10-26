@@ -424,7 +424,9 @@ define([
          */
         _replaceImage: function (oldFile, newFile, imageData) {
             var tmpNewFile = newFile,
+                tmpOldImage,
                 newImageId,
+                oldNewFilePosition,
                 fc,
                 suff,
                 searchsuff,
@@ -433,6 +435,7 @@ define([
 
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
+            tmpOldImage = this._images[oldFile];
 
             if (newFile === oldFile) {
                 this._images[newFile] = imageData;
@@ -444,26 +447,36 @@ define([
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
 
-            if (oldFile && imageData.oldFile) {
-                newImageId = this.findElementId(tmpNewFile);
-                fc = $(this._itemIdSelector).val();
-
-                suff = 'product[media_gallery][images]' + fc;
-
-                searchsuff = 'input[name="' + suff + '[value_id]"]';
-                key = $(searchsuff).val();
-
-                if (!key) {
-                    return null;
-                }
-
-                oldValIdElem = document.createElement('input');
-                $('form[data-form="edit-product"]').append(oldValIdElem);
-                $(oldValIdElem).attr({
-                    type: 'hidden',
-                    name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
-                }).val(key);
+            if (!oldFile || !imageData.oldFile) {
+                return null;
             }
+
+            newImageId = this.findElementId(tmpNewFile);
+            fc = $(this._itemIdSelector).val();
+
+            suff = 'product[media_gallery][images]' + fc;
+
+            searchsuff = 'input[name="' + suff + '[value_id]"]';
+            key = $(searchsuff).val();
+
+            if (!key) {
+                return null;
+            }
+
+            oldValIdElem = document.createElement('input');
+            $('form[data-form="edit-product"]').append(oldValIdElem);
+            $(oldValIdElem).attr({
+                type: 'hidden',
+                name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
+            }).val(key);
+
+            oldNewFilePosition = parseInt(tmpOldImage.position);
+            imageData.position = oldNewFilePosition;
+
+            $(this._imageWidgetSelector).trigger('setPosition', {
+                imageData: imageData,
+                position: oldNewFilePosition
+            });
         },
 
         /**
