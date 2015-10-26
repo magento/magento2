@@ -24,7 +24,7 @@ class AssertUserDuplicateMessage extends AbstractConstraint
      */
     public function processAssert(UserEdit $userEdit)
     {
-        $failedMessage = $userEdit->getMessagesBlock()->getErrorMessages();
+        $failedMessage = $userEdit->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
             $failedMessage,
