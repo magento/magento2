@@ -13,14 +13,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**
- * Weee pricing adjustment
+ * Weee tax pricing adjustment
  */
-class Adjustment implements AdjustmentInterface
+class TaxAdjustment implements AdjustmentInterface
 {
     /**
      * Adjustment code weee
      */
-    const ADJUSTMENT_CODE = 'weee';
+    const ADJUSTMENT_CODE = 'weee_tax';
 
     /**
      * Weee helper
@@ -40,6 +40,7 @@ class Adjustment implements AdjustmentInterface
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+
     /**
      * Constructor
      *
@@ -82,13 +83,13 @@ class Adjustment implements AdjustmentInterface
      */
     public function isIncludedInDisplayPrice()
     {
-        return $this->weeeHelper->typeOfDisplay(
-            [
-                \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
-                \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
-            ]
-        );
+        if ($this->weeeHelper->isEnabled() == true &&
+            $this->weeeHelper->isTaxable() == true &&
+            $this->weeeHelper->typeOfDisplay([\Magento\Weee\Model\Tax::DISPLAY_EXCL]) == false) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -144,9 +145,15 @@ class Adjustment implements AdjustmentInterface
      */
     protected function getAmount(SaleableInterface $saleableItem)
     {
-        $weeeAmount = $this->weeeHelper->getAmount($saleableItem);
-        $weeeAmount = $this->priceCurrency->convertAndRound($weeeAmount);
-        return $weeeAmount;
+        $weeeTaxAmount = 0;
+        $attributes = $this->weeeHelper->getProductWeeeAttributes($saleableItem, null, null, null, true, false);
+        if ($attributes != null) {
+            foreach ($attributes as $attribute) {
+                $weeeTaxAmount += $attribute->getData('tax_amount');
+            }
+        }
+        $weeeTaxAmount = $this->priceCurrency->convert($weeeTaxAmount);
+        return $weeeTaxAmount;
     }
 
     /**
