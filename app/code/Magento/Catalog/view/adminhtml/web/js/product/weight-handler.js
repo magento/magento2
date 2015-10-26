@@ -29,7 +29,7 @@ define([
             this.$weight.removeClass('ignore-validate').prop('disabled', false);
         },
         switchWeight: function() {
-            return !this.productHasWeight() ? this.enabled() : this.disable();
+            return this.productHasWeight() ? this.enabled() : this.disabled();
         },
         productHasWeight: function () {
             return $('input:checked', this.$weightSwitcher).val() == 1;
@@ -40,6 +40,15 @@ define([
         change: function (data) {
             var value = data !== undefined ? +data : !this.productHasWeight();
             $('input[value='+ value +']', this.$weightSwitcher).prop('checked', true);
+        },
+        'Magento_Catalog/js/product/weight-handler': function () {
+            this.switchWeight();
+            this.bindAll();
+        },
+        bindAll: function () {
+            this.$weightSwitcher.find('input').on('change', function () {
+                this.switchWeight();
+            }.bind(this));
         }
     };
 });
