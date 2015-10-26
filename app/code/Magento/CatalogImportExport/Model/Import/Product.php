@@ -1372,7 +1372,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                     }
                 }
 
-                $this->websitesCache[$rowSku] = [];
+                if (!array_key_exists($rowSku, $this->websitesCache)) {
+                    $this->websitesCache[$rowSku] = [];
+                }
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
                     $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
@@ -1383,12 +1385,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 }
 
                 // 3. Categories phase
-                $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
-                $this->categoriesCache[$rowSku] = [];
-                if (!empty($categoriesString)) {
-                    foreach ($this->categoryProcessor->upsertCategories($categoriesString) as $categoryId) {
-                        $this->categoriesCache[$rowSku][$categoryId] = true;
-                    }
+                $categoryIds = $this->processRowCategories($rowData);
+                $this->categoriesCache[$rowData[Product::COL_SKU]] = [];
+                foreach ($categoryIds as $id) {
+                    $this->categoriesCache[$rowData[Product::COL_SKU]][$id] = true;
                 }
 
                 // 4.1. Tier prices phase
@@ -1541,7 +1541,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                         }
                     }
                     foreach ($storeIds as $storeId) {
-                        $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
+                        if (!isset($attributes[$attrTable][$rowSku][$attrId][$storeId])) {
+                            $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
+                        }
                     }
                     // restore 'backend_model' to avoid 'default' setting
                     $attribute->setBackendModel($backModel);
@@ -1574,7 +1576,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     }
 
     /**
-     * @param $productSku
+     * @param array $rowData
+     * @return array
+     */
+    protected function processRowCategories($rowData)
+    {
+        $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
+        $categoryIds = [];
+        if (!empty($categoriesString)) {
+            $categoryIds = $this->categoryProcessor->upsertCategories(
+                $categoriesString,
+                $this->getMultipleValueSeparator()
+            );
+        }
+        return $categoryIds;
+    }
+
+    /**
+     * @param string $productSku
      * @return array
      */
     public function getProductWebsites($productSku)
@@ -1583,7 +1602,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     }
 
     /**
-     * @param $productSku
+     * @param string $productSku
      * @return array
      */
     public function getProductCategories($productSku)
@@ -1592,7 +1611,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     }
 
     /**
-     * @param $storeCode
+     * @param string $storeCode
      * @return array|int|null|string
      */
     public function getStoreIdByCode($storeCode)
