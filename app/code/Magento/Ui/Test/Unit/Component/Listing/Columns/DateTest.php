@@ -77,7 +77,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetComponentName()
+    public function testPrepareDataSource()
     {
         $item = ['test_data' => 'some_data', 'field_name' => self::TEST_TIME];
 
