@@ -3,7 +3,12 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiComponent', '../model/gift-message', '../model/gift-options', '../action/gift-options'],
+define([
+        'uiComponent',
+        'Magento_GiftMessage/js/model/gift-message',
+        'Magento_GiftMessage/js/model/gift-options',
+        'Magento_GiftMessage/js/action/gift-options'
+    ],
     function (Component, giftMessage, giftOptions, giftOptionsService) {
         "use strict";
         return Component.extend({

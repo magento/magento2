@@ -1131,7 +1131,7 @@
 
 .fotorama--fullscreen {
     .fotorama__stage__frame {
-        .fotorama__img {
+        .fotorama__img, .fotorama__img--full {
             bottom: 0;
             left: 0;
             margin: auto;
@@ -1142,7 +1142,7 @@
             top: 0;
         }
         .fotorama__img--full {
-            display:block;
+            display: block;
             width: auto;
             max-height: 100%;
             max-width: 100%;
@@ -1255,31 +1255,5 @@ body.fotorama__fullscreen {
     }
     .magnify-lens {
         display: none !important;
-    }
-}
-
-.fotorama--fullscreen {
-    .fotorama__stage__frame {
-        .fotorama__img {
-            display:none;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            max-height: inherit;
-            max-width: inherit;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-        .fotorama__img--full {
-            display:block;
-            height: auto;
-            width: auto;
-            max-height: 100%;
-            max-width: 100%;
-            vertical-align: middle;
-            transition-duration: @fotorama-fullscreen-zoom-time;
-            transition-property: width, height, top, left;
-        }
     }
 }
