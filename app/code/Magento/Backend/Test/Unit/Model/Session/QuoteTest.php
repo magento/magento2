@@ -195,7 +195,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', [], [], '', false);
+        $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
 
         $this->quote = $this->getMock(
             'Magento\Backend\Model\Session\Quote',
