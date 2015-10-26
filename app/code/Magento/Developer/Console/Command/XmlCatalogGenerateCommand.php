@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Exception\InputException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Developer\Model\XmlCatalog\Format\FormatFactory;
 use Magento\Developer\Model\XmlCatalog\Format\FormatInterface;
 
 class XmlCatalogGenerateCommand extends Command
@@ -128,6 +128,8 @@ class XmlCatalogGenerateCommand extends Command
         $urnDictionary = $this->getUrnDictionary();
         if ($formatter = $this->getFormatters($ideName)) {
             $formatter->generateCatalog($urnDictionary, $ideFilePath);
+        } else {
+            throw new InputException(__("Format for IDE '%ide' is not supported", ['ide' => $ideName]));
         }
     }
 
