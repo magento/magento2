@@ -212,6 +212,7 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @param array $rowData
+     * @return void
      */
     protected function setStoreToProduct(\Magento\Catalog\Model\Product $product, array $rowData)
     {
