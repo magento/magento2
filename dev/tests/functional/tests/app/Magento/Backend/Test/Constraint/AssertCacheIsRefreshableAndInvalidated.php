@@ -41,7 +41,7 @@ class AssertCacheIsRefreshableAndInvalidated extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, count($items)),
-            $adminCache->getMessagesBlock()->getSuccessMessages(),
+            $adminCache->getMessagesBlock()->getSuccessMessage(),
             'Cache is Invalid and refreshable.'
         );
     }

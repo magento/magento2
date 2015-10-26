@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
