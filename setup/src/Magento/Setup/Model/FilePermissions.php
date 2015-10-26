@@ -130,7 +130,7 @@ class FilePermissions
             new \RecursiveDirectoryIterator($directory),
             \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
         );
-        foreach($directoryIterator as $subDirectory) {
+        foreach ($directoryIterator as $subDirectory) {
             if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
                 $flag = false;
             }
