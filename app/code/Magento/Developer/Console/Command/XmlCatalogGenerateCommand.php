@@ -13,6 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Developer\Model\XmlCatalog\Format\FormatFactory;
+use Magento\Developer\Model\XmlCatalog\Format\FormatInterface;
 
 class XmlCatalogGenerateCommand extends Command
 {
@@ -37,15 +39,25 @@ class XmlCatalogGenerateCommand extends Command
     private $urnResolver;
 
     /**
+     * Supported formats
+     *
+     * @var FormatInterface[]
+     */
+    private $formats;
+
+    /**
      * @param Files $filesUtility
      * @param UrnResolver $urnResolver
+     * @param FormatInterface[] $formats
      */
     public function __construct(
         Files $filesUtility,
-        UrnResolver $urnResolver
+        UrnResolver $urnResolver,
+        array $formats = []
     ) {
         $this->filesUtility = $filesUtility;
         $this->urnResolver = $urnResolver;
+        $this->formats = $formats;
         parent::__construct();
     }
 
@@ -54,20 +66,21 @@ class XmlCatalogGenerateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('dev:xml-catalog:generate')
-            ->setDescription('Collects URNs used in XML to reference XSD schemas. Generates catalog for IDE.')
+        $this->setName('dev:urn-catalog:generate')
+            ->setDescription('Generates the catalog of URNs to *.xsd mappings for the IDE to highlight xml.')
             ->setDefinition([
                 new InputOption(
                     self::IDE_OPTION,
                     null,
                     InputOption::VALUE_OPTIONAL,
-                    'IDE for which catalog will be generated: [PhpStorm]',
-                    'PhpStorm'
+                    'Format in which catalog will be generated. Supported: ['.
+                        implode(', ', $this->getSupportedFormats()) . ']',
+                    'phpstorm'
                 ),
                 new InputArgument(
                     self::IDE_FILE_PATH_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'Path to the IDE config file. For PhpStorm it is .idea/misc.xml'
+                    'Path to file to output the catalog. For PhpStorm use .idea/misc.xml'
                 )
             ]);
 
@@ -75,7 +88,7 @@ class XmlCatalogGenerateCommand extends Command
     }
 
     /**
-     * Get an arry of URNs
+     * Get an array of URNs
      *
      * @return array
      */
@@ -88,64 +101,20 @@ class XmlCatalogGenerateCommand extends Command
         foreach ($files as $file) {
             $content = file_get_contents($file[0]);
             $matches = [];
-            preg_match_all('/schemaLocation="(urn\:[^"]*)"/i', $content, $matches);
+            preg_match_all('/schemaLocation="(urn\:magento\:[^"]*)"/i', $content, $matches);
             $urns = array_merge($urns, $matches[1]);
         }
         $urns = array_unique($urns);
 
         $paths = [];
         foreach ($urns as $urn) {
-            $paths[$urn] = $this->urnResolver->getRealPath($urn);
+            try {
+                $paths[$urn] = $this->urnResolver->getRealPath($urn);
+            } catch (\Exception $e) {
+                // don't add unsupported element to array
+            }
         }
         return $paths;
-    }
-
-    /**
-     * Format URN dictionary for PhpStorm
-     *
-     * @param array $dictionary
-     * @param string $ideFilePath
-     * @return null
-     */
-    private function formatForPhpStorm($dictionary, $ideFilePath)
-    {
-        $componentNode = null;
-        $projectNode = null;
-        if (file_exists($ideFilePath)) {
-            $dom = new \DOMDocument();
-            $dom->load($ideFilePath);
-            $xpath = new \DOMXPath($dom);
-            $nodeList = $xpath->query('/project');
-            $projectNode = $nodeList->item(0);
-        } else {
-            $dom = new \DOMDocument();
-            $projectNode = $dom->createElement('project');
-            $projectNode->setAttribute('version', '4');
-            $dom->appendChild($projectNode);
-            $rootComponentNode = $dom->createElement('component');
-            $rootComponentNode->setAttribute('version', '2');
-            $rootComponentNode->setAttribute('name', 'ProjectRootManager');
-            $projectNode->appendChild($rootComponentNode);
-
-        }
-
-        $xpath = new \DOMXPath($dom);
-        $nodeList = $xpath->query("/project/component[@name='ProjectResources']");
-        $componentNode = $nodeList->item(0);
-        if ($componentNode == null) {
-            $componentNode = $dom->createElement('component');
-            $componentNode->setAttribute('name', 'ProjectResources');
-            $projectNode->appendChild($componentNode);
-        }
-
-        foreach ($dictionary as $urn => $path) {
-            $node = $dom->createElement('resource');
-            $node->setAttribute('url', $urn);
-            $node->setAttribute('location', $path);
-            $componentNode->appendChild($node);
-        }
-        $dom->formatOutput = true;
-        file_put_contents($ideFilePath, $dom->saveXML(), FILE_TEXT);
     }
 
     /**
@@ -157,11 +126,32 @@ class XmlCatalogGenerateCommand extends Command
         $ideName = $input->getOption(self::IDE_OPTION);
         $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
         $urnDictionary = $this->getUrnDictionary();
-        switch ($ideName) {
-            default:
-            case 'PhpStorm':
-                $this->formatForPhpStorm($urnDictionary, $ideFilePath);
-                break;
+        if ($formatter = $this->getFormatters($ideName)) {
+            $formatter->generateCatalog($urnDictionary, $ideFilePath);
         }
+    }
+
+    /**
+     * Get formatter based on format
+     *
+     * @param string $format
+     * @return FormatInterface|false
+     */
+    private function getFormatters($format)
+    {
+        if (!isset($this->formats[$format])) {
+            return false;
+        }
+        return $this->formats[$format];
+    }
+
+    /**
+     * Get registered formatter aliases
+     *
+     * @return string[]
+     */
+    public function getSupportedFormats()
+    {
+        return array_keys($this->formats);
     }
 }
