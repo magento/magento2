@@ -15,7 +15,7 @@ define([
             translationStorageInvalidation = $.initNamespaceStorage('mage-translation-file-version').localStorage,
             timeout = $.localStorage.get('mage-translation-file-version');
 
-        if (timeout.version !== config.version || !timeout.version) {
+        if (timeout.version !== config.version) {
             require([config.config], function (string) {
                 if (string.length) {
                     $.mage.translate.add(JSON.parse(string));
