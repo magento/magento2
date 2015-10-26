@@ -299,7 +299,7 @@ $hints = [
                     ng-change="$scope.validate()"
                     check-Redis
                     >
-                    <?php foreach ( $this->sessionSave as $value): ?>
+                    <?php foreach ($this->sessionSave as $value):?>
                         <?php echo "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>"; ?>
                     <?php endforeach; ?>
                 </select>
