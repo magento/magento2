@@ -134,7 +134,7 @@ angular.module('web-configuration', ['ngStorage'])
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             var validator = function(value){
-                if (value === 'redis' ) {
+                if (value === 'redis') {
                     var ajaxPromise = redisFactory.hasRedisExtension();
                     ajaxPromise.then(function(result) {
                         ngModel.$setValidity('checkRedis', result.data.hasRedis);
