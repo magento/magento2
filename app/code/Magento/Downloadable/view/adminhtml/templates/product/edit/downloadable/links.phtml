@@ -469,9 +469,8 @@ require([
             })(jQuery);
         };
 
-
-        if (jQuery('#link-switcher1')) {
-            jQuery('#link-switcher1, #link-switcher0').on('change', function () {
+        if (jQuery('input[name="product[links_purchased_separately]"]')) {
+            jQuery('input[name="product[links_purchased_separately]"]').on('change', function () {
                 linkItems.togglePriceFields.bind()
             });
         }
