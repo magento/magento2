@@ -4,14 +4,14 @@
  */
 define([
     'jquery',
+    'Magento_Catalog/catalog/type-events',
     'Magento_ConfigurableProduct/js/advanced-pricing-handler',
     'Magento_ConfigurableProduct/js/options/price-type-handler',
-    'Magento_Catalog/catalog/type-events',
     'collapsible',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function($, advancedPricingHandler, priceTypeHandler, typeHandler){
+], function($, productType, advancedPricingHandler, priceTypeHandler){
     'use strict';
 
     return {
@@ -52,24 +52,31 @@ define([
             $(document).on('changeConfigurableTypeProduct', function (event, isConfigurable) {
                 $(document).trigger('setTypeProduct', isConfigurable ? 'configurable' : null);
             }.bind(this));
-            $(document).on('changeTypeProduct', function (event, controllers) {
-                var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
-                if (controllers.type.current === 'configurable') {
-                    suggestContainer.addClass('disabled').prop('disabled', true);
-                    this.$block.prop('disabled', false);
-                    $('#inventory_qty').prop('disabled', true);
-                    $('#inventory_stock_availability').removeProp('disabled');
-                    this._setElementDisabled($('#qty'), true, true);
-                    this._setElementDisabled($('#quantity_and_stock_status'), false, false);
-                } else {
-                    suggestContainer.removeClass('disabled').removeProp('disabled');
-                    this.$block.prop('disabled', true);
-                    $('#inventory_qty').removeProp('disabled');
-                    $('#inventory_stock_availability').prop('disabled', true);
-                    this._setElementDisabled($('#quantity_and_stock_status'), true, false);
-                    this._setElementDisabled($('#qty'), false, true);
-                }
-            }.bind(this));
+            $(document).on('changeTypeProduct', this._initType.bind(this));
+        },
+        _initType: function () {
+            var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
+            if (productType.type.current === 'configurable') {
+                suggestContainer.addClass('disabled').prop('disabled', true);
+                this.$block.prop('disabled', false);
+                $('#inventory_qty').prop('disabled', true);
+                $('#inventory_stock_availability').removeProp('disabled');
+                this._setElementDisabled($('#qty'), true, true);
+                this._setElementDisabled($('#quantity_and_stock_status'), false, false);
+            } else {
+                suggestContainer.removeClass('disabled').removeProp('disabled');
+                this.$block.prop('disabled', true);
+                $('#inventory_qty').removeProp('disabled');
+                $('#inventory_stock_availability').prop('disabled', true);
+                this._setElementDisabled($('#quantity_and_stock_status'), true, false);
+                this._setElementDisabled($('#qty'), false, true);
+            }
+
+            if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
+                this.hide();
+            } else {
+                this.show();
+            }
         },
         'Magento_ConfigurableProduct/js/configurable-type-handler': function (inData) {
             this.$block = $(inData.blockId + ' input[name="attributes[]"]');
@@ -79,6 +86,7 @@ define([
             priceTypeHandler.init();
 
             this.bindAll();
+            this._initType();
         }
     };
 });

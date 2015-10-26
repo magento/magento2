@@ -4,8 +4,9 @@
  */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'Magento_Catalog/catalog/type-events'
+], function ($, productType) {
     'use strict';
 
     return {
@@ -17,17 +18,19 @@ define([
             });
         },
         init: function () {
-            $(document).on('changeTypeProduct', function (event, controllers) {
-                var isConfigurable = controllers.type.current === 'configurable';
+            $(document).on('changeTypeProduct', this._initType.bind(this));
+            this._initType();
+        },
+        _initType: function () {
+            var isConfigurable = productType.type.current === 'configurable';
 
-                if (isConfigurable) {
-                    this.$links.hide();
-                } else {
-                    this.$links.show();
-                }
+            if (isConfigurable) {
+                this.$links.hide();
+            } else {
+                this.$links.show();
+            }
 
-                this.toggleDisabledAttribute(isConfigurable);
-            }.bind(this));
+            this.toggleDisabledAttribute(isConfigurable);
         }
     };
 });
