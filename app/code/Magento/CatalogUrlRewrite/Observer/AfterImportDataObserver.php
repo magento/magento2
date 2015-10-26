@@ -190,6 +190,7 @@ class AfterImportDataObserver implements ObserverInterface
                 $product->setData($field, $rowData[$field]);
             }
         }
+
         $this->categoryCache[$rowData['entity_id']] = $this->import->getProductCategories($rowData['sku']);
         $this->websiteCache[$rowData['entity_id']] = $this->import->getProductWebsites($rowData['sku']);
         foreach ($this->websiteCache[$rowData['entity_id']] as $websiteId) {
@@ -197,6 +198,23 @@ class AfterImportDataObserver implements ObserverInterface
                 $this->websitesToStoreIds[$websiteId] = $this->storeManager->getWebsite($websiteId)->getStoreIds();
             }
         }
+
+        $this->setStoreToProduct($product, $rowData);
+
+        if ($this->isGlobalScope($product->getStoreId())) {
+            $this->populateGlobalProduct($product);
+        } else {
+            $this->addProductToImport($product, $product->getStoreId());
+        }
+        return $this;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $rowData
+     */
+    protected function setStoreToProduct(\Magento\Catalog\Model\Product $product, array $rowData)
+    {
         if (!empty($rowData[ImportProduct::COL_STORE])
             && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
         ) {
@@ -204,12 +222,6 @@ class AfterImportDataObserver implements ObserverInterface
         } elseif (!$product->hasData(\Magento\Catalog\Api\Data\ProductInterface::STORE_ID)) {
             $product->setStoreId(Store::DEFAULT_STORE_ID);
         }
-        if ($this->isGlobalScope($product->getStoreId())) {
-            $this->populateGlobalProduct($product);
-        } else {
-            $this->addProductToImport($product, $product->getStoreId());
-        }
-        return $this;
     }
 
     /**
