@@ -38,6 +38,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">2</data>
@@ -80,6 +81,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options_with_assigned_product</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">2</data>
