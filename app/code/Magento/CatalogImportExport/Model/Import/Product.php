@@ -1386,7 +1386,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
 
                 // 3. Categories phase
                 $categoryIds = $this->processRowCategories($rowData);
-                $this->categoriesCache[$rowData[Product::COL_SKU]] = [];
+                if (!array_key_exists($rowData[Product::COL_SKU], $this->categoriesCache)) {
+                    $this->categoriesCache[$rowData[Product::COL_SKU]] = [];
+                }
                 foreach ($categoryIds as $id) {
                     $this->categoriesCache[$rowData[Product::COL_SKU]][$id] = true;
                 }
@@ -2232,7 +2234,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     private function _customFieldsMapping($rowData)
     {
         foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
-            if (isset($rowData[$fileFieldName])) {
+            if (array_key_exists($fileFieldName, $rowData)) {
                 $rowData[$systemFieldName] = $rowData[$fileFieldName];
             }
         }
@@ -2240,10 +2242,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         $rowData = $this->_parseAdditionalAttributes($rowData);
 
         $rowData = $this->_setStockUseConfigFieldsValues($rowData);
-        if (isset($rowData['status'])) {
-            if (($rowData['status'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) || $rowData['status'] == 'yes') {
+        if (array_key_exists('status', $rowData)
+            && $rowData['status'] != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        ) {
+            if ($rowData['status'] == 'yes') {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
-            } else {
+            } elseif (!empty($rowData['status']) || $this->getRowScope($rowData) == self::SCOPE_DEFAULT) {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
             }
         }
