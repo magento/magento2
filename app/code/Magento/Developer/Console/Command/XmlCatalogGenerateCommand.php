@@ -124,7 +124,9 @@ class XmlCatalogGenerateCommand extends Command
             );
             $matches = [];
             preg_match_all('/schemaLocation="(urn\:magento\:[^"]*)"/i', $content, $matches);
-            $urns = array_merge($urns, $matches[1]);
+            if (isset($matches[1])) {
+                $urns = array_merge($urns, $matches[1]);
+            }
         }
         $urns = array_unique($urns);
         $paths = [];
