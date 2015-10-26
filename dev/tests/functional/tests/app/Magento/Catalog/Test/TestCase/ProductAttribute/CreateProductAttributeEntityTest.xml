@@ -126,6 +126,9 @@
             <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
+            <data name="assertProduct/data/name" xsi:type="string">Product name</data>
+            <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
+            <data name="assertProduct/data/price" xsi:type="string">25</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
@@ -154,10 +157,10 @@
             <data name="productAttribute/data/is_comparable" xsi:type="string">No</data>
             <data name="productAttribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
             <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+            <data name="attributeValue" xsi:type="number">15</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />

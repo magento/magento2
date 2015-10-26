@@ -27,7 +27,7 @@ class AssertCustomerBackendDuplicateErrorMessage extends AbstractConstraint
      */
     public function processAssert(CustomerIndex $customerIndexPage)
     {
-        $actualMessage = $customerIndexPage->getMessagesBlock()->getErrorMessages();
+        $actualMessage = $customerIndexPage->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_SAVE_MESSAGE,
             $actualMessage,
