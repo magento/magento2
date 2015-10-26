@@ -12,24 +12,24 @@ use Magento\Mtf\TestStep\TestStepInterface;
 /**
  * Create product attribute template using handler.
  */
-class CreateProductTemplateStep implements TestStepInterface
+class CreateAttributeSetStep implements TestStepInterface
 {
     /**
      * CatalogAttributeSet fixture.
      *
      * @var string
      */
-    protected $productTemplate;
+    protected $attributeSet;
 
     /**
      * Preparing step properties.
      *
      * @constructor
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      */
-    public function __construct(CatalogAttributeSet $productTemplate)
+    public function __construct(CatalogAttributeSet $attributeSet)
     {
-        $this->productTemplate = $productTemplate;
+        $this->attributeSet = $attributeSet;
     }
 
     /**
@@ -39,8 +39,8 @@ class CreateProductTemplateStep implements TestStepInterface
      */
     public function run()
     {
-        $this->productTemplate->persist();
+        $this->attributeSet->persist();
 
-        return ['productTemplate' => $this->productTemplate];
+        return ['attributeSet' => $this->attributeSet];
     }
 }
