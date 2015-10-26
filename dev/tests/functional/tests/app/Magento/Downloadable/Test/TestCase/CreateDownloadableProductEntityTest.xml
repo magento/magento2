@@ -276,7 +276,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation15">
             <data name="description" xsi:type="string">Create product with tier price</data>
