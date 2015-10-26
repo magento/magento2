@@ -1426,7 +1426,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
-                $this->websitesCache[$rowSku] = [];
+                if (!array_key_exists($rowSku, $this->websitesCache)) {
+                    $this->websitesCache[$rowSku] = [];
+                }
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
                     $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
