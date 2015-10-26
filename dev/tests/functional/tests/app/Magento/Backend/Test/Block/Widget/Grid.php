@@ -189,7 +189,7 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
-     *  Selector for confirm.
+     * Selector for confirm.
      *
      * @var string
      */
