@@ -7,7 +7,6 @@
 namespace Magento\ProductVideo\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
-use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Attribute Media Resource decorator
