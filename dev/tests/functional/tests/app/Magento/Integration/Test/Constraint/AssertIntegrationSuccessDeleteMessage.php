@@ -28,7 +28,7 @@ class AssertIntegrationSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(IntegrationIndex $integrationIndexPage, Integration $integration)
     {
         $expectedMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, $integration->getName());
-        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
