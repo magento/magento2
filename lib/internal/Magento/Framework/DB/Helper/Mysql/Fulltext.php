@@ -68,6 +68,8 @@ class Fulltext
 
         $expression = $this->connection->quote($expression);
 
+        $expression = str_replace('%', '\\%', $expression);
+
         $condition = self::MATCH . " ({$columns}) " . self::AGAINST . " ({$expression} {$mode})";
         return $condition;
     }
