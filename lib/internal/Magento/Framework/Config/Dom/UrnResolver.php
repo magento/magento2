@@ -77,7 +77,7 @@ class UrnResolver
             if (file_exists($system)) {
                 $filePath = $system;
             } else {
-                throw new LocalizedException(new Phrase('File %system cannot be found', ['system' => $system]));
+                throw new LocalizedException(new Phrase("File '%system' cannot be found", ['system' => $system]));
             }
         }
         return fopen($filePath, "r");
