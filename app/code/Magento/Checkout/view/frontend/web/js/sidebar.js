@@ -53,6 +53,9 @@ define([
                     actions: {
                         confirm: function () {
                             self._removeItem($(event.currentTarget));
+                        },
+                        always: function (event) {
+                            event.stopImmediatePropagation();
                         }
                     }
                 });
