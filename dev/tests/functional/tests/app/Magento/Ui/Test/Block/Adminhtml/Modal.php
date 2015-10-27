@@ -42,6 +42,13 @@ class Modal extends Block
     protected $inputFieldSelector = '[data-role="promptField"]';
 
     /**
+     * Modal overlay selector.
+     *
+     * @var string
+     */
+    protected $modalOverlay = '.modals-overlay';
+
+    /**
      * Press OK on an alert, confirm, prompt a dialog.
      *
      * @return void
@@ -90,5 +97,19 @@ class Modal extends Block
     public function setAlertText($text)
     {
         $this->_rootElement->find($this->inputFieldSelector)->setValue($text);
+    }
+
+    /**
+     * Wait until modal window will disapper.
+     *
+     * @return void
+     */
+    public function waitModalWindowToDisappear()
+    {
+        $this->browser->waitUntil(
+            function () {
+                return $this->browser->find($this->modalOverlay)->isVisible() == false ? true : null;
+            }
+        );
     }
 }
