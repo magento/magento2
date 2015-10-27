@@ -54,6 +54,14 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
     /**
      * {@inheritdoc}
      */
+    public function delete(ProductWebsiteLinkInterface $productLink)
+    {
+        return $this->deleteById($productLink->getSku(), $productLink->getSku());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function deleteById($sku, $websiteId)
     {
         $product = $this->productRepository->get($sku);

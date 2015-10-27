@@ -9,10 +9,10 @@ namespace Magento\Catalog\Api;
 interface ProductWebsiteLinkRepositoryInterface
 {
     /**
-     * Assign a product to the websites
+     * Assign a product to the website
      *
      * @param \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface $productWebsiteLink
-     * @return bool will returned True if assigned
+     * @return bool will returned True if website successfully assigned to product
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
@@ -20,13 +20,23 @@ interface ProductWebsiteLinkRepositoryInterface
     public function save(Data\ProductWebsiteLinkInterface $productWebsiteLink);
 
     /**
-     * Remove the websites assignment from the product by product sku
+     * Remove the website assignment from the product
+     *
+     * @param \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface $productWebsiteLink
+     * @return bool will returned True if website successfully unassigned from product
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function delete(Data\ProductWebsiteLinkInterface $productWebsiteLink);
+
+    /**
+     * Remove the website assignment from the product by product sku
      *
      * @param string $sku
      * @param int $websiteId
-     * @return bool will returned True if websites successfully unassigned from product
+     * @return bool will returned True if website successfully unassigned from product
      *
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function deleteById($sku, $websiteId);
 }
