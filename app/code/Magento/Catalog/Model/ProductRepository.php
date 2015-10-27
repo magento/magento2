@@ -586,7 +586,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
-            $product->save();
+            $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
                 $exception->getAttributeCode(),
