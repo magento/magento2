@@ -60,7 +60,7 @@ class DeploymentConfig
      *
      * @param string $key
      * @param mixed $defaultValue
-     * @return array|null
+     * @return mixed|null
      */
     public function get($key = null, $defaultValue = null)
     {
