@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Braintree\Block\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $storedCards = $this->helper('\Magento\Braintree\Helper\Createorder')->getLoggedInCustomerCards();
 $useVault = $block->useVault();
 $useCvv = $block->useCvv();
