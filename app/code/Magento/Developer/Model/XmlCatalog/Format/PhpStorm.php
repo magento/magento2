@@ -9,6 +9,7 @@ namespace Magento\Developer\Model\XmlCatalog\Format;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class PhpStormNine generates URN catalog for PhpStorm 9

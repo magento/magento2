@@ -27,12 +27,12 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([]));
-        $urnResolverMock = $this->getMock('\Magento\Framework\Config\Dom\UrnResolver',  [], [], '', false);
+        $urnResolverMock = $this->getMock('\Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
             ->will($this->returnValue($fixtureXmlFile));
-        $phpstormFormatMock = $this->getMock('\Magento\Developer\Model\XmlCatalog\Format\PhpStorm',  [], [], '', false);
+        $phpstormFormatMock = $this->getMock('\Magento\Developer\Model\XmlCatalog\Format\PhpStorm', [], [], '', false);
         $phpstormFormatMock->expects($this->once())
             ->method('generateCatalog')
             ->with(
@@ -41,8 +41,8 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnValue(null));
 
         $formats = ['phpstorm' => $phpstormFormatMock];
-        $filesystem = $this->getMock('Magento\Framework\Filesystem',  [], [], '', false);
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface',  [], [], '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
 
         $content = file_get_contents($fixtureXmlFile);
 
@@ -58,12 +58,12 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->will($this->returnValue($readDirMock));
 
-        $currDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface',  [], [], '', false);
+        $currDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
         $currDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with($this->equalTo('test'))
             ->will($this->returnValue('test_absolute_path'));
-        $readDirFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory',  [], [], '', false);
+        $readDirFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $readDirFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($currDirMock));
