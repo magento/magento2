@@ -48,6 +48,7 @@ class ExternalVideoEntryProcessor
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+     * @param \Magento\ProductVideo\Model\ResourceModel\Video $videoResourceModel
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery,
