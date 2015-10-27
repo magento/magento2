@@ -3,9 +3,3 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine Off
 </IfModule>
-
-<IfModule mod_headers.c>
-    ############################################
-    ## prevent clickjacking
-    Header set X-Frame-Options SAMEORIGIN
-</IfModule>

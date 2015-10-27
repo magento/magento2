@@ -28,4 +28,6 @@ HTML;
 $handler = new \Magento\Framework\App\ErrorHandler();
 set_error_handler([$handler, 'handler']);
 
+header('X-Frame-Options: SAMEORIGIN');
+
 \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
