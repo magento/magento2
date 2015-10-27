@@ -46,6 +46,9 @@
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Repository">
+        <plugin name="filterDataForApi" type="Magento\Catalog\Model\Plugin\Api\FilterCustomAttribute" />
+    </type>
     <type name="Magento\Indexer\Model\Indexer\State">
         <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
     </type>
