@@ -16,7 +16,7 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
-    public function setUp()
+    public function testExecuteBadType()
     {
         $fixtureXmlFile = __DIR__ . '/_files/test.xml';
 
@@ -75,10 +75,7 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
             $readDirFactory,
             $formats
         );
-    }
 
-    public function testExecuteBadType()
-    {
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([XmlCatalogGenerateCommand::IDE_FILE_PATH_ARGUMENT => 'test']);
         $this->assertEquals('', $commandTester->getDisplay());

@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
- * Class PhpStormNine generates URN catalog for PhpStorm 9
+ * Class PhpStorm generates URN catalog for PhpStorm 9
  */
 class PhpStorm implements FormatInterface
 {
@@ -42,17 +42,17 @@ class PhpStorm implements FormatInterface
      * Generate Catalog of URNs for the PhpStorm 9
      *
      * @param string[] $dictionary
-     * @param string $path
+     * @param string $configFile absolute path to the PhpStorm misc.xml
      * @return void
      */
-    public function generateCatalog(array $dictionary, $path)
+    public function generateCatalog(array $dictionary, $configFile)
     {
         $componentNode = null;
         $projectNode = null;
-        $path = $this->currentDirRead->getRelativePath($path);
-        if ($this->currentDirRead->isExist($path) && $this->currentDirRead->isFile($path)) {
+        $configFile = $this->currentDirRead->getRelativePath($configFile);
+        if ($this->currentDirRead->isExist($configFile) && $this->currentDirRead->isFile($configFile)) {
             $dom = new \DOMDocument();
-            $dom->load($path);
+            $dom->load($configFile);
             $xpath = new \DOMXPath($dom);
             $nodeList = $xpath->query('/project');
             $projectNode = $nodeList->item(0);
@@ -87,6 +87,6 @@ class PhpStorm implements FormatInterface
             $componentNode->appendChild($node);
         }
         $dom->formatOutput = true;
-        $this->currentDirWrite->writeFile($path, $dom->saveXML());
+        $this->currentDirWrite->writeFile($configFile, $dom->saveXML());
     }
 }

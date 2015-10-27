@@ -11,6 +11,7 @@ namespace Magento\Framework\Config\Dom;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 
 class UrnResolver
@@ -20,43 +21,37 @@ class UrnResolver
      *
      * @param string $schema
      * @return string
-     * @throws \UnexpectedValueException
+     * @throws NotFoundException
      */
     public function getRealPath($schema)
     {
-        $componentRegistrar = new ComponentRegistrar();
-        if (substr($schema, 0, 4) == 'urn:') {
-            // resolve schema location
-            $urnParts = explode(':', $schema);
-            if ($urnParts[2] == 'module') {
-                // urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
-                // 0 : urn, 1: magento, 2: module, 3: Magento_Catalog, 4: etc/catalog_attributes.xsd
-                // moduleName -> Magento_Catalog
-                $schemaPath = $componentRegistrar->getPath(
-                    ComponentRegistrar::MODULE,
-                    $urnParts[3]
-                ) . '/' . $urnParts[4];
-            } else if (strpos($urnParts[2], 'framework') === 0) {
-                // urn:magento:framework:Module/etc/module.xsd
-                // 0: urn, 1: magento, 2: framework, 3: Module/etc/module.xsd
-                // libaryName -> magento/framework
-                $libraryName = $urnParts[1] . '/' . $urnParts[2];
-                $schemaPath = $componentRegistrar->getPath(
-                    ComponentRegistrar::LIBRARY,
-                    $libraryName
-                ) . '/' . $urnParts[3];
-            } else {
-                throw new \UnexpectedValueException("Unsupported format of schema location: " . $schema);
-            }
-            if (!empty($schemaPath) && file_exists($schemaPath)) {
-                $schema = $schemaPath;
-            } else {
-                throw new \UnexpectedValueException(
-                    "Could not locate schema: '" . $schema . "' at '" . $schemaPath . "'"
-                );
-            }
+        if (strpos($schema, 'urn:') !== 0) {
+            return $schema;
         }
-        return $schema;
+
+        $componentRegistrar = new ComponentRegistrar();
+        $matches = [];
+        $modulePattern = '/urn:(?<vendor>([a-zA-Z]*)):module:(?<module>([A-Za-z\_]*)):(?<path>(.+))/';
+        $frameworkPattern = '/urn:(?<vendor>([a-zA-Z]*)):(?<framework>(framework[A-Za-z\-]*)):(?<path>(.+))/';
+        if (preg_match($modulePattern, $schema, $matches)) {
+            //urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
+            $package = $componentRegistrar
+                ->getPath(ComponentRegistrar::MODULE, $matches['module']);
+        } else if (preg_match($frameworkPattern, $schema, $matches)) {
+            //urn:magento:framework:Module/etc/module.xsd
+            //urn:magento:framework-amqp:Module/etc/module.xsd
+            $package = $componentRegistrar
+                ->getPath(ComponentRegistrar::LIBRARY, $matches['vendor'] . '/' . $matches['framework']);
+        } else {
+            throw new NotFoundException(__("Unsupported format of schema location: '%1'", $schema));
+        }
+        $schemaPath = $package . '/' . $matches['path'];
+        if (empty($package) || !file_exists($schemaPath)) {
+            throw new NotFoundException(
+                __("Could not locate schema: '%1' at '%2'", $schema, $schemaPath)
+            );
+        }
+        return $schemaPath;
     }
 
     /**
