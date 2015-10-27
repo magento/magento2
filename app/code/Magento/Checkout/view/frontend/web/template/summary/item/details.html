@@ -12,7 +12,7 @@
 
     <div class="product-item-inner">
         <div class="product-item-name-block">
-            <strong class="product-item-name" data-bind="i18n: $parent.name"></strong>
+            <strong class="product-item-name" data-bind="text: $parent.name"></strong>
             <div class="details-qty">
                 <span class="label"><!-- ko i18n: 'Qty' --><!-- /ko --></span>
                 <span class="value" data-bind="text: $parent.qty"></span>
@@ -30,7 +30,7 @@
             <strong class="subtitle"><!-- ko i18n: 'Options Details' --><!-- /ko --></strong>
             <dl class="item-options">
                 <!--ko foreach: JSON.parse($parent.options)-->
-                <dt class="label" data-bind="i18n: label"></dt>
+                <dt class="label" data-bind="text: label"></dt>
                     <!-- ko if: ($data.full_view)-->
                     <dd class="values" data-bind="html: full_view"></dd>
                     <!-- /ko -->
