@@ -119,36 +119,4 @@ angular.module('web-configuration', ['ngStorage'])
                 $scope.webconfig.submitted = false;
             }
         });
-    }])
-    .factory('redisFactory', function($http) {
-        var hasRedisExtension = function() {
-            return $http.get('index.php/web-configuration/has-redis').success(function (data) {
-                return data;
-            })
-        }
-        return { hasRedisExtension: hasRedisExtension }
-    })
-    .directive('checkRedis', ['redisFactory', function (redisFactory) {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function (scope, element, attrs, ngModel) {
-            var validator = function(value){
-                if (value === 'redis') {
-                    var ajaxPromise = redisFactory.hasRedisExtension();
-                    ajaxPromise.then(function(result) {
-                        ngModel.$setValidity('checkRedis', result.data.hasRedis);
-                        scope.validate();
-                    })
-                } else {
-                    ngModel.$setValidity('checkRedis', true);
-                    scope.validate();
-                }
-                return value;
-            };
-
-            ngModel.$parsers.unshift(validator);
-            ngModel.$formatters.unshift(validator);
-        }
-    };
-}]);
+    }]);
