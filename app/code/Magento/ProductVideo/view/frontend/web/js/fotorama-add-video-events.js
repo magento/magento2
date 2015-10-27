@@ -173,7 +173,7 @@ define([
                     tmpVideoData.provider = dataUrl.type;
                 }
                 iPlace = i + 1;
-                if(tmpVideoData.isBase) {
+                if (tmpVideoData.isBase) {
                     videoData.unshift(tmpVideoData);
                     continue;
                 }
