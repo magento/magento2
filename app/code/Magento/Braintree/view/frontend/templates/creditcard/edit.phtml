@@ -9,8 +9,8 @@
 /** @var $block \Magento\Braintree\Block\Creditcard\Management */
 
 echo $block->getLayout()->getMessagesBlock()->getGroupedHtml();
-$defaultExpMonth = $block->getTodayMonth();
-$defaultExpYear = $block->getTodayYear();
+$defaultExpMonth = '';
+$defaultExpYear = '';
 $countrySpecificCardTypeConfig = $block->getCountrySpecificCardTypeConfig();
 $applicableCardTypeConfig = $block->getCcApplicableTypes();
 if ($block->isEditMode()) {

@@ -58,19 +58,6 @@ define([
         },
 
         /**
-         * Extends instance with defaults, extends config with formatted values
-         *     and options, and invokes initialize method of AbstractElement class.
-         *
-         * @returns {Object} Chainable
-         */
-        initialize: function () {
-            this._super()
-                .initOptions();
-
-            return this;
-        },
-
-        /**
          * Parses options and merges the result with instance
          *
          * @param  {Object} config
