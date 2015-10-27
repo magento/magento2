@@ -21,3 +21,6 @@ Layouts,Layouts
 "Paths to pre-processed view files (e.g, CSS files with fixed paths or generated from LESS files).","Paths to pre-processed view files (e.g, CSS files with fixed paths or generated from LESS files)."
 "Collections Data","Collections Data"
 "Collection data files.","Collection data files."
+"All Stores","All Stores"
+"Other Settings","Other Settings"
+Attribute,Attribute
