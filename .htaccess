@@ -103,6 +103,12 @@
 
 </IfModule>
 
+############################################
+## workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+############################################
+
 <IfModule mod_rewrite.c>
 
 ############################################
