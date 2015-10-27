@@ -255,9 +255,9 @@ class Template extends AbstractBlock
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
-            $fileName = $fileName ?: $this->getTemplate();
+            $templatePath = $fileName ?: $this->getTemplate();
             $this->_logger->critical(
-                "Invalid template file: '{$fileName}' in module: '{$this->getModuleName()}'"
+                "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
                 . " block's name: '{$this->getNameInLayout()}'"
             );
         }
