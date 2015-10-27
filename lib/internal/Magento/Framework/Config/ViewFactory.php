@@ -31,7 +31,7 @@ class ViewFactory
     {
         return $this->objectManager->create(
             'Magento\Framework\Config\View',
-            ['configFiles' => $configFiles]
+            ['fileList' => $configFiles]
         );
     }
 }
