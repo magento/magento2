@@ -58,14 +58,12 @@ define([
             var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
             if (productType.type.current === 'configurable') {
                 suggestContainer.addClass('disabled').prop('disabled', true);
-                this.$block.prop('disabled', false);
                 $('#inventory_qty').prop('disabled', true);
                 $('#inventory_stock_availability').removeProp('disabled');
                 this._setElementDisabled($('#qty'), true, true);
                 this._setElementDisabled($('#quantity_and_stock_status'), false, false);
             } else {
                 suggestContainer.removeClass('disabled').removeProp('disabled');
-                this.$block.prop('disabled', true);
                 $('#inventory_qty').removeProp('disabled');
                 $('#inventory_stock_availability').prop('disabled', true);
                 this._setElementDisabled($('#quantity_and_stock_status'), true, false);
