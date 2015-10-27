@@ -48,7 +48,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
         if ($category->getUrlKey() !== false) {
-            $category->setUrlKey($this->categoryUrlPathGenerator->generateUrlKey($category))
+            $category->setUrlKey($this->categoryUrlPathGenerator->getUrlKey($category))
                 ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             if (!$category->isObjectNew()) {
                 $category->getResource()->saveAttribute($category, 'url_path');
@@ -105,7 +105,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      */
     protected function updateUrlPathForCategory(Category $category)
     {
-        $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         $category->getResource()->saveAttribute($category, 'url_path');
     }

@@ -74,7 +74,7 @@ class CategoryUrlPathGenerator
         }
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
             $parentPath = $this->getUrlPath(
-                $this->categoryRepository->get($category->getParentId(),$category->getStoreId())
+                $this->categoryRepository->get($category->getParentId(), $category->getStoreId())
             );
             $path = $parentPath === '' ? $path : $parentPath . '/' . $path;
         }
@@ -143,7 +143,7 @@ class CategoryUrlPathGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @return string
      */
-    public function generateUrlKey($category)
+    public function getUrlKey($category)
     {
         $urlKey = $category->getUrlKey();
         return $category->formatUrlKey($urlKey === '' || $urlKey === null ? $category->getName() : $urlKey);
