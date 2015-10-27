@@ -12,17 +12,18 @@ use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Zend_Db_Expr;
 
 class Match implements QueryInterface
 {
-    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%';
+    const SPECIAL_CHARACTERS = '-+~/\<>\'":*$#@()!,.?`=%^';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
 
     /**
      * @var string[]
      */
-    private $replaceSymbols = [];
+    private $pattern = [];
 
     /**
      * @var ResolverInterface
@@ -50,7 +51,12 @@ class Match implements QueryInterface
         $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN
     ) {
         $this->resolver = $resolver;
-        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
+        $characters = str_split(self::SPECIAL_CHARACTERS, 1);
+        foreach ($characters as $key => $value) {
+            $characters[$key] = "\\{$value}";
+        }
+        $characters = implode('', $characters);
+        $this->pattern = $characters = "/([{$characters}])/";
         $this->fulltextHelper = $fulltextHelper;
         $this->fulltextSearchMode = $fulltextSearchMode;
     }
@@ -85,7 +91,7 @@ class Match implements QueryInterface
 
         $matchQuery = $this->fulltextHelper->getMatchQuery(
             $columns,
-            $queryValue,
+            new Zend_Db_Expr($queryValue),
             $this->fulltextSearchMode
         );
         $scoreBuilder->addCondition($matchQuery, true);
@@ -106,7 +112,7 @@ class Match implements QueryInterface
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
-        $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
+        $queryValue = preg_replace($this->pattern, '\\\\$1', $queryValue);
 
         $stringPrefix = '';
         if ($conditionType === BoolExpression::QUERY_CONDITION_MUST) {

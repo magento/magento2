@@ -90,8 +90,7 @@ class Cleaner
                 }
                 break;
             case QueryInterface::TYPE_MATCH:
-                if (preg_match('/\$(.+)\$/si', $query['value'], $matches)
-                    && !preg_match('/^\$+$/si', $query['value'], $matches)) {
+                if (!array_key_exists('is_bind', $query)) {
                     unset($this->requestData['queries'][$queryName]);
                 }
                 break;
@@ -131,8 +130,9 @@ class Cleaner
                 foreach ($this->requestData['aggregations'] as $aggregationName => $aggregationValue) {
                     switch ($aggregationValue['type']) {
                         case 'dynamicBucket':
-                            if (is_string($aggregationValue['method'])
-                                && preg_match('/\$(.+)\$/si', $aggregationValue['method'])
+                            if (
+                                !array_key_exists('is_bind', $aggregationValue)
+                                && is_string($aggregationValue['method'])
                             ) {
                                 unset($this->requestData['aggregations'][$aggregationName]);
                             }
