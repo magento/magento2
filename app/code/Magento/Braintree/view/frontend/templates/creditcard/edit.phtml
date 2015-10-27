@@ -9,8 +9,8 @@
 /** @var $block \Magento\Braintree\Block\Creditcard\Management */
 
 echo $block->getLayout()->getMessagesBlock()->getGroupedHtml();
-$defaultExpMonth = $block->getTodayMonth();
-$defaultExpYear = $block->getTodayYear();
+$defaultExpMonth = '';
+$defaultExpYear = '';
 $countrySpecificCardTypeConfig = $block->getCountrySpecificCardTypeConfig();
 $applicableCardTypeConfig = $block->getCcApplicableTypes();
 if ($block->isEditMode()) {
@@ -328,7 +328,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
             </label>
 
             <div class="control">
-                <?php echo $block->escapeHtml($block->countrySelect('credit_card[billing_address][country_code_alpha2]', 'billing_address_country', $default)); ?>
+                <?php /* @noEscape */ echo $block->countrySelect('credit_card[billing_address][country_code_alpha2]', 'billing_address_country', $default); ?>
             </div>
         </div>
     </fieldset>
