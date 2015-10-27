@@ -47,7 +47,6 @@ define([
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
-            mouseSenvity: null,
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
@@ -389,7 +388,6 @@ define([
                 if (this.hoverElIndex() !== this.options().length - 1) {
                     this.hoverElIndex(this.hoverElIndex() + 1);
                 } else {
-                    this.mouseSenvity = 0;
                     this.hoverElIndex(0);
                 }
             } else {
