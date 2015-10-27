@@ -20,6 +20,10 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 
+/**
+ * Class XmlCatalogGenerateCommand Generates dictionary of URNs for the IDE
+ * @SuppressWarnings("PMD.CouplingBetweenObjects")
+ */
 class XmlCatalogGenerateCommand extends Command
 {
     /**
