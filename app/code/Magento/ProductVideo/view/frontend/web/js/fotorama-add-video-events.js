@@ -138,11 +138,12 @@ define([
          * @private
          */
         _createVideoData: function (inputData, isJSON) {
-            var videoData = {},
+            var videoData = [],
                 dataUrl,
                 tmpVideoData,
                 tmpInputData,
-                i;
+                i,
+                iPlace;
 
             if (isJSON) {
                 inputData = $.parseJSON(inputData);
@@ -171,10 +172,14 @@ define([
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
                 }
+                iPlace = i + 1;
+                if(tmpVideoData.isBase) {
+                    videoData.unshift(tmpVideoData);
+                    continue;
+                }
 
-                videoData[i] = tmpVideoData;
+                videoData.push(tmpVideoData);
             }
-
             return videoData;
         },
 
