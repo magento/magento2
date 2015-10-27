@@ -45,7 +45,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         $links = [];
 
         /** @var \Magento\Catalog\Model\Product $product */
-        foreach ($products->getItems() as $productId => $product) {
+        foreach ($products->getItems() as $product) {
             /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface $link */
             $link = $this->productLinkFactory->create();
             $link->setSku($product->getSku())
