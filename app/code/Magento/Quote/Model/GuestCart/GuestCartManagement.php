@@ -12,7 +12,6 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote\Address;
 
 /**
  * Cart Management class for guest carts.
@@ -37,28 +36,20 @@ class GuestCartManagement implements GuestCartManagementInterface
     protected $cartRepository;
 
     /**
-     * @var \Magento\Quote\Model\Quote\AddressFactory
-     */
-    protected $quoteAddressFactory;
-
-    /**
      * Initialize dependencies.
      *
      * @param CartManagementInterface $quoteManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory
      * @param CartRepositoryInterface $cartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         CartRepositoryInterface $cartRepository
     ) {
         $this->quoteManagement = $quoteManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->cartRepository = $cartRepository;
     }
 
@@ -70,15 +61,6 @@ class GuestCartManagement implements GuestCartManagementInterface
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create();
         $cartId = $this->quoteManagement->createEmptyCart();
-
-        /** @var \Magento\Quote\Model\Quote  $cart */
-        $cart = $this->cartRepository->get($cartId);
-        $billingAddress = $this->quoteAddressFactory->create()->setAddressType(Address::TYPE_BILLING);
-        $cart->addAddress($billingAddress);
-        $shippingAddress = $this->quoteAddressFactory->create()->setAddressType(Address::TYPE_SHIPPING);
-        $cart->addAddress($shippingAddress);
-        $cart->save();
-
         $quoteIdMask->setQuoteId($cartId)->save();
         return $quoteIdMask->getMaskedId();
     }
