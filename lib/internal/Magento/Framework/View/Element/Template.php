@@ -259,7 +259,7 @@ class Template extends AbstractBlock
             $blockClass = $this->getData()['type'] ?: '';
             $this->_logger->critical(
                 "Invalid template file: '{$fileName}' in module: '{$this->getModuleName()}'"
-                 . " block's name: '{$this->getNameInLayout()}' block's class: '{$blockClass}'"
+                . " block's name: '{$this->getNameInLayout()}' block's class: '{$blockClass}'"
             );
         }
 
