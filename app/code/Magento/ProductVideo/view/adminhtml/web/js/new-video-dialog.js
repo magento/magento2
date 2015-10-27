@@ -61,11 +61,9 @@ define([
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
-            } else
-            if (checkVideoID && checkVideoID === this.options.videoId) {
+            } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
-            } else
-            if (!checkVideoID) {
+            } else if (!checkVideoID) {
                 this._doUpdate();
             }
 
@@ -96,8 +94,7 @@ define([
                     this.options.metaData.data.uploader +
                     '</a>'
                 );
-            } else
-            if (this.options.videoProvider === 'vimeo') {
+            } else if (this.options.videoProvider === 'vimeo') {
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
@@ -885,9 +882,8 @@ define([
             if (
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext.toLowerCase()) === -1 ||
-                !file.files  ||
+                !file.files ||
                 !file.files.length
-
             ) {
                 prev.remove();
                 this._previewImage = null;
@@ -983,7 +979,9 @@ define([
 
             try {
                 newVideoForm.validation('clearError');
-            } catch (e) {}
+            } catch (e) {
+
+            }
             newVideoForm.trigger('reset');
         },
 
