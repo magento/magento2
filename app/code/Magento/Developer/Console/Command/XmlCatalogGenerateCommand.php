@@ -92,9 +92,9 @@ class XmlCatalogGenerateCommand extends Command
                 new InputOption(
                     self::IDE_OPTION,
                     null,
-                    InputOption::VALUE_OPTIONAL,
+                    InputOption::VALUE_REQUIRED,
                     'Format in which catalog will be generated. Supported: ['.
-                        implode(', ', $this->getSupportedFormats()) . ']',
+                    implode(', ', $this->getSupportedFormats()) . ']',
                     'phpstorm'
                 ),
                 new InputArgument(
@@ -154,7 +154,7 @@ class XmlCatalogGenerateCommand extends Command
         if ($formatter = $this->getFormatters($ideName)) {
             $formatter->generateCatalog($urnDictionary, $absolutePath);
         } else {
-            throw new InputException(__("Format for IDE '%ide' is not supported", ['ide' => $ideName]));
+            throw new InputException(__("Format for IDE '%1' is not supported", $ideName));
         }
     }
 
