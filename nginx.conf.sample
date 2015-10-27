@@ -34,13 +34,15 @@ location /setup {
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;
-        add_header X-Frame-Options "SAMEORIGIN"
     }
 
     location ~ ^/setup/(?!pub/). {
         deny all;
     }
-    add_header X-Frame-Options "SAMEORIGIN";
+
+    location ~ ^/setup/pub/ {
+        add_header X-Frame-Options "SAMEORIGIN";
+    }
 }
 
 location /update {
@@ -51,14 +53,16 @@ location /update {
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;
-        add_header X-Frame-Options "SAMEORIGIN"
     }
 
     # deny everything but index.php
     location ~ ^/update/(?!pub/). {
         deny all;
     }
-    add_header X-Frame-Options "SAMEORIGIN"
+
+    location ~ ^/update/pub/ {
+        add_header X-Frame-Options "SAMEORIGIN";
+    }
 }
 
 location / {
@@ -79,7 +83,7 @@ location /static/ {
     }
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
-        add_header X-Frame-Options "SAMEORIGIN"
+        add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
 
         if (!-f $request_filename) {
@@ -88,7 +92,7 @@ location /static/ {
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
-        add_header X-Frame-Options "SAMEORIGIN"
+        add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
 
         if (!-f $request_filename) {
@@ -110,13 +114,13 @@ location /media/ {
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
-        add_header X-Frame-Options "SAMEORIGIN"
+        add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
         try_files $uri $uri/ /get.php?$args;
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
-        add_header X-Frame-Options "SAMEORIGIN"
+        add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
         try_files $uri $uri/ /get.php?$args;
     }
