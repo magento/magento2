@@ -105,6 +105,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      */
     protected function updateUrlPathForCategory(Category $category)
     {
+        $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         $category->getResource()->saveAttribute($category, 'url_path');
     }
