@@ -125,17 +125,16 @@ class FilePermissions
      */
     private function checkRecursiveDirectories($directory)
     {
-        $flag = true;
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory),
             \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
         );
         foreach ($directoryIterator as $subDirectory) {
             if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
-                $flag = false;
+                return false;
             }
         }
-        return $flag;
+        return true;
     }
 
     /**
