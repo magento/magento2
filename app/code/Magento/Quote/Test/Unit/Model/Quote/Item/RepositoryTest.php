@@ -7,8 +7,6 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-use Magento\Quote\Api\CartItemRepositoryInterface;
-
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -384,7 +382,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $itemId = 5;
         $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $cartItemProcessorMock = $this->getMock('\Magento\Quote\Model\Quote\Item\CartItemProcessorInterface');
-        $this->repository = new Repository(
+        $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,

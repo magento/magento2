@@ -8,6 +8,7 @@ namespace Magento\Backend\Test\Unit\Model\Session;
 /**
  * Class QuoteTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
