@@ -49,6 +49,7 @@ class Module implements
                 $headers->addHeaderLine('Cache-Control', 'no-cache, no-store, must-revalidate');
                 $headers->addHeaderLine('Pragma', 'no-cache');
                 $headers->addHeaderLine('Expires', '1970-01-01');
+                $headers->addHeaderLine('X-Frame-Options: SAMEORIGIN');
             }
         }
     }
