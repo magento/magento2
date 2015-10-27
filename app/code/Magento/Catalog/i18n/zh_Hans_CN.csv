@@ -161,6 +161,8 @@ Empty,空
 "Add New Attribute Set",添加新属性集
 "Add New Set",添加新集
 "Attribute Sets","Attribute Sets"
+"Product Templates","Product Templates"
+"Product Template","Product Template"
 "Close Window",关闭窗口
 "New Product",新产品
 "Save & Edit","Save & Edit"
@@ -281,6 +283,7 @@ Categories,分类
 "You saved the attribute set.","You saved the attribute set."
 "An error occurred while saving the attribute set.",保存属性集时发生错误。
 "New Attribute Set","New Attribute Set"
+"New Product Template","New Product Template"
 "The attribute set has been removed.","The attribute set has been removed."
 "An error occurred while deleting this set.","An error occurred while deleting this set."
 "Search Terms","Search Terms"
