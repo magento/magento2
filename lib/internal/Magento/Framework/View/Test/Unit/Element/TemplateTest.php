@@ -130,11 +130,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $templateFile = 'wrong_template_path.pthml';
         $moduleName = 'Acme';
         $blockName = 'acme_test_module_test_block';
-        $blockClass = 'Acme\TestModule\Block\Form';
         $exception = "Invalid template file: '{$templateFile}' in module: '{$moduleName}'"
-            . " block's name: '$blockName' block's class: '{$blockClass}'";
+            . " block's name: '{$blockName}'";
         $this->_block->setTemplate($templateFile);
-        $this->_block->setData('type', $blockClass);
         $this->_block->setData('module_name', $moduleName);
         $this->_block->setNameInLayout($blockName);
         $this->_validator->expects($this->once())
