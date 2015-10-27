@@ -882,7 +882,7 @@ define([
             if (
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext.toLowerCase()) === -1 ||
-                !file.files  ||
+                !file.files ||
                 !file.files.length
             ) {
                 prev.remove();
