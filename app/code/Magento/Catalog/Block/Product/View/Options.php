@@ -162,7 +162,7 @@ class Options extends \Magento\Framework\View\Element\Template
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getPrice(false), false, false),
+                    'amount' => $optionPrice,
                     'adjustments' => [],
                 ],
                 'basePrice' => [

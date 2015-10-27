@@ -11,7 +11,7 @@
  */
 namespace Magento\Newsletter\Model\Template;
 
-class Filter extends \Magento\Widget\Model\Template\Filter
+class Filter extends \Magento\Widget\Model\Template\FilterEmulate
 {
     /**
      * Generate widget HTML if template variables are assigned
