@@ -104,6 +104,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
+        $quoteItem->setConvertedPrice(null);
         $originalPrice = $product->getPrice();
         if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
             $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
