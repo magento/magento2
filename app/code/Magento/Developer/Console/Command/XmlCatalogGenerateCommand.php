@@ -114,9 +114,10 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * Get an array of URNs
      *
+     * @param OutputInterface $output
      * @return array
      */
-    private function getUrnDictionary()
+    private function getUrnDictionary(OutputInterface $output)
     {
         $files = $this->filesUtility->getXmlCatalogFiles('*.xml');
         $files = array_merge($files, $this->filesUtility->getXmlCatalogFiles('*.xsd'));
@@ -139,6 +140,9 @@ class XmlCatalogGenerateCommand extends Command
                 $paths[$urn] = $this->urnResolver->getRealPath($urn);
             } catch (\Exception $e) {
                 // don't add unsupported element to array
+                if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                    $output->writeln($e->getMessage());
+                }
             }
         }
         return $paths;
@@ -154,7 +158,7 @@ class XmlCatalogGenerateCommand extends Command
         $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
         $absolutePath = $this->currentDirRead->getAbsolutePath($ideFilePath);
 
-        $urnDictionary = $this->getUrnDictionary();
+        $urnDictionary = $this->getUrnDictionary($output);
         if ($formatter = $this->getFormatters($ideName)) {
             $formatter->generateCatalog($urnDictionary, $absolutePath);
         } else {

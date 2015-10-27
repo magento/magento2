@@ -15,8 +15,8 @@ interface FormatInterface
      * Generate Catalog of URNs
      *
      * @param string[] $dictionary
-     * @param string $path
+     * @param string $configFile absolute path to the file to write the catalog
      * @return void
      */
-    public function generateCatalog(array $dictionary, $path);
+    public function generateCatalog(array $dictionary, $configFile);
 }
