@@ -876,6 +876,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Map equal and not equal conditions to in and not in
+     *
      * @param $conditionType
      * @return mixed
      */
