@@ -34,18 +34,18 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\ProductVideo\Helper\Media $mediaHelper,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\ProductVideo\Helper\Media $mediaHelper,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -269,11 +269,10 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     protected function getNoteVideoUrl()
     {
         $result = __('YouTube and Vimeo supported.');
-        if (is_null($this->mediaHelper->getYouTubeApiKey())) {
+        if ($this->mediaHelper->getYouTubeApiKey() === null) {
             $result = __(
                 'Vimeo supported.<br />'
-                . 'To add YouTube video, please <a href="%1">enter YouTube API Key</a> first.'
-                ,
+                . 'To add YouTube video, please <a href="%1">enter YouTube API Key</a> first.',
                 $this->getConfigApiKeyUrl()
             );
         }
