@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
+
 /**
  * Application deployment configuration
  */
@@ -38,13 +40,6 @@ class DeploymentConfig
      * @var array
      */
     private $overrideData;
-
-    /**
-     * Availability of deployment config file
-     *
-     * @var bool
-     */
-    private $isAvailable;
 
     /**
      * Constructor
@@ -85,7 +80,7 @@ class DeploymentConfig
     {
         $this->data = null;
         $this->load();
-        return $this->isAvailable;
+        return isset($this->flatData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE]);
     }
 
     /**
@@ -128,7 +123,6 @@ class DeploymentConfig
     {
         if (null === $this->data) {
             $this->data = $this->reader->load();
-            $this->isAvailable = !empty($this->data);
             if ($this->overrideData) {
                 $this->data = array_replace($this->data, $this->overrideData);
             }
