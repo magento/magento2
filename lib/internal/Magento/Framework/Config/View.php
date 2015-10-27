@@ -12,7 +12,7 @@ namespace Magento\Framework\Config;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
-class View extends \Magento\Framework\Config\AbstractXml
+class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /** @var UrnResolver */
     protected $urnResolver;
@@ -32,14 +32,20 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     private $xsdReader;
 
+    private $data;
+
     /**
-     * @param array $configFiles
+     * @param array $fileList
      * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
      * @param array $xpath
      */
     public function __construct(
-        $configFiles,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        \Magento\Framework\Config\ConverterInterface $converter,
+        \Magento\Framework\Config\SchemaLocator $schemaLocator,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
+        $fileList,
         UrnResolver $urnResolver,
         TypeDataExtractorPool $extractorPool,
         $xpath = []
@@ -47,7 +53,18 @@ class View extends \Magento\Framework\Config\AbstractXml
         $this->xpath = $xpath;
         $this->extractorPool = $extractorPool;
         $this->urnResolver = $urnResolver;
-        parent::__construct($configFiles);
+        //parent::__construct($fileList);
+        $idAttributes = $this->_getIdAttributes();
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            'view.xml',
+            $idAttributes
+        );
+        //$test = $this->_readFiles($fileList);
+        $this->data = $this->getExtractedData($fileList);
     }
 
     /**
@@ -60,6 +77,18 @@ class View extends \Magento\Framework\Config\AbstractXml
         return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
     }
 
+    public function getExtractedData($fileList)
+    {
+        $test = $this->getMergedConfig($fileList);
+        $test2 = $this->extractData($test);
+        return $test2;
+    }
+
+    public function getMergedConfig($fileList)
+    {
+        return $this->_readFiles($fileList);
+    }
+
     /**
      * Extract configuration data from the DOM structure
      *
@@ -67,7 +96,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _extractData(\DOMDocument $dom)
+    protected function _extractData2(\DOMDocument $dom)
     {
         $result = [];
         /** @var $varsNode \DOMElement */
@@ -96,6 +125,42 @@ class View extends \Magento\Framework\Config\AbstractXml
                         }
                     }
                     break;
+            }
+        }
+        return $result;
+    }
+
+    protected function extractData(array $dom)
+    {
+        $result = [];
+        /** @var $varsNode \DOMElement */
+        foreach ($dom['view'][0] as $key => $childNode) {
+            switch ($key) {
+                case 'vars':
+                    //$moduleName = $childNode->getAttribute('module');
+                    $moduleName = $childNode[$key][0]['@attributes']['module'];
+                    //$result[$childNode->tagName][$moduleName] = $this->parseVarElement($childNode);
+                    $result[$key][$moduleName] = 'test';
+                    break;
+//                case 'exclude':
+//                    /** @var $itemNode \DOMElement */
+//                    foreach ($childNode->getElementsByTagName('item') as $itemNode) {
+//                        $itemType = $itemNode->getAttribute('type');
+//                        $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
+//                    }
+//                    break;
+//                case 'media':
+//                    foreach ($childNode->childNodes as $mediaNode) {
+//                        if ($mediaNode instanceof \DOMElement) {
+//                            $mediaNodesArray =
+//                                $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
+//                                    $mediaNode,
+//                                    $childNode->tagName
+//                                );
+//                            $result = array_merge_recursive($result, $mediaNodesArray);
+//                        }
+//                    }
+//                    break;
             }
         }
         return $result;
