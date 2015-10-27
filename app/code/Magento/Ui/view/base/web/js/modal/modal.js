@@ -78,8 +78,8 @@ define([
                 /**
                  * Default action on button click
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }]
         },
