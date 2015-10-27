@@ -6,11 +6,10 @@
 
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Developer\Console\Command\CssDeployCommand;
+use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 
 /**
  * A class to manage Magento modes
@@ -137,9 +136,10 @@ class Filesystem
         $themeLocalePairs = $this->storeView->retrieveThemeLocalePairs();
         foreach ($themeLocalePairs as $themeLocalePair) {
             $theme = $themeLocalePair['theme'] ?: self::DEFAULT_THEME;
-            $cmd = $this->functionCallPath . 'dev:css:deploy less'
-                . ' --' . CssDeployCommand::THEME_OPTION . '="' . $theme . '"'
-                . ' --' . CssDeployCommand::LOCALE_OPTION . '="' . $themeLocalePair['locale'] . '"';
+            $cmd = $this->functionCallPath . 'dev:source_theme:deploy'
+                . ' --' . SourceThemeDeployCommand::TYPE_ARGUMENT . '="less"'
+                . ' --' . SourceThemeDeployCommand::THEME_OPTION . '="' . $theme . '"'
+                . ' --' . SourceThemeDeployCommand::LOCALE_OPTION . '="' . $themeLocalePair['locale'] . '"';
 
             /**
              * @todo build a solution that does not depend on exec
