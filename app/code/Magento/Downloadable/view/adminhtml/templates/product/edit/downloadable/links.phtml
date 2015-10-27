@@ -40,7 +40,7 @@
                         <input type="radio" name="product[links_purchased_separately]" value="1"
                                class="admin__control-radio"
                                id="link-switcher1"
-                           <?php if($block->getProductLinksCanBePurchasedSeparately()): ?>
+                           <?php if($block->isProductLinksCanBePurchasedSeparately()): ?>
                                checked="checked"
                            <?php endif; ?>
                             >
@@ -52,7 +52,7 @@
                         <input type="radio" name="product[links_purchased_separately]" value="0"
                                 class="admin__control-radio"
                                 id="link-switcher0"
-                            <?php if(!$block->getProductLinksCanBePurchasedSeparately()): ?>
+                            <?php if(!$block->isProductLinksCanBePurchasedSeparately()): ?>
                                 checked="checked"
                             <?php endif; ?>
                             >

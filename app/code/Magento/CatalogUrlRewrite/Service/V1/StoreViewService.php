@@ -69,6 +69,7 @@ class StoreViewService
      * @param int $storeId
      * @param int $entityId
      * @param string $entityType
+     * @param mixed $attributeName
      * @throws \InvalidArgumentException
      * @return bool
      */
