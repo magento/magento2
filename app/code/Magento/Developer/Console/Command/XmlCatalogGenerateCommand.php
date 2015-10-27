@@ -12,17 +12,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Developer\Model\XmlCatalog\Format\FormatInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Class XmlCatalogGenerateCommand Generates dictionary of URNs for the IDE
- * @SuppressWarnings("PMD.CouplingBetweenObjects")
  */
 class XmlCatalogGenerateCommand extends Command
 {
@@ -37,50 +30,42 @@ class XmlCatalogGenerateCommand extends Command
     const IDE_FILE_PATH_ARGUMENT = 'path';
 
     /**
-     * @var Files
+     * @var \Magento\Framework\App\Utility\Files
      */
     private $filesUtility;
 
     /**
-     * @var UrnResolver
+     * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     private $urnResolver;
 
     /**
-     * @var ReadInterface
-     */
-    private $currentDirRead;
-
-    /**
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $rootDirRead;
 
     /**
      * Supported formats
      *
-     * @var FormatInterface[]
+     * @var \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[]
      */
     private $formats;
 
     /**
-     * @param Files $filesUtility
-     * @param UrnResolver $urnResolver
-     * @param Filesystem $filesystemFactory
-     * @param ReadFactory $readFactory
-     * @param FormatInterface[] $formats
+     * @param \Magento\Framework\App\Utility\Files $filesUtility
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param \Magento\Framework\Filesystem $filesystemFactory
+     * @param \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[] $formats
      */
     public function __construct(
-        Files $filesUtility,
-        UrnResolver $urnResolver,
-        Filesystem $filesystemFactory,
-        ReadFactory $readFactory,
+        \Magento\Framework\App\Utility\Files $filesUtility,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        \Magento\Framework\Filesystem $filesystemFactory,
         array $formats = []
     ) {
         $this->filesUtility = $filesUtility;
         $this->urnResolver = $urnResolver;
         $this->formats = $formats;
-        $this->currentDirRead = $readFactory->create(getcwd());
         $this->rootDirRead = $filesystemFactory->getDirectoryRead(DirectoryList::ROOT);
         parent::__construct();
     }
@@ -156,11 +141,10 @@ class XmlCatalogGenerateCommand extends Command
     {
         $ideName = $input->getOption(self::IDE_OPTION);
         $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
-        $absolutePath = $this->currentDirRead->getAbsolutePath($ideFilePath);
 
         $urnDictionary = $this->getUrnDictionary($output);
         if ($formatter = $this->getFormatters($ideName)) {
-            $formatter->generateCatalog($urnDictionary, $absolutePath);
+            $formatter->generateCatalog($urnDictionary, $ideFilePath);
         } else {
             throw new InputException(__("Format for IDE '%1' is not supported", $ideName));
         }
@@ -170,7 +154,7 @@ class XmlCatalogGenerateCommand extends Command
      * Get formatter based on format
      *
      * @param string $format
-     * @return FormatInterface|false
+     * @return \Magento\Developer\Model\XmlCatalog\Format\FormatInterface|false
      */
     private function getFormatters($format)
     {
