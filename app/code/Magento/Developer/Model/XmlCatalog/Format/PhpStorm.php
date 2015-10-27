@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
@@ -27,36 +28,48 @@ class PhpStorm implements FormatInterface
     private $currentDirWrite;
 
     /**
+     * @var \Magento\Framework\Filesystem\File\WriteFactory
+     */
+    private $fileWriteFactory;
+
+    /**
      * @param ReadFactory $readFactory
-     * @param WriteFactory $writeFactory
+     * @param \Magento\Framework\Filesystem\File\WriteFactory $fileWriteFactory
      */
     public function __construct(
         ReadFactory $readFactory,
-        WriteFactory $writeFactory
+        \Magento\Framework\Filesystem\File\WriteFactory $fileWriteFactory
     ) {
         $this->currentDirRead = $readFactory->create(getcwd());
-        $this->currentDirWrite = $writeFactory->create(getcwd());
+        $this->fileWriteFactory = $fileWriteFactory;
     }
 
     /**
      * Generate Catalog of URNs for the PhpStorm 9
      *
      * @param string[] $dictionary
-     * @param string $configFile absolute path to the PhpStorm misc.xml
+     * @param string $configFilePath relative path to the PhpStorm misc.xml
      * @return void
      */
-    public function generateCatalog(array $dictionary, $configFile)
+    public function generateCatalog(array $dictionary, $configFilePath)
     {
         $componentNode = null;
         $projectNode = null;
-        $configFile = $this->currentDirRead->getRelativePath($configFile);
-        if ($this->currentDirRead->isExist($configFile) && $this->currentDirRead->isFile($configFile)) {
+
+        try {
+            $file = $this->fileWriteFactory->create(
+                $configFilePath,
+                \Magento\Framework\Filesystem\DriverPool::FILE,
+                'r'
+            );
             $dom = new \DOMDocument();
-            $dom->load($configFile);
+            $dom->loadXML($file->readAll());
             $xpath = new \DOMXPath($dom);
             $nodeList = $xpath->query('/project');
             $projectNode = $nodeList->item(0);
-        } else {
+            $file->close();
+        } catch (FileSystemException $f){
+            //create file if does not exists
             $dom = new \DOMDocument();
             $projectNode = $dom->createElement('project');
 
@@ -87,6 +100,12 @@ class PhpStorm implements FormatInterface
             $componentNode->appendChild($node);
         }
         $dom->formatOutput = true;
-        $this->currentDirWrite->writeFile($configFile, $dom->saveXML());
+        $file = $this->fileWriteFactory->create(
+            $configFilePath,
+            \Magento\Framework\Filesystem\DriverPool::FILE,
+            'w'
+        );
+        $file->write($dom->saveXML());
+        $file->close();
     }
 }
