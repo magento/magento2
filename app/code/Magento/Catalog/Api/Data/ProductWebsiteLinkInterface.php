@@ -12,7 +12,7 @@ namespace Magento\Catalog\Api\Data;
 interface ProductWebsiteLinkInterface
 {
     /**
-     * @return string|null
+     * @return string
      */
     public function getSku();
 

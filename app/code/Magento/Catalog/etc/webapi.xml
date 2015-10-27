@@ -385,6 +385,8 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+
+    <!-- Product Website Links -->
     <route url="/V1/products/:sku/websites" method="POST">
         <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="save" />
         <resources>
