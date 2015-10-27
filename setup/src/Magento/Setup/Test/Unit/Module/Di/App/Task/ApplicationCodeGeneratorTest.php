@@ -6,11 +6,11 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator;
+use Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
+class ApplicationCodeGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Scanner\DirectoryScanner | \PHPUnit_Framework_MockObject_MockObject
@@ -18,9 +18,9 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
     private $directoryScannerMock;
 
     /**
-     * @var Scanner\RepositoryScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var Scanner\PhpScanner | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $repositoryScannerMock;
+    private $phpScannerMock;
 
     /**
      * @var ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
@@ -30,58 +30,64 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->directoryScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner')
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->repositoryScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\RepositoryScanner')
-            ->setMethods([])
+        $this->phpScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\PhpScanner')
             ->disableOriginalConstructor()
             ->getMock();
         $this->classesScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Reader\ClassesScanner')
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     /**
-     * @dataProvider wrongDataDataProvider
+     * @param array $data
+     *
+     * @dataProvider doOperationWrongDataDataProvider
      */
-    public function testDoOperationEmptyData($wrongData)
+    public function testDoOperationWrongData($data)
     {
-        $model = new RepositoryGenerator(
-            $this->directoryScannerMock,
+        $model = new ApplicationCodeGenerator(
             $this->classesScannerMock,
-            $this->repositoryScannerMock,
-            $wrongData
+            $this->phpScannerMock,
+            $this->directoryScannerMock,
+            $data
         );
 
-        $this->assertNull($model->doOperation());
+        $this->classesScannerMock->expects($this->never())
+            ->method('getList');
+        $this->directoryScannerMock->expects($this->never())
+            ->method('scan');
+        $this->phpScannerMock->expects($this->never())
+            ->method('collectEntities');
+
+        $this->assertEmpty($model->doOperation());
     }
 
     /**
      * @return array
      */
-    public function wrongDataDataProvider()
+    public function doOperationWrongDataDataProvider()
     {
         return [
             [[]],
             [['filePatterns' => ['php' => '*.php']]],
-            [['path' => 'path']]
+            [['path' => 'path']],
         ];
     }
 
-    public function testDoOperationEmptyRepositories()
+    public function testDoOperation()
     {
         $data = [
             'paths' => ['path/to/app'],
-            'filePatterns' => ['di' => 'di.xml'],
-            'excludePatterns' => ['/\/Test\//'],
+            'filePatterns' => ['php' => '.php'],
+            'excludePatterns' => ['/\/Test\//']
         ];
-        $files = ['di' => []];
-        $model = new RepositoryGenerator(
-            $this->directoryScannerMock,
+        $files = ['php' => []];
+        $model = new ApplicationCodeGenerator(
             $this->classesScannerMock,
-            $this->repositoryScannerMock,
+            $this->phpScannerMock,
+            $this->directoryScannerMock,
             $data
         );
 
@@ -92,14 +98,12 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('scan')
             ->with(
                 $data['paths'][0],
-                $data['filePatterns']
+                $data['filePatterns'],
+                $data['excludePatterns']
             )->willReturn($files);
-        $this->repositoryScannerMock->expects($this->once())
-            ->method('setUseAutoload')
-            ->with(false);
-        $this->repositoryScannerMock->expects($this->once())
+        $this->phpScannerMock->expects($this->once())
             ->method('collectEntities')
-            ->with($files['di'])
+            ->with($files['php'])
             ->willReturn([]);
 
         $this->assertEmpty($model->doOperation());
