@@ -65,8 +65,13 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
             'Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider'
         );
 
-        $this->storeViewService = $this->getMock('Magento\CatalogUrlRewrite\Service\V1\StoreViewService', [], [], '',
-            false);
+        $this->storeViewService = $this->getMock(
+            'Magento\CatalogUrlRewrite\Service\V1\StoreViewService',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->categoryUrlPathAutogeneratorObserver = (new ObjectManagerHelper($this))->getObject(
             'Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver',

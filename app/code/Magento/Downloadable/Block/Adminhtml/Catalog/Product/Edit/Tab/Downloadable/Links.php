@@ -161,7 +161,7 @@ class Links extends \Magento\Backend\Block\Template
      *
      * @return bool
      */
-    public function getProductLinksCanBePurchasedSeparately()
+    public function isProductLinksCanBePurchasedSeparately()
     {
         return (bool) $this->getProduct()->getData('links_purchased_separately');
     }
