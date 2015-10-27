@@ -52,13 +52,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->agreementsValidatorMock = $this->getMock(
-            '\Magento\CheckoutAgreements\Model\AgreementsValidator',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->agreementsValidatorMock = $this->getMock('\Magento\Checkout\Api\AgreementsValidatorInterface');
         $this->subjectMock = $this->getMock('\Magento\Checkout\Api\PaymentInformationManagementInterface');
         $this->paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
         $this->addressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
