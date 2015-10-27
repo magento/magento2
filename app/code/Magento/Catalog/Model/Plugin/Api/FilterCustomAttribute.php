@@ -28,12 +28,12 @@ class FilterCustomAttribute
      * Delete custom attribute from api response
      *
      * @param Repository $repository
-     * @param $attributes
+     * @param array $attributes
      * @return \Magento\Eav\Model\AttributeRepository
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetCustomAttributesMetadata(Repository $repository, $attributes)
+    public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes)
     {
         foreach ($attributes as $key => $attribute) {
             if (in_array($attribute->getAttributeCode(), $this->blackList)) {
