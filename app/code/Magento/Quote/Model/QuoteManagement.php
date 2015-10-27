@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Class QuoteManagement
@@ -95,6 +96,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $customerModelFactory;
 
     /**
+     * @var \Magento\Quote\Model\Quote\AddressFactory
+     */
+    protected $quoteAddressFactory;
+
+    /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -154,6 +160,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         QuoteRepository $quoteRepository,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -173,6 +180,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->quoteRepository = $quoteRepository;
         $this->customerRepository = $customerRepository;
         $this->customerModelFactory = $customerModelFactory;
+        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->storeManager = $storeManager;
         $this->checkoutSession = $checkoutSession;
@@ -187,6 +195,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
         $quote = $this->createAnonymousCart($storeId);
+
+        $quote->setBillingAddress($this->quoteAddressFactory->create());
+        $quote->setShippingAddress($this->quoteAddressFactory->create());
 
         try {
             $this->quoteRepository->save($quote);
