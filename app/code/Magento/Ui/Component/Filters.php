@@ -73,6 +73,11 @@ class Filters extends AbstractComponent implements ObserverInterface
     {
         if ($component instanceof ColumnInterface) {
             $filterType = $component->getData('config/filter');
+
+            if (is_array($filterType)) {
+                $filterType = $filterType['filterType'];
+            }
+
             if (!$filterType) {
                 return;
             }
