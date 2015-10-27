@@ -40,6 +40,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $rootDirMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->_resolver = $this->getMock(
@@ -61,13 +66,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->rootDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $this->rootDirMock->expects($this->any())
             ->method('getRelativePath')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT, DriverPool::FILE)
-            ->will($this->returnValue($this->rootDirMock));
+            ->willReturn($this->rootDirMock);
 
         $this->_templateEngine = $this->getMock(
             'Magento\Framework\View\TemplateEnginePool',
@@ -76,11 +81,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->_templateEngine->expects($this->any())->method('get')->will($this->returnValue($this->_templateEngine));
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->_templateEngine->expects($this->any())->method('get')->willReturn($this->_templateEngine);
 
         $appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
-        $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
+        $appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $helper->getObject(
             'Magento\Framework\View\Element\Template',
@@ -90,6 +95,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'resolver' => $this->_resolver,
                 'validator' => $this->_validator,
                 'appState' => $appState,
+                'logger' => $this->loggerMock,
                 'data' => ['template' => 'template.phtml', 'module_name' => 'Fixture_Module']
             ]
         );
@@ -109,12 +115,36 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_validator->expects($this->once())
             ->method('isValid')
             ->with($template)
-            ->will($this->returnValue(true));
-
+            ->willReturn(true);
         $output = '<h1>Template Contents</h1>';
         $vars = ['var1' => 'value1', 'var2' => 'value2'];
-        $this->_templateEngine->expects($this->once())->method('render')->will($this->returnValue($output));
+        $this->_templateEngine->expects($this->once())->method('render')->willReturn($output);
         $this->_block->assign($vars);
+        $this->assertEquals($output, $this->_block->fetchView($template));
+    }
+
+    public function testFetchViewWithNoFileName()
+    {
+        $output = '';
+        $template = false;
+        $templateFile = 'wrong_template_path.pthml';
+        $moduleName = 'Acme';
+        $blockName = 'acme_test_module_test_block';
+        $blockClass = 'Acme\TestModule\Block\Form';
+        $exception = "Invalid template file: '{$templateFile}' in module: '{$moduleName}'"
+            . " block's name: '$blockName' block's class: '{$blockClass}'";
+        $this->_block->setTemplate($templateFile);
+        $this->_block->setData('type', $blockClass);
+        $this->_block->setData('module_name', $moduleName);
+        $this->_block->setNameInLayout($blockName);
+        $this->_validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(false);
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception)
+            ->willReturn(null);
         $this->assertEquals($output, $this->_block->fetchView($template));
     }
 
@@ -125,8 +155,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_validator->expects($this->once())
             ->method('isValid')
             ->with($template)
-            ->will($this->returnValue(true));
-
+            ->willReturn(true);
         $this->_templateEngine->expects($this->once())->method('render')->with($context);
         $this->_block->setTemplateContext($context);
         $this->_block->fetchView($template);
