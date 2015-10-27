@@ -98,7 +98,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Api\CartRepositoryInterface',
+            'Magento\Quote\Model\QuoteRepository',
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,
