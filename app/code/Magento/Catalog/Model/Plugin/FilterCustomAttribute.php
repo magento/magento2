@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Plugin\Api;
+namespace Magento\Catalog\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
 
@@ -19,13 +19,13 @@ class FilterCustomAttribute
     /**
      * @param array $blackList
      */
-    public function __construct($blackList = ['quantity_and_stock_status'])
+    public function __construct(array $blackList = [])
     {
         $this->blackList = $blackList;
     }
 
     /**
-     * Delete custom attribute from api response
+     * Delete custom attribute
      *
      * @param Repository $repository
      * @param array $attributes
