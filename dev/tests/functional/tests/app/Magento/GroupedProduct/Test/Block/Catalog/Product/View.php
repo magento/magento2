@@ -81,8 +81,7 @@ class View extends ParentView
      */
     public function getOptions(FixtureInterface $product)
     {
-        $groupedOptions = $this->getGroupedProductBlock()->getOptions($product);
-        return ['grouped_options' => $groupedOptions] + parent::getOptions($product);
+        return ['grouped_options' => $this->getGroupedProductBlock()->getOptions($product)];
     }
 
     /**
