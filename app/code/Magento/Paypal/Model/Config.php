@@ -208,12 +208,13 @@ class Config extends AbstractConfig
         'NZD',
         'PLN',
         'GBP',
+        'RUB',
         'SGD',
         'SEK',
         'CHF',
-        'USD',
         'TWD',
         'THB',
+        'USD',
     ];
 
     /**
