@@ -112,17 +112,17 @@
                             </td>
 
                             <td class="col col-method"
-                                    data-bind="i18n: method.method_title, attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}"></td>
+                                    data-bind="text: method.method_title, attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}"></td>
 
                             <td class="col col-carrier"
-                                    data-bind="i18n: method.carrier_title, attr: {'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code}"></td>
+                                    data-bind="text: method.carrier_title, attr: {'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code}"></td>
                         </tr>
 
                         <!-- ko if:  method.error_message -->
                         <tr class="row row-error">
                             <td class="col col-error" colspan="4">
                                 <div class="message error">
-                                    <div data-bind="i18n: method.error_message"></div>
+                                    <div data-bind="text: method.error_message"></div>
                                 </div>
                                 <span class="no-display">
                                     <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
@@ -143,7 +143,7 @@
                 </div>
                 <!-- ko if: errorValidationMessage().length > 0 -->
                 <div class="message notice">
-                    <span><!-- ko i18n: errorValidationMessage()--><!-- /ko --></span>
+                    <span><!-- ko text: errorValidationMessage()--><!-- /ko --></span>
                 </div>
                 <!-- /ko -->
                 <div class="actions-toolbar" id="shipping-method-buttons-container">
