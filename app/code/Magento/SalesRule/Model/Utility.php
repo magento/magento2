@@ -182,7 +182,6 @@ class Utility
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deltaRoundingFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
