@@ -250,6 +250,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
+        $optionFactory = $this->getMock(
+            'Magento\Catalog\Model\Product\OptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $optionFactory->expects($this->any())->method('create')->willReturn($this->optionInstanceMock);
+
         $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->disableOriginalConstructor()
             ->getMock();
@@ -347,7 +356,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'catalogProductType' => $this->productTypeInstanceMock,
                 'productFlatIndexerProcessor' => $this->productFlatProcessor,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
-                'catalogProductOption' => $this->optionInstanceMock,
+                'catalogProductOptionFactory' => $optionFactory,
                 'storeManager' => $storeManager,
                 'resource' => $this->resource,
                 'registry' => $this->registry,
@@ -1241,6 +1250,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
             ->disableOriginalConstructor()
             ->getMock();
+        $optionFactory = $this->getMock(
+            'Magento\Catalog\Model\Product\OptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $optionFactory->expects($this->any())->method('create')->willReturn($optionInstanceMock);
         $joinProcessorMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -1249,7 +1266,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productModel = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
             [
-                'catalogProductOption' => $optionInstanceMock,
+                'catalogProductOptionFactory' => $optionFactory,
                 'joinProcessor' => $joinProcessorMock
             ]
         );
