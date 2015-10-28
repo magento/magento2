@@ -55,7 +55,7 @@ abstract class AbstractAssertInvoiceReportResult extends AbstractConstraint
     protected function searchInInvoiceReportGrid(array $invoiceReport)
     {
         $this->salesInvoiceReport->open();
-        $this->salesInvoiceReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->salesInvoiceReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->salesInvoiceReport->getFilterForm()->viewsReport($invoiceReport);
         $this->salesInvoiceReport->getActionBlock()->showReport();
     }

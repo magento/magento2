@@ -7,8 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**
@@ -24,17 +22,27 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             return $product->getCalculatedFinalPrice();
         }
         if ($product->getCustomOption('simple_product')) {
-            $simpleProduct = $product->getCustomOption('simple_product')->getProduct();
-            $product->setSelectedConfigurableOption($simpleProduct);
-            $priceInfo = $simpleProduct->getPriceInfo();
+            return parent::getFinalPrice($qty, $product->getCustomOption('simple_product')->getProduct());
         } else {
             $priceInfo = $product->getPriceInfo();
-        }
-        $finalPrice = $priceInfo->getPrice('final_price')->getAmount()->getValue();
-        $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
-        $finalPrice = max(0, $finalPrice);
-        $product->setFinalPrice($finalPrice);
+            $finalPrice = $priceInfo->getPrice('final_price')->getAmount()->getValue();
+            $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
+            $finalPrice = max(0, $finalPrice);
+            $product->setFinalPrice($finalPrice);
 
-        return $finalPrice;
+            return $finalPrice;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrice($product)
+    {
+        if ($product->getCustomOption('simple_product')) {
+            return $product->getCustomOption('simple_product')->getProduct()->getPrice();
+        } else {
+            return 0;
+        }
     }
 }

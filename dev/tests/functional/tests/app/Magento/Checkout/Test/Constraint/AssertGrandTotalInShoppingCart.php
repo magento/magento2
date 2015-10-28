@@ -28,6 +28,7 @@ class AssertGrandTotalInShoppingCart extends AbstractConstraint
     {
         if ($requireReload) {
             $checkoutCart->open();
+            $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         }
 
         $fixtureGrandTotal = number_format($cart->getGrandTotal(), 2);

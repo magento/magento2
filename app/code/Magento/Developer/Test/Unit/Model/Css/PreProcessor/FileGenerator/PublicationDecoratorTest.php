@@ -3,11 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Developer\Test\Unit\Model\Css\PreProcessor\FileGenerator;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator;
 
+/**
+ * Class PublicationDecoratorTest
+ */
 class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,6 +19,13 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateRelatedFile()
     {
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fileTemporaryMock = $this->getMockBuilder(Temporary::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $publisherMock = $this->getMockBuilder('Magento\Framework\App\View\Asset\Publisher')
             ->disableOriginalConstructor()
             ->getMock();
@@ -33,24 +44,24 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
         $relatedFileId = 'file_id';
 
         $relatedFiles = [[$relatedFileId, $localAssetMock]];
-        $importGeneratorMock->expects($this->any())
+
+        $importGeneratorMock->expects(self::any())
             ->method('getRelatedFiles')
-            ->will($this->onConsecutiveCalls($relatedFiles, []));
-        $assetRepoMock->expects($this->any())
+            ->will(self::onConsecutiveCalls($relatedFiles, []));
+
+        $assetRepoMock->expects(self::any())
             ->method('createRelated')
             ->willReturn($relatedAssetMock);
-        $publisherMock->expects($this->once())
+
+        $publisherMock->expects(self::once())
             ->method('publish')
             ->with($relatedAssetMock);
 
-        $args = [
-            'assetRepo' => $assetRepoMock,
-            'publisher' => $publisherMock
-        ];
-
-        $model = (new ObjectManager($this))->getObject(
-            'Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator',
-            $args
+        $model = new PublicationDecorator(
+            $filesystemMock,
+            $assetRepoMock,
+            $fileTemporaryMock,
+            $publisherMock
         );
 
         $model->generate($importGeneratorMock);
