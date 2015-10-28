@@ -568,7 +568,9 @@ class Info
             }
             if (!empty($this->_paymentMapFull[$key]['value'])) {
                 if ($labelValuesOnly) {
-                    $result[$this->_paymentMapFull[$key]['label']] = __($this->_paymentMapFull[$key]['value']);
+                    $value = $this->_paymentMapFull[$key]['value'];
+                    $value = is_array($value) ? array_map('__', $value) : __($value);
+                    $result[$this->_paymentMapFull[$key]['label']] = $value;
                 } else {
                     $result[$key] = $this->_paymentMapFull[$key];
                 }
