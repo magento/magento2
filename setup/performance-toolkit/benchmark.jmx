@@ -5027,7 +5027,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/${cart_id}/shipping-information</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

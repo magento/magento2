@@ -8,13 +8,12 @@ namespace Magento\Quote\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Api\ShippingAddressManagementInterface;
 
 /**
  * Quote shipping address write service object.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingAddressManagement implements ShippingAddressManagementInterface
+class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
     /**
      * Quote repository.
