@@ -18,6 +18,7 @@ define([
             singleOpenDropDown: true,
             dialog: {}, // Options for mage/dropdown
             dialogDelay: 500, // Delay in ms after resize dropdown shown again
+            origin: '', //Required, type of popup: 'msrp', 'tier' or 'info' popup
 
             // Selectors
             cartForm: '.form.map.checkout',
