@@ -7,16 +7,54 @@
 ?>
 <?php /** @var $block \Magento\Translation\Block\Js */ ?>
 <?php if ($block->dictionaryEnabled()): ?>
-    <script type="text/x-magento-init">
-        {
-            "*": {
-                "Magento_Translation/js/add-to-translate": {
-                    "config": "text!<?php /* @escapeNotVerified */
-                    echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>",
-                    "version": "<?php /* @escapeNotVerified */
-                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>"
-                 }
+    <script>
+        require.config({
+            deps: [
+                'jquery',
+                'jquery/jquery-storageapi'
+            ],
+            callback: function ($) {
+                'use strict';
+
+                var dependencies,
+                    timeout;
+                $.initNamespaceStorage('mage-translation-storage');
+                $.initNamespaceStorage('mage-translation-file-version');
+                timeout = $.localStorage.get('mage-translation-file-version');
+                if (timeout.version !== '<?php /* @escapeNotVerified */
+                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>') {
+                    dependencies = [
+                        'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>',
+                        'mage/translate',
+                        'jquery/jquery-storageapi'
+                    ];
+
+                } else {
+                    dependencies =  [
+                        'mage/translate',
+                        'jquery/jquery-storageapi'
+                    ];
+                }
+
+                require.config({
+                    deps: dependencies,
+                    callback: function (string) {
+                        if (typeof string === 'string') {
+                            $.mage.translate.add(JSON.parse(string));
+                            $.localStorage.set('mage-translation-storage', string);
+                            $.localStorage.set(
+                                'mage-translation-file-version',
+                                {
+                                    version: '<?php /* @escapeNotVerified */
+                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>'
+                                }
+                            );
+                        } else {
+                            $.mage.translate.add($.localStorage.get('mage-translation-storage'));
+                        }
+                    }
+                });
             }
-        }
+        });
     </script>
 <?php endif; ?>

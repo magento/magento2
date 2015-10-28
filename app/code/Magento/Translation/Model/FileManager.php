@@ -6,6 +6,7 @@
 namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * A service for handling Translation config files
  */
