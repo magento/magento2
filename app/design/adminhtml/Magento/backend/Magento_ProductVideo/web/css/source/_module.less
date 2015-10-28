@@ -234,3 +234,34 @@
 .image.base-image:hover .image-label {
     display: none;
 }
+
+.image-upload-error {
+    background: #F9E1E1;
+    color: @color-gray19;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 7px 7px 7px 35px;
+    position: relative;
+    .image-upload-error-cross {
+        position: absolute;
+        left: 8px;
+        top: 9px;
+        width: 20px;
+        height: 20px;
+        &:before,
+        &:after {
+            position: absolute;
+            left: 8px;
+            content: ' ';
+            height: 20px;
+            width: 4px;
+            background-color: @color-red9;
+        }
+        &:before {
+            transform: rotate(45deg);
+        }
+        &:after {
+            transform: rotate(-45deg);
+        }
+    }
+}

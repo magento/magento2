@@ -20,7 +20,7 @@ $hints = [
     ),
     'admin' => sprintf(
         '<p>%s</p>',
-        'A unique URL helps keep store and customer info safer.'
+        'A unique URL helps keep your store and customers safer. Use only letters, numbers, and underscore characters.'
     )
 ];
 ?>
@@ -101,6 +101,7 @@ $hints = [
                         class="form-el-input"
                         type="text"
                         name="admin"
+                        ng-pattern="/^[a-zA-Z0-9_]+$/"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
                         ng-init="config.address.admin = '<?php echo $this->autoAdminPath ?>';"
@@ -111,8 +112,8 @@ $hints = [
                         tooltip-append-to-body="true"
                         >
                     <div class="error-container">
-                        <span ng-show="webconfig.admin.$error.required">
-                            Please enter a valid admin URL path.
+                        <span ng-show="webconfig.admin.$error">
+                            Please enter a valid admin URL path. Use only letters, numbers, and underscore characters.
                         </span>
                     </div>
                 </div>

@@ -189,7 +189,7 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
-     *  Selector for confirm.
+     * Selector for confirm.
      *
      * @var string
      */
@@ -259,6 +259,7 @@ abstract class Grid extends Block
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+        $this->waitLoader();
     }
 
     /**

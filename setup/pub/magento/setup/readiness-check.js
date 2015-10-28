@@ -24,14 +24,14 @@ angular.module('readiness-check', [])
         };
         switch ($state.current.type) {
             case 'uninstall':
-                $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/uninstall-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
                 break;
             case 'enable':
             case 'disable':
-                $scope.dependencyUrl = 'index.php/environment/enable-disable-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {
                         type: $state.current.type,
@@ -40,7 +40,7 @@ angular.module('readiness-check', [])
                 }
                 break;
             default:
-                $scope.dependencyUrl = 'index.php/environment/component-dependency';
+                $scope.dependencyUrl = 'index.php/dependency-check/component-dependency';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
