@@ -3,27 +3,24 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
+namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
-use Magento\Framework\View\Asset\ContentProcessorInterface;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSource;
-use Magento\Framework\View\Asset\PreProcessor\FilenameResolverInterface;
-use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
+use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
- * Class AlternativeSourceTest
+ * Class FrontendCompilationTest
  *
- * @see \Magento\Framework\View\Asset\PreProcessor\AlternativeSource
+ * @see \Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation
  */
-class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
+class FrontendCompilationTest extends \PHPUnit_Framework_TestCase
 {
     const AREA = 'test-area';
 
@@ -38,16 +35,6 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     const NEW_CONTENT = 'test-new-content';
 
     /**
-     * @var SortInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sorterMock;
-
-    /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerMock;
-
-    /**
      * @var LockerProcessInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $lockerProcessMock;
@@ -58,61 +45,46 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     private $assetBuilderMock;
 
     /**
-     * @var ContentProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AlternativeSourceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $alternativeMock;
+    private $alternativeSourceMock;
 
     /**
-     * @var FilenameResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $filenameResolverMock;
+    private $assetSourceMock;
 
     /**
      * Set up
      */
     protected function setUp()
     {
-        $this->sorterMock = $this->getMockBuilder(SortInterface::class)
-            ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
         $this->lockerProcessMock = $this->getMockBuilder(LockerProcessInterface::class)
             ->getMockForAbstractClass();
         $this->assetBuilderMock = $this->getMockBuilder(AssetBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->alternativeMock = $this->getMockBuilder(ContentProcessorInterface::class)
+        $this->alternativeSourceMock = $this->getMockBuilder(AlternativeSourceInterface::class)
             ->getMockForAbstractClass();
-        $this->filenameResolverMock = $this->getMockBuilder(FilenameResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->assetSourceMock = $this->getMockBuilder(Source::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
-     * Run test for process method (exception)
+     * Run test for process method (Exception)
      */
     public function testProcessException()
     {
-        $alternatives = [
-            'processor' => [
-                AlternativeSource::PROCESSOR_CLASS => 'stdClass'
-            ]
-        ];
-
         $this->lockerProcessMock->expects(self::once())
             ->method('lockProcess')
             ->with(self::isType('string'));
         $this->lockerProcessMock->expects(self::once())
             ->method('unlockProcess');
 
-        $this->sorterMock->expects(self::once())
-            ->method('sort')
-            ->with($alternatives)
-            ->willReturn($alternatives);
-
-        $this->filenameResolverMock->expects(self::once())
-            ->method('resolve')
-            ->with(self::FILE_PATH)
-            ->willReturn(self::FILE_PATH);
+        $this->alternativeSourceMock->expects(self::once())
+            ->method('getAlternativesExtensionsNames')
+            ->willReturn(['less']);
 
         $this->assetBuilderMock->expects(self::once())
             ->method('setArea')
@@ -136,26 +108,24 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->assetBuilderMock->expects(self::once())
             ->method('build')
-            ->willReturn($this->getAssetNew());
+            ->willThrowException(new \Exception());
 
-        $this->objectManagerMock->expects(self::once())
-            ->method('get')
-            ->with('stdClass')
-            ->willReturn(new \stdClass());
 
-        $alternativeSource = new AlternativeSource(
-            $this->filenameResolverMock,
-            $this->objectManagerMock,
-            $this->lockerProcessMock,
-            $this->sorterMock,
+        $this->assetSourceMock->expects(self::never())
+            ->method('getContent');
+
+        $frontendCompilation = new FrontendCompilation(
+            $this->assetSourceMock,
             $this->assetBuilderMock,
-            'lock',
-            $alternatives
+            $this->alternativeSourceMock,
+            $this->lockerProcessMock,
+            'lock'
         );
+
         try {
-            $alternativeSource->process($this->getChainMockExpects('', 0));
-        } catch (\UnexpectedValueException $e) {
-            self::assertInstanceOf('\UnexpectedValueException', $e);
+            $frontendCompilation->process($this->getChainMockExpects('', 0, 1));
+        } catch (\Exception $e) {
+            self::assertInstanceOf('\Exception', $e);
         }
     }
 
@@ -164,27 +134,11 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess()
     {
-        $alternatives = [
-            'processor' => [
-                AlternativeSource::PROCESSOR_CLASS => 'Magento\Framework\View\Asset\ContentProcessorInterface'
-            ]
-        ];
-
         $this->lockerProcessMock->expects(self::once())
             ->method('lockProcess')
             ->with(self::isType('string'));
         $this->lockerProcessMock->expects(self::once())
             ->method('unlockProcess');
-
-        $this->sorterMock->expects(self::once())
-            ->method('sort')
-            ->with($alternatives)
-            ->willReturn($alternatives);
-
-        $this->filenameResolverMock->expects(self::once())
-            ->method('resolve')
-            ->with(self::FILE_PATH)
-            ->willReturn(self::FILE_PATH);
 
         $assetMock = $this->getAssetNew();
 
@@ -212,22 +166,24 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->willReturn($assetMock);
 
-        $this->objectManagerMock->expects(self::once())
-            ->method('get')
-            ->with('Magento\Framework\View\Asset\ContentProcessorInterface')
-            ->willReturn($this->getProcessorMock($assetMock));
+        $this->alternativeSourceMock->expects(self::once())
+            ->method('getAlternativesExtensionsNames')
+            ->willReturn(['less']);
 
-        $alternativeSource = new AlternativeSource(
-            $this->filenameResolverMock,
-            $this->objectManagerMock,
-            $this->lockerProcessMock,
-            $this->sorterMock,
+        $this->assetSourceMock->expects(self::once())
+            ->method('getContent')
+            ->with($assetMock)
+            ->willReturn(self::NEW_CONTENT);
+
+        $frontendCompilation = new FrontendCompilation(
+            $this->assetSourceMock,
             $this->assetBuilderMock,
-            'lock',
-            $alternatives
+            $this->alternativeSourceMock,
+            $this->lockerProcessMock,
+            'lock'
         );
 
-        $alternativeSource->process($this->getChainMockExpects());
+        $frontendCompilation->process($this->getChainMockExpects());
     }
 
     /**
@@ -242,46 +198,24 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->method('getContent')
             ->willReturn('test-content');
 
-        $chainMock->expects(self::once())
+        $chainMock->expects(self::never())
             ->method('getAsset')
             ->willReturn($assetMock);
-
-        $this->filenameResolverMock->expects(self::never())
-            ->method('resolve');
 
         $this->lockerProcessMock->expects(self::never())
             ->method('lockProcess');
         $this->lockerProcessMock->expects(self::never())
             ->method('unlockProcess');
 
-        $alternativeSource = new AlternativeSource(
-            $this->filenameResolverMock,
-            $this->objectManagerMock,
-            $this->lockerProcessMock,
-            $this->sorterMock,
+        $frontendCompilation = new FrontendCompilation(
+            $this->assetSourceMock,
             $this->assetBuilderMock,
-            'lock',
-            []
+            $this->alternativeSourceMock,
+            $this->lockerProcessMock,
+            'lock'
         );
 
-        $alternativeSource->process($chainMock);
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $asset
-     * @return ContentProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getProcessorMock($asset)
-    {
-        $processorMock = $this->getMockBuilder(ContentProcessorInterface::class)
-            ->getMockForAbstractClass();
-
-        $processorMock->expects(self::once())
-            ->method('processContent')
-            ->with($asset)
-            ->willReturn(self::NEW_CONTENT);
-
-        return $processorMock;
+        $frontendCompilation->process($chainMock);
     }
 
     /**
@@ -299,9 +233,10 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $content
      * @param int $contentExactly
+     * @param int $pathExactly
      * @return Chain|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getChainMockExpects($content = '', $contentExactly = 1)
+    private function getChainMockExpects($content = '', $contentExactly = 1, $pathExactly = 1)
     {
         $chainMock = $this->getChainMock();
 
@@ -310,7 +245,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
         $chainMock->expects(self::exactly(3))
             ->method('getAsset')
-            ->willReturn($this->getAssetMockExpects());
+            ->willReturn($this->getAssetMockExpects($pathExactly));
         $chainMock->expects(self::exactly($contentExactly))
             ->method('setContent')
             ->willReturn(self::NEW_CONTENT);
@@ -343,16 +278,17 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $pathExactly
      * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getAssetMockExpects()
+    private function getAssetMockExpects($pathExactly = 1)
     {
         $assetMock = $this->getAssetMock();
 
         $assetMock->expects(self::once())
             ->method('getContext')
             ->willReturn($this->getContextMock());
-        $assetMock->expects(self::once())
+        $assetMock->expects(self::exactly($pathExactly))
             ->method('getFilePath')
             ->willReturn(self::FILE_PATH);
         $assetMock->expects(self::once())

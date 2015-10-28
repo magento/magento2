@@ -64,6 +64,7 @@ class Processor implements ContentProcessorInterface
      */
     public function processContent(File $asset)
     {
+        $path = $asset->getPath();
         try {
             $parser = new \Less_Parser(
                 [
@@ -78,14 +79,14 @@ class Processor implements ContentProcessorInterface
                 return '';
             }
 
-            $tmpFilePath = $this->temporaryFile->createFile($asset->getPath(), $content);
+            $tmpFilePath = $this->temporaryFile->createFile($path, $content);
             $parser->parseFile($tmpFilePath, '');
 
             $content = $parser->getCss();
 
             return $content;
         } catch (\Exception $e) {
-            $errorMessage = self::ERROR_MESSAGE_PREFIX . $e->getMessage();
+            $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path . PHP_EOL . $e->getMessage();
             $this->logger->critical($errorMessage);
 
             throw new ContentProcessorException($errorMessage);

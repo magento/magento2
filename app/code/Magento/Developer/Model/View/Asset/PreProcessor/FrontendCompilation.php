@@ -74,7 +74,6 @@ class FrontendCompilation implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        $path = $chain->getAsset()->getFilePath();
         $content = $chain->getContent();
         if (trim($content) !== '') {
             return;
@@ -83,12 +82,12 @@ class FrontendCompilation implements PreProcessorInterface
         try {
             $this->lockerProcess->lockProcess($this->lockName);
 
+            $path = $chain->getAsset()->getFilePath();
             $module = $chain->getAsset()->getModule();
 
             /** @var FallbackContext $context */
             $context = $chain->getAsset()->getContext();
-            $content = $this->processContent($path, $content, $module, $context);
-            $chain->setContent($content);
+            $chain->setContent($this->processContent($path, $content, $module, $context));
         } finally {
             $this->lockerProcess->unlockProcess();
         }
@@ -102,7 +101,6 @@ class FrontendCompilation implements PreProcessorInterface
      * @param string $module
      * @param FallbackContext $context
      * @return string
-     * @throws \UnexpectedValueException
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {
@@ -117,10 +115,10 @@ class FrontendCompilation implements PreProcessorInterface
                     $path
                 ))->build();
 
-            $content = $this->assetSource->getContent($asset);
+            $processedContent = $this->assetSource->getContent($asset);
 
-            if (trim($content) !== '') {
-                return $content;
+            if (trim($processedContent) !== '') {
+                return $processedContent;
             }
         }
 
