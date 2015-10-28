@@ -52,7 +52,14 @@ class BinderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'dimensions' => ['scope' => ['value' => 'default']],
             'queries' => ['query' => ['value' => 'match_query', 'is_bind' => true]],
-            'filters' => ['filter' => ['from' => 'filter_from', 'to' => 'filter_to', 'value' => 'filter_value', 'is_bind' => true]],
+            'filters' => [
+                'filter' => [
+                    'from' => 'filter_from',
+                    'to' => 'filter_to',
+                    'value' => 'filter_value',
+                    'is_bind' => true
+                ]
+            ],
             'aggregations' => ['price' => ['method' => 'filter_method', 'is_bind' => true]],
             'from' => 1,
             'size' => 10,

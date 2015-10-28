@@ -172,7 +172,7 @@ class Cleaner
             case FilterInterface::TYPE_RANGE:
                 $keys = ['from', 'to'];
                 foreach ($keys as $key) {
-                    if (isset($filter[$key]) && preg_match('/^\$(.+)\$$/si', $filter[$key], $matches)) {
+                    if (isset($filter[$key]) && preg_match('/^\$(.+)\$$/si', $filter[$key])) {
                         unset($this->requestData['filters'][$filterName][$key]);
                     }
                 }
