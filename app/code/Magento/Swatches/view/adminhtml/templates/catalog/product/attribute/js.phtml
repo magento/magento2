@@ -265,10 +265,10 @@ require([
                 setRowVisibility('is_unique', false);
                 setRowVisibility('frontend_class', false);
             break;
-        <?php $hiddenFields = $this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() ?>
+        <?php $hiddenFields = $block->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() ?>
         <?php foreach ($hiddenFields as $type => $fields): ?>
         <?php if (in_array($type, array('swatch_visual', 'swatch_text'))) continue ?>
-            case '<?php echo $this->escapeHtml($type); ?>':
+            case '<?php echo $block->escapeHtml($type); ?>':
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
                         getFrontTab().hide();
@@ -280,7 +280,7 @@ require([
                     <?php elseif ($one == '_scope'): ?>
                         scopeVisibility = false;
                     <?php else: ?>
-                        setRowVisibility('<?php echo $this->escapeHtml($one); ?>', false);
+                        setRowVisibility('<?php echo $block->escapeHtml($one); ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
             break;
