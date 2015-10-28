@@ -31,7 +31,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateMock;
 
@@ -173,16 +173,13 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('hasStructureElement')
             ->with($parentName)
             ->willReturn(false);
-
         $this->dataStructureMock->expects($this->once())
             ->method('hasElement')
             ->with($parentName)
             ->willReturn(false);
-
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($stateMode);
-
         $this->loggerMock->expects($loggerExpects)
             ->method('critical')
             ->with(
@@ -259,7 +256,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             );
         $this->scheduledStructureMock->expects($this->any())->method('hasStructureElement')->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setElement')->with($key, [$block, $data]);
-
         $this->dataStructureMock->expects($this->once())->method('createElement')->with($key, ['type' => $block]);
         $this->dataStructureMock->expects($this->once())
             ->method('hasElement')
@@ -269,7 +265,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('setAsChild')
             ->with($key, $parentName, $alias)
             ->willReturn(true);
-
         $this->scheduledStructureMock->expects($this->exactly($toRemoveList))
             ->method('setElementToBrokenParentList')
             ->with($key);
