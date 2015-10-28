@@ -68,7 +68,7 @@ class Cache extends Block
      */
     public function isStorageCacheFlushed()
     {
-        return $this->getMessagesBlock()->getSuccessMessages() == $this->messagesText['cache_storage_flushed'];
+        return $this->getMessagesBlock()->getSuccessMessage() == $this->messagesText['cache_storage_flushed'];
     }
 
     /**
@@ -78,7 +78,7 @@ class Cache extends Block
      */
     public function isMagentoCacheFlushed()
     {
-        return $this->getMessagesBlock()->getSuccessMessages() == $this->messagesText['cache_magento_flushed'];
+        return $this->getMessagesBlock()->getSuccessMessage() == $this->messagesText['cache_magento_flushed'];
     }
 
     /**
