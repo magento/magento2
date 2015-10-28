@@ -42,12 +42,20 @@ class ExternalVideoEntryProcessor
     protected $resourceEntryMediaGallery;
 
     /**
+     * @var \Magento\ProductVideo\Model\ResourceModel\Video
+     */
+    protected $videoResourceModel;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+     * @param \Magento\ProductVideo\Model\ResourceModel\Video $videoResourceModel
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $resourceEntryMediaGallery,
+        \Magento\ProductVideo\Model\ResourceModel\Video $videoResourceModel
     ) {
         $this->resourceEntryMediaGallery = $resourceEntryMediaGallery;
+        $this->videoResourceModel = $videoResourceModel;
     }
 
     /**
@@ -141,8 +149,7 @@ class ExternalVideoEntryProcessor
      */
     protected function saveVideoValuesItem(array $item)
     {
-        $this->resourceEntryMediaGallery->saveDataRow(
-            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
+        $this->videoResourceModel->insertOnDuplicate(
             $this->prepareVideoRowDataForSave($item)
         );
     }
