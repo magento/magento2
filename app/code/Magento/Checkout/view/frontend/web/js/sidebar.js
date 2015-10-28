@@ -40,7 +40,11 @@ define([
                     customer = customerData.get('customer');
 
                 if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
-                    authenticationPopup.showModal();
+                    if (this.options.url.isRedirectRequired) {
+                        location.href = this.options.url.loginUrl;
+                    } else {
+                        authenticationPopup.showModal();
+                    }
 
                     return false;
                 }
