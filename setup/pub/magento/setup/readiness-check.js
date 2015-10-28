@@ -343,10 +343,10 @@ angular.module('readiness-check', [])
                 if($state.current.type === 'install' || $state.current.type === 'upgrade') {
                     $actionString += 'Magento';
                     if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
-                        $actionString += ' and Selected Components';
+                        $actionString += ' and selected components';
                     }
                 } else {
-                    $actionString += $localStorage.titles[$state.current.type];
+                    $actionString += 'package';
                 }
             }
             $actionString += " to be " + $state.current.type;
