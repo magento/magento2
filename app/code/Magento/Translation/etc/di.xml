@@ -64,7 +64,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+    <virtualType name="AssetPreProcessorPool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
                 <item name="js" xsi:type="array">
@@ -79,7 +79,7 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
