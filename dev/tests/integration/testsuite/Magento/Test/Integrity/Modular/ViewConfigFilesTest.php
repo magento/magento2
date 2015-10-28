@@ -18,7 +18,10 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Xsd\Reader'
         );
         $mergeXsd = $reader->read();
-        $domConfig = new \Magento\Framework\Config\Dom($file);
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
         $result = $domConfig->validate(
             $mergeXsd,
             $errors
