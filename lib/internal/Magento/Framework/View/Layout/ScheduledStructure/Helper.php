@@ -33,17 +33,17 @@ class Helper
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $state;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\App\State $state
+     * @param State $state
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\State $state
+        State $state
     ) {
         $this->logger = $logger;
         $this->state = $state;
@@ -200,7 +200,7 @@ class Helper
             } else {
                 $scheduledStructure->setElementToBrokenParentList($key);
 
-                if ($this->state->getMode() == State::MODE_DEVELOPER) {
+                if ($this->state->getMode() === State::MODE_DEVELOPER) {
                     $this->logger->critical(
                         "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                         'because the latter doesn\'t exist'
