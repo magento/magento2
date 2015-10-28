@@ -12,6 +12,8 @@ use \Magento\Braintree\Model\PaymentMethod;
 
 class ConfigProvider extends CcGenericConfigProvider
 {
+    const COMPONENT_PROVIDER_NAME = 'checkout.steps.billing-step.payment.payments-list.braintree-form';
+
     /**
      * @var string[]
      */
@@ -185,7 +187,7 @@ class ConfigProvider extends CcGenericConfigProvider
                     'availableCardTypes' => $this->getCcAvailableCcTypes(),
                     'braintreeDataJs'=> $this->config->getBraintreeDataJs(),
                     'ajaxGenerateNonceUrl' => $this->getAjaxGenerateNonceUrl(),
-                    'billingAddressComponentName' => 'checkout.steps.billing-step.payment.payments-list.braintree-form'
+                    'billingAddressComponentName' => self::COMPONENT_PROVIDER_NAME
                 ],
             ],
         ]);
