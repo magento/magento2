@@ -288,12 +288,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     private function assertPhpVersionInSync($name, $phpVersion)
     {
-        $this->assertEquals(
-            self::$rootJson['require']['php'],
-            $phpVersion,
-            "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-            . self::$rootJson['require']['php'] . ' in root composer.json'
-        );
+        if (isset(self::$rootJson['require']['php'])) {
+            $this->assertEquals(
+                self::$rootJson['require']['php'],
+                $phpVersion,
+                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                . self::$rootJson['require']['php'] . ' in root composer.json'
+            );
+        }
     }
 
     /**
