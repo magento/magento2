@@ -324,6 +324,7 @@ class Cart extends DataObject implements CartInterface
         if (!$request->hasQty()) {
             $request->setQty(1);
         }
+        !$request->hasFormKey() ?: $request->unsFormKey();
 
         return $request;
     }
