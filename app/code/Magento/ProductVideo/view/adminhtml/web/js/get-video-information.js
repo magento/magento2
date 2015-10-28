@@ -63,14 +63,14 @@ require([
                         break;
                     default:
                         throw {
-                            name: 'Video Error',
-                            message: 'Unknown video type',
+                            name: $.mage.__('Video Error'),
+                            message: $.mage.__('Unknown video type'),
 
                             /**
                              * Return string
                              */
                             toString: function () {
-                                return $.mage.__(this.name + ': ' + this.message);
+                                return this.name + this.message;
                             }
                         };
                 }
