@@ -30,7 +30,7 @@ class AssertStoreSuccessSaveMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $storeIndex->getMessagesBlock()->getSuccessMessages(),
+            $storeIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'
         );
     }

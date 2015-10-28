@@ -153,10 +153,10 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filter]);
 
-        $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
+        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
-        $criteria->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn($filterGroups);
 
@@ -171,7 +171,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->creditmemo->getList($criteria));
+        $this->assertEquals($collection, $this->creditmemo->getList($searchCriteria));
     }
 
     public function testDelete()
