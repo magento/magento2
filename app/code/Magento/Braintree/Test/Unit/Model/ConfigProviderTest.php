@@ -6,6 +6,7 @@
 
 namespace Magento\Braintree\Test\Unit\Model;
 
+use Magento\Braintree\Model\ConfigProvider;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -193,16 +194,6 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('generatePaymentMethodToken')
             ->willReturnMap($tokenNonceMap);
 
-        $quoteMock = $this->getMockBuilder('\Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->expects($this->once())
-            ->method('getBillingAddress')
-            ->willReturn(new \Magento\Framework\DataObject(['country_id' => 'US']));
-        $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-
         $cardTypeMap = [
             ['Visa', 'VI'],
             ['Master Card', 'MA'],
@@ -273,6 +264,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
+                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
                         ],
                     ],
                 ]
@@ -348,6 +340,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
+                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
                         ],
                     ],
                 ]
@@ -423,6 +416,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
+                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
                         ],
                     ],
                 ]
@@ -467,6 +461,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
                             'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
+                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
                         ],
                     ],
                 ]
