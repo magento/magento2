@@ -6,6 +6,8 @@
 
 namespace Magento\Deploy\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
@@ -295,6 +297,7 @@ class Deployer
      * @param string $module
      * @return string
      * @throws \InvalidArgumentException
+     * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -338,9 +341,11 @@ class Deployer
                 $this->bundleManager->addAsset($asset);
             }
             $this->count++;
-        } catch (\Exception $e) {
+        } catch (ContentProcessorException $exception) {
+            throw new LocalizedException(__($exception->getMessage()));
+        } catch (\Exception $exception) {
             $this->output->write('.');
-            $this->verboseLog($e->getTraceAsString());
+            $this->verboseLog($exception->getTraceAsString());
             $this->errorCount++;
         }
 
