@@ -15,13 +15,12 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Xsd\Reader'
-        );
-        $mergeXsd = $reader->read();
         $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
-        $errors = [];
-        $result = $domConfig->validate($mergeXsd, $errors);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $result = $domConfig->validate(
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
+            $errors
+        );
         $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
