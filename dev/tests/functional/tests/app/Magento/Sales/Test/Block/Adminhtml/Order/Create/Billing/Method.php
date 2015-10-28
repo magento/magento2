@@ -35,8 +35,6 @@ class Method extends Block
      */
     public function selectPaymentMethod(array $paymentCode)
     {
-        // Click on rootElement to solve overlapping inner elements by header menu.
-        $this->_rootElement->click();
         $paymentInput = $this->_rootElement->find(sprintf($this->paymentMethod, $paymentCode['method']));
         if ($paymentInput->isVisible()) {
             $paymentInput->click();

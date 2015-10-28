@@ -102,9 +102,10 @@
                 font-weight: @font-weight__semibold;
                 margin: 0;
                 overflow: hidden;
-                padding: @indent__s 20px+@indent__s 0 @indent__s;
+                padding: @indent__s 30px+@indent__s 0 @indent__s;
                 position: relative;
                 text-transform: uppercase;
+                word-break: break-all;
                 z-index: 1;
                 .lib-icon-font(
                 @_icon-font-content: @icon-down,
@@ -267,10 +268,10 @@
             text-transform: uppercase;
             z-index: 1;
             .lib-icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 13px,
-            @_icon-font-position: before,
-            @_icon-font-display: block
+                @_icon-font-content: @icon-down,
+                @_icon-font-size: 13px,
+                @_icon-font-position: before,
+                @_icon-font-display: block
             );
             &:before {
                 position: absolute;
@@ -288,8 +289,8 @@
             padding-bottom: 30px;
             .block-subtitle {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: before
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: before
                 );
             }
             .items {

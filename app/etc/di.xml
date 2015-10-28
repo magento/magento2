@@ -176,7 +176,7 @@
     <type name="Magento\Framework\View\BlockPool" shared="false" />
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
-            <argument name="pathInfoProcessor" xsi:type="object">Magento\Store\App\Request\PathInfoProcessor\Proxy</argument>
+            <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
