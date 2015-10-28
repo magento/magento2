@@ -28,34 +28,11 @@ define([
         },
 
         /**
-         * @param {Integer} id
+         * @param {Number} id
          * @returns {*}
          */
         getLabel: function (id) {
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
-        },
-
-        /**
-         * Initializes components' static properties.
-         *
-         * @returns {Column} Chainable.
-         */
-        initProperties: function () {
-            this.actions = [{
-                value: 'selectAll',
-                label: $t('Select All')
-            }, {
-                value: 'deselectAll',
-                label: $t('Deselect All')
-            }, {
-                value: 'selectPage',
-                label: $t('Select All on This Page')
-            }, {
-                value: 'deselectPage',
-                label: $t('Deselect All on This Page')
-            }];
-
-            return this._super();
         },
 
         /**
@@ -67,11 +44,10 @@ define([
                 key,
                 i;
 
-            registry.set('position_cache_valid', true);
-
-            if (this.selected().length === this.selectedData.length && positionCacheValid) {
+            if (this.selectedData.length === 0 || positionCacheValid) {
                 return;
             }
+            registry.set('position_cache_valid', true);
             // Check selected data
             for (key in this.selectedData) {
                 if (this.selectedData.hasOwnProperty(key) && this.selected().indexOf(key) === -1) {
@@ -87,7 +63,7 @@ define([
 
         /**
          * Show/hide action in the massaction menu
-         * @param {Integer} actionId
+         * @param {Number} actionId
          * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
@@ -110,7 +86,7 @@ define([
          * Updates values of the 'allSelected'
          * and 'indetermine' properties.
          *
-         * @returns {Multiselect} Chainable.
+         * @returns {Object} Chainable.
          */
         updateState: function () {
             var totalRecords    = this.totalRecords(),
