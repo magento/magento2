@@ -20,6 +20,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
     /**
+     * Product type
+     */
+    const TYPE_CODE = 'bundle';
+
+    /**
      * Product is composite
      *
      * @var bool
