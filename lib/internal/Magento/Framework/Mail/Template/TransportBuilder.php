@@ -24,6 +24,13 @@ class TransportBuilder
     protected $templateIdentifier;
 
     /**
+     * Template Namespace
+     *
+     * @var string
+     */
+    protected $templateNamespace;
+
+    /**
      * Template Variables
      *
      * @var array
@@ -175,6 +182,18 @@ class TransportBuilder
     }
 
     /**
+     * Set template namespace
+     *
+     * @param string $templateNamespace
+     * @return $this
+     */
+    public function setTemplateNamespace($templateNamespace)
+    {
+        $this->templateNamespace = $templateNamespace;
+        return $this;
+    }
+
+    /**
      * Set template vars
      *
      * @param array $templateVars
@@ -233,7 +252,7 @@ class TransportBuilder
      */
     protected function getTemplate()
     {
-        return $this->templateFactory->get($this->templateIdentifier)
+        return $this->templateFactory->get($this->templateIdentifier, $this->templateNamespace)
             ->setVars($this->templateVars)
             ->setOptions($this->templateOptions);
     }
