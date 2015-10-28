@@ -142,7 +142,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
                 $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
                 $valid = true;
                 foreach ($values as $value) {
-                    $valid = $valid || isset($attrParams['options'][strtolower($value)]);
+                    $valid = $valid && isset($attrParams['options'][strtolower($value)]);
                 }
                 if (!$valid) {
                     $this->_addMessages(

@@ -83,7 +83,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 'type' => 'boolean',
                 'apply_to' => ['simple'],
-                'is_required' => false
+                'is_required' => false,
+                'options' => ['yes' => 0, 'no' => 1]
             ],
             [
                 'product_type' => 'simple',
