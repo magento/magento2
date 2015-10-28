@@ -41,13 +41,16 @@ define([
             if (checkoutData.getShippingAddressFromData()) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
+            } else {
+                this.resolveShippingAddress();
             }
-
             if (quote.isVirtual()) {
                if  (checkoutData.getBillingAddressFromData()) {
                     address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
                     selectBillingAddress(address);
-                }
+                } else {
+                   this.resolveBillingAddress();
+               }
             }
 
         },
