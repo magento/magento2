@@ -143,7 +143,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="component in displayComponents | orderBy:predicate:reverse | limitTo:rowLimit">
+            <tr ng-repeat="component in components | orderBy:predicate:reverse | startFrom:(currentPage-1)*rowLimit |
+             limitTo:rowLimit">
                 <td class="data-grid-indicator-cell">
                     <span class="component-indicator"
                           ng-class="getIndicatorInfo(component, 'icon')"
@@ -171,8 +172,8 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
-                                ng-show="component.update || component.uninstall ||
-                                !component.disable || !component.update"
+                                ng-show="isAvailableUpdatePackage(component.name) || component.uninstall ||
+                                component.enable || component.disable"
                                 ng-click="toggleActiveActionsCell(component)"
                                 ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
