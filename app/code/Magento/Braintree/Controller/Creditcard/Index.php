@@ -12,7 +12,7 @@ class Index extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

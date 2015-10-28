@@ -53,7 +53,7 @@ class Configure extends Action\Action implements IndexInterface
      * @return \Magento\Framework\Controller\ResultInterface
      * @throws NotFoundException
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('id');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

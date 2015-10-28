@@ -40,7 +40,7 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();

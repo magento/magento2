@@ -35,7 +35,7 @@ class Edit extends TermController
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\Search\Model\Query');

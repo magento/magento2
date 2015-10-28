@@ -13,7 +13,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');

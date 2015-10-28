@@ -170,7 +170,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             $expectedEventParameters
         );
 
-        $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
+        $this->assertEquals($this->_responseMock, $this->action->execute($this->_requestMock));
     }
 }
 
@@ -179,7 +179,7 @@ class ActionFake extends Action
     /**
      * Fake action to check a method call from a parent
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_forward(
             ActionTest::ACTION_NAME,

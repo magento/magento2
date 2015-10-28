@@ -137,7 +137,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->with($this->mediaGallery)
             ->will($this->returnSelf());
 
-        $result = $this->controller->execute();
+        $result = $this->controller->executeInternal();
 
         $this->assertInstanceOf('\Magento\Framework\Controller\Result\Json', $result);
     }
@@ -179,7 +179,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->with($this->mediaGallery)
             ->will($this->returnSelf());
 
-        $result = $this->controller->execute();
+        $result = $this->controller->executeInternal();
 
         $this->assertInstanceOf('\Magento\Framework\Controller\Result\Json', $result);
     }
