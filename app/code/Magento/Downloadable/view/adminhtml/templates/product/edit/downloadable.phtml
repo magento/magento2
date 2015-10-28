@@ -25,17 +25,6 @@ require([
 
 //<![CDATA[>
 var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
-                                '<div id="<%- data.id %>" class="file-row file-row-narrow">' +
-                                    '<span class="file-info">' +
-                                        '<span class="file-info-name"><%= data.name %></span>' +
-                                        ' ' +
-                                        '<span class="file-info-size">(<%- data.size %>)</span>' +
-                                    '</span>' +
-                                    '<div class="progressbar-container">' +
-                                        '<div class="progressbar upload-progress" style="width: 0%;"></div>' +
-                                    '</div>' +
-                                    '<div class="clear"></div>' +
-                                '</div>' +
                             '</div>' +
                                 '<div class="no-display" id="[[idName]]-template-progress">' +
                                 '<%- data.percent %>% <%- data.uploaded %> / <%- data.total %>' +
