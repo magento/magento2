@@ -139,6 +139,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
