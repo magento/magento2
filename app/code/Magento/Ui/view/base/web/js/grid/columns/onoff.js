@@ -82,7 +82,7 @@ define([
             for (i = 0; i < this.selected().length; i++) {
                 key = this.selected()[i];
                 this.selectedData.hasOwnProperty(key) || this.selected.splice(this.selected().indexOf(key), 1);
-                this.selectedData.hasOwnProperty(key) || (i--);
+                this.selectedData.hasOwnProperty(key) || i--;
             }
         },
 
