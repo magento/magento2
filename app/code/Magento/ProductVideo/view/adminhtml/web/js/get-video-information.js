@@ -70,7 +70,7 @@ require([
                              * Return string
                              */
                             toString: function () {
-                                return this.name + this.message;
+                                return this.name + ': ' + this.message;
                             }
                         };
                 }
