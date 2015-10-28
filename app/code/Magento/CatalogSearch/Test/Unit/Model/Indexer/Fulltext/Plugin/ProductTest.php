@@ -16,9 +16,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product
      */
     protected $subjectMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     */
+    protected $productMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $proceed;
 
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
@@ -32,8 +42,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-
+        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
             'Magento\Framework\Indexer\IndexerInterface',
             [],
@@ -43,7 +53,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-
         $this->indexerRegistryMock = $this->getMock(
             'Magento\Framework\Indexer\IndexerRegistry',
             ['get'],
@@ -51,6 +60,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->proceed = function () {
+            return $this->subjectMock;
+        };
 
         $this->model = new Product($this->indexerRegistryMock);
     }
@@ -61,9 +74,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
         $this->prepareIndexer();
 
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals($this->subjectMock, $this->model->afterSave($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterSaveScheduled()
@@ -72,9 +88,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->never())->method('reindexRow');
         $this->prepareIndexer();
 
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals($this->subjectMock, $this->model->afterSave($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterDeleteNonScheduled()
@@ -83,9 +102,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
         $this->prepareIndexer();
 
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals($this->subjectMock, $this->model->afterDelete($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterDeleteScheduled()
@@ -94,9 +116,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->never())->method('reindexRow');
         $this->prepareIndexer();
 
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->assertEquals($this->subjectMock, $this->model->afterDelete($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     protected function prepareIndexer()

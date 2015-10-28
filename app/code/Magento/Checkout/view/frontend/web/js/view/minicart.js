@@ -72,12 +72,6 @@ define([
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 initSidebar();
-
-                /**TODO: Extra options support. Should be refactored after MAGETWO-43159. */
-                setInterval(function(){
-                    minicart.trigger('contentUpdated');
-                }, 500);
-
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function(event) {
                 addToCartCalls++;
