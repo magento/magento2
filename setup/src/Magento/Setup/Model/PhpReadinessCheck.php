@@ -206,8 +206,6 @@ class PhpReadinessCheck
             && ($iniSetting !== -1 && $iniSetting !== null)
         ) {
             $error = true;
-        } elseif (version_compare(PHP_VERSION, '7.0.0') >= 0 && $iniSetting !== null) {
-            $error = true;
         }
 
         $message = sprintf(
