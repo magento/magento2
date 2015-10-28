@@ -128,6 +128,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
+        $billingAddress = $addressInformation->getBillingAddress();
+        if ($billingAddress) {
+            $quote->setBillingAddress($billingAddress);
+        }
 
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setSameAsBilling($sameAsBilling);
