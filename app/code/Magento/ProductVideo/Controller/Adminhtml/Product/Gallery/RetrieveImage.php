@@ -8,6 +8,9 @@ namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RetrieveImage extends \Magento\Backend\App\Action
 {
     /**
