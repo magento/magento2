@@ -4102,5 +4102,7 @@ return [
     ['Magento\GoogleOptimizer\Model\Observer\Block\Category\Tab', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\Payment\Model\Observer', 'Magento\Payment\Observer\*'],
     ['Magento\Tax\Observer\AggregateSalesReportTaxData', 'Magento\Tax\Model\AggregateSalesReportTaxData'],
-    ['Magento\Developer\Console\Command\CssDeployCommand']
+    ['Magento\Developer\Console\Command\CssDeployCommand'],
+    ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain'],
+    ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory'],
 ];

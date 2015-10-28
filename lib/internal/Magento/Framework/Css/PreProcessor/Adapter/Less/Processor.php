@@ -10,6 +10,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
@@ -59,6 +60,7 @@ class Processor implements ContentProcessorInterface
 
     /**
      * @inheritdoc
+     * @throws ContentProcessorException
      */
     public function processContent(File $asset)
     {
@@ -86,7 +88,7 @@ class Processor implements ContentProcessorInterface
             $errorMessage = self::ERROR_MESSAGE_PREFIX . $e->getMessage();
             $this->logger->critical($errorMessage);
 
-            return $errorMessage;
+            throw new ContentProcessorException($errorMessage);
         }
     }
 }
