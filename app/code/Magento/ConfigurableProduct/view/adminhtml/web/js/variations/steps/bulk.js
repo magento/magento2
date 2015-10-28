@@ -56,7 +56,7 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable(),
-                    currencySymbol: this.variationsComponent().getCurrencySymbol()
+                    currencySymbol: ''
                 },
                 quantity: {
                     label: 'quantity',
@@ -65,6 +65,11 @@ define([
                     attribute: ko.observable()
                 }
             });
+
+            this.variationsComponent(function (variationsComponent) {
+                this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol()
+            }.bind(this));
+
             this.makeOptionSections = function () {
                 this.images = new self.makeImages(null);
                 this.price = self.price;
