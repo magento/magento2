@@ -703,7 +703,9 @@ define([
                             mageData.scripts.map(function(script) {
                                 return eval(script);
                             });
-                        } catch (e) {}
+                        } catch (e) {
+
+                        }
                         this.restorePhase = false;
                     }
                     break;
