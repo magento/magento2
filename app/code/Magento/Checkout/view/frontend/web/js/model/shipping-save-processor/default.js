@@ -30,6 +30,7 @@ define(
                 var payload = {
                     addressInformation: {
                         shipping_address: quote.shippingAddress(),
+                        billing_address: quote.billingAddress(),
                         shipping_method_code: quote.shippingMethod().method_code,
                         shipping_carrier_code: quote.shippingMethod().carrier_code
                     }
