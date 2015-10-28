@@ -62,7 +62,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $_sitemapIncrement = 0;
 
     /**
-     * Sitemap start and end tags
+     * Sitemap start and end tagsbeforeSave
      *
      * @var array
      */
@@ -275,6 +275,31 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return all sitemap items
+     * @return $this
+     */
+    public function getSitemapItems()
+    {
+        return $this->_sitemapItems;
+    }
+
+    /**
+     * Add new sitemap item
+     * 
+     * @param \Magento\Framework\DataObject $sitemapItem
+     * @return $this
+     */
+    public function addSitemapItems(\Magento\Framework\DataObject $sitemapItem, $ontoEnd = true)
+    {
+        if ($ontoEnd) {
+            array_push($this->_sitemapItems, $sitemapItem);
+        } else {
+            array_unshift($this->_sitemapItems, $sitemapItem);
+        }
+        return $this;
+    }
+
+    /**
      * Check sitemap file location and permissions
      *
      * @return \Magento\Framework\Model\AbstractModel
@@ -337,7 +362,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     {
         $this->_initSitemapItems();
         /** @var $sitemapItem \Magento\Framework\DataObject */
-        foreach ($this->_sitemapItems as $sitemapItem) {
+        foreach ($this->getSitemapItems() as $sitemapItem) {
             $changefreq = $sitemapItem->getChangefreq();
             $priority = $sitemapItem->getPriority();
             foreach ($sitemapItem->getCollection() as $item) {
