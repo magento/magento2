@@ -145,6 +145,9 @@ define(
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
+                    if (this.source.get(this.dataScopePrefix + '.custom_attributes')) {
+                        this.source.trigger(this.dataScopePrefix + '.custom_attributes.data.validate');
+                    };
 
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix),

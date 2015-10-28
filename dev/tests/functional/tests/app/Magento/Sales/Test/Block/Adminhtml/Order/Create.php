@@ -102,6 +102,13 @@ class Create extends Block
     protected $accountInformationBlock = '#order-form_account';
 
     /**
+     * Payment and Shipping methods block.
+     *
+     * @var string
+     */
+    protected $orderMethodsSelector = '#order-methods';
+
+    /**
      * Getter for order selected products grid.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
@@ -278,6 +285,7 @@ class Create extends Block
      */
     public function selectShippingMethod(array $shippingMethod)
     {
+        $this->_rootElement->find($this->orderMethodsSelector)->click();
         $this->getShippingMethodBlock()->selectShippingMethod($shippingMethod);
         $this->getTemplateBlock()->waitLoader();
     }
@@ -291,7 +299,7 @@ class Create extends Block
     public function selectPaymentMethod(array $paymentCode)
     {
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->click();
+        $this->_rootElement->find($this->orderMethodsSelector)->click();
         $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode);
         $this->getTemplateBlock()->waitLoader();
     }
