@@ -467,7 +467,7 @@ define([
                 name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
             }).val(key);
 
-            oldNewFilePosition = parseInt(tmpOldImage.position);
+            oldNewFilePosition = parseInt(tmpOldImage.position, 10);
             imageData.position = oldNewFilePosition;
 
             $(this._imageWidgetSelector).trigger('setPosition', {
