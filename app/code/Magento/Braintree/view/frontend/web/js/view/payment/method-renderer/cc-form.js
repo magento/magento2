@@ -12,13 +12,26 @@ define(
         'underscore',
         'jquery',
         'Magento_Ui/js/model/messageList',
-        'mage/translate'
+        'mage/translate',
+        'uiRegistry',
+        'mage/utils/wrapper'
     ],
-    function (ko, Component, setPaymentInformationAction, quote, braintreeClientSDK, _, $, messageList, $t) {
+    function (
+        ko,
+        Component,
+        setPaymentInformationAction,
+        quote,
+        braintreeClientSDK,
+        _,
+        $,
+        messageList,
+        $t,
+        registry,
+        wrapper
+    ) {
         'use strict';
         var configBraintree= window.checkoutConfig.payment.braintree;
         return Component.extend({
-
             placeOrderHandler: null,
             validateHandler: null,
             setPlaceOrderHandler: function(handler) {
@@ -52,7 +65,12 @@ define(
                 storedCards: configBraintree ? configBraintree.storedCards : {},
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
                 creditCardExpMonth: null,
-                creditCardExpYear: null
+                creditCardExpYear: null,
+                billingAddressComponentName: configBraintree.billingAddressComponentName,
+                lastBillingAddress: null,
+                imports: {
+                    onIsSameChange: '${ $.billingAddressComponentName }:isAddressSameAsShipping'
+                }
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -79,6 +97,7 @@ define(
             initObservable: function () {
                 this.initVars();
                 this._super()
+                    .track('availableCcValues')
                     .observe([
                         'selectedCardToken',
                         'storeInVault',
@@ -91,6 +110,8 @@ define(
                         || this.selectedCardToken() === undefined ||
                         this.selectedCardToken() == '';
                 }, this);
+
+                this.initBillingAddressListening();
 
                 if (!this.braintreeDataFrameLoaded && this.isFraudDetectionEnabled) {
                     $.getScript(this.braintreeDataJs, function () {
@@ -293,26 +314,30 @@ define(
                 }
                 return filteredCards;
             },
-            getCcAvailableTypes: function() {
-                var billingAddress = quote.billingAddress;
-                var billingCountryId = billingAddress.countryId;
-                if (typeof billingCountryId == 'undefined') {
-                    billingCountryId = billingAddress.country_id;
-                }
-                var availableTypes = configBraintree.availableCardTypes;
-                var countrySpecificCardTypeConfig = configBraintree.countrySpecificCardTypes;
-                if (billingCountryId && typeof countrySpecificCardTypeConfig.billingCountryId != 'undefined') {
-                    var countrySpecificCardTypes = countrySpecificCardTypeConfig[billingCountryId];
-                    if (typeof countrySpecificCardTypes != 'undefined') {
-                        var filteredTypes = {};
 
-                        for (var key in availableTypes) {
-                            if (_.indexOf(countrySpecificCardTypes, key) != -1) {
-                                filteredTypes[key] = availableTypes[key];
-                            }
+            /**
+             * Get list of available CC types
+             */
+            getCcAvailableTypes: function () {
+                var availableTypes = configBraintree.availableCardTypes;
+                var billingAddress = quote.billingAddress();
+                if (!billingAddress) {
+                    billingAddress = this.lastBillingAddress;
+                }
+                this.lastBillingAddress = billingAddress;
+                var billingCountryId = billingAddress.countryId;
+                if (billingCountryId &&
+                    typeof configBraintree.countrySpecificCardTypes[billingCountryId] !== 'undefined'
+                ) {
+                    var countrySpecificCardTypes = configBraintree.countrySpecificCardTypes[billingCountryId];
+                    var filteredTypes = {};
+
+                    for (var key in availableTypes) {
+                        if (_.indexOf(countrySpecificCardTypes, key) != -1) {
+                            filteredTypes[key] = availableTypes[key];
                         }
-                        return filteredTypes;
                     }
+                    return filteredTypes;
                 }
                 return availableTypes;
             },
@@ -353,6 +378,36 @@ define(
 
             getCssClass: function () {
                 return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
+            },
+
+            /**
+             * Update list of available CC types values
+             */
+            updateAvailableTypeValues: function () {
+                this.availableCcValues = this.getCcAvailableTypesValues();
+            },
+
+            /**
+             * Trigger update CC types function
+             * after Magento_Checkout/js/view/billing-address::isAddressSameAsShipping() was triggered
+             */
+            onIsSameChange: function () {
+                this.updateAvailableTypeValues();
+            },
+
+            /**
+             * Listening Magento_Checkout/js/view/billing-address::updateAddress() function
+             * and update available CC types values
+             */
+            initBillingAddressListening: function () {
+                var self = this;
+                registry.get(self.billingAddressComponentName, function (component) {
+                    // listen updateAddress() function
+                    component.updateAddress = wrapper.wrap(component.updateAddress, function (origin) {
+                        origin();
+                        self.updateAvailableTypeValues();
+                    });
+                });
             }
         });
     }
