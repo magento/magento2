@@ -130,17 +130,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      */
     protected function _readFiles($fileList)
     {
-        $configMerger = $this->getMergedConfig($fileList);
-
-        $output = [];
-        if ($configMerger) {
-            $output = $this->_converter->convert($configMerger->getDom());
-        }
-        return $output;
-    }
-
-    public function getMergedConfig($fileList)
-    {
         /** @var \Magento\Framework\Config\Dom $configMerger */
         $configMerger = null;
         foreach ($fileList as $key => $content) {
@@ -166,7 +155,11 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
             }
         }
 
-        return $configMerger;
+        $output = [];
+        if ($configMerger) {
+            $output = $this->_converter->convert($configMerger->getDom());
+        }
+        return $output;
     }
 
     /**
