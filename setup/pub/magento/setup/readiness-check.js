@@ -334,4 +334,27 @@ angular.module('readiness-check', [])
                 $scope.progress();
             }
         });
+
+        $scope.wordingOfReadinessCheckAction = function() {
+            var $actionString = 'We\'re making sure your server environment is ready for ';
+            if ($localStorage.moduleName) {
+                $actionString += $localStorage.moduleName;
+            } else {
+                if($state.current.type === 'install' || $state.current.type === 'upgrade') {
+                    $actionString += 'Magento';
+                    if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
+                        $actionString += ' and Selected Components';
+                    }
+                } else {
+                    $actionString += $localStorage.titles[$state.current.type];
+                }
+            }
+            $actionString += " to be " + $state.current.type;
+            if ($scope.endsWith($state.current.type, 'e')) {
+                $actionString += 'd';
+            } else {
+                $actionString +='ed';
+            }
+            return $actionString;
+        }
     }]);
