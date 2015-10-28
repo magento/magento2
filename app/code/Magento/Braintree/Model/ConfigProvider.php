@@ -97,8 +97,7 @@ class ConfigProvider extends CcGenericConfigProvider
      */
     protected function getCcAvailableCcTypes()
     {
-        $country = $this->checkoutSession->getQuote()->getBillingAddress()->getCountryId();
-        return $this->dataHelper->getCcAvailableCardTypes($country);
+        return $this->dataHelper->getCcAvailableCardTypes();
     }
 
     /**
@@ -186,6 +185,7 @@ class ConfigProvider extends CcGenericConfigProvider
                     'availableCardTypes' => $this->getCcAvailableCcTypes(),
                     'braintreeDataJs'=> $this->config->getBraintreeDataJs(),
                     'ajaxGenerateNonceUrl' => $this->getAjaxGenerateNonceUrl(),
+                    'billingAddressComponentName' => 'checkout.steps.billing-step.payment.payments-list.braintree-form'
                 ],
             ],
         ]);
