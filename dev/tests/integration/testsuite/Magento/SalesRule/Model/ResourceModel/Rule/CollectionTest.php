@@ -6,6 +6,8 @@
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
 /**
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/SalesRule/_files/rules.php
  * @magentoDataFixture Magento/SalesRule/_files/coupons.php
  */
