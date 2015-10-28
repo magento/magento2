@@ -82,7 +82,7 @@ class TransportBuilder
     /**
      * @var \Magento\Framework\Mail\TransportInterfaceFactory
      */
-    protected $_mailTransportFactory;
+    protected $mailTransportFactory;
 
     /**
      * @param FactoryInterface $templateFactory
@@ -102,7 +102,7 @@ class TransportBuilder
         $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
-        $this->_mailTransportFactory = $mailTransportFactory;
+        $this->mailTransportFactory = $mailTransportFactory;
     }
 
     /**
@@ -225,7 +225,7 @@ class TransportBuilder
     public function getTransport()
     {
         $this->prepareMessage();
-        $mailTransport = $this->_mailTransportFactory->create(['message' => clone $this->message]);
+        $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
         $this->reset();
 
         return $mailTransport;
