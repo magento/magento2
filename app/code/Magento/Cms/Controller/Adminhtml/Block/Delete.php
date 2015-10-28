@@ -13,7 +13,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

@@ -206,7 +206,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('sales/invoice/view', ['order_id' => $orderId, 'invoice_id' => $invoiceId])
             ->willReturnSelf();
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Redirect', $this->invoiceEmail->execute());
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Redirect', $this->invoiceEmail->executeInternal());
     }
 
     public function testEmailNoInvoiceId()
@@ -223,7 +223,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->executeInternal());
     }
 
     public function testEmailNoInvoice()
@@ -253,6 +253,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->executeInternal());
     }
 }

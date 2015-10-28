@@ -68,7 +68,7 @@ class Show extends \Magento\Backend\App\Action
      *
      * @return string
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $uploader = $this->uploaderFactory->create(['fileId' => 'datafile']);

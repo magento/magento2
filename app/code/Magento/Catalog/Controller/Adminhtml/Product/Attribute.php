@@ -62,14 +62,14 @@ abstract class Attribute extends \Magento\Backend\App\Action
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(\Magento\Framework\App\RequestInterface $request)
+    public function execute(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_entityTypeId = $this->_objectManager->create(
             'Magento\Eav\Model\Entity'
         )->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->getTypeId();
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**

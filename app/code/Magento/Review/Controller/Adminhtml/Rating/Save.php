@@ -15,7 +15,7 @@ class Save extends RatingController
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->initEnityId();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

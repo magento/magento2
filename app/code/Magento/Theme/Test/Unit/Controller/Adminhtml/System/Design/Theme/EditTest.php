@@ -59,7 +59,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->method('getUrl')
             ->willReturn('http://return.url');
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 
     public function testExecuteWithException()
@@ -125,7 +125,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->method('getUrl')
             ->willReturn('http://return.url');
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 
     /**
@@ -245,6 +245,6 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
         $this->view->expects($this->once())
             ->method('renderLayout');
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 }

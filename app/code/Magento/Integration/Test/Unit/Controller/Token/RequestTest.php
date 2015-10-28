@@ -142,6 +142,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['response']);
         $this->response->expects($this->once())
             ->method('setBody');
-        $this->requestAction->execute();
+        $this->requestAction->executeInternal();
     }
 }

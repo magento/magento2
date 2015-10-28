@@ -94,6 +94,6 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($condition));
 
         $this->response->expects($this->once())->method('setBody')->with('<some_html>')->will($this->returnSelf());
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }
