@@ -28,11 +28,6 @@ class View extends \Magento\Framework\Config\AbstractXml
     protected $xpath;
 
     /**
-     * @var Reader
-     */
-    private $xsdReader;
-
-    /**
      * @param array $configFiles
      * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
