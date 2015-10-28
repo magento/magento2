@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Interface StockItemCollectionInterface
+ * @api
  */
 interface StockItemCollectionInterface extends SearchResultsInterface
 {
