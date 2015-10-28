@@ -84,7 +84,10 @@
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?php /* @noEscape */ echo $block->renderAddress($block->getShippingAddress()); ?>
+                            <?php echo $block->escapeHtml(
+                                $block->renderAddress($block->getShippingAddress()),
+                                ['br']
+                            ); ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
