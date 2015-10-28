@@ -25,7 +25,7 @@ class AssertCacheManagementAction extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             $successMessage,
-            $adminCache->getMessagesBlock()->getSuccessMessages(),
+            $adminCache->getMessagesBlock()->getSuccessMessage(),
             'Action is not successful.'
         );
     }
