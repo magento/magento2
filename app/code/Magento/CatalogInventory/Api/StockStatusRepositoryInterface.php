@@ -7,7 +7,6 @@ namespace Magento\CatalogInventory\Api;
 
 /**
  * Interface StockStatusRepositoryInterface
- * @api
  */
 interface StockStatusRepositoryInterface
 {
