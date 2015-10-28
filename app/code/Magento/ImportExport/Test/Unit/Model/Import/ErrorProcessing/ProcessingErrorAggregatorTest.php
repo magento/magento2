@@ -130,7 +130,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsRowInvalid($errorLevel, $rowNumber, $isValid)
     {
-        $this->model->addError('systemException', $errorLevel, $rowNumber, 'Some column name', 'Message', 'Description');
+        $this->model->addError('systemException', $errorLevel, $rowNumber, 'Column name', 'Message', 'Description');
         $result = $this->model->isRowInvalid($rowNumber);
         $this->assertEquals($isValid, $result);
     }
