@@ -70,7 +70,7 @@ require([
                              * Return string
                              */
                             toString: function () {
-                                return this.name + ': ' + this.message;
+                                return $.mage.__(this.name + ': ' + this.message);
                             }
                         };
                 }
@@ -323,8 +323,7 @@ require([
         $.widget('mage.videoData', {
             options: {
                 youtubeKey: '',
-                noKeyErrorTxt: 'You have not entered youtube API key. ' +
-                'No information about youtube video will be retrieved.',
+                noKeyErrorTxt: $.mage.__('You have not entered youtube API key. No information about youtube video will be retrieved.'),
                 eventSource: '' //where is data going from - focus out or click on button
             },
 
@@ -367,7 +366,7 @@ require([
                 videoInfo = this._validateURL(url);
 
                 if (!videoInfo) {
-                    this._onRequestError('Invalid video url');
+                    this._onRequestError($.mage.__('Invalid video url'));
 
                     return;
                 }
@@ -402,7 +401,7 @@ require([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push('Youtube API key is an invalid');
+                                errorsMessage.push($.mage.__('Youtube API key is an invalid'));
 
                                 break;
                             }
@@ -410,7 +409,7 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                        return $.mage.__('Video can\'t be shown by reason: ') + $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
@@ -420,7 +419,7 @@ require([
                     }
 
                     if (!data.items || data.items.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return;
                     }
@@ -450,7 +449,7 @@ require([
                         respData;
 
                     if (data.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }

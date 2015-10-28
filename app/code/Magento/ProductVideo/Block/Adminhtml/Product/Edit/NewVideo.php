@@ -104,7 +104,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Url'),
                 'required' => true,
                 'name' => 'video_url',
-                'note' => 'Youtube or Vimeo supported',
+                'note' => __('Youtube or Vimeo supported'),
             ]
         );
 
@@ -156,9 +156,9 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'button',
             [
                 'label' => '',
-                'title' => __('Get Video Information'),
+                'title' => 'Get Video Information',
                 'name' => 'new_video_get',
-                'value' => 'Get Video Information',
+                'value' => __('Get Video Information'),
                 'class' => 'action-default'
             ]
         );

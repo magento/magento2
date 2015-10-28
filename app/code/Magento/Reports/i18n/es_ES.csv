@@ -225,3 +225,5 @@ Refunds,Refunds
 "PayPal Settlement","PayPal Settlement"
 "Order Count","Order Count"
 Bestseller,Bestseller
+"Date Used","Date Used"
+"For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.","For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone."

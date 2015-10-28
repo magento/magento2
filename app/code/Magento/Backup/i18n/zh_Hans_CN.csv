@@ -79,3 +79,6 @@ Frequency,Frequency
 "Are you sure you want to delete the selected backup(s)?",你是否确定要删除所选备份？
 Size(bytes),Size(bytes)
 Rollback,回滚
+"Maintenance mode","Maintenance mode"
+"This may take a few moments.","This may take a few moments."
+"Be sure your store is in maintenance mode during backup.","Be sure your store is in maintenance mode during backup."
