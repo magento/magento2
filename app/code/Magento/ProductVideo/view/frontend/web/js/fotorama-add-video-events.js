@@ -142,8 +142,7 @@ define([
                 dataUrl,
                 tmpVideoData,
                 tmpInputData,
-                i,
-                iPlace;
+                i;
 
             if (isJSON) {
                 inputData = $.parseJSON(inputData);
@@ -172,14 +171,14 @@ define([
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
                 }
-                iPlace = i + 1;
+
                 if (tmpVideoData.isBase) {
                     videoData.unshift(tmpVideoData);
-                    continue;
+                } else {
+                    videoData.push(tmpVideoData);
                 }
-
-                videoData.push(tmpVideoData);
             }
+
             return videoData;
         },
 

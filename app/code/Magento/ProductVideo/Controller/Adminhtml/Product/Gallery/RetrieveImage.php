@@ -72,12 +72,13 @@ class RetrieveImage extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        $baseTmpMediaPath = $this->mediaConfig->getBaseTmpMediaPath();
         try {
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
-            $originalFileName = $this->parseOriginalFileName($remoteFileUrl);
-            $localFileName = $this->localFileName($originalFileName);
-            $localTmpFileName = $this->generateTmpFileName($localFileName);
-            $localFileMediaPath = $this->appendFileSystemPath($localTmpFileName);
+            $originalFileName = basename($remoteFileUrl);
+            $localFileName = Uploader::getCorrectFileName($originalFileName);
+            $localTmpFileName = Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
+            $localFileMediaPath = $baseTmpMediaPath . ($localTmpFileName);
             $localUniqueFileMediaPath = $this->appendNewFileName($localFileMediaPath);
             $this->retrieveRemoteImage($remoteFileUrl, $localUniqueFileMediaPath);
             $localFileFullPath = $this->appendAbsoluteFileSystemPath($localUniqueFileMediaPath);
@@ -101,7 +102,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected function appendResultSaveRemoteImage($fileName)
     {
         $fileInfo = pathinfo($fileName);
-        $tmpFileName = $this->generateTmpFileName($fileInfo['basename']);
+        $tmpFileName = Uploader::getDispretionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
         $result['name'] = $fileInfo['basename'];
         $result['type'] = $this->imageAdapter->getMimeType();
         $result['error'] = 0;
@@ -109,16 +110,6 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $result['url'] = $this->mediaConfig->getTmpMediaUrl($tmpFileName);
         $result['file'] = $tmpFileName;
         return $result;
-    }
-
-    /**
-     * @param string $fileName
-     * @return string
-     */
-    protected function localFileName($fileName)
-    {
-        $fileName = Uploader::getCorrectFileName($fileName);
-        return $fileName;
     }
 
     /**
@@ -150,43 +141,6 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $fileName = Uploader::getNewFileName($destinationFile);
         $fileInfo = pathinfo($localFilePath);
         return $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * @param string $fileUrl
-     * @return string
-     */
-    protected function parseOriginalFileName($fileUrl)
-    {
-        return basename($fileUrl);
-    }
-
-    /**
-     * @param string $fileName
-     * @return string
-     */
-    protected function generateTmpFileName($fileName)
-    {
-        return Uploader::getDispretionPath($fileName) . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * @param string $fileName
-     * @return string
-     */
-    protected function generateFileNameWithPath($fileName)
-    {
-        return Uploader::getDispretionPath($fileName) . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * @param string $localTmpFile
-     * @return string
-     */
-    protected function appendFileSystemPath($localTmpFile)
-    {
-        $pathToSave = $this->mediaConfig->getBaseTmpMediaPath();
-        return $pathToSave . $localTmpFile;
     }
 
     /**
