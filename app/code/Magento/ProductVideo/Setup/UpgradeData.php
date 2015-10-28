@@ -53,7 +53,9 @@ class UpgradeData implements UpgradeDataInterface
                 $attributeSetId,
                 'Image Management'
             );
-            if (isset($attributeGroup['attribute_group_name']) && $attributeGroup['attribute_group_name'] == 'Image Management') {
+            if (isset($attributeGroup['attribute_group_name'])
+                && $attributeGroup['attribute_group_name'] == 'Image Management'
+            ) {
                 // update General Group
                 $categorySetup->updateAttributeGroup(
                     $entityTypeId,
