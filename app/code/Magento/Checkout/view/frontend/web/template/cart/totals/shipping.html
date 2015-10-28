@@ -6,7 +6,7 @@
 -->
 <!-- ko if: isCalculated() -->
 <tr class="totals shipping excl">
-    <th class="mark" colspan="1" scope="row" data-bind="text: $t(title) + ' (' + $t(getShippingMethodTitle()) + ')'"></th>
+    <th class="mark" colspan="1" scope="row" data-bind="text: title + ' (' + getShippingMethodTitle() + ')'"></th>
     <td class="amount">
         <span class="price" data-bind="text: getValue()"></span>
     </td>
