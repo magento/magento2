@@ -2490,7 +2490,6 @@ return [
     ['getShippingAddress', 'Magento\Quote\Api\Data\CartInterface'],
     ['setShippingAddress', 'Magento\Quote\Api\Data\CartInterface'],
     ['getPaymentById', 'Magento\Quote\Model\Quote'],
-    ['getPaymentById', 'Magento\Quote\Model\Quote'],
     ['create', 'Magento\Quote\Model\QuoteRepository'],
     ['set', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::set'],
     ['get', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::get'],
