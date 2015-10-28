@@ -6,7 +6,6 @@
 
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -15,7 +14,8 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
  * Shipping method management class for guest carts.
  */
 class GuestShippingMethodManagement implements
-    GuestShippingMethodManagementInterface, \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
+    \Magento\Quote\Api\GuestShippingMethodManagementInterface,
+    \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
 {
     /**
      * @var ShippingMethodManagementInterface

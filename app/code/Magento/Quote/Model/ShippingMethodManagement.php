@@ -9,14 +9,14 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 /**
  * Shipping method read service.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingMethodManagement implements
-    ShippingMethodManagementInterface, \Magento\Quote\Model\ShippingMethodManagementInterface
+    \Magento\Quote\Api\ShippingMethodManagementInterface,
+    \Magento\Quote\Model\ShippingMethodManagementInterface
 {
     /**
      * Quote repository.
