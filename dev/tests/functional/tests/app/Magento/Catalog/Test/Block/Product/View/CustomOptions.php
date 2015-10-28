@@ -30,14 +30,14 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $optionElement = '#product-options-wrapper .field';
+    protected $optionElement = '#product-options-wrapper > * > .field';
 
     /**
      * Selector for title of option
      *
      * @var string
      */
-    protected $title = 'label';
+    protected $title = 'label > span:nth-child(1), legend > span:nth-child(1)';
 
     /**
      * Selector for required option
@@ -381,7 +381,7 @@ class CustomOptions extends Form
      */
     protected function parseOptionText($optionText)
     {
-        preg_match('`^(.*?)\+\$(\d.*?)$`', $optionText, $match);
+        preg_match('`^(.*?) \+ ?\$([\d\.,]*?)$`', $optionText, $match);
         $optionPrice = isset($match[2]) ? str_replace(',', '', $match[2]) : 0;
         $optionTitle = isset($match[1]) ? trim($match[1]) : $optionText;
 

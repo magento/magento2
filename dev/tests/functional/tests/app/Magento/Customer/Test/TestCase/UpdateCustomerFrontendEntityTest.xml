@@ -19,9 +19,7 @@
             <data name="address/data/city" xsi:type="string">City %isolation%</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">Colorado</data>
-            <data name="address/data/region" xsi:type="string">-</data>
             <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
-            <data name="address/data/fax" xsi:type="string">161-999-8888</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
@@ -37,10 +35,8 @@
             <data name="address/data/street" xsi:type="string">Some street %isolation%</data>
             <data name="address/data/city" xsi:type="string">City %isolation%</data>
             <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
-            <data name="address/data/region_id" xsi:type="string">-</data>
             <data name="address/data/region" xsi:type="string">Region %isolation%</data>
             <data name="address/data/telephone" xsi:type="string">0123456789-02134567</data>
-            <data name="address/data/fax" xsi:type="string">5555-874-99634</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
@@ -57,9 +53,7 @@
             <data name="address/data/city" xsi:type="string">Quintin</data>
             <data name="address/data/country_id" xsi:type="string">France</data>
             <data name="address/data/region_id" xsi:type="string">Côtes-d'Armor</data>
-            <data name="address/data/region" xsi:type="string">-</data>
             <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
-            <data name="address/data/fax" xsi:type="string">161-999-8888</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
@@ -75,9 +69,7 @@
             <data name="address/data/city" xsi:type="string">Culver City</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>
-            <data name="address/data/region" xsi:type="string">-</data>
             <data name="address/data/telephone" xsi:type="string">555-55-555-55</data>
-            <data name="address/data/fax" xsi:type="string">-</data>
             <data name="address/data/postcode" xsi:type="string">90230</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />

@@ -739,12 +739,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_INCL setting
+     * Get FPT DISPLAY_INCL setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayIncl($storeId = null)
+    public function isDisplayIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_INCL,
@@ -754,12 +754,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_EXCL_DESCR_INCL setting
+     * Get FPT DISPLAY_INCL_DESCR setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayExlDescIncl($storeId = null)
+    public function isDisplayInclDesc($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL_DESCR,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get FPT DISPLAY_EXCL_DESCR_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayExclDescIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
@@ -769,12 +784,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_EXCL setting
+     * Get FPT DISPLAY_EXCL setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayExcl($storeId = null)
+    public function isDisplayExcl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL,
