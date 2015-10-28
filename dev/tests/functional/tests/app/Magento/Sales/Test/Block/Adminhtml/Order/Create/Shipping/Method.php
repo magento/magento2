@@ -36,8 +36,6 @@ class Method extends Block
      */
     public function selectShippingMethod(array $shippingMethod)
     {
-        // Click on rootElement to solve overlapping inner elements by header menu.
-        $this->_rootElement->click();
         $this->_rootElement->find($this->shippingMethodsLink)->click();
         $selector = sprintf(
             $this->shippingMethod,

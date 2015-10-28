@@ -6,20 +6,17 @@
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+
+/** @var \Magento\Store\Model\Store $store */
 $store = Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
 $storeCode = 'fixturestore';
+
 if (!$store->load($storeCode)->getId()) {
-    $websiteId = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-        ->getWebsite()
-        ->getId();
-
-    $groupId = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-        ->getWebsite()
-        ->getDefaultGroupId();
-
     $store->setCode($storeCode)
-        ->setWebsiteId($websiteId)
-        ->setGroupId($groupId)
+        ->setWebsiteId($storeManager->getWebsite()->getId())
+        ->setGroupId($storeManager->getWebsite()->getDefaultGroupId())
         ->setName('Fixture Store')
         ->setSortOrder(10)
         ->setIsActive(1);
