@@ -837,7 +837,7 @@ class CategorySetup extends EavSetup
                         'label' => 'Quantity',
                         'input' => 'select',
                         'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
-                        'source' => 'Magento\\CatalogInventory\\Model\\Source\\Stock',
+                        'source' => 'Magento\CatalogInventory\Model\Source\Stock',
                         'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                         'default' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
                         'user_defined' => false,
