@@ -141,3 +141,7 @@ Ok,Ok
 "We can't complete your order because you don't have a payment method available.","We can't complete your order because you don't have a payment method available."
 Translations,Translations
 "Translation files.","Translation files."
+"Translation Strategy","Translation Strategy"
+"Please put your store into maintenance mode and redeploy static files after changing strategy","Please put your store into maintenance mode and redeploy static files after changing strategy"
+"Dictionary (Translation on Storefront side)","Dictionary (Translation on Storefront side)"
+"Embedded (Translation on Admin side)","Embedded (Translation on Admin side)"

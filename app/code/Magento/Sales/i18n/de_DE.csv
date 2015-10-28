@@ -680,3 +680,11 @@ order-header,order-header
 "PDF Packing Slips","PDF Packzettel"
 "Status can't be unassigned, because it is used by existing order(s).","Status can't be unassigned, because it is used by existing order(s)."
 Operations,Operations
+"Include Tax to Amount","Include Tax to Amount"
+"Orders Cron Settings","Orders Cron Settings"
+"Pending Payment Order Lifetime (minutes)","Pending Payment Order Lifetime (minutes)"
+"Asynchronous sending","Asynchronous sending"
+"Grid Settings","Grid Settings"
+"Asynchronous indexing","Asynchronous indexing"
+"Visible On Storefront","Visible On Storefront"
+"Please select a customer","Please select a customer"
