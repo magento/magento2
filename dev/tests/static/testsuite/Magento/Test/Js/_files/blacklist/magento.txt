@@ -864,7 +864,6 @@ vendor/magento/module-paypal/view/frontend/web/js/action/set-payment-method.js
 vendor/magento/module-paypal/view/frontend/web/js/model/iframe-redirect.js
 vendor/magento/module-paypal/view/frontend/web/js/model/iframe.js
 vendor/magento/module-paypal/view/frontend/web/js/opcheckout.js
-vendor/magento/module-paypal/view/frontend/web/js/paypal-checkout.js
 vendor/magento/module-paypal/view/frontend/web/js/view/payment/method-renderer/iframe-methods.js
 vendor/magento/module-paypal/view/frontend/web/js/view/payment/method-renderer/payflow-express-bml.js
 vendor/magento/module-paypal/view/frontend/web/js/view/payment/method-renderer/payflow-express.js
