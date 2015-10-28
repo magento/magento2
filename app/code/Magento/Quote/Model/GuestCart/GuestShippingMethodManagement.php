@@ -14,7 +14,8 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Shipping method management class for guest carts.
  */
-class GuestShippingMethodManagement implements GuestShippingMethodManagementInterface
+class GuestShippingMethodManagement implements
+    GuestShippingMethodManagementInterface, \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
 {
     /**
      * @var ShippingMethodManagementInterface
