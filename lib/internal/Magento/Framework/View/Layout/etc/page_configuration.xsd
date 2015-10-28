@@ -6,9 +6,9 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="head.xsd"/>
-    <xs:include schemaLocation="body.xsd"/>
-    <xs:include schemaLocation="html.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/head.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/body.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/html.xsd"/>
 
     <xs:complexType name="pageType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
