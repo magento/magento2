@@ -32,6 +32,28 @@ class Cli extends SymfonyApplication
     private $initException;
 
     /**
+     * Process an error happened during initialization of commands, if any
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws \Exception
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $exitCode = parent::doRun($input, $output);
+        if ($this->initException) {
+            $output->writeln(
+                '<error>An error happened during commands initialization. '
+                . 'If you just updated the code base, consider cleaning "var/generation", "var/di" directories '
+                . 'and cache.</error>'
+            );
+            throw $this->initException;
+        }
+        return $exitCode;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getDefaultCommands()
@@ -95,26 +117,5 @@ class Cli extends SymfonyApplication
             }
         }
         return $commands;
-    }
-
-    /**
-     * Process an error happened during initialization of commands, if any
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws \Exception
-     */
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-        $exitCode = parent::doRun($input, $output);
-        if ($this->initException) {
-            $output->writeln(
-                '<error>An error happened during commands initialization. '
-                . 'If you just updated the code base, consider cleaning "var/generation" and "var/di" folders.</error>'
-            );
-            throw $this->initException;
-        }
-        return $exitCode;
     }
 }
