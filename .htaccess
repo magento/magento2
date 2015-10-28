@@ -128,7 +128,7 @@
 ## workaround for HTTP authorization
 ## in CGI environment
 
-##    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 ############################################
 ## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
