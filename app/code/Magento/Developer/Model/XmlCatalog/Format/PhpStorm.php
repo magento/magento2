@@ -23,11 +23,6 @@ class PhpStorm implements FormatInterface
     private $currentDirRead;
 
     /**
-     * @var WriteInterface
-     */
-    private $currentDirWrite;
-
-    /**
      * @var \Magento\Framework\Filesystem\File\WriteFactory
      */
     private $fileWriteFactory;
@@ -68,7 +63,7 @@ class PhpStorm implements FormatInterface
             $nodeList = $xpath->query('/project');
             $projectNode = $nodeList->item(0);
             $file->close();
-        } catch (FileSystemException $f){
+        } catch (FileSystemException $f) {
             //create file if does not exists
             $dom = new \DOMDocument();
             $projectNode = $dom->createElement('project');

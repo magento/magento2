@@ -43,12 +43,12 @@ class UrnResolver
             $package = $componentRegistrar
                 ->getPath(ComponentRegistrar::LIBRARY, $matches['vendor'] . '/' . $matches['framework']);
         } else {
-            throw new NotFoundException(new Phrase("Unsupported format of schema location: '%1'", $schema));
+            throw new NotFoundException(new Phrase("Unsupported format of schema location: '%1'", [$schema]));
         }
         $schemaPath = $package . '/' . $matches['path'];
         if (empty($package) || !file_exists($schemaPath)) {
             throw new NotFoundException(
-                new Phrase("Could not locate schema: '%1' at '%2'", $schema, $schemaPath)
+                new Phrase("Could not locate schema: '%1' at '%2'", [$schema, $schemaPath])
             );
         }
         return $schemaPath;
