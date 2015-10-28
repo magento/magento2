@@ -13,17 +13,17 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        /** @var \Magento\Framework\View\Xsd\Reader $reader */
-        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Xsd\Reader'
-        );
-        $mergeXsd = $reader->read();
         $domConfig = new \Magento\Framework\Config\Dom($file);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            $mergeXsd,
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
-        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
+        $message = "Invalid XML-file: {$file}\n";
+        foreach ($errors as $error) {
+            $message .= "{$error->message} Line: {$error->line}\n";
+        }
+        $this->assertTrue($result, $message);
     }
 
     /**

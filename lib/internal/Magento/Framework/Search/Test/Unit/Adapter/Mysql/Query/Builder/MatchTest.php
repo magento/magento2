@@ -64,7 +64,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
-            ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
+            ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some* -value*'))
             ->will($this->returnValue('matchedQuery'));
         $select->expects($this->once())
             ->method('where')
