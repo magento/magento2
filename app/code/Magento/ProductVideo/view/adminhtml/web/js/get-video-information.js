@@ -403,7 +403,7 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video cannot be shown due to the following reason: ' + $.unique(errorsMessage).join(', ');
+                        return 'Video cant be shown due to the following reason: ' + $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {

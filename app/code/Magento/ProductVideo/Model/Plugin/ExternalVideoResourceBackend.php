@@ -7,7 +7,6 @@
 namespace Magento\ProductVideo\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
-use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Attribute Media Resource decorator
@@ -37,7 +36,7 @@ class ExternalVideoResourceBackend
     public function afterDuplicate(Media $originalResourceModel, array $valueIdMap)
     {
         $mediaGalleryEntitiesData = $this->videoResourceModel->loadByIds(array_keys($valueIdMap));
-        foreach($mediaGalleryEntitiesData as $row) {
+        foreach ($mediaGalleryEntitiesData as $row) {
             $row['value_id'] = $valueIdMap[$row['value_id']];
             $this->videoResourceModel->insertOnDuplicate($row);
         }
