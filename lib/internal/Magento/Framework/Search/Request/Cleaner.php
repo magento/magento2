@@ -130,9 +130,8 @@ class Cleaner
                 foreach ($this->requestData['aggregations'] as $aggregationName => $aggregationValue) {
                     switch ($aggregationValue['type']) {
                         case 'dynamicBucket':
-                            if (
-                                !array_key_exists('is_bind', $aggregationValue)
-                                && is_string($aggregationValue['method'])
+                            if (is_string($aggregationValue['method'])
+                                && preg_match('/^\$(.+)\$$/si', $aggregationValue['method'])
                             ) {
                                 unset($this->requestData['aggregations'][$aggregationName]);
                             }
