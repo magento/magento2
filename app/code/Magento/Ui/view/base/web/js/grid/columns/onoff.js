@@ -44,10 +44,11 @@ define([
                 key,
                 i;
 
+            registry.set('position_cache_valid', true);
+
             if (this.selectedData.length === 0 || positionCacheValid) {
                 return;
             }
-            registry.set('position_cache_valid', true);
             // Check selected data
             for (key in this.selectedData) {
                 if (this.selectedData.hasOwnProperty(key) && this.selected().indexOf(key) === -1) {
@@ -58,7 +59,7 @@ define([
             for (i = 0; i < this.selected().length; i++) {
                 key = this.selected()[i];
                 this.selectedData.hasOwnProperty(key) || this.selected.splice(this.selected().indexOf(key), 1);
-                this.selectedData.hasOwnProperty(key) || (i--);
+                this.selectedData.hasOwnProperty(key) || i--;
             }
         },
 
