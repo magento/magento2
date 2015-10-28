@@ -253,6 +253,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_trackCollectionFactory;
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     */
+    protected $salesOrderCollectionFactory;
+
+    /**
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
@@ -284,6 +289,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -313,6 +319,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -337,6 +344,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->_memoCollectionFactory = $memoCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
+        $this->salesOrderCollectionFactory = $salesOrderCollectionFactory;
         $this->priceCurrency = $priceCurrency;
         parent::__construct(
             $context,
@@ -433,6 +441,40 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function loadByIncrementId($incrementId)
     {
         return $this->loadByAttribute('increment_id', $incrementId);
+    }
+
+    /**
+     * Load order by system increment and store identifiers
+     *
+     * @param string $incrementId
+     * @param string $storeId
+     * @return \Magento\Sales\Model\Order
+     */
+    public function loadByIncrementIdAndStoreId($incrementId, $storeId)
+    {
+        $orderCollection = $this->getSalesOrderCollection(
+            [
+                'increment_id' => $incrementId,
+                'store_id' => $storeId
+            ]
+        );
+        return $orderCollection->getFirstItem();
+    }
+
+    /**
+     * Get sales Order collection model populated with data
+     *
+     * @param array $filters
+     * @return \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
+    protected function getSalesOrderCollection(array $filters = [])
+    {
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Collection $salesOrderCollection */
+        $salesOrderCollection = $this->salesOrderCollectionFactory->create();
+        foreach ($filters as $field => $condition) {
+            $salesOrderCollection->addFieldToFilter($field, $condition);
+        }
+        return $salesOrderCollection->load();
     }
 
     /**
