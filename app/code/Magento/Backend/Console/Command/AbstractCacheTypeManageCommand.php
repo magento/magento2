@@ -6,11 +6,26 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\Event\ManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
+    /** @var ManagerInterface */
+    protected $eventManager;
+
+    /**
+     * @param Manager $cacheManager
+     * @param ManagerInterface $eventManager
+     */
+    public function __construct(Manager $cacheManager, ManagerInterface $eventManager)
+    {
+        $this->eventManager = $eventManager;
+        parent::__construct($cacheManager);
+    }
+
     /**
      * Perform a cache management action on cache types
      *
