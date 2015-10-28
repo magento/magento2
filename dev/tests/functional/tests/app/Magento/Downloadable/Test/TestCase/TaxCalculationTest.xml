@@ -40,8 +40,8 @@
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
             <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">-</data>
-            <data name="prices/category_price_incl_tax" xsi:type="string">16.26</data>
-            <data name="prices/product_view_price_incl_tax" xsi:type="string">22.14</data>
+            <data name="prices/category_special_price" xsi:type="string">16.26</data>
+            <data name="prices/product_view_special_price" xsi:type="string">22.14</data>
             <data name="prices/cart_item_price_incl_tax" xsi:type="string">22.14</data>
             <data name="prices/cart_item_subtotal_incl_tax" xsi:type="string">22.14</data>
             <data name="prices/subtotal_incl_tax" xsi:type="string">22.14</data>
@@ -61,17 +61,17 @@
             <data name="qty" xsi:type="string">-</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">9.24</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">10.01</data>
-            <data name="prices/product_view_price_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/product_view_price_incl_tax" xsi:type="string">13.01</data>
-            <data name="prices/cart_item_price_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/cart_item_price_incl_tax" xsi:type="string">13.02</data>
-            <data name="prices/cart_item_subtotal_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/cart_item_subtotal_incl_tax" xsi:type="string">13.02</data>
-            <data name="prices/subtotal_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/subtotal_incl_tax" xsi:type="string">13.02</data>
-            <data name="prices/tax" xsi:type="string">1.01</data>
-            <data name="prices/grand_total_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/grand_total_incl_tax" xsi:type="string">13.02</data>
+            <data name="prices/product_view_price_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/product_view_price_incl_tax" xsi:type="string">16.45</data>
+            <data name="prices/cart_item_price_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/cart_item_price_incl_tax" xsi:type="string">16.45</data>
+            <data name="prices/cart_item_subtotal_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/cart_item_subtotal_incl_tax" xsi:type="string">16.45</data>
+            <data name="prices/subtotal_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/subtotal_incl_tax" xsi:type="string">16.45</data>
+            <data name="prices/tax" xsi:type="string">1.27</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">16.45</data>
             <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" />
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
@@ -83,13 +83,13 @@
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
             <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">-</data>
-            <data name="prices/category_price_excl_tax" xsi:type="string">9.24</data>
-            <data name="prices/product_view_price_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/cart_item_price_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/cart_item_subtotal_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/subtotal_excl_tax" xsi:type="string">12.01</data>
-            <data name="prices/tax" xsi:type="string">0.99</data>
-            <data name="prices/grand_total_excl_tax" xsi:type="string">13.00</data>
+            <data name="prices/category_price" xsi:type="string">9.24</data>
+            <data name="prices/product_view_price" xsi:type="string">15.18</data>
+            <data name="prices/cart_item_price_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/cart_item_subtotal_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/subtotal_excl_tax" xsi:type="string">15.18</data>
+            <data name="prices/tax" xsi:type="string">1.25</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">16.43</data>
             <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingTax" />
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingTax" />

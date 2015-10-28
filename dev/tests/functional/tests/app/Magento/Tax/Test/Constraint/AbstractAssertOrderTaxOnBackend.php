@@ -121,7 +121,11 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         $actualPrices = $this->getCreditMemoNewPrices($actualPrices, $product);
         $actualPrices = $this->getCreditMemoNewTotals($actualPrices);
         $message = 'Prices on credit memo new page should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
+        \PHPUnit_Framework_Assert::assertEquals(
+            array_diff_key($prices, ['shipping_excl_tax' => null, 'shipping_incl_tax' => null]),
+            array_filter($actualPrices),
+            $message
+        );
         $orderCreditMemoNew->getFormBlock()->submit();
         //Check prices after refund on order page
         $actualPrices = [];
