@@ -171,7 +171,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\User\Model\User::XML_PATH_FORGOT_EMAIL_IDENTITY)
             ->willReturn('sender');
         $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateNamespace')
+            ->method('setTemplateModel')
             ->with($this->equalTo('Magento\Email\Model\BackendTemplate'))
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
@@ -229,7 +229,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\User\Model\User::XML_PATH_FORGOT_EMAIL_IDENTITY)
             ->willReturn('sender');
         $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateNamespace')
+            ->method('setTemplateModel')
             ->with($this->equalTo('Magento\Email\Model\BackendTemplate'))
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())

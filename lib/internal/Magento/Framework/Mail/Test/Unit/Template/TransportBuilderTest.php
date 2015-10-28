@@ -81,7 +81,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTransport($templateType, $messageType, $bodyText, $templateNamespace)
     {
-        $this->builder->setTemplateNamespace($templateNamespace);
+        $this->builder->setTemplateModel($templateNamespace);
 
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
         $options = ['area' => 'frontend', 'store' => 1];
