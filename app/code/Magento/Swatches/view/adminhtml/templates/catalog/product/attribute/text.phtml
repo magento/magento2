@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text */
 ?>
-<fieldset class="fieldset ignore-validate">
+<fieldset class="fieldset">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Swatch (values of your attribute)') ?></span></legend>
     <div id="swatch-text-options-panel">
         <?php //@todo move style to css file ?>
@@ -33,16 +33,23 @@
                 <th class="col-delete">&nbsp;</th>
             </tr>
             </thead>
-            <tbody data-role="swatch-text-options-container"></tbody>
+            <tbody data-role="swatch-text-options-container" class="ignore-validate"></tbody>
             <tfoot>
-            <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
-                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
-                    <button id="add_new_swatch_text_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Swatch'); ?>"
-                            type="button" class="action- scalable add">
-                        <span><?php /* @escapeNotVerified */ echo __('Add Swatch'); ?></span>
-                    </button>
-                <?php endif; ?>
-            </th>
+            <tr>
+                <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>">
+                    <input type="hidden" class="required-swatch-entry"/>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
+                    <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+                        <button id="add_new_swatch_text_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Swatch'); ?>"
+                                type="button" class="action- scalable add">
+                            <span><?php /* @escapeNotVerified */ echo __('Add Swatch'); ?></span>
+                        </button>
+                    <?php endif; ?>
+                </th>
+            </tr>
             </tfoot>
         </table>
         <input type="hidden" id="swatch-text-option-count-check" value="" />

@@ -103,8 +103,8 @@ class InvoiceService implements InvoiceManagementInterface
         $this->criteriaBuilder->addFilters(
             [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
-        $criteria = $this->criteriaBuilder->create();
-        return $this->commentRepository->getList($criteria);
+        $searchCriteria = $this->criteriaBuilder->create();
+        return $this->commentRepository->getList($searchCriteria);
     }
 
     /**
