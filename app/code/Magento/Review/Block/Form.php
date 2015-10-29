@@ -158,7 +158,13 @@ class Form extends \Magento\Framework\View\Element\Template
      */
     public function getAction()
     {
-        return $this->getUrl('review/product/post', ['id' => $this->getProductId()]);
+        return $this->getUrl(
+            'review/product/post',
+            [
+                '_secure' => $this->_request->isSecure(),
+                'id' => $this->getProductId(),
+            ]
+        );
     }
 
     /**
