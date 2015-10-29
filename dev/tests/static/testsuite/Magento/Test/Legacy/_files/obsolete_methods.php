@@ -2485,4 +2485,5 @@ return [
     ['setCcExpYear', 'Magento\Quote\Api\Data\PaymentInterface'],
     ['getCcExpMonth', 'Magento\Quote\Api\Data\PaymentInterface'],
     ['setCcExpMonth', 'Magento\Quote\Api\Data\PaymentInterface'],
+    ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
 ];
