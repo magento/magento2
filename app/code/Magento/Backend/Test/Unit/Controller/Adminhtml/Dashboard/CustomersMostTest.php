@@ -15,7 +15,7 @@ class CustomersMostTest extends AbstractTestCase
 {
     public function testExecute()
     {
-        $this->assertExecute(
+        $this->assertExecuteInternal(
             'Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost',
             'Magento\Backend\Block\Dashboard\Tab\Customers\Most'
         );

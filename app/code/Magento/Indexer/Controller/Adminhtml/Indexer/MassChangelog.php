@@ -13,7 +13,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $indexerIds = $this->getRequest()->getParam('indexer_ids');
         if (!is_array($indexerIds)) {

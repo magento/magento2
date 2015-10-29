@@ -11,7 +11,9 @@ define([
     'mage/template',
     'uiRegistry',
     'jquery/ui',
-    'prototype'
+    'prototype',
+    'form',
+    'validation'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 

@@ -119,7 +119,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->willReturn($this->getLayoutMock());
 
-        $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->execute());
+        $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->executeInternal());
     }
 
     public function testExecuteWithException()
@@ -144,7 +144,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->willReturn($this->getLayoutMock());
 
-        $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->execute());
+        $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->executeInternal());
     }
 
     /**

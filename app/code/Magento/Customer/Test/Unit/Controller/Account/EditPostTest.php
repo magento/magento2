@@ -131,7 +131,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->executeInternal());
     }
 
     public function testNoPostValues()
@@ -150,7 +150,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->executeInternal());
     }
 
     public function testGeneralSave()
@@ -211,7 +211,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('customer/account')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->executeInternal());
     }
 
     /**
@@ -311,7 +311,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($errors['counter']);
 
 
-        $this->assertSame($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->executeInternal());
     }
 
     /**
@@ -443,7 +443,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->model->execute());
+        $this->assertSame($this->resultRedirect, $this->model->executeInternal());
     }
 
     /**

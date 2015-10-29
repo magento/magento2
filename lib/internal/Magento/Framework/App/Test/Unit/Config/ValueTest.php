@@ -15,7 +15,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManager;
+    protected $eventManagerMock;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -23,19 +23,28 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheTypeListMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->cacheTypeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Config\Value',
             [
                 'config' => $this->configMock,
-                'eventDispatcher' => $this->eventManager,
+                'eventDispatcher' => $this->eventManagerMock,
+                'cacheTypeList' => $this->cacheTypeListMock,
             ]
         );
     }
@@ -99,7 +108,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterLoad()
     {
-        $this->eventManager->expects(
+        $this->eventManagerMock->expects(
             $this->at(0)
         )->method(
             'dispatch'
@@ -107,7 +116,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             'model_load_after',
             ['object' => $this->model]
         );
-        $this->eventManager->expects(
+        $this->eventManagerMock->expects(
             $this->at(1)
         )->method(
             'dispatch'
@@ -156,6 +165,30 @@ class ValueTest extends \PHPUnit_Framework_TestCase
                 'key',
                 null,
             ],
+        ];
+    }
+
+    /**
+     * @param int $callNumber
+     * @param string $oldValue
+     * @dataProvider afterSaveDataProvider
+     */
+    public function testAfterSave($callNumber, $oldValue)
+    {
+        $this->cacheTypeListMock->expects($this->exactly($callNumber))
+            ->method('invalidate');
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($oldValue);
+        $this->model->setValue('some_value');
+        $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
+    }
+
+    public function afterSaveDataProvider()
+    {
+        return [
+            [0, 'some_value'],
+            [1, 'other_value'],
         ];
     }
 }

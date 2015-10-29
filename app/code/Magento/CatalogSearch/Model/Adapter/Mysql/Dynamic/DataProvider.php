@@ -135,7 +135,10 @@ class DataProvider implements DataProviderInterface
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
-            $this->connection->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
+            $this->connection->getIfNullSql(
+                $this->connection->quoteInto('FLOOR(' . $column[1] . ' / ? ) + 1', $range),
+                1
+            )
         );
 
         $select

@@ -53,7 +53,7 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_initAction()->_saveSessionCurrentPath();

@@ -11,7 +11,7 @@ class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $ids = $this->getRequest()->getParam('notification');
         if (!is_array($ids)) {

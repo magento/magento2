@@ -164,7 +164,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Wishlist\Model\Item')
             ->willReturn($item);
 
-        $this->getController()->execute();
+        $this->getController()->executeInternal();
     }
 
     /**
@@ -206,7 +206,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->with(2)
             ->willReturn(null);
 
-        $this->getController()->execute();
+        $this->getController()->executeInternal();
     }
 
     public function testExecuteCanNotSaveWishlist()
@@ -291,7 +291,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->with($referer)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
     }
 
     public function testExecuteCanNotSaveWishlistAndWithRedirect()
@@ -387,6 +387,6 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->with('http://test.com/frontname/module/controller/action')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
     }
 }
