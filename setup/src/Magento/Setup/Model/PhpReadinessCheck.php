@@ -198,24 +198,23 @@ class PhpReadinessCheck
 
         $data = [];
         $error = false;
-        $rawPostData = ini_get('always_populate_raw_post_data');
-        $iniSetting = $rawPostData !== false ? intval($rawPostData) : null;
+        $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
 
         if (version_compare(PHP_VERSION, '5.6.0') >= 0
             && version_compare(PHP_VERSION, '7.0.0') < 0
-            && ($iniSetting !== -1 && $iniSetting !== null)
+            && $iniSetting !== -1
         ) {
             $error = true;
         }
 
         $message = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = %d.
-            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and is removed from PHP 7.0 onwards.
-            This will stop the installer from running.
-            Please open your php.ini file and remove always_populate_raw_post_data.
-            If you need more help please call your hosting provider.',
+ 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
+ 	        This will stop the installer from running.
+	        Please open your php.ini file and set always_populate_raw_post_data to -1.
+ 	        If you need more help please call your hosting provider.',
             PHP_VERSION,
-            $iniSetting
+            intVal(ini_get('always_populate_raw_post_data'))
         );
 
         $data['always_populate_raw_post_data'] = [
