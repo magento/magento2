@@ -157,7 +157,7 @@ class NewShippingTest extends \PHPUnit_Framework_TestCase
             ->willReturn($shippingAddress);
         $this->addressFormMock->expects($this->once())->method('setBackUrl')->with($url);
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function executeDataProvider()
@@ -183,6 +183,6 @@ class NewShippingTest extends \PHPUnit_Framework_TestCase
             ->with('customer_address_edit');
         $this->urlMock->expects($this->never())->method('getUrl');
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

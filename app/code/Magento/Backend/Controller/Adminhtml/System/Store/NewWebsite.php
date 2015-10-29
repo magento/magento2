@@ -11,7 +11,7 @@ class NewWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_coreRegistry->register('store_type', 'website');
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */

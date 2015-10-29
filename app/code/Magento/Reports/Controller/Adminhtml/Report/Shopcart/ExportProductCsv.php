@@ -16,7 +16,7 @@ class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shop
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'shopcart_product.csv';
         $content = $this->_view->getLayout()->createBlock(

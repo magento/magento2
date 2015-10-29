@@ -323,8 +323,6 @@ require([
         $.widget('mage.videoData', {
             options: {
                 youtubeKey: '',
-                noKeyErrorTxt: 'You have not entered youtube API key. ' +
-                'No information about youtube video will be retrieved.',
                 eventSource: '' //where is data going from - focus out or click on button
             },
 
@@ -340,11 +338,6 @@ require([
              * @private
              */
             _init: function () {
-                if (!this.options.youtubeKey && this.options.eventSource === 'click') {
-                    alert({
-                        content: this.options.noKeyErrorTxt
-                    });
-                }
                 this._onRequestHandler();
             },
 
@@ -402,7 +395,7 @@ require([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push('Youtube API key is an invalid');
+                                errorsMessage.push('Youtube API key is invalid');
 
                                 break;
                             }
@@ -410,7 +403,7 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                        return 'Video cant be shown due to the following reason: ' + $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
@@ -576,8 +569,8 @@ require([
                     type = 'youtube';
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
-                    vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
-                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+                    vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
                     ].join(''));
                     id = href.href.match(vimeoRegex)[3];
                 }

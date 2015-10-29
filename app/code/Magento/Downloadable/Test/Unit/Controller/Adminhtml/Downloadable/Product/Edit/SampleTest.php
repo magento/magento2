@@ -164,7 +164,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->will($this->returnValue($this->sampleModel));
 
-        $this->sample->execute();
+        $this->sample->executeInternal();
     }
 
     /**
@@ -205,6 +205,6 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->will($this->returnValue($this->sampleModel));
 
-        $this->sample->execute();
+        $this->sample->executeInternal();
     }
 }
