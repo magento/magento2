@@ -15,7 +15,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $rateId = (int)$this->getRequest()->getParam('tax_calculation_rate_id');
         try {

@@ -301,7 +301,7 @@ define([
          * @private
          */
         _onOpenDialog: function(e, imageData) {
-            if(imageData.media_type && imageData.media_type != 'image') {
+            if (imageData.media_type && imageData.media_type != 'image') {
                 return;
             }
             this._showDialog(imageData);
@@ -315,7 +315,7 @@ define([
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
             var dialogElement = $imageContainer.data('dialog');
-            if(!this.dialogTmpl) {
+            if (!this.dialogTmpl) {
                 alert('System problem!');
                 return;
             }

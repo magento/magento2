@@ -100,7 +100,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('adminhtml/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->saveController->executeInternal());
     }
 
     public function testTryToSaveInvalidDataShouldFailWithErrors()
@@ -166,6 +166,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('adminhtml/*/edit', ['sitemap_id' => $siteMapId])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->saveController->executeInternal());
     }
 }

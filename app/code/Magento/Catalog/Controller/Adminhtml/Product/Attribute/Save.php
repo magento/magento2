@@ -86,7 +86,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function execute()
+    public function executeInternal()
     {
         $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();

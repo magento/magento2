@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'assetRepo' => $this->repositoryMock,
                 'viewFileSystem' => $this->fileSystemMock,
                 'fileIteratorFactory' => $this->fileIteratorFactoryMock,
-                'viewConfigFactory' => $this->viewConfigFactoryMock
+                'viewFactory' => $this->viewConfigFactoryMock
             ]
         );
     }

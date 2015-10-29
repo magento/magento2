@@ -13,7 +13,7 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $variable = $this->_initVariable();
         $data = $this->getRequest()->getPost('variable');
