@@ -35,7 +35,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $view;
 
     /**
-     * @var Grid
+     * @var Delete
      */
     protected $controller;
 
@@ -70,13 +70,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteInternal()
+    public function testExecute()
     {
         $this->view->expects($this->once())
             ->method('loadLayout')
             ->with(false);
         $this->view->expects($this->once())
             ->method('renderLayout');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }
