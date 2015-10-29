@@ -154,7 +154,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->editController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->editController->executeInternal());
     }
 
     /**
@@ -220,7 +220,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->willReturn($pageConfigMock);
 
-        $this->assertSame($resultPageMock, $this->editController->execute());
+        $this->assertSame($resultPageMock, $this->editController->executeInternal());
     }
 
     /**

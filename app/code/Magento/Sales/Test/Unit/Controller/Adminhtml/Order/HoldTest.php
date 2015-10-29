@@ -137,6 +137,6 @@ class HoldTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->controller->execute());
+        $this->assertEquals($this->resultRedirect, $this->controller->executeInternal());
     }
 }

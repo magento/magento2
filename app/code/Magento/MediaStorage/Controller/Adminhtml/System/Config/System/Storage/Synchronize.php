@@ -13,7 +13,7 @@ class Synchronize extends \Magento\MediaStorage\Controller\Adminhtml\System\Conf
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         session_write_close();
 

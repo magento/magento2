@@ -14,7 +14,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $customerId = $this->initCurrentCustomer();
         $websiteId = $this->getRequest()->getParam('website_id');
