@@ -16,21 +16,14 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
-
-    /**
-     * Path to corresponding XSD file with validation rules for separate config files
-     *
-     * @var string
-     */
-    protected $_perFileSchema = null;
+    protected $schema = null;
 
     /**
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(UrnResolver $urnResolver)
     {
-        $this->_schema = $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
+        $this->schema = $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
     }
 
     /**
@@ -40,7 +33,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -50,6 +43,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_schema;
+        return $this->getSchema();
     }
 }
