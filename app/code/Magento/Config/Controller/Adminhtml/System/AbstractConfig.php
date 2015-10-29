@@ -44,12 +44,12 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(\Magento\Framework\App\RequestInterface $request)
+    public function execute(\Magento\Framework\App\RequestInterface $request)
     {
         if (!$request->getParam('section')) {
             $request->setParam('section', $this->_configStructure->getFirstSection()->getId());
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**

@@ -14,6 +14,11 @@ define([
     /**
      * @private
      */
+    var allowBase = true; //global var is needed because fotorama always fully reloads events in case of fullscreen
+
+    /**
+     * @private
+     */
     function parseHref(href) {
         var a = document.createElement('a');
 
@@ -68,8 +73,8 @@ define([
             type = 'youtube';
         } else if (href.host.match(/vimeo\.com/)) {
             type = 'vimeo';
-            vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
-                '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+            vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
             ].join(''));
             id = href.href.match(vimeoRegex)[3];
         }
@@ -96,6 +101,7 @@ define([
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
+        isFullscreen: 0,
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -106,10 +112,21 @@ define([
          */
         _init: function () {
             if (this._checkForVideoExist()) {
+                this._checkFullscreen();
                 this._checkForVimeo();
                 this._isVideoBase();
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
+            }
+        },
+
+        /**
+         *
+         * @private
+         */
+        _checkFullscreen: function () {
+            if ($(this.element).find('.fotorama__fullscreen-icon')) {
+                this.isFullscreen = true;
             }
         },
 
@@ -121,23 +138,18 @@ define([
          * @private
          */
         _createVideoData: function (inputData, isJSON) {
-            var videoData = {},
-                key,
+            var videoData = [],
                 dataUrl,
                 tmpVideoData,
                 tmpInputData,
-                inputDataKeys,
                 i;
 
             if (isJSON) {
                 inputData = $.parseJSON(inputData);
             }
 
-            inputDataKeys = Object.keys(inputData);
-
-            for (i = 0; i < inputDataKeys.length; i++) {
-                key = inputDataKeys[i];
-                tmpInputData = inputData[key];
+            for (i = 0; i < inputData.length; i++) {
+                tmpInputData = inputData[i];
                 dataUrl = '';
                 tmpVideoData = {
                     mediaType: '',
@@ -160,7 +172,11 @@ define([
                     tmpVideoData.provider = dataUrl.type;
                 }
 
-                videoData[key] = tmpVideoData;
+                if (tmpVideoData.isBase) {
+                    videoData.unshift(tmpVideoData);
+                } else {
+                    videoData.push(tmpVideoData);
+                }
             }
 
             return videoData;
@@ -297,13 +313,16 @@ define([
 
                 if (
                     videoItem.mediaType === this.VID && videoItem.isBase &&
-                    this.options.VideoSettings[0].playIfBase
+                    this.options.VideoSettings[0].playIfBase && allowBase
                 ) {
                     this.Base = true;
+                    allowBase = false;
                 }
             }
 
-            this._createCloseVideo($(this.element).data('fotorama'), this.Base);
+            if (!this.isFullscreen) {
+                this._createCloseVideo($(this.element).data('fotorama'), this.Base);
+            }
         },
 
         /**
@@ -315,7 +334,7 @@ define([
                 scriptTag = document.getElementsByTagName('script')[0];
 
             element.async = true;
-            element.src = 'https://f.vimeocdn.com/js/froogaloop2.min.js';
+            element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
             scriptTag.parentNode.insertBefore(element, scriptTag);
         },
 
@@ -367,6 +386,11 @@ define([
             $(this.element).on('fotorama:showend', $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
+
+            $(this.element).on('fotorama:fullscreenexit', $.proxy(function (e, fotorama) {
+                fotorama.activeFrame.$stageFrame.parent().find('.' + this.PV).remove();
+                this._startPrepareForPlayer(e, fotorama);
+            }, this));
         },
 
         /**
@@ -403,6 +427,7 @@ define([
             if ($image && videoData && videoData.mediaType === this.VID) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
+                $('.fotorama-video-container').addClass('video-unplayed');
             }
         },
 
@@ -470,7 +495,10 @@ define([
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
-                    self._showCloseVideo();
+
+                    if (!self.isFullscreen) {
+                        self._showCloseVideo();
+                    }
                 }
             });
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
@@ -502,9 +530,11 @@ define([
                             this.Base = false;
                         }
                     }, this), 50);
-                } else { //if not a vimeo - play it immediately
-                    $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                    this.Base = false;
+                } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
+                    setTimeout($.proxy(function () {
+                        $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                        this.Base = false;
+                    }, this), 50);
                 }
             }
         },

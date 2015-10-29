@@ -60,7 +60,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
      *
      * @return void|null
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('customer/account/');

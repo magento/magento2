@@ -11,7 +11,7 @@ class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('id');
         $model = $this->_objectManager->get('Magento\CheckoutAgreements\Model\Agreement')->load($id);

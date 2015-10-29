@@ -40,6 +40,6 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
             ->method('getLayout')
             ->will($this->returnValue($layout));
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 }

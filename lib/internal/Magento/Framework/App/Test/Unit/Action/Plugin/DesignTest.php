@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\Action\Plugin;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAroundDispatch()
+    public function testAroundExecute()
     {
         $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
         $designLoaderMock = $this->getMock('Magento\Framework\View\DesignLoader', [], [], '', false);
@@ -17,6 +17,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $plugin = new \Magento\Framework\App\Action\Plugin\Design($designLoaderMock);
         $designLoaderMock->expects($this->once())->method('load');
-        $this->assertEquals('Expected', $plugin->aroundDispatch($subjectMock, $closureMock, $requestMock));
+        $this->assertEquals('Expected', $plugin->aroundExecute($subjectMock, $closureMock, $requestMock));
     }
 }

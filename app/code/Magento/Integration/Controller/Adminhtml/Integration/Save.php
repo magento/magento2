@@ -32,7 +32,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var array $integrationData */
         $integrationData = [];

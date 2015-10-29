@@ -13,7 +13,7 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $data = $this->getRequest()->getParams();

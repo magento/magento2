@@ -100,7 +100,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->once())->method('representJson')->with(json_encode(['imgSrc' => 'source']));
         $this->flagMock->expects($this->once())->method('set')->with('', 'no-postDispatch', true);
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     /**
