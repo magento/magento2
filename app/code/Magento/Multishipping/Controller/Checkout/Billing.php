@@ -30,7 +30,7 @@ class Billing extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void|ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->_validateBilling()) {
             return;

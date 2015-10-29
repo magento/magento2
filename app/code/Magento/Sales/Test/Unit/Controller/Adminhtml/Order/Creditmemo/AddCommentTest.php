@@ -173,7 +173,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Json',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -201,7 +201,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Json',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -230,7 +230,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Json',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -294,7 +294,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Raw',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 }

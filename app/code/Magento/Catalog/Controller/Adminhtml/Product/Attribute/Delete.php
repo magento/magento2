@@ -11,7 +11,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = $this->getRequest()->getParam('attribute_id');
         $resultRedirect = $this->resultRedirectFactory->create();

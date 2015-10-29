@@ -8,8 +8,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Eav;
 
-use \Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -131,9 +129,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->_model->setOrigData('is_global', \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE);
+        $this->_model->setOrigData('is_global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
         $this->_model->setOrigData('used_in_product_listing', 1);
-        $this->_model->setIsGlobal(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL);
+        $this->_model->setIsGlobal(\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL);
         $this->_model->afterSave();
     }
 
@@ -172,7 +170,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'indexerEavProcessor' => $this->_eavProcessor,
                 'resource' => $this->resourceMock,
                 'data' => [
-                    'is_global' => Attribute::SCOPE_GLOBAL
+                    'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
                 ]
             ]
         );
@@ -190,7 +188,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'indexerEavProcessor' => $this->_eavProcessor,
                 'resource' => $this->resourceMock,
                 'data' => [
-                    'is_global' => Attribute::SCOPE_WEBSITE
+                    'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE
                 ]
             ]
         );

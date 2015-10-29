@@ -28,7 +28,7 @@ class Plugin
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Framework\App\Action\Action $subject)
+    public function beforeExecuteInternal(\Magento\Framework\App\Action\Action $subject)
     {
         $this->cart->getQuote()->setIsMultiShipping(0);
     }

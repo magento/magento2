@@ -52,7 +52,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $taxRateId=1;
         $returnArray=[
@@ -120,7 +120,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad $controller */
+        $controller = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
                 'taxRateRepository' => $this->taxRateRepository,
@@ -132,14 +133,14 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 
 
         // No exception thrown
-        $this->assertSame($jsonObject, $notification->execute());
+        $this->assertSame($jsonObject, $controller->executeInternal());
 
     }
 
     /**
      * Check if validation throws a localized catched exception in case of incorrect id
      */
-    public function testExecuteLocalizedException()
+    public function testExecuteInternalLocalizedException()
     {
         $taxRateId=999;
         $exceptionMessage='No such entity with taxRateId = '.$taxRateId;
@@ -173,7 +174,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad $controller */
+        $controller = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
                 'taxRateRepository' => $this->taxRateRepository,
@@ -183,13 +185,13 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         );
 
         //exception thrown with catch
-        $this->assertSame($jsonObject, $notification->execute());
+        $this->assertSame($jsonObject, $controller->executeInternal());
     }
 
     /**
      * Check if validation throws a localized catched exception in case of incorrect id
      */
-    public function testExecuteException()
+    public function testExecuteInternalException()
     {
         $taxRateId=999;
         $exceptionMessage=__('An error occurred while loading this tax rate.');
@@ -223,7 +225,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad $controller */
+        $controller = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
                 'taxRateRepository' => $this->taxRateRepository,
@@ -233,6 +236,6 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         );
 
         //exception thrown with catch
-        $this->assertSame($jsonObject, $notification->execute());
+        $this->assertSame($jsonObject, $controller->executeInternal());
     }
 }

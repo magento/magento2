@@ -55,7 +55,7 @@ class View extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
