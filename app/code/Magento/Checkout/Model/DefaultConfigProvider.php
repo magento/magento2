@@ -63,11 +63,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $httpContext;
 
     /**
-     * @var CurrencyManager
-     */
-    private $currencyManager;
-
-    /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
@@ -174,8 +169,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param CustomerSession $customerSession
      * @param CustomerUrlManager $customerUrlManager
      * @param HttpContext $httpContext
-     * @param CurrencyManager $currencyManager
-     * @param CartRepositoryInterface $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
@@ -205,8 +199,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         CustomerSession $customerSession,
         CustomerUrlManager $customerUrlManager,
         HttpContext $httpContext,
-        CurrencyManager $currencyManager,
-        CartRepositoryInterface $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
         ConfigurationPool $configurationPool,
@@ -233,7 +226,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->customerSession = $customerSession;
         $this->customerUrlManager = $customerUrlManager;
         $this->httpContext = $httpContext;
-        $this->currencyManager = $currencyManager;
         $this->quoteRepository = $quoteRepository;
         $this->quoteItemRepository = $quoteItemRepository;
         $this->shippingMethodManager = $shippingMethodManager;
@@ -282,7 +274,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         );
         $output['basePriceFormat'] = $this->localeFormat->getPriceFormat(
             null,
-            $this->currencyManager->getDefaultCurrency()
+            $this->checkoutSession->getQuote()->getBaseCurrencyCode()
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);

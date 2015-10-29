@@ -36,7 +36,7 @@ class Stock extends UnsubscribeController
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

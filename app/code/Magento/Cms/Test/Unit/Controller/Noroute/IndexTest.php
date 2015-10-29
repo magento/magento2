@@ -113,7 +113,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(
             $this->resultPageMock,
-            $this->_controller->execute()
+            $this->_controller->executeInternal()
         );
     }
 
@@ -146,7 +146,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(
             $this->forwardMock,
-            $this->_controller->execute()
+            $this->_controller->executeInternal()
         );
     }
 }

@@ -47,7 +47,7 @@ class AssertConfigurableProductPage extends AssertProductPage
 
         if ($fixturePrice != $formPrice) {
             return "Displayed product price on product page(front-end) not equals passed from fixture. "
-            . "Actual: {$fixturePrice}, expected: {$formPrice}.";
+            . "Actual: {$formPrice}, expected: {$fixturePrice}.";
         }
         return null;
     }

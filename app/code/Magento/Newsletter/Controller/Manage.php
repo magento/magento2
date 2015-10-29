@@ -37,11 +37,11 @@ abstract class Manage extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         if (!$this->_customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 }

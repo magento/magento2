@@ -15,7 +15,7 @@ class SaveMethod extends Index
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->sessionHelper->isPersistent()) {
             $this->sessionHelper->getSession()->removePersistentCookie();

@@ -13,7 +13,7 @@ class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_shopcart_product'

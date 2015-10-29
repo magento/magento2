@@ -39,7 +39,7 @@ class Redirect extends AbstractAction
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->getRequest()->getParam('app')) {
