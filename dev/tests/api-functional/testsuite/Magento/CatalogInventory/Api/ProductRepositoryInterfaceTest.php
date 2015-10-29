@@ -204,12 +204,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $qty = false;
         $qtyAndStockStatus = [];
-        foreach ($customAttributes as $customAttribute) {
-            if ($customAttribute[self::KEY_ATTRIBUTE_CODE] == self::CODE_QUANTITY_AND_STOCK_STATUS) {
-                $qtyAndStockStatus = $customAttribute['value'];
-                break;
-            }
-        }
+
         if (!empty($qtyAndStockStatus) && is_array($qtyAndStockStatus)) {
 
             if (array_key_exists('any_type', $qtyAndStockStatus)) {

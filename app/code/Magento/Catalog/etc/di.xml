@@ -46,16 +46,6 @@
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Catalog\Model\Product\Attribute\Repository">
-        <plugin name="filterCustomAttribute" type="Magento\Catalog\Model\Plugin\FilterCustomAttribute" />
-    </type>
-    <type name="Magento\Catalog\Model\Plugin\FilterCustomAttribute">
-        <arguments>
-            <argument name="blackList" xsi:type="array">
-                <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Indexer\Model\Indexer\State">
         <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
     </type>
