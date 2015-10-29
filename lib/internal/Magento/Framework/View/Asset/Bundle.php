@@ -117,7 +117,7 @@ class Bundle
         $parts = $this->assets[$this->getContextCode($asset)][$asset->getContentType()];
 
         $maxPartSize = $this->getMaxPartSize($asset);
-        $minSpace = $maxPartSize + 1;
+        $minSpace = $maxPartSize;
         $minIndex = -1;
         if ($maxPartSize && count($parts)) {
             foreach ($parts as $partIndex => $part) {
