@@ -54,7 +54,8 @@ $product = $block->getSaleableItem();
                     }
                 ?>
                 <?php /* @escapeNotVerified */ echo __('Buy %1 for: ', $price['price_qty']); ?>
-                <a href="#" id="<?php /* @escapeNotVerified */ echo($popupId);?>"
+                <a href="javascript:void(0);"
+                   id="<?php /* @escapeNotVerified */ echo($popupId);?>"
                    data-tier-price="<?php echo $block->escapeHtml($block->jsonEncode($tierPriceData)); ?>">
                     <?php /* @escapeNotVerified */ echo __('Click for price'); ?></a>
                 <?php else:
