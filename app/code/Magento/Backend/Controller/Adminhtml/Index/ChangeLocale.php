@@ -13,7 +13,7 @@ class ChangeLocale extends \Magento\Backend\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $redirectResult = $this->resultRedirectFactory->create();
         $redirectResult->setRefererUrl();

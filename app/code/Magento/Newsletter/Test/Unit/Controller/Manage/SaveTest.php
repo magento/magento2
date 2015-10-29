@@ -107,7 +107,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->never())
             ->method('addError');
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     public function testSaveActionNoCustomerInSession()
@@ -126,7 +126,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('Something went wrong while saving your subscription.');
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     public function testSaveActionWithException()
@@ -156,6 +156,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('Something went wrong while saving your subscription.');
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }

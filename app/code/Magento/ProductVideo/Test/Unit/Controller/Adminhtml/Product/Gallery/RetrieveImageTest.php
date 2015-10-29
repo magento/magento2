@@ -128,6 +128,6 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
         $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('/var/www/application/sample.jpg');
         $this->abstractAdapter->expects($this->any())->method('validateUploadFile')->willReturn('true');
 
-        $this->image->execute();
+        $this->image->executeInternal();
     }
 }

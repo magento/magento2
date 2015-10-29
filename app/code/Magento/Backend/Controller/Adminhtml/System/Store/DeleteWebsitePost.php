@@ -13,7 +13,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $itemId = $this->getRequest()->getParam('item_id');
         $model = $this->_objectManager->create('Magento\Store\Model\Website');

@@ -50,7 +50,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $country = (string)$this->getRequest()->getParam('country_id');
         $postcode = (string)$this->getRequest()->getParam('estimate_postcode');

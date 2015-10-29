@@ -14,7 +14,8 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'jquery/file-uploader',
-    'mage/translate'
+    'mage/translate',
+    'Magento_ConfigurableProduct/js/variations/variations'
 ], function (Component, $, ko, _, Collapsible, mageTemplate, alert) {
     'use strict';
 

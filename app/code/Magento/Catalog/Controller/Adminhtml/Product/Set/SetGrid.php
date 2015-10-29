@@ -30,7 +30,7 @@ class SetGrid extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     /**
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_setTypeId();
         return $this->resultLayoutFactory->create();

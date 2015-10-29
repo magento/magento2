@@ -248,7 +248,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function canUseAttribute(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
     {
-        return $attribute->getIsGlobal() == \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL &&
+        return $attribute->getIsGlobal() == \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL &&
             $attribute->getIsVisible() &&
             $attribute->usesSource() &&
             $attribute->getIsUserDefined();

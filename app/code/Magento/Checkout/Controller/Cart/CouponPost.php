@@ -61,7 +61,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $couponCode = $this->getRequest()->getParam('remove') == 1
             ? ''
