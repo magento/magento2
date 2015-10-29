@@ -164,6 +164,7 @@ class AssignCustomOrderStatusTest extends Injectable
         if ($this->orderStatus) {
             $filter = ['label' => $this->orderStatus->getLabel()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+            $this->orderStatusIndex->getMessagesBlock()->waitSuccessMessage();
         }
     }
 }
