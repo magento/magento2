@@ -204,7 +204,7 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $this->assertEquals($resultRedirect, $this->controller->execute());
+        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
     }
 
     public function testExecuteException()
@@ -234,6 +234,6 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $this->assertEquals($resultRedirect, $this->controller->execute());
+        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
     }
 }

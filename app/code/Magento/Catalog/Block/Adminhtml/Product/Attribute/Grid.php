@@ -83,9 +83,9 @@ class Grid extends AbstractGrid
                 'index' => 'is_global',
                 'type' => 'options',
                 'options' => [
-                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE => __('Store View'),
-                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_WEBSITE => __('Web Site'),
-                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL => __('Global'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Web Site'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
                 ],
                 'align' => 'center'
             ],

@@ -48,7 +48,7 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $request = $this->getRequest();
         try {

@@ -104,7 +104,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
                 $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
             )
         );
-        $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $this->_validationStateMock->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(true);
         $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
@@ -133,7 +135,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
                 $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
             )
         );
-        $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $this->_validationStateMock->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(true);
 
         $model = new Filesystem(
             $this->_fileResolverMock,

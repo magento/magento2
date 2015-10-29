@@ -11,7 +11,7 @@ class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->getRequest()->getParam('attribute') == 'sku') {
             $type = 'Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku';
