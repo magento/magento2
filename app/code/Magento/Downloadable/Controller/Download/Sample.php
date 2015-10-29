@@ -17,7 +17,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function execute()
+    public function executeInternal()
     {
         $sampleId = $this->getRequest()->getParam('sample_id', 0);
         /** @var \Magento\Downloadable\Model\Sample $sample */

@@ -11,7 +11,7 @@ class Index extends \Magento\User\Controller\Adminhtml\User
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction();
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Users'));

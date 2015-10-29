@@ -66,7 +66,7 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts successfully deleted
      */
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $objectManager = new ObjectManagerHelper($this);
         $phrase = new \Magento\Framework\Phrase('Credit card successfully deleted');
@@ -93,7 +93,8 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with($phrase);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\DeleteConfirm $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\DeleteConfirm',
             [
                 'request' => $this->request,
@@ -103,13 +104,13 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $notification->execute());
+        $this->assertSame($this->resultRedirect, $controller->executeInternal());
     }
 
     /**
      * Executes the controller action and asserts with redirect for non valid token param
      */
-    public function testExecuteNoTokenRedirect()
+    public function testExecuteInternalNoTokenRedirect()
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -128,7 +129,8 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->willReturnSelf();
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\Edit $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Edit',
             [
                 'request' => $this->request,
@@ -137,13 +139,13 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $notification->execute());
+        $this->assertSame($this->resultRedirect, $controller->executeInternal());
     }
 
     /**
      * Executes the controller action and asserts with redirects for can't delete card logic
      */
-    public function testExecuteNonExistingTokenRedirect()
+    public function testExecuteInternalNonExistingTokenRedirect()
     {
         $objectManager = new ObjectManagerHelper($this);
         $phrase = new \Magento\Framework\Phrase('a,b,c');
@@ -172,7 +174,8 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($phrase);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\DeleteConfirm $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\DeleteConfirm',
             [
                 'request' => $this->request,
@@ -182,13 +185,13 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $notification->execute());
+        $this->assertSame($this->resultRedirect, $controller->executeInternal());
     }
 
     /**
      * Executes the controller action and asserts failed deletion
      */
-    public function testExecuteSaveFail()
+    public function testExecuteInternalSaveFail()
     {
         $objectManager = new ObjectManagerHelper($this);
         $phrase = new \Magento\Framework\Phrase('There was error deleting the credit card');
@@ -214,7 +217,8 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($phrase);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\DeleteConfirm $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\DeleteConfirm',
             [
                 'request' => $this->request,
@@ -224,6 +228,6 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $notification->execute());
+        $this->assertSame($this->resultRedirect, $controller->executeInternal());
     }
 }
