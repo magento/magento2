@@ -289,35 +289,8 @@ class Multishipping extends \Magento\Framework\DataObject
         if ($this->_quoteShippingAddressesItems !== null) {
             return $this->_quoteShippingAddressesItems;
         }
-        $items = [];
-        $addresses = $this->getQuote()->getAllAddresses();
-        foreach ($addresses as $address) {
-            foreach ($address->getAllItems() as $item) {
-                if ($item->getParentItemId()) {
-                    continue;
-                }
-                if ($item->getProduct()->getIsVirtual()) {
-                    $items[] = $item;
-                    continue;
-                }
-                if ($item->getQty() > 1) {
-                    for ($i = 0, $n = $item->getQty(); $i < $n; $i++) {
-                        if ($i == 0) {
-                            $addressItem = $item;
-                        } else {
-                            $addressItem = clone $item;
-                        }
-                        $addressItem->setQty(1)->setCustomerAddressId($address->getCustomerAddressId())->save();
-                        $items[] = $addressItem;
-                    }
-                } else {
-                    $item->setCustomerAddressId($address->getCustomerAddressId());
-                    $items[] = $item;
-                }
-            }
-        }
-        $this->_quoteShippingAddressesItems = $items;
-        return $items;
+        $this->_quoteShippingAddressesItems = $this->getQuote()->getShippingAddressesItems();
+        return $this->_quoteShippingAddressesItems;
     }
 
     /**

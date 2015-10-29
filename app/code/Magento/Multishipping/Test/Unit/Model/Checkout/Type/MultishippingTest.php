@@ -260,4 +260,12 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
     }
+
+    public function testGetQuoteShippingAddressesItems()
+    {
+        $quoteItem = $this->getMock('Magento\Quote\Model\Quote\Address\Item', [], [], '', false);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getShippingAddressesItems')->willReturn($quoteItem);
+        $this->model->getQuoteShippingAddressesItems();
+    }
 }
