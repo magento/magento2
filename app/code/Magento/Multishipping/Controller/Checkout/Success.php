@@ -15,7 +15,7 @@ class Success extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->_getState()->getCompleteStep(State::STEP_OVERVIEW)) {
             $this->_redirect('*/*/addresses');

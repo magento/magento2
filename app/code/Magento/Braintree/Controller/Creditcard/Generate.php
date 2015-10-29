@@ -19,7 +19,7 @@ class Generate extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             if ($this->hasToken()) {

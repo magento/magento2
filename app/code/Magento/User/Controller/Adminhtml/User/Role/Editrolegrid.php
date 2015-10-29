@@ -13,7 +13,7 @@ class Editrolegrid extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_view->renderLayout();
