@@ -441,6 +441,7 @@ class Application
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
         $this->_ensureDirExists($this->_configDir);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::PUB][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::MEDIA][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::STATIC_VIEW][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
@@ -624,14 +625,15 @@ class Application
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
-            DirectoryList::MEDIA => [$path => "{$this->installDir}/media"],
-            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub_static"],
+            DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
+            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::GENERATION => [$path => "{$var}/generation"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
+            DirectoryList::PUB => [$path => "{$this->installDir}/pub"],
         ];
         return $customDirs;
     }
