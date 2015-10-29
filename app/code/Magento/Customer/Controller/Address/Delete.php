@@ -11,7 +11,7 @@ class Delete extends \Magento\Customer\Controller\Address
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $addressId = $this->getRequest()->getParam('id', false);
 

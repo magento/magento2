@@ -13,7 +13,7 @@ class Index extends ProductController
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->getRequest()->getParam('ajax')) {
             /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */

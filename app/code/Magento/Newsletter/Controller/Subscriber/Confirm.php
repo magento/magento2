@@ -12,7 +12,7 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber
      * Subscription confirm action
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('id');
         $code = (string)$this->getRequest()->getParam('code');

@@ -36,7 +36,7 @@ class View extends CustomerController
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $review = $this->reviewFactory->create()->load($this->getRequest()->getParam('id'));
         if ($review->getCustomerId() != $this->customerSession->getCustomerId()) {

@@ -150,7 +150,7 @@ class Bundle
      */
     protected function getAssetSize(LocalInterface $asset)
     {
-        return mb_strlen(utf8_encode($asset->getContent()), 'utf-8') / 1024;
+        return mb_strlen(json_encode(utf8_encode($asset->getContent()), JSON_UNESCAPED_SLASHES), 'utf-8') / 1024;
     }
 
     /**

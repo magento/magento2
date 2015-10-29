@@ -234,7 +234,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with($productUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     /**
@@ -361,7 +361,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with($redirectUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     /**
@@ -488,7 +488,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with($redirectUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     /**
@@ -615,7 +615,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with($redirectUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     /**
@@ -743,7 +743,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with($redirectUrl)
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     /**
@@ -799,7 +799,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($forwardMock, $this->model->execute());
+        $this->assertEquals($forwardMock, $this->model->executeInternal());
     }
 
     /**
@@ -873,7 +873,7 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($forwardMock, $this->model->execute());
+        $this->assertEquals($forwardMock, $this->model->executeInternal());
     }
 
     public function testExecuteWithoutFormKey()
@@ -901,6 +901,6 @@ class SendmailTest extends \PHPUnit_Framework_TestCase
             ->with('sendfriend/product/send', ['_current' => true])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 }

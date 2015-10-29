@@ -13,7 +13,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->_getSession()->getPostData()) {
             $this->_coreRegistry->register('store_post_data', $this->_getSession()->getPostData());

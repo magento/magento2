@@ -14,7 +14,7 @@ class DeleteFiles extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysi
      * @return void
      * @throws \Exception
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             if (!$this->getRequest()->isPost()) {

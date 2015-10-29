@@ -16,7 +16,7 @@ class SetSensitiveCookie extends \Magento\TestModule1\Controller\CookieTester
      *
      * @return void
      */
-    public function execute(RequestInterface $request)
+    public function executeInternal(RequestInterface $request)
     {
         $sensitiveCookieMetadata = $this->getCookieMetadataFactory()->createSensitiveCookieMetadata();
 

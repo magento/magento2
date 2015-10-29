@@ -162,7 +162,7 @@ class Options extends \Magento\Framework\View\Element\Template
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $optionPrice,
+                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
                     'adjustments' => [],
                 ],
                 'basePrice' => [
@@ -208,7 +208,6 @@ class Options extends \Magento\Framework\View\Element\Template
         $config = [];
         foreach ($this->getOptions() as $option) {
             /* @var $option \Magento\Catalog\Model\Product\Option */
-            $priceValue = 0;
             if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
                 $tmpPriceValues = [];
                 foreach ($option->getValues() as $value) {

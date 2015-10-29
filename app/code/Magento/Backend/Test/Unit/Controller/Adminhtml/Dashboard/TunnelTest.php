@@ -92,7 +92,7 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
             ->with('success_msg')
             ->willReturnSelf();
 
-        $controller->execute();
+        $controller->executeInternal();
         $this->assertEquals('success_msg', $controller->getResponse()->getBody());
     }
 
@@ -112,7 +112,7 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
             ->with('Service unavailable: invalid request')
             ->willReturnSelf();
 
-        $controller->execute();
+        $controller->executeInternal();
     }
 
     public function testTunnelAction503()
@@ -164,7 +164,7 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
             ->with('Service unavailable: see error log for details')
             ->willReturnSelf();
 
-        $controller->execute();
+        $controller->executeInternal();
     }
 
     /**
