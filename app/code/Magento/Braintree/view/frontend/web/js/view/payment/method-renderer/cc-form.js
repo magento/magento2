@@ -401,6 +401,9 @@ define(
              */
             initBillingAddressListening: function () {
                 var self = this;
+                if (!registry.has([self.billingAddressComponentName])) {
+                    throw new Error('Billing Address component not found');
+                }
                 registry.get(self.billingAddressComponentName, function (component) {
                     // listen updateAddress() function
                     component.updateAddress = wrapper.wrap(component.updateAddress, function (origin) {
