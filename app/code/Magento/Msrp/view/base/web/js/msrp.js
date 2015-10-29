@@ -72,9 +72,7 @@ define([
                 $('body').append($(this.popupDOM).html());
                 this.$popup = $($(this.popupDOM).html());
 
-                $(this.options.popupId).on('click', function (e) {
-                    this.openPopup(e);
-                }.bind(this));
+                $(this.options.popupId).on('click', this.openPopup.bind(this));
             }
 
             if (this.options.helpLinkId) {
@@ -109,7 +107,7 @@ define([
          *
          * @param element
          */
-        openPopup: function (element){
+        openPopup: function (element) {
             this.popUpOptions.position.of = $(element.target);
             this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
             this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
