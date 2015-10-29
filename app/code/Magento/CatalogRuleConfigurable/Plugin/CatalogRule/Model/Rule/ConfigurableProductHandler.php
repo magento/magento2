@@ -42,14 +42,13 @@ class ConfigurableProductHandler
         $configurableProductIds = $this->configurableProductsProvider->getIds(array_keys($productIds));
         foreach ($configurableProductIds as $productId) {
             $subProductIds = $this->configurable->getChildrenIds($productId)[0];
+            $parentValidationResult = isset($productIds[$productId])
+                ? array_filter($productIds[$productId])
+                : [];
             foreach ($subProductIds as $subProductId) {
-                $parentValidationResult = isset($productIds[$productId])
-                    ? array_filter($productIds[$productId])
-                    : [];
                 $childValidationResult = isset($productIds[$subProductId])
                     ? array_filter($productIds[$subProductId])
                     : [];
-
                 $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
             }
             unset($productIds[$productId]);
