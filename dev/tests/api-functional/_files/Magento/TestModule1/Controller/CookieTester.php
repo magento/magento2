@@ -71,7 +71,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
      */
     public function dispatch(RequestInterface $request)
     {
-        $result = $this->executeInternal($request);
+        $result = $this->execute($request);
         return $result ? $result : $this->_response;
     }
 }
