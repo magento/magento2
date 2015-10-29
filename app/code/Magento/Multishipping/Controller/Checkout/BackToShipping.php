@@ -13,7 +13,7 @@ class BackToShipping extends \Magento\Multishipping\Controller\Checkout
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_getState()->setActiveStep(State::STEP_SHIPPING);
         $this->_getState()->unsCompleteStep(State::STEP_BILLING);
