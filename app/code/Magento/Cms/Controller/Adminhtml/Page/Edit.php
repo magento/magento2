@@ -67,7 +67,7 @@ class Edit extends \Magento\Backend\App\Action
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('page_id');

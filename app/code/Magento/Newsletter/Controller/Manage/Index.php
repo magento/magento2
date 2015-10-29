@@ -13,7 +13,7 @@ class Index extends \Magento\Newsletter\Controller\Manage
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
 

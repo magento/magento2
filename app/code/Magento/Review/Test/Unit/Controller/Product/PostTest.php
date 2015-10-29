@@ -315,6 +315,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturn($redirectUrl);
 
-        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
     }
 }

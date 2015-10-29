@@ -14,7 +14,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_responseAction('adminhtml');
     }
