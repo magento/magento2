@@ -197,6 +197,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->userMock->setUserId($userId);
         $this->requestMock->setParams($requestParams);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

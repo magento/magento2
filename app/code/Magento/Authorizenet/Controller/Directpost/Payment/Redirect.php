@@ -15,7 +15,7 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $helper = $this->dataFactory->create('frontend');
 
