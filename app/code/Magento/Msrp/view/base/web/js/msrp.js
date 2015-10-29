@@ -105,10 +105,10 @@ define([
         /**
          * Open and set up popup
          *
-         * @param element
+         * @param event
          */
-        openPopup: function (element) {
-            this.popUpOptions.position.of = $(element.target);
+        openPopup: function (event) {
+            this.popUpOptions.position.of = $(event.target);
             this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
             this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
             this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
