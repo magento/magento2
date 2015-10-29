@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\PageCache\Test\Unit\Model\App;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Type;
 
