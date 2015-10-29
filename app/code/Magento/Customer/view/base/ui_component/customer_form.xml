@@ -102,7 +102,7 @@
                     </item>
                     <item name="tooltip" xsi:type="array">
                         <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
-                        <item name="description" xsi:type="string">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
+                        <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
                     </item>
                 </item>
             </argument>
