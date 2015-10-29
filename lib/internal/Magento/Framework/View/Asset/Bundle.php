@@ -143,15 +143,6 @@ class Bundle
 
     /**
      * @param LocalInterface $asset
-     * @return int
-     */
-    protected function getAssetSize(LocalInterface $asset)
-    {
-        return mb_strlen(json_encode(utf8_encode($asset->getContent()), JSON_UNESCAPED_SLASHES), 'utf-8') / 1024;
-    }
-
-    /**
-     * @param LocalInterface $asset
      * @param LocalInterface[] $assets
      * @return float
      */
