@@ -18,21 +18,21 @@
 
                 var dependencies,
                     timeout;
+
                 $.initNamespaceStorage('mage-translation-storage');
                 $.initNamespaceStorage('mage-translation-file-version');
                 timeout = $.localStorage.get('mage-translation-file-version');
+
                 if (timeout.version !== '<?php /* @escapeNotVerified */
                     echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>') {
                     dependencies = [
                         'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>',
-                        'mage/translate',
-                        'jquery/jquery-storageapi'
+                        'mage/translate'
                     ];
 
                 } else {
                     dependencies =  [
-                        'mage/translate',
-                        'jquery/jquery-storageapi'
+                        'mage/translate'
                     ];
                 }
 
