@@ -32,7 +32,7 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $helper = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
         $storeId = $this->getRequest()->getParam('store');

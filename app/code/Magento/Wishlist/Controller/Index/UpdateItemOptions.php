@@ -51,7 +51,7 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

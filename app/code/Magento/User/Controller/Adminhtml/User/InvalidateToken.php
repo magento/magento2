@@ -40,7 +40,7 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($userId = $this->getRequest()->getParam('user_id')) {
             try {

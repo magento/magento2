@@ -22,7 +22,7 @@ class Noroute implements \Magento\Framework\App\ActionInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
     }
 

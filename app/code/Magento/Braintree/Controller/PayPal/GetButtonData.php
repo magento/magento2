@@ -37,7 +37,7 @@ class GetButtonData extends \Magento\Framework\App\Action\Action
      * @return ResultInterface
      * @throws LocalizedException
      */
-    public function executeInternal()
+    public function execute()
     {
         $isAjax = $this->_request->getParam('isAjax');
 
