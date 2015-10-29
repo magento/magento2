@@ -52,7 +52,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $result = $this->orderLoader->load($this->_request);
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {

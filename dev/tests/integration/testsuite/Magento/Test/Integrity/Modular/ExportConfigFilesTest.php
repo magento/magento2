@@ -25,7 +25,7 @@ class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
         );
 
         $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

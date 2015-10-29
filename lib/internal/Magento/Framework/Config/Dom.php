@@ -31,6 +31,11 @@ class Dom
     const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
 
     /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    private $validationState;
+
+    /**
      * Dom document
      *
      * @var \DOMDocument
@@ -71,7 +76,7 @@ class Dom
     protected $rootNamespace;
 
     /**
-     * \Magento\Framework\Config\Dom\UrnResolver
+     * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     private static $urnResolver;
 
@@ -82,6 +87,7 @@ class Dom
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
      * @param string $xml
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param array $idAttributes
      * @param string $typeAttributeName
      * @param string $schemaFile
@@ -89,11 +95,13 @@ class Dom
      */
     public function __construct(
         $xml,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        $this->validationState = $validationState;
         $this->schema = $schemaFile;
         $this->nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
         $this->typeAttributeName = $typeAttributeName;
@@ -351,7 +359,7 @@ class Dom
     {
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        if ($this->schema) {
+        if ($this->validationState->isValidationRequired() && $this->schema) {
             $errors = $this->validateDomDocument($dom, $this->schema, $this->errorFormat);
             if (count($errors)) {
                 throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
@@ -369,8 +377,11 @@ class Dom
      */
     public function validate($schemaFileName, &$errors = [])
     {
-        $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
-        return !count($errors);
+        if ($this->validationState->isValidationRequired()) {
+            $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
+            return !count($errors);
+        }
+        return true;
     }
 
     /**

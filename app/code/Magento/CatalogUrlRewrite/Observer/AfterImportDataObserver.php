@@ -190,6 +190,7 @@ class AfterImportDataObserver implements ObserverInterface
                 $product->setData($field, $rowData[$field]);
             }
         }
+
         $this->categoryCache[$rowData['entity_id']] = $this->import->getProductCategories($rowData['sku']);
         $this->websiteCache[$rowData['entity_id']] = $this->import->getProductWebsites($rowData['sku']);
         foreach ($this->websiteCache[$rowData['entity_id']] as $websiteId) {
@@ -197,11 +198,9 @@ class AfterImportDataObserver implements ObserverInterface
                 $this->websitesToStoreIds[$websiteId] = $this->storeManager->getWebsite($websiteId)->getStoreIds();
             }
         }
-        if (!empty($rowData[ImportProduct::COL_STORE])
-            && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
-        ) {
-            $product->setStoreId($storeId);
-        }
+
+        $this->setStoreToProduct($product, $rowData);
+
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
         } else {
@@ -211,9 +210,25 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $rowData
+     * @return void
+     */
+    protected function setStoreToProduct(\Magento\Catalog\Model\Product $product, array $rowData)
+    {
+        if (!empty($rowData[ImportProduct::COL_STORE])
+            && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
+        ) {
+            $product->setStoreId($storeId);
+        } elseif (!$product->hasData(\Magento\Catalog\Api\Data\ProductInterface::STORE_ID)) {
+            $product->setStoreId(Store::DEFAULT_STORE_ID);
+        }
+    }
+
+    /**
      * Add product to import
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $storeId
      * @return $this
      */
@@ -221,15 +236,15 @@ class AfterImportDataObserver implements ObserverInterface
     {
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];
-            $this->products[$product->getId()][$storeId] = $product;
         }
+        $this->products[$product->getId()][$storeId] = $product;
         return $this;
     }
 
     /**
      * Populate global product
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function populateGlobalProduct($product)

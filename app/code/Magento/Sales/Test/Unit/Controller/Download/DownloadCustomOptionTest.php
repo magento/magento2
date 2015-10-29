@@ -209,7 +209,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
             $this->objectMock->expects($this->once())->method('endExecute')->willReturn(true);
         }
-        $this->objectMock->execute();
+        $this->objectMock->executeInternal();
     }
 
     public function executeDataProvider()
@@ -329,6 +329,6 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturn(true);
 
-        $this->objectMock->execute();
+        $this->objectMock->executeInternal();
     }
 }

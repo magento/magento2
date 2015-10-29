@@ -37,7 +37,7 @@ class Index extends Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $versionParts = explode('.', $this->productMetadata->getVersion());
         if (!isset($versionParts[0]) || !isset($versionParts[1])) {
