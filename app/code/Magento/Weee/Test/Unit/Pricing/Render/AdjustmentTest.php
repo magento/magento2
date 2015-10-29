@@ -166,7 +166,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmount')->will($this->returnValue($amount));
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
         $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
 
         $this->model->render($amountRender);
@@ -237,7 +237,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmount')->will($this->returnValue($amount));
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
         $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
 
         $this->model->render($amountRender);
@@ -409,8 +409,8 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function renderWeeeTaxAttributeAmountWithTaxDataProvider()
     {
         return [
-            [new \Magento\Framework\DataObject(['amount' => 50, 'tax_amount' => 5]), 55],
-            [new \Magento\Framework\DataObject(['amount' => false]), false],
+            [new \Magento\Framework\DataObject(['amount_excl_tax' => 50, 'tax_amount' => 5]), 55],
+            [new \Magento\Framework\DataObject(['amount_excl_tax' => false]), false],
         ];
     }
 }

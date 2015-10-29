@@ -57,7 +57,6 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         //setup
         $this->weeeHelperMock->expects($this->atLeastOnce())->method('typeOfDisplay')->willReturn($weeeIsExcluded);
-        $this->weeeHelperMock->expects($this->atLeastOnce())->method('isTaxable')->willReturn(false);
 
         //test
         $defaultExclusions = $this->model->getDefaultExclusions();

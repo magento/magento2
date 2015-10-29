@@ -143,7 +143,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Framework\DataObject $billing
      * @param Website $website
      * @param bool $calculateTax
-     * @return int
+     * @return float
      */
     public function getWeeeAmount(
         $product,
@@ -164,6 +164,34 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             $amount += $attribute->getAmount();
         }
         return $amount;
+    }
+
+    /**
+     * @param Product $product
+     * @param null|false|\Magento\Framework\DataObject $shipping
+     * @param null|false|\Magento\Framework\DataObject $billing
+     * @param Website $website
+     * @return float
+     */
+    public function getWeeeAmountExclTax(
+        $product,
+        $shipping = null,
+        $billing = null,
+        $website = null
+    ) {
+        $amountExclTax = 0;
+        $attributes = $this->getProductWeeeAttributes(
+            $product,
+            $shipping,
+            $billing,
+            $website,
+            true,
+            false
+        );
+        foreach ($attributes as $attribute) {
+            $amountExclTax += $attribute->getAmountExclTax();
+        }
+        return $amountExclTax;
     }
 
     /**
@@ -272,6 +300,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             if ($value) {
                 $taxAmount = $amount = 0;
                 $amount = $value;
+                $amountExclTax = $value;
                 if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
                     /** @var \Magento\Tax\Model\Calculation $calculator */
                     $defaultPercent = $calculator->getRate(
@@ -282,12 +311,14 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     );
                     if ($this->_taxData->priceIncludesTax($store)) {
                         $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
-                        //round the "golden price"
-                        $amountInclTax = $this->priceCurrency->round($amountInclTax);
+                        if ($round) {
+                            $amountInclTax = $this->priceCurrency->round($amountInclTax);
+                        }
                         $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
                         if ($round) {
                             $taxAmount = $this->priceCurrency->round($taxAmount);
                         }
+                        $amountExclTax = $amountInclTax - $taxAmount;
                     } else {
                         $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
                         if (count($appliedRates) > 1) {
@@ -316,6 +347,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $one->setName(__($attribute['label_value'] ? $attribute['label_value'] : $attribute['frontend_label']))
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)
+                    ->setAmountExclTax($amountExclTax)
                     ->setCode($attribute['attribute_code']);
 
                 $result[] = $one;

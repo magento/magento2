@@ -102,10 +102,7 @@ class Adjustment implements AdjustmentInterface
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
-        if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
-            return 0;
-        }
-        return $this->getAmount($saleableItem);
+        return 0;
     }
 
     /**
@@ -144,8 +141,8 @@ class Adjustment implements AdjustmentInterface
      */
     protected function getAmount(SaleableInterface $saleableItem)
     {
-        $weeeAmount = $this->weeeHelper->getAmount($saleableItem);
-        $weeeAmount = $this->priceCurrency->convertAndRound($weeeAmount);
+        $weeeAmount = $this->weeeHelper->getAmountExclTax($saleableItem);
+        $weeeAmount = $this->priceCurrency->convert($weeeAmount);
         return $weeeAmount;
     }
 

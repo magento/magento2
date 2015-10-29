@@ -103,10 +103,7 @@ class TaxAdjustment implements AdjustmentInterface
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
-        if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
-            return 0;
-        }
-        return $this->getAmount($saleableItem);
+        return 0;
     }
 
     /**
