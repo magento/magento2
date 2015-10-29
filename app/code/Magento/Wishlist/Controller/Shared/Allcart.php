@@ -41,7 +41,7 @@ class Allcart extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {

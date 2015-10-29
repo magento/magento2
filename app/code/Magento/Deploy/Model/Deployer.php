@@ -315,12 +315,11 @@ class Deployer
             }
         }
 
-        $logMessage = "Processing file '$filePath' for area '$area', theme '$themePath', locale '$locale'";
-        if ($module) {
-            $logMessage .= ", module '$module'";
-        }
-
         if ($this->output->isVeryVerbose()) {
+            $logMessage = "Processing file '$filePath' for area '$area', theme '$themePath', locale '$locale'";
+            if ($module) {
+                $logMessage .= ", module '$module'";
+            }
             $this->output->writeln($logMessage);
         }
 

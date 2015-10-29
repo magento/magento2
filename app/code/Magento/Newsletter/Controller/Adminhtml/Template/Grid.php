@@ -13,7 +13,7 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $grid = $this->_view->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Template\Grid')->toHtml();
