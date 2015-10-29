@@ -196,7 +196,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   mixed $website
      * @return  float
      */
-    public function getAmount($product, $website = null)
+    public function getAmountExclTax($product, $website = null)
     {
         if (!$product->hasData($this->cacheProductWeeeAmount)) {
             /** @var \Magento\Store\Model\Store $store */
@@ -208,7 +208,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
             $amount = 0;
             if ($this->isEnabled($store)) {
-                $amount = $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+                $amount = $this->_weeeTax->getWeeeAmountExclTax($product, null, null, $website);
             }
 
             $product->setData($this->cacheProductWeeeAmount, $amount);
@@ -402,7 +402,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         if ($this->isEnabled($store)) {
             $calculateTax = ($this->typeOfDisplay(1) || $this->typeOfDisplay(2)) ? 1 : 0;
-            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax);
+            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax, false);
         }
         return [];
     }
@@ -441,45 +441,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         return [];
-    }
-
-    /**
-     * Returns amount to display
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return int
-     */
-    public function getAmountForDisplay($product)
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $product->getStore();
-
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, null, $this->typeOfDisplay(1));
-        }
-        return 0;
-    }
-
-    /**
-     * Returns all summed WEEE taxes with all local taxes applied
-     *
-     * @param \Magento\Framework\DataObject[] $attributes Result from getProductWeeeAttributes()
-     * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getAmountInclTaxes($attributes)
-    {
-        if (!is_array($attributes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('$attributes must be an array'));
-        }
-
-        $amount = 0;
-        foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Framework\DataObject */
-            $amount += $attribute->getAmountInclTax();
-        }
-
-        return (float) $amount;
     }
 
     /**
