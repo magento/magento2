@@ -244,7 +244,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->execute());
+        $this->assertSame($resultRedirect, $this->controller->executeInternal());
     }
 
     /**
@@ -280,7 +280,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultForward));
 
-        $this->assertSame($resultForward, $this->controller->execute());
+        $this->assertSame($resultForward, $this->controller->executeInternal());
     }
 
     /**
@@ -339,7 +339,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->execute());
+        $this->assertSame($resultRedirect, $this->controller->executeInternal());
     }
 
     /**
@@ -399,6 +399,6 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->execute());
+        $this->assertSame($resultRedirect, $this->controller->executeInternal());
     }
 }

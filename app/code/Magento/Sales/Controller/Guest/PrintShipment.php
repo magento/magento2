@@ -42,7 +42,7 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function executeInternal()
     {
         $result = $this->orderLoader->load($this->_request);
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {

@@ -69,7 +69,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->method('representJson')
             ->with('{"error":"true","message":"Wrong request"}');
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecute()
@@ -99,6 +99,6 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->method('deleteFile')
             ->with('file');
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

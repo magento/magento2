@@ -34,7 +34,7 @@ class Grid extends Action
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $product = $this->productBuilder->build($this->getRequest());
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */

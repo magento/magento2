@@ -86,6 +86,6 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('body')
         );
         $this->responseMock->expects($this->once())->method('representJson')->with('body');
-        $this->suggestAttributes->execute();
+        $this->suggestAttributes->executeInternal();
     }
 }

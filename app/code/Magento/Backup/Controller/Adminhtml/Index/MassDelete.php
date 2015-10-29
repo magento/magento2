@@ -13,7 +13,7 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\App\Action
      */
-    public function execute()
+    public function executeInternal()
     {
         $backupIds = $this->getRequest()->getParam('ids', []);
 
