@@ -161,7 +161,7 @@ class Form extends \Magento\Framework\View\Element\Template
         return $this->getUrl(
             'review/product/post',
             [
-                '_secure' => $this->_request->isSecure(),
+                '_secure' => $this->getRequest()->isSecure(),
                 'id' => $this->getProductId(),
             ]
         );
