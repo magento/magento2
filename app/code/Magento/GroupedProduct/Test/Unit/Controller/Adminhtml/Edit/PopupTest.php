@@ -118,7 +118,7 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(3))->method('getParam')->with('set')->will($this->returnValue($setId));
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
-        $this->assertSame($this->resultLayoutMock, $this->action->execute());
+        $this->assertSame($this->resultLayoutMock, $this->action->executeInternal());
     }
 
     public function testPopupActionWithProductIdNoSetId()
@@ -155,6 +155,6 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(3))->method('getParam')->with('set')->will($this->returnValue($setId));
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
-        $this->assertSame($this->resultLayoutMock, $this->action->execute());
+        $this->assertSame($this->resultLayoutMock, $this->action->executeInternal());
     }
 }

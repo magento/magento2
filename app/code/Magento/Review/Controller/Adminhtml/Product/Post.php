@@ -15,7 +15,7 @@ class Post extends ProductController
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $productId = $this->getRequest()->getParam('product_id', false);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

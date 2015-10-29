@@ -153,6 +153,7 @@ class DataGrid extends Grid
         if ($chipsHolder->isVisible()) {
             parent::resetFilter();
         }
+        $this->waitLoader();
     }
 
     /**
@@ -285,7 +286,7 @@ class DataGrid extends Grid
      * @return void
      * @throws \Exception
      */
-    protected function selectItems(array $items)
+    public function selectItems(array $items)
     {
         $this->sortGridByField('ID');
         foreach ($items as $item) {
@@ -293,7 +294,7 @@ class DataGrid extends Grid
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
             do {
-                if ($selectItem->isVisible()) {
+                if ($selectItem->isVisible() && !$selectItem->isSelected()) {
                     $selectItem->click();
                     break;
                 }

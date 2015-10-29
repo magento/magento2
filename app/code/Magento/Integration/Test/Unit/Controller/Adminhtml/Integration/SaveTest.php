@@ -59,7 +59,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                 __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
             );
         $integrationContr = $this->_createIntegrationController('Save');
-        $integrationContr->execute();
+        $integrationContr->executeInternal();
     }
 
     public function testSaveActionException()
@@ -80,7 +80,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
-        $integrationContr->execute();
+        $integrationContr->executeInternal();
     }
 
     public function testSaveActionIntegrationException()
@@ -101,7 +101,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
-        $integrationContr->execute();
+        $integrationContr->executeInternal();
     }
 
     public function testSaveActionNew()
@@ -146,7 +146,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                 __('The integration \'%1\' has been saved.', $integration->getName())
             );
         $integrationContr = $this->_createIntegrationController('Save');
-        $integrationContr->execute();
+        $integrationContr->executeInternal();
     }
 
     public function testSaveActionExceptionDuringServiceCreation()
@@ -186,6 +186,6 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         // Verify success message
         $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationController = $this->_createIntegrationController('Save');
-        $integrationController->execute();
+        $integrationController->executeInternal();
     }
 }

@@ -35,7 +35,7 @@ class LogoutSuccess extends Action implements AccountInterface
      *
      * @return \Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         return $this->resultPageFactory->create();
     }

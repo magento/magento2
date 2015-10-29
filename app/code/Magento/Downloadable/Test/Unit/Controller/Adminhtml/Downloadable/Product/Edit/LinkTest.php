@@ -171,7 +171,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->will($this->returnValue($this->linkModel));
 
-        $this->link->execute();
+        $this->link->executeInternal();
     }
 
     /**
@@ -217,7 +217,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->will($this->returnValue($this->linkModel));
 
-        $this->link->execute();
+        $this->link->executeInternal();
     }
 
     /**

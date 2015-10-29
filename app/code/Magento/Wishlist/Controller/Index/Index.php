@@ -35,7 +35,7 @@ class Index extends Action\Action implements IndexInterface
      * @return \Magento\Framework\View\Result\Page
      * @throws NotFoundException
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->wishlistProvider->getWishlist()) {
             throw new NotFoundException(__('Page not found.'));

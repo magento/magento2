@@ -11,7 +11,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_getGiftmessageSaveModel()->setGiftmessages(
