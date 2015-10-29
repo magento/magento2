@@ -146,7 +146,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->executeInternal());
     }
 
     public function testDeleteActionNoId()
@@ -166,7 +166,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->executeInternal());
     }
 
     public function testDeleteActionThrowsException()
@@ -210,6 +210,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['page_id' => $this->pageId])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->executeInternal());
     }
 }

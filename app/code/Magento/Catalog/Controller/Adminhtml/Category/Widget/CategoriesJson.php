@@ -42,7 +42,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $categoryId = (int)$this->getRequest()->getPost('id');
         if ($categoryId) {

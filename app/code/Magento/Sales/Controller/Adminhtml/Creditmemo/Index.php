@@ -12,8 +12,8 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCredi
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
-        return parent::execute();
+        return parent::executeInternal();
     }
 }

@@ -142,7 +142,7 @@ class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/login', [])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     public function testExecuteWithException()
@@ -208,7 +208,7 @@ class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/createPassword', ['id' => $customerId, 'token' => $token])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     public function testExecuteWithWrongConfirmation()
@@ -255,7 +255,7 @@ class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/createPassword', ['id' => $customerId, 'token' => $token])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 
     public function testExecuteWithEmptyPassword()
@@ -302,6 +302,6 @@ class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/createPassword', ['id' => $customerId, 'token' => $token])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->execute());
+        $this->assertEquals($redirectMock, $this->model->executeInternal());
     }
 }
