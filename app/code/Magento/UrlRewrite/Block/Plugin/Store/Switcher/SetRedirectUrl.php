@@ -67,7 +67,7 @@ class SetRedirectUrl
                 $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath()))
             );
         }
-        return array($store, $data) ;
+        return [$store, $data];
     }
 
     /**
