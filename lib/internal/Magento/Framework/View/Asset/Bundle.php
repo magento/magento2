@@ -79,10 +79,8 @@ class Bundle
         $parts = &$this->assets[$this->getContextCode($asset)][$asset->getContentType()];
         if (!isset($parts[$partIndex])) {
             $parts[$partIndex]['assets'] = [];
-            $parts[$partIndex]['space'] = $this->getMaxPartSize($asset);
         }
         $parts[$partIndex]['assets'][$this->getAssetKey($asset)] = $asset;
-        $parts[$partIndex]['space'] -= $this->getAssetSize($asset);
     }
 
     /**
@@ -119,12 +117,11 @@ class Bundle
         $parts = $this->assets[$this->getContextCode($asset)][$asset->getContentType()];
 
         $maxPartSize = $this->getMaxPartSize($asset);
-        $assetSize = $this->getAssetSize($asset);
         $minSpace = $maxPartSize + 1;
         $minIndex = -1;
         if ($maxPartSize && count($parts)) {
             foreach ($parts as $partIndex => $part) {
-                $space = $part['space'] - $assetSize;
+                $space = $maxPartSize - $this->getSizePartWithNewAsset($asset, $parts[$partIndex]['assets']);
                 if ($space >= 0 && $space < $minSpace) {
                     $minSpace = $space;
                     $minIndex = $partIndex;
@@ -151,6 +148,17 @@ class Bundle
     protected function getAssetSize(LocalInterface $asset)
     {
         return mb_strlen(json_encode(utf8_encode($asset->getContent()), JSON_UNESCAPED_SLASHES), 'utf-8') / 1024;
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @param LocalInterface[] $assets
+     * @return float
+     */
+    protected function getSizePartWithNewAsset(LocalInterface $asset, $assets = [])
+    {
+        $assets[$this->getAssetKey($asset)] = $asset;
+        return mb_strlen($this->getPartContent($assets), 'utf-8') / 1024;
     }
 
     /**
