@@ -44,7 +44,7 @@ class Login extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->session->isLoggedIn()) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

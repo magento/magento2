@@ -35,7 +35,7 @@ class Logout extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $lastCustomerId = $this->session->getId();
         $this->session->logout()->setBeforeAuthUrl($this->_redirect->getRefererUrl())

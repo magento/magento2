@@ -44,7 +44,7 @@ class ForgotPassword extends Action implements AccountInterface
      *
      * @return \Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

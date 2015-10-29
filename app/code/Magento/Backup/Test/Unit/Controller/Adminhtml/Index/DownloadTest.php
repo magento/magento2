@@ -143,7 +143,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backup\Controller\Adminhtml\Index\Download::executeInternal
+     * @covers \Magento\Backup\Controller\Adminhtml\Index\Download::execute
      */
     public function testExecuteBackupFound()
     {
@@ -201,11 +201,11 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRawMock);
 
-        $this->assertSame($this->resultRawMock, $this->downloadController->executeInternal());
+        $this->assertSame($this->resultRawMock, $this->downloadController->execute());
     }
 
     /**
-     * @covers \Magento\Backup\Controller\Adminhtml\Index\Download::executeInternal
+     * @covers \Magento\Backup\Controller\Adminhtml\Index\Download::execute
      * @param int $time
      * @param bool $exists
      * @param int $existsCount
@@ -240,7 +240,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRedirectMock);
 
-        $this->assertSame($this->resultRedirectMock, $this->downloadController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->downloadController->execute());
     }
 
     /**

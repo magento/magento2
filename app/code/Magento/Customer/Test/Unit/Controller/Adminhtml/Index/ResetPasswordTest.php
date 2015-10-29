@@ -236,7 +236,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->_testedObject->executeInternal()
+            $this->_testedObject->execute()
         );
     }
 
@@ -290,7 +290,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->_testedObject->executeInternal()
+            $this->_testedObject->execute()
         );
     }
 
@@ -329,7 +329,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->method('addMessage')
             ->with($error);
 
-        $this->_testedObject->executeInternal();
+        $this->_testedObject->execute();
     }
 
     public function testResetPasswordActionCoreExceptionWarn()
@@ -358,7 +358,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->method('addMessage')
             ->with(new \Magento\Framework\Message\Error($warningText));
 
-        $this->_testedObject->executeInternal();
+        $this->_testedObject->execute();
     }
 
     public function testResetPasswordActionException()
@@ -399,7 +399,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->equalTo('Something went wrong while resetting customer password.')
         );
 
-        $this->_testedObject->executeInternal();
+        $this->_testedObject->execute();
     }
 
     public function testResetPasswordActionSendEmail()
@@ -479,7 +479,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->_testedObject->executeInternal()
+            $this->_testedObject->execute()
         );
     }
 }

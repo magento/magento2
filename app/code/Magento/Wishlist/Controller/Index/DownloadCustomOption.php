@@ -36,7 +36,7 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function executeInternal()
+    public function execute()
     {
         $option = $this->_objectManager->create(
             'Magento\Wishlist\Model\Item\Option'

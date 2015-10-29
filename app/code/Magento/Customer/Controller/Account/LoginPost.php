@@ -67,7 +67,7 @@ class LoginPost extends Action implements AccountInterface
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->session->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

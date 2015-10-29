@@ -17,7 +17,7 @@ class Forward extends AbstractAction
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         $request->setDispatched(false);
         return $this->_response;

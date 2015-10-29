@@ -37,7 +37,7 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
      *
      * @return void|\Magento\Backend\App\Action
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = $this->getRequest()->getParam('filename');
 

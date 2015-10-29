@@ -33,7 +33,7 @@ class Share extends Action\Action implements IndexInterface
      *
      * @return void|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->customerSession->authenticate()) {
             /** @var \Magento\Framework\View\Result\Page $resultPage */

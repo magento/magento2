@@ -51,7 +51,7 @@ class CreatePassword extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
         $customerId = (int)$this->getRequest()->getParam('id');
