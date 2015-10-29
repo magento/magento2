@@ -56,6 +56,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     const SERIALIZER_VALUE_IGBINARY = 'igbinary';
     /**#@- */
 
+    /** Command name */
+    const NAME = 'setup:di:compile-multi-tenant';
+
     /**
      * Object Manager
      *
@@ -155,7 +158,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 'Allows to exclude Paths from compilation (default is #[\\\\/]m1[\\\\/]#i)'
             ),
         ];
-        $this->setName('setup:di:compile-multi-tenant')
+        $this->setName(self::NAME)
             ->setDescription(
                 'Generates all non-existing proxies and factories, and pre-compile class definitions, '
                 . 'inheritance information and plugin definitions'
