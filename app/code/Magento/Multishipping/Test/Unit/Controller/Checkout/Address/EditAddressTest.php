@@ -126,7 +126,7 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
         $this->titleMock->expects($this->once())->method('set')->with('Address title - default_title');
         $this->addressFormMock->expects($this->once())->method('setBackUrl')->with('success/url');
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
 
@@ -140,6 +140,6 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
             ->with('customer_address_edit');
         $this->urlMock->expects($this->never())->method('getUrl');
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

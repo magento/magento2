@@ -83,7 +83,7 @@ abstract class Action extends AbstractAction
      * @return ResponseInterface
      * @throws NotFoundException
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $this->_request = $request;
         $profilerKey = 'CONTROLLER_ACTION:' . $request->getFullActionName();
@@ -99,7 +99,7 @@ abstract class Action extends AbstractAction
         $result = null;
         if ($request->isDispatched() && !$this->_actionFlag->get('', self::FLAG_NO_DISPATCH)) {
             \Magento\Framework\Profiler::start('action_body');
-            $result = $this->execute();
+            $result = $this->executeInternal();
             \Magento\Framework\Profiler::start('postdispatch');
             if (!$this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
                 $this->_eventManager->dispatch(
@@ -122,7 +122,7 @@ abstract class Action extends AbstractAction
     /**
      * @return ResultInterface
      */
-    abstract protected function execute();
+    abstract protected function executeInternal();
 
     /**
      * Throw control to different action (control and module if was specified).

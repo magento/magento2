@@ -72,7 +72,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $objectManager = new ObjectManager($this);
         $this->resultJson->expects($this->once())
@@ -87,7 +87,8 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturn(true);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\Generate $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Generate',
             [
                 'request' => $this->request,
@@ -96,13 +97,13 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultJson, $notification->execute());
+        $this->assertSame($this->resultJson, $controller->executeInternal());
     }
 
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecuteLocalizedException()
+    public function testExecuteInternalLocalizedException()
     {
         $phrase = new \Magento\Framework\Phrase('Something went wrong while processing.');
         $objectManager = new ObjectManager($this);
@@ -126,7 +127,8 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturn(true);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\Generate $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Generate',
             [
                 'request' => $this->request,
@@ -136,6 +138,6 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultJson, $notification->execute());
+        $this->assertSame($this->resultJson, $controller->executeInternal());
     }
 }

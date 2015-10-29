@@ -69,7 +69,7 @@ class View extends \Magento\Catalog\Controller\Product
      *
      * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         // Get initial data from request
         $categoryId = (int) $this->getRequest()->getParam('category', false);
