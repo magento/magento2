@@ -50,6 +50,13 @@ class View extends AbstractConfigureBlock
     protected $qty = '#qty';
 
     /**
+     * Add to cart form id.
+     *
+     * @var string
+     */
+    protected $addToCartForm = '#product_addtocart_form';
+
+    /**
      * 'Check out with PayPal' button.
      *
      * @var string
@@ -223,7 +230,7 @@ class View extends AbstractConfigureBlock
     public function setQty($qty)
     {
         $this->_rootElement->find($this->qty)->setValue($qty);
-        $this->_rootElement->click();
+        $this->_rootElement->find($this->addToCartForm)->click();
     }
 
     /**

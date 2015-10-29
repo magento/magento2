@@ -16,7 +16,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $types = $this->getRequest()->getParam('types');

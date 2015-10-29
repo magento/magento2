@@ -13,7 +13,7 @@ class Start extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_forward(
             'start',

@@ -66,7 +66,7 @@ class Download extends ImportController
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = $this->getRequest()->getParam('filename') . '.csv';
         $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::SAMPLE_FILES_MODULE);

@@ -14,7 +14,7 @@ class Transactions extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initOrder();
         $resultLayout = $this->resultLayoutFactory->create();

@@ -13,7 +13,7 @@ class Index extends \Magento\Paypal\Controller\Billing\Agreement
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Billing Agreements'));
