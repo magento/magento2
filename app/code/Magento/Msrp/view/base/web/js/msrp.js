@@ -226,6 +226,29 @@ define([
         closePopup: function ($elem) {
             $elem.dropdownDialog('close');
             $(document).off('mouseup');
+        },
+
+        /**
+         * Handler for addToCart action
+         */
+        _addToCartSubmit: function () {
+            this.element.trigger('addToCart', this.element);
+
+            if (this.element.data('stop-processing')) {
+                return false;
+            }
+
+            if (this.options.addToCartButton) {
+                $(this.options.addToCartButton).click();
+
+                return false;
+            }
+
+            if (this.options.addToCartUrl) {
+                $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
+            }
+            $(this.options.cartForm).submit();
+
         }
     });
 
