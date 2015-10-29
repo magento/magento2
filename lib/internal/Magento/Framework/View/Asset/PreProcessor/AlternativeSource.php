@@ -14,6 +14,8 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
  * Class AlternativeSource
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlternativeSource implements AlternativeSourceInterface
 {
