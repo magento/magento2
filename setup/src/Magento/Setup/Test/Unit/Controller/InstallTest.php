@@ -109,9 +109,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $numValue = 42;
         $consoleMessages = ['key1' => 'log message 1', 'key2' => 'log message 2'];
 
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->with('log')->willReturn($readDirMock);
-        $readDirMock->expects($this->once())->method('isExist')->with('install.log')->willReturn(true);
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
         $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)
             ->willReturn($progress);
@@ -131,9 +129,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     public function testProgressActionWithError()
     {
         $e = 'Some exception message';
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->with('log')->willReturn($readDirMock);
-        $readDirMock->expects($this->once())->method('isExist')->with('install.log')->willReturn(true);
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $this->progressFactory->expects($this->once())->method('createFromLog')
             ->will($this->throwException(new \LogicException($e)));
         $jsonModel = $this->controller->progressAction();
@@ -149,9 +145,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     public function testProgressActionWithSampleDataError()
     {
         $numValue = 42;
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->with('log')->willReturn($readDirMock);
-        $readDirMock->expects($this->once())->method('isExist')->with('install.log')->willReturn(true);
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
         $progress->expects($this->once())->method('getRatio')->willReturn($numValue);
         $this->progressFactory->expects($this->once())->method('createFromLog')->willReturn($progress);
@@ -168,9 +162,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
 
     public function testProgressActionNoInstallLogFile()
     {
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->with('log')->willReturn($readDirMock);
-        $readDirMock->expects($this->once())->method('isExist')->with('install.log')->willReturn(false);
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(false);
         $jsonModel = $this->controller->progressAction();
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
