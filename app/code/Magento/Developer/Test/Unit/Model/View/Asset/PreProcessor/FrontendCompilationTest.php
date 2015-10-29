@@ -19,6 +19,8 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  * Class FrontendCompilationTest
  *
  * @see \Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FrontendCompilationTest extends \PHPUnit_Framework_TestCase
 {

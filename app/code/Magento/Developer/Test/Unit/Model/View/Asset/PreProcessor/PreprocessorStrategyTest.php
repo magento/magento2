@@ -5,7 +5,7 @@
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\View\Asset\PreProcessor;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
@@ -104,11 +104,11 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PreProcessor\Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getChainMock()
     {
-        $chainMock = $this->getMockBuilder(PreProcessor\Chain::class)
+        $chainMock = $this->getMockBuilder(Chain::class)
             ->disableOriginalConstructor()
             ->getMock();
 

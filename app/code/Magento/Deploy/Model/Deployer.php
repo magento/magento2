@@ -300,6 +300,7 @@ class Deployer
      * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function deployFile($filePath, $area, $themePath, $locale, $module)
     {
@@ -341,7 +342,7 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            throw new LocalizedException(__($exception->getMessage()));
+            throw $exception;
         } catch (\Exception $exception) {
             $this->output->write('.');
             $this->verboseLog($exception->getTraceAsString());

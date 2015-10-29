@@ -22,6 +22,8 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  * Class AlternativeSourceTest
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\AlternativeSource
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Class ContentProcessorException
  */
-class ContentProcessorException extends \RuntimeException
+class ContentProcessorException extends LocalizedException
 {
 
 }
