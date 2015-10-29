@@ -47,6 +47,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAll()
     {
+        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $expected = ['foo' => self::$allFixture['foo']];
@@ -64,6 +65,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOne()
     {
+        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
@@ -72,6 +74,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNames()
     {
+        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertSame(['foo'], $this->model->getNames());
@@ -80,6 +83,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
+        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertTrue($this->model->has('foo'));
@@ -88,6 +92,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testIsModuleInfoAvailable()
     {
+        $this->config->expects($this->once())->method('resetData');
         $this->setLoadConfigExpectation(true);
         $this->assertTrue($this->model->isModuleInfoAvailable());
     }
