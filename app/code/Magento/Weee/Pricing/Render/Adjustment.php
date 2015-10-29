@@ -162,7 +162,9 @@ class Adjustment extends AbstractAdjustment
      */
     public function renderWeeeTaxAttributeWithTax(\Magento\Framework\DataObject $attribute)
     {
-        return $this->convertAndFormatCurrency($attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount'));
+        return $this->convertAndFormatCurrency(
+            $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount')
+        );
     }
 
     /**
