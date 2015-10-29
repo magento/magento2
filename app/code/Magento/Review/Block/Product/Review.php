@@ -69,7 +69,7 @@ class Review extends Template implements IdentityInterface
         return $this->getUrl(
             'review/product/listAjax',
             [
-                '_secure' => $this->_request->isSecure(),
+                '_secure' => $this->getRequest()->isSecure(),
                 'id' => $this->getProductId(),
             ]
         );

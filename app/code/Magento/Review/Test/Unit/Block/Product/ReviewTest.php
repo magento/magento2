@@ -58,6 +58,15 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     private $store;
 
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
+
+    /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    protected $urlBuilder;
+
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $requestMock;
+
     protected function setUp()
     {
         $this->initContextMock();
@@ -66,7 +75,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $helper = new ObjectManager($this);
         $this->block = $helper->getObject(ReviewBlock::class, [
-            'storeManager' => $this->storeManager,
+            'context' => $this->context,
             'registry' => $this->registry,
             'collectionFactory' => $this->collectionFactory,
         ]);
@@ -124,7 +133,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['registry'])
             ->getMock();
 
-        $this->registry->expects(static::once())
+        $this->registry->expects($this->any())
             ->method('registry')
             ->with('product')
             ->willReturn($this->product);
@@ -159,5 +168,44 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->willReturn($this->store);
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMockForAbstractClass();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->getMockForAbstractClass();
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
+        $this->context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
+    }
+
+    /**
+     * @param bool $isSecure
+     * @param string $actionUrl
+     * @param int $productId
+     * @dataProvider getProductReviewUrlDataProvider
+     */
+    public function testGetProductReviewUrl($isSecure, $actionUrl, $productId)
+    {
+        $this->urlBuilder->expects($this->any())
+            ->method('getUrl')
+            ->with('review/product/listAjax', ['_secure' => $isSecure, 'id' => $productId])
+            ->willReturn($actionUrl . '/id/' . $productId);
+        $this->product->expects($this->any())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn($isSecure);
+
+        $this->assertEquals($actionUrl . '/id/' . $productId , $this->block->getProductReviewUrl());
+    }
+
+    public function getProductReviewUrlDataProvider()
+    {
+        return [
+            [false, 'http://localhost/review/product/listAjax', 3],
+            [true, 'https://localhost/review/product/listAjax' ,3],
+        ];
     }
 }
