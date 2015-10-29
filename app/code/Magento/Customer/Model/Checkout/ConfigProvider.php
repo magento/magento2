@@ -70,5 +70,4 @@ class ConfigProvider implements ConfigProviderInterface
 
         return true;
     }
-
 }
