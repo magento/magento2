@@ -15,6 +15,7 @@ define([
         options: {
             showAddToCart: true,
             submitUrl: '',
+            cartButtonId: '',
             singleOpenDropDown: true,
             dialog: {}, // Options for mage/dropdown
             dialogDelay: 500, // Delay in ms after resize dropdown shown again
@@ -70,6 +71,7 @@ define([
             } else if (this.options.origin === 'tier') {
                 this.initTierPopup();
             }
+            $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
         },
 
         /**
