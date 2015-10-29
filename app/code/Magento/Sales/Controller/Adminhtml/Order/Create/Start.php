@@ -14,7 +14,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_getSession()->clearStorage();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

@@ -13,7 +13,7 @@ class RemoveItem extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $itemId = $this->getRequest()->getParam('id');
         $addressId = $this->getRequest()->getParam('address');

@@ -114,7 +114,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->with('search/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
+        $this->assertSame($this->resultRedirectMock, $this->controller->executeInternal());
     }
 
     /**

@@ -13,7 +13,7 @@ class CustomersNewest extends AjaxBlock
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $output = $this->layoutFactory->create()
             ->createBlock('Magento\Backend\Block\Dashboard\Tab\Customers\Newest')

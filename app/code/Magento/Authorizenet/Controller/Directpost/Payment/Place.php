@@ -71,7 +71,7 @@ class Place extends Payment
      *
      * @return string
      */
-    public function execute()
+    public function executeInternal()
     {
         $paymentParam = $this->getRequest()->getParam('payment');
         $controller = $this->getRequest()->getParam('controller');
