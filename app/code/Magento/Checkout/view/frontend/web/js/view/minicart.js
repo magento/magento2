@@ -33,7 +33,9 @@ define([
             "url": {
                 "checkout": window.checkout.checkoutUrl,
                 "update": window.checkout.updateItemQtyUrl,
-                "remove": window.checkout.removeItemUrl
+                "remove": window.checkout.removeItemUrl,
+                "loginUrl": window.checkout.customerLoginUrl,
+                "isRedirectRequired": window.checkout.isRedirectRequired
             },
             "button": {
                 "checkout": "#top-cart-btn-checkout",
