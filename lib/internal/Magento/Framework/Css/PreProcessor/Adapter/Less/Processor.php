@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\File;
@@ -88,7 +89,7 @@ class Processor implements ContentProcessorInterface
                 $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
                 $this->logger->critical($errorMessage);
 
-                throw new ContentProcessorException(__($errorMessage));
+                throw new ContentProcessorException(new Phrase($errorMessage));
             }
 
             return $content;
@@ -96,7 +97,7 @@ class Processor implements ContentProcessorInterface
             $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path . PHP_EOL . $e->getMessage();
             $this->logger->critical($errorMessage);
 
-            throw new ContentProcessorException(__($errorMessage));
+            throw new ContentProcessorException(new Phrase($errorMessage));
         }
     }
 }
