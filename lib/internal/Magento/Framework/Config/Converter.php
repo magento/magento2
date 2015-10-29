@@ -28,8 +28,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($source)
     {
@@ -40,32 +38,46 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
-                switch ($childNode->nodeName) {
-                    case 'vars':
-                        $moduleName = $childNode->getAttribute('module');
-                        $output[$childNode->tagName][$moduleName] = $this->parseVarElement($childNode);
-                        break;
-                    case 'exclude':
-                        /** @var $itemNode \DOMElement */
-                        foreach ($childNode->getElementsByTagName('item') as $itemNode) {
-                            $itemType = $itemNode->getAttribute('type');
-                            $output[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
-                        }
-                        break;
-                    case 'media':
-                        foreach ($childNode->childNodes as $mediaNode) {
-                            if ($mediaNode instanceof \DOMElement) {
-                                $mediaNodesArray =
-                                    $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
-                                        $mediaNode,
-                                        $childNode->tagName
-                                    );
-                                $output = array_merge_recursive($output, $mediaNodesArray);
-                            }
-                        }
-                        break;
-                }
+                $result = $this->parseNodes($childNode);
+                $output = array_merge_recursive($output, $result);
             }
+        }
+        return $output;
+    }
+
+    /**
+     * Parse node values from xml nodes
+     *
+     * @param $childNode
+     * @return array
+     */
+    protected function parseNodes($childNode)
+    {
+        $output = [];
+        switch ($childNode->nodeName) {
+            case 'vars':
+                $moduleName = $childNode->getAttribute('module');
+                $output[$childNode->tagName][$moduleName] = $this->parseVarElement($childNode);
+                break;
+            case 'exclude':
+                /** @var $itemNode \DOMElement */
+                foreach ($childNode->getElementsByTagName('item') as $itemNode) {
+                    $itemType = $itemNode->getAttribute('type');
+                    $output[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
+                }
+                break;
+            case 'media':
+                foreach ($childNode->childNodes as $mediaNode) {
+                    if ($mediaNode instanceof \DOMElement) {
+                        $mediaNodesArray =
+                            $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
+                                $mediaNode,
+                                $childNode->tagName
+                            );
+                        $output = array_merge_recursive($output, $mediaNodesArray);
+                    }
+                }
+                break;
         }
         return $output;
     }
