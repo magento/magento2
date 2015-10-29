@@ -20,6 +20,8 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Install controller
@@ -49,23 +51,31 @@ class Install extends AbstractActionController
     protected $sampleDataState;
 
     /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
+     * @param FileSystem
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState
+        \Magento\Framework\Setup\SampleData\State $sampleDataState,
+        Filesystem $filesystem
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
         $this->sampleDataState = $sampleDataState;
+        $this->fileSystem = $filesystem;
     }
 
     /**
@@ -120,7 +130,17 @@ class Install extends AbstractActionController
     {
         $percent = 0;
         $success = false;
+        $contents = '';
         $json = new JsonModel();
+
+        // Depending upon the install environment and network latency, there is a possibility that
+        // "progress" check request may arrive before the Install POST request. In that case
+        // "install.log" file may not be created yet. Check the "install.log" is created before
+        // trying to read from it.
+        if (!$this->fileSystem->getDirectoryRead(DirectoryList::LOG)->isExist('install.log')) {
+            return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+        }
+
         try {
             $progress = $this->progressFactory->createFromLog($this->log);
             $percent = sprintf('%d', $progress->getRatio() * 100);
