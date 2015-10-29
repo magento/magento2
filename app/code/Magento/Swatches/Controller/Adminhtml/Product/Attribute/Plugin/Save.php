@@ -22,7 +22,7 @@ class Save
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
+    public function beforeExecute(Attribute\Save $subject, RequestInterface $request)
     {
         $data = $request->getPostValue();
         if (isset($data['frontend_input'])) {

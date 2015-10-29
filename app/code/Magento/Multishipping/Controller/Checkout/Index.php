@@ -13,7 +13,7 @@ class Index extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_getCheckoutSession()->setCartWasUpdated(false);
         $this->_redirect('*/*/addresses');

@@ -16,7 +16,7 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get(

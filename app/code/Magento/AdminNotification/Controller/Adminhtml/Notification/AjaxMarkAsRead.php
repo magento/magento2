@@ -13,7 +13,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->getRequest()->getPostValue()) {
             return;

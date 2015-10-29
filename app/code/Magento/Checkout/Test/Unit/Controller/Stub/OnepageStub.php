@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\Controller\Stub;
 
 class OnepageStub extends \Magento\Checkout\Controller\Onepage
 {
-    protected function execute()
+    protected function executeInternal()
     {
         // Empty method stub for test
     }

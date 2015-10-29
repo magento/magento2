@@ -172,7 +172,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     {
         $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(true);
         $this->resultRaw->expects($this->once())->method('setContents');
-        $this->downloadController->execute();
+        $this->downloadController->executeInternal();
     }
 
     /**
@@ -182,6 +182,6 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     {
         $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(false);
         $this->resultRaw->expects($this->never())->method('setContents');
-        $this->downloadController->execute();
+        $this->downloadController->executeInternal();
     }
 }
