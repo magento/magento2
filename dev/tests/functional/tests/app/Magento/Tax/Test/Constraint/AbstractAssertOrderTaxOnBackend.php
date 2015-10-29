@@ -144,9 +144,11 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     protected function preparePrices($prices)
     {
         $deletePrices = [
+            'category_price',
             'category_special_price',
             'category_price_excl_tax',
             'category_price_incl_tax',
+            'product_view_price',
             'product_view_special_price',
             'product_view_price_excl_tax',
             'product_view_price_incl_tax'
