@@ -11,7 +11,7 @@ class EditAddress extends \Magento\Multishipping\Controller\Checkout\Address
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {

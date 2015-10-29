@@ -13,7 +13,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Group
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         return $this->resultForwardFactory->create()->forward('new');
     }

@@ -111,7 +111,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
             $email = (string)$this->getRequest()->getPost('email');

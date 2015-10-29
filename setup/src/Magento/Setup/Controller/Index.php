@@ -9,6 +9,7 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Main controller of the Setup Wizard
@@ -16,17 +17,25 @@ use Magento\Setup\Model\ObjectManagerProvider;
 class Index extends AbstractActionController
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
-    private $objectManager;
+    private $objectManagerProvider;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        DeploymentConfig $deploymentConfig
     ) {
-        $this->objectManager = $objectManagerProvider->get();
+        $this->objectManagerProvider = $objectManagerProvider;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -34,19 +43,20 @@ class Index extends AbstractActionController
      */
     public function indexAction()
     {
-        if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+        if ($this->deploymentConfig->isAvailable()) {
+            $objectManager = $this->objectManagerProvider->get();
             /** @var \Magento\Framework\App\State $adminAppState */
-            $adminAppState = $this->objectManager->get('Magento\Framework\App\State');
+            $adminAppState = $objectManager->get('Magento\Framework\App\State');
             $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
 
-            $this->objectManager->create(
+            $objectManager->create(
                 'Magento\Backend\Model\Auth\Session',
                 [
-                    'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                    'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
                     'appState' => $adminAppState
                 ]
             );
-            if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+            if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                 $view = new ViewModel();
                 $view->setTemplate('/error/401.phtml');
                 $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_401);

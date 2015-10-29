@@ -121,6 +121,6 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
             $context,
             $registry
         );
-        $action->execute();
+        $action->executeInternal();
     }
 }
