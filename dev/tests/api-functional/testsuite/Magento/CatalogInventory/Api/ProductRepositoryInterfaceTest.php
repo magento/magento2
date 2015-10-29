@@ -70,7 +70,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $returnedQty = $stockItemData[self::KEY_QTY];
         $this->assertEquals($qty, $returnedQty, 'UPDATE 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
 
-        $customAttributeQty = $this->findCustomAttributeQty($response[self::KEY_CUSTOM_ATTRIBUTES]);
+        $customAttributeQty = $this->findCustomAttributeQty();
         $this->assertTrue(!is_bool($customAttributeQty), 'Expected to find a quantity in the custom attributes');
         $this->assertEquals(
             $qty,
@@ -197,10 +197,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Returns the product's quantity from the array of custom attributes.
      * If no quantity can be found, will return false.
      *
-     * @param array $customAttributes
      * @return int|bool
      */
-    protected function findCustomAttributeQty($customAttributes)
+    protected function findCustomAttributeQty()
     {
         $qty = false;
         $qtyAndStockStatus = [];
