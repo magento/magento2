@@ -27,6 +27,7 @@ define([
             cartButtonId: '', // better to be cartButton
             popupId: '', // better to be popup
             realPrice: '',
+            isSaleable: '',
             msrpPrice: '',
             helpLinkId: '', // better to be helpLink
             addToCartButton: '',
@@ -72,17 +73,7 @@ define([
                 this.$popup = $($(this.popupDOM).html());
 
                 $(this.options.popupId).on('click', function (e) {
-                    this.popUpOptions.position.of = $(e.target);
-                    this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
-                    this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
-                    this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-
-                    this.$popup.find('button').on('click', function () {
-                        if (this.options.addToCartButton) {
-                            $(this.options.addToCartButton).click();
-                        }
-                    }.bind(this));
-                    this._toggle(this.$popup);
+                    this.openPopup(e);
                 }.bind(this));
             }
 
@@ -113,7 +104,26 @@ define([
                 }.bind(this));
             }
         },
-
+        /**
+         * Open and set up popup
+         *
+         * @param element
+         */
+        openPopup: function (element){
+            this.popUpOptions.position.of = $(element.target);
+            this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
+            this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
+            this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
+            this.$popup.find('button').on('click', function () {
+                if (this.options.addToCartButton) {
+                    $(this.options.addToCartButton).click();
+                }
+            }.bind(this));
+            this._toggle(this.$popup);
+            if (!this.options.isSaleable) {
+                this.$popup.find('form').hide();
+            }
+        },
         /**
          *
          * @param $elem
