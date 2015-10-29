@@ -47,7 +47,7 @@ class Registration
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
+    public function beforeExecute(
         AbstractAction $subject,
         RequestInterface $request
     ) {

@@ -13,7 +13,7 @@ class Delete extends \Magento\Checkout\Controller\Cart
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('id');
         if ($id) {

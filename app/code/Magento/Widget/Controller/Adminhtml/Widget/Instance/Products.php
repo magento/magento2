@@ -13,7 +13,7 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $productTypeId = $this->getRequest()->getParam('product_type_id', '');

@@ -13,7 +13,7 @@ class Delete extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $agreementModel = $this->_initBillingAgreement();
 

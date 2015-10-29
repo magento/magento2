@@ -35,7 +35,7 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $file = $this->getRequest()->getParam('file');
         $file = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images')->idDecode($file);

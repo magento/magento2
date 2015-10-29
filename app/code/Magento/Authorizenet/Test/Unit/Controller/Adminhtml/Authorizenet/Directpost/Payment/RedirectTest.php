@@ -96,6 +96,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected $helperMock;
 
+    /**
+     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $controller;
+
     protected function setUp()
     {
         $this->directpostSessionMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
@@ -196,7 +201,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteErrorMsgWithoutCancelOrder()
+    public function testExecuteInternalErrorMsgWithoutCancelOrder()
     {
         $params = ['success' => 0, 'error_msg' => 'Error message'];
         $incrementId = 1;
@@ -238,10 +243,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('register')
             ->with(Iframe::REGISTRY_KEY);
 
-        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->execute());
+        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->executeInternal());
     }
 
-    public function testExecuteErrorMsgWithCancelOrder()
+    public function testExecuteInternalErrorMsgWithCancelOrder()
     {
         $params = ['success' => 0, 'error_msg' => 'Error message', 'x_invoice_num' => 1];
         $incrementId = 1;
@@ -273,10 +278,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('register')
             ->with(Iframe::REGISTRY_KEY);
 
-        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->execute());
+        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->executeInternal());
     }
 
-    public function testExecuteSuccess()
+    public function testExecuteInternalSuccess()
     {
         $params = ['success' => 1, 'controller_action_name' => 'action', 'x_invoice_num' => 1];
         $this->requestMock->expects($this->once())
@@ -307,6 +312,6 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('register')
             ->with(Iframe::REGISTRY_KEY);
 
-        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->execute());
+        $this->assertInstanceOf('\Magento\Framework\View\Result\Layout', $this->controller->executeInternal());
     }
 }

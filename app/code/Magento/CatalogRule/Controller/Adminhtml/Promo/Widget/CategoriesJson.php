@@ -68,7 +68,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $categoryId = (int)$this->getRequest()->getPost('id');
         if ($categoryId) {

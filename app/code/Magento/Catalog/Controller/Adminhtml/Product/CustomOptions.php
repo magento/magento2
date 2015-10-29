@@ -45,7 +45,7 @@ class CustomOptions extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->registry->register('import_option_products', $this->getRequest()->getPost('products'));
         return $this->resultLayoutFactory->create();

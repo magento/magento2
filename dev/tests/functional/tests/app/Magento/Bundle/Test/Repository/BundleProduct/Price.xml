@@ -56,8 +56,8 @@
         </dataset>
 
         <dataset name="fixed-100-custom-options">
-            <field name="price_from" xsi:type="string">244.00</field>
-            <field name="cart_price" xsi:type="string">244.00</field>
+            <field name="price_from" xsi:type="string">270.00</field>
+            <field name="cart_price" xsi:type="string">270.00</field>
         </dataset>
 
         <dataset name="fixed-110">

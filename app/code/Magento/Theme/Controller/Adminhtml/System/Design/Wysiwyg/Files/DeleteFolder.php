@@ -13,7 +13,7 @@ class DeleteFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $path = $this->storage->getCurrentPath();
