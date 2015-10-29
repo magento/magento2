@@ -83,21 +83,21 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria  $criteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
         return $collection;
     }
 

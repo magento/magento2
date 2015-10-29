@@ -26,7 +26,7 @@ class ExportViewedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Pro
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'products_mostviewed.xml';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Product\Viewed\Grid');

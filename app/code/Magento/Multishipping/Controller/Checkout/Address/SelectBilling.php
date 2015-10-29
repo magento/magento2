@@ -11,7 +11,7 @@ class SelectBilling extends \Magento\Multishipping\Controller\Checkout\Address
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_getState()->setActiveStep(
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_BILLING

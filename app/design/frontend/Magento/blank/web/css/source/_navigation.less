@@ -86,7 +86,7 @@
             font-size: 1.6rem;
             font-weight: 700;
             margin: 0;
-            padding: 8px 20px;
+            padding: .8rem 3.5rem .8rem 2rem;
             .label {
                 display: block;
                 margin-bottom: @indent__xs;
@@ -125,16 +125,17 @@
 
         .header.links {
             .lib-list-reset-styles();
+            border-bottom: 1px solid @color-gray82;
             li {
-                border-top: 1px solid @color-gray82;
                 font-size: 1.6rem;
                 margin: 0;
                 &.greet.welcome {
+                    border-top: 1px solid @color-gray82;
                     font-weight: 700;
-                    padding: 8px 20px;
+                    padding: .8rem @indent__base;
                 }
-                &:last-child {
-                    border-bottom: 1px solid @color-gray82;
+                > a {
+                    border-top: 1px solid @color-gray82;
                 }
             }
             a,
@@ -143,7 +144,10 @@
                 .lib-css(text-decoration, @navigation-level0-item__text-decoration);
                 display: block;
                 font-weight: 700;
-                padding: 8px 20px;
+                padding: .8rem @indent__base;
+            }
+            .header.links {
+                border: 0;
             }
         }
     }
@@ -216,6 +220,11 @@
             &.active {
                 background: transparent;
                 border-bottom: 0;
+            }
+            .nav-sections-item-switch {
+                &:hover {
+                    text-decoration: none;
+                }
             }
         }
 

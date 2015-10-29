@@ -13,7 +13,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->getRequest()->isAjax()) {
             $this->_forward('noroute');

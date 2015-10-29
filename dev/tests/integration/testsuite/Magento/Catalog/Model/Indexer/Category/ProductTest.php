@@ -73,7 +73,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->assertTrue((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
             }
 
-            $this->assertFalse(
+            $this->assertTrue(
                 (bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getParentId())
             );
         }
@@ -187,12 +187,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productThird->setCategoryIds([$categorySixth->getId()]);
         $productThird->save();
 
-        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId()];
+        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFifth->getId()];
         foreach ($categories as $categoryId) {
             $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
 
-        $categories = [$categoryFifth->getId(), $categorySecond->getId()];
+        $categories = [$categorySecond->getId()];
         foreach ($categories as $categoryId) {
             $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }

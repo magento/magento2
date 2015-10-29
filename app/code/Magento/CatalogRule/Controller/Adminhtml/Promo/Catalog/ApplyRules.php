@@ -16,7 +16,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $errorMessage = __('We can\'t apply the rules.');
         try {

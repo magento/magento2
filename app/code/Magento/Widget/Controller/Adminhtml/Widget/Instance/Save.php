@@ -13,7 +13,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $widgetInstance = $this->_initWidgetInstance();
         if (!$widgetInstance) {

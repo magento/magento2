@@ -679,3 +679,4 @@ order-header,order-header
 "State Code and Title","State Code and Title"
 "PDF Packing Slips","Bons de livraison PDF"
 "Status can't be unassigned, because it is used by existing order(s).","Status can't be unassigned, because it is used by existing order(s)."
+Operations,Operations

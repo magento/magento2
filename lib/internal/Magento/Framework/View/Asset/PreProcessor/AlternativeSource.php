@@ -96,7 +96,7 @@ class AlternativeSource implements AlternativeSourceInterface
         }
 
         try {
-            $this->lockerProcess->lockProcess($this->lockName . sprintf('%x', crc32($path . $content)));
+            $this->lockerProcess->lockProcess($this->lockName);
 
             $module = $chain->getAsset()->getModule();
 

@@ -8,7 +8,7 @@ namespace Magento\Contact\Test\Unit\Controller\Stub;
 
 class IndexStub extends \Magento\Contact\Controller\Index
 {
-    protected function execute()
+    protected function executeInternal()
     {
         // Empty method stub for test
     }
