@@ -16,7 +16,7 @@ class SetPublicCookie extends \Magento\TestModule1\Controller\CookieTester
      *
      * @return void
      */
-    public function executeInternal(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $publicCookieMetadata = $this->getCookieMetadataFactory()->createPublicCookieMetadata();
 

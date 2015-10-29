@@ -16,7 +16,7 @@ class DeleteCookie extends \Magento\TestModule1\Controller\CookieTester
      *
      * @return void
      */
-    public function executeInternal(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $cookieName = $request->getParam('cookie_name');
         $this->getCookieManager()->deleteCookie($cookieName);
