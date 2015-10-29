@@ -33,7 +33,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product">
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
