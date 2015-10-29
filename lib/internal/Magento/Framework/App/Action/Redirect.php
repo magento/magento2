@@ -21,6 +21,14 @@ class Redirect extends AbstractAction
      */
     public function dispatch(RequestInterface $request)
     {
+        return $this->execute();
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function execute()
+    {
         return $this->_response;
     }
 }
