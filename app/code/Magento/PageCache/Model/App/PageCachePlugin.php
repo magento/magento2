@@ -12,11 +12,13 @@ class PageCachePlugin
      * Attach FPC tag to all saved entries to enable cache type management
      *
      * @param \Magento\Framework\App\PageCache\Cache $subject
-     * @param $data
-     * @param $identifier
-     * @param array $tags
-     * @param null $lifeTime
+     * @param string $data
+     * @param string $identifier
+     * @param string[] $tags
+     * @param int|null $lifeTime
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         \Magento\Framework\App\PageCache\Cache $subject,
