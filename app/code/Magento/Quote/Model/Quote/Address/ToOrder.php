@@ -67,7 +67,9 @@ class ToOrder
             'to_order',
             $object
         );
-
+        /**
+         * @var $order \Magento\Sales\Model\Order
+         */
         $order = $this->orderFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $order,
@@ -77,7 +79,12 @@ class ToOrder
         $order->setStoreId($object->getQuote()->getStoreId())
             ->setQuoteId($object->getQuote()->getId())
             ->setIncrementId($object->getQuote()->getReservedOrderId());
-
+        if (array_key_exists('shipping_method', $data)) {
+            $order->setShippingMethod($data['shipping_method']);
+        }
+        if ($object->getShippingMethod()) {
+            $order->setShippingMethod($object->getShippingMethod());
+        }
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
         $this->eventManager->dispatch(
             'sales_convert_quote_to_order',

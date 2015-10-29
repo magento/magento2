@@ -435,7 +435,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $addresses[] = $billingAddress;
         $order->setBillingAddress($billingAddress);
         $order->setAddresses($addresses);
-        $order->setPayments([$this->quotePaymentToOrderPayment->convert($quote->getPayment())]);
+        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
         $order->setItems($this->resolveItems($quote));
         if ($quote->getCustomer()) {
             $order->setCustomerId($quote->getCustomer()->getId());
