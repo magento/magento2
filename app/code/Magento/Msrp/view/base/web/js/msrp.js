@@ -66,6 +66,7 @@ define([
 
             this.popupDOM = $(this.options.popUpAttr)[0];
             this.infoPopupDOM = $('[data-role=msrp-info-template]')[0];
+            $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
 
             if (this.options.popupId) {
                 $('body').append($(this.popupDOM).html());
@@ -137,6 +138,29 @@ define([
         closePopup: function ($elem) {
             $elem.dropdownDialog('close');
             $(document).off('mouseup');
+        },
+
+        /**
+         * Handler for addToCart action
+         */
+        _addToCartSubmit: function () {
+            this.element.trigger('addToCart', this.element);
+
+            if (this.element.data('stop-processing')) {
+                return false;
+            }
+
+            if (this.options.addToCartButton) {
+                $(this.options.addToCartButton).click();
+
+                return false;
+            }
+
+            if (this.options.addToCartUrl) {
+                $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
+            }
+            $(this.options.cartForm).submit();
+
         }
     });
 
