@@ -48,7 +48,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());

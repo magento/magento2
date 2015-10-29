@@ -16,7 +16,7 @@ class ExportXml extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);

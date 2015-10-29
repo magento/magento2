@@ -18,7 +18,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             /* @var $queue \Magento\Newsletter\Model\Queue */

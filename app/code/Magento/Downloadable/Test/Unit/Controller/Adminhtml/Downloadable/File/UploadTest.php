@@ -165,6 +165,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->resultFactory->expects($this->once())->method('create')->willReturn($resultJson);
         $resultJson->expects($this->once())->method('setData')->willReturnSelf();
 
-        $this->assertEquals($resultJson, $this->upload->execute());
+        $this->assertEquals($resultJson, $this->upload->executeInternal());
     }
 }

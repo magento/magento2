@@ -16,7 +16,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $order = $this->_initOrder();
         if ($order) {

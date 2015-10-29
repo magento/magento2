@@ -15,7 +15,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $itemId = $this->getRequest()->getParam('item_id');
 

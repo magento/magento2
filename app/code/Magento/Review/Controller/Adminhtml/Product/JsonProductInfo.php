@@ -42,7 +42,7 @@ class JsonProductInfo extends ProductController
     /**
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $response = new DataObject();
         $id = $this->getRequest()->getParam('id');

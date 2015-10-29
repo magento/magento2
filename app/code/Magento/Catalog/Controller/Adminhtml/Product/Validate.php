@@ -72,7 +72,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);
