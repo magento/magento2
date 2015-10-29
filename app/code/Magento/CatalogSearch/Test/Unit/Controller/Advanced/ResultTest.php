@@ -50,6 +50,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogSearch\Controller\Advanced\Result',
             ['context' => $context, 'catalogSearchAdvanced' => $catalogSearchAdvanced]
         );
-        $instance->execute();
+        $instance->executeInternal();
     }
 }

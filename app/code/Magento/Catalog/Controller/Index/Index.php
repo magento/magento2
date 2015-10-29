@@ -12,7 +12,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return $this
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('/');

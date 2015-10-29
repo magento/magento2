@@ -13,7 +13,7 @@ class OnInsert extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var $helperStorage \Magento\Theme\Helper\Storage */
         $helperStorage = $this->_objectManager->get('Magento\Theme\Helper\Storage');

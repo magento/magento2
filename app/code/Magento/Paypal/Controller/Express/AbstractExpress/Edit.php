@@ -13,7 +13,7 @@ class Edit extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->getResponse()->setRedirect($this->_config->getExpressCheckoutEditUrl($this->_initToken()));

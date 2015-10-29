@@ -95,9 +95,10 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $components[$component['name']]['update'] = false;
             $components[$component['name']]['uninstall'] = false;
             $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
-            if ($this->composerInformation->isPackageInComposerJson($component['name'])
-                && ($component['type'] !== \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
-                $components[$component['name']]['uninstall'] = true;
+            if ($this->composerInformation->isPackageInComposerJson($component['name'])) {
+                if ($component['type'] !== \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
+                    $components[$component['name']]['uninstall'] = true;
+                }
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
                         $lastSyncData['packages'][$component['name']]['latestVersion'],
