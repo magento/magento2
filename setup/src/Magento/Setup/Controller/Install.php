@@ -62,7 +62,7 @@ class Install extends AbstractActionController
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
-     * @param FileSystem
+     * @param FileSystem $filesystem
      */
     public function __construct(
         WebLogger $logger,
