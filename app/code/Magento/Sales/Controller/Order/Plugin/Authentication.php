@@ -40,7 +40,7 @@ class Authentication
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
+    public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
         $loginUrl = $this->customerUrl->getLoginUrl();
 
