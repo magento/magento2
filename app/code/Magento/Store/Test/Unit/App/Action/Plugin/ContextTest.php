@@ -185,7 +185,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::CURRENCY_CURRENT_STORE));
     }
 
-    public function testAroundDispatchCurrencyFromSession()
+    public function testAroundExecuteCurrencyFromSession()
     {
         $this->sessionMock->expects($this->any())
             ->method('getCurrencyCode')
@@ -201,11 +201,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->aroundExecute($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 
-    public function testDispatchCurrentStoreCurrency()
+    public function testExecuteCurrentStoreCurrency()
     {
         $this->httpContextMock->expects($this->at(0))
             ->method('setValue')
@@ -217,7 +217,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->aroundExecute($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 }

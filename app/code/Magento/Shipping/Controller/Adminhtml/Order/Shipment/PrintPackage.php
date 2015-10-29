@@ -50,7 +50,7 @@ class PrintPackage extends \Magento\Backend\App\Action
      *
      * @return ResponseInterface|void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));

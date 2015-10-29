@@ -213,14 +213,14 @@ class Advanced extends Generic
         }
 
         $scopes = [
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE => __('Store View'),
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_WEBSITE => __('Website'),
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL => __('Global'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
         ];
 
         if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
         ) {
-            unset($scopes[\Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE]);
+            unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
         }
 
         $fieldset->addField(

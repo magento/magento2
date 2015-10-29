@@ -13,7 +13,7 @@ class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $variable = $this->_initVariable();
 
