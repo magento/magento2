@@ -10,9 +10,6 @@
         <dataset name="default">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -41,9 +38,6 @@
         <dataset name="configurable_with_qty_1">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">40</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -72,9 +66,6 @@
         <dataset name="product_with_special_price">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="special_price" xsi:type="string">9</field>
             <field name="weight" xsi:type="string">5</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
@@ -104,9 +95,6 @@
         <dataset name="product_with_size">
             <field name="name" xsi:type="string">Test configurable product with size %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -135,9 +123,6 @@
         <dataset name="product_with_color_and_size">
             <field name="name" xsi:type="string">Test configurable product with color and size %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -166,9 +151,6 @@
         <dataset name="one_variation">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -194,9 +176,6 @@
         <dataset name="not_virtual_for_type_switching">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -225,9 +204,6 @@
         <dataset name="with_one_option">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -256,9 +232,6 @@
         <dataset name="with_out_of_stock_item">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">120</item>
-            </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -285,9 +258,6 @@
             <field name="name" xsi:type="string">Configurable product %isolation%</field>
             <field name="url_key" xsi:type="string">test-configurable-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
@@ -318,9 +288,6 @@
             <field name="name" xsi:type="string">Configurable product %isolation%</field>
             <field name="url_key" xsi:type="string">test-configurable-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
@@ -343,9 +310,6 @@
         <dataset name="filterable_two_options_with_zero_price">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="status" xsi:type="string">Product online</field>
@@ -373,9 +337,6 @@
             <field name="name" xsi:type="string">Configurable product %isolation%</field>
             <field name="url_key" xsi:type="string">test-configurable-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_configurable_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">10</item>
-            </field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>

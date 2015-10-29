@@ -29,7 +29,7 @@
             </tax_class_id>
             <product_has_weight>
                 <selector>[name="product[product_has_weight]"]</selector>
-                <input>checkbox</input>
+                <input>radiobutton</input>
             </product_has_weight>
             <category_ids>
                 <selector>#attribute-category_ids-container</selector>
