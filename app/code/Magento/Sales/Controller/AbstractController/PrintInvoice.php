@@ -49,7 +49,7 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {

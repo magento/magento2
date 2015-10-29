@@ -144,11 +144,11 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $allowGuest = $this->_objectManager->get('Magento\Review\Helper\Data')->getIsGuestAllowToWrite();
         if (!$request->isDispatched()) {
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
 
         if (!$allowGuest && $request->getActionName() == 'post' && $request->isPost()) {
@@ -166,7 +166,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             }
         }
 
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**

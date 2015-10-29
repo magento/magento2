@@ -15,7 +15,7 @@ class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integr
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         if ($integrationId) {

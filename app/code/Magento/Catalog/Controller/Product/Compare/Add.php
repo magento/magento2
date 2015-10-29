@@ -15,7 +15,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->_formKeyValidator->validate($this->getRequest())) {

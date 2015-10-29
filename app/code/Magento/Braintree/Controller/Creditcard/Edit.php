@@ -12,7 +12,7 @@ class Edit extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->hasToken()) {
             if (!$this->vault->storedCard($this->hasToken())) {

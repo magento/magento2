@@ -14,7 +14,7 @@ class MassVisibleIn extends ProductController
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
