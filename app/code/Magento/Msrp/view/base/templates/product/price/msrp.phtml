@@ -73,7 +73,7 @@ if ($product->isSaleable()) {
         }
     ?>
     <span id="<?php /* @escapeNotVerified */ echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
-    <a href="#"
+    <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo($popupId);?>"
        class="action map-show-info"
        data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>"><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
@@ -86,7 +86,7 @@ if ($product->isSaleable()) {
 
 <?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
-    <a href="#"
+    <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo $helpLinkId;?>"
        class="action map-show-info"
        data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo $helpLinkId;?>",
