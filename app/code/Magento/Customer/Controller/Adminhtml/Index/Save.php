@@ -176,7 +176,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $returnToEdit = false;
         $originalRequestData = $this->getRequest()->getPostValue();

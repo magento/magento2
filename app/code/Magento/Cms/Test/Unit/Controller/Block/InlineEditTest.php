@@ -131,7 +131,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithoutData()
@@ -157,6 +157,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

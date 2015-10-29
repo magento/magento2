@@ -47,7 +47,7 @@ class Logout extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $lastCustomerId = $this->customerSession->getId();
         $this->customerSession->logout()

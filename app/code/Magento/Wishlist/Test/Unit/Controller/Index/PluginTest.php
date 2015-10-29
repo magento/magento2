@@ -66,7 +66,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\NotFoundException
      */
-    public function testBeforeDispatch()
+    public function testBeforeExecute()
     {
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $indexController = $this->getMock('Magento\Wishlist\Controller\Index\Index', [], [], '', false);
@@ -124,6 +124,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist/general/active')
             ->willReturn(false);
 
-        $this->getPlugin()->beforeDispatch($indexController, $this->request);
+        $this->getPlugin()->beforeExecute($indexController, $this->request);
     }
 }

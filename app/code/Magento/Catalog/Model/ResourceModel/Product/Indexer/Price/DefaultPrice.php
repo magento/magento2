@@ -225,6 +225,20 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function _prepareFinalPriceData($entityIds = null)
     {
+        return $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
+    }
+
+    /**
+     * Prepare products default final price in temporary index table
+     *
+     * @param int|array $entityIds the entity ids limitation
+     * @param string|null $type product type, all if null
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function prepareFinalPriceDataForType($entityIds, $type)
+    {
         $this->_prepareDefaultFinalPriceTable();
 
         $connection = $this->getConnection();
@@ -260,10 +274,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
-        )->where(
-            'e.type_id = ?',
-            $this->getTypeId()
         );
+
+        if ($type !== null) {
+            $select->where('e.type_id = ?', $type);
+        }
 
         // add enable products limitation
         $statusCond = $connection->quoteInto(
@@ -299,10 +314,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
         $select->columns(
             [
-                'orig_price' => $price,
-                'price' => $finalPrice,
-                'min_price' => $finalPrice,
-                'max_price' => $finalPrice,
+                'orig_price' => $connection->getIfNullSql($price, 0),
+                'price' => $connection->getIfNullSql($finalPrice, 0),
+                'min_price' => $connection->getIfNullSql($finalPrice, 0),
+                'max_price' => $connection->getIfNullSql($finalPrice, 0),
                 'tier_price' => new \Zend_Db_Expr('tp.min_price'),
                 'base_tier' => new \Zend_Db_Expr('tp.min_price'),
             ]
@@ -554,9 +569,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Mode Final Prices index to primary temporary index table
      *
+     * @param int[]|null $entityIds
      * @return $this
      */
-    protected function _movePriceDataToIndexTable()
+    protected function _movePriceDataToIndexTable($entityIds = null)
     {
         $columns = [
             'entity_id' => 'entity_id',
@@ -573,6 +589,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection = $this->getConnection();
         $table = $this->_getDefaultFinalPriceTable();
         $select = $connection->select()->from($table, $columns);
+
+        if ($entityIds !== null) {
+            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0);
+        }
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);
         $connection->query($query);
