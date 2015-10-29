@@ -16,6 +16,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class XmlCatalogGenerateCommand Generates dictionary of URNs for the IDE
+ *
+ * @SuppressWarnings(PMD.CouplingBetweenObjects)
  */
 class XmlCatalogGenerateCommand extends Command
 {
