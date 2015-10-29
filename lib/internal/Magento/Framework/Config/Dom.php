@@ -282,11 +282,7 @@ class Dom
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
-            if (file_exists($schema)) {
-                $result = $dom->schemaValidate($schema);
-            } else {
-                $result = $dom->schemaValidateSource($schema);
-            }
+            $result = $dom->schemaValidate($schema);
             $errors = [];
             if (!$result) {
                 $validationErrors = libxml_get_errors();

@@ -215,7 +215,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 
     /**
@@ -259,7 +259,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 
     /**
@@ -287,6 +287,6 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('Can not cancel');
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 }

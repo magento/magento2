@@ -118,9 +118,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::executeInternal
      */
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $this->prepareExecute();
 
@@ -157,13 +157,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('addLink')
             ->willReturnSelf();
 
-        $this->assertNull($this->indexController->execute());
+        $this->assertNull($this->indexController->executeInternal());
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::executeInternal
      */
-    public function testExecuteAjax()
+    public function testExecuteInternalAjax()
     {
         $this->prepareExecute(true);
         $indexController = $this->getMockBuilder('Magento\Email\Controller\Adminhtml\Email\Template\Index')
@@ -176,7 +176,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $indexController->expects($this->once())
             ->method('_forward')
             ->with('grid');
-        $this->assertNull($indexController->execute());
+        $this->assertNull($indexController->executeInternal());
     }
 
     /**

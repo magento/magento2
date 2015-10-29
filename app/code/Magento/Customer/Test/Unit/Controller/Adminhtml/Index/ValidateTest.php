@@ -186,7 +186,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithoutAddresses()
@@ -225,7 +225,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithException()
@@ -271,6 +271,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

@@ -270,7 +270,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->customerRepository->expects($this->never())
             ->method('save');
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     public function testRegenerateIdOnExecution()
@@ -297,7 +297,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     /**
@@ -391,7 +391,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxCalculationAddressType')
             ->will($this->returnValue($addressType));
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     /**
@@ -539,7 +539,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     public function getSuccessRedirectDataProvider()

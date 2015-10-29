@@ -11,7 +11,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
 

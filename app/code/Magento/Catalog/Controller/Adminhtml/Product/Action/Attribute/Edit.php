@@ -51,7 +51,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $this->attributeHelper->setProductIds($collection->getAllIds());

@@ -12,7 +12,7 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->getRequest()->getQuery('ajax')) {
             $resultForward = $this->resultForwardFactory->create();
