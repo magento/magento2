@@ -8,7 +8,6 @@ namespace Magento\Test\Integrity\App\Language;
 
 use Magento\Framework\App\Language\Config;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Config\Dom\UrnResolver;
 
 class CircularDependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,12 +21,36 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencies()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $componentRegistrar = new ComponentRegistrar();
         $declaredLanguages = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
-        $urnResolver = new UrnResolver();
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domFactoryMock = $this->getMock('Magento\Framework\Config\DomFactory', [], [], '', false);
+        $domFactoryMock->expects($this->any())
+            ->method('createDom')
+            ->willReturnCallback(
+                function ($arguments) use ($validationStateMock) {
+                    return new \Magento\Framework\Config\Dom(
+                        $arguments['xml'],
+                        $validationStateMock,
+                        [],
+                        null,
+                        $arguments['schemaFile']
+                    );
+                }
+            );
+
         $packs = [];
         foreach ($declaredLanguages as $language) {
-            $languageConfig = new Config(file_get_contents($language . '/language.xml'), $urnResolver);
+            $languageConfig = $objectManager->getObject(
+                'Magento\Framework\App\Language\Config',
+                [
+                    'source' => file_get_contents($language . '/language.xml'),
+                    'domFactory' => $domFactoryMock
+                ]
+            );
             $this->packs[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
             $packs[] = $languageConfig;
         }

@@ -132,7 +132,7 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, 9]]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(9);
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     public function testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
@@ -141,6 +141,6 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, null]]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(4);
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }

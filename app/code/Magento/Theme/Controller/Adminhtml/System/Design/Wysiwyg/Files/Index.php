@@ -13,7 +13,7 @@ class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Fi
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout('overlay_popup');
         $this->_view->renderLayout();

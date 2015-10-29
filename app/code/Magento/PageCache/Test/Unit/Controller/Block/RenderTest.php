@@ -79,7 +79,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
         $this->requestMock->expects($this->once())->method('setActionName')->will($this->returnValue('noroute'));
         $this->requestMock->expects($this->once())->method('setDispatched')->will($this->returnValue(false));
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     /**
@@ -96,7 +96,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->will($this->returnValue(''));
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     public function testExecute()
@@ -171,6 +171,6 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('appendBody')
             ->with($this->equalTo(json_encode($expectedData)));
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }
