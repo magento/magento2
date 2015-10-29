@@ -14,6 +14,13 @@ use Magento\Mtf\Client\Locator;
 class DropdownmultiselectElement extends MultiselectElement
 {
     /**
+     * Selector for expanding dropdown.
+     *
+     * @var string
+     */
+    protected $toggle = 'div';
+
+    /**
      * Selected option selector.
      *
      * @var string
@@ -36,7 +43,7 @@ class DropdownmultiselectElement extends MultiselectElement
     public function setValue($values)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $this->click();
+        $this->find($this->toggle)->click();
         $this->deselectAll();
         $values = is_array($values) ? $values : [$values];
         foreach ($values as $value) {
@@ -45,7 +52,7 @@ class DropdownmultiselectElement extends MultiselectElement
                 Locator::SELECTOR_XPATH
             )->click();
         }
-        $this->click();
+        $this->find($this->toggle)->click();
     }
 
     /**
@@ -57,12 +64,12 @@ class DropdownmultiselectElement extends MultiselectElement
     {
         $this->eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
         $values = [];
-        $this->click();
+        $this->find($this->toggle)->click();
         $options = $this->getElements($this->selectedValue);
         foreach ($options as $option) {
             $values[] = $option->getText();
         }
-        $this->click();
+        $this->find($this->toggle)->click();
 
         return $values;
     }
