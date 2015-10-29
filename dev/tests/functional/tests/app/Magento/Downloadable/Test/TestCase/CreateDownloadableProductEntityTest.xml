@@ -10,6 +10,8 @@
         <variation name="CreateDownloadableProductEntityTestVariation1" summary="Create Downloadable Product with Required Fields Only and Assign it to the Category" ticketId="MAGETWO-13595">
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/price/value" xsi:type="string">1</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">one_separately_link</data>
@@ -128,7 +130,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/qty" xsi:type="string">123</data>
             <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">No</data>
             <data name="product/data/stock_data/min_qty" xsi:type="string">123</data>

@@ -15,6 +15,12 @@ use Magento\Setup\Module\ConnectionFactory;
  */
 class DbValidator
 {
+
+    /**
+     * Db prefix max length
+     */
+    const DB_PREFIX_LENGTH = 5;
+
     /**
      * DB connection factory
      *
@@ -44,7 +50,16 @@ class DbValidator
         //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
         // the first character should be a letter.
         if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
-            throw new \InvalidArgumentException('Please correct the table prefix format.');
+            throw new \InvalidArgumentException(
+                'Please correct the table prefix format, should contain only numbers, letters or underscores.'
+                .' The first character should be a letter.'
+            );
+        }
+
+        if (strlen($prefix) > self::DB_PREFIX_LENGTH) {
+            throw new \InvalidArgumentException(
+                'Table prefix length can\'t be more than ' . self::DB_PREFIX_LENGTH . ' characters.'
+            );
         }
 
         return true;

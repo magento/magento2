@@ -13,7 +13,7 @@ class NewConditionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
