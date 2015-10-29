@@ -15,7 +15,7 @@ class Index extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction();
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Site Map'));

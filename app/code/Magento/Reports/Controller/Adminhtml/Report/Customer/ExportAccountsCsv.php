@@ -17,7 +17,7 @@ class ExportAccountsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Cus
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $fileName = 'new_accounts.csv';

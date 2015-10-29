@@ -13,7 +13,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $status = $this->getRequest()->getParam('__status__');
         if (!$status instanceof \Magento\Framework\DataObject) {

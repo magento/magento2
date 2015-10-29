@@ -83,6 +83,6 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
                 [new Phrase('Low Stock'), new Phrase('Low Stock')]
             );
 
-        $this->lowstock->execute();
+        $this->lowstock->executeInternal();
     }
 }

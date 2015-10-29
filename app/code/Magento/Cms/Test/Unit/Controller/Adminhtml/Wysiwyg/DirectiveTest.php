@@ -157,7 +157,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::executeInternal
      */
     public function testExecute()
     {
@@ -188,12 +188,12 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->rawMock,
-            $this->wysiwygDirective->execute()
+            $this->wysiwygDirective->executeInternal()
         );
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::executeInternal
      */
     public function testExecuteException()
     {
@@ -236,7 +236,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->rawMock,
-            $this->wysiwygDirective->execute()
+            $this->wysiwygDirective->executeInternal()
         );
     }
 

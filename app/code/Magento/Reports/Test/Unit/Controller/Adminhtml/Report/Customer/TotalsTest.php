@@ -70,6 +70,6 @@ class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->expects($this->at(2))
             ->method('addLink')
             ->with(new Phrase('Customers by Orders Total'), new Phrase('Customers by Orders Total'));
-        $this->totals->execute();
+        $this->totals->executeInternal();
     }
 }

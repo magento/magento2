@@ -244,7 +244,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->resultPageMock));
 
-        $this->assertSame($this->resultPageMock, $this->controller->execute());
+        $this->assertSame($this->resultPageMock, $this->controller->executeInternal());
     }
 
     public function testExecuteNoInvoice()
@@ -278,6 +278,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultForward));
 
-        $this->assertSame($resultForward, $this->controller->execute());
+        $this->assertSame($resultForward, $this->controller->executeInternal());
     }
 }
