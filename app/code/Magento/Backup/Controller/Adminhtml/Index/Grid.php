@@ -13,7 +13,7 @@ class Grid extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_view->renderLayout();

@@ -160,16 +160,26 @@ class Attribute extends Form
      */
     public function fillAttributes(array $attributes)
     {
+        $attributesFilters = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
             }
+            $attributesFilters[] = ['frontend_label' => $attribute['frontend_label']];
         }
 
+        //select attributes
+        $this->getAttributesGrid()->resetFilter();
+        if ($this->_rootElement->find('[class$=no-data]')->isVisible()) {
+            return;
+        }
+        $this->getAttributesGrid()->selectItems($attributesFilters);
+
+        $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
+
+        //update attributes options
         foreach ($attributes as $attribute) {
-            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            $this->browser->find($this->nextButton)->click();
-            $this->getTemplateBlock()->waitLoader();
             $this->updateOptions($attribute);
         }
 
@@ -272,6 +282,7 @@ class Attribute extends Form
             $label = isset($option['admin']) ? $option['admin'] : $option['label'];
             $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
+            //Create option
             if (!$optionContainer->isVisible()) {
                 $mapping = $this->dataMapping($option);
                 $attributeBlock->find($this->addOption)->click();
@@ -282,6 +293,11 @@ class Attribute extends Form
                     ->setValue($mapping['label']['value']);
                 $this->getTemplateBlock()->waitLoader();
                 $optionContainer->find('[data-action=save]')->click();
+                $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
+            }
+            //Select option
+            if (!$optionContainer->find('[type="checkbox"]')->isSelected()) {
+                $optionContainer->find('[type="checkbox"]')->click();
             }
         }
     }

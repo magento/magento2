@@ -13,7 +13,7 @@ class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout('newsletter_template_preview_popup');
         $this->_view->renderLayout();
