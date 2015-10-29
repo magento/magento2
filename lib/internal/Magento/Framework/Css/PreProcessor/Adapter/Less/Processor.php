@@ -84,6 +84,13 @@ class Processor implements ContentProcessorInterface
 
             $content = $parser->getCss();
 
+            if (trim($content) === '') {
+                $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
+                $this->logger->critical($errorMessage);
+
+                throw new ContentProcessorException($errorMessage);
+            }
+
             return $content;
         } catch (\Exception $e) {
             $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path . PHP_EOL . $e->getMessage();
