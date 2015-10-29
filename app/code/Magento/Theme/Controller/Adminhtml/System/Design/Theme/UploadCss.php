@@ -13,7 +13,7 @@ class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */
         $serviceModel = $this->_objectManager->get('Magento\Theme\Model\Uploader\Service');

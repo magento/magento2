@@ -19,7 +19,7 @@ class Redirect extends AbstractAction
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         return $this->_response;
     }

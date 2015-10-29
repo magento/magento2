@@ -78,7 +78,7 @@ class Fromcart extends Action\Action implements IndexInterface
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function execute()
+    public function executeInternal()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {

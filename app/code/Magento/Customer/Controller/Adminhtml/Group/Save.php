@@ -67,7 +67,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         $taxClass = (int)$this->getRequest()->getParam('tax_class');
 

@@ -550,7 +550,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue('result-execute'));
 
-        $this->assertEquals('result-execute', $this->save->execute());
+        $this->assertEquals('result-execute', $this->save->executeInternal());
     }
 
     /**

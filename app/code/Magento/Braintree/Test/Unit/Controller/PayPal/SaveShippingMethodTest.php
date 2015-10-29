@@ -198,7 +198,7 @@ class SaveShippingMethodTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_PAGE)
             ->willReturn($responsePageMock);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteException()
@@ -236,6 +236,6 @@ class SaveShippingMethodTest extends \PHPUnit_Framework_TestCase
             ->method('setBody')
             ->with($html);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

@@ -25,8 +25,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, [], null, null, $messageFormat);
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
