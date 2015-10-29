@@ -12,7 +12,7 @@ class Save extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->messageManager->addError(__('There was error during saving card data'));
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

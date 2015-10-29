@@ -107,7 +107,7 @@ class Cart extends Action\Action implements IndexInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $itemId = (int)$this->getRequest()->getParam('item');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

@@ -15,7 +15,7 @@ class SaveShippingMethod extends \Magento\Braintree\Controller\PayPal
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $isAjax = $this->getRequest()->getParam('isAjax');

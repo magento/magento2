@@ -16,7 +16,7 @@ class ExportRefundedExcel extends \Magento\Reports\Controller\Adminhtml\Report\S
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'refunded.xml';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');

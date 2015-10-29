@@ -150,7 +150,7 @@ class View extends \Magento\Framework\App\Action\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)) {
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());

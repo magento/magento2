@@ -13,7 +13,7 @@ class Pending extends ProductController
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->getRequest()->getParam('ajax')) {
             $this->coreRegistry->register('usePendingFilter', true);
