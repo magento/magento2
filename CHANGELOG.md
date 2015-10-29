@@ -1,3 +1,24 @@
+1.0.0-beta6
+=============
+* Fixed bugs:
+    * Fixed an issue with сustomer attribute creation in admin panel
+    * Fixed an issue with translation in html files using $t()
+    * Fixed an issue when save customer with custom attribute of type "file"
+    * Fixed an issue with container "page.bottom.container" in empty layout file
+    * Fixed an issue with rendering of static blocks grid on the store view
+    * Fixed an issue with rendering of multi-select customer attribute in admin panel
+    * Fixed an issue with categories import in a comma-separated format
+    * Fixed an issue with media import/export functionality
+    * Fixed an issue with category link management interface when getting assigned products 
+    * Fixed an issue with URL rewrite bulk assignment to website in multi-store mode
+    * Fixed an issue with website shopping cart rules applying
+    * Fixed an issue with limiter in My Account -> My Orders
+    * Fixed an issue with layout xml files that doesn't have translations
+* Various improvements:
+    * Validation error is shown on the focus out event of the email field during Checkout
+    * Added translations to layout xml files
+    * Various security improvements
+    
 1.0.0-beta5
 =============
 * Fixed bugs:
