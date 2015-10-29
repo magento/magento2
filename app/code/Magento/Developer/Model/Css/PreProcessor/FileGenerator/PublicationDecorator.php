@@ -32,7 +32,7 @@ class PublicationDecorator extends RelatedGenerator
     private $scopeConfig;
 
     /**
-     * @var
+     * @var bool
      */
     private $hasRelatedPublishing;
 
