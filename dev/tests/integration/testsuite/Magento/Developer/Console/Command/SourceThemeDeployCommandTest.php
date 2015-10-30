@@ -5,7 +5,6 @@
  */
 namespace Magento\Developer\Console\Command;
 
-use Magento\Framework\Validator\Locale;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
-    const PUB_STATIC_DIRECTORY = 'pub_static';
+    const PUB_STATIC_DIRECTORY = 'pub/static';
 
     const AREA_TEST_VALUE = 'frontend';
 
@@ -26,11 +25,6 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
     const THEME_TEST_VALUE = 'Magento/luma';
 
     const TYPE_TEST_VALUE = 'less';
-
-    /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $validatorMock;
 
     /**
      * @var SourceThemeDeployCommand
@@ -53,10 +47,6 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         global $installDir;
-
-        $this->validatorMock = $this->getMockBuilder(Locale::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->pubStatic = $installDir . DIRECTORY_SEPARATOR . self::PUB_STATIC_DIRECTORY;
         $this->command = Bootstrap::getObjectManager()->get(SourceThemeDeployCommand::class);
