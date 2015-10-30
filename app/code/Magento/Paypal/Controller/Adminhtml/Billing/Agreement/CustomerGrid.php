@@ -29,7 +29,7 @@ class CustomerGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreemen
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->initCurrentCustomer();
         $this->_view->loadLayout(false);

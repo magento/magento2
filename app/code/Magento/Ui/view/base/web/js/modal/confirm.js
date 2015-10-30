@@ -40,8 +40,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }, {
                 text: $.mage.__('OK'),
@@ -50,8 +50,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal(true);
+                click: function (event) {
+                    this.closeModal(event, true);
                 }
             }]
         },
@@ -82,15 +82,15 @@ define([
         /**
          * Close modal window.
          */
-        closeModal: function (result) {
+        closeModal: function (event, result) {
             result = result || false;
 
             if (result) {
-                this.options.actions.confirm();
+                this.options.actions.confirm(event);
             } else {
-                this.options.actions.cancel();
+                this.options.actions.cancel(event);
             }
-            this.options.actions.always();
+            this.options.actions.always(event);
             this.element.bind('confirmclosed', _.bind(this._remove, this));
 
             return this._super();

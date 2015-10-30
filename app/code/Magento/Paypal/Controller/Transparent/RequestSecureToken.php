@@ -77,7 +77,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      *
      * @return ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var Quote $quote */
         $quote = $this->sessionManager->getQuote();

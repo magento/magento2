@@ -101,7 +101,7 @@ class Authentication
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function aroundExecute(
         \Magento\Backend\App\AbstractAction $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request

@@ -34,14 +34,14 @@ class Products extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $loginUrl = $this->_objectManager->get('Magento\Customer\Model\Url')->getLoginUrl();
 
         if (!$this->_customerSession->authenticate($loginUrl)) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**
@@ -49,7 +49,7 @@ class Products extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         if ($block = $this->_view->getLayout()->getBlock('downloadable_customer_products_list')) {

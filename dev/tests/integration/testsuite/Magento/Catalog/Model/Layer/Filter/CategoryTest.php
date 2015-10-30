@@ -109,6 +109,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($modelApplied, $item->getFilter());
         $this->assertEquals('Category 1.1', $item->getLabel());
         $this->assertEquals(4, $item->getValue());
-        $this->assertEquals(1, $item->getCount());
+        $this->assertEquals(2, $item->getCount());
     }
 }

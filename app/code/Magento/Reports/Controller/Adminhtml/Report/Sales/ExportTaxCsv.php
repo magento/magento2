@@ -16,7 +16,7 @@ class ExportTaxCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'tax.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');

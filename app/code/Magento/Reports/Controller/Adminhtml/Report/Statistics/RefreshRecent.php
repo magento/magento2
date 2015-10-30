@@ -14,7 +14,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $collectionsNames = $this->_getCollectionNames();

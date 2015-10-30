@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Class ProductTest
@@ -567,7 +568,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
         $this->assertEquals(
-            \Magento\CatalogImportExport\Model\Import\Product::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+            Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
             $this->importProduct->getMultipleValueSeparator()
         );
     }

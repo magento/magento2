@@ -16,7 +16,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $rateId = (int)$this->getRequest()->getParam('id');
         try {
