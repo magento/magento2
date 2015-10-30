@@ -11,6 +11,7 @@ use \Braintree_Exception;
 use \Braintree_Transaction;
 use \Braintree_Result_Successful;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 use Magento\Payment\Model\InfoInterface;
@@ -636,6 +637,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 }
             }
 
+            // transaction should be voided if it not settled
             $canVoid = ($transaction->status === \Braintree_Transaction::AUTHORIZED
                 || $transaction->status === \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT);
             $result = $canVoid
@@ -643,6 +645,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 : $this->braintreeTransaction->refund($transactionId, $amount);
             $this->_debug($result);
             if ($result->success) {
+                $payment->setTransactionId($transactionId . '-' . Transaction::TYPE_REFUND);
                 $payment->setIsTransactionClosed(1);
             } else {
                 throw new LocalizedException($this->errorHelper->parseBraintreeError($result));
