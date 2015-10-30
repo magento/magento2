@@ -28,22 +28,20 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @param FileResolverInterface $fileResolver
-     * @param Converter $converter
-     * @param SchemaLocator $schemaLocator
      * @param ValidationStateInterface $validationState
-     * @param string $fileName
-     * @param array $fileList
      * @param UrnResolver $urnResolver
+     * @param ValidationStateInterface $fileName
+     * @param ConverterInterface $converterInterface
+     * @param SchemaLocatorInterface $schemaLocatorInterface
      * @param array $xpath
      */
     public function __construct(
-        FileResolverInterface $fileResolver,
-        Converter $converter,
-        SchemaLocator $schemaLocator,
         ValidationStateInterface $validationState,
-        $fileName,
-        $fileList,
         UrnResolver $urnResolver,
+        ConverterInterface $converterInterface,
+        SchemaLocatorInterface $schemaLocatorInterface,
+        FileResolverInterface $fileResolver,
+        $fileName,
         $xpath = []
     ) {
         $this->xpath = $xpath;
@@ -51,13 +49,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $idAttributes = $this->_getIdAttributes();
         parent::__construct(
             $fileResolver,
-            $converter,
-            $schemaLocator,
+            $converterInterface,
+            $schemaLocatorInterface,
             $validationState,
             $fileName,
             $idAttributes
         );
-        $this->data = $this->getExtractedData($fileList);
+        $this->data = $this->read();
     }
 
     /**
@@ -68,12 +66,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getSchemaFile()
     {
         return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
-    }
-
-    public function getExtractedData($fileList)
-    {
-        $output = $this->_readFiles($fileList);
-        return $output;
     }
 
     /**

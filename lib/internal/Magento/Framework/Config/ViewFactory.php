@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Config;
 
+use Magento\Framework\ObjectManagerInterface;
+
 class ViewFactory
 {
     /**
@@ -18,20 +20,18 @@ class ViewFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
 
     /**
-     * @param array $configFiles
-     * @return View
+     * @return mixed
      */
-    public function create($configFiles)
+    public function create()
     {
         return $this->objectManager->create(
-            'Magento\Framework\Config\View',
-            ['fileList' => $configFiles]
+            'Magento\Framework\Config\View'
         );
     }
 }

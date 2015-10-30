@@ -1065,6 +1065,9 @@
     <type name="Magento\Framework\Config\View">
         <arguments>
             <argument name="fileName" xsi:type="string">view.xml</argument>
+            <argument name="converterInterface" xsi:type="object">Magento\Framework\Config\Converter</argument>
+            <argument name="schemaLocatorInterface" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
         </arguments>
     </type>
 </config>
