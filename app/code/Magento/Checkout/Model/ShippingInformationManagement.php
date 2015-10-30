@@ -104,6 +104,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveAddressInformation(
         $cartId,
