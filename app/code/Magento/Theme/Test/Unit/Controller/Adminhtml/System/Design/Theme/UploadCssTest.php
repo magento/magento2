@@ -39,7 +39,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
             ->method('representJson')
             ->with('{"filename":"filename","content":"content"}');
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 
     public function testExecuteWithLocalizedException()
@@ -67,7 +67,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
             ->with('Magento\Framework\Json\Helper\Data')
             ->willReturn($jsonData);
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 
     public function testExecuteWithException()
@@ -103,6 +103,6 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
             ->with('Magento\Framework\Json\Helper\Data')
             ->willReturn($jsonData);
 
-        $this->_model->execute();
+        $this->_model->executeInternal();
     }
 }

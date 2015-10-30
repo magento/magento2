@@ -60,7 +60,7 @@ class GetAttributes extends Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
         $collection = $this->collectionFactory->create();

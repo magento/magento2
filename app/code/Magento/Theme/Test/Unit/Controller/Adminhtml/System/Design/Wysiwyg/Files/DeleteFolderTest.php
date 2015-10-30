@@ -66,6 +66,6 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\Json\Helper\Data')
             ->willReturn($jsonData);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

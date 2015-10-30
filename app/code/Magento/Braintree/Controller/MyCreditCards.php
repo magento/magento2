@@ -68,7 +68,7 @@ abstract class MyCreditCards extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $loginUrl = $this->customerUrl->getLoginUrl();
         if (!$this->customerSession->authenticate($loginUrl)) {
@@ -82,7 +82,7 @@ abstract class MyCreditCards extends \Magento\Framework\App\Action\Action
             return $resultRedirect;
         }
 
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**

@@ -52,7 +52,7 @@ class CreateOptions extends Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->getResponse()->representJson($this->jsonHelper->jsonEncode($this->saveAttributeOptions()));
     }

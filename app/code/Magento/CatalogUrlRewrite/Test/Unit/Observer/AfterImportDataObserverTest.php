@@ -379,8 +379,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for afterImportData()
-     * Covers afterImportData() + protected methods used inside except related to generateUrls() ones.
-     * generateUrls will be covered separately.
+     * Covers afterImportData() + protected methods used inside
      *
      * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::afterImportData
      * @covers \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::_populateForUrlGeneration
@@ -392,7 +391,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterImportData()
     {
-        $newSku = ['entity_id' => 'value'];
+        $newSku = [['entity_id' => 'value'], ['entity_id' => 'value3']];
         $websiteId = 'websiteId value';
         $productsCount = count($this->products);
         $websiteMock = $this->getMock(
@@ -421,21 +420,24 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
             )
-            ->willReturn($newSku);
+            ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')
             ->withConsecutive(
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
-            );
+            )->willReturn([]);
         $getProductWebsitesCallsCount = $productsCount*2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))
             ->method('getProductWebsites')
-            ->willReturn([
-                $newSku['entity_id'] => $websiteId,
-            ]);
+            ->willReturnOnConsecutiveCalls(
+                [$newSku[0]['entity_id'] => $websiteId],
+                [$newSku[0]['entity_id'] => $websiteId],
+                [$newSku[1]['entity_id'] => $websiteId],
+                [$newSku[1]['entity_id'] => $websiteId]
+            );
         $map = [
             [$this->products[0][ImportProduct::COL_STORE], $this->products[0][ImportProduct::COL_STORE]],
             [$this->products[1][ImportProduct::COL_STORE], $this->products[1][ImportProduct::COL_STORE]]
@@ -460,11 +462,20 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
         $product
             ->expects($this->exactly($productsCount))
             ->method('setId')
-            ->with($newSku['entity_id']);
+            ->withConsecutive([$newSku[0]['entity_id']], [$newSku[1]['entity_id']]);
         $product
             ->expects($this->any())
             ->method('getId')
-            ->willReturn($newSku['entity_id']);
+            ->willReturnOnConsecutiveCalls(
+                $newSku[0]['entity_id'],
+                $newSku[0]['entity_id'],
+                $newSku[0]['entity_id'],
+                $newSku[0]['entity_id'],
+                $newSku[0]['entity_id'],
+                $newSku[1]['entity_id'],
+                $newSku[1]['entity_id'],
+                $newSku[1]['entity_id']
+            );
         $product
             ->expects($this->exactly($productsCount))
             ->method('getSku')
@@ -480,9 +491,12 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 $this->products[1][ImportProduct::COL_STORE]
             ));
         $product
-            ->expects($this->once())
+            ->expects($this->exactly($productsCount))
             ->method('setStoreId')
-            ->with($this->products[1][ImportProduct::COL_STORE]);
+            ->withConsecutive(
+                [$this->products[0][ImportProduct::COL_STORE]],
+                [$this->products[1][ImportProduct::COL_STORE]]
+            );
         $this->catalogProductFactory
             ->expects($this->exactly($productsCount))
             ->method('create')
@@ -497,32 +511,55 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     ' AND entity_id = ?)',
-                    $newSku['entity_id'],
+                    $newSku[0]['entity_id'],
+                ],
+                [
+                    '(store_id = ?',
+                    $storeIds[0],
+                ],
+                [
+                    ' AND entity_id = ?)',
+                    $newSku[1]['entity_id'],
                 ]
             );
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn([]);
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+
+        $this->urlFinder->expects($this->any())->method('findAllByData')->willReturn([]);
+
+        $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
+            ->willReturn('urlPathWithSuffix');
+        $this->productUrlPathGenerator->expects($this->any())->method('getUrlPath')
+            ->willReturn('urlPath');
+        $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
+            ->willReturn('canonicalUrlPath');
+
+        $this->urlRewrite->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityId')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityType')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('getTargetPath')->willReturn('targetPath');
+        $this->urlRewrite->expects($this->any())->method('getStoreId')
+            ->willReturnOnConsecutiveCalls(0, 'not global');
+
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
 
         $productUrls = [
-            'url 1',
-            'url 2',
+            'targetPath-0' => $this->urlRewrite,
+            'targetPath-not global' => $this->urlRewrite
         ];
 
-        $importMock = $this->getImportMock([
-            'generateUrls',
-            'canonicalUrlRewriteGenerate',
-            'categoriesUrlRewriteGenerate',
-            'currentUrlRewritesRegenerate',
-            'cleanOverriddenUrlKey',
-        ]);
-        $importMock
-            ->expects($this->once())
-            ->method('generateUrls')
-            ->willReturn($productUrls);
         $this->urlPersist
             ->expects($this->once())
             ->method('replace')
             ->with($productUrls);
 
-        $importMock->execute($this->observer);
+        $this->import->execute($this->observer);
     }
 
     /**
