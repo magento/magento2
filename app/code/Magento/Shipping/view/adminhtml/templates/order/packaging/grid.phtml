@@ -8,44 +8,58 @@
 
 ?>
 <div class="grid">
-    <div class="hor-scroll">
-        <table class="data-table admin__table-primary">
+    <?php $randomId = rand(); ?>
+    <div class="admin__table-wrapper">
+        <table class="data-grid">
             <thead>
-            <tr>
-                <th class="col-product no-link"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col-weight no-link"><?php /* @escapeNotVerified */ echo __('Weight') ?></th>
-                <th class="col-custom no-link" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                    <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
-                </th>
-                <th class="col-select no-link">
-                    <div class="admin__field admin__field-option">
-                        <input type="checkbox"
-                               name=""
-                               onclick="packaging.checkAllItems(this);"
-                               class="checkbox admin__control-checkbox"
-                               title="<?php /* @escapeNotVerified */ echo __('Select All') ?>">
-                        <label class="admin__field-label"></label>
-                    </div>
-                </th>
-                <th class="col-qty no-link"><?php /* @escapeNotVerified */ echo __('Qty Ordered') ?></th>
-                <th class="col-qty-edit no-link last"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
-            </tr>
+                <tr>
+                    <th class="data-grid-checkbox-cell">
+                        <label class="data-grid-checkbox-cell-inner">
+                            <input type="checkbox"
+                                   id="select-items-<?php echo $randomId; ?>"
+                                   onchange="packaging.checkAllItems(this);"
+                                   class="checkbox admin__control-checkbox"
+                                   title="<?php /* @escapeNotVerified */ echo __('Select All') ?>">
+                            <label for="select-items-<?php echo $randomId; ?>"></label>
+                        </label>
+                    </th>
+                    <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                    <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Weight') ?></th>
+                    <th class="data-grid-th" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                        <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
+                    </th>
+                    <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Qty Ordered') ?></th>
+                    <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                </tr>
             </thead>
-
             <tbody>
+            <?php $i=0; ?>
             <?php foreach ($block->getCollection() as $item): ?>
-                <?php $_order = $block->getShipment()->getOrder() ?>
-                <?php $_orderItem = $_order->getItemById($item->getOrderItemId()); ?>
+                <?php
+                    $_order = $block->getShipment()->getOrder();
+                    $_orderItem = $_order->getItemById($item->getOrderItemId());
+                ?>
                 <?php if ($item->getIsVirtual()
                     || ($_orderItem->isShipSeparately() && !($_orderItem->getParentItemId() || $_orderItem->getParentItem()))
                     || (!$_orderItem->isShipSeparately() && ($_orderItem->getParentItemId() || $_orderItem->getParentItem()))): ?>
                     <?php continue; ?>
                 <?php endif; ?>
-                <tr title="#" id="" class="">
-                    <td class="col-product name">
+                <tr class="data-grid-controls-row data-row <?php echo ($i++ % 2 != 0) ? '_odd-row' : ''; ?>">
+                    <td class="data-grid-checkbox-cell">
+                        <?php /* @escapeNotVerified */ $id = $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>
+                        <label class="data-grid-checkbox-cell-inner">
+                            <input type="checkbox"
+                                   name=""
+                                   id="select-item-<?php echo $randomId . '-' . $id; ?>"
+                                   value="<?php /* @escapeNotVerified */ echo $id; ?>"
+                                   class="checkbox admin__control-checkbox">
+                            <label for="select-item-<?php echo $randomId . '-' . $id; ?>"></label>
+                        </label>
+                    </td>
+                    <td>
                         <?php /* @escapeNotVerified */ echo $item->getName(); ?>
                     </td>
-                    <td class="col-weight weight ">
+                    <td data-role="item-weight">
                         <?php /* @escapeNotVerified */ echo $item->getWeight(); ?>
                     </td>
                     <?php
@@ -65,19 +79,10 @@
                                size="10"
                                onblur="packaging.recalcContainerWeightAndCustomsValue(this);">
                     </td>
-                    <td class="col-select">
-                        <div class="admin__field admin__field-option">
-                            <input type="checkbox"
-                                   name=""
-                                   value="<?php /* @escapeNotVerified */ echo $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>"
-                                   class="checkbox admin__control-checkbox">
-                            <label class="admin__field-label"></label>
-                        </div>
-                    </td>
-                    <td class="col-qty">
+                    <td>
                         <?php /* @escapeNotVerified */ echo $item->getOrderItem()->getQtyOrdered()*1; ?>
                     </td>
-                    <td class="col-qty-edit last">
+                    <td>
                         <input type="hidden" name="price" value="<?php /* @escapeNotVerified */ echo $item->getPrice(); ?>">
                         <input type="text"
                                name="qty"
