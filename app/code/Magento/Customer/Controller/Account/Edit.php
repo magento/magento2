@@ -58,7 +58,7 @@ class Edit extends Action implements AccountInterface
      *
      * @return \Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

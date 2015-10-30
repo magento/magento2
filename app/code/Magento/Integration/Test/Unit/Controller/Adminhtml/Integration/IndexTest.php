@@ -14,6 +14,6 @@ class IndexTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Inte
         $this->_verifyLoadAndRenderLayout();
         // renderLayout
         $this->_controller = $this->_createIntegrationController('Index');
-        $this->_controller->execute();
+        $this->_controller->executeInternal();
     }
 }

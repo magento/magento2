@@ -110,7 +110,8 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testUpsertCategories()
     {
-        $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME);
+        $categoriesSeparator = ',';
+        $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME, $categoriesSeparator);
         $this->assertArrayHasKey(self::CHILD_CATEGORY_ID, array_flip($categoryIds));
     }
 

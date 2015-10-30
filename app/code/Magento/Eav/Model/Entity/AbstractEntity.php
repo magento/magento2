@@ -1513,7 +1513,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             'value' => $this->_prepareValueForSave($value, $attribute),
         ];
 
-        if (!$this->getEntityTable()) {
+        if (!$this->getEntityTable() || $this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
             $data['entity_type_id'] = $object->getEntityTypeId();
         }
 

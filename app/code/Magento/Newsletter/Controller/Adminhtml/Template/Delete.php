@@ -13,7 +13,7 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $template = $this->_objectManager->create(
             'Magento\Newsletter\Model\Template'

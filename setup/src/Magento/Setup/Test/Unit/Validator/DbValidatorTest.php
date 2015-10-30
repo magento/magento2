@@ -109,6 +109,18 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Table prefix length can't be more than
+     */
+    public function testCheckDatabaseTablePrefixWrongLength()
+    {
+        $this->assertEquals(
+            true,
+            $this->dbValidator->checkDatabaseTablePrefix('mvbXzXzItSIr0wrZW3gqgV2UKrWiK1Mj7bkBlW72rZW3gqgV2UKrWiK1M')
+        );
+    }
+
+    /**
      * @expectedException \Magento\Setup\Exception
      * @expectedExceptionMessage Database connection failure.
      */
