@@ -9,8 +9,9 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Search\ResponseInterface;
+use Magento\Framework\Search\SearchResponseBuilderInterface;
 
-class SearchResponseBuilder
+class SearchResponseBuilder implements SearchResponseBuilderInterface
 {
     /**
      * @var DocumentFactory
