@@ -79,7 +79,7 @@ if ($product->isSaleable()) {
     <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo($popupId);?>"
        class="action map-show-info"
-       data-mage-init='<?=$this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
+       data-mage-init='<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">
