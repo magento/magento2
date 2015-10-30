@@ -72,13 +72,7 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->cartRepositoryMock = $this->getMock(
-            'Magento\Quote\Api\CartRepositoryInterface',
-            ['get', 'getList'],
-            [],
-            '',
-            false
-        );
+        $this->cartRepositoryMock = $this->getMock('Magento\Quote\Api\CartRepositoryInterface');
 
         $this->quoteMock = $this->getMockForAbstractClass(
             'Magento\Quote\Api\Data\CartInterface',
