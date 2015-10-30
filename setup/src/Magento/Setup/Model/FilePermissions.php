@@ -118,7 +118,7 @@ class FilePermissions
     }
 
     /**
-     * Check all sub-directories
+     * Check all sub-directories and files except for var/generation and var/di
      *
      * @param string $directory
      * @return bool
@@ -126,21 +126,15 @@ class FilePermissions
     private function checkRecursiveDirectories($directory)
     {
         $directoryIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($directory),
+            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
         );
-        $restrictedFolders = ['.', '..'];
-        $noWritableFilesFolders = ['generation', 'di'];
+        $noWritableFilesFolders = [BP. '/var/generation', BP . '/var/di'];
         foreach ($directoryIterator as $subDirectory) {
-            if ($subDirectory->isLink()) {
-                continue;
-            }
-            if ($subDirectory->isDir()) {
-                if (!in_array($subDirectory->getFileName(), $restrictedFolders) && !$subDirectory->isWritable()) {
-                    return false;
-                }
+            if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
+                return false;
             } elseif (
-                !in_array($subDirectory->getFileName(), $noWritableFilesFolders) && !$subDirectory->isWritable()
+                !in_array($subDirectory->getPath(), $noWritableFilesFolders) && !$subDirectory->isWritable()
             ) {
                 return false;
             }
