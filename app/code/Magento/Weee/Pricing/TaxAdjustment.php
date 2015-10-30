@@ -51,6 +51,7 @@ class TaxAdjustment implements AdjustmentInterface
      * Constructor
      *
      * @param WeeeHelper $weeeHelper
+     * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param int $sortOrder
      */
