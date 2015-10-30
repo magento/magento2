@@ -113,7 +113,7 @@
         </variation>
         <variation name="AdvancedSearchEntityTestVariation14">
             <data name="description" xsi:type="string">Negative product search</data>
-            <data name="productSearch/data/name" xsi:type="string">TryToFindMeAndI&#39;llFindYOU</data>
+            <data name="productSearch/data/name" xsi:type="string">Negative_product_search</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
         </variation>
     </testCase>

@@ -12,6 +12,7 @@
         </dataset>
         <dataset name="price_40">
             <field name="category_price" xsi:type="string">40</field>
+            <field name="compare_price" xsi:type="string">40</field>
         </dataset>
         <dataset name="MAGETWO-12620">
             <field name="category_price" xsi:type="string">11</field>
