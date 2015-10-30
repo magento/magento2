@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
-use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\File;
