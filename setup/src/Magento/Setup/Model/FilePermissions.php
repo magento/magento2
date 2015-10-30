@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem;
 
 class FilePermissions
@@ -127,15 +128,14 @@ class FilePermissions
     {
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
+            \RecursiveIteratorIterator::LEAVES_ONLY, \RecursiveIteratorIterator::CATCH_GET_CHILD
         );
-        $noWritableFilesFolders = [BP. '/var/generation', BP . '/var/di'];
+        $rootPath = $this->directoryList->getRoot();
+        $noWritableFilesFolders = [$rootPath . '/var/generation', $rootPath . '/var/di'];
+
+        $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
         foreach ($directoryIterator as $subDirectory) {
-            if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
-                return false;
-            } elseif (
-                !in_array($subDirectory->getPath(), $noWritableFilesFolders) && !$subDirectory->isWritable()
-            ) {
+            if (!$subDirectory->isWritable()) {
                 return false;
             }
         }
