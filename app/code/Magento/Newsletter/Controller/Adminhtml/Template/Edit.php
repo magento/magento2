@@ -30,7 +30,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $model = $this->_objectManager->create('Magento\Newsletter\Model\Template');
         $id = $this->getRequest()->getParam('id');

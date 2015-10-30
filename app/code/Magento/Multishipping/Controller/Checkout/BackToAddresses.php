@@ -13,7 +13,7 @@ class BackToAddresses extends \Magento\Multishipping\Controller\Checkout
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_getState()->setActiveStep(State::STEP_SELECT_ADDRESSES);
         $this->_getState()->unsCompleteStep(State::STEP_SHIPPING);

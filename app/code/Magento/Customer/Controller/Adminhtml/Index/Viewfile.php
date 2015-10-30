@@ -129,7 +129,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function execute()
+    public function executeInternal()
     {
         $file = null;
         $plain = false;

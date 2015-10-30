@@ -38,6 +38,11 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
     protected $jsonEncoderMock;
 
     /**
+     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mediaHelper;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      * |\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo
      */
@@ -46,6 +51,7 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
+        $this->mediaHelper = $this->getMock('\Magento\ProductVideo\Helper\Media', [], [], '', false);
         $this->mathRandom = $this->getMock('\Magento\Framework\Math\Random', [], [], '', false);
         $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
         $this->contextMock->expects($this->any())->method('getMathRandom')->willReturn($this->mathRandom);
@@ -60,9 +66,11 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
             '\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo',
             [
                 'context' => $this->contextMock,
+                'mediaHelper' => $this->mediaHelper,
+                'urlBuilder' => $this->urlBuilder,
+                'jsonEncoder' => $this->jsonEncoderMock,
                 'registry' => $this->registryMock,
                 'formFactory' => $this->formFactoryMock,
-                'jsonEncoder' => $this->jsonEncoderMock
             ]
         );
     }

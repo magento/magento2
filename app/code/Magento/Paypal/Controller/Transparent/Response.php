@@ -62,7 +62,7 @@ class Response extends \Magento\Framework\App\Action\Action
     /**
      * @return ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $parameters = [];
         try {

@@ -13,7 +13,7 @@ class ApplyRules extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction();
         $this->_view->renderLayout();

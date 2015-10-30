@@ -62,7 +62,7 @@ class Popup extends AbstractAction
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $productId = (int)$this->getRequest()->getParam('id');
 

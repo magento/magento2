@@ -59,7 +59,7 @@ class Add extends Action\Action implements IndexInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function execute()
+    public function executeInternal()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {

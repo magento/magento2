@@ -37,7 +37,7 @@ class ExportCsv extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $fileName = 'customers.csv';
