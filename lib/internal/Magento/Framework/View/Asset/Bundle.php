@@ -142,6 +142,8 @@ class Bundle
     }
 
     /**
+     * Get part size after adding new asset
+     *
      * @param LocalInterface $asset
      * @param LocalInterface[] $assets
      * @return float
