@@ -499,6 +499,7 @@ define([
                     if (!self.isFullscreen) {
                         self._showCloseVideo();
                     }
+                    $('.' + self.FTAR).addClass('hidden-video');
                 }
             });
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
@@ -579,6 +580,7 @@ define([
                 self._hideCloseVideo();
 
             });
+            $('.' + this.FTAR).removeClass('hidden-video');
         }
     });
 
