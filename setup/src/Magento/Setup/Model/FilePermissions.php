@@ -109,12 +109,32 @@ class FilePermissions
     {
         if (!$this->installationCurrentWritableDirectories) {
             foreach ($this->installationWritableDirectories as $code => $path) {
-                if ($this->isWritable($code)) {
+                if ($this->isWritable($code) && $this->checkRecursiveDirectories($path)) {
                     $this->installationCurrentWritableDirectories[] = $path;
                 }
             }
         }
         return $this->installationCurrentWritableDirectories;
+    }
+
+    /**
+     * Check all sub-directories
+     *
+     * @param string $directory
+     * @return bool
+     */
+    private function checkRecursiveDirectories($directory)
+    {
+        $directoryIterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory),
+            \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
+        );
+        foreach ($directoryIterator as $subDirectory) {
+            if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
