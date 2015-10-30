@@ -51,7 +51,7 @@ class Index extends Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         $customerId = $this->customerSession->getCustomerId();

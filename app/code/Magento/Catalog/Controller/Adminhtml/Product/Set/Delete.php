@@ -30,7 +30,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $setId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();

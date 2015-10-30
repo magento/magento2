@@ -13,7 +13,7 @@ class Redirect extends \Magento\Paypal\Controller\Payflow
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->getResponse()->setRedirect(
             $this->getOrder()->getPayment()->getAdditionalInformation('secure_form_url')

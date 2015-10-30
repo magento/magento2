@@ -32,7 +32,7 @@ class Grid extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         return $this->resultPageFactory->create();
     }
