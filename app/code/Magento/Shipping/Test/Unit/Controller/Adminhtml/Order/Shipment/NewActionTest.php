@@ -282,6 +282,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with('menu')
             ->will($this->returnValue($menuBlock));
 
-        $this->assertNull($this->newAction->execute());
+        $this->assertNull($this->newAction->executeInternal());
     }
 }

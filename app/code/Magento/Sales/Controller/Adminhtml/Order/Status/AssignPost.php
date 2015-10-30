@@ -13,7 +13,7 @@ class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

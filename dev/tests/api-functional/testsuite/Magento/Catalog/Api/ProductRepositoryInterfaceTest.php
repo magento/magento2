@@ -140,7 +140,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
-     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoApiDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      */
     public function testCreateAllStoreCode($fixtureProduct)
     {
@@ -169,7 +169,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
-     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoApiDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      */
     public function testDeleteAllStoreCode($fixtureProduct)
     {

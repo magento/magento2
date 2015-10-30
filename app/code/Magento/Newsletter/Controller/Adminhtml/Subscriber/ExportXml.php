@@ -16,7 +16,7 @@ class ExportXml extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $fileName = 'subscribers.xml';

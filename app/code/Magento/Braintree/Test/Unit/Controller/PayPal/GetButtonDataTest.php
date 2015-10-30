@@ -85,7 +85,7 @@ class GetButtonDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data['currency']);
 
         $getButtonData = new GetButtonData($this->contextMock, $this->checkoutSessionMock);
-        $getButtonData->execute();
+        $getButtonData->executeInternal();
     }
 
     /**
@@ -168,7 +168,7 @@ class GetButtonDataTest extends \PHPUnit_Framework_TestCase
         ->method('getQuote');
 
         $getButtonData = new GetButtonData($this->contextMock, $this->checkoutSessionMock);
-        $getButtonData->execute();
+        $getButtonData->executeInternal();
     }
 
     /**

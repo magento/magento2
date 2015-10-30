@@ -11,7 +11,7 @@ class NewStore extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->_coreRegistry->registry('store_type')) {
             $this->_coreRegistry->register('store_type', 'store');
