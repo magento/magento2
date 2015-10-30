@@ -141,8 +141,18 @@ class AssignCustomOrderStatusTest extends Injectable
         $this->orderStatusAssign->getPageActionsBlock()->save();
         $assertion->processAssert($this->orderStatusIndex);
 
+        // Prepare data for constraints
+        $config = $this->fixtureFactory->createByCode('configData', [
+            'dataset' => 'checkmo_custom_new_order_status',
+            'data' => ['payment/checkmo/order_status' => ['value' => $orderStatus->getStatus()]]
+        ]);
+        $config->persist();
         $order->persist();
         $this->order = $order;
+        $this->fixtureFactory->createByCode(
+            'configData',
+            ['dataset' => 'checkmo_custom_new_order_status', 'data' => ['value' => $orderStatus->getLabel()]]
+        );
 
         return [
             'orderId' => $order->getId(),
@@ -152,7 +162,7 @@ class AssignCustomOrderStatusTest extends Injectable
     }
 
     /**
-     * Change created order status and unassign custom order status
+     * Change created order status and unassign custom order status.
      *
      * @return void
      */
@@ -165,6 +175,10 @@ class AssignCustomOrderStatusTest extends Injectable
             $filter = ['label' => $this->orderStatus->getLabel()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
             $this->orderStatusIndex->getMessagesBlock()->waitSuccessMessage();
+            $this->objectManager->create(
+                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                ['configData' => 'checkmo_custom_new_order_status_rollback']
+            )->run();
         }
     }
 }
