@@ -11,29 +11,25 @@
         require.config({
             deps: [
                 'jquery',
+                'mage/translate',
                 'jquery/jquery-storageapi'
             ],
             callback: function ($) {
                 'use strict';
 
-                var dependencies,
-                    timeout;
+                var dependencies = [],
+                    versionObj;
 
                 $.initNamespaceStorage('mage-translation-storage');
                 $.initNamespaceStorage('mage-translation-file-version');
-                timeout = $.localStorage.get('mage-translation-file-version');
+                versionObj = $.localStorage.get('mage-translation-file-version');
 
-                if (timeout.version !== '<?php /* @escapeNotVerified */
+                if (versionObj.version !== '<?php /* @escapeNotVerified */
                     echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>') {
-                    dependencies = [
-                        'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>',
-                        'mage/translate'
-                    ];
+                    dependencies.push(
+                        'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>'
+                    );
 
-                } else {
-                    dependencies =  [
-                        'mage/translate'
-                    ];
                 }
 
                 require.config({
