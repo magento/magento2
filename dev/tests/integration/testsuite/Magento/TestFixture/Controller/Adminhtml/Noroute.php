@@ -16,13 +16,10 @@ class Noroute implements \Magento\Framework\App\ActionInterface
     /**
      * Dispatch request
      *
-     * @param RequestInterface $request
      * @return ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function dispatch(RequestInterface $request)
+    public function execute()
     {
     }
 
