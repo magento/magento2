@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
-    <publisher name="default" connection="rabbitmq" exchange="magento"/>
+    <publisher name="default" connection="amqp" exchange="magento"/>
 </config>
