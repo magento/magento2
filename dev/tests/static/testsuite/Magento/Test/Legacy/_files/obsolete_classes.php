@@ -4105,4 +4105,9 @@ return [
     ['Magento\Developer\Console\Command\CssDeployCommand'],
     ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain'],
     ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory'],
+    [
+        'Magento\Quote\Api\GuestShippingAddressManagementInterface',
+        'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
+    ],
+    ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
 ];
