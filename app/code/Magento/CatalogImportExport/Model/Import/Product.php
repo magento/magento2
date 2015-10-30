@@ -1958,12 +1958,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 } else {
                     $row['qty'] = 0;
                 }
-                $stockData[] = $row;
+                if (!isset($stockData[$rowData[self::COL_SKU]])) {
+                    $stockData[$rowData[self::COL_SKU]] = $row;
+                }
             }
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->_connection->insertOnDuplicate($entityTable, $stockData);
+                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
             }
 
             if ($productIdsToReindex) {
