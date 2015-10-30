@@ -29,7 +29,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
 
         $data = [
             'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
-            'label' => $this->getLabel(),
+            'label' => $this->_getLabel(),
             'onclick' => "setLocation('" . $this->_getUrl($params) . "')",
         ];
 
