@@ -27,11 +27,10 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
             'varnish' => $this->getVarnishVersion()
         ];
 
-        $url = $this->getUrl("*/PageCache/exportVarnishConfig", $params);
         $data = [
             'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
-            'label' => __('Export VCL for Varnish ') . $this->getVarnishVersion(),
-            'onclick' => "setLocation('" . $url . "')",
+            'label' => $this->getLabel(),
+            'onclick' => "setLocation('" . $this->_getUrl($params) . "')",
         ];
 
         $html = $buttonBlock->setData($data)->toHtml();
@@ -48,14 +47,14 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
         return 0;
     }
 
-    /**
-     * Return PageCache TTL value from config
-     * to avoid saving empty field
-     *
-     * @return string
-     */
-    public function getTtlValue()
+    protected function _getLabel()
     {
-        return $this->_scopeConfig->getValue(\Magento\PageCache\Model\Config::XML_PAGECACHE_TTL);
+        return __('Export VCL for Varnish ') . $this->getVarnishVersion();
     }
+
+    protected function _getUrl($params)
+    {
+        return $this->getUrl("*/PageCache/exportVarnishConfig", $params);
+    }
+
 }
