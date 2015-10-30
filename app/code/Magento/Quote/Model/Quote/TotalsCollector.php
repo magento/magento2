@@ -145,6 +145,7 @@ class TotalsCollector
 
             $total->setShippingAmount($addressTotal->getShippingAmount());
             $total->setBaseShippingAmount($addressTotal->getBaseShippingAmount());
+            $total->setShippingDescription($addressTotal->getShippingDescription());
 
             $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
             $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
