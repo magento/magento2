@@ -35,11 +35,6 @@ class InstallTest extends \PHPUnit_Framework_TestCase
      */
     private $sampleDataState;
 
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fileSystem;
-
     public function setUp()
     {
         $this->webLogger = $this->getMock('\Magento\Setup\Model\WebLogger', [], [], '', false);
@@ -47,7 +42,6 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('\Magento\Framework\Setup\SampleData\State', [], [], '', false);
-        $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
@@ -55,8 +49,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
             $this->webLogger,
             $installerFactory,
             $this->progressFactory,
-            $this->sampleDataState,
-            $this->fileSystem
+            $this->sampleDataState
         );
     }
 
