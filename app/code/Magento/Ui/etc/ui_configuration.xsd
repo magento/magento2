@@ -11,7 +11,7 @@
         <xs:documentation>The definition of a configuration item components</xs:documentation>
     </xs:annotation>
     <!-- Include section -->
-    <xs:include schemaLocation="ui_components.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:etc/ui_components.xsd"/>
     <!-- Components list -->
     <xs:element type="formConfiguration" name="form"/>
     <xs:element type="containerConfiguration" name="container"/>

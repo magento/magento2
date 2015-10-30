@@ -29,8 +29,7 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteMock = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
-            ->getMockForAbstractClass();
+        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
 
         $this->addressAdapterFactoryMock =
             $this->getMockBuilder('Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory')
