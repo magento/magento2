@@ -260,12 +260,12 @@ class Checkout
     protected $paypalQuote;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteManagement
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $quoteManagement;
 
@@ -287,7 +287,7 @@ class Checkout
      * @param \Magento\Framework\UrlInterface $coreUrl
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory
-     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
      * @param DataObject\Copy $objectCopyService
@@ -298,7 +298,7 @@ class Checkout
      * @param AccountManagement $accountManagement
      * @param PaypalQuote $paypalQuote
      * @param OrderSender $orderSender
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $params
      * @throws \Exception
@@ -317,7 +317,7 @@ class Checkout
         \Magento\Framework\UrlInterface $coreUrl,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory,
-        \Magento\Quote\Model\QuoteManagement $quoteManagement,
+        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory,
         \Magento\Framework\DataObject\Copy $objectCopyService,
@@ -328,7 +328,7 @@ class Checkout
         AccountManagement $accountManagement,
         PaypalQuote $paypalQuote,
         OrderSender $orderSender,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         $params = []
     ) {

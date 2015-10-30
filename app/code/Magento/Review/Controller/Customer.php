@@ -40,11 +40,11 @@ abstract class Customer extends Action
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 }

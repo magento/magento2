@@ -13,7 +13,7 @@ class Product extends \Magento\Reports\Controller\Adminhtml\Report\Review
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Review::report_review_product'

@@ -15,7 +15,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {

@@ -13,7 +13,7 @@ class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_auth->logout();
         $this->messageManager->addSuccess(__('You have logged out.'));

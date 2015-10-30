@@ -13,7 +13,7 @@ class Start extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $queue = $this->_objectManager->create(
             'Magento\Newsletter\Model\Queue'
