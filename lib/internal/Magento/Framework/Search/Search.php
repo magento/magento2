@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright Â© 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Model;
+namespace Magento\Framework\Search;
 
+use Magento\Framework\Api\Search\SearchInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
-use Magento\Framework\Search\SearchEngineInterface;
-use Magento\Search\Api\SearchInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Search implements SearchInterface
 {
@@ -21,9 +18,9 @@ class Search implements SearchInterface
     private $requestBuilder;
 
     /**
-     * @var StoreManagerInterface
+     * @var ScopeResolverInterface
      */
-    private $storeManager;
+    private $scopeResolver;
 
     /**
      * @var SearchEngineInterface
@@ -31,24 +28,24 @@ class Search implements SearchInterface
     private $searchEngine;
 
     /**
-     * @var SearchResponseBuilder
+     * @var SearchResponseBuilderInterface
      */
     private $searchResponseBuilder;
 
     /**
      * @param Builder $requestBuilder
-     * @param StoreManagerInterface $storeManager
+     * @param ScopeResolverInterface $scopeResolver
      * @param SearchEngineInterface $searchEngine
-     * @param SearchResponseBuilder $searchResponseBuilder
+     * @param SearchResponseBuilderInterface $searchResponseBuilder
      */
     public function __construct(
         Builder $requestBuilder,
-        StoreManagerInterface $storeManager,
+        ScopeResolverInterface $scopeResolver,
         SearchEngineInterface $searchEngine,
-        SearchResponseBuilder $searchResponseBuilder
+        SearchResponseBuilderInterface $searchResponseBuilder
     ) {
         $this->requestBuilder = $requestBuilder;
-        $this->storeManager = $storeManager;
+        $this->scopeResolver = $scopeResolver;
         $this->searchEngine = $searchEngine;
         $this->searchResponseBuilder = $searchResponseBuilder;
     }
@@ -60,8 +57,8 @@ class Search implements SearchInterface
     {
         $this->requestBuilder->setRequestName($searchCriteria->getRequestName());
 
-        $storeId = $this->storeManager->getStore(true)->getId();
-        $this->requestBuilder->bindDimension('scope', $storeId);
+        $scope = $this->scopeResolver->getScope();
+        $this->requestBuilder->bindDimension('scope', $scope);
 
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
@@ -82,7 +79,7 @@ class Search implements SearchInterface
      * Apply attribute filter to facet collection
      *
      * @param string $field
-     * @param null $condition
+     * @param string|array|null $condition
      * @return $this
      */
     private function addFieldToFilter($field, $condition = null)
@@ -97,6 +94,7 @@ class Search implements SearchInterface
                 $this->requestBuilder->bind("{$field}.to", $condition['to']);
             }
         }
+
         return $this;
     }
 }
