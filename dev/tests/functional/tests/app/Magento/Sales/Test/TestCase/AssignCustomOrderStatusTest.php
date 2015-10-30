@@ -31,6 +31,7 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-29382
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssignCustomOrderStatusTest extends Injectable
 {
@@ -149,10 +150,6 @@ class AssignCustomOrderStatusTest extends Injectable
         $config->persist();
         $order->persist();
         $this->order = $order;
-        $this->fixtureFactory->createByCode(
-            'configData',
-            ['dataset' => 'checkmo_custom_new_order_status', 'data' => ['value' => $orderStatus->getLabel()]]
-        );
 
         return [
             'orderId' => $order->getId(),
