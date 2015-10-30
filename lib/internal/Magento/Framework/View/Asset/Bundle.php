@@ -126,7 +126,7 @@ class Bundle
         $minIndex = -1;
         if ($maxPartSize && count($parts)) {
             foreach ($parts as $partIndex => $part) {
-                $space = $maxPartSize - $this->getSizePartWithNewAsset($asset, $parts[$partIndex]['assets']);
+                $space = $maxPartSize - $this->getSizePartWithNewAsset($asset, $part['assets']);
                 if ($space >= 0 && $space < $minSpace) {
                     $minSpace = $space;
                     $minIndex = $partIndex;
