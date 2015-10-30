@@ -117,9 +117,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
-    public function testCheckPhpVersion()
+    private function setUpNoPrettyVersionParser()
     {
-        $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
             'Composer\Package\LinkConstraint\LinkConstraintInterface',
             [],
@@ -136,6 +135,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $this->versionParser->expects($this->at(2))->method('parseConstraints')->willReturn($currentPhpVersion);
         $multipleConstraints->expects($this->once())->method('matches')->willReturn(true);
+    }
+
+    public function testCheckPhpVersion()
+    {
+        $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
+
+        $this->setUpNoPrettyVersionParser();
         $expected = [
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
             'data' => [
@@ -186,6 +192,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             100,
             50
         );
+
+        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -222,6 +230,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             100,
             200
         );
+
+        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -250,6 +260,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckPhpSettingsNoXDebug()
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn([]);
+
+        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
