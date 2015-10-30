@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Paypal\Test\Unit\Model\ResourceModel;
+namespace Magento\Paypal\Test\Unit\Model\ResourceModel\Billing;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -96,7 +96,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 ['pbao.agreement_id IN(?)', [100]],
                 ['main_table.entity_id IN (?)', [500]]
-                )
+            )
             ->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
