@@ -15,7 +15,7 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
 class Match implements QueryInterface
 {
-    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=';
+    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^_';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
 

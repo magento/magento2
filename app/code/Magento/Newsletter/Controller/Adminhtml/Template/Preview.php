@@ -13,7 +13,7 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void|$this
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
 

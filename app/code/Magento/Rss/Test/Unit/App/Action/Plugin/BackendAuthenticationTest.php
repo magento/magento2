@@ -7,7 +7,7 @@ namespace Magento\Rss\Test\Unit\App\Action\Plugin;
 
 class BackendAuthenticationTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAroundDispatch()
+    public function testAroundExecute()
     {
         /** @var \Magento\Backend\App\AbstractAction|\PHPUnit_Framework_MockObject_MockObject $subject */
         $subject = $this->getMock('Magento\Backend\App\AbstractAction', [], [], '', false);
@@ -69,7 +69,7 @@ class BackendAuthenticationTest extends \PHPUnit_Framework_TestCase
             );
         $this->assertSame(
             $response,
-            $plugin->aroundDispatch($subject, $proceed, $request)
+            $plugin->aroundExecute($subject, $proceed, $request)
         );
     }
 }

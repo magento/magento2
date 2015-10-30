@@ -15,7 +15,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

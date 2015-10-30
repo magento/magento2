@@ -13,7 +13,7 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $template = $this->_initTemplate('id');

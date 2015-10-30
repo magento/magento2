@@ -60,6 +60,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up test
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -200,6 +201,6 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
             ->method('renderLayout')
             ->will($this->returnValue(1));
 
-        $this->object->execute();
+        $this->object->executeInternal();
     }
 }

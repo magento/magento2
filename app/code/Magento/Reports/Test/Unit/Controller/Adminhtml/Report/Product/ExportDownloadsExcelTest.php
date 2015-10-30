@@ -72,6 +72,6 @@ class ExportDownloadsExcelTest extends \Magento\Reports\Test\Unit\Controller\Adm
             ->method('create')
             ->with($fileName, $content);
 
-        $this->exportDownloadsExcel->execute();
+        $this->exportDownloadsExcel->executeInternal();
     }
 }

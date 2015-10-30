@@ -32,7 +32,7 @@ class AddAttribute extends Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout('popup');
         $this->productBuilder->build($this->getRequest());

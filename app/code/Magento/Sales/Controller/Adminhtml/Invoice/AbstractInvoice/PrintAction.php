@@ -47,7 +47,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
     /**
      * @return ResponseInterface|void
      */
-    public function execute()
+    public function executeInternal()
     {
         $invoiceId = $this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {

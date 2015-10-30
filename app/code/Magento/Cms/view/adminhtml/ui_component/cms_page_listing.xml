@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
@@ -85,6 +85,14 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
