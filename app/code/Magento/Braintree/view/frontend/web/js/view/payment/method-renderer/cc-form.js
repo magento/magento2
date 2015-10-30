@@ -25,9 +25,7 @@ define(
         _,
         $,
         messageList,
-        $t,
-        registry,
-        wrapper
+        $t
     ) {
         'use strict';
         var configBraintree= window.checkoutConfig.payment.braintree;
@@ -66,11 +64,7 @@ define(
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
                 creditCardExpMonth: null,
                 creditCardExpYear: null,
-                billingAddressComponentName: configBraintree.billingAddressComponentName,
-                lastBillingAddress: null,
-                imports: {
-                    onIsSameChange: '${ $.billingAddressComponentName }:isAddressSameAsShipping'
-                }
+                lastBillingAddress: null
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -95,6 +89,7 @@ define(
              * @override
              */
             initObservable: function () {
+                var self = this;
                 this.initVars();
                 this._super()
                     .track('availableCcValues')
@@ -111,8 +106,6 @@ define(
                         this.selectedCardToken() == '';
                 }, this);
 
-                this.initBillingAddressListening();
-
                 if (!this.braintreeDataFrameLoaded && this.isFraudDetectionEnabled) {
                     $.getScript(this.braintreeDataJs, function () {
                         self.braintreeDataFrameLoaded = true;
@@ -126,6 +119,11 @@ define(
                 } else {
                     this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
                 }
+
+                // subscribe on billing address update
+                quote.billingAddress.subscribe(function () {
+                    self.updateAvailableTypeValues();
+                });
 
                 return this;
             },
@@ -321,10 +319,10 @@ define(
             getCcAvailableTypes: function () {
                 var availableTypes = configBraintree.availableCardTypes;
                 var billingAddress = quote.billingAddress();
+                this.lastBillingAddress = quote.shippingAddress();
                 if (!billingAddress) {
                     billingAddress = this.lastBillingAddress;
                 }
-                this.lastBillingAddress = billingAddress;
                 var billingCountryId = billingAddress.countryId;
                 if (billingCountryId &&
                     typeof configBraintree.countrySpecificCardTypes[billingCountryId] !== 'undefined'
@@ -385,32 +383,6 @@ define(
              */
             updateAvailableTypeValues: function () {
                 this.availableCcValues = this.getCcAvailableTypesValues();
-            },
-
-            /**
-             * Trigger update CC types function
-             * after Magento_Checkout/js/view/billing-address::isAddressSameAsShipping() was triggered
-             */
-            onIsSameChange: function () {
-                this.updateAvailableTypeValues();
-            },
-
-            /**
-             * Listening Magento_Checkout/js/view/billing-address::updateAddress() function
-             * and update available CC types values
-             */
-            initBillingAddressListening: function () {
-                var self = this;
-                if (!registry.has([self.billingAddressComponentName])) {
-                    throw new Error('Billing Address component not found');
-                }
-                registry.get(self.billingAddressComponentName, function (component) {
-                    // listen updateAddress() function
-                    component.updateAddress = wrapper.wrap(component.updateAddress, function (origin) {
-                        origin();
-                        self.updateAvailableTypeValues();
-                    });
-                });
             }
         });
     }
