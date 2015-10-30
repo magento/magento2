@@ -49,7 +49,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
@@ -60,7 +59,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Reports\Model\ResourceModel\Helper $resourceHelper,
@@ -71,7 +69,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             $logger,
             $localeDate,
             $reportsFlagFactory,
-            $dateTime,
             $timezoneValidator,
             $connectionName
         );
