@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Api;
+namespace Magento\Quote\Model;
 
 /**
- * Shipping address management interface for guest carts.
+ * Interface ShippingAddressManagementInterface
  * @api
  */
-interface GuestShippingAddressManagementInterface
+interface ShippingAddressManagementInterface
 {
     /**
-     * Assign a specified shipping address to a specified cart.
+     * Assigns a specified shipping address to a specified cart.
      *
-     * @param string $cartId The cart ID.
+     * @param int $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\AddressInterface $address The shipping address data.
      * @return int Address ID.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
@@ -23,9 +23,9 @@ interface GuestShippingAddressManagementInterface
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address);
 
     /**
-     * Return the shipping address for a specified quote.
+     * Returns the shipping address for a specified quote.
      *
-     * @param string $cartId The cart ID.
+     * @param int $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\AddressInterface Shipping address object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
