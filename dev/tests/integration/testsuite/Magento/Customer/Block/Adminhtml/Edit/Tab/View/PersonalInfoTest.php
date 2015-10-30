@@ -144,9 +144,11 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCreateDate()
     {
         $customer = $this->_loadCustomer();
-        $timezone = $this->_context->getLocaleDate()->getConfigTimezone(
+        $localeDate = $this->_context->getLocaleDate();
+        $timezone = $localeDate->getConfigTimezone(
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $customer->getStoreId());
+            $customer->getStoreId()
+        );
         $storeCreateDate = $this->_block->formatDate(
             $customer->getCreatedAt(),
             \IntlDateFormatter::MEDIUM,
