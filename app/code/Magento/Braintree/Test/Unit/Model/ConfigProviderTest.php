@@ -263,8 +263,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
-                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
-                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
+                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL
                         ],
                     ],
                 ]
@@ -339,8 +338,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
-                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
-                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
+                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL
                         ],
                     ],
                 ]
@@ -415,8 +413,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
-                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
-                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
+                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL
                         ],
                     ],
                 ]
@@ -460,8 +457,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'isCcDetectionEnabled' => true,
                             'availableCardTypes' => $this->availableCardTypes,
                             'braintreeDataJs'=> 'https://js.braintreegateway.com/v1/braintree-data.js',
-                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL,
-                            'billingAddressComponentName' => ConfigProvider::COMPONENT_PROVIDER_NAME
+                            'ajaxGenerateNonceUrl' => self::PAYMENT_NONCE_GENERATION_URL
                         ],
                     ],
                 ]
