@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Weee tax pricing adjustment
@@ -28,6 +29,11 @@ class TaxAdjustment implements AdjustmentInterface
      * @var WeeeHelper
      */
     protected $weeeHelper;
+
+    /**
+     * @var TaxHelper
+     */
+    protected $taxHelper;
 
     /**
      * Sort order
@@ -48,9 +54,14 @@ class TaxAdjustment implements AdjustmentInterface
      * @param PriceCurrencyInterface $priceCurrency
      * @param int $sortOrder
      */
-    public function __construct(WeeeHelper $weeeHelper, PriceCurrencyInterface $priceCurrency, $sortOrder = null)
-    {
+    public function __construct(
+        WeeeHelper $weeeHelper,
+        TaxHelper $taxHelper,
+        PriceCurrencyInterface $priceCurrency,
+        $sortOrder = null
+    ) {
         $this->weeeHelper = $weeeHelper;
+        $this->taxHelper = $taxHelper;
         $this->priceCurrency = $priceCurrency;
         $this->sortOrder = $sortOrder;
     }
@@ -83,6 +94,9 @@ class TaxAdjustment implements AdjustmentInterface
      */
     public function isIncludedInDisplayPrice()
     {
+        if ($this->taxHelper->displayPriceExcludingTax()) {
+            return false;
+        }
         if ($this->weeeHelper->isEnabled() == true &&
             $this->weeeHelper->isTaxable() == true &&
             $this->weeeHelper->typeOfDisplay([\Magento\Weee\Model\Tax::DISPLAY_EXCL]) == false) {
