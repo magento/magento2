@@ -47,14 +47,22 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
         return 0;
     }
 
+    /**
+     * @return string
+     */
     protected function _getLabel()
     {
         return __('Export VCL for Varnish ') . $this->getVarnishVersion();
     }
 
-    protected function _getUrl($params)
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    protected function _getUrl($params = [])
     {
-        return $this->getUrl("*/PageCache/exportVarnishConfig", $params);
+        return $this->getUrl('*/PageCache/exportVarnishConfig', $params);
     }
 
 }
