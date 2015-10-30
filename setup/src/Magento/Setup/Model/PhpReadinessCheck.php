@@ -65,12 +65,7 @@ class PhpReadinessCheck
             ];
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        try {
-            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
-        } catch (\UnexpectedValueException $e) {
-            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
-            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
-        }
+        $normalizedPhpVersion = $this->normalizePhpVersion(PHP_VERSION);
         $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
@@ -200,8 +195,10 @@ class PhpReadinessCheck
         $error = false;
         $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
 
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0
-            && version_compare(PHP_VERSION, '7.0.0') < 0
+        $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
+        $normalizedPhpVersion = $this->normalizePhpVersion(PHP_VERSION);
+        $currentVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
+        if ($checkVersionConstraint->matches($currentVersion)
             && $iniSetting !== -1
         ) {
             $error = true;
@@ -224,5 +221,23 @@ class PhpReadinessCheck
         ];
 
         return $data;
+    }
+
+
+    /**
+     * Normalize PHP Version
+     *
+     * @param string $version
+     * @return string
+     */
+    private function normalizePhpVersion($version)
+    {
+        try {
+            $normalizedPhpVersion = $this->versionParser->normalize($version);
+        } catch (\UnexpectedValueException $e) {
+            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', $version);
+            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
+        }
+        return $normalizedPhpVersion;
     }
 }
