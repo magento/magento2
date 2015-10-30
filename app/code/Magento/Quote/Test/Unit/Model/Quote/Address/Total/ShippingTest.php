@@ -72,6 +72,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 'setShippingAmount',
                 'setBaseTotalAmount',
                 'setTotalAmount',
+                'setShippingDescription',
             ],
             [],
             '',
@@ -94,8 +95,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 'setItemQty',
                 'collectShippingRates',
                 'getAllShippingRates',
-                'getShippingAmount',
                 'setShippingDescription',
+                'getShippingDescription',
                 'getFreeShipping',
             ],
             [],
@@ -229,9 +230,6 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('convert')
             ->with(5, $this->store)
             ->willReturn(5);
-        $this->address->expects($this->once())
-            ->method('getShippingAmount')
-            ->willReturn(5);
         $this->total->expects($this->once())
             ->method('setShippingAmount')
             ->with(5);
@@ -242,6 +240,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('getMethodTitle')
             ->willReturn('Method title');
         $this->address->expects($this->once())
+            ->method('setShippingDescription')
+            ->with('Carrier title - Method title');
+        $this->address->expects($this->once())
+            ->method('getShippingDescription')
+            ->willReturn('Carrier title - Method title');
+        $this->total->expects($this->once())
             ->method('setShippingDescription')
             ->with('Carrier title - Method title');
 
