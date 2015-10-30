@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -26,9 +27,9 @@ class Download extends ImportController
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader
+     * @var \Magento\Framework\Component\ComponentRegistrar
      */
-    protected $reader;
+    protected $componentRegistrar;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -42,14 +43,14 @@ class Download extends ImportController
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
-     * @param \Magento\Framework\Module\Dir\Reader $reader
+     * @param ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
-        \Magento\Framework\Module\Dir\Reader $reader
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
     ) {
         parent::__construct(
             $context
@@ -57,7 +58,7 @@ class Download extends ImportController
         $this->fileFactory = $fileFactory;
         $this->resultRawFactory = $resultRawFactory;
         $this->readFactory = $readFactory;
-        $this->reader = $reader;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -65,11 +66,11 @@ class Download extends ImportController
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = $this->getRequest()->getParam('filename') . '.csv';
-        $moduleDir = $this->reader->getModuleDir('', self::SAMPLE_FILES_MODULE);
-        $fileAbsolutePath = $moduleDir . '/' . $fileName;
+        $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::SAMPLE_FILES_MODULE);
+        $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $fileName;
         $directoryRead = $this->readFactory->create($moduleDir);
         $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 

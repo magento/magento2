@@ -13,7 +13,7 @@ class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\F
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $path = $this->storage->getCurrentPath();
