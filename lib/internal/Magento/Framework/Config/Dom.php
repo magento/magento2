@@ -281,6 +281,7 @@ class Dom
         }
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
+        libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
         try {
             $result = $dom->schemaValidate($schema);
             $errors = [];
@@ -298,6 +299,7 @@ class Dom
             libxml_use_internal_errors(false);
             throw $exception;
         }
+        libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);
         return $errors;
     }

@@ -1869,27 +1869,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param string $paymentId
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getPaymentById($paymentId)
-    {
-        foreach ($this->getPaymentsCollection() as $payment) {
-            if ($payment->getId() == $paymentId) {
-                return $payment;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Adds a payment to quote
      *
      * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(PaymentInterface $payment)
+    protected function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
