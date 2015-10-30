@@ -80,7 +80,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->cartTotalsRepositoryMock = $this->getMock('\Magento\Quote\Api\CartTotalRepositoryInterface');
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->addressValidatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
         $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
         $this->addressRepositoryMock = $this->getMock('\Magento\Customer\Api\AddressRepositoryInterface');

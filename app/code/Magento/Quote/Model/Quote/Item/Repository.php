@@ -16,7 +16,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -38,13 +38,13 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $cartItemProcessors;
 
     /**
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
      * @param CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
         array $cartItemProcessors = []
