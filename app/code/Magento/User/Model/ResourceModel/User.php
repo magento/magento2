@@ -160,22 +160,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Set created/modified values before user save
-     *
-     * @param \Magento\Framework\Model\AbstractModel $user
-     * @return $this
-     */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $user)
-    {
-        if ($user->isObjectNew()) {
-            $user->setCreated($this->dateTime->formatDate(true));
-        }
-        $user->setModified($this->dateTime->formatDate(true));
-
-        return parent::_beforeSave($user);
-    }
-
-    /**
      * Unserialize user extra data after user save
      *
      * @param \Magento\Framework\Model\AbstractModel $user
