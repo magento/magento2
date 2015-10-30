@@ -13,18 +13,12 @@ use Magento\Framework\App\ResponseInterface;
 class Forward extends AbstractAction
 {
     /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * @param RequestInterface $request
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dispatch(RequestInterface $request)
     {
-        $this->request = $request;
         return $this->execute();
     }
 
@@ -33,7 +27,7 @@ class Forward extends AbstractAction
      */
     public function execute()
     {
-        $this->request->setDispatched(false);
+        $this->_request->setDispatched(false);
         return $this->_response;
     }
 }
