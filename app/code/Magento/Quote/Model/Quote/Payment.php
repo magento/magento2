@@ -5,8 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-
 /**
  * Quote payment information
  *

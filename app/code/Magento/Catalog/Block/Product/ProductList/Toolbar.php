@@ -356,7 +356,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Compare defined order field vith current order field
+     * Compare defined order field with current order field
      *
      * @param string $order
      * @return bool
@@ -376,7 +376,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $urlParams = [];
         $urlParams['_current'] = true;
-        $urlParams['_escape'] = true;
+        $urlParams['_escape'] = false;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
         return $this->getUrl('*/*/*', $urlParams);

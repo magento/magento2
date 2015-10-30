@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "1.0.0-beta2",
+    "version": "1.0.0-beta5",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -60,7 +60,7 @@
         "ext-mbstring": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3"
+        "lusitanian/oauth": "~0.3 <=0.7.0"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",

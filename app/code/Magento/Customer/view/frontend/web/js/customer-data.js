@@ -42,8 +42,9 @@ define([
             });
             return result;
         },
-        getFromServer: function (sectionNames) {
+        getFromServer: function (sectionNames, updateSectionId) {
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
+            parameters['update_section_id'] = updateSectionId;
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
                 throw new Error(jqXHR);
             });
@@ -82,11 +83,16 @@ define([
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
+            var sectionId = 0;
+            var sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
             _.each(sections, function (sectionData, sectionName) {
+                sectionId = sectionData['data_id'];
+                sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
                 buffer.notify(sectionName, sectionData);
             });
+            $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
         remove: function (sections) {
             _.each(sections, function (sectionName) {
@@ -99,21 +105,54 @@ define([
     var customerData = {
         init: function() {
             if (_.isEmpty(storage.keys())) {
-                this.reload();
+                this.reload([], false);
+            } else if (this.needReload()) {
+                this.reload(this.getExpiredKeys(), false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
                 if (!_.isEmpty(storageInvalidation.keys())) {
-                    this.reload(storageInvalidation.keys());
+                    this.reload(storageInvalidation.keys(), false);
                 }
             }
+        },
+        needReload: function () {
+            var cookieSections = $.cookieStorage.get('section_data_ids');
+            if (typeof cookieSections != 'object') {
+                return true;
+            }
+            var storageVal, name;
+            for (name in cookieSections) {
+                if (undefined !== name) {
+                    storageVal = storage.get(name);
+                    if (typeof storageVal == 'object' && cookieSections[name] > storageVal['data_id']) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        getExpiredKeys: function() {
+            var cookieSections = $.cookieStorage.get('section_data_ids');
+
+            if (typeof cookieSections != 'object') {
+                return [];
+            }
+            var storageVal, name, expiredKeys = [];
+            for (name in cookieSections) {
+                storageVal = storage.get(name);
+                if (typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id']) {
+                    expiredKeys.push(name);
+                }
+            }
+            return expiredKeys;
         },
         get: function (sectionName) {
             return buffer.get(sectionName);
         },
-        reload: function (sectionNames) {
-            return dataProvider.getFromServer(sectionNames).done(function (sections) {
+        reload: function (sectionNames, updateSectionId) {
+            return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
                 buffer.update(sections);
             });
         },
@@ -138,7 +177,7 @@ define([
                 if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
                     return ;
                 }
-                customerData.reload(sections);
+                customerData.reload(sections, true);
             }
         }
     });

@@ -22,4 +22,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="braintree" xsi:type="string">/braintree/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

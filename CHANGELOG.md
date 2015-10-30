@@ -1,3 +1,66 @@
+1.0.0-beta5
+=============
+* Fixed bugs:
+    * Fixed an issue where search results are not ordered properly for sorting options
+    * Fixed an issue with mini cart qty after checkout login and aborted checkout
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue when invalid postcode allows the customer to continue the checkout process
+    * Fixed an issue with import of configurable products
+    * Fixed an issue with missed attributes during products export
+    * Fixed an issue with naming in resources configuration
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue with title prefix on page headings
+    * Fixed an issue with color swatches when attribute is out of stock
+    * Fixed an issue with singe tenant compiler
+    * Fixed an issue with Braintree Paypal Checkout button in popup
+* Various improvements:    
+    * Implemented CMS page preview without area emulation
+    
+1.0.0-beta4
+=============
+* Fixed bugs:
+    * Fixed an issue with Paypal WebAPI exception error when placing order within PayPal Payments Pro
+    * Fixed an issue with wrong links on multi website store
+    * Fixed an issue where unable to set a date limit on a promotion for 2016 onwards
+    * Fixed an issue with saving promotions
+    * Fixed an issue with option to pay with Paypal account for Payments Pro when configured on website level
+    * Fixed an issue with search results after filtering
+    * Fixed an issue with catalog product import
+    * Fixed an issue with configurable product special price
+    * Fixed an issue where unable to change type for color and size swatches
+    * Fixed an issue with selected filters on layered navigation
+    * Fixed an issue with related products block
+    * Fixed an issue with product alert for out of stock
+    * Fixed an issue with product selection in Products->Catalog results in no products selected
+    * Fixed an issue where unable to remove item from Minicart
+    * Fixed an issue where unable to deploy to production without downtime
+    * Fixed an issue with minicart inconsistent behavior between http and https
+    * Fixed an issue with CMS page preview on frontend
+    * Fixed an issue where discounts is not showing in the order summary at the shipping section in the checkout
+* Search improvements:    
+    * Improve Catalog Performance. Quick Search
+* GitHub issues and requests:
+    * [#1705](https://github.com/magento/magento2/issues/1705) -- Remove item from Minicart does not work
+    * [#1704](https://github.com/magento/magento2/issues/1704) -- Minicart inconsistant behavior between http and https
+      
+
+1.0.0-beta3
+=============
+* Fixed bugs:
+    * Fixed an issue with cms block cache if the block was added via layout xml
+    * Fixed an issue with error message after click "Get Payment Update" for order placed within Authorize.net Direct Post with incorrect url in "Transaction Details Url"
+    * Fixed an issue where unable to import images for configurable products
+    * Fixed an issue where product links API does not return the linked product's sku and position with flat tables turned on
+    * Fixed an issue where unable to run the CLI tool after the DI compilation
+    * Fixed an issue where copies of LESS source files are created instead of symlinks in client side less compilation
+* Various improvements:
+    * Stores and stores loading improvements
+    * Created APIs to retrieve store information
+    * Added the ability to send the purge requests for multiple servers
+* GitHub issues and requests:
+    * [#1679](https://github.com/magento/magento2/issues/1679) -- Cannot run php bin/magento setup:di:compile (have to delete contents of var/di) first
+    * [#1510](https://github.com/magento/magento2/issues/1510) -- Multisite does not work when Full Page Cache is enabled (FPC ignores MAGE_RUN_CODE)
+    
 1.0.0-beta2
 =============
 * Fixed bugs:

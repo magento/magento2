@@ -17,13 +17,13 @@ define([
             focused: false,
             required: false,
             disabled: false,
-            tmpPath: 'ui/form/element/',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             input_type: 'input',
             placeholder: '',
             description: '',
             label: '',
             error: '',
+            warn: '',
             notice: '',
             customScope: '',
             additionalClasses: {},
@@ -67,7 +67,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value')
+            this.observe('error disabled focused preview visible value warn')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -86,9 +86,9 @@ define([
             this._super();
 
             _.extend(this, {
-                'uid': uid,
-                'noticeId': 'notice-' + uid,
-                'inputName': utils.serializeName(this.dataScope)
+                uid: uid,
+                noticeId: 'notice-' + uid,
+                inputName: utils.serializeName(this.dataScope)
             });
 
             return this;
@@ -115,6 +115,7 @@ define([
             _.extend(this.additionalClasses, {
                 required:   this.required,
                 _error:     this.error,
+                _warn:      this.warn,
                 _disabled:  this.disabled
             });
 

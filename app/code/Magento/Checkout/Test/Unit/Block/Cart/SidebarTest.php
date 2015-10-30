@@ -45,10 +45,16 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkoutSessionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
+        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
         $this->layoutMock = $this->getMock('\Magento\Framework\View\Layout', [], [], '', false);
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
@@ -64,7 +70,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             '\Magento\Framework\View\Element\Template\Context',
-            ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig'],
+            ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig', 'getRequest'],
             [],
             '',
             false
@@ -81,6 +87,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->will($this->returnValue($this->scopeConfigMock));
+        $contextMock->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($this->requestMock));
 
         $this->model = $this->_objectManager->getObject(
             'Magento\Checkout\Block\Cart\Sidebar',
@@ -131,9 +140,13 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             ['checkout/cart', [], $shoppingCartUrl],
             ['checkout', [], $checkoutUrl],
-            ['checkout/sidebar/updateItemQty', [], $updateItemQtyUrl],
-            ['checkout/sidebar/removeItem', [], $removeItemUrl]
+            ['checkout/sidebar/updateItemQty', ['_secure' => false], $updateItemQtyUrl],
+            ['checkout/sidebar/removeItem', ['_secure' => false], $removeItemUrl]
         ];
+
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(false);
 
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')

@@ -16,6 +16,11 @@
             <argument name="storage" xsi:type="object">Magento\Paypal\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Paypal\Controller\Express\AbstractExpress">
+        <arguments>
+            <argument name="paypalSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">paypal_payflow</argument>

@@ -133,12 +133,13 @@ class Result extends Template
         /* @var $category \Magento\Catalog\Model\Category */
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
+        $availableOrders['relevance'] = __('Relevance');
 
         $this->getListBlock()->setAvailableOrders(
             $availableOrders
         )->setDefaultDirection(
             'desc'
-        )->setSortBy(
+        )->setDefaultSortBy(
             'relevance'
         );
 

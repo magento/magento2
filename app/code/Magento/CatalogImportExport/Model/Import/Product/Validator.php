@@ -99,8 +99,10 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->rowData = $rowData;
-        if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
-            return true;
+        if (isset($rowData['product_type']) && !empty($attrParams['apply_to'])
+            && !in_array($rowData['product_type'], $attrParams['apply_to'])
+        ) {
+            return false;
         }
         if ($attrCode == Product::COL_SKU || $attrParams['is_required']
             && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
@@ -135,11 +137,12 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
                 $valid = $this->numericValidation($attrCode, $attrParams['type']);
                 break;
             case 'select':
+            case 'boolean':
             case 'multiselect':
                 $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
                 $valid = true;
                 foreach ($values as $value) {
-                    $valid = $valid || isset($attrParams['options'][strtolower($value)]);
+                    $valid = $valid && isset($attrParams['options'][strtolower($value)]);
                 }
                 if (!$valid) {
                     $this->_addMessages(

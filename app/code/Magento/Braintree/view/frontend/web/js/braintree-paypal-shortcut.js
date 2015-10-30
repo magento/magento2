@@ -38,7 +38,7 @@ define([
                 enableShippingAddress: true,
                 enableBillingAddress: this.options.enableBillingAddress,
                 locale: this.options.locale,
-                displayName: this.options.merchantName,
+                displayName: this.options.merchantName || '',
                 onPaymentMethodReceived: function (obj) {
                     var nonce = obj.nonce;
                     var details = JSON.stringify(obj.details);

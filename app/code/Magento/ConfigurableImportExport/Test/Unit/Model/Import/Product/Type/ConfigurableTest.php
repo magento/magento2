@@ -208,7 +208,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->_connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->_connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->_connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([]));
+        $this->_connection->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',

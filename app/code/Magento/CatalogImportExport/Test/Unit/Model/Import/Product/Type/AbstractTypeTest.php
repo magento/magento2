@@ -37,7 +37,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
 
@@ -117,41 +117,59 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $entityAttributes = [
-            'attribute_id' => 'attributeSetName'
-        ];
-
-        $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
-        $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
-        $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
-        $attrSetCollection->expects($this->any())->method('setEntityTypeFilter')->willReturn([$attributeSet]);
-        $attrColFactory->expects($this->any())->method('create')->willReturn($attrCollection);
-        $attrCollection->expects($this->any())->method('setAttributeSetFilter')->willReturn([$attribute]);
-        $attributeSet->expects($this->any())->method('getId')->willReturn(1);
-        $attributeSet->expects($this->any())->method('getAttributeSetName')->willReturn('attribute_set_name');
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn('attr_code');
-        $attribute->expects($this->any())->method('getId')->willReturn('1');
         $attribute->expects($this->any())->method('getIsVisible')->willReturn(true);
         $attribute->expects($this->any())->method('getIsGlobal')->willReturn(true);
         $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
         $attribute->expects($this->any())->method('getIsUnique')->willReturn(true);
         $attribute->expects($this->any())->method('getFrontendLabel')->willReturn('frontend_label');
-        $attribute->expects($this->any())->method('isStatic')->willReturn(true);
         $attribute->expects($this->any())->method('getApplyTo')->willReturn(['simple']);
         $attribute->expects($this->any())->method('getDefaultValue')->willReturn('default_value');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
-        $attribute->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
+
+
+        $entityAttributes = [
+            [
+                'attribute_id' => 'attribute_id',
+                'attribute_set_name' => 'attributeSetName',
+            ],
+            [
+                'attribute_id' => 'boolean_attribute',
+                'attribute_set_name' => 'attributeSetName'
+            ]
+        ];
+        $attribute1 = clone $attribute;
+        $attribute2 = clone $attribute;
+
+        $attribute1->expects($this->any())->method('getId')->willReturn('1');
+        $attribute1->expects($this->any())->method('getAttributeCode')->willReturn('attr_code');
+        $attribute1->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
+        $attribute1->expects($this->any())->method('isStatic')->willReturn(true);
+
+        $attribute2->expects($this->any())->method('getId')->willReturn('2');
+        $attribute2->expects($this->any())->method('getAttributeCode')->willReturn('boolean_attribute');
+        $attribute2->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
+        $attribute2->expects($this->any())->method('isStatic')->willReturn(false);
+
+        $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
+        $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturnOnConsecutiveCalls(
+            ['option1', 'option2'],
+            ['yes' => 1, 'no' => 0]
+        );
+        $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
+        $attrSetCollection->expects($this->any())->method('setEntityTypeFilter')->willReturn([$attributeSet]);
+        $attrColFactory->expects($this->any())->method('create')->willReturn($attrCollection);
+        $attrCollection->expects($this->any())->method('setAttributeSetFilter')->willReturn([$attribute1, $attribute2]);
+        $attributeSet->expects($this->any())->method('getId')->willReturn(1);
+        $attributeSet->expects($this->any())->method('getAttributeSetName')->willReturn('attribute_set_name');
+
         $attrCollection
             ->expects($this->any())
             ->method('addFieldToFilter')
             ->with(
                 'main_table.attribute_id',
-                ['in' => [
-                    key($entityAttributes)
-                ]]
+                ['in' => ['attribute_id', 'boolean_attribute']]
             )
-            ->willReturn([$attribute]);
+            ->willReturn([$attribute1, $attribute2]);
 
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -174,7 +192,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 'from',
                 'where',
                 'joinLeft',
-                'getAdapter',
+                'getConnection',
             ],
             [],
             '',
@@ -184,15 +202,15 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->connection
             ->expects($this->any())
-            ->method('fetchPairs')
+            ->method('fetchAll')
             ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->getMock(
@@ -226,8 +244,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->abstractType = $this->getMockBuilder(
             '\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
         )
-        ->disableOriginalConstructor()
-        ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -279,6 +297,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
+            'sku' => 'sku'
         ];
         $rowNum = 1;
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);
@@ -343,6 +362,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      * @param $property
+     * @return mixed
      */
     protected function getPropertyValue(&$object, $property)
     {
@@ -365,5 +385,15 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
+    }
+
+    public function testPrepareAttributesWithDefaultValueForSave()
+    {
+        $rowData = [
+            '_attribute_set' => 'attributeSetName',
+            'boolean_attribute' => 'Yes'
+        ];
+        $result = $this->simpleType->prepareAttributesWithDefaultValueForSave($rowData);
+        $this->assertEquals(['boolean_attribute' => 1], $result);
     }
 }

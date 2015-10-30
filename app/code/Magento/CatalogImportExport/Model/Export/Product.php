@@ -502,7 +502,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],
                 '_media_position' => $mediaRow['position'],
-                '_media_is_disabled' => $mediaRow['disabled'],
+                '_media_is_disabled' => $mediaRow['disabled']
             ];
         }
 
@@ -632,7 +632,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             $categories[] = $categoryPath;
         }
-        $dataRow[self::COL_CATEGORY] = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $categories);
+        $dataRow[self::COL_CATEGORY] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $categories);
         unset($rowCategories[$productId]);
 
         return true;
@@ -666,7 +666,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_ATTR_SET,
                     self::COL_TYPE,
                     self::COL_CATEGORY,
-                    '_product_websites',
+                    self::COL_PRODUCT_WEBSITES,
                 ],
                 $this->_getExportMainAttrCodes(),
                 [self::COL_ADDITIONAL_ATTRIBUTES],
@@ -677,7 +677,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     'crosssell_skus',
                     'upsell_skus',
                 ],
-                ['additional_images', 'additional_image_labels']
+                ['additional_images', 'additional_image_labels', 'hide_from_product_page']
             );
             // have we merge custom options columns
             if ($customOptionsData) {
@@ -874,13 +874,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
 
                     if ($this->_attributeTypes[$code] !== 'multiselect') {
-                        if (is_scalar($attrValue)) {
-                            if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
-                                $additionalAttributes[$fieldName] = $fieldName .
-                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
-                            }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                        if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
+                            $additionalAttributes[$fieldName] = $fieldName .
+                                ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                         }
+                        $data[$itemId][$storeId][$fieldName] = $attrValue;
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
                         if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
@@ -1034,21 +1032,28 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
                 }
-                $dataRow['_product_websites'] =
+                $dataRow[self::COL_PRODUCT_WEBSITES] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
             if (!empty($multiRawData['mediaGalery'][$productId])) {
                 $additionalImages = [];
                 $additionalImageLabels = [];
+                $additionalImageIsDisabled = [];
                 foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
                     $additionalImages[] = $mediaItem['_media_image'];
                     $additionalImageLabels[] = $mediaItem['_media_label'];
+
+                    if ($mediaItem['_media_is_disabled'] == true) {
+                        $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                    }
                 }
                 $dataRow['additional_images'] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImages);
                 $dataRow['additional_image_labels'] =
                     implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
+                $dataRow['hide_from_product_page'] =
+                    implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
                 $multiRawData['mediaGalery'][$productId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {

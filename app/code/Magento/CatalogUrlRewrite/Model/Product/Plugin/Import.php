@@ -172,6 +172,7 @@ class Import
      *
      * @return Import
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _populateForUrlGeneration($rowData)
     {
@@ -200,6 +201,8 @@ class Import
             && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
         ) {
             $product->setStoreId($storeId);
+        } elseif (!$product->hasData(\Magento\Catalog\Api\Data\ProductInterface::STORE_ID)) {
+            $product->setStoreId(Store::DEFAULT_STORE_ID);
         }
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
@@ -212,7 +215,7 @@ class Import
     /**
      * Add product to import
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $storeId
      * @return $this
      */
@@ -220,15 +223,15 @@ class Import
     {
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];
-            $this->products[$product->getId()][$storeId] = $product;
         }
+        $this->products[$product->getId()][$storeId] = $product;
         return $this;
     }
 
     /**
      * Populate global product
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function populateGlobalProduct($product)
@@ -320,12 +323,14 @@ class Import
         $urls = [];
         foreach ($this->products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
-                $urls[] = $this->urlRewriteFactory->create()
-                    ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
-                    ->setEntityId($productId)
-                    ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
-                    ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
-                    ->setStoreId($storeId);
+                if ($this->productUrlPathGenerator->getUrlPath($product)) {
+                    $urls[] = $this->urlRewriteFactory->create()
+                        ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+                        ->setEntityId($productId)
+                        ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
+                        ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
+                        ->setStoreId($storeId);
+                }
             }
         }
 

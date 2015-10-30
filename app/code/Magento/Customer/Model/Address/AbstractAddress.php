@@ -253,7 +253,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Enforce format of the street field
+     * Enforce format of the street field or other multiline custom attributes
      *
      * @param array|string $key
      * @param null $value
@@ -263,10 +263,20 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     {
         if (is_array($key)) {
             $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value)) {
+        } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
+    }
+
+    /**
+     * Check that address can have multiline attribute by this code (as street or some custom attribute)
+     * @param string $code
+     * @return bool
+     */
+    protected function isAddressMultilineAttribute($code)
+    {
+        return $code == 'street' || in_array($code, $this->getCustomAttributesCodes());
     }
 
     /**
@@ -278,7 +288,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _implodeArrayField(array $data)
     {
         foreach ($data as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value) && $this->isAddressMultilineAttribute($key)) {
                 $data[$key] = $this->_implodeArrayValues($data[$key]);
             }
         }

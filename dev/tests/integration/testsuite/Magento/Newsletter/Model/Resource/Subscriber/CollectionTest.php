@@ -30,10 +30,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $subscribers = $this->_collectionModel->getItems();
         $this->assertCount(2, $subscribers);
         $subscriber = array_shift($subscribers);
-        $this->assertEquals('John', $subscriber->getCustomerFirstname(), $subscriber->getSubscriberEmail());
-        $this->assertEquals('Smith', $subscriber->getCustomerLastname(), $subscriber->getSubscriberEmail());
+        $this->assertEquals('John', $subscriber->getFirstname(), $subscriber->getSubscriberEmail());
+        $this->assertEquals('Smith', $subscriber->getLastname(), $subscriber->getSubscriberEmail());
         $subscriber = array_shift($subscribers);
-        $this->assertNull($subscriber->getCustomerFirstname(), $subscriber->getSubscriberEmail());
-        $this->assertNull($subscriber->getCustomerLastname(), $subscriber->getSubscriberEmail());
+        $this->assertNull($subscriber->getFirstname(), $subscriber->getSubscriberEmail());
+        $this->assertNull($subscriber->getLastname(), $subscriber->getSubscriberEmail());
     }
 }

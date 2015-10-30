@@ -40,7 +40,8 @@ class Composite implements RowCustomizerInterface
     public function prepareData($collection, $productIds)
     {
         foreach ($this->customizers as $className) {
-            $this->objectManager->get($className)->prepareData($collection, $productIds);
+            $customCollection = clone $collection;
+            $this->objectManager->get($className)->prepareData($customCollection, $productIds);
         }
     }
 

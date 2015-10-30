@@ -789,8 +789,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function getSubscriberFullName()
     {
         $name = null;
-        if ($this->hasCustomerFirstname() || $this->hasCustomerLastname()) {
-            $name = $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
+        if ($this->hasFirstname() || $this->hasLastname()) {
+            $name = $this->getFirstname() . ' ' . $this->getLastname();
         }
         return $name;
     }
