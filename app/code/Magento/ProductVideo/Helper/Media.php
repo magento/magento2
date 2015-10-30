@@ -47,6 +47,20 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_YOUTUBE_API_KEY = 'catalog/product_video/youtube_api_key';
 
     /**
+     * Configuration path for video play
+     */
+    const XML_PATH_PLAY_IF_BASE = 'catalog/product_video/play_if_base';
+
+    /**
+     * Configuration path
+     */
+    const XML_PATH_SHOW_RELATED = 'catalog/product_video/show_related';
+    /**
+     * Configuration path
+     */
+    const XML_PATH_VIDEO_AUTO_RESTART = 'catalog/product_video/youtube_api_key';
+
+    /**
      * @var ConfigInterface
      */
     protected $viewConfig;
