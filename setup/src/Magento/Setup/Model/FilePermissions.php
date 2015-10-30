@@ -139,10 +139,10 @@ class FilePermissions
                 if (!in_array($subDirectory->getFileName(), $restrictedFolders) && !$subDirectory->isWritable()) {
                     return false;
                 }
-            } else {
-                if (!in_array($subDirectory->getFileName(), $noWritableFilesFolders) && !$subDirectory->isWritable()) {
-                    return false;
-                }
+            } elseif (
+                !in_array($subDirectory->getFileName(), $noWritableFilesFolders) && !$subDirectory->isWritable()
+            ) {
+                return false;
             }
         }
         return true;
