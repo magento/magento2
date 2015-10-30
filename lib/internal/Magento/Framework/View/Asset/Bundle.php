@@ -21,6 +21,11 @@ class Bundle
      */
     protected $assets = [];
 
+    /**
+     * @var array
+     */
+    protected $assetsContent = [];
+
     /** @var  Bundle\Config */
     protected $bundleConfig;
 
@@ -177,7 +182,7 @@ class Bundle
     {
         $contents = [];
         foreach ($assets as $key => $asset) {
-            $contents[$key] = utf8_encode($asset->getContent());
+            $contents[$key] = $this->getAssetContent($asset);
         }
 
         $partType = reset($assets)->getContentType();
@@ -189,6 +194,23 @@ class Bundle
             "});\n";
 
         return $content;
+    }
+
+    /**
+     * Get content of asset
+     *
+     * @param LocalInterface $asset
+     * @return string
+     */
+    protected function getAssetContent(LocalInterface $asset)
+    {
+        $assetContextCode = $this->getContextCode($asset);
+        $assetContentType = $asset->getContentType();
+        if (!isset($this->assetsContent[$assetContextCode][$assetContentType])) {
+            $this->assetsContent[$assetContextCode][$assetContentType] = utf8_encode($asset->getContent());
+        }
+
+        return $this->assetsContent[$assetContextCode][$assetContentType];
     }
 
     /**
