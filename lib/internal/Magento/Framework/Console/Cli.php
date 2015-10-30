@@ -44,9 +44,8 @@ class Cli extends SymfonyApplication
         $exitCode = parent::doRun($input, $output);
         if ($this->initException) {
             $output->writeln(
-                '<error>An error happened during commands initialization. '
-                . 'If you just updated the code base, consider cleaning "var/generation", "var/di" directories '
-                . 'and cache.</error>'
+                "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
+                . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
             );
             throw $this->initException;
         }
