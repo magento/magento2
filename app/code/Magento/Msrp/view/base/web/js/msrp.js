@@ -27,6 +27,7 @@ define([
             cartButtonId: '', // better to be cartButton
             popupId: '', // better to be popup
             realPrice: '',
+            isSaleable: '',
             msrpPrice: '',
             helpLinkId: '', // better to be helpLink
             addToCartButton: '',
@@ -71,19 +72,7 @@ define([
                 $('body').append($(this.popupDOM).html());
                 this.$popup = $($(this.popupDOM).html());
 
-                $(this.options.popupId).on('click', function (e) {
-                    this.popUpOptions.position.of = $(e.target);
-                    this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
-                    this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
-                    this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-
-                    this.$popup.find('button').on('click', function () {
-                        if (this.options.addToCartButton) {
-                            $(this.options.addToCartButton).click();
-                        }
-                    }.bind(this));
-                    this._toggle(this.$popup);
-                }.bind(this));
+                $(this.options.popupId).on('click', this.openPopup.bind(this));
             }
 
             if (this.options.helpLinkId) {
@@ -113,7 +102,26 @@ define([
                 }.bind(this));
             }
         },
-
+        /**
+         * Open and set up popup
+         *
+         * @param event
+         */
+        openPopup: function (event) {
+            this.popUpOptions.position.of = $(event.target);
+            this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
+            this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
+            this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
+            this.$popup.find('button').on('click', function () {
+                if (this.options.addToCartButton) {
+                    $(this.options.addToCartButton).click();
+                }
+            }.bind(this));
+            this._toggle(this.$popup);
+            if (!this.options.isSaleable) {
+                this.$popup.find('form').hide();
+            }
+        },
         /**
          *
          * @param $elem
