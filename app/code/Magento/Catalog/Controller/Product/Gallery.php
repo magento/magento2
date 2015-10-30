@@ -44,7 +44,7 @@ class Gallery extends \Magento\Catalog\Controller\Product
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $result = null;
         if (!$this->_initProduct()) {

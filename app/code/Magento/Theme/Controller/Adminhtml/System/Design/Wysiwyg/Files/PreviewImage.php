@@ -16,7 +16,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
      *
      * @return ResponseInterface|void
      */
-    public function execute()
+    public function executeInternal()
     {
         $file = $this->getRequest()->getParam('file');
         /** @var $helper \Magento\Theme\Helper\Storage */

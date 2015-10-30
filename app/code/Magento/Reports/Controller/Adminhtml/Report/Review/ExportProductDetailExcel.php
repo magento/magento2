@@ -16,7 +16,7 @@ class ExportProductDetailExcel extends \Magento\Reports\Controller\Adminhtml\Rep
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'review_product_detail.xml';
         $content = $this->_view->getLayout()->createBlock(

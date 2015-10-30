@@ -72,6 +72,6 @@ HANDLE;
                 $this->equalTo(['adminhtml_integration_activate_permissions_webapi'])
             );
 
-        $controller->execute();
+        $controller->executeInternal();
     }
 }
