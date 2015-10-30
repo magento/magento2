@@ -57,6 +57,7 @@ if ($product->isSaleable()) {
             'popupId' => '#' . $popupId,
             'productName' => $product->getName(),
             'realPrice' => $block->getRealPriceHtml(),
+            'isSaleable' => $product->isSaleable(),
             'msrpPrice' => $msrpPrice,
             'priceElementId' => $priceElementId,
             'closeButtonId' => '#map-popup-close',
