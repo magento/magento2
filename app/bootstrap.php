@@ -34,6 +34,5 @@ require_once BP . '/app/functions.php';
 if (!empty($_SERVER['MAGE_PROFILER'])) {
     \Magento\Framework\Profiler::applyConfig($_SERVER['MAGE_PROFILER'], BP, !empty($_REQUEST['isAjax']));
 }
-if (ini_get('date.timezone') == '') {
-    date_default_timezone_set('UTC');
-}
+
+date_default_timezone_set('UTC');

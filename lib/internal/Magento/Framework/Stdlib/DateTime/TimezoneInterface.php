@@ -104,9 +104,11 @@ interface TimezoneInterface
     /**
      * Gets the scope config timezone
      *
+     * @param string $scopeType
+     * @param string $scopeCode
      * @return string
      */
-    public function getConfigTimezone();
+    public function getConfigTimezone($scopeType = null, $scopeCode = null);
 
     /**
      * Checks if current date of the given scope (in the scope timezone) is within the range

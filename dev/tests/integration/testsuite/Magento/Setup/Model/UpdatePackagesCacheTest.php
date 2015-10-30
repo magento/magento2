@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -91,7 +91,7 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
                     $this->directoryList
                 ),
                 'filesystem' => $this->filesystem,
-                'dateTime' => new DateTime(),
+                'dateTime' => $this->objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime'),
                 'composerInformation' => $this->composerInformation
             ]
         );
