@@ -206,11 +206,12 @@ class Bundle
     {
         $assetContextCode = $this->getContextCode($asset);
         $assetContentType = $asset->getContentType();
-        if (!isset($this->assetsContent[$assetContextCode][$assetContentType])) {
-            $this->assetsContent[$assetContextCode][$assetContentType] = utf8_encode($asset->getContent());
+        $assetKey = $this->getAssetKey($asset);
+        if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
+            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = utf8_encode($asset->getContent());
         }
 
-        return $this->assetsContent[$assetContextCode][$assetContentType];
+        return $this->assetsContent[$assetContextCode][$assetContentType][$assetKey];
     }
 
     /**
@@ -243,6 +244,7 @@ class Bundle
         }
         $this->assets = [];
         $this->content = [];
+        $this->assetsContent = [];
     }
 
     /**
