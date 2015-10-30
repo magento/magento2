@@ -60,7 +60,7 @@ class Server
             $httpHost = $this->request->getHttpHost();
             $servers[] = $httpHost ?
                 UriFactory::factory('')->setHost($httpHost)->setPort(self::DEFAULT_PORT)->setScheme('http') :
-                UriFactory::factory($this->urlBuilder->getUrl('*'))
+                UriFactory::factory($this->urlBuilder->getUrl('*', ['_nosid' => true])) // Don't use SID in URL
                     ->setScheme('http')
                     ->setPath(null)
                     ->setQuery(null);
