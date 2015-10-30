@@ -144,11 +144,15 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCreateDate()
     {
         $customer = $this->_loadCustomer();
-        $date = $this->_context->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
+        $timezone = $this->_context->getLocaleDate()->getConfigTimezone(
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $customer->getStoreId());
         $storeCreateDate = $this->_block->formatDate(
-            $date,
+            $customer->getCreatedAt(),
             \IntlDateFormatter::MEDIUM,
-            true
+            true,
+            null,
+            $timezone
         );
         $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());
     }
