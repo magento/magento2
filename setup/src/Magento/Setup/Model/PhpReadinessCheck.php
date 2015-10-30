@@ -65,7 +65,7 @@ class PhpReadinessCheck
             ];
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $normalizedPhpVersion = $this->normalizeCurrentPhpVersion();
+        $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
         $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
@@ -196,7 +196,7 @@ class PhpReadinessCheck
         $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
 
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
-        $normalizedPhpVersion = $this->normalizeCurrentPhpVersion();
+        $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
         $currentVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         if ($checkVersionConstraint->matches($currentVersion) && $iniSetting !== -1) {
             $error = true;
@@ -224,14 +224,15 @@ class PhpReadinessCheck
     /**
      * Normalize PHP Version
      *
+     * @param string $version
      * @return string
      */
-    private function normalizeCurrentPhpVersion()
+    private function getNormalizedCurrentPhpVersion($version)
     {
         try {
-            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
+            $normalizedPhpVersion = $this->versionParser->normalize($version);
         } catch (\UnexpectedValueException $e) {
-            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
+            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', $version);
             $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
         }
         return $normalizedPhpVersion;
