@@ -198,7 +198,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('isSecure')
             ->willReturn($isSecure);
 
-        $this->assertEquals($actionUrl . '/id/' . $productId , $this->block->getProductReviewUrl());
+        $this->assertEquals($actionUrl . '/id/' . $productId, $this->block->getProductReviewUrl());
     }
 
     public function getProductReviewUrlDataProvider()

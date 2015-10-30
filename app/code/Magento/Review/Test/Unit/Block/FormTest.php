@@ -122,7 +122,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('isSecure')
             ->willReturn($isSecure);
 
-        $this->assertEquals($actionUrl . '/id/' . $productId , $this->object->getAction());
+        $this->assertEquals($actionUrl . '/id/' . $productId, $this->object->getAction());
     }
 
     public function getActionDataProvider()
