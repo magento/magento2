@@ -5,6 +5,7 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
@@ -885,10 +886,15 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         $css = '';
-        foreach ($files as $file) {
-            $asset = $this->_assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
+        try {
+            foreach ($files as $file) {
+                $asset = $this->_assetRepo->createAsset($file, $designParams);
+                $css .= $asset->getContent();
+            }
+        } catch (ContentProcessorException $exception) {
+            $css = $exception->getMessage();
         }
+
         return $css;
     }
 
