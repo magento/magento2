@@ -129,9 +129,20 @@ class FilePermissions
             new \RecursiveDirectoryIterator($directory),
             \RecursiveIteratorIterator::LEAVES_ONLY | \RecursiveIteratorIterator::CATCH_GET_CHILD
         );
+        $restrictedFolders = ['.', '..'];
+        $noWritableFilesFolders = ['generation', 'di'];
         foreach ($directoryIterator as $subDirectory) {
-            if ($subDirectory->isDir() && !$subDirectory->isWritable()) {
-                return false;
+            if ($subDirectory->isLink()) {
+                continue;
+            }
+            if ($subDirectory->isDir()) {
+                if (!in_array($subDirectory->getFileName(), $restrictedFolders) && !$subDirectory->isWritable()) {
+                    return false;
+                }
+            } else {
+                if (!in_array($subDirectory->getFileName(), $noWritableFilesFolders) && !$subDirectory->isWritable()) {
+                    return false;
+                }
             }
         }
         return true;
