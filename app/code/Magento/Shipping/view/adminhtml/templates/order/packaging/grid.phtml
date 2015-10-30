@@ -16,11 +16,11 @@
                     <th class="data-grid-checkbox-cell">
                         <label class="data-grid-checkbox-cell-inner">
                             <input type="checkbox"
-                                   id="select-items-<?php echo $randomId; ?>"
+                                   id="select-items-<?php /* @noEscape */ echo $randomId; ?>"
                                    onchange="packaging.checkAllItems(this);"
                                    class="checkbox admin__control-checkbox"
                                    title="<?php /* @escapeNotVerified */ echo __('Select All') ?>">
-                            <label for="select-items-<?php echo $randomId; ?>"></label>
+                            <label for="select-items-<?php /* @noEscape */ echo $randomId; ?>"></label>
                         </label>
                     </th>
                     <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
@@ -46,14 +46,14 @@
                 <?php endif; ?>
                 <tr class="data-grid-controls-row data-row <?php echo ($i++ % 2 != 0) ? '_odd-row' : ''; ?>">
                     <td class="data-grid-checkbox-cell">
-                        <?php /* @escapeNotVerified */ $id = $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>
+                        <?php $id = $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>
                         <label class="data-grid-checkbox-cell-inner">
                             <input type="checkbox"
                                    name=""
-                                   id="select-item-<?php echo $randomId . '-' . $id; ?>"
+                                   id="select-item-<?php /* @noEscape */ echo $randomId . '-' . $id; ?>"
                                    value="<?php /* @escapeNotVerified */ echo $id; ?>"
                                    class="checkbox admin__control-checkbox">
-                            <label for="select-item-<?php echo $randomId . '-' . $id; ?>"></label>
+                            <label for="select-item-<?php /* @noEscape */ echo $randomId . '-' . $id; ?>"></label>
                         </label>
                     </td>
                     <td>
