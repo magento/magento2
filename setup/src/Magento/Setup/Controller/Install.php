@@ -20,7 +20,6 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
-use Magento\Framework\Filesystem;
 
 /**
  * Install controller
@@ -50,31 +49,23 @@ class Install extends AbstractActionController
     protected $sampleDataState;
 
     /**
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
      * Default Constructor
      *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
-     * @param FileSystem $filesystem
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState,
-        Filesystem $filesystem
+        \Magento\Framework\Setup\SampleData\State $sampleDataState
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
         $this->sampleDataState = $sampleDataState;
-        $this->fileSystem = $filesystem;
     }
 
     /**
