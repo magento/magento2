@@ -198,9 +198,7 @@ class PhpReadinessCheck
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
         $normalizedPhpVersion = $this->normalizePhpVersion(PHP_VERSION);
         $currentVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
-        if ($checkVersionConstraint->matches($currentVersion)
-            && $iniSetting !== -1
-        ) {
+        if ($checkVersionConstraint->matches($currentVersion) && $iniSetting !== -1) {
             $error = true;
         }
 
