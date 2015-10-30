@@ -128,16 +128,21 @@ class FilePermissions
     {
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY, \RecursiveIteratorIterator::CATCH_GET_CHILD
+            \RecursiveIteratorIterator::LEAVES_ONLY
         );
         $rootPath = $this->directoryList->getRoot();
         $noWritableFilesFolders = [$rootPath . '/var/generation', $rootPath . '/var/di'];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
-        foreach ($directoryIterator as $subDirectory) {
-            if (!$subDirectory->isWritable()) {
-                return false;
+
+        try {
+            foreach ($directoryIterator as $subDirectory) {
+                if (!$subDirectory->isWritable()) {
+                    return false;
+                }
             }
+        } catch (\UnexpectedValueException $e) {
+            return false;
         }
         return true;
     }
