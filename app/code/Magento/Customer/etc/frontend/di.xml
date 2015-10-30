@@ -51,7 +51,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Controller\AccountInterface">
+    <type name="Magento\Customer\Controller\AbstractAccount">
         <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
