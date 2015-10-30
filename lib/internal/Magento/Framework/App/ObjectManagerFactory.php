@@ -202,7 +202,7 @@ class ObjectManagerFactory
         $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
             : [];
-        $reader = new DeploymentConfig\Reader($directoryList, $configFilePool, $customFile);
+        $reader = new DeploymentConfig\Reader($directoryList, $this->driverPool, $configFilePool, $customFile);
         return new DeploymentConfig($reader, $customData);
     }
 
