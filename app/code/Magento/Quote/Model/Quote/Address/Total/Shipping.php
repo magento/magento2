@@ -169,6 +169,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     );
                     $total->setTotalAmount($this->getCode(), $amountPrice);
                     $total->setBaseTotalAmount($this->getCode(), $rate->getPrice());
+                    $total->setShippingAmount($address->getShippingAmount());
                     $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();
                     $address->setShippingDescription(trim($shippingDescription, ' -'));
                     break;

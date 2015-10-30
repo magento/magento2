@@ -143,6 +143,9 @@ class TotalsCollector
         foreach ($quote->getAllAddresses() as $address) {
             $addressTotal = $this->collectAddressTotals($quote, $address);
 
+            $total->setShippingAmount($addressTotal->getShippingAmount());
+            $total->setBaseShippingAmount($addressTotal->getBaseShippingAmount());
+
             $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
             $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
 
