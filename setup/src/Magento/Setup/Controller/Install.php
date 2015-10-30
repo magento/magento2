@@ -21,7 +21,6 @@ use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Install controller
