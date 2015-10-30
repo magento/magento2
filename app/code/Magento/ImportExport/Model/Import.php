@@ -80,6 +80,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**#@-*/
 
+    /**
+     * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
+     */
+    const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+
     /**#@+
      * Import constants
      */
