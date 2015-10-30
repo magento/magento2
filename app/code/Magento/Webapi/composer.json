@@ -3,18 +3,18 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta5",
-        "magento/module-authorization": "1.0.0-beta5",
-        "magento/module-integration": "1.0.0-beta5",
-        "magento/module-backend": "1.0.0-beta5",
-        "magento/framework": "1.0.0-beta5",
+        "magento/module-store": "1.0.0-beta6",
+        "magento/module-authorization": "1.0.0-beta6",
+        "magento/module-integration": "1.0.0-beta6",
+        "magento/module-backend": "1.0.0-beta6",
+        "magento/framework": "1.0.0-beta6",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
-        "magento/module-user": "1.0.0-beta5"
+        "magento/module-user": "1.0.0-beta6"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta5",
+    "version": "1.0.0-beta6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

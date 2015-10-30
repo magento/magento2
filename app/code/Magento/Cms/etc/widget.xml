@@ -17,7 +17,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Page\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Page...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Page...</item>
                         </item>
                     </data>
                 </block>
@@ -52,7 +52,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Block\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Block...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Block...</item>
                         </item>
                     </data>
                 </block>
