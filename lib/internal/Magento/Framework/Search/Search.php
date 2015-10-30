@@ -28,7 +28,7 @@ class Search implements SearchInterface
     private $searchEngine;
 
     /**
-     * @var SearchResponseBuilderInterface
+     * @var SearchResponseBuilder
      */
     private $searchResponseBuilder;
 
@@ -36,13 +36,13 @@ class Search implements SearchInterface
      * @param Builder $requestBuilder
      * @param ScopeResolverInterface $scopeResolver
      * @param SearchEngineInterface $searchEngine
-     * @param SearchResponseBuilderInterface $searchResponseBuilder
+     * @param SearchResponseBuilder $searchResponseBuilder
      */
     public function __construct(
         Builder $requestBuilder,
         ScopeResolverInterface $scopeResolver,
         SearchEngineInterface $searchEngine,
-        SearchResponseBuilderInterface $searchResponseBuilder
+        SearchResponseBuilder $searchResponseBuilder
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->scopeResolver = $scopeResolver;

@@ -3,15 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Model;
+namespace Magento\Framework\Search;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Search\ResponseInterface;
-use Magento\Framework\Search\SearchResponseBuilderInterface;
 
-class SearchResponseBuilder implements SearchResponseBuilderInterface
+class SearchResponseBuilder
 {
     /**
      * @var DocumentFactory

@@ -25,7 +25,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     protected $searchEngine;
 
     /**
-     * @var \Magento\Framework\Search\SearchResponseBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\SearchResponseBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchResponseBuilder;
 
@@ -46,7 +46,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchResponseBuilder = $this->getMockBuilder('Magento\Framework\Search\SearchResponseBuilderInterface')
+        $this->searchResponseBuilder = $this->getMockBuilder('Magento\Framework\Search\SearchResponseBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
