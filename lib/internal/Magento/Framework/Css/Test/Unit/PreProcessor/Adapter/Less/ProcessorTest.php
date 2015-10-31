@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Adapter\Less;
+namespace Magento\Framework\Css\Test\Unit\PreProcessor\Adapter\Less;
 
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
@@ -79,6 +79,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for processContent method (exception)
+     *
+     * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
+     * @expectedExceptionMessageRegExp (Compilation from source:.*Test exception)
      */
     public function testProcessContentException()
     {
@@ -95,17 +98,18 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->loggerMock->expects(self::once())
             ->method('critical')
-            ->with(Processor::ERROR_MESSAGE_PREFIX . self::ERROR_MESSAGE);
+            ->with(
+                PHP_EOL . Processor::ERROR_MESSAGE_PREFIX . PHP_EOL . self::ASSET_PATH  . PHP_EOL . self::ERROR_MESSAGE
+            );
 
         $this->temporaryFileMock->expects(self::never())
             ->method('createFile');
 
-        $assetMock->expects(self::never())
-            ->method('getPath');
+        $assetMock->expects(self::once())
+            ->method('getPath')
+            ->willReturn(self::ASSET_PATH);
 
-        $content = $this->processor->processContent($assetMock);
-
-        self::assertEquals(Processor::ERROR_MESSAGE_PREFIX . self::ERROR_MESSAGE, $content);
+        $this->processor->processContent($assetMock);
     }
 
     /**
@@ -127,8 +131,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->temporaryFileMock->expects(self::never())
             ->method('createFile');
 
-        $assetMock->expects(self::never())
-            ->method('getPath');
+        $assetMock->expects(self::once())
+            ->method('getPath')
+            ->willReturn(self::ASSET_PATH);
 
         $this->loggerMock->expects(self::never())
             ->method('critical');
