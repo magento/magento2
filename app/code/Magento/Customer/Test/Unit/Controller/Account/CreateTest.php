@@ -116,7 +116,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock->expects($this->never())
             ->method('getLayout');
 
-        $this->object->execute();
+        $this->object->executeInternal();
     }
 
     /**
@@ -139,6 +139,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $this->object->execute();
+        $this->object->executeInternal();
     }
 }

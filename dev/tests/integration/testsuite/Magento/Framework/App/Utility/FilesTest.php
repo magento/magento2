@@ -105,6 +105,21 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetXmlCatalogFiles()
+    {
+        $actual = $this->model->getXmlCatalogFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
+
+        $actual = $this->model->getXmlCatalogFiles('*.xsd');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xsd', $file[0]);
+        }
+    }
+
     /**
      * Verify that the given array of files does not contain anything in test directories
      *

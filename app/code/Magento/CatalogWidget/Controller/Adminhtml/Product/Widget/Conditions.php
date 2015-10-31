@@ -32,7 +32,7 @@ class Conditions extends \Magento\CatalogWidget\Controller\Adminhtml\Product\Wid
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = $this->getRequest()->getParam('id');
         $typeData = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));

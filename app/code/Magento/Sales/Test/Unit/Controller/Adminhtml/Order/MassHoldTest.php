@@ -217,7 +217,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 
     public function testExecuteNoOrdersPutOnHold()
@@ -257,6 +257,6 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 }

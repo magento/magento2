@@ -30,7 +30,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_coreRegistry->register('current_queue', $this->_objectManager->get('Magento\Newsletter\Model\Queue'));
 

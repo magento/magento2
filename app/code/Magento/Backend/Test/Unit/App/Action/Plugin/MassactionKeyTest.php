@@ -49,13 +49,13 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundExecute
      *
      * @param $postData array|string
      * @param array $convertedData
-     * @dataProvider aroundDispatchDataProvider
+     * @dataProvider aroundExecuteDataProvider
      */
-    public function testAroundDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
+    public function testAroundExecuteWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
     {
         $this->requestMock->expects($this->at(0))
             ->method('getPost')
@@ -71,11 +71,11 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'Expected',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->aroundExecute($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 
-    public function aroundDispatchDataProvider()
+    public function aroundExecuteDataProvider()
     {
         return [
             'post_data_is_array' => [['key'], ['key']],
@@ -84,9 +84,9 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundExecute
      */
-    public function testAroundDispatchWhenMassactionPrepareKeyRequestNotExists()
+    public function testAroundExecuteWhenMassactionPrepareKeyRequestNotExists()
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
@@ -97,7 +97,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'Expected',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->aroundExecute($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 }
