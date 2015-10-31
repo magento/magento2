@@ -199,10 +199,11 @@ define([
                 this.closePopup(this.$popup);
             }
         },
+
         /**
          * Open and set up popup
          *
-         * @param event
+         * @param {Object} event
          */
         openPopup: function (event) {
             this.popUpOptions.position.of = $(event.target);
