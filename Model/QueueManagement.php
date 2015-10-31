@@ -47,9 +47,9 @@ class QueueManagement
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    private $timezone;
+    private $dateTime;
 
     /**
      * @var \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory
@@ -60,17 +60,17 @@ class QueueManagement
      * @param \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      */
     public function __construct(
         \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
     ) {
         $this->messageResource = $messageResource;
         $this->scopeConfig = $scopeConfig;
-        $this->timezone = $timezone;
+        $this->dateTime = $dateTime;
         $this->messageStatusCollectionFactory = $messageStatusCollectionFactory;
     }
 
@@ -124,10 +124,7 @@ class QueueManagement
      */
     private function processMessagePerStatus($messageStatus)
     {
-        /**
-         * Get timestamp related to current timezone
-         */
-        $now = $this->timezone->scopeTimeStamp();
+        $now = $this->dateTime->gmtTimestamp();
 
         if ($messageStatus->getStatus() == self::MESSAGE_STATUS_COMPLETE
             && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getCompletedMessageLifetime())) {
