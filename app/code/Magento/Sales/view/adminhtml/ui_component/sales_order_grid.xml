@@ -254,7 +254,7 @@
                 </item>
             </argument>
         </column>
-        <column name="created_at">
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>
@@ -288,7 +288,7 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
