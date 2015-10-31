@@ -607,6 +607,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($payment)
             ->willReturn($convertedPayment);
 
+        $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
+
         $order = $this->prepareOrderFactory(
             $baseOrder,
             $convertedBillingAddress,
@@ -850,7 +852,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->method('isVirtual')
             ->willReturn($isVirtual);
         if ($shippingAddress) {
-            $quote->expects($this->exactly(2))
+            $quote->expects($this->exactly(3))
                 ->method('getShippingAddress')
                 ->willReturn($shippingAddress);
         }

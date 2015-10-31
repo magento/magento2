@@ -82,7 +82,6 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $object->expects($this->exactly(5))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $object->expects($this->atLeastOnce())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
             'quote_convert_address',
             'to_order',
@@ -93,7 +92,6 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setQuoteId')->with($quoteId)->willReturnSelf();
-        $this->orderMock->expects($this->once())->method('setShippingMethod')->willReturnSelf();
         $this->orderDataFactoryMock->expects($this->once())->method('create')->willReturn($this->orderMock);
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')

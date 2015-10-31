@@ -79,11 +79,6 @@ class ToOrder
         $order->setStoreId($object->getQuote()->getStoreId())
             ->setQuoteId($object->getQuote()->getId())
             ->setIncrementId($object->getQuote()->getReservedOrderId());
-        if (array_key_exists('shipping_method', $data)) {
-            $order->setShippingMethod($data['shipping_method']);
-        } else if ($object->getShippingMethod()) {
-            $order->setShippingMethod($object->getShippingMethod());
-        }
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
         $this->eventManager->dispatch(
             'sales_convert_quote_to_order',
