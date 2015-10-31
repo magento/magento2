@@ -369,6 +369,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
@@ -388,6 +389,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
