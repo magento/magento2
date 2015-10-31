@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+echo "swatchjs";
 // @codingStandardsIgnoreFile
 
 ?>
@@ -265,7 +265,7 @@ require([
                 setRowVisibility('is_unique', false);
                 setRowVisibility('frontend_class', false);
             break;
-        <?php $hiddenFields = $block->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() ?>
+        <?php $hiddenFields = $this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() ?>
         <?php foreach ($hiddenFields as $type => $fields): ?>
         <?php if (in_array($type, array('swatch_visual', 'swatch_text'))) continue ?>
             case '<?php echo $block->escapeHtml($type); ?>':
