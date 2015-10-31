@@ -24,6 +24,13 @@ class TransportBuilder
     protected $templateIdentifier;
 
     /**
+     * Template Model
+     *
+     * @var string
+     */
+    protected $templateModel;
+
+    /**
      * Template Variables
      *
      * @var array
@@ -75,7 +82,7 @@ class TransportBuilder
     /**
      * @var \Magento\Framework\Mail\TransportInterfaceFactory
      */
-    protected $_mailTransportFactory;
+    protected $mailTransportFactory;
 
     /**
      * @param FactoryInterface $templateFactory
@@ -95,7 +102,7 @@ class TransportBuilder
         $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
-        $this->_mailTransportFactory = $mailTransportFactory;
+        $this->mailTransportFactory = $mailTransportFactory;
     }
 
     /**
@@ -175,6 +182,18 @@ class TransportBuilder
     }
 
     /**
+     * Set template model
+     *
+     * @param string $templateModel
+     * @return $this
+     */
+    public function setTemplateModel($templateModel)
+    {
+        $this->templateModel = $templateModel;
+        return $this;
+    }
+
+    /**
      * Set template vars
      *
      * @param array $templateVars
@@ -206,7 +225,7 @@ class TransportBuilder
     public function getTransport()
     {
         $this->prepareMessage();
-        $mailTransport = $this->_mailTransportFactory->create(['message' => clone $this->message]);
+        $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
         $this->reset();
 
         return $mailTransport;
@@ -233,7 +252,7 @@ class TransportBuilder
      */
     protected function getTemplate()
     {
-        return $this->templateFactory->get($this->templateIdentifier)
+        return $this->templateFactory->get($this->templateIdentifier, $this->templateModel)
             ->setVars($this->templateVars)
             ->setOptions($this->templateOptions);
     }

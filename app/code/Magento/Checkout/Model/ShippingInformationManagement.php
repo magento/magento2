@@ -104,6 +104,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveAddressInformation(
         $cartId,
@@ -127,6 +128,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
+        }
+        $billingAddress = $addressInformation->getBillingAddress();
+        if ($billingAddress) {
+            $quote->setBillingAddress($billingAddress);
         }
 
         $address->setSaveInAddressBook($saveInAddressBook);

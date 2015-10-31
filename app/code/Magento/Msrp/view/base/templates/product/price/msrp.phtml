@@ -60,6 +60,7 @@ if ($product->isSaleable()) {
             'productId' => $productId,
             'productIdInput' => 'input[type="hidden"][name="product"]',
             'realPrice' => $block->getRealPriceHtml(),
+            'isSaleable' => $product->isSaleable(),
             'msrpPrice' => $msrpPrice,
             'priceElementId' => $priceElementId,
             'closeButtonId' => '#map-popup-close',
