@@ -33,13 +33,6 @@ class Sidebar extends ListCompare
     protected $clearAll = '#compare-clear-all';
 
     /**
-     * Selector for alert.
-     *
-     * @var string
-     */
-    protected $alertModal = '._show[data-role=modal]';
-
-    /**
      * Get compare products block content.
      *
      * @throws \Exception
@@ -86,9 +79,6 @@ class Sidebar extends ListCompare
             }
         );
         $this->_rootElement->find($this->clearAll)->click();
-        $element = $this->browser->find($this->alertModal);
-        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
-        $modal->acceptAlert();
+        $this->browser->acceptAlert();
     }
 }

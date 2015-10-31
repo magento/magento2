@@ -16,7 +16,7 @@ class ExportCustomerCsv extends \Magento\Reports\Controller\Adminhtml\Report\Rev
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_customer.csv';

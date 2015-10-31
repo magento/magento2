@@ -14,7 +14,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());

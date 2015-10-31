@@ -122,7 +122,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             $this->identicalTo($this->_agreement)
         );
 
-        $this->_controller->execute();
+        $this->_controller->executeInternal();
     }
 
     public function testExecuteAgreementDoesNotBelongToCustomer()
@@ -136,7 +136,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $this->_registry->expects($this->never())->method('register');
 
-        $this->_controller->execute();
+        $this->_controller->executeInternal();
     }
 
     public function testExecuteAgreementStatusDoesNotAllowToCancel()
@@ -157,6 +157,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             $this->identicalTo($this->_agreement)
         );
 
-        $this->_controller->execute();
+        $this->_controller->executeInternal();
     }
 }

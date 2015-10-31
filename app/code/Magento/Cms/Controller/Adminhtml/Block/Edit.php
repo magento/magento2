@@ -33,7 +33,7 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('block_id');

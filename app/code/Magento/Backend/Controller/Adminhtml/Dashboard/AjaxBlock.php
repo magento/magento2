@@ -36,7 +36,7 @@ class AjaxBlock extends \Magento\Backend\Controller\Adminhtml\Dashboard
     /**
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $output = '';
         $blockTab = $this->getRequest()->getParam('block');

@@ -13,7 +13,7 @@ class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwy
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $name = $this->getRequest()->getPost('name');
         try {

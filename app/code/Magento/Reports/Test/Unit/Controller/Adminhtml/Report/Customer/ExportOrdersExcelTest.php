@@ -45,6 +45,6 @@ class ExportOrdersExcelTest extends \Magento\Reports\Test\Unit\Controller\Adminh
             ->expects($this->once())
             ->method('create')
             ->with('customers_orders.xml', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportOrdersExcel->execute();
+        $this->exportOrdersExcel->executeInternal();
     }
 }

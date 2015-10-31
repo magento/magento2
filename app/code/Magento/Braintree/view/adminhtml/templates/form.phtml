@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Braintree\Block\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $storedCards = $this->helper('\Magento\Braintree\Helper\Createorder')->getLoggedInCustomerCards();
 $useVault = $block->useVault();
 $useCvv = $block->useCvv();
@@ -133,7 +133,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             </div>
         </fieldset>
     <?php endif; ?>
-    <?php if($_useVault): ?>
+    <?php if($useVault): ?>
         <fieldset class="admin__fieldset hide_if_token_selected">
             <div id="<?php /* @noEscape */ echo $code; ?>_store_in_vault_div" style="text-align:left;" class="">
                 <input type="checkbox" title="<?php echo $block->escapeHtml(__('Save this card for future use')); ?>"

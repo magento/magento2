@@ -18,12 +18,12 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * Test Flow:
  * 1. Log in to Backend.
- * 2. Navigate to Stores > Attributes > Product Template.
- * 3. Start to create new Product Template.
+ * 2. Navigate to Stores > Attributes > Attribute Set.
+ * 3. Start to create new Attribute Set.
  * 4. Fill out fields data according to data set.
- * 5. Add created Product Attribute to Product Template.
- * 6. Save new Product Template.
- * 7. Verify created Product Template.
+ * 5. Add created Product Attribute to Attribute Set.
+ * 6. Save new Attribute Set.
+ * 7. Verify created Attribute Set.
  *
  * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-25104

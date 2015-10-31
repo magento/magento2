@@ -102,6 +102,6 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->once())->method('setChild')->willReturnSelf();
         $this->view->expects($this->any())->method('renderLayout')->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

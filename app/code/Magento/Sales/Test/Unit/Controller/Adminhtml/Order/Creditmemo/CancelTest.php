@@ -200,7 +200,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -235,7 +235,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -258,7 +258,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Forward',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 
@@ -293,7 +293,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->execute()
+            $this->controller->executeInternal()
         );
     }
 }

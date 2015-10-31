@@ -16,10 +16,10 @@ interface InvoiceItemRepositoryInterface
     /**
      * Lists the invoice items that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceItemSearchResultInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Loads a specified invoice item.

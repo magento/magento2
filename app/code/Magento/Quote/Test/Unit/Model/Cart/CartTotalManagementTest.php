@@ -32,14 +32,14 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
     protected $cartTotalMock;
 
     /**
-     * @var \Magento\Quote\Model\Cart\CartTotalManagement
+     * @var \Magento\Quote\Api\CartTotalManagementInterface
      */
     protected $model;
 
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->shippingMock = $this->getMock('\Magento\Quote\Api\ShippingMethodManagementInterface', [], [], '', false);
+        $this->shippingMock = $this->getMock('\Magento\Quote\Model\ShippingMethodManagement', [], [], '', false);
         $this->paymentMock = $this->getMock('\Magento\Quote\Api\PaymentMethodManagementInterface', [], [], '', false);
         $this->cartTotalMock = $this->getMock('\Magento\Quote\Api\CartTotalRepositoryInterface', [], [], '', false);
         $this->model = $this->objectManager->getObject(
