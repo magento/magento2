@@ -12,7 +12,7 @@ class Index extends TermController
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Search Terms'));

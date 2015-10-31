@@ -29,7 +29,7 @@ define([
             listens: {
                 '${ $.productsProvider }:data': '_showMessageAssociatedGrid _handleManualGridOpening',
                 '${ $.productsMassAction }:selected': '_handleManualGridSelect',
-                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual'
+                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual _switchProductType'
             }
         },
 
@@ -68,6 +68,12 @@ define([
             }.bind(this));
 
             this._initGrid = _.once(this._initGrid);
+            this._switchProductType = _.wrap(this._switchProductType.bind(this), function (func, params) {
+                if (!!params.length !== !!this.init) {
+                    this.init = !!params.length;
+                    func(params);
+                }
+            }.bind(this._switchProductType));
         },
 
         /**
@@ -192,6 +198,10 @@ define([
          */
         _showButtonAddManual: function (variations) {
             return this.button(variations.length);
+        },
+
+        _switchProductType: function (variations) {
+            $(document).trigger('changeConfigurableTypeProduct', variations.length);
         },
 
         /**

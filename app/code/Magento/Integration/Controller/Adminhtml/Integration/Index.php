@@ -13,7 +13,7 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $unsecureIntegrationsCount = $this->_integrationCollection->addUnsecureUrlsFilter()->getSize();
         if ($unsecureIntegrationsCount > 0) {

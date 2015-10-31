@@ -13,7 +13,7 @@ class NewAction extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();

@@ -19,7 +19,7 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Group');
 

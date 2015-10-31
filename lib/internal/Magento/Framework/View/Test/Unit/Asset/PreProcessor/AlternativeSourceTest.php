@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource;
+use Magento\Framework\View\Asset\PreProcessor\FilenameResolverInterface;
 use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
@@ -21,6 +22,8 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  * Class AlternativeSourceTest
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\AlternativeSource
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,21 +65,27 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     private $alternativeMock;
 
     /**
+     * @var FilenameResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filenameResolverMock;
+
+    /**
      * Set up
      */
     protected function setUp()
     {
-        $this->sorterMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface')
+        $this->sorterMock = $this->getMockBuilder(SortInterface::class)
             ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->lockerProcessMock = $this->getMockBuilder('Magento\Framework\View\Asset\LockerProcessInterface')
+        $this->lockerProcessMock = $this->getMockBuilder(LockerProcessInterface::class)
             ->getMockForAbstractClass();
-        $this->assetBuilderMock = $this->getMockBuilder(
-            'Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder'
-        )->disableOriginalConstructor()
+        $this->assetBuilderMock = $this->getMockBuilder(AssetBuilder::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->alternativeMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContentProcessorInterface')
+        $this->alternativeMock = $this->getMockBuilder(ContentProcessorInterface::class)
+            ->getMockForAbstractClass();
+        $this->filenameResolverMock = $this->getMockBuilder(FilenameResolverInterface::class)
             ->getMockForAbstractClass();
     }
 
@@ -101,6 +110,11 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->method('sort')
             ->with($alternatives)
             ->willReturn($alternatives);
+
+        $this->filenameResolverMock->expects(self::once())
+            ->method('resolve')
+            ->with(self::FILE_PATH)
+            ->willReturn(self::FILE_PATH);
 
         $this->assetBuilderMock->expects(self::once())
             ->method('setArea')
@@ -132,6 +146,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \stdClass());
 
         $alternativeSource = new AlternativeSource(
+            $this->filenameResolverMock,
             $this->objectManagerMock,
             $this->lockerProcessMock,
             $this->sorterMock,
@@ -168,6 +183,11 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->with($alternatives)
             ->willReturn($alternatives);
 
+        $this->filenameResolverMock->expects(self::once())
+            ->method('resolve')
+            ->with(self::FILE_PATH)
+            ->willReturn(self::FILE_PATH);
+
         $assetMock = $this->getAssetNew();
 
         $this->assetBuilderMock->expects(self::once())
@@ -200,6 +220,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->getProcessorMock($assetMock));
 
         $alternativeSource = new AlternativeSource(
+            $this->filenameResolverMock,
             $this->objectManagerMock,
             $this->lockerProcessMock,
             $this->sorterMock,
@@ -227,12 +248,16 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
             ->method('getAsset')
             ->willReturn($assetMock);
 
+        $this->filenameResolverMock->expects(self::never())
+            ->method('resolve');
+
         $this->lockerProcessMock->expects(self::never())
             ->method('lockProcess');
         $this->lockerProcessMock->expects(self::never())
             ->method('unlockProcess');
 
         $alternativeSource = new AlternativeSource(
+            $this->filenameResolverMock,
             $this->objectManagerMock,
             $this->lockerProcessMock,
             $this->sorterMock,
@@ -250,7 +275,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     private function getProcessorMock($asset)
     {
-        $processorMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContentProcessorInterface')
+        $processorMock = $this->getMockBuilder(ContentProcessorInterface::class)
             ->getMockForAbstractClass();
 
         $processorMock->expects(self::once())
@@ -266,7 +291,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     private function getChainMock()
     {
-        $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+        $chainMock = $this->getMockBuilder(Chain::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -300,7 +325,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     private function getAssetNew()
     {
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $assetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -312,7 +337,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     private function getAssetMock()
     {
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+        $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -344,7 +369,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
      */
     private function getContextMock()
     {
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $contextMock = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
 

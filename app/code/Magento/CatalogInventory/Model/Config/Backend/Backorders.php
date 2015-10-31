@@ -28,6 +28,6 @@ class Backorders extends AbstractValue
             $this->stockIndex->rebuild();
             $this->_stockIndexerProcessor->markIndexerAsInvalid();
         }
-        return $this;
+        return parent::afterSave();
     }
 }

@@ -45,6 +45,6 @@ class ExportTotalsCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
             ->expects($this->once())
             ->method('create')
             ->with('customer_totals.csv', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportTotalsCsv->execute();
+        $this->exportTotalsCsv->executeInternal();
     }
 }
