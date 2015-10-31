@@ -26,7 +26,7 @@ class ViewFactory
     }
 
     /**
-     * @return mixed
+     * @return \Magento\Framework\Config\View
      */
     public function create()
     {
