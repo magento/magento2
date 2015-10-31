@@ -39,6 +39,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_VIDEO_AUTO_RESTART = 'catalog/product_video/video_auto_restart';
 
     /**
+     * Media config node
+     */
+    const MEDIA_TYPE_CONFIG_NODE = 'videos';
+
+    /**
      * @param Context $context
      */
     public function __construct(
