@@ -29,12 +29,14 @@ class View extends \Magento\Framework\Config\AbstractXml
 
     /**
      * @param array $configFiles
+     * @param DomFactory $domFactory
      * @param UrnResolver $urnResolver
      * @param TypeDataExtractorPool $extractorPool
      * @param array $xpath
      */
     public function __construct(
         $configFiles,
+        DomFactory $domFactory,
         UrnResolver $urnResolver,
         TypeDataExtractorPool $extractorPool,
         $xpath = []
@@ -42,7 +44,7 @@ class View extends \Magento\Framework\Config\AbstractXml
         $this->xpath = $xpath;
         $this->extractorPool = $extractorPool;
         $this->urnResolver = $urnResolver;
-        parent::__construct($configFiles);
+        parent::__construct($configFiles, $domFactory);
     }
 
     /**
