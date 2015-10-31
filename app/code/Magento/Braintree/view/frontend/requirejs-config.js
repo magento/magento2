@@ -11,7 +11,6 @@ var config = {
             braintreeForm:              'Magento_Braintree/js/cc-form',
             braintreeEditForm:          'Magento_Braintree/js/cc-edit-form',
             braintreePayPalMinicart:    'Magento_Braintree/js/button/braintree-paypal-minicart',
-            braintreePayPal:            'Magento_Braintree/js/button/braintree-paypal',
             transparent:                'Magento_Payment/transparent'
         }
     }
