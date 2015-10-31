@@ -22,26 +22,27 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected $xpath;
 
     /**
-     * @var Reader
-     */
-    private $xsdReader;
-
-    /**
      * @param FileResolverInterface $fileResolver
-     * @param ConverterInterface $converterInterface
-     * @param SchemaLocatorInterface $schemaLocatorInterface
+     * @param ConverterInterface $converter
+     * @param SchemaLocatorInterface $schemaLocator
      * @param ValidationStateInterface $validationState
+     * @param string $fileName
      * @param UrnResolver $urnResolver
-     * @param array $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
      * @param array $xpath
      */
     public function __construct(
         FileResolverInterface $fileResolver,
-        ConverterInterface $converterInterface,
-        SchemaLocatorInterface $schemaLocatorInterface,
+        ConverterInterface $converter,
+        SchemaLocatorInterface $schemaLocator,
         ValidationStateInterface $validationState,
-        UrnResolver $urnResolver,
         $fileName,
+        UrnResolver $urnResolver,
+        $idAttributes = [],
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $defaultScope = 'global',
         $xpath = []
     ) {
         $this->xpath = $xpath;
@@ -49,11 +50,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $idAttributes = $this->_getIdAttributes();
         parent::__construct(
             $fileResolver,
-            $converterInterface,
-            $schemaLocatorInterface,
+            $converter,
+            $schemaLocator,
             $validationState,
             $fileName,
-            $idAttributes
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
         $this->data = $this->read();
     }
