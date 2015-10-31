@@ -30,6 +30,7 @@ define([
             paypalCheckoutButons: '[data-action=checkout-form-submit]',
             popupId: '',
             realPrice: '',
+            isSaleable: '',
             msrpPrice: '',
             helpLinkId: '',
             addToCartButton: '',
@@ -94,13 +95,8 @@ define([
             $msrpPopup.find(this.options.paypalCheckoutButons).on('click',
                 this.handleMsrpPaypalCheckout.bind(this));
 
-            $(this.options.popupId).on('click', function (e) {
-                this.popUpOptions.position.of = $(e.target);
-                $msrpPopup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
-                $msrpPopup.find(this.options.priceLabelId).html(this.options.realPrice);
-                $msrpPopup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-                this._toggle($msrpPopup);
-            }.bind(this));
+            $(this.options.popupId).on('click', this.openPopup.bind(this));
+
 
             this.$popup = $msrpPopup;
         },
@@ -204,7 +200,26 @@ define([
                 this.closePopup(this.$popup);
             }
         },
-
+        /**
+         * Open and set up popup
+         *
+         * @param event
+         */
+        openPopup: function (event) {
+            this.popUpOptions.position.of = $(event.target);
+            this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
+            this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
+            this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
+            this.$popup.find('button').on('click', function () {
+                if (this.options.addToCartButton) {
+                    $(this.options.addToCartButton).click();
+                }
+            }.bind(this));
+            this._toggle(this.$popup);
+            if (!this.options.isSaleable) {
+                this.$popup.find('form').hide();
+            }
+        },
         /**
          *
          * @param {HTMLElement} $elem

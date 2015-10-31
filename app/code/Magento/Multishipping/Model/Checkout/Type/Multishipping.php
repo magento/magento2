@@ -471,6 +471,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 }
 
                 $quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId());
+                $quoteAddress->setCustomerAddressId($addressId);
                 $quoteAddressItem = $quoteAddress->getItemByQuoteItemId($quoteItemId);
                 if ($quoteAddressItem) {
                     $quoteAddressItem->setQty((int)($quoteAddressItem->getQty() + $qty));
@@ -936,6 +937,6 @@ class Multishipping extends \Magento\Framework\DataObject
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());
-        return in_array($addressId, $applicableAddressIds);
+        return !is_numeric($addressId) || in_array($addressId, $applicableAddressIds);
     }
 }
