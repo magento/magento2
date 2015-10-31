@@ -13,7 +13,7 @@ class PriceAll extends UnsubscribeController
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_objectManager->create('Magento\ProductAlert\Model\Price')

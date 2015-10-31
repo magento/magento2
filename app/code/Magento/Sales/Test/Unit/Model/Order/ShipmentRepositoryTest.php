@@ -170,14 +170,14 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filter]);
 
-        $criteria = $this->getMock(
+        $searchCriteria = $this->getMock(
             'Magento\Framework\Api\SearchCriteria',
             ['getFilterGroups'],
             [],
             '',
             false
         );
-        $criteria->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
 
@@ -196,7 +196,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->subject->getList($criteria));
+        $this->assertEquals($collection, $this->subject->getList($searchCriteria));
     }
 
     public function testDelete()

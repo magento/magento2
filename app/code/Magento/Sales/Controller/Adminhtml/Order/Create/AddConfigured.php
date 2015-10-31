@@ -12,7 +12,7 @@ class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $errorMessage = null;
         try {

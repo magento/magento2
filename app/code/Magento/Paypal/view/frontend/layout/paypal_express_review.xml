@@ -24,7 +24,7 @@
                 <block class="Magento\Framework\View\Element\Text\ListText" name="paypal.additional.actions"/>
                 <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
-                    <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+                    <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="Magento_Paypal::checkout/onepage/review/totals.phtml"/>
                 </block>
                 <block class="Magento\CheckoutAgreements\Block\Agreements" name="paypal.express.review.details.agreements" as="agreements" template="Magento_CheckoutAgreements::additional_agreements.phtml"/>
             </block>

@@ -95,7 +95,8 @@ class PhpReadinessCheck
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
 
         $settings = array_merge(
-            $this->checkXDebugNestedLevel()
+            $this->checkXDebugNestedLevel(),
+            $this->checkPopulateRawPostSetting()
         );
 
         foreach ($settings as $setting) {
@@ -175,6 +176,49 @@ class PhpReadinessCheck
                 'error' => $error
             ];
         }
+
+        return $data;
+    }
+
+    /**
+     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set to -1
+     *
+     * Beginning PHP 7.0, support for 'always_populate_raw_post_data' is going to removed.
+     * And beginning PHP 5.6, a deprecated message is displayed if 'always_populate_raw_post_data'
+     * is set to a value other than -1.
+     *
+     * @return array
+     */
+    private function checkPopulateRawPostSetting()
+    {
+        // HHVM and PHP 7does not support 'always_populate_raw_post_data' to be set to -1
+        if (version_compare(PHP_VERSION, '7.0.0-beta') >= 0 || defined('HHVM_VERSION')) {
+            return [];
+        }
+
+        $data = [];
+        $error = false;
+        $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
+
+        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && $iniSetting !== -1) {
+            $error = true;
+        }
+
+        $message = sprintf(
+            'Your PHP Version is %s, but always_populate_raw_post_data = %d.
+ 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
+	        Please open your php.ini file and set always_populate_raw_post_data to -1.
+ 	        If you need more help please call your hosting provider.
+ 	        ',
+            PHP_VERSION,
+            intVal(ini_get('always_populate_raw_post_data'))
+        );
+
+        $data['always_populate_raw_post_data'] = [
+            'message' => $message,
+            'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+            'error' => $error
+        ];
 
         return $data;
     }

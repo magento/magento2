@@ -15,7 +15,7 @@ class Index extends ImportController
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->messageManager->addNotice(
             $this->_objectManager->get('Magento\ImportExport\Helper\Data')->getMaxUploadSizeMessage()

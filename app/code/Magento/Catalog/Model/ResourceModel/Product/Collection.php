@@ -134,22 +134,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_priceDataFieldFilters = [];
 
     /**
-     * Map of price fields
-     *
-     * @var array
-     */
-    protected $_map = [
-        'fields' => [
-            'price' => 'price_index.price',
-            'final_price' => 'price_index.final_price',
-            'min_price' => 'price_index.min_price',
-            'max_price' => 'price_index.max_price',
-            'tier_price' => 'price_index.tier_price',
-            'special_price' => 'price_index.special_price',
-        ],
-    ];
-
-    /**
      * Price expression sql
      *
      * @var string|null

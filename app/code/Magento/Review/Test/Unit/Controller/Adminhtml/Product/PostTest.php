@@ -209,6 +209,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('addOptionVote')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->postController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->postController->executeInternal());
     }
 }

@@ -286,7 +286,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
+            } elseif (isset($productData['store_id'])
+                && !empty($productData['store_id'])
+                && $this->storeManager->getStore($productData['store_id'])
+            ) {
+                $product->setWebsiteIds([$this->storeManager->getStore($productData['store_id'])->getWebsiteId()]);
             }
         } else {
             unset($this->instances[$productData['sku']]);

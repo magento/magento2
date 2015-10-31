@@ -152,6 +152,6 @@ class GetShippingItemsGridTest extends \PHPUnit_Framework_TestCase
             ->method('toHtml')
             ->will($this->returnValue($result));
 
-        $this->assertNotEmpty('result-html', $this->controller->execute());
+        $this->assertNotEmpty('result-html', $this->controller->executeInternal());
     }
 }
