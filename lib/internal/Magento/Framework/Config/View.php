@@ -27,19 +27,20 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     private $xsdReader;
 
     /**
-     * @param array $configFiles
-     * @param UrnResolver $urnResolver
-     * @param ValidationStateInterface $fileName
+     * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converterInterface
      * @param SchemaLocatorInterface $schemaLocatorInterface
+     * @param ValidationStateInterface $validationState
+     * @param UrnResolver $urnResolver
+     * @param array $fileName
      * @param array $xpath
      */
     public function __construct(
-        ValidationStateInterface $validationState,
-        UrnResolver $urnResolver,
+        FileResolverInterface $fileResolver,
         ConverterInterface $converterInterface,
         SchemaLocatorInterface $schemaLocatorInterface,
-        FileResolverInterface $fileResolver,
+        ValidationStateInterface $validationState,
+        UrnResolver $urnResolver,
         $fileName,
         $xpath = []
     ) {
