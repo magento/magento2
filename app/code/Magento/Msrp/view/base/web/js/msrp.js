@@ -97,7 +97,6 @@ define([
 
             $(this.options.popupId).on('click', this.openPopup.bind(this));
 
-
             this.$popup = $msrpPopup;
         },
 
@@ -216,10 +215,12 @@ define([
                 }
             }.bind(this));
             this._toggle(this.$popup);
+
             if (!this.options.isSaleable) {
                 this.$popup.find('form').hide();
             }
         },
+
         /**
          *
          * @param {HTMLElement} $elem
