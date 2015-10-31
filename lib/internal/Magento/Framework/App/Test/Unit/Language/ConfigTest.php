@@ -30,9 +30,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getRealPath')
             ->with('urn:magento:framework:App/Language/package.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'));
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domFactoryMock = $this->getMock('Magento\Framework\Config\DomFactory', [], [], '', false);
+        $domFactoryMock->expects($this->once())
+            ->method('createDom')
+            ->willReturnCallback(
+                function ($arguments) use ($validationStateMock) {
+                    return new \Magento\Framework\Config\Dom(
+                        $arguments['xml'],
+                        $validationStateMock,
+                        [],
+                        null,
+                        $arguments['schemaFile']
+                    );
+                }
+            );
         $this->config = new Config(
             file_get_contents(__DIR__ . '/_files/language.xml'),
-            $this->urnResolverMock
+            $this->urnResolverMock,
+            $domFactoryMock
         );
     }
 

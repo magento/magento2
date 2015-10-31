@@ -10,12 +10,34 @@ use Magento\Framework\Component\ComponentRegistrar;
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    protected $validationStateMock;
+
+    public function setUp()
+    {
+        $this->validationStateMock = $this->getMock(
+            'Magento\Framework\Config\ValidationStateInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+    }
+
+    /**
      * @param string $file
      * @dataProvider viewConfigFileDataProvider
      */
     public function testViewConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(
+            file_get_contents($file),
+            $this->validationStateMock
+        );
+        $errors = [];
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
             $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
@@ -70,7 +92,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testThemeConfigFileSchema($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $this->validationStateMock);
         $errors = [];
         $result = $domConfig->validate('urn:magento:framework:Config/etc/theme.xsd', $errors);
         $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
