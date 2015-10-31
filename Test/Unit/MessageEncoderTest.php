@@ -8,7 +8,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 /**
  * Test class for Magento\Framework\MessageQueue\MessageEncoder
@@ -72,6 +71,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodeInvalidMessage()
     {
+        $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
@@ -80,7 +80,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
-            ->willThrowException(new LocalizedException(new Phrase('')));
+            ->willThrowException(new LocalizedException(__($exceptionMessage)));
 
         $this->encoder->encode('customer.created', $object);
     }
@@ -91,6 +91,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodeInvalidMessageArray()
     {
+        $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
@@ -99,7 +100,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
-            ->willThrowException(new LocalizedException(new Phrase('')));
+            ->willThrowException(new LocalizedException(__($exceptionMessage)));
 
         $this->encoder->encode('customer.created', [$object]);
     }
