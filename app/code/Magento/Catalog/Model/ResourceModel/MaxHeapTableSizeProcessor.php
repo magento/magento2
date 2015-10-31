@@ -45,12 +45,12 @@ class MaxHeapTableSizeProcessor
             throw new \InvalidArgumentException('Wrong max_heap_table_size parameter');
         }
 
-        $this->currentMaxHeapTableSize = (int)$this->connection->fetchOne('SELECT @@max_heap_table_size');
+        $this->currentMaxHeapTableSize = (int)$this->connection->fetchOne('SELECT @@session.max_heap_table_size');
         if (!$this->currentMaxHeapTableSize) {
             throw new \RuntimeException('Can not extract max_heap_table_size');
         }
 
-        $this->connection->query('SET max_heap_table_size = ' . $maxHeapTableSize);
+        $this->connection->query('SET SESSION max_heap_table_size = ' . $maxHeapTableSize);
     }
 
     /**
@@ -63,6 +63,6 @@ class MaxHeapTableSizeProcessor
         if (null === $this->currentMaxHeapTableSize) {
             throw new \RuntimeException('max_heap_table_size parameter is not set');
         }
-        $this->connection->query('SET max_heap_table_size = ' . $this->currentMaxHeapTableSize);
+        $this->connection->query('SET SESSION max_heap_table_size = ' . $this->currentMaxHeapTableSize);
     }
 }
