@@ -9,7 +9,7 @@ namespace Magento\Framework\View\PageLayout;
 /**
  * Page layouts configuration
  */
-class Config extends \Magento\Framework\Config\AbstractXml
+class Config extends \Magento\Framework\Config\Reader\Filesystem
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
