@@ -3,46 +3,41 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Ui\Component\Listing\Column;
+namespace Magento\Ui\Component\Listing\Columns;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Price
+ * Class Date
  */
-class Price extends Column
+class Date extends Column
 {
     /**
-     * @var PriceCurrencyInterface
+     * @var TimezoneInterface
      */
-    protected $priceFormatter;
+    protected $timezone;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param PriceCurrencyInterface $priceFormatter
+     * @param TimezoneInterface $timezone
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        PriceCurrencyInterface $priceFormatter,
+        TimezoneInterface $timezone,
         array $components = [],
         array $data = []
     ) {
-        $this->priceFormatter = $priceFormatter;
+        $this->timezone = $timezone;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
-     * Prepare Data Source
-     *
      * @param array $dataSource
      * @return array
      */
@@ -50,14 +45,10 @@ class Price extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
-                $item[$this->getData('name')] = $this->priceFormatter->format(
-                    $item[$this->getData('name')],
-                    false,
-                    null,
-                    null,
-                    $currencyCode
-                );
+                if (isset($item[$this->getData('name')])) {
+                    $date = $this->timezone->date(new \DateTime($item[$this->getData('name')]));
+                    $item[$this->getData('name')] = $date->format('Y-m-d H:i:s');
+                }
             }
         }
 
