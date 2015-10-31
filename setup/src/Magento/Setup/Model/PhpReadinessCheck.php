@@ -191,8 +191,8 @@ class PhpReadinessCheck
      */
     private function checkPopulateRawPostSetting()
     {
-        // HHVM does not support 'always_populate_raw_post_data' to be set to -1
-        if (defined('HHVM_VERSION')) {
+        // HHVM and PHP 7does not support 'always_populate_raw_post_data' to be set to -1
+        if (version_compare(PHP_VERSION, '7.0.0-beta') >= 0 || defined('HHVM_VERSION')) {
             return [];
         }
 

@@ -37,18 +37,6 @@
         </arguments>
     </type>
     <virtualType name="Magento\Paypal\Block\WpsExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut"></virtualType>
-    <virtualType name="Magento\Paypal\Block\Express\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Paypal\Block\WpsExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Paypal\Block\PayflowExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut">
         <arguments>
             <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
@@ -56,13 +44,6 @@
             <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.payflow</argument>
             <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Paypal\Block\PayflowExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
-            <argument name="alias" xsi:type="string">product.info.addtocart.payflowShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Paypal\Block\Bml\Shortcut">
