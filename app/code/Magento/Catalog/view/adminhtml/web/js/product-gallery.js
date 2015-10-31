@@ -181,14 +181,6 @@ define([
         _removeItem: function (event, imageData) {
             var $imageContainer = this.findElement(imageData);
             imageData.isRemoved = true;
-
-            if(!imageData['value_id']) {
-                delete this.options.images[imageData.file];
-                $imageContainer.remove();
-
-                return;
-            }
-
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
         },
 
