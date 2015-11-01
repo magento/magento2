@@ -45,6 +45,6 @@ class ExportAccountsExcelTest extends \Magento\Reports\Test\Unit\Controller\Admi
             ->expects($this->once())
             ->method('create')
             ->with('new_accounts.xml', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportAccountsExcel->execute();
+        $this->exportAccountsExcel->executeInternal();
     }
 }

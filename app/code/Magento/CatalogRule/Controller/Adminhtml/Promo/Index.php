@@ -19,7 +19,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_CatalogRule::promo');

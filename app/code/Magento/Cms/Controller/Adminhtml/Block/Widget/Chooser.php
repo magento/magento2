@@ -39,7 +39,7 @@ class Chooser extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\View\Layout $layout */
         $layout = $this->layoutFactory->create();

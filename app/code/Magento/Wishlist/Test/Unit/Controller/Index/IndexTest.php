@@ -139,7 +139,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->willReturn(null);
 
-        $this->getController()->execute();
+        $this->getController()->executeInternal();
     }
 
     public function testExecutePassed()
@@ -150,6 +150,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->willReturn($wishlist);
 
-        $this->assertSame($this->resultPageMock, $this->getController()->execute());
+        $this->assertSame($this->resultPageMock, $this->getController()->executeInternal());
     }
 }
