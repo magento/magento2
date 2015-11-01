@@ -11,16 +11,17 @@ use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
- * Weee pricing adjustment
+ * Weee tax pricing adjustment
  */
-class Adjustment implements AdjustmentInterface
+class TaxAdjustment implements AdjustmentInterface
 {
     /**
      * Adjustment code weee
      */
-    const ADJUSTMENT_CODE = 'weee';
+    const ADJUSTMENT_CODE = 'weee_tax';
 
     /**
      * Weee helper
@@ -28,6 +29,11 @@ class Adjustment implements AdjustmentInterface
      * @var WeeeHelper
      */
     protected $weeeHelper;
+
+    /**
+     * @var TaxHelper
+     */
+    protected $taxHelper;
 
     /**
      * Sort order
@@ -40,6 +46,7 @@ class Adjustment implements AdjustmentInterface
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+
     /**
      * Constructor
      *
@@ -47,9 +54,14 @@ class Adjustment implements AdjustmentInterface
      * @param PriceCurrencyInterface $priceCurrency
      * @param int $sortOrder
      */
-    public function __construct(WeeeHelper $weeeHelper, PriceCurrencyInterface $priceCurrency, $sortOrder = null)
-    {
+    public function __construct(
+        WeeeHelper $weeeHelper,
+        TaxHelper $taxHelper,
+        PriceCurrencyInterface $priceCurrency,
+        $sortOrder = null
+    ) {
         $this->weeeHelper = $weeeHelper;
+        $this->taxHelper = $taxHelper;
         $this->priceCurrency = $priceCurrency;
         $this->sortOrder = $sortOrder;
     }
@@ -82,13 +94,16 @@ class Adjustment implements AdjustmentInterface
      */
     public function isIncludedInDisplayPrice()
     {
-        return $this->weeeHelper->typeOfDisplay(
-            [
-                \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
-                \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
-            ]
-        );
+        if ($this->taxHelper->displayPriceExcludingTax()) {
+            return false;
+        }
+        if ($this->weeeHelper->isEnabled() == true &&
+            $this->weeeHelper->isTaxable() == true &&
+            $this->weeeHelper->typeOfDisplay([\Magento\Weee\Model\Tax::DISPLAY_EXCL]) == false) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -141,9 +156,15 @@ class Adjustment implements AdjustmentInterface
      */
     protected function getAmount(SaleableInterface $saleableItem)
     {
-        $weeeAmount = $this->weeeHelper->getAmountExclTax($saleableItem);
-        $weeeAmount = $this->priceCurrency->convert($weeeAmount);
-        return $weeeAmount;
+        $weeeTaxAmount = 0;
+        $attributes = $this->weeeHelper->getProductWeeeAttributes($saleableItem, null, null, null, true, false);
+        if ($attributes != null) {
+            foreach ($attributes as $attribute) {
+                $weeeTaxAmount += $attribute->getData('tax_amount');
+            }
+        }
+        $weeeTaxAmount = $this->priceCurrency->convert($weeeTaxAmount);
+        return $weeeTaxAmount;
     }
 
     /**
