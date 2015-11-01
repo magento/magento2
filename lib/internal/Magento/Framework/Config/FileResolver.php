@@ -45,14 +45,12 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FileIteratorFactory $iteratorFactory
      * @param DesignInterface $designInterface
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param DirectoryList $directoryList
      */
     public function __construct(
         Reader $moduleReader,
         FileIteratorFactory $iteratorFactory,
         DesignInterface $designInterface,
-        Filesystem $filesystem,
         DirectoryList $directoryList
     ) {
         $this->directoryList = $directoryList;
