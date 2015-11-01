@@ -76,35 +76,22 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
         } else {
             $shipment = $this->getMock(
                 'Magento\Sales\Model\Order\Shipment',
-                ['getEntityId'],
+                ['load', 'getEntityId'],
                 [],
                 '',
                 false
             );
             $shipment->expects($this->once())
+                ->method('load')
+                ->with($id)
+                ->willReturn($shipment);
+            $shipment->expects($this->once())
                 ->method('getEntityId')
                 ->willReturn($entityId);
-
-            $mapper = $this->getMockForAbstractClass(
-                'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-                [],
-                '',
-                false,
-                true,
-                true,
-                ['load']
-            );
-            $mapper->expects($this->once())
-                ->method('load')
-                ->with($shipment, $id)
-                ->willReturnSelf();
 
             $this->metadata->expects($this->once())
                 ->method('getNewInstance')
                 ->willReturn($shipment);
-            $this->metadata->expects($this->once())
-                ->method('getMapper')
-                ->willReturn($mapper);
 
             if (!$entityId) {
                 $this->setExpectedException(
@@ -115,14 +102,19 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             } else {
                 $this->assertEquals($shipment, $this->subject->get($id));
 
-                $mapper->expects($this->never())
-                    ->method('load');
+                $shipment->expects($this->never())
+                    ->method('load')
+                    ->with($id)
+                    ->willReturn($shipment);
+                $shipment->expects($this->never())
+                    ->method('getEntityId')
+                    ->willReturn($entityId);
 
                 $this->metadata->expects($this->never())
-                    ->method('getNewInstance');
-                $this->metadata->expects($this->never())
-                    ->method('getMapper');
+                    ->method('getNewInstance')
+                    ->willReturn($shipment);
 
+                // Retrieve Shipment from registry.
                 $this->assertEquals($shipment, $this->subject->get($id));
             }
         }
