@@ -254,7 +254,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        $this->assertEquals($expectedInterval, $intervalResult);
+        $this->assertEquals($expectedInterval->format('%y %m %d %h:%i:%s'), $intervalResult);
     }
 
     /**
@@ -423,10 +423,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function firstPartDateRangeDataProvider()
     {
+        $dt = new \DateTime();
+        $dt->setTime(0, 0, 0);
+        $dt1 = clone $dt;
+        $dt2 = clone $dt;
+        $dt3 = clone $dt;
         return [
-            ['', '', '', '0 0 0 23:59:59'],
-            ['24h', '', '', '0 0 1 0:0:0'],
-            ['7d', '', '', '0 0 6 23:59:59']
+            ['', '', '', $dt->diff($dt1->setTime(23, 59, 59))],
+            ['24h', '', '', $dt->diff($dt2->add(new \DateInterval('P0Y0M01DT00H00M00S')))],
+            ['7d', '', '', $dt->diff($dt3->add(new \DateInterval('P0Y0M06DT23H59M59S')))]
         ];
     }
 
