@@ -26,7 +26,7 @@ define([
                 template: mageTemplate('#swatch-text-row-template'),
                 add: function (data, render) {
                     var isNewOption = false,
-                        element, visibleRadio;
+                        element;
 
                     if (typeof data.id == 'undefined') {
                         data = {
