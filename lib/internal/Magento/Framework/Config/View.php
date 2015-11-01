@@ -13,9 +13,6 @@ use Magento\Framework\Config\Dom\UrnResolver;
 
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
-    /** @var UrnResolver */
-    protected $urnResolver;
-
     /**
      * @var array
      */
@@ -27,7 +24,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param SchemaLocatorInterface $schemaLocator
      * @param ValidationStateInterface $validationState
      * @param string $fileName
-     * @param UrnResolver $urnResolver
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
@@ -39,15 +35,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         SchemaLocatorInterface $schemaLocator,
         ValidationStateInterface $validationState,
         $fileName,
-        UrnResolver $urnResolver,
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global',
         $xpath = []
     ) {
         $this->xpath = $xpath;
-        $this->urnResolver = $urnResolver;
-        $idAttributes = $this->_getIdAttributes();
+        $idAttributes = $this->getIdAttributes();
         parent::__construct(
             $fileResolver,
             $converter,
@@ -59,16 +53,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $defaultScope
         );
         $this->data = $this->read();
-    }
-
-    /**
-     * Path to view.xsd
-     *
-     * @return string
-     */
-    public function getSchemaFile()
-    {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
     }
 
     /**
@@ -151,26 +135,14 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @return array
      */
-    protected function _getIdAttributes()
-    {
-        $idAttributes = $this->addIdAttributes($this->xpath);
-        return $idAttributes;
-    }
-
-    /**
-     * Add attributes for module identification
-     *
-     * @param array $xpath
-     * @return array
-     */
-    protected function addIdAttributes($xpath)
+    protected function getIdAttributes()
     {
         $idAttributes = [
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
-        foreach ($xpath as $attribute) {
+        foreach ($this->xpath as $attribute) {
             if (is_array($attribute)) {
                 foreach ($attribute as $key => $id) {
                     if (count($id) > 1) {

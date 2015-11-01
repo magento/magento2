@@ -17,23 +17,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Module\Dir\Reader | \PHPUnit_Framework_MockObject_MockObject */
-    protected $readerMock;
-
-    /** @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject */
-    protected $filesystemMock;
-
     /** @var \Magento\Framework\View\Asset\Repository | \PHPUnit_Framework_MockObject_MockObject */
     protected $repositoryMock;
-
-    /** @var \Magento\Framework\View\FileSystem | \PHPUnit_Framework_MockObject_MockObject */
-    protected $fileSystemMock;
-
-    /** @var \Magento\Framework\Config\FileIteratorFactory | \PHPUnit_Framework_MockObject_MockObject */
-    protected $fileIteratorFactoryMock;
-
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject */
-    protected $directoryReadMock;
 
     /**
      * @var \Magento\Framework\Config\ViewFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -42,24 +27,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->directoryReadMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
         $this->repositoryMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->fileIteratorFactoryMock = $this->getMock(
-            'Magento\Framework\Config\FileIteratorFactory',
-            [],
-            [],
-            '',
-            false
-        );
         $this->viewConfigFactoryMock = $this->getMock('Magento\Framework\Config\ViewFactory', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Config',
             [
                 'assetRepo' => $this->repositoryMock,
-                'fileIteratorFactory' => $this->fileIteratorFactoryMock,
-                'viewFactory' => $this->viewConfigFactoryMock
+                'viewConfigFactory' => $this->viewConfigFactoryMock
             ]
         );
     }
@@ -68,12 +43,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $themeMock = $this->getMock(
             'Magento\Theme\Model\Theme',
-            ['getCustomViewConfigPath'],
+            ['getCode'],
             [],
             '',
             false
         );
+        $themeMock->expects($this->atLeastOnce())
+            ->method('getCode')
+            ->will($this->returnValue(2));
         $params = ['themeModel' => $themeMock];
+        $this->repositoryMock->expects($this->atLeastOnce())
+            ->method('updateDesignParams')
+            ->with($this->equalTo($params))
+            ->will($this->returnSelf());
         $configViewMock = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
         $this->viewConfigFactoryMock->expects($this->once())
             ->method('create')
