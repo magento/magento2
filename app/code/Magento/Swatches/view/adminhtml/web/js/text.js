@@ -44,7 +44,7 @@ define([
                         data: data
                     });
 
-                    if (isNewOption &&!this.isReadOnly) {
+                    if (isNewOption && !this.isReadOnly) {
                         this.enableNewOptionDeleteButton(data.id);
                     }
                     this.itemCount++;
