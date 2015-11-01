@@ -80,7 +80,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultiRulesWithDifferentTimezone()
     {
-        $this->markTestIncomplete('MAGETWO-44815');
         $this->setSpecificTimezone('Australia/Sydney');
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
