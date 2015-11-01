@@ -18,7 +18,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function execute()
+    public function executeInternal()
     {
         $customerId = $this->initCurrentCustomer();
 

@@ -15,7 +15,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** start csv content and set template */
         $headers = new \Magento\Framework\DataObject(

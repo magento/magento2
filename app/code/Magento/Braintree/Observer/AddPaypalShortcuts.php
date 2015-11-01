@@ -42,9 +42,12 @@ class AddPaypalShortcuts implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $isMiniCart = !$observer->getEvent()->getIsCatalogProduct();
+
         //Don't display shortcut on product view page
         if (!$this->methodPayPal->isActive() ||
-            !$this->paypalConfig->isShortcutCheckoutEnabled()) {
+            !$this->paypalConfig->isShortcutCheckoutEnabled() ||
+            !$isMiniCart) {
             return;
         }
 
@@ -57,7 +60,7 @@ class AddPaypalShortcuts implements ObserverInterface
             '',
             [
                 'data' => [
-                    Shortcut::MINI_CART_FLAG_KEY => !$observer->getEvent()->getIsCatalogProduct()
+                    Shortcut::MINI_CART_FLAG_KEY => $isMiniCart
                 ]
             ]
         );

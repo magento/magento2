@@ -13,7 +13,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initRule();
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');

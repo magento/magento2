@@ -13,7 +13,7 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {
