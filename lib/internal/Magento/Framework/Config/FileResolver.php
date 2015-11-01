@@ -11,6 +11,7 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -76,9 +77,14 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                     . '/'
                     . $this->themePath
                     . '/etc/view.xml';
-                $designDom = new \DOMDocument;
-                $designDom->load($designPath);
-                $iterator[$designPath] = $designDom->saveXML();
+                if (file_exists($designPath)) {
+                    try {
+                        $designDom = new \DOMDocument;
+                        $designDom->load($designPath);
+                        $iterator[$designPath] = $designDom->saveXML();
+                    } catch (Exception $e) {
+                    }
+                }
                 break;
             default:
                 $iterator = $this->iteratorFactory->create([]);
