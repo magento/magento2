@@ -48,7 +48,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Parse node values from xml nodes
      *
-     * @param $childNode
+     * @param \DOMElement $childNode
      * @return array
      */
     protected function parseNodes($childNode)
