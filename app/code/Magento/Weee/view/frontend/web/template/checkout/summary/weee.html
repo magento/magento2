@@ -7,7 +7,7 @@
 <!-- ko if: isDisplayed() -->
 <tr class="totals">
     <th data-bind="text: title" class="mark" scope="row"></th>
-    <td class="amount" data-bind="attr: {'data-th': $t(title) }">
+    <td class="amount" data-bind="attr: {'data-th': title}">
         <span class="price" data-bind="text: getValue()"></span>
     </td>
 </tr>

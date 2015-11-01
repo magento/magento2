@@ -40,7 +40,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
         $parentId = (int)$this->getRequest()->getParam('parent');

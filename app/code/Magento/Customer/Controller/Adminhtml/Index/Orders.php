@@ -12,7 +12,7 @@ class Orders extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->initCurrentCustomer();
         $resultLayout = $this->resultLayoutFactory->create();

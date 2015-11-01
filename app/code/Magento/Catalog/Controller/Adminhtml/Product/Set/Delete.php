@@ -30,13 +30,13 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $setId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
             $this->attributeSetRepository->deleteById($setId);
-            $this->messageManager->addSuccess(__('The product template has been removed.'));
+            $this->messageManager->addSuccess(__('The attribute set has been removed.'));
             $resultRedirect->setPath('catalog/*/');
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t delete this set right now.'));

@@ -9,8 +9,8 @@
 /** @var $block \Magento\Braintree\Block\Creditcard\Management */
 
 echo $block->getLayout()->getMessagesBlock()->getGroupedHtml();
-$defaultExpMonth = $block->getTodayMonth();
-$defaultExpYear = $block->getTodayYear();
+$defaultExpMonth = '';
+$defaultExpYear = '';
 $countrySpecificCardTypeConfig = $block->getCountrySpecificCardTypeConfig();
 $applicableCardTypeConfig = $block->getCcApplicableTypes();
 if ($block->isEditMode()) {
@@ -164,7 +164,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
                                 class="year required-entry"
                                 data-validate="{required:true}">
                                 <?php foreach ($block->getCcYears() as $k => $v): ?>
-                                    <option value="<?php /* @noEscape */ echo $k ? $k : ''; ?>"
+                                    <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
                                         <?php if ($k == $defaultExpYear): ?> selected="selected"<?php endif; ?>>
                                         <?php echo $block->escapeHtml($v); ?>
                                     </option>
@@ -328,7 +328,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
             </label>
 
             <div class="control">
-                <?php echo $block->escapeHtml($block->countrySelect('credit_card[billing_address][country_code_alpha2]', 'billing_address_country', $default)); ?>
+                <?php /* @noEscape */ echo $block->countrySelect('credit_card[billing_address][country_code_alpha2]', 'billing_address_country', $default); ?>
             </div>
         </div>
     </fieldset>

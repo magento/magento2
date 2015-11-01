@@ -38,7 +38,7 @@ class Request extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $requestUrl = $this->helper->getRequestUrl($this->getRequest());

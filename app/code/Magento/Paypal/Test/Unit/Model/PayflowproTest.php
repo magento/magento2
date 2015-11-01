@@ -175,7 +175,6 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
 
-
     /**
      * @param $response
      * @dataProvider setTransStatusDataProvider
@@ -324,6 +323,22 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Paypal\Model\Payflowpro::refund()
+     */
+    public function testRefund()
+    {
+        /** @var \Magento\Sales\Model\Order\Payment $paymentMock */
+        $paymentMock = $this->getPaymentMock();
+
+        $response = $this->execGatewayRequest();
+
+        $amount = 213.04;
+        $this->payflowpro->refund($paymentMock, $amount);
+        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        static::assertTrue($paymentMock->getIsTransactionClosed());
+    }
+
+    /**
      * Create mock object for store model
      * @return void
      */
@@ -399,16 +414,16 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             'year' => 18,
             'cvv' => 123
         ];
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::any())
             ->method('getCcNumber')
             ->willReturn($cardData['number']);
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::any())
             ->method('getCcExpMonth')
             ->willReturn($cardData['month']);
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::any())
             ->method('getCcExpYear')
             ->willReturn($cardData['year']);
-        $paymentMock->expects(static::once())
+        $paymentMock->expects(static::any())
             ->method('getCcCid')
             ->willReturn($cardData['cvv']);
         return $paymentMock;

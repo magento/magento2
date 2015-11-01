@@ -105,7 +105,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         //Mocking generation
         $this->ioObjectMock->expects($this->any())
-            ->method('getResultFileName')
+            ->method('generateResultFileName')
             ->with(self::RESULT_CLASS_NAME)
             ->will($this->returnValue($resultFileName));
         $this->ioObjectMock->expects($this->once())

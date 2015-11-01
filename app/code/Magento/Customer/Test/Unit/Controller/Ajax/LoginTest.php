@@ -204,7 +204,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($result)
             ->willReturn($loginSuccessResponse);
-        $this->assertEquals($loginSuccessResponse, $this->object->execute());
+        $this->assertEquals($loginSuccessResponse, $this->object->executeInternal());
     }
 
     public function testLoginFailure()
@@ -260,6 +260,6 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($result)
             ->willReturn($loginFailureResponse);
 
-        $this->assertEquals($loginFailureResponse, $this->object->execute());
+        $this->assertEquals($loginFailureResponse, $this->object->executeInternal());
     }
 }

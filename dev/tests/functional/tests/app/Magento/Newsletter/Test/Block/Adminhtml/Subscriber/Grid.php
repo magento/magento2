@@ -7,13 +7,12 @@
 namespace Magento\Newsletter\Test\Block\Adminhtml\Subscriber;
 
 /**
- * Newsletter subscribers grid
- *
+ * Newsletter subscribers grid.
  */
-class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */

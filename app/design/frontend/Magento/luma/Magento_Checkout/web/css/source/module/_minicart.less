@@ -12,7 +12,6 @@
 
 @minicart-qty__height: 24px;
 
-
 //
 //  Common
 //  _____________________________________________
@@ -52,9 +51,9 @@
             display: none;
             &.empty {
                 display: block;
+                font-size: 14px;
                 padding: @indent__l 0 @indent__base;
                 text-align: center;
-                font-size: 14px;
             }
         }
         .text {
@@ -95,18 +94,18 @@
 
     .minicart-wrapper {
         .lib-dropdown(
-            @_toggle-selector: ~".action.showcart",
-            @_options-selector: ~".block-minicart",
-            @_dropdown-toggle-icon-content: @icon-cart,
-            @_dropdown-toggle-active-icon-content: @icon-cart,
-            @_dropdown-list-item-padding: false,
-            @_dropdown-list-item-hover: false,
-            @_icon-font-position: before,
-            @_icon-font-size: 22px,
-            @_icon-font-line-height: 28px,
-            @_icon-font-color: @minicart-icons-color,
-            @_icon-font-color-hover: @minicart-icons-color-hover,
-            @_icon-font-color-active: @minicart-icons-color
+        @_toggle-selector: ~".action.showcart",
+        @_options-selector: ~".block-minicart",
+        @_dropdown-toggle-icon-content: @icon-cart,
+        @_dropdown-toggle-active-icon-content: @icon-cart,
+        @_dropdown-list-item-padding: false,
+        @_dropdown-list-item-hover: false,
+        @_icon-font-position: before,
+        @_icon-font-size: 22px,
+        @_icon-font-line-height: 28px,
+        @_icon-font-color: @minicart-icons-color,
+        @_icon-font-color-hover: @minicart-icons-color-hover,
+        @_icon-font-color-active: @minicart-icons-color
         );
         float: right;
         .block-minicart {
@@ -140,11 +139,11 @@
         }
         .action {
             &.close {
-                width: 40px;
                 height: 40px;
-                top: 0;
-                right: 0;
                 position: absolute;
+                right: 0;
+                top: 0;
+                width: 40px;
                 .lib-button-reset();
                 .lib-button-icon(
                     @icon-remove,
@@ -155,10 +154,10 @@
                 );
             }
             &.showcart {
+                white-space: nowrap;
                 .text {
                     &:extend(.abs-visually-hidden all);
                 }
-                white-space: nowrap;
                 .counter.qty {
                     .lib-css(background, @active__color);
                     .lib-css(color, @page__background-color);
@@ -203,10 +202,10 @@
     .minicart-items {
         .lib-list-reset-styles();
         .product-item {
+            padding: @indent__base 0;
             &:not(:first-child) {
                 .lib-css(border-top, 1px solid @minicart__border-color);
             }
-            padding: @indent__base 0;
             &:first-child {
                 padding-top: 0;
             }
@@ -260,9 +259,9 @@
             .toggle {
                 &:extend(.abs-toggling-title all);
                 &:after {
-                    position: static;
-                    margin: 0 0 0 @indent__xs;
                     .lib-css(color, @color-gray56);
+                    margin: 0 0 0 @indent__xs;
+                    position: static;
                 }
                 border: 0;
                 padding: 0 @indent__xl @indent__xs 0;
@@ -281,12 +280,12 @@
             &.options {
                 .tooltip.toggle {
                     .lib-icon-font(
-                        @icon-down,
-                        @_icon-font-size: 12px,
-                        @_icon-font-line-height: 12px,
-                        @_icon-font-text-hide: true,
-                        @_icon-font-margin: -3px 0 0 7px,
-                        @_icon-font-position: after
+                    @icon-down,
+                    @_icon-font-size: 12px,
+                    @_icon-font-line-height: 12px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: -3px 0 0 7px,
+                    @_icon-font-position: after
                     );
                 }
                 .details {
@@ -301,38 +300,37 @@
             }
         }
         .item-qty {
-            width: 40px;
-            text-align: center;
             margin-right: @indent__s;
+            text-align: center;
+            width: 40px;
         }
         .update-cart-item {
-            vertical-align: top;
             .lib-font-size(11);
+            vertical-align: top;
+        }
+        .subtitle {
+            display: none;
         }
         .action {
             &.edit,
             &.delete {
                 .lib-icon-font(
-                    @icon-edit,
-                    @_icon-font-size: 18px,
-                    @_icon-font-line-height: 20px,
-                    @_icon-font-text-hide: true,
-                    @_icon-font-color: @minicart-icons-color,
-                    @_icon-font-color-hover: @primary__color,
-                    @_icon-font-color-active: @minicart-icons-color
+                @icon-edit,
+                @_icon-font-size: 18px,
+                @_icon-font-line-height: 20px,
+                @_icon-font-text-hide: true,
+                @_icon-font-color: @minicart-icons-color,
+                @_icon-font-color-hover: @primary__color,
+                @_icon-font-color-active: @minicart-icons-color
                 );
             }
             &.delete {
                 .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-trash
+                @_icon-font-content: @icon-trash
                 );
             }
         }
-        .subtitle {
-            display: none;
-        }
     }
-
 }
 
 //
@@ -350,7 +348,6 @@
         margin-top: @indent__s;
     }
 }
-
 
 //
 //  Desktop

@@ -113,7 +113,7 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
         $requestInterface= $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
             ->getMock();
 
-        $notification = $objectManager->getObject(
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Test\Unit\Controller\Stub\MyCreditCardsStub',
             [
                 'customerSession' => $this->customerSession,
@@ -123,7 +123,7 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $notification->dispatch($requestInterface));
+        $this->assertSame($this->resultRedirect, $controller->execute($requestInterface));
     }
 
     /**
@@ -156,7 +156,7 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
 
-        $notification = $objectManager->getObject(
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Test\Unit\Controller\Stub\MyCreditCardsStub',
             [
                 'customerSession' => $this->customerSession,
@@ -167,6 +167,6 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->_response, $notification->dispatch($requestInterface));
+        $this->assertSame($this->_response, $controller->execute($requestInterface));
     }
 }

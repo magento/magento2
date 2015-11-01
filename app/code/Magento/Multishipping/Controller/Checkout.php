@@ -86,11 +86,11 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $this->_request = $request;
         if ($this->_actionFlag->get('', 'redirectLogin')) {
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
 
         $action = $request->getActionName();
@@ -109,7 +109,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
         ) {
             $this->_redirect('*/*/index');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
 
         if (!in_array($action, ['login', 'register'])) {
@@ -123,7 +123,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
                 $this->messageManager->addError($error);
                 $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-                return parent::dispatch($request);
+                return parent::execute($request);
             }
         }
 
@@ -142,11 +142,11 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
         ) {
             $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
 
         if ($action == 'success' && $this->_getCheckout()->getCheckoutSession()->getDisplaySuccess(true)) {
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
 
         $quote = $this->_getCheckout()->getQuote();
@@ -155,7 +155,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
 
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**
