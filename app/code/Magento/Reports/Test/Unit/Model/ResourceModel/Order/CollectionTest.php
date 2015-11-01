@@ -251,6 +251,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDateRangeFirstPart($range, $customStart, $customEnd, $expectedInterval)
     {
+        $this->markTestIncomplete('MAGETWO-44815');
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
