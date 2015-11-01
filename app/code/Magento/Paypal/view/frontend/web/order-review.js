@@ -28,7 +28,8 @@ define([
             updateShippingMethodSubmitSelector: "#update-shipping-method-submit",
             reviewSubmitSelector: "#review-submit",
             shippingMethodUpdateUrl: null,
-            updateOrderSubmitUrl: null
+            updateOrderSubmitUrl: null,
+            canEditShippingMethod: false
         },
 
         /**
@@ -50,7 +51,7 @@ define([
                 .find(this.options.updateShippingMethodSubmitSelector).hide().end()
                 .find(this.options.reviewSubmitSelector).hide();
             this._shippingTobilling();
-            if ($(this.options.shippingSubmitFormSelector).length) {
+            if ($(this.options.shippingSubmitFormSelector).length && this.options.canEditShippingMethod) {
                 this.isShippingSubmitForm = true;
                 $(this.options.shippingSubmitFormSelector).find(this.options.updateShippingMethodSubmitSelector).hide().end()
                     .on('change',

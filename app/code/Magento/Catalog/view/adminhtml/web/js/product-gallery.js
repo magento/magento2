@@ -373,7 +373,7 @@ define([
                     selectedClass = 'selected';
                 parent.toggleClass(selectedClass, $(this).prop('checked'));
             });
-            dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._changeType, this));
+            dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._notifyType, this));
             dialogElement.on('change', '[data-role=visibility-trigger]', $.proxy(function(e) {
                 this._changeVisibility(e, imageData);
             }, this));
@@ -401,7 +401,7 @@ define([
          * @param event
          * @private
          */
-        _changeType: function (event) {
+        _notifyType: function (event) {
             var $checkbox = $(event.currentTarget);
             var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             this.element.trigger('setImageType', {
