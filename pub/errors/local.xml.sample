@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <skin>default</skin>
+    <report>
+        <!--
+            "action" can be set to "print" to show exception on screen and "email"
+            to send exception on specified email
+        -->
+        <action>print</action>
+        <!--
+            in "subject" you can set subject of email
+        -->
+        <subject>Store Debug Information</subject>
+        <!--
+            "email_address" admin email address
+        -->
+        <email_address></email_address>
+        <!--
+            "trash" is handle about trace info
+            value "leave" is for store on disk
+            value "delete" is for cleaning
+        -->
+        <trash>leave</trash>
+    </report>
+</config>
