@@ -17,6 +17,11 @@ class MaxHeapTableSizeProcessor
     protected $connection;
 
     /**
+     * @var int
+     */
+    protected $defaultMaxHeapTableSie;
+
+    /**
      * Current max_heap_table_size value (in Bytes)
      *
      * @var int
@@ -29,18 +34,19 @@ class MaxHeapTableSizeProcessor
     public function __construct(ResourceConnection $resource)
     {
         $this->connection = $resource->getConnection();
+        $this->defaultMaxHeapTableSie = 1024 * 1024 * 64;
     }
 
     /**
      * Set max_heap_table_size value in Bytes. By default value is 64M
      *
-     * @param int $maxHeapTableSize
+     * @param int|null $maxHeapTableSize
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function set($maxHeapTableSize = 1024 * 1024 * 64)
+    public function set($maxHeapTableSize = null)
     {
-        $maxHeapTableSize = (int)$maxHeapTableSize;
+        $maxHeapTableSize = (int) (null === $maxHeapTableSize ? $this->defaultMaxHeapTableSie : $maxHeapTableSize);
         if (!$maxHeapTableSize) {
             throw new \InvalidArgumentException('Wrong max_heap_table_size parameter');
         }
