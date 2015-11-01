@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
@@ -29,7 +29,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     /**
      * Quote repository.
      *
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
 
@@ -55,7 +55,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 
     /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
      * @param CouponManagementInterface $couponService
      * @param TotalsConverter $totalsConverter
@@ -63,7 +63,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         DataObjectHelper $dataObjectHelper,
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,

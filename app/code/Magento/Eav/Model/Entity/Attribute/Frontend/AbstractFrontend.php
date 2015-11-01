@@ -70,7 +70,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     }
 
     /**
-     * Retrieve lable
+     * Retrieve label
      *
      * @return string
      */
@@ -82,6 +82,16 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
         }
 
         return $label;
+    }
+
+    /**
+     * Retrieve localized label
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLocalizedLabel()
+    {
+        return __($this->getLabel());
     }
 
     /**

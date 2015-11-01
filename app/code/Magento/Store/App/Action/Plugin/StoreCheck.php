@@ -31,7 +31,7 @@ class StoreCheck
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\State\InitException
      */
-    public function aroundDispatch(
+    public function aroundExecute(
         \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request

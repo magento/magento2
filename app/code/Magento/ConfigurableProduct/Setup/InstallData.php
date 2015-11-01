@@ -47,7 +47,6 @@ class InstallData implements InstallDataInterface
             'minimal_price',
             'msrp',
             'msrp_display_actual_price_type',
-            'price',
             'special_price',
             'special_from_date',
             'special_to_date',
