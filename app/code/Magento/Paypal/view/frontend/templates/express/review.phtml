@@ -21,7 +21,7 @@
                         <form method="post" id="shipping-method-form"
                               action="<?php echo $block->escapeUrl($block->getShippingMethodSubmitUrl()); ?>"
                               class="form">
-                            <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()): ?>
+                            <?php if ($block->canEditShippingMethod()): ?>
                                 <?php if ($groups = $block->getShippingRateGroups()): ?>
                                     <?php $currentRate = $block->getCurrentShippingRate(); ?>
                                     <div class="field shipping required">
@@ -84,7 +84,10 @@
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?php echo $block->escapeHtml($block->renderAddress($block->getShippingAddress())); ?>
+                            <?php echo $block->escapeHtml(
+                                $block->renderAddress($block->getShippingAddress()),
+                                ['br']
+                            ); ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
@@ -159,7 +162,8 @@
                 "shippingSubmitFormSelector": "#shipping-method-form",
                 "shippingSelector": "#shipping-method",
                 "shippingMethodUpdateUrl": "<?php echo $block->escapeUrl($block->getUpdateShippingMethodsUrl()) ?>",
-                "isAjax": <?php /* @noEscape */ echo $block->getUseAjax() ? 'true' : 'false' ?>
+                "isAjax": <?php /* @noEscape */ echo $block->getUseAjax() ? 'true' : 'false' ?>,
+                "canEditShippingMethod": <?php /* @noEscape */ echo $block->canEditShippingMethod() ? 'true' : 'false' ?>
             }
         }
     }

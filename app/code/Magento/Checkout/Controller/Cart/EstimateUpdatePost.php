@@ -11,7 +11,7 @@ class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $code = (string)$this->getRequest()->getParam('estimate_method');
         if (!empty($code)) {

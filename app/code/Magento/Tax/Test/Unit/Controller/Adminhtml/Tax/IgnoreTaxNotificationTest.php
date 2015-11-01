@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $objectManager = new ObjectManager($this);
         $cacheTypeList = $this->getMockBuilder('\Magento\Framework\App\Cache\TypeList')
@@ -63,7 +63,8 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($config);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification $controller */
+        $controller = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification',
             [
                 'objectManager' => $manager,
@@ -74,6 +75,6 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
         );
 
         // No exception thrown
-        $this->assertSame($resultRedirect, $notification->execute());
+        $this->assertSame($resultRedirect, $controller->executeInternal());
     }
 }

@@ -48,7 +48,7 @@ class Cancel extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout(false);
         $gotoSection = $this->_cancelPayment();

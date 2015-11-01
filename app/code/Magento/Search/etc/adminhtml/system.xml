@@ -18,11 +18,6 @@
                         <field id="engine">mysql</field>
                     </depends>
                 </field>
-                <field id="use_layered_navigation_count">
-                    <depends>
-                        <field id="engine">mysql</field>
-                    </depends>
-                </field>
             </group>
         </section>
     </system>

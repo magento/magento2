@@ -31,7 +31,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $request = $this->getRequest();
         $resultJson = $this->resultJsonFactory->create();

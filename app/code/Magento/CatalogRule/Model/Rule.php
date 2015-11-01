@@ -342,6 +342,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $map = [];
         $websites = $this->_storeManager->getWebsites(true);
         foreach ($websites as $website) {
+            // Continue if website has no store to be able to create catalog rule for website without store
+            if ($website->getDefaultStore() === null) {
+                continue;
+            }
             $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
         return $map;

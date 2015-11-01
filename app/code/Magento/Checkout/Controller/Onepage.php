@@ -57,7 +57,7 @@ abstract class Onepage extends Action
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -91,7 +91,7 @@ abstract class Onepage extends Action
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -110,7 +110,7 @@ abstract class Onepage extends Action
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
@@ -141,7 +141,7 @@ abstract class Onepage extends Action
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         $this->_request = $request;
         $result = $this->_preDispatchValidateCustomer();
@@ -158,7 +158,7 @@ abstract class Onepage extends Action
         if (!$this->_canShowForUnregisteredUsers()) {
             throw new NotFoundException(__('Page not found.'));
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**
