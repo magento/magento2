@@ -43,6 +43,7 @@ class MaxHeapTableSizeProcessor
      * @param int|null $maxHeapTableSize
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
+     * @return void
      */
     public function set($maxHeapTableSize = null)
     {
@@ -63,6 +64,7 @@ class MaxHeapTableSizeProcessor
      * Restore max_heap_table_size value
      *
      * @throws \RuntimeException
+     * @return void
      */
     public function restore()
     {
