@@ -13,7 +13,7 @@ class LoadOptions extends \Magento\Backend\App\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_view->loadLayout();

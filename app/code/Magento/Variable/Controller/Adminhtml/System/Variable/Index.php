@@ -13,7 +13,7 @@ class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Custom Variables'));

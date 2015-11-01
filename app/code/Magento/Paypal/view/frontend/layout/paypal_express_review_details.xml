@@ -10,7 +10,7 @@
     <container name="root">
         <block class="Magento\Paypal\Block\Express\Review\Details" name="page.block" template="express/review/details.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="Magento_Paypal::checkout/onepage/review/totals.phtml"/>
         </block>
     </container>
 </layout>

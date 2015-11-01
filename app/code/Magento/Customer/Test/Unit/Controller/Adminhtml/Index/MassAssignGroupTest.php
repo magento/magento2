@@ -172,7 +172,7 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/index')
             ->willReturnSelf();
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 
     public function testExecuteWithException()
@@ -191,6 +191,6 @@ class MassAssignGroupTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('Some message.');
 
-        $this->massAction->execute();
+        $this->massAction->executeInternal();
     }
 }

@@ -47,6 +47,7 @@ class Item extends Sidebar
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
         $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
         $modal->acceptAlert();
+        $modal->waitModalWindowToDisappear();
     }
 
     /**

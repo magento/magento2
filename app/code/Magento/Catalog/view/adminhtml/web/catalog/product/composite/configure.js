@@ -703,7 +703,9 @@ define([
                             mageData.scripts.map(function(script) {
                                 return eval(script);
                             });
-                        } catch (e) {}
+                        } catch (e) {
+
+                        }
                         this.restorePhase = false;
                     }
                     break;
@@ -761,8 +763,5 @@ define([
         }
     };
 
-    jQuery(document).ready(function(){
-        productConfigure = new ProductConfigure();
-    });
-
+    productConfigure = new ProductConfigure();
 });

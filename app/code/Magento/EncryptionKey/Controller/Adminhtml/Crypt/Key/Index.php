@@ -16,7 +16,7 @@ class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Framework\App\DeploymentConfig\Writer $writer */
         $writer = $this->_objectManager->get('Magento\Framework\App\DeploymentConfig\Writer');

@@ -60,7 +60,7 @@ class Plugin
      * @return void
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
+    public function beforeExecute(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
         if ($this->authenticationState->isEnabled() && !$this->customerSession->authenticate()) {
             $subject->getActionFlag()->set('', 'no-dispatch', true);

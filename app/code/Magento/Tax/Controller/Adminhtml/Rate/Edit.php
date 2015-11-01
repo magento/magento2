@@ -17,7 +17,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $rateId = (int)$this->getRequest()->getParam('rate');
         $this->_coreRegistry->register(RegistryConstants::CURRENT_TAX_RATE_ID, $rateId);
