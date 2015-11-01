@@ -37,7 +37,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $validSaveHandlers = [
         ConfigOptionsListConstants::SESSION_SAVE_FILES,
         ConfigOptionsListConstants::SESSION_SAVE_DB,
-        ConfigOptionsListConstants::SESSION_SAVE_REDIS
     ];
 
     /**

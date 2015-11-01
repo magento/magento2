@@ -6,7 +6,7 @@
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\Session\Generic;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 
@@ -16,7 +16,7 @@ use Magento\Quote\Api\PaymentMethodManagementInterface;
 abstract class AbstractFilterValidator
 {
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -34,11 +34,11 @@ abstract class AbstractFilterValidator
      * Constructor
      *
      * @param Generic $sessionTransparent
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param PaymentMethodManagementInterface $paymentManagement
      */
     public function __construct(
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         Generic $sessionTransparent,
         PaymentMethodManagementInterface $paymentManagement
     ) {
