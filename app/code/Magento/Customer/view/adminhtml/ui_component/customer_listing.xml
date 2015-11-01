@@ -310,11 +310,12 @@
                 </item>
             </argument>
         </column>
-        <column name="created_at">
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Customer Since</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>
@@ -332,7 +333,7 @@
                 </item>
             </argument>
         </column>
-        <column name="last_visit_at">
+        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
@@ -380,7 +381,7 @@
                 </item>
             </argument>
         </column>
-        <column name="dob">
+        <column name="dob" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
