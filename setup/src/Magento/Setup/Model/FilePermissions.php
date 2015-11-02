@@ -130,8 +130,10 @@ class FilePermissions
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::LEAVES_ONLY
         );
-        $rootPath = $this->directoryList->getRoot();
-        $noWritableFilesFolders = [$rootPath . '/var/generation', $rootPath . '/var/di'];
+        $noWritableFilesFolders = [
+            $this->directoryList->getPath(DirectoryList::GENERATION),
+            $this->directoryList->getPath(DirectoryList::DI)
+        ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
 
