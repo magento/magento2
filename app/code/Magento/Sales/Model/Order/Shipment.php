@@ -46,6 +46,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
 
     const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
 
+    const XML_PATH_STORE_EMAIL = 'shipping/origin/email';
+
     /**
      * Order entity type
      *
