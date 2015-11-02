@@ -51,8 +51,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test checks timezone when timezone is not changed
-     *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_specific_date.php
@@ -70,9 +68,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test checks timezone when timezone is shifted to locale where current day already +1
-     * (e.g. existed rule: from day 2000-01-01 to day 2000-01-01, after changing timezone 2000-01-02)
-     *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_specific_date.php
@@ -86,7 +81,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $collection->addWebsiteGroupDateFilter(1, 0);
         $items = array_values($collection->getItems());
-        $this->assertEmpty($items);
+        $this->assertNotEmpty($items);
     }
 
     protected function setSpecificTimezone($timezone)
