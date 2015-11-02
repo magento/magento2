@@ -26,11 +26,11 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
             }
             $this->_validateTypes($types);
             foreach ($types as $code) {
+                $this->_cacheTypeList->cleanType($code);
                 if ($this->_cacheState->isEnabled($code)) {
                     $this->_cacheState->setEnabled($code, false);
                     $updatedTypes++;
                 }
-                $this->_cacheTypeList->cleanType($code);
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
