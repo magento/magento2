@@ -1151,9 +1151,19 @@
             max-height: 100%;
             max-width: 100%;
             vertical-align: middle;
-            transition-duration: @fotorama-fullscreen-zoom-time;
+            transition: @fotorama-fullscreen-zoom-time linear;
             transition-property: width, height, top, left;
             margin: auto;
+            cursor: default;
+            &.fotorama__img--zoommable {
+                cursor: pointer;
+                max-width: none;
+                max-height: none;
+            }
+            &.fotorama__img--draggable {
+                cursor: move;
+                transition-property: width, height;
+            }
         }
     }
 }
