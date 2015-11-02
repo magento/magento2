@@ -79,3 +79,6 @@ Frequency,Frequency
 "Are you sure you want to delete the selected backup(s)?","¿Seguro que desea eliminar las copias de seguridad seleccionadas?"
 Size(bytes),Size(bytes)
 Rollback,Revertir
+"Maintenance mode","Maintenance mode"
+"This may take a few moments.","This may take a few moments."
+"Be sure your store is in maintenance mode during backup.","Be sure your store is in maintenance mode during backup."
