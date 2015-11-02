@@ -17,7 +17,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      * @return void|\Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->getRequest()->isAjax()) {
             return $this->_redirect('*/*/index');

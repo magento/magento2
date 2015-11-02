@@ -47,8 +47,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Quote\Api\GuestPaymentMethodManagementInterface'
         );
         $this->cartManagementMock = $this->getMock('\Magento\Quote\Api\GuestCartManagementInterface');
-
-        $this->cartRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->cartRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $this->quoteIdMaskFactoryMock = $this->getMock(
             'Magento\Quote\Model\QuoteIdMaskFactory',

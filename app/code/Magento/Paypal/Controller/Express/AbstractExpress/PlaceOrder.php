@@ -60,7 +60,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             if ($this->isValidationRequired() &&

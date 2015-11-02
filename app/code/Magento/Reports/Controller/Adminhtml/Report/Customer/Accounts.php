@@ -13,7 +13,7 @@ class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_customers_accounts'

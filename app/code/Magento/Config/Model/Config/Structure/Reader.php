@@ -100,7 +100,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
             }
         }
 
-        if ($this->_isValidated) {
+        if ($this->validationState->isValidationRequired()) {
             $errors = [];
             if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {
                 $message = "Invalid Document \n";

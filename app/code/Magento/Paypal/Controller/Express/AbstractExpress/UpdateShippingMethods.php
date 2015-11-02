@@ -13,7 +13,7 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_initCheckout();

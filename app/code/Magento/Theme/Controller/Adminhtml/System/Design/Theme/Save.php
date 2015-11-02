@@ -14,7 +14,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $redirectBack = (bool)$this->getRequest()->getParam('back', false);
         $themeData = $this->getRequest()->getParam('theme');
