@@ -128,7 +128,7 @@ class Install extends AbstractActionController
         // "install.log" file may not be created yet. Check the "install.log" is created before
         // trying to read from it.
         if (!$this->log->logfileExists()) {
-            return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+            return $json->setVariables(['progress' => $percent, 'success' => true, 'console' => $contents]);
         }
 
         try {

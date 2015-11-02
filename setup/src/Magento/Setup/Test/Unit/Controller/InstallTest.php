@@ -161,7 +161,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('console', $variables);
-        $this->assertFalse($variables['success']);
+        $this->assertTrue($variables['success']);
         $this->assertEmpty($variables['console']);
         $this->assertSame(0, $variables['progress']);
     }
