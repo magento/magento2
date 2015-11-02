@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
 
     <route url="/V1/search" method="GET">
-        <service class="Magento\Framework\Api\Search\SearchInterface" method="search"/>
+        <service class="Magento\Search\Api\SearchInterface" method="search"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
