@@ -75,7 +75,6 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $data = ['test' => 'beer'];
         $quoteId = 1;
         $storeId = 777;
-        $shippingMethod = 'checkmo';
 
         $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
