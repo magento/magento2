@@ -52,22 +52,17 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn($id);
+
         $this->invoiceMetadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->invoiceMetadata->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertEquals($entity, $this->invoice->get($id));
     }
 
@@ -92,22 +87,17 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn(null);
+
         $this->invoiceMetadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->invoiceMetadata->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertNull($entity, $this->invoice->get($id));
     }
 
@@ -199,9 +189,14 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
+        $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
         $entity->expects($this->any())
             ->method('getEntityId')
             ->willReturn($id);
+
         $this->invoiceMetadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
@@ -209,14 +204,6 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->invoiceMetadata->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
-
         $mapper->expects($this->once())
             ->method('delete')
             ->with($entity);

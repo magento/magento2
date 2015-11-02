@@ -16,6 +16,7 @@ define([
         options: {
             modalClass: 'confirm',
             title: '',
+            focus: '.action-accept',
             actions: {
 
                 /**
@@ -61,7 +62,7 @@ define([
          */
         _create: function () {
             this._super();
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this));
             this.openModal();
         },
 

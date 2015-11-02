@@ -213,14 +213,16 @@ class IndexBuilder
     {
         $this->connection->deleteFromSelect(
             $this->connection
-                ->select($this->resource->getTableName('catalogrule_product'), 'product_id')
+                ->select()
+                ->from($this->resource->getTableName('catalogrule_product'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product')
         );
 
         $this->connection->deleteFromSelect(
-            $this->connection->select($this->resource->getTableName('catalogrule_product_price'), 'product_id')
+            $this->connection->select()
+                ->from($this->resource->getTableName('catalogrule_product_price'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product_price')
@@ -240,6 +242,10 @@ class IndexBuilder
         $productId = $product->getId();
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
+        if (!$rule->validate($product)) {
+            return $this;
+        }
+
         $this->connection->delete(
             $this->resource->getTableName('catalogrule_product'),
             [
@@ -247,14 +253,6 @@ class IndexBuilder
                 $this->connection->quoteInto('product_id = ?', $productId)
             ]
         );
-
-        if (!$rule->validate($product)) {
-            $this->connection->delete(
-                $this->resource->getTableName('catalogrule_product_price'),
-                [$this->connection->quoteInto('product_id = ?', $productId)]
-            );
-            return $this;
-        }
 
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
