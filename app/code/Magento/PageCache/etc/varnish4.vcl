@@ -40,6 +40,11 @@ sub vcl_recv {
         return (pass);
     }
 
+    # Bypass shopping cart and checkout requests
+    if (req.url ~ "/checkout") {
+        return (pass);
+    }
+
     # normalize url in case of leading HTTP scheme and domain
     set req.url = regsub(req.url, "^http[s]?://", "");
 

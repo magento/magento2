@@ -12,7 +12,7 @@ $paymentId = $block->getPaymentMethodNonceId();
 $detailsId = $block->getPaymentDetailsId();
 $isMiniCart = (bool)(int)$block->isInMiniCart();
 
-$widgetName = $isMiniCart ? 'braintreePayPalMinicart' : 'braintreePayPal';
+$widgetName = 'braintreePayPalMinicart';
 
 $config = [
     $widgetName => [
