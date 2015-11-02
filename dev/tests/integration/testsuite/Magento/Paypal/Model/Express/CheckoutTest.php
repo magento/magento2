@@ -86,6 +86,40 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testPlaceGuestQuote()
+    {
+        /** @var Quote $quote */
+        $quote = $this->_getFixtureQuote();
+        $quote->setCheckoutMethod(Onepage::METHOD_GUEST); // to dive into _prepareGuestQuote() on switch
+        $quote->getShippingAddress()->setSameAsBilling(0);
+        $quote->setReservedOrderId(null);
+
+        $checkout = $this->_getCheckout($quote);
+        $checkout->place('token');
+
+        $this->assertNull($quote->getCustomerId());
+        $this->assertTrue($quote->getCustomerIsGuest());
+        $this->assertEquals(
+            \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
+            $quote->getCustomerGroupId()
+        );
+
+        $this->assertNotEmpty($quote->getBillingAddress());
+        $this->assertNotEmpty($quote->getShippingAddress());
+
+        $order = $checkout->getOrder();
+        $this->assertNotEmpty($order->getBillingAddress());
+        $this->assertNotEmpty($order->getShippingAddress());
+    }
+
+
+    /**
      * @param Quote $quote
      * @return Checkout
      */
