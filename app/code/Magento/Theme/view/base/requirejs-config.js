@@ -44,7 +44,7 @@ var config = {
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",
         "prototype": "legacy-build.min",
         "jquery/jquery-storageapi": "jquery/jquery.storageapi.min",
-        "text": "requirejs/text",
+        "text": "mage/requirejs/text",
         "domReady": "requirejs/domReady",
         "tinymce": "tiny_mce/tiny_mce_src"
     },
