@@ -16,7 +16,7 @@ class ExportBestsellersExcel extends \Magento\Reports\Controller\Adminhtml\Repor
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'bestsellers.xml';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid');

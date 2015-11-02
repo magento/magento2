@@ -12,7 +12,7 @@ class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $customerId = $this->initCurrentCustomer();
         $resultLayout = $this->resultLayoutFactory->create();

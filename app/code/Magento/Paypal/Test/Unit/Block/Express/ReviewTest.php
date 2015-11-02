@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
 use Magento\Paypal\Block\Express\Review;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {
@@ -176,5 +177,14 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->model->setQuote($quoteMock);
         $this->assertEquals('', $this->model->getEmail());
+    }
+
+    public function testCanEditShippingMethod()
+    {
+        $this->model->setData('can_edit_shipping_method', true);
+        static::assertTrue($this->model->canEditShippingMethod());
+
+        $this->model->setData('can_edit_shipping_method', false);
+        static::assertTrue($this->model->canEditShippingMethod());
     }
 }

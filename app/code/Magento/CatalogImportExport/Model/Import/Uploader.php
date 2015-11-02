@@ -223,7 +223,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
                 && method_exists($params['object'], $params['method'])
                 && is_callable([$params['object'], $params['method']])
             ) {
-                $params['object']->{$params['method']}($filePath);
+                $params['object']->{$params['method']}($this->_directory->getAbsolutePath($filePath));
             }
         }
     }

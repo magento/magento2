@@ -76,35 +76,22 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         } else {
             $address = $this->getMock(
                 'Magento\Sales\Model\Order\Address',
-                ['getEntityId'],
+                ['load', 'getEntityId'],
                 [],
                 '',
                 false
             );
             $address->expects($this->once())
+                ->method('load')
+                ->with($id)
+                ->willReturn($address);
+            $address->expects($this->once())
                 ->method('getEntityId')
                 ->willReturn($entityId);
-
-            $mapper = $this->getMockForAbstractClass(
-                'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-                [],
-                '',
-                false,
-                true,
-                true,
-                ['load']
-            );
-            $mapper->expects($this->once())
-                ->method('load')
-                ->with($address, $id)
-                ->willReturnSelf();
 
             $this->metadata->expects($this->once())
                 ->method('getNewInstance')
                 ->willReturn($address);
-            $this->metadata->expects($this->once())
-                ->method('getMapper')
-                ->willReturn($mapper);
 
             if (!$entityId) {
                 $this->setExpectedException(
@@ -115,14 +102,19 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             } else {
                 $this->assertEquals($address, $this->subject->get($id));
 
-                $mapper->expects($this->never())
-                    ->method('load');
+                $address->expects($this->never())
+                    ->method('load')
+                    ->with($id)
+                    ->willReturn($address);
+                $address->expects($this->never())
+                    ->method('getEntityId')
+                    ->willReturn($entityId);
 
                 $this->metadata->expects($this->never())
-                    ->method('getNewInstance');
-                $this->metadata->expects($this->never())
-                    ->method('getMapper');
+                    ->method('getNewInstance')
+                    ->willReturn($address);
 
+                // Retrieve Address from registry.
                 $this->assertEquals($address, $this->subject->get($id));
             }
         }

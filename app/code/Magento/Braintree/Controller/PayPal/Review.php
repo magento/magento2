@@ -49,7 +49,7 @@ class Review extends \Magento\Braintree\Controller\PayPal
     /**
      * @return $this|\Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $paymentMethodNonce = $this->getRequest()->getParam('payment_method_nonce');
         $details = $this->getRequest()->getParam('details');

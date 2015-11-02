@@ -95,7 +95,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $this->viewMock->expects($this->once())
             ->method('getPage')
@@ -110,6 +110,6 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->willReturnSelf();
 
-        $this->assertNull($this->object->execute());
+        $this->assertNull($this->object->executeInternal());
     }
 }

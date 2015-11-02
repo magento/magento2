@@ -17,7 +17,6 @@
             <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">153</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
             <data name="updatedProduct/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
@@ -42,7 +41,6 @@
             <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">154</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight" xsi:type="string">3</data>
@@ -65,7 +63,6 @@
             <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">112</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
             <data name="updatedProduct/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
@@ -88,7 +85,6 @@
             <data name="updatedProduct/data/checkout_data/dataset" xsi:type="string">configurable_two_attributes</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight" xsi:type="string">3</data>
@@ -106,7 +102,6 @@
             <data name="updatedProduct/data/configurable_attributes_data/dataset" xsi:type="string">one_new_options</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>

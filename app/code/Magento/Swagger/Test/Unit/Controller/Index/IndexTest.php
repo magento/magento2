@@ -8,7 +8,7 @@ namespace Magento\Swagger\Test\Unit\Controller\Index;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExecute()
+    public function testExecuteInternal()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -22,6 +22,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $pageConfigMock->expects($this->once())->method('addBodyClass')->with('swagger-section');
         $resultPageFactory->expects($this->once())->method('create');
 
+        /** @var \Magento\Swagger\Controller\Index\Index $model */
         $model = $objectManager->getObject(
             'Magento\Swagger\Controller\Index\Index',
             [
@@ -29,6 +30,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 'pageFactory' => $resultPageFactory
             ]
         );
-        $model->execute();
+        $model->executeInternal();
     }
 }

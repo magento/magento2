@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <fieldset class="fieldset">
+    <div class="fieldset">
         <?php echo $block->getChildHtml('matrix'); ?>
 
         <!-- Select Associated Product popup -->
@@ -53,68 +53,8 @@
         </div>
 
         <input type="hidden" name="affect_configurable_product_attributes" value="1" />
-    </fieldset>
+    </div>
 </div>
-<script>
-require([
-    'jquery',
-    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
-    'Magento_ConfigurableProduct/js/options/price-type-handler',
-    'collapsible',
-    'Magento_Ui/js/modal/modal',
-    'mage/translate',
-    'domReady!'
-], function($, advancedPricingHandler, priceTypeHandler){
-    'use strict';
-
-    advancedPricingHandler.init();
-    priceTypeHandler.init();
-
-    var blockId = '#<?= /* @noEscape */ $block->getId()?>',
-        hasVariations = <?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>,
-        setElementDisabled = function ($element, state, triggerEvent) {
-            if (!$element.is('[data-locked]')) {
-                $element.prop('disabled', state);
-    
-                if (triggerEvent) {
-                    $element.trigger('change');
-                }
-            }
-        },
-        configurableTypeHandler = function (isConfigurable) {
-            isConfigurable = hasVariations ? true : isConfigurable;
-            $('[data-form=edit-product]').trigger("change_configurable_type", isConfigurable);
-        };
-
-    $('[data-tab=<?= /* @noEscape */ $block->getTabId()?>]')
-        .on('dimensionsChanged', function (event, data) {
-            var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
-            if (data.opened) {
-                suggestContainer
-                    .addClass('disabled')
-                    .prop('disabled', true);
-                $(blockId + ' input[name="attributes[]"]').prop('disabled', false);
-                $('#inventory_qty').prop('disabled', true);
-                $('#inventory_stock_availability').removeProp('disabled');
-                setElementDisabled($('#qty'), true, true);
-                setElementDisabled($('#quantity_and_stock_status'), false, false);
-                configurableTypeHandler(true);
-            } else {
-                suggestContainer
-                    .removeClass('disabled')
-                    .removeProp('disabled');
-                $('#inventory_qty').removeProp('disabled');
-                $('#inventory_stock_availability').prop('disabled', true);
-                setElementDisabled($('#quantity_and_stock_status'), true, false);
-                setElementDisabled($('#qty'), false, true);
-                configurableTypeHandler(false);
-            }
-        })
-        .on('collapsiblecreated', function() {
-            $(this).collapsible(hasVariations ? 'activate' : 'deactivate');
-        });
-});
-</script>
 <script type="text/x-magento-init">
     {
         "*": {
@@ -130,6 +70,11 @@ require([
                         "configurableVariations": "configurableVariations"
                     }
                 }
+            },
+            "Magento_ConfigurableProduct/js/configurable-type-handler": {
+                "blockId": "#<?= /* @noEscape */ $block->getId()?>",
+                "tabId": "<?= /* @noEscape */ $block->getTabId()?>",
+                "hasVariations": "<?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>"
             }
         }
     }
