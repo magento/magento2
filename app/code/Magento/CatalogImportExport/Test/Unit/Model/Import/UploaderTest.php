@@ -71,7 +71,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Writer')
-            ->setMethods(['writeFile', 'getRelativePath'])
+            ->setMethods(['writeFile', 'getRelativePath', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
