@@ -14,7 +14,11 @@ define(
             var address = null;
             if (quote.shippingAddress() && billingAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
                 address = $.extend({}, billingAddress);
-                address.save_in_address_book = false;
+                address.saveInAddressBook = false;
+                if (quote.shippingAddress().saveInAddressBook) {
+                    address.saveInAddressBook = true;
+                    quote.shippingAddress().saveInAddressBook = false;
+                }
             } else {
                 address = billingAddress;
             }
