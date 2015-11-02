@@ -36,6 +36,7 @@ class ConfigurableProductHandler
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param array $productIds
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetMatchingProductIds(\Magento\CatalogRule\Model\Rule $rule, array $productIds)
     {

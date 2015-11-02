@@ -162,6 +162,8 @@ class Install extends AbstractActionController
             ? $source['config']['address']['admin'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
             ? $source['config']['encrypt']['key'] : null;
+        $result[SetupConfigOptionsList::INPUT_KEY_SESSION_SAVE] = isset($source['config']['sessionSave']['type'])
+            ? $source['config']['sessionSave']['type'] : SetupConfigOptionsList::SESSION_SAVE_FILES;
         $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
             ? implode(',', $source['store']['selectedModules']) : '';
         $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
