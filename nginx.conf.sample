@@ -45,9 +45,11 @@ location /update {
     root $MAGE_ROOT;
 
     location ~ ^/update/index.php {
+        fastcgi_split_path_info ^(/update/index.php)(/.+)$;
         fastcgi_pass   fastcgi_backend;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  PATH_INFO        $fastcgi_path_info;
         include        fastcgi_params;
     }
 
