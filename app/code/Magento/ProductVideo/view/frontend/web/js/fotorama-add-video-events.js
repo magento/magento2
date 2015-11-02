@@ -549,7 +549,13 @@ define([
                     waitForFroogaloop = setInterval($.proxy(function () {
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
+                            fotorama.requestFullScreen();
                             $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                            $('.fotorama__fullscreen-icon').css({
+                                opacity: '1',
+                                visibility: 'visible',
+                                display: 'block'
+                            });
                             this.Base = false;
                         }
                     }, this), 50);
