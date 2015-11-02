@@ -920,8 +920,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      */
     public function canVoid()
     {
-        if (($order = $this->_registry->registry('current_order'))
-            && $order->getId() && $order->hasInvoices() ) {
+        if ((($order = $this->_registry->registry('current_order'))
+            && $order->getId() && $order->hasInvoices()) || $this->_registry->registry('current_invoice')) {
             return false;
         }
         return $this->_canVoid;
