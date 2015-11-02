@@ -128,12 +128,9 @@ class Source
         $this->preProcessorPool->process($chain);
         $chain->assertValid();
         $dirCode = DirectoryList::ROOT;
-        $directoryReader = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        $targetPath = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
-
-        if ($chain->isChanged() || !$directoryReader->isExist($targetPath)) {
+        if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
-            $path = $targetPath;
+            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }
         $result = [$dirCode, $path];
