@@ -13,7 +13,7 @@ class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {

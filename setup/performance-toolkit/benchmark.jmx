@@ -1890,7 +1890,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -1929,7 +1929,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -1981,7 +1981,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2020,7 +2020,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -2103,7 +2103,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2142,7 +2142,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -2225,7 +2225,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2264,7 +2264,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -2621,7 +2621,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2660,7 +2660,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -2712,7 +2712,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2751,7 +2751,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -2863,7 +2863,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -2982,7 +2982,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3021,7 +3021,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -3132,7 +3132,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3254,7 +3254,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3293,7 +3293,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -3411,7 +3411,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3807,7 +3807,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3846,7 +3846,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -3898,7 +3898,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -3937,7 +3937,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -4049,7 +4049,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4168,7 +4168,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4207,7 +4207,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -4318,7 +4318,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4440,7 +4440,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4479,7 +4479,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -4597,7 +4597,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4767,7 +4767,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -4806,7 +4806,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5027,7 +5027,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/${cart_id}/shipping-information</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -5074,7 +5074,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5113,7 +5113,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5243,7 +5243,7 @@ vars.put("loadType", "Guest");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5282,7 +5282,7 @@ vars.put("loadType", "Guest");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5520,7 +5520,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5559,7 +5559,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5728,7 +5728,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5767,7 +5767,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5839,7 +5839,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5878,7 +5878,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5930,7 +5930,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -5969,7 +5969,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6081,7 +6081,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6200,7 +6200,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6239,7 +6239,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6350,7 +6350,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6472,7 +6472,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6511,7 +6511,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6629,7 +6629,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">cart,banner,messages</stringProp>
+            <stringProp name="Argument.value">cart,messages</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6839,7 +6839,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6878,7 +6878,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6957,7 +6957,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -6996,7 +6996,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -7113,7 +7113,7 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Arguments.arguments">
           <elementProp name="sections" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">banner</stringProp>
+            <stringProp name="Argument.value">customer</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
@@ -7152,7 +7152,7 @@ vars.put("loadType", "Customer");</stringProp>
     <hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1898134910">\"banner\":</stringProp>
+          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>

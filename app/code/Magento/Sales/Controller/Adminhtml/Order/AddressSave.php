@@ -13,7 +13,7 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $addressId = $this->getRequest()->getParam('address_id');
         /** @var $address \Magento\Sales\Api\Data\OrderAddressInterface|\Magento\Sales\Model\Order\Address */

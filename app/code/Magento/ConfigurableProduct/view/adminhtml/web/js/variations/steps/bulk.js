@@ -14,7 +14,8 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'jquery/file-uploader',
-    'mage/translate'
+    'mage/translate',
+    'Magento_ConfigurableProduct/js/variations/variations'
 ], function (Component, $, ko, _, Collapsible, mageTemplate, alert) {
     'use strict';
 
@@ -55,7 +56,7 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable(),
-                    currencySymbol: this.variationsComponent().getCurrencySymbol()
+                    currencySymbol: ''
                 },
                 quantity: {
                     label: 'quantity',
@@ -64,6 +65,11 @@ define([
                     attribute: ko.observable()
                 }
             });
+
+            this.variationsComponent(function (variationsComponent) {
+                this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol()
+            }.bind(this));
+
             this.makeOptionSections = function () {
                 this.images = new self.makeImages(null);
                 this.price = self.price;

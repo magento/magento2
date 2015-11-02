@@ -13,7 +13,7 @@ class NewConditionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\C
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
