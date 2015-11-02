@@ -142,21 +142,21 @@
                                                 <item name="subtotal" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
                                                     <item name="config" xsi:type="array">
-                                                        <item name="title" xsi:type="string">Subtotal</item>
+                                                        <item name="title" xsi:type="string" translate="true">Subtotal</item>
                                                         <item name="template" xsi:type="string">Magento_Checkout/cart/totals/subtotal</item>
                                                     </item>
                                                 </item>
                                                 <item name="shipping" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Checkout/js/view/cart/totals/shipping</item>
                                                     <item name="config" xsi:type="array">
-                                                        <item name="title" xsi:type="string">Shipping</item>
+                                                        <item name="title" xsi:type="string" translate="true">Shipping</item>
                                                         <item name="template" xsi:type="string">Magento_Checkout/cart/totals/shipping</item>
                                                     </item>
                                                 </item>
                                                 <item name="grand-total" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
                                                     <item name="config" xsi:type="array">
-                                                        <item name="title" xsi:type="string">Order Total</item>
+                                                        <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                         <item name="template" xsi:type="string">Magento_Checkout/cart/totals/grand-total</item>
                                                     </item>
                                                 </item>
