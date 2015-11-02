@@ -13,15 +13,22 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     protected $image;
 
     /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
+     */
+    protected $variationMediaAttributes;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Image $image
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Image $image
+        \Magento\Catalog\Helper\Image $image,
+        \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes
     ) {
         parent::__construct($context);
         $this->image = $image;
+        $this->variationMediaAttributes = $variationMediaAttributes;
     }
 
     /**
@@ -38,5 +45,32 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     public function getNoImageUrl()
     {
         return $this->image->getDefaultPlaceholderUrl('thumbnail');
+    }
+
+    /**
+     * Get image types data
+     *
+     * @return array
+     */
+    public function getImageTypes()
+    {
+        $imageTypes = [];
+        foreach ($this->variationMediaAttributes->getMediaAttributes() as $attribute) {
+            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            $imageTypes[$attribute->getAttributeCode()] = [
+                'code' => $attribute->getAttributeCode(),
+                'value' => '',
+                'name' => '',
+            ];
+        }
+        return $imageTypes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMediaAttributes()
+    {
+        return $this->variationMediaAttributes->getMediaAttributes();
     }
 }
