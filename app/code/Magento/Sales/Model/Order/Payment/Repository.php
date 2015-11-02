@@ -79,8 +79,7 @@ class Repository implements OrderPaymentRepositoryInterface
             throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
-            $entity = $this->metaData->getNewInstance();
-            $this->metaData->getMapper()->load($entity, $id);
+            $entity = $this->metaData->getNewInstance()->load($id);
             if (!$entity->getId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
