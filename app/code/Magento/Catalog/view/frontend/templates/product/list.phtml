@@ -79,6 +79,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                         <form data-role="tocart-form" action="<?php echo $postParams['action']; ?>" method="post">
                                             <input type="hidden" name="product" value="<?php echo $postParams['data']['product']; ?>">
                                             <input type="hidden" name="<?php echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                            <?php echo $block->getBlockHtml('formkey')?>
                                             <button type="submit"
                                                     title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
                                                     class="action tocart primary">
