@@ -135,7 +135,7 @@
                 <block class="Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Category...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Category...</item>
                         </item>
                     </data>
                 </block>
