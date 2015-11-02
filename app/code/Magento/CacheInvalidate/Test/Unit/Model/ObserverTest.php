@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CacheInvalidate\Test\Unit\Observer;
+namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\Observer */
     protected $model;
