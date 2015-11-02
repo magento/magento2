@@ -30,22 +30,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Initialization the quote
-     *
-     * @param Quote $quote
-     * @return void
-     */
-    protected function quoteInitialization(Quote $quote)
-    {
-        $quote->setCheckoutMethod(Onepage::METHOD_REGISTER);
-        $quote->setCustomerEmail('user@example.com');
-        $quote->setCustomerFirstname('Firstname');
-        $quote->setCustomerLastname('Lastname');
-        $quote->setCustomerIsGuest(false);
-        $quote->setReservedOrderId(null);
-    }
-
-    /**
      * Verify that an order placed with an existing customer can re-use the customer addresses.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
