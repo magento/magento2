@@ -96,7 +96,7 @@
                 <block class="Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Product...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Product...</item>
                         </item>
                     </data>
                 </block>
