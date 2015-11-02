@@ -62,25 +62,25 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->at(1))->method('where')->willReturnSelf();
         $select->expects($this->at(2))->method('where')->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchOne')->with(
-                $select,
-                [
-                    'product_super_attribute_id' => $attributeId,
-                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                ]
-            )->willReturn(0);
+            $select,
+            [
+                'product_super_attribute_id' => $attributeId,
+                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ]
+        )->willReturn(0);
 
         $this->connection->expects($this->once())->method('insertOnDuplicate')->with(
-                'catalog_product_super_attribute_label',
-                [
-                    'product_super_attribute_id' => $attributeId,
-                    'use_default' => 0,
-                    'store_id' => 0,
-                    'value' => 'test',
-                ]
-            );
+            'catalog_product_super_attribute_label',
+            [
+                'product_super_attribute_id' => $attributeId,
+                'use_default' => 0,
+                'store_id' => 0,
+                'value' => 'test',
+            ]
+        );
         $attributeMode = $this->getMockBuilder(AttributeModel::class)->setMethods(
-                ['getId', 'getUseDefault', 'getLabel']
-            )->disableOriginalConstructor()->getMock();
+            ['getId', 'getUseDefault', 'getLabel']
+        )->disableOriginalConstructor()->getMock();
         $attributeMode->expects($this->any())->method('getId')->willReturn($attributeId);
         $attributeMode->expects($this->any())->method('getUseDefault')->willReturn(0);
         $attributeMode->expects($this->any())->method('getLabel')->willReturn('test');
