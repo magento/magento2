@@ -1148,17 +1148,20 @@
         .fotorama__img--full {
             display: block;
             width: auto;
+            height: auto;
             max-height: 100%;
             max-width: 100%;
+            top: 0;
+            left: 0;
             vertical-align: middle;
             transition: @fotorama-fullscreen-zoom-time linear;
-            transition-property: width, height, top, left;
             margin: auto;
             cursor: default;
             &.fotorama__img--zoommable {
                 cursor: pointer;
                 max-width: none;
                 max-height: none;
+                transition-property: width, height, top, left;
             }
             &.fotorama__img--draggable {
                 cursor: move;
