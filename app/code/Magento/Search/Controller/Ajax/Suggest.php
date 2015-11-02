@@ -32,7 +32,7 @@ class Suggest extends Action
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->getRequest()->getParam('q', false)) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

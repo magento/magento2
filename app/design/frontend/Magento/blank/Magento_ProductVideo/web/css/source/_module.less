@@ -45,11 +45,14 @@
 }
 
 .product-video {
-    height: 85%;
-    margin-top: 15%;
+    height: 75%;
+    left: 0;
     position: absolute;
     top: 0;
     width: 100%;
+    right: 0;
+    bottom: 0;
+    margin: auto;
     iframe {
         height: 100%;
         left: 0;
@@ -57,6 +60,16 @@
         top: 0;
         width: 100%;
         z-index: 9999;
+    }
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 780px)
+and (orientation : landscape) {
+    .product-video {
+        height: 100%;
+        width: 81%;
     }
 }
 

@@ -11,7 +11,7 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $ids = $this->getRequest()->getParam('notification');
         if (!is_array($ids)) {

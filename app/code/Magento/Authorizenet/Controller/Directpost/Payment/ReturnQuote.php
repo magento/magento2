@@ -13,7 +13,7 @@ class ReturnQuote extends \Magento\Authorizenet\Controller\Directpost\Payment
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_returnCustomerQuote();
         $this->getResponse()->representJson(

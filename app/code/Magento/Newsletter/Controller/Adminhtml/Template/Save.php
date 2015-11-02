@@ -16,7 +16,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $request = $this->getRequest();
         if (!$request->isPost()) {

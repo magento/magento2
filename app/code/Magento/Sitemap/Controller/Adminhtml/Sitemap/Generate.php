@@ -14,7 +14,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         // init and load sitemap model
         $id = $this->getRequest()->getParam('sitemap_id');

@@ -42,7 +42,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Product Template ID'
+                'Attribute Set ID'
             )
             ->addColumn(
                 'type_id',

@@ -13,7 +13,7 @@ class Register extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
             $this->getResponse()->setRedirect($this->_getHelper()->getMSCheckoutUrl());
