@@ -1143,7 +1143,7 @@ class Checkout
      * Prepare quote for guest checkout order submit
      *
      * @return $this
-    */
+     */
     protected function prepareGuestQuote()
     {
         $quote = $this->_quote;
