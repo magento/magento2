@@ -11,7 +11,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::executeInternal
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -46,7 +46,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::executeInternal
      *
      * @dataProvider validateActionDataProvider
      *

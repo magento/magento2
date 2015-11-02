@@ -99,8 +99,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
-            $orderItem = $this->metadata->getNewInstance();
-            $this->metadata->getMapper()->load($orderItem, $id);
+            $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }

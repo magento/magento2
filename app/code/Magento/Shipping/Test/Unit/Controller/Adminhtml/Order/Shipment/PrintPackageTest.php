@@ -193,7 +193,7 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
                 'application/pdf'
             )->will($this->returnValue('result-pdf-content'));
 
-        $this->assertEquals('result-pdf-content', $this->controller->execute());
+        $this->assertEquals('result-pdf-content', $this->controller->executeInternal());
     }
 
     /**
@@ -215,6 +215,6 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
             ->method('setIsUrlNotice')
             ->with(true);
 
-        $this->assertNull($this->controller->execute());
+        $this->assertNull($this->controller->executeInternal());
     }
 }

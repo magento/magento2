@@ -11,7 +11,7 @@ class DeleteGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Group')->load($itemId))) {

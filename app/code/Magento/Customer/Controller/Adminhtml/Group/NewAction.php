@@ -28,7 +28,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $groupId = $this->_initGroup();
 

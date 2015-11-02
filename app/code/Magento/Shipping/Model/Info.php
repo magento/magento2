@@ -32,7 +32,7 @@ class Info extends \Magento\Framework\DataObject
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
 
@@ -49,7 +49,7 @@ class Info extends \Magento\Framework\DataObject
     /**
      * @param \Magento\Shipping\Helper\Data $shippingData
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
      * @param \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory
      * @param array $data
@@ -57,7 +57,7 @@ class Info extends \Magento\Framework\DataObject
     public function __construct(
         \Magento\Shipping\Helper\Data $shippingData,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Shipping\Model\Order\TrackFactory $trackFactory,
         \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory,
         array $data = []
