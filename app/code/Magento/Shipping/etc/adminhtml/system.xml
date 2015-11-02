@@ -33,11 +33,6 @@
                 <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Street Address Line 2</label>
                 </field>
-                <field id="email" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Email</label>
-                    <validate>validate-email</validate>
-                    <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
-                </field>
             </group>
             <group id="shipping_policy" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Shipping Policy Parameters</label>
