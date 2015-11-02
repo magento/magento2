@@ -37,15 +37,15 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(RequestInterface $request)
+    public function execute(RequestInterface $request)
     {
         if (!$request->isDispatched()) {
-            return parent::dispatch($request);
+            return parent::execute($request);
         }
         if (!$this->_getSession()->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
-        return parent::dispatch($request);
+        return parent::execute($request);
     }
 
     /**

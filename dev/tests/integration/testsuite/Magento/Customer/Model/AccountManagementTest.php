@@ -587,7 +587,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'email' => $email,
                 'firstname' => $firstName,
                 'lastname' => $lastName,
-                'created_in' => 'Admin',
                 'id' => null
             ]
         );
@@ -603,7 +602,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
         $this->assertEquals($lastName, $customerAfter->getLastname());
-        $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $this->accountManagement->authenticate(
             $customerAfter->getEmail(),
             'aPassword'
@@ -807,7 +805,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $customerEntity->setEmail($email)
             ->setFirstname($firstName)
             ->setLastname($lastname)
-            ->setCreatedIn('Admin')
             ->setId(null);
 
         $customer = $this->accountManagement->createAccount($customerEntity, 'aPassword');
@@ -815,7 +812,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($email, $customer->getEmail());
         $this->assertEquals($firstName, $customer->getFirstname());
         $this->assertEquals($lastname, $customer->getLastname());
-        $this->assertEquals('Admin', $customer->getCreatedIn());
         $this->accountManagement->authenticate(
             $customer->getEmail(),
             'aPassword',

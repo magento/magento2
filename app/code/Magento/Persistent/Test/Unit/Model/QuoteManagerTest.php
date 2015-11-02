@@ -76,9 +76,7 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
         $this->abstractCollectionMock =
             $this->getMock('Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false);
 
-        $this->quoteRepositoryMock =
-            $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
-
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote',
             [
                 'getId',

@@ -11,7 +11,7 @@ class SetStore extends \Magento\Backend\Controller\Adminhtml\System
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
         if ($storeId) {

@@ -57,7 +57,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $entityTypeId = $this->_getEntityTypeId();
         $hasError = false;
@@ -82,7 +82,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 }
                 if (!$model->getId()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('This product template no longer exists.')
+                        __('This attribute set no longer exists.')
                     );
                 }
                 $data = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
@@ -100,12 +100,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 $model->initFromSkeleton($this->getRequest()->getParam('skeleton_set'));
             }
             $model->save();
-            $this->messageManager->addSuccess(__('You saved the product template.'));
+            $this->messageManager->addSuccess(__('You saved the attribute set.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while saving the product template.'));
+            $this->messageManager->addException($e, __('Something went wrong while saving the attribute set.'));
             $hasError = true;
         }
 

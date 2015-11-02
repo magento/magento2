@@ -75,8 +75,11 @@ class Links extends Block
      */
     public function isLinkVisible($linkTitle)
     {
-        $this->expandCustomerMenu();
-        return $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->isVisible();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        return $link->isVisible();
     }
 
     /**

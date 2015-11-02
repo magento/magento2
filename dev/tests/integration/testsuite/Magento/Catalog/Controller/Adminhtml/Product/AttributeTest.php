@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -248,7 +249,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function _getAttributeData()
     {
         return [
-            'is_global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE,
+            'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
             'default_value_text' => '0',
             'default_value_yesno' => '0',
             'default_value_date' => '',

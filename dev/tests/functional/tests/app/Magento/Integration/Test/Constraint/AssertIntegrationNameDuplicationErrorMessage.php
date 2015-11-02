@@ -29,7 +29,7 @@ class AssertIntegrationNameDuplicationErrorMessage extends AbstractConstraint
         Integration $integration
     ) {
         $expectedMessage = sprintf(self::ERROR_DUPLICATE_INTEGRATION_NAME, $integration->getName());
-        $actualMessage = $integrationIndexPage->getMessagesBlock()->getErrorMessages();
+        $actualMessage = $integrationIndexPage->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,

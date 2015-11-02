@@ -37,6 +37,7 @@ class Locale extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configsFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
@@ -51,6 +52,7 @@ class Locale extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configsFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
@@ -63,7 +65,7 @@ class Locale extends \Magento\Framework\App\Config\Value
         $this->_websiteFactory = $websiteFactory;
         $this->_storeFactory = $storeFactory;
         $this->_localeCurrency = $localeCurrency;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -120,6 +122,6 @@ class Locale extends \Magento\Framework\App\Config\Value
             throw new \Magento\Framework\Exception\LocalizedException(__(join("\n", $exceptions)));
         }
 
-        return $this;
+        return parent::afterSave();
     }
 }

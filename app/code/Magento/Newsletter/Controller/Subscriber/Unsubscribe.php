@@ -12,7 +12,7 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
      * Unsubscribe newsletter
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('id');
         $code = (string)$this->getRequest()->getParam('code');

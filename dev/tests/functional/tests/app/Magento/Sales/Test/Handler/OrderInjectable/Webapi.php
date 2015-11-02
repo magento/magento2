@@ -31,6 +31,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         ],
         'country_id' => [
             'United States' => 'US',
+            'United Kingdom' => 'GB',
         ],
     ];
 
@@ -61,9 +62,8 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->url = $_ENV['app_frontend_url'] . 'rest/V1/carts/' . (int)$this->quote;
         $this->setProducts($fixture);
         $this->setCoupon($fixture);
-        $this->setAddress($fixture, 'billing');
-        $this->setAddress($fixture, 'shipping');
-        $this->setShippingMethod($fixture);
+        $this->setBillingAddress($fixture);
+        $this->setShippingInformation($fixture);
         $this->setPaymentMethod($fixture);
         $orderId = $this->placeOrder();
 
@@ -100,7 +100,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     protected function setProducts(OrderInjectable $order)
     {
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/carts/items';
+        $url = $_ENV['app_frontend_url'] . 'rest/V1/carts/' .  $this->quote . '/items';
         $products = $order->getEntityId()['products'];
         foreach ($products as $product) {
             $data = [
@@ -151,26 +151,17 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
     }
 
     /**
-     * Set address to quote.
+     * Set billing address to quote.
      *
      * @param OrderInjectable $order
-     * @param string $addressType billing|shipping
      * @return void
      * @throws \Exception
      */
-    protected function setAddress(OrderInjectable $order, $addressType)
+    protected function setBillingAddress(OrderInjectable $order)
     {
-        $url = $this->url . "/$addressType-address";
-        if ($addressType == 'billing') {
-            $address = $order->getBillingAddressId();
-        } else {
-            if (!$order->hasData('shipping_method')) {
-                return;
-            }
-            $address = $order->hasData('shipping_address_id')
-                ? $order->getShippingAddressId()
-                : $order->getBillingAddressId();
-        }
+        $url = $this->url . "/billing-address";
+        $address = $order->getBillingAddressId();
+
         unset($address['default_billing']);
         unset($address['default_shipping']);
         foreach (array_keys($this->mappingData) as $key) {
@@ -184,32 +175,48 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception("Could not set $addressType addresss to quote!");
+            throw new \Exception("Could not set billing addresss to quote!");
         }
     }
 
     /**
-     * Set shipping method to quote.
+     * Set shipping information to quote
      *
      * @param OrderInjectable $order
-     * @return void
      * @throws \Exception
      */
-    protected function setShippingMethod(OrderInjectable $order)
+    protected function setShippingInformation(OrderInjectable $order)
     {
         if (!$order->hasData('shipping_method')) {
             return;
         }
-        $url = $this->url . '/selected-shipping-method';
+        $url = $this->url . '/shipping-information';
         list($carrier, $method) = explode('_', $order->getShippingMethod());
+
+        $address = $order->hasData('shipping_address_id')
+            ? $order->getShippingAddressId()
+            : $order->getBillingAddressId();
+
+        unset($address['default_billing']);
+        unset($address['default_shipping']);
+        foreach (array_keys($this->mappingData) as $key) {
+            if (isset($address[$key])) {
+                $address[$key] = $this->mappingData[$key][$address[$key]];
+            }
+        }
+
         $data = [
-            "carrierCode" => $carrier,
-            "methodCode" => $method
+            'addressInformation' => [
+                'shippingAddress' => $address,
+                'shippingMethodCode' => $method,
+                'shippingCarrierCode' => $carrier,
+            ]
         ];
-        $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
+
+        $this->webapiTransport->write($url, $data, WebapiDecorator::POST);
         $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
-        if ($response !== true) {
+        if (!isset($response['payment_methods'], $response['totals'])) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
             throw new \Exception('Could not set shipping method to quote!');
         }

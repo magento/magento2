@@ -8,9 +8,6 @@ namespace Magento\Checkout\Controller\Onepage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
-/**
- * @removeCandidate
- */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -20,7 +17,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
