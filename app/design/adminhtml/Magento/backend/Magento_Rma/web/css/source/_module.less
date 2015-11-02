@@ -1,0 +1,145 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .rma-request-details,
+    .rma-wrapper .order-shipping-address {
+        float: left;
+        #mix-grid .width(6,12);
+    }
+
+    .rma-confirmation,
+    .rma-wrapper .order-return-address {
+        float: right;
+        #mix-grid .width(6,12);
+    }
+}
+
+.rma-items {
+    .col-actions {
+        .item_details,
+        .item_split_line {
+            &:extend(.abs-action-default all);
+            margin: 0 0 @order-create-sidebar__margin__s;
+        }
+        .item_delete_line {
+            &:extend(.abs-action-delete all);
+        }
+    }
+    .admin__control-select {
+        max-width: 10rem;
+    }
+}
+
+.rma-items-block {
+    .col-actions {
+        a {
+            &:extend(.abs-action-default all);
+            margin: 0 0 @order-create-sidebar__margin__s;
+        }
+    }
+    .col-reason {
+        .admin__control-select + .admin__control-text {
+            margin-top: @indent__xs;
+        }
+    }
+}
+
+.select-order-items-block,
+.rma-items-block {
+    .admin__page-section-title {
+        .actions {
+            float: right;
+            margin-bottom: 1.7rem;
+            margin-top: -0.3rem;
+        }
+    }
+}
+
+.col-rma-product {
+    .product_to_add {
+        float: right;
+    }
+}
+
+//  ToDo UI: refactor the popup to jQuery UI, edit the styles
+.rma-popup {
+    background: @popup__background-color;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    left: 50%;
+    margin: -20rem 0 0 -47rem;
+    position: fixed;
+    top: 50%;
+    width: 100rem;
+    z-index: 1000;
+
+    .entry-edit .fieldset {
+        border: none;
+    }
+
+    .validation-advice,
+    label.mage-error {
+        margin-left: 0;
+    }
+
+    .popup-window-title {
+        &:extend(.abs-clearfix all);
+        padding: @indent__base;
+        .title {
+            font-size: 1.9rem;
+            display: block;
+        }
+        .actions {
+            float: right;
+        }
+    }
+
+    .popup-window-content {
+        height: auto !important;
+        max-height: 40rem;
+        overflow-x: hidden;
+        overflow: auto;
+        padding: @indent__base @indent__base 0;
+        position: relative;
+    }
+
+    .popup-window-buttons-set {
+        padding: @indent__base;
+        text-align: right;
+    }
+
+    .product-options {
+        border-bottom: 1px solid #e7e7e7;
+        margin: 0 0 15px;
+        padding: 0 0 12px;
+        .required {
+            color: #333 !important;
+            font-weight: normal !important;
+            em {
+                color: #d40707;
+            }
+        }
+    }
+
+    .last-fieldset .product-options {
+        border: 0 none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .action-close {
+        &:extend(.ui-dialog .action-close all);
+    }
+    .action-secondary {
+        float: right;
+        margin: 0 0 0 @popup__padding__horizontal;
+        &:extend(.ui-dialog .action-primary all);
+    }
+}
+
+.grid .rma-popup .form-list tr,
+.grid tr.even .rma-popup .form-list tr,
+.grid tr.on-mouse .rma-popup .form-list tr {
+    background: @popup__background-color !important;
+}
