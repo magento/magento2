@@ -10,29 +10,29 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Method
- * Adminhtml sales order create shipping method block
+ * Adminhtml sales order create shipping method block.
  */
 class Method extends Block
 {
     /**
-     * 'Get shipping methods and rates' link
+     * 'Get shipping methods and rates' link.
      *
      * @var string
      */
     protected $shippingMethodsLink = '#order-shipping-method-summary a';
 
     /**
-     * Shipping method
+     * Shipping method.
      *
      * @var string
      */
     protected $shippingMethod = '//dt[contains(.,"%s")]/following-sibling::*//*[contains(text(), "%s")]';
 
     /**
-     * Select shipping method
+     * Select shipping method.
      *
      * @param array $shippingMethod
+     * @return void
      */
     public function selectShippingMethod(array $shippingMethod)
     {

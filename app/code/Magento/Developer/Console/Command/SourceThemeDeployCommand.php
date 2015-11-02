@@ -74,7 +74,7 @@ class SourceThemeDeployCommand extends Command
         Publisher $assetPublisher,
         Repository $assetRepository
     ) {
-        parent::__construct('dev:source_theme:deploy');
+        parent::__construct('dev:source-theme:deploy');
         $this->validator = $validator;
         $this->assetPublisher = $assetPublisher;
         $this->assetRepository = $assetRepository;

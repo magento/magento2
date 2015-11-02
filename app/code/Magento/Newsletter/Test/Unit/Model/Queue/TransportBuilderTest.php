@@ -103,7 +103,7 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
 
         $transport = $this->getMock('\Magento\Framework\Mail\TransportInterface');
 
-        $this->_mailTransportFactoryMock->expects(
+        $this->mailTransportFactoryMock->expects(
             $this->at(0)
         )->method(
             'create'
