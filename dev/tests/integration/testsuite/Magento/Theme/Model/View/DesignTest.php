@@ -146,13 +146,59 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider getFilenameDataProvider
+     * @magentoAppIsolation enabled
+     */
+    public function testGetFilename($file, $params)
+    {
+        $this->_emulateFixtureTheme();
+        $this->assertFileExists($this->_viewFileSystem->getFilename($file, $params));
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilenameDataProvider()
+    {
+        return [
+            ['theme_file.txt', ['module' => 'Magento_Catalog']],
+            ['Magento_Catalog::theme_file.txt', []],
+            ['Magento_Catalog::theme_file_with_2_dots..txt', []],
+            ['Magento_Catalog::theme_file.txt', ['module' => 'Overridden_Module']]
+        ];
+    }
+
+    /**
      * @magentoAppIsolation enabled
      */
     public function testGetViewConfig()
     {
         $this->_emulateFixtureTheme();
-        $config = $this->_viewConfig->getViewConfig();
-        $this->assertInstanceOf('Magento\Framework\Config\View', $config);
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->getDesignTheme();
+        $customConfigFile = $theme->getCustomization()->getCustomViewConfigPath();
+        /** @var $filesystem \Magento\Framework\Filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $relativePath = $directory->getRelativePath($customConfigFile);
+        try {
+            $directory->writeFile(
+                $relativePath,
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <view><vars  module="Namespace_Module"><var name="var">var value</var></vars></view>'
+            );
+
+            $config = $this->_viewConfig->getViewConfig();
+            $this->assertInstanceOf('Magento\Framework\Config\View', $config);
+            $this->assertEquals('var value', $config->getVarValue('Namespace_Module', 'var'));
+        } catch (\Exception $e) {
+            $directory->delete($relativePath);
+            throw $e;
+        }
+        $directory->delete($relativePath);
     }
 
     /**
@@ -180,6 +226,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf('Magento\Framework\Config\View', $config);
+            $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
         } catch (\Exception $e) {
             $directory->delete($relativePath);
             throw $e;
