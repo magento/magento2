@@ -432,7 +432,7 @@ Packaging.prototype = {
                 qty.disabled = 'disabled';
                 checkbox.disabled = 'disabled';
                 packagePrepareGrid.select('.grid th [type="checkbox"]')[0].up('th label').hide();
-                item.select('.delete')[0].show();
+                item.select('[data-action=package-delete-item]')[0].show();
             } else {
                 item.remove();
             }
@@ -647,8 +647,8 @@ Packaging.prototype = {
      * Show/hide disable/enable buttons in case of all items packed state
      */
     _setAllItemsPackedState: function() {
-        var addPackageBtn = this.window.select('.AddPackageBtn')[0];
-        var savePackagesBtn = this.window.select('.SavePackagesBtn')[0];
+        var addPackageBtn = $$('[data-action=add-packages]')[0];
+        var savePackagesBtn = $$('[data-action=save-packages]')[0];
         if (this._getItemsCount(this.itemsAll) > 0
                 && (this._checkExceedsQtyFinal(this._getItemsCount(this.getPackedItemsQty()),this._getItemsCount(this.itemsAll)))
         ) {

@@ -70,6 +70,7 @@
                         $customsValueDisplay = ' style="display: none;" ';
                         $customsValueValidation = '';
                     }
+
                     ?>
                     <td <?php /* @escapeNotVerified */ echo $customsValueDisplay ?>>
                         <input type="text"
@@ -88,7 +89,7 @@
                                name="qty"
                                value="<?php /* @escapeNotVerified */ echo $item->getQty()*1; ?>"
                                class="input-text admin__control-text qty<?php if ($item->getOrderItem()->getIsQtyDecimal()): ?> qty-decimal<?php endif ?>">&nbsp;
-                        <button type="button" class="action-delete delete icon-btn" onclick="packaging.deleteItem(this);" style="display:none;">
+                        <button type="button" class="action-delete" data-action="package-delete-item" onclick="packaging.deleteItem(this);" style="display:none;">
                             <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
                         </button>
                     </td>
