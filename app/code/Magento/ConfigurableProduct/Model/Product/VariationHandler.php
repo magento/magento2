@@ -44,6 +44,7 @@ class VariationHandler
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+     * @param VariationMediaAttributes $variationMediaAttributes
      */
     public function __construct(
         Type\Configurable $configurableProduct,
