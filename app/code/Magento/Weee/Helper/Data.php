@@ -791,19 +791,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $typeInstance->getOptionsIds($product),
                 $product
             );
-            $insertedWeeCodesArray = [];
+            $insertedWeeeCodesArray = [];
             foreach ($selectionCollection as $selectionItem) {
-                $weeAttributes = $this->getProductWeeeAttributes(
+                $weeeAttributes = $this->getProductWeeeAttributes(
                     $selectionItem,
                     null,
                     null,
-                    $product->getStore()->getWebsiteId()
+                    $product->getStore()->getWebsiteId(),
+                    true,
+                    false
                 );
-                foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
+                foreach ($weeeAttributes as $weeeAttribute) {
+                    if ($this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
+                        $this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+                        if ($this->displayTotalsInclTax() == false) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
+                        }
+                    }
+                    if ($this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                        if ($this->displayTotalsInclTax() == true) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
+                        }
+                    }
+                    $insertedWeeeCodesArray[$selectionItem->getId()][$weeeAttribute->getCode()] = $weeeAttribute;
                 }
             }
-            return $insertedWeeCodesArray;
+            return $insertedWeeeCodesArray;
         }
         return [];
     }
