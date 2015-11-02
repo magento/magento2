@@ -190,7 +190,8 @@ class Application
         if (null === $this->_db) {
             if ($this->isInstalled()) {
                 $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
-                $reader = new Reader($this->dirList, $configPool);
+                $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+                $reader = new Reader($this->dirList, $driverPool, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
                 $host = $deploymentConfig->get(
                     ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .

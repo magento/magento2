@@ -29,8 +29,8 @@ $product = $productRepository->get('simple');
 
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = $objectManager->create('Magento\Quote\Model\Quote');
-/** @var \Magento\Quote\Model\Quote\Item\Repository  $quoteItemRepository */
-$quoteItemRepository = $objectManager->create('Magento\Quote\Model\Quote\Item\Repository');
+/** @var \Magento\Quote\Api\CartItemRepositoryInterface  $quoteItemRepository */
+$quoteItemRepository = $objectManager->create('\Magento\Quote\Api\CartItemRepositoryInterface');
 /** @var \Magento\Quote\Api\Data\CartItemInterface $cartItem */
 $cartItem = $objectManager->create('Magento\Quote\Api\Data\CartItemInterface');
 /** @var \Magento\Quote\Model\Quote\ProductOption $productOption */
