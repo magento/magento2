@@ -81,10 +81,10 @@ define([
          */
         initMsrpPopup: function () {
             var popupDOM = $(this.options.popUpAttr)[0],
-                $msrpPopup = $($(popupDOM).html()).clone();
+                $msrpPopup = $($.parseHTML(popupDOM.text.trim())).clone();
 
             $msrpPopup.find(this.options.productIdInput).val(this.options.productId);
-            $('body').append($msrpPopup);
+            $('body').add($msrpPopup);
             $msrpPopup.trigger('contentUpdated');
 
             $msrpPopup.find('button').on('click', function (ev) {
@@ -106,7 +106,9 @@ define([
          */
         initInfoPopup: function () {
             var infoPopupDOM = $('[data-role=msrp-info-template]')[0],
-                $infoPopup = $(infoPopupDOM.innerText).appendTo('body');
+                $infoPopup = $($.parseHTML(infoPopupDOM.text.trim()));
+
+            $('body').add($infoPopup);
 
             $(this.options.helpLinkId).on('click', function (e) {
                 this.popUpOptions.position.of = $(e.target);
@@ -124,8 +126,9 @@ define([
         initTierPopup: function () {
             var tierOptions = JSON.parse($(this.options.attr).attr('data-tier-price')),
                 popupDOM = $(this.options.popUpAttr)[0],
-                $tierPopup = $(popupDOM.innerText).appendTo('body');
+                $tierPopup = $($.parseHTML(popupDOM.text.trim()));
 
+            $('body').add($tierPopup);
             $tierPopup.find(this.options.productIdInput).val(this.options.productId);
             this.popUpOptions.position.of = $(this.options.helpLinkId);
 
