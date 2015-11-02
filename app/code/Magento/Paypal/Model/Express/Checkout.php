@@ -8,7 +8,6 @@ namespace Magento\Paypal\Model\Express;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Paypal\Model\Config as PaypalConfig;
-use Magento\Paypal\Model\Express\Checkout\Quote as PaypalQuote;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
@@ -255,11 +254,6 @@ class Checkout
     protected $orderSender;
 
     /**
-     * @var PaypalQuote
-     */
-    protected $paypalQuote;
-
-    /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
@@ -296,7 +290,6 @@ class Checkout
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param AccountManagement $accountManagement
-     * @param PaypalQuote $paypalQuote
      * @param OrderSender $orderSender
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
@@ -326,7 +319,6 @@ class Checkout
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         AccountManagement $accountManagement,
-        PaypalQuote $paypalQuote,
         OrderSender $orderSender,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
@@ -353,7 +345,6 @@ class Checkout
         $this->_messageManager = $messageManager;
         $this->orderSender = $orderSender;
         $this->_accountManagement = $accountManagement;
-        $this->paypalQuote = $paypalQuote;
         $this->quoteRepository = $quoteRepository;
         $this->totalsCollector = $totalsCollector;
         $this->_customerSession = isset($params['session'])
@@ -620,7 +611,7 @@ class Checkout
             ->callGetExpressCheckoutDetails();
         $quote = $this->_quote;
 
-        $this->_ignoreAddressValidation();
+        $this->ignoreAddressValidation();
 
         // import shipping address
         $exportedShippingAddress = $this->_api->getExportedShippingAddress();
@@ -708,7 +699,7 @@ class Checkout
         $this->_quote->setMayEditShippingMethod(
             '' == $this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD)
         );
-        $this->_ignoreAddressValidation();
+        $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
         $this->quoteRepository->save($this->_quote);
     }
@@ -763,7 +754,7 @@ class Checkout
         $shippingAddress = $this->_quote->getShippingAddress();
         if (!$this->_quote->getIsVirtual() && $shippingAddress) {
             if ($methodCode != $shippingAddress->getShippingMethod()) {
-                $this->_ignoreAddressValidation();
+                $this->ignoreAddressValidation();
                 $shippingAddress->setShippingMethod($methodCode)->setCollectShippingRates(true);
                 $this->_quote->collectTotals();
                 $this->quoteRepository->save($this->_quote);
@@ -786,31 +777,16 @@ class Checkout
             $this->updateShippingMethod($shippingMethodCode);
         }
 
-        $isNewCustomer = false;
         switch ($this->getCheckoutMethod()) {
             case \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST:
-                $this->_prepareGuestQuote();
-                break;
-            case \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER:
-                $this->_prepareNewCustomerQuote();
-                $isNewCustomer = true;
-                break;
-            default:
-                $this->_prepareCustomerQuote();
+                $this->prepareGuestQuote();
                 break;
         }
 
-        $this->_ignoreAddressValidation();
+        $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
         $order = $this->quoteManagement->submit($this->_quote);
 
-        if ($isNewCustomer) {
-            try {
-                $this->_involveNewCustomer();
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-            }
-        }
         if (!$order) {
             return;
         }
@@ -843,7 +819,7 @@ class Checkout
      *
      * @return void
      */
-    private function _ignoreAddressValidation()
+    private function ignoreAddressValidation()
     {
         $this->_quote->getBillingAddress()->setShouldIgnoreValidation(true);
         if (!$this->_quote->getIsVirtual()) {
@@ -1110,62 +1086,6 @@ class Checkout
     }
 
     /**
-     * Prepare quote for guest checkout order submit
-     *
-     * @return $this
-     */
-    protected function _prepareGuestQuote()
-    {
-        $quote = $this->_quote;
-        $quote->setCustomerId(null)
-            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
-            ->setCustomerIsGuest(true)
-            ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
-        return $this;
-    }
-
-    /**
-     * Prepare quote for customer registration and customer order submit
-     * and restore magento customer data from quote
-     *
-     * @return void
-     */
-    protected function _prepareNewCustomerQuote()
-    {
-        $this->paypalQuote->prepareQuoteForNewCustomer($this->_quote);
-    }
-
-    /**
-     * Prepare quote for customer order submit
-     *
-     * @return void
-     */
-    protected function _prepareCustomerQuote()
-    {
-        $this->paypalQuote->prepareRegisteredCustomerQuote($this->_quote, $this->_customerSession->getCustomerId());
-    }
-
-    /**
-     * Involve new customer to system
-     *
-     * @return $this
-     */
-    protected function _involveNewCustomer()
-    {
-        $customer = $this->_quote->getCustomer();
-        $confirmationStatus = $this->_accountManagement->getConfirmationStatus($customer->getId());
-        if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
-            $this->_messageManager->addSuccess(
-                __('Thank you for registering with Main Website Store.')
-            );
-        } else {
-            $this->getCustomerSession()->regenerateId();
-            $this->getCustomerSession()->loginById($customer->getId());
-        }
-        return $this;
-    }
-
-    /**
      * Create payment redirect url
      * @param bool|null $button
      * @param string $token
@@ -1217,5 +1137,20 @@ class Checkout
                 }
             }
         }
+    }
+
+    /**
+     * Prepare quote for guest checkout order submit
+     *
+     * @return $this
+    */
+    protected function prepareGuestQuote()
+    {
+        $quote = $this->_quote;
+        $quote->setCustomerId(null)
+            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
+            ->setCustomerIsGuest(true)
+            ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
+        return $this;
     }
 }
