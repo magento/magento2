@@ -131,8 +131,9 @@
 
 ############################################
 ## workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## Please, set it on virtual host configuration level
 
-    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 ############################################
 
 <IfModule mod_rewrite.c>

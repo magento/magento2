@@ -63,8 +63,6 @@ class Json extends AbstractResult
      */
     protected function render(ResponseInterface $response)
     {
-        // reset profiler to avoid appending profiling stat to JSON response
-        \Magento\Framework\Profiler::reset();
         $this->translateInline->processResponseBody($this->json, true);
         $response->representJson($this->json);
         return $this;

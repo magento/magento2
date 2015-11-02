@@ -54,19 +54,14 @@ class Renderer extends Config\Renderer
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
-        $taggedAttributes = parent::addDefaultAttributes($contentType, $attributes);
-
-        if ($taggedAttributes !== $attributes) {
-            return $taggedAttributes;
-        }
-
         switch ($contentType) {
-            case 'less':
-                $taggedAttributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
+            case 'css':
+                return ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
 
         }
-        return $taggedAttributes;
+
+        return parent::addDefaultAttributes($contentType, $attributes);
     }
 
     /**
