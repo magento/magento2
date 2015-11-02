@@ -88,7 +88,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
             }
 
             if (!in_array($store->getId(), $stores)) {
-                throw new NoSuchEntityException(__('Requested scope cannot be loaded'));
+                $store = $this->getDefaultStoreById($defaultStoreId);
             }
         } else {
             $store = $this->getDefaultStoreById($defaultStoreId);
