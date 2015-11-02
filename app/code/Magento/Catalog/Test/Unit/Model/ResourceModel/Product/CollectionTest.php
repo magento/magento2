@@ -28,6 +28,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $collection;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
@@ -147,7 +150,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->exactly(2))->method('prepareSqlCondition')->withConsecutive(
             ['cat.category_id', $condition],
-            ['e.entity_id' , [$conditionType => $this->selectMock]]
+            ['e.entity_id', [$conditionType => $this->selectMock]]
         )->willReturnOnConsecutiveCalls(
             $preparedSql,
             'e.entity_id IN (1,2)'
