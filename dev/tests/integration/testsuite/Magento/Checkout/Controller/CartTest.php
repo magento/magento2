@@ -35,7 +35,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for simple product doesn\'t contain "Update Cart" button'
@@ -63,7 +63,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for simple product with custom option doesn\'t contain "Update Cart" button'
@@ -98,7 +98,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for bundle product doesn\'t contain "Update Cart" button'
@@ -126,7 +126,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for downloadable product doesn\'t contain "Update Cart" button'
