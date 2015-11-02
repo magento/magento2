@@ -20,6 +20,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Image $image
+     * @param \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

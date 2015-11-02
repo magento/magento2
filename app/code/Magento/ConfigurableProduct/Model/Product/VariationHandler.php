@@ -217,11 +217,11 @@ class VariationHandler
                 $variationId = $image['variation_id'];
                 $newFile = $this->media->duplicateImageFromTmp($file);
                 $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
-                foreach ($this->variationMediaAttributes->getMediaAttributes() as $imageType => $attribute) {
-                    if (isset($productsData[$variationId][$imageType])
-                        && $productsData[$variationId][$imageType] == $file
+                foreach ($this->variationMediaAttributes->getMediaAttributes() as $attribute) {
+                    if (isset($productsData[$variationId][$attribute->getAttributeCode()])
+                        && $productsData[$variationId][$attribute->getAttributeCode()] == $file
                     ) {
-                        $productsData[$variationId][$imageType] = $newFile;
+                        $productsData[$variationId][$attribute->getAttributeCode()] = $newFile;
                     }
                 }
             }
