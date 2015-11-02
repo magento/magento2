@@ -23,7 +23,7 @@ class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Downloadable::report_products_downloads'

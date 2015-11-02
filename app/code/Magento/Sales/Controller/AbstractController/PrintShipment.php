@@ -49,7 +49,7 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {

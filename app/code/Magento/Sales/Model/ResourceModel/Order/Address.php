@@ -122,19 +122,4 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         }
         return $this;
     }
-
-    /**
-     * Update related grid table after object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $resource = parent::_afterSave($object);
-        if ($object->getParentId()) {
-            $this->gridPool->refreshByOrderId($object->getParentId());
-        }
-        return $resource;
-    }
 }

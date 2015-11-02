@@ -13,7 +13,7 @@ class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_forward('refreshLifetime', 'report_statistics');
     }

@@ -11,7 +11,7 @@ class Failure extends \Magento\Checkout\Controller\Onepage
     /**
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $lastQuoteId = $this->getOnepage()->getCheckout()->getLastQuoteId();
         $lastOrderId = $this->getOnepage()->getCheckout()->getLastOrderId();
