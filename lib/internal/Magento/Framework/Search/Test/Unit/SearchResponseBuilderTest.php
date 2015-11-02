@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Test\Unit\Model;
+namespace Magento\Framework\Search\Test\Unit;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Response\QueryResponse;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Search\Model\SearchResponseBuilder
+     * @var \Magento\Framework\Search\SearchResponseBuilder
      */
     private $model;
 
@@ -36,7 +36,7 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject('Magento\Search\Model\SearchResponseBuilder', [
+        $this->model = (new ObjectManager($this))->getObject('Magento\Framework\Search\SearchResponseBuilder', [
             'documentFactory' => $this->documentFactory,
             'searchResultFactory' => $this->searchResultFactory,
         ]);
