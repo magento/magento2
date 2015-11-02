@@ -171,6 +171,8 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $total->setBaseTotalAmount($this->getCode(), $rate->getPrice());
                     $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();
                     $address->setShippingDescription(trim($shippingDescription, ' -'));
+                    $total->setShippingAmount($rate->getPrice());
+                    $total->setShippingDescription($address->getShippingDescription());
                     break;
                 }
             }
@@ -184,6 +186,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
