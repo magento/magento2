@@ -563,7 +563,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $convertedQuoteItem = $this->getMock('Magento\Sales\Api\Data\OrderItemInterface', [], [], '', false);
 
         $addresses = [$convertedShippingAddress, $convertedBillingAddress];
-        $payments = [$convertedPayment];
         $quoteItems = [$quoteItem];
         $convertedItems = [$convertedQuoteItem];
 
@@ -615,11 +614,13 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($payment)
             ->willReturn($convertedPayment);
 
+        $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
+
         $order = $this->prepareOrderFactory(
             $baseOrder,
             $convertedBillingAddress,
             $addresses,
-            $payments,
+            $convertedPayment,
             $convertedItems,
             $quoteId,
             $convertedShippingAddress
@@ -860,7 +861,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->method('isVirtual')
             ->willReturn($isVirtual);
         if ($shippingAddress) {
-            $quote->expects($this->exactly(2))
+            $quote->expects($this->exactly(3))
                 ->method('getShippingAddress')
                 ->willReturn($shippingAddress);
         }
@@ -892,7 +893,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
      * @param \Magento\Sales\Api\Data\OrderInterface $baseOrder
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
      * @param array $addresses
-     * @param array $payments
+     * @param $payment
      * @param array $items
      * @param $quoteId
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
@@ -902,7 +903,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
         \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress,
         array $addresses,
-        array $payments,
+        $payment,
         array $items,
         $quoteId,
         \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null,
@@ -911,7 +912,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $order = $this->getMock(
             'Magento\Sales\Model\Order',
             ['setShippingAddress', 'getAddressesCollection', 'getAddresses', 'getBillingAddress', 'addAddresses',
-            'setBillingAddress', 'setAddresses', 'setPayments', 'setItems', 'setQuoteId'],
+            'setBillingAddress', 'setAddresses', 'setPayment', 'setItems', 'setQuoteId'],
             [],
             '',
             false
@@ -938,7 +939,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $order->expects($this->any())->method('addAddresses')->withAnyParameters()->willReturnSelf();
         $order->expects($this->once())->method('setBillingAddress')->with($billingAddress);
         $order->expects($this->once())->method('setAddresses')->with($addresses);
-        $order->expects($this->once())->method('setPayments')->with($payments);
+        $order->expects($this->once())->method('setPayment')->with($payment);
         $order->expects($this->once())->method('setItems')->with($items);
         $order->expects($this->once())->method('setQuoteId')->with($quoteId);
 
