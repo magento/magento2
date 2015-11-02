@@ -46,7 +46,7 @@ class GridToCsv extends Action
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         return $this->fileFactory->create('export.csv', $this->converter->getCsvFile(), 'var');
     }

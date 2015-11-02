@@ -81,7 +81,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
             return $this;
         }
         $this->processErrorStatistics($errorLevel);
-        $this->processInvalidRow($rowNumber);
+        if ($errorLevel == ProcessingError::ERROR_LEVEL_CRITICAL) {
+            $this->processInvalidRow($rowNumber);
+        }
         $errorMessage = $this->getErrorMessage($errorCode, $errorMessage, $columnName);
 
         /** @var ProcessingError $newError */
