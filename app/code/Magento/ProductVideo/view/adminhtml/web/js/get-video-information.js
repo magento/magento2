@@ -403,7 +403,8 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return $.mage.__('Video cant be shown due to the following reason: ') + $.unique(errorsMessage).join(', ');
+                        return $.mage.__('Video cant be shown due to the following reason: ') +
+                            $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
