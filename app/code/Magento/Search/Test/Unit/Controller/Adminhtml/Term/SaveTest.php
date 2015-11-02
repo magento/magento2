@@ -120,7 +120,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(0))->method('getPostValue')->willReturn($data);
         $this->request->expects($this->at(1))->method('isPost')->willReturn($isPost);
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     /**
@@ -146,7 +146,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addSuccess');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     public function testExecuteLoadQueryQueryIdQueryText()
@@ -164,7 +164,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addSuccess');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     public function testExecuteLoadQueryQueryIdQueryText2()
@@ -183,7 +183,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addSuccess');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     public function testExecuteLoadQueryQueryIdQueryTextException()
@@ -202,7 +202,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addError');
         $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     public function testExecuteException()
@@ -219,7 +219,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())->method('addException');
         $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
-        $this->assertSame($this->redirect, $this->controller->execute());
+        $this->assertSame($this->redirect, $this->controller->executeInternal());
     }
 
     /**

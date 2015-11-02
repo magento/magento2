@@ -13,7 +13,7 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
         //TODO: some actions with order

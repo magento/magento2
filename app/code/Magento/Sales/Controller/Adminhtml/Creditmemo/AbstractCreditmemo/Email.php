@@ -25,7 +25,7 @@ class Email extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $creditmemoId = $this->getRequest()->getParam('creditmemo_id');
         if (!$creditmemoId) {

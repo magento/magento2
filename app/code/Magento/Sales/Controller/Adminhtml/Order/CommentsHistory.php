@@ -74,7 +74,7 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initOrder();
         $layout = $this->layoutFactory->create();

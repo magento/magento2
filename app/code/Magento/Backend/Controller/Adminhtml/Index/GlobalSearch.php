@@ -40,7 +40,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $items = [];
 

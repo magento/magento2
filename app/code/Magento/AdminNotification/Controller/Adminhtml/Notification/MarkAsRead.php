@@ -11,7 +11,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $notificationId = (int)$this->getRequest()->getParam('id');
         if ($notificationId) {

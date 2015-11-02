@@ -125,7 +125,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($resultRedirect);
 
-        $this->assertEquals($resultRedirect, $this->controller->dispatch($this->requestMock));
+        $this->assertEquals($resultRedirect, $this->controller->execute($this->requestMock));
         $this->assertEquals('noRoute', $resultRedirect->getPath()) ;
     }
 
@@ -146,7 +146,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($resultRedirect);
 
-        $this->assertEquals($resultRedirect, $this->controller->dispatch($this->requestMock));
+        $this->assertEquals($resultRedirect, $this->controller->execute($this->requestMock));
         $this->assertEquals('noRoute', $resultRedirect->getPath()) ;
     }
 }

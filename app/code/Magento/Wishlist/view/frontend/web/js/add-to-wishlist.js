@@ -66,7 +66,7 @@ define([
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
                 if (!params)
-                    params = {};
+                    params = {'data': {}};
 
                 if (!$.isEmptyObject(dataToAdd)) {
                     self._removeExcessiveData(params, dataToAdd);
