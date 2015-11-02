@@ -18,7 +18,7 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $reports = $this->_settlementFactory->create();

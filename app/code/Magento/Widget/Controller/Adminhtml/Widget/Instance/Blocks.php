@@ -40,7 +40,7 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_objectManager->get(
             'Magento\Framework\App\State'

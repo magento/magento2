@@ -178,6 +178,6 @@ class AccessTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody');
 
-        $this->accessAction->execute();
+        $this->accessAction->executeInternal();
     }
 }

@@ -19,7 +19,7 @@ class Validate extends ImportResultController
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */

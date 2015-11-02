@@ -7,6 +7,7 @@
         "magento/module-authorization": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-integration": "1.0.0-beta",
+        "magento/module-email": "1.0.0-beta",
         "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",

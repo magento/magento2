@@ -69,7 +69,7 @@ class SalesOrderReportEntityTest extends Injectable
     {
         // Preconditions
         $this->salesReport->open();
-        $this->salesReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->salesReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->salesReport->getFilterBlock()->viewsReport($salesReport);
         $this->salesReport->getActionBlock()->showReport();
         $initialSalesResult = $this->salesReport->getGridBlock()->getLastResult();

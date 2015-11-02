@@ -22,7 +22,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_initSession();
 

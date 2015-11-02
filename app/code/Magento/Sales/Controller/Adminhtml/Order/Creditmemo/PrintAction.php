@@ -49,13 +49,13 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
      *
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
         $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $this->creditmemoLoader->load();
-        return parent::execute();
+        return parent::executeInternal();
     }
 }

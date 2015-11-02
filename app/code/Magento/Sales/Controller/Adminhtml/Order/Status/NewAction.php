@@ -36,7 +36,7 @@ class NewAction extends \Magento\Sales\Controller\Adminhtml\Order\Status
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $data = $this->_getSession()->getFormData(true);
         if ($data) {

@@ -123,7 +123,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
             ->method('appendBody')
             ->with($this->equalTo($html));
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 
     public function executeDataProvider()
@@ -145,6 +145,6 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($mapData));
         $this->viewMock->expects($this->never())->method('getLayout')->will($this->returnValue($this->layoutMock));
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }

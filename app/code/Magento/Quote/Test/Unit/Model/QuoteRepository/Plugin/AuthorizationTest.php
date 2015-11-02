@@ -37,7 +37,7 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     {
         // Quote without customer ID
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
@@ -48,7 +48,7 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetActiveReturnsQuoteIfQuoteIsAllowedForCurrentUserContext()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
@@ -63,7 +63,7 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     {
         // Quote without customer ID
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())->method('getUserType')->willReturn(
             UserContextInterface::USER_TYPE_CUSTOMER
         );
@@ -74,7 +74,7 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetActiveForCustomerReturnsQuoteIfQuoteIsAllowedForCurrentUserContext()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);

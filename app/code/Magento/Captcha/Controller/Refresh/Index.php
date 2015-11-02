@@ -30,7 +30,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function executeInternal()
     {
         $formId = $this->_request->getPost('formId');
         if (null === $formId) {

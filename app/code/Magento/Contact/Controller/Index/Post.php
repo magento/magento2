@@ -14,7 +14,7 @@ class Post extends \Magento\Contact\Controller\Index
      * @return void
      * @throws \Exception
      */
-    public function execute()
+    public function executeInternal()
     {
         $post = $this->getRequest()->getPostValue();
         if (!$post) {

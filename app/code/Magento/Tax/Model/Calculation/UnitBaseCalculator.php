@@ -45,7 +45,7 @@ class UnitBaseCalculator extends AbstractCalculator
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
         $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
-            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate);
+            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate, $round);
         }
         $uniTax = $this->calculationTool->calcTaxAmount($priceInclTax, $rate, true, false);
         $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;

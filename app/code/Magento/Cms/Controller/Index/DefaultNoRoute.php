@@ -27,7 +27,7 @@ class DefaultNoRoute extends \Magento\Framework\App\Action\Action
     /**
      * @return \Magento\Framework\View\Result\LayoutFactory
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultLayout = $this->resultPageFactory->create();
         $resultLayout->setStatusHeader(404, '1.1', 'Not Found');
