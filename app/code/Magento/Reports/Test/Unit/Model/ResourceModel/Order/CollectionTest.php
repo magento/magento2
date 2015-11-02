@@ -251,10 +251,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDateRangeFirstPart($range, $customStart, $customEnd, $expectedInterval)
     {
+        $timeZoneToReturn = date_default_timezone_get();
+        date_default_timezone_set('UTC');
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
+        date_default_timezone_set($timeZoneToReturn);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        $this->assertEquals($expectedInterval->format('%y %m %d %h:%i:%s'), $intervalResult);
+        $this->assertEquals($expectedInterval, $intervalResult);
     }
 
     /**
@@ -423,15 +426,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function firstPartDateRangeDataProvider()
     {
-        $dt = new \DateTime();
-        $dt->setTime(0, 0, 0);
-        $dt1 = clone $dt;
-        $dt2 = clone $dt;
-        $dt3 = clone $dt;
         return [
-            ['', '', '', $dt->diff($dt1->setTime(23, 59, 59))],
-            ['24h', '', '', $dt->diff($dt2->add(new \DateInterval('P0Y0M01DT00H00M00S')))],
-            ['7d', '', '', $dt->diff($dt3->add(new \DateInterval('P0Y0M06DT23H59M59S')))]
+            ['', '', '', '0 0 0 23:59:59'],
+            ['24h', '', '', '0 0 1 0:0:0'],
+            ['7d', '', '', '0 0 6 23:59:59']
         ];
     }
 
