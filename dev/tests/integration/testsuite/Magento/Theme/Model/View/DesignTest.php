@@ -146,29 +146,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getFilenameDataProvider
-     * @magentoAppIsolation enabled
-     */
-    public function testGetFilename($file, $params)
-    {
-        $this->_emulateFixtureTheme();
-        $this->assertFileExists($this->_viewFileSystem->getFilename($file, $params));
-    }
-
-    /**
-     * @return array
-     */
-    public function getFilenameDataProvider()
-    {
-        return [
-            ['theme_file.txt', ['module' => 'Magento_Catalog']],
-            ['Magento_Catalog::theme_file.txt', []],
-            ['Magento_Catalog::theme_file_with_2_dots..txt', []],
-            ['Magento_Catalog::theme_file.txt', ['module' => 'Overridden_Module']]
-        ];
-    }
-
-    /**
      * @magentoAppIsolation enabled
      */
     public function testGetViewConfig()
@@ -176,7 +153,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->_emulateFixtureTheme();
         $config = $this->_viewConfig->getViewConfig();
         $this->assertInstanceOf('Magento\Framework\Config\View', $config);
-        $this->assertEquals(['var1' => 'value1', 'var2' => 'value2'], $config->getVars('Namespace_Module'));
     }
 
     /**
@@ -204,7 +180,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf('Magento\Framework\Config\View', $config);
-            $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
         } catch (\Exception $e) {
             $directory->delete($relativePath);
             throw $e;
