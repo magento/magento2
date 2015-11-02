@@ -12,6 +12,7 @@
                 <country_id>US</country_id>
                 <postcode>90034</postcode>
                 <region_id>12</region_id>
+                <email>forshipping@example.com</email>
             </origin>
         </shipping>
     </default>
