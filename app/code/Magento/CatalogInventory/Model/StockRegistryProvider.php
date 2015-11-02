@@ -148,7 +148,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
         if (!isset($this->stockItems[$key])) {
             $criteria = $this->stockItemCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            //$criteria->setWebsiteFilter($websiteId);
             $collection = $this->stockItemRepository->getList($criteria);
             $stockItem = current($collection->getItems());
             if ($stockItem && $stockItem->getItemId()) {
