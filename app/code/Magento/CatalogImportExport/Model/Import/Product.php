@@ -2202,10 +2202,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
             $separatorPosition = strpos($attributeNameValuePair, self::PAIR_NAME_VALUE_SEPARATOR);
             if ($separatorPosition !== false) {
                 $key = substr($attributeNameValuePair, 0, $separatorPosition);
-                $rowData[$key] = substr(
+                $value = substr(
                     $attributeNameValuePair,
                     $separatorPosition + strlen(self::PAIR_NAME_VALUE_SEPARATOR)
                 );
+                $rowData[$key] = $value === false ? '' : $value;
             }
         }
         return $rowData;
