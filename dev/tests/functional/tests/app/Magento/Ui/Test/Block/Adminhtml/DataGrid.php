@@ -283,12 +283,15 @@ class DataGrid extends Grid
      * Select items without using grid search.
      *
      * @param array $items
+     * @param bool $isSortable
      * @return void
      * @throws \Exception
      */
-    public function selectItems(array $items)
+    public function selectItems(array $items, $isSortable = true)
     {
-        $this->sortGridByField('ID');
+        if ($isSortable) {
+            $this->sortGridByField('ID');
+        }
         foreach ($items as $item) {
             $this->_rootElement->find($this->currentPage)->setValue('');
             $this->waitLoader();

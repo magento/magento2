@@ -31,7 +31,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('sitemap_id');

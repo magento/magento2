@@ -13,7 +13,7 @@ class TreeJson extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->getResponse()->representJson(

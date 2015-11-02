@@ -113,7 +113,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertEquals('json represented', $this->removeItem->executeInternal());
     }
 
     public function testExecuteWithLocalizedException()
@@ -153,7 +153,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertEquals('json represented', $this->removeItem->executeInternal());
     }
 
     public function testExecuteWithException()
@@ -200,6 +200,6 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
             ->with('json encoded')
             ->willReturn('json represented');
 
-        $this->assertEquals('json represented', $this->removeItem->execute());
+        $this->assertEquals('json represented', $this->removeItem->executeInternal());
     }
 }

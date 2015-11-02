@@ -73,7 +73,7 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $invoiceData = $this->getRequest()->getParam('invoice', []);

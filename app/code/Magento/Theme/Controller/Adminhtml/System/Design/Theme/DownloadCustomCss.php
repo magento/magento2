@@ -16,7 +16,7 @@ class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Desig
      *
      * @return ResponseInterface|void
      */
-    public function execute()
+    public function executeInternal()
     {
         $themeId = $this->getRequest()->getParam('theme_id');
         try {
