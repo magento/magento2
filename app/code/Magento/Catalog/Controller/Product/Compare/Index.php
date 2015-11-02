@@ -71,7 +71,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $items = $this->getRequest()->getParam('items');
 

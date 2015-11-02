@@ -13,7 +13,7 @@ class Pause extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $queue = $this->_objectManager->get(
             'Magento\Newsletter\Model\Queue'

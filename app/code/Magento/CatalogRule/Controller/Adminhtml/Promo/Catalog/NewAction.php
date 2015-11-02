@@ -11,7 +11,7 @@ class NewAction extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_forward('edit');
     }

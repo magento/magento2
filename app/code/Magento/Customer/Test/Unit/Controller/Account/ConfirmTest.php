@@ -190,7 +190,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->executeInternal());
     }
 
     /**
@@ -232,7 +232,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($testUrl))
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->executeInternal());
     }
 
     /**
@@ -307,7 +307,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     /**
@@ -404,7 +404,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($isSetFlag);
 
-        $this->model->execute();
+        $this->model->executeInternal();
     }
 
     /**

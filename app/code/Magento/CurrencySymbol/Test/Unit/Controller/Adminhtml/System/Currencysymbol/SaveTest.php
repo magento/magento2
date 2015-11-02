@@ -143,6 +143,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with(__('You applied the custom currency symbols.'));
 
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }

@@ -51,7 +51,7 @@ class Index extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         $resultPage = $this->_initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Credit Memos'));

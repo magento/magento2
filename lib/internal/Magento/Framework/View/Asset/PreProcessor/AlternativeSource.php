@@ -14,6 +14,8 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
  * Class AlternativeSource
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlternativeSource implements AlternativeSourceInterface
 {
@@ -58,8 +60,14 @@ class AlternativeSource implements AlternativeSourceInterface
     private $assetBuilder;
 
     /**
+     * @var FilenameResolverInterface
+     */
+    private $filenameResolver;
+
+    /**
      * Constructor
      *
+     * @param FilenameResolverInterface $filenameResolver
      * @param ObjectManagerInterface $objectManager
      * @param LockerProcessInterface $lockerProcess
      * @param Helper\SortInterface $sorter
@@ -68,6 +76,7 @@ class AlternativeSource implements AlternativeSourceInterface
      * @param array $alternatives
      */
     public function __construct(
+        FilenameResolverInterface $filenameResolver,
         ObjectManagerInterface $objectManager,
         LockerProcessInterface $lockerProcess,
         Helper\SortInterface $sorter,
@@ -81,6 +90,7 @@ class AlternativeSource implements AlternativeSourceInterface
         $this->alternatives = $alternatives;
         $this->lockName = $lockName;
         $this->assetBuilder = $assetBuilder;
+        $this->filenameResolver = $filenameResolver;
     }
 
     /**
@@ -100,7 +110,7 @@ class AlternativeSource implements AlternativeSourceInterface
 
             $module = $chain->getAsset()->getModule();
 
-            /** @var  FallbackContext $context */
+            /** @var FallbackContext $context */
             $context = $chain->getAsset()->getContext();
             $chain->setContent($this->processContent($path, $content, $module, $context));
         } finally {
@@ -124,6 +134,7 @@ class AlternativeSource implements AlternativeSourceInterface
             $this->alternativesSorted = $this->sorter->sort($this->alternatives);
         }
 
+        $path = $this->filenameResolver->resolve($path);
         foreach ($this->alternativesSorted as $name => $alternative) {
             $asset = $this->assetBuilder->setArea($context->getAreaCode())
                 ->setTheme($context->getThemePath())

@@ -88,8 +88,8 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with($phrase);
 
-
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\AjaxSave $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\AjaxSave',
             [
                 'request' => $this->request,
@@ -98,7 +98,7 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultJson, $notification->execute());
+        $this->assertSame($this->resultJson, $controller->executeInternal());
     }
 
     /**
@@ -124,7 +124,8 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($phrase);
 
-        $notification = $objectManager->getObject(
+        /** @var \Magento\Braintree\Controller\Creditcard\AjaxSave $controller */
+        $controller = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\AjaxSave',
             [
                 'request' => $this->request,
@@ -134,6 +135,6 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultJson, $notification->execute());
+        $this->assertSame($this->resultJson, $controller->executeInternal());
     }
 }

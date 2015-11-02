@@ -120,6 +120,6 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
                     'layout' => $this->layout
                 ]
             );
-        $this->assertSame($this->resultRaw, $this->controller->execute());
+        $this->assertSame($this->resultRaw, $this->controller->executeInternal());
     }
 }
