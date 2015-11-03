@@ -57,7 +57,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected $shippingAddressMock;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -73,10 +73,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->any())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $this->quoteRepositoryMock = $this->getMockBuilder('\Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $configMock = $this->getMockBuilder('\Magento\Paypal\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();

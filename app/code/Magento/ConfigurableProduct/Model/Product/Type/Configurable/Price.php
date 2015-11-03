@@ -21,7 +21,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
-        if ($product->getCustomOption('simple_product')) {
+        if ($product->getCustomOption('simple_product') && $product->getCustomOption('simple_product')->getProduct()) {
             return parent::getFinalPrice($qty, $product->getCustomOption('simple_product')->getProduct());
         } else {
             $priceInfo = $product->getPriceInfo();
