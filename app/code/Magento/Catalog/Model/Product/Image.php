@@ -942,15 +942,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $fileInfo = null;
         if ($this->_newFile === true) {
-            $sourceFile = $this->_assetRepo->createAsset(
+            $asset = $this->_assetRepo->createAsset(
                 "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
-            )->getSourceFile();
-            if ($this->_mediaDirectory->isFile($sourceFile)) {
-                try {
-                    $fileInfo = getimagesize($sourceFile);
-                } catch (Exception $e) {
-                }
-            }
+            );
+            $img = $asset->getSourceFile();
+            $fileInfo = getimagesize($img);
         } else {
             if ($this->_mediaDirectory->isFile($this->_mediaDirectory->getAbsolutePath($this->_newFile))) {
                 $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
