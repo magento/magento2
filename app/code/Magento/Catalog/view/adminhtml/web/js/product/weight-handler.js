@@ -14,13 +14,6 @@ define([
         $weight: $('#weight'),
 
         /**
-         * Hide weight switcher
-         */
-        hideWeightSwitcher: function () {
-            this.$weightSwitcher.hide();
-        },
-
-        /**
          * Is locked
          * @returns {*}
          */
@@ -47,23 +40,30 @@ define([
          * @returns {*}
          */
         switchWeight: function () {
-            return this.productHasWeight() ? this.enabled() : this.disabled();
+            return this.productHasWeightBySwitcher() ? this.enabled() : this.disabled();
+        },
+
+        /**
+         * Hide weight switcher
+         */
+        hideWeightSwitcher: function () {
+            this.$weightSwitcher.hide();
+        },
+
+        /**
+         * Has weight swither
+         * @returns {*}
+         */
+        hasWeightSwither: function () {
+            return this.$weightSwitcher.is(':visible');
         },
 
         /**
          * Product has weight
          * @returns {Bool}
          */
-        productHasWeight: function () {
+        productHasWeightBySwitcher: function () {
             return $('input:checked', this.$weightSwitcher).val() === '1';
-        },
-
-        /**
-         * Notify product weight is changed
-         * @returns {*|jQuery}
-         */
-        notifyProductWeightIsChanged: function () {
-            return $('input:checked', this.$weightSwitcher).trigger('change');
         },
 
         /**
@@ -71,7 +71,7 @@ define([
          * @param {String} data
          */
         change: function (data) {
-            var value = data !== undefined ? +data : !this.productHasWeight();
+            var value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
 
             $('input[value=' + value + ']', this.$weightSwitcher).prop('checked', true);
         },
@@ -81,7 +81,10 @@ define([
          */
         'Magento_Catalog/js/product/weight-handler': function () {
             this.bindAll();
-            this.switchWeight();
+
+            if (this.hasWeightSwither()) {
+                this.switchWeight();
+            }
         },
 
         /**
