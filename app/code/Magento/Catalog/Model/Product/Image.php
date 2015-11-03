@@ -711,8 +711,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
         } else {
             $url = $this->_storeManager->getStore()->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . $this->_newFile;
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+            ) . $this->_newFile;
         }
 
         return $url;
