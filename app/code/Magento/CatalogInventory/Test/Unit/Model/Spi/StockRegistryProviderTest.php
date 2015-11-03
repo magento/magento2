@@ -253,7 +253,6 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetStockItem()
     {
         $this->stockItemCriteriaFactory->expects($this->once())->method('create')->willReturn($this->stockItemCriteria);
-        $this->stockItemCriteria->expects($this->once())->method('setWebsiteFilter')->willReturn(null);
         $this->stockItemCriteria->expects($this->once())->method('setProductsFilter')->willReturn(null);
         $stockItemCollection = $this->getMock(
             '\Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
