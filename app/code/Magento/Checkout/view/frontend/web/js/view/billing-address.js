@@ -46,8 +46,9 @@ define(
             },
             countryData = customerData.get('directory-data'),
             addressOptions = addressList().filter(function (address) {
-            return address.getType() == 'customer-address';
-        });
+                return address.getType() == 'customer-address';
+            });
+
         addressOptions.push(newAddressOption);
 
         return Component.extend({
