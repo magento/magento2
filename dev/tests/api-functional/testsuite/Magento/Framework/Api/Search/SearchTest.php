@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Api;
+namespace Magento\Framework\Api\Search;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -15,7 +15,7 @@ class SearchTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @covers \Magento\Search\Model\Search::search
+     * @covers \Magento\Framework\Search\Search::search
      */
     public function testCatalogSearch()
     {
