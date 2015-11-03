@@ -231,7 +231,7 @@ define([
          * @private
          */
         _toggle: function ($elem) {
-            $(document).on('mouseup', function (e) {
+            $(document).on('mouseup.msrp', function (e) {
                 if (!$elem.is(e.target) && $elem.has(e.target).length === 0) {
                     this.closePopup($elem);
                 }
@@ -247,7 +247,7 @@ define([
          */
         closePopup: function ($elem) {
             $elem.dropdownDialog('close');
-            $(document).off('mouseup');
+            $(document).off('mouseup.msrp');
         },
 
         /**
