@@ -143,8 +143,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="component in components | orderBy:predicate:reverse | startFrom:(currentPage-1)*rowLimit |
-             limitTo:rowLimit">
+            <tr ng-repeat="component in components | orderBy:predicate:reverse
+                | startFrom:(currentPage-1)*rowLimit | limitTo:rowLimit"
+                >
                 <td class="data-grid-indicator-cell">
                     <span class="component-indicator"
                           ng-class="getIndicatorInfo(component, 'icon')"
