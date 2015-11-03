@@ -331,10 +331,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     const QUOTE_ID = 'quote_id';
     /*
-     * Shipping address ID.
-     */
-    const SHIPPING_ADDRESS_ID = 'shipping_address_id';
-    /*
      * Negative adjustment.
      */
     const ADJUSTMENT_NEGATIVE = 'adjustment_negative';
@@ -479,10 +475,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     const REMOTE_IP = 'remote_ip';
     /*
-     * Shipping method.
-     */
-    const SHIPPING_METHOD = 'shipping_method';
-    /*
      * Store currency code.
      */
     const STORE_CURRENCY_CODE = 'store_currency_code';
@@ -563,17 +555,9 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     const BILLING_ADDRESS = 'billing_address';
     /*
-     * Shipping address.
+     * Payment.
      */
-    const SHIPPING_ADDRESS = 'shipping_address';
-    /*
-     * Payments.
-     */
-    const PAYMENTS = 'payments';
-    /*
-     * Addresses.
-     */
-    const ADDRESSES = 'addresses';
+    const PAYMENT = 'payment';
     /*
      * Status histories.
      */
@@ -1254,13 +1238,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getRemoteIp();
 
     /**
-     * Gets the shipping address ID for the order.
-     *
-     * @return int|null Shipping address ID.
-     */
-    public function getShippingAddressId();
-
-    /**
      * Gets the shipping amount for the order.
      *
      * @return float|null Shipping amount.
@@ -1308,13 +1285,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return float|null Shipping invoiced amount.
      */
     public function getShippingInvoiced();
-
-    /**
-     * Gets the shipping method for the order.
-     *
-     * @return string|null Shipping method.
-     */
-    public function getShippingMethod();
 
     /**
      * Gets the shipping refunded amount for the order.
@@ -1567,49 +1537,19 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
     /**
-     * Gets the shipping address, if any, for the order.
+     * Gets order payment
      *
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface|null Shipping address. Otherwise, null.
+     * @return \Magento\Sales\Api\Data\OrderPaymentInterface|null
      */
-    public function getShippingAddress();
+    public function getPayment();
 
     /**
-     * Sets the shipping address, if any, for the order.
+     * Sets order payment
      *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
-     * @return $this
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface|null $payment
+     * @return \Magento\Sales\Api\Data\OrderPaymentInterface
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
-
-    /**
-     * Gets the payments for the order.
-     *
-     * @return \Magento\Sales\Api\Data\OrderPaymentInterface[] Array of payments.
-     */
-    public function getPayments();
-
-    /**
-     * Sets the payments for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $payments
-     * @return $this
-     */
-    public function setPayments(array $payments = null);
-
-    /**
-     * Gets addresses for the order.
-     *
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface[]|null Array of addresses.
-     */
-    public function getAddresses();
-
-    /**
-     * Sets addresses for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $addresses
-     * @return $this
-     */
-    public function setAddresses(array $addresses = null);
+    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null);
 
     /**
      * Gets status histories for the order.
@@ -2243,14 +2183,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setQuoteId($id);
 
     /**
-     * Sets the shipping address ID for the order.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setShippingAddressId($id);
-
-    /**
      * Sets the negative adjustment value for the order.
      *
      * @param float $adjustmentNegative
@@ -2537,14 +2469,6 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setRemoteIp($remoteIp);
-
-    /**
-     * Sets the shipping method for the order.
-     *
-     * @param string $shippingMethod
-     * @return $this
-     */
-    public function setShippingMethod($shippingMethod);
 
     /**
      * Sets the store currency code for the order.
