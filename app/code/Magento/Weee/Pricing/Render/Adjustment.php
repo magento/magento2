@@ -51,11 +51,15 @@ class Adjustment extends AbstractAdjustment
      */
     protected function apply()
     {
-        if ($this->typeOfDisplay([Tax::DISPLAY_EXCL, Tax::DISPLAY_EXCL_DESCR_INCL])) {
-            $this->finalAmount = $this->amountRender->getDisplayValue();
+        $weeeAmount = $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode());
+        $weeeTaxAmount =
+            $this->amountRender->getAmount()->getAdjustmentAmount(\Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE);
+
+        $this->finalAmount = $this->amountRender->getDisplayValue();
+
+        if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
             $this->amountRender->setDisplayValue(
-                $this->amountRender->getDisplayValue() -
-                $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                $this->amountRender->getDisplayValue() - $weeeAmount - $weeeTaxAmount
             );
         }
         return $this->toHtml();
@@ -92,10 +96,10 @@ class Adjustment extends AbstractAdjustment
      *
      * @return float
      */
-    protected function getWeeeTaxAmount()
+    protected function getWeeeAmount()
     {
         $product = $this->getSaleableItem();
-        return $this->weeeHelper->getAmount($product);
+        return $this->weeeHelper->getAmountExclTax($product);
     }
 
     /**
@@ -105,7 +109,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function showInclDescr()
     {
-        return $this->isWeeeShown() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_INCL_DESCR);
+        return $this->isWeeeShown() && $this->getWeeeAmount() && $this->typeOfDisplay(Tax::DISPLAY_INCL_DESCR);
     }
 
     /**
@@ -115,7 +119,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function showExclDescrIncl()
     {
-        return $this->isWeeeShown() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_EXCL_DESCR_INCL);
+        return $this->isWeeeShown() && $this->getWeeeAmount() && $this->typeOfDisplay(Tax::DISPLAY_EXCL_DESCR_INCL);
     }
 
     /**
@@ -151,6 +155,31 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * Render Weee tax attributes value with tax
+     *
+     * @param \Magento\Framework\DataObject $attribute
+     * @return string
+     */
+    public function renderWeeeTaxAttributeWithTax(\Magento\Framework\DataObject $attribute)
+    {
+        return $this->convertAndFormatCurrency(
+            $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount')
+        );
+    }
+
+    /**
+     * Render Weee tax attributes value without tax
+     *
+     * @param \Magento\Framework\DataObject $attribute
+     * @return string
+     */
+    public function renderWeeeTaxAttributeWithoutTax(\Magento\Framework\DataObject $attribute)
+    {
+        $price = $attribute->getData('amount_excl_tax');
+        return ($price > 0) ? $this->convertAndFormatCurrency($price): $this->convertAndFormatCurrency(0);
+    }
+
+    /**
      * Returns display type for price accordingly to current zone
      *
      * @param int|int[]|null $compareTo
@@ -182,5 +211,27 @@ class Adjustment extends AbstractAdjustment
     {
         $isWeeeShown = $this->typeOfDisplay([Tax::DISPLAY_INCL_DESCR, Tax::DISPLAY_EXCL_DESCR_INCL]);
         return $isWeeeShown;
+    }
+
+    /**
+     * Returns whether tax should be shown (according to Price Display Settings)
+     *
+     * @return int
+     */
+    public function getTaxDisplayConfig()
+    {
+        $showPriceWithTax = $this->weeeHelper->getTaxDisplayConfig();
+        return $showPriceWithTax;
+    }
+
+    /**
+     * Returns whether price includes tax
+     *
+     * @return bool
+     */
+    public function isPriceIncludesTax()
+    {
+        $showPriceWithTax = $this->weeeHelper->displayTotalsInclTax();
+        return $showPriceWithTax;
     }
 }

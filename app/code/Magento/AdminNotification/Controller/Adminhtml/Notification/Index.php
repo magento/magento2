@@ -11,7 +11,7 @@ class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
     /**
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu(

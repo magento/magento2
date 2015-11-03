@@ -27,7 +27,7 @@ class ExportSoldExcel extends \Magento\Reports\Controller\Adminhtml\Report\Produ
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $fileName = 'products_ordered.xml';

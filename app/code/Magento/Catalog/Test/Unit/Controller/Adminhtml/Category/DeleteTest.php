@@ -122,7 +122,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('catalog/*/', ['_current' => true, 'id' => null]);
         $this->categoryRepository->expects($this->never())->method('get');
 
-        $this->unit->execute();
+        $this->unit->executeInternal();
     }
 
     public function testDelete()
@@ -138,6 +138,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirect->expects($this->once())->method('setPath')
             ->with('catalog/*/', ['_current' => true, 'id' => $parentId]);
 
-        $this->unit->execute();
+        $this->unit->executeInternal();
     }
 }

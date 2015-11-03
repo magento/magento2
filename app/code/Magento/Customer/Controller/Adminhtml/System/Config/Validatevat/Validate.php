@@ -31,7 +31,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Vali
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $result = $this->_validate();
 

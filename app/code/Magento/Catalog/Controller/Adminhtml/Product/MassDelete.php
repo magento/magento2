@@ -46,7 +46,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productDeleted = 0;

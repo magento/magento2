@@ -200,7 +200,6 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
         }
-        $this->responseMock->expects($this->once())->method('getContent');
         $this->assertSame(
             $this->responseMock,
             $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)

@@ -250,7 +250,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingLabel')
             ->will($this->returnValue($labelContent));
 
-        $this->assertEquals($this->fileCreate(), $this->controller->execute());
+        $this->assertEquals($this->fileCreate(), $this->controller->executeInternal());
     }
 
     /**
@@ -291,7 +291,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->method('getObject')
             ->will($this->returnSelf());
 
-        $this->assertEquals($this->fileCreate(), $this->controller->execute());
+        $this->assertEquals($this->fileCreate(), $this->controller->executeInternal());
     }
 
     /**
@@ -337,7 +337,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->redirectSection();
 
-        $this->assertNull($this->controller->execute());
+        $this->assertNull($this->controller->executeInternal());
     }
 
     /**
@@ -351,6 +351,6 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
         $this->redirectSection();
 
-        $this->assertNull($this->controller->execute());
+        $this->assertNull($this->controller->executeInternal());
     }
 }

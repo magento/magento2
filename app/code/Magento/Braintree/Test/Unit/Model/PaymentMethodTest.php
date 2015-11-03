@@ -1361,8 +1361,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
                     'paymentMethodToken' => self::CC_TOKEN,
                     'customerId' => self::CUSTOMER_ID,
-                    'billing' => null,
-                    'shipping' => null,
                     'deviceData' => 'fraud_detection_data',
                 ],
                 'braintree_response' => [
@@ -1429,8 +1427,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
                     'paymentMethodNonce' => self::PAYMENT_METHOD_NONCE,
                     'customerId' => self::CUSTOMER_ID,
-                    'billing' => null,
-                    'shipping' => null,
                     'deviceData' => 'fraud_detection_data',
                     'options' => [
                         'three_d_secure' => [
@@ -1502,8 +1498,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
                     'paymentMethodToken' => self::CC_TOKEN,
                     'customerId' => self::CUSTOMER_ID,
-                    'billing' => null,
-                    'shipping' => null,
                     'deviceData' => 'fraud_detection_data',
                 ],
                 'braintree_response' => [

@@ -46,7 +46,8 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
         $this->connectManager
             ->expects($this->once())
-            ->method('saveAuthJson');
+            ->method('saveAuthJson')
+            ->willReturn(true);
         $jsonModel = $this->controller->saveAuthJsonAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $jsonModel);
         $variables = $jsonModel->getVariables();
