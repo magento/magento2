@@ -43,16 +43,25 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     protected $area;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * Root directory
+     *
+     * @var ReadInterface
+     */
+    protected $rootDirectory;
+
+    /**
+     * @param Reader $moduleReader
      * @param FileIteratorFactory $iteratorFactory
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
+     * @param Filesystem $filesystem
      */
     public function __construct(
         Reader $moduleReader,
         FileIteratorFactory $iteratorFactory,
         DesignInterface $designInterface,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        Filesystem $filesystem
     ) {
         $this->directoryList = $directoryList;
         $this->iteratorFactory = $iteratorFactory;
@@ -60,6 +69,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         $this->currentTheme = $designInterface->getDesignTheme();
         $this->themePath = $designInterface->getThemePath($this->currentTheme);
         $this->area = $designInterface->getArea();
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**
@@ -70,6 +80,16 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         switch ($scope) {
             case 'global':
                 $iterator = $this->moduleReader->getConfigurationFiles($filename)->toArray();
+
+                $themeConfigFile = $this->currentTheme->getCustomization()->getCustomViewConfigPath();
+                if ($themeConfigFile
+                    && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
+                ) {
+                    $iterator[$this->rootDirectory->getRelativePath($themeConfigFile)] = $this->rootDirectory->readFile(
+                        $this->rootDirectory->getRelativePath($themeConfigFile)
+                    );
+                }
+
                 $designPath =
                     $this->directoryList->getPath(DirectoryList::APP)
                     . '/design/'
