@@ -128,7 +128,6 @@ define([
                 $tierPopup = $(popupDOM.innerText).appendTo('body');
 
             this.tierOptions = JSON.parse($(this.options.attr).attr('data-tier-price'));
-
             $tierPopup.find(this.options.productIdInput).val(this.options.productId);
             this.popUpOptions.position.of = $(this.options.helpLinkId);
 
