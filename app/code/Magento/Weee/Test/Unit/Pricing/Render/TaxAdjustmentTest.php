@@ -34,7 +34,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
 
         $this->weeeHelperMock = $this->getMock(
             'Magento\Weee\Helper\Data',
-            ['typeOfDisplay'],
+            ['typeOfDisplay', 'isTaxable'],
             [],
             '',
             false
