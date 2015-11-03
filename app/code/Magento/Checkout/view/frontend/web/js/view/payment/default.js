@@ -68,11 +68,11 @@ define(
                     if (billingAddressData) {
                         checkoutProvider.set(
                             billingAddressCode,
-                            $.extend({}, defaultAddressData, billingAddressData)
+                            $.extend(true, {}, defaultAddressData, billingAddressData)
                         );
                     }
-                    checkoutProvider.on(billingAddressCode, function (billingAddressData) {
-                        checkoutData.setBillingAddressFromData(billingAddressData);
+                    checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
+                        checkoutData.setBillingAddressFromData(providerBillingAddressData);
                     }, billingAddressCode);
                 });
 
