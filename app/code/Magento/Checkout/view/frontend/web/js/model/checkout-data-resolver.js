@@ -200,12 +200,8 @@ define(
                 var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
                     newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
 
-                //console.log(selectedBillingAddress);
-                //console.log(newCustomerBillingAddressData);
-
                 if (selectedBillingAddress) {
                     if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) {
-                        //console.log(createBillingAddress(newCustomerBillingAddressData));
                         selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
                     } else {
                         addressList.some(function (address) {
