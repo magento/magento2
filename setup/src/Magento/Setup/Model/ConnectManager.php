@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Zend\View\Model\JsonModel;
 
 class ConnectManager
 {
@@ -43,14 +44,11 @@ class ConnectManager
     private $pathToAuthFile = 'auth.json';
 
     /**#@+
-     * Composer command params and options
+     * Composer auth.json keys
      */
-    const PARAM_COMMAND = 'command';
-    const PARAM_KEY = 'setting-key';
-    const PARAM_VALUE = 'setting-value';
-    const PARAM_GLOBAL = '--global';
-    const PARAM_CONFIG = 'config';
-    const PARAM_HTTPBASIC = 'http-basic.';
+    const KEY_HTTPBASIC = 'http-basic';
+    const KEY_USERNAME = 'username';
+    const KEY_PASSWORD = 'password';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
@@ -63,30 +61,22 @@ class ConnectManager
     protected $pathToInstallPackagesCacheFile = 'install_composer_packages.json';
 
     /**
-     * @var \Magento\Composer\MagentoComposerApplication
-     */
-    protected $application;
-
-    /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Framework\HTTP\Client\Curl $curl
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $applicationFactory
      */
     public function __construct(
         \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator,
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Composer\MagentoComposerApplicationFactory $applicationFactory
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->serviceLocator = $serviceLocator;
         $this->composerInformation = $composerInformation;
         $this->curlClient = $curl;
         $this->filesystem = $filesystem;
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->application = $applicationFactory->create();
     }
 
     /**
@@ -260,18 +250,27 @@ class ConnectManager
      */
     public function saveAuthJson($username, $password)
     {
-        $commandParams = [
-            self::PARAM_COMMAND =>  self::PARAM_CONFIG,
-            self::PARAM_KEY => self::PARAM_HTTPBASIC . $this->getCredentialBaseUrl(),
-            self::PARAM_VALUE =>  [$username, $password],
-            self::PARAM_GLOBAL => true
+        $authContent = [
+            self::KEY_HTTPBASIC => [
+                $this->getCredentialBaseUrl() => [
+                    self::KEY_USERNAME => "$username",
+                    self::KEY_PASSWORD => "$password"
+                ]
+            ]
         ];
-        try {
-            $this->getApplication()->runComposerCommand($commandParams);
-            return true;
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \Exception($e->getMessage());
-        }
+        $json = new JsonModel($authContent);
+        $json->setOption('prettyPrint', true);
+        $jsonContent = $json->serialize();
+
+        return $this->getDirectory()->writeFile(
+            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+            $jsonContent
+        ) && $this->getDirectory()->changePermissions(
+            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+            \Magento\Framework\Filesystem\DriverInterface::WRITEABLE_FILE_MODE
+        );
+
+        return false;
     }
 
     /**
@@ -382,13 +381,5 @@ class ConnectManager
     public function getDirectory()
     {
         return $this->directory;
-    }
-
-    /**
-     * @return \Magento\Composer\MagentoComposerApplication
-     */
-    public function getApplication()
-    {
-        return $this->application;
     }
 }
