@@ -123,4 +123,7 @@
             <argument name="priceResolver" xsi:type="object">ConfigurableRegularPriceResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
 </config>
