@@ -49,8 +49,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
         $this->weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
         $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
-        $this->taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPriceDisplayType', 'priceIncludesTax'],
-            [], '', false);
+        $this->taxData = $this->getMock(
+            'Magento\Tax\Helper\Data',
+            ['getPriceDisplayType', 'priceIncludesTax'],
+            [],
+            '',
+            false
+        );
         $arguments = [
             'weeeConfig' => $weeeConfig,
             'weeeTax' => $this->weeeTax,
@@ -185,7 +190,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'tax_amount' => '1'
             ]
         );
-
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode2,
@@ -194,7 +198,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'tax_amount' => '5'
             ]
         );
-
         $expectedObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode1,
@@ -203,7 +206,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'tax_amount' => '1'
             ]
         );
-
         $expectedObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode2,
@@ -214,22 +216,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
-        $testArray = [$prodId1 => [$fptCode1 => $weeeObject1], $prodId2 => [$fptCode2 => $weeeObject2]];
-
         $this->weeeTax->expects($this->any())
             ->method('getProductWeeeAttributes')
             ->will($this->returnValue([$weeeObject1, $weeeObject2]));
-
         $this->taxData->expects($this->any())
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
-
         $this->taxData->expects($this->any())
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
         $productSimple = $this->getMock('\Magento\Catalog\Model\Product\Type\Simple', ['getId'], [], '', false);
-
         $productSimple->expects($this->at(0))
             ->method('getId')
             ->will($this->returnValue($prodId1));
@@ -243,7 +240,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$productSimple]));
 
         $store=$this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->getMock(
             '\Magento\Bundle\Model\Product',
@@ -255,15 +251,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->will($this->returnValue($productInstance));
-
         $product->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue(1));
-
         $product->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
-
         $product->expects($this->any())
             ->method('getTypeId')
             ->will($this->returnValue('bundle'));
