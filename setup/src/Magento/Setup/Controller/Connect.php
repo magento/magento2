@@ -51,8 +51,7 @@ class Connect extends AbstractActionController
             $password = isset($params['password']) ? $params['password'] : '';
             $isValid = $this->connectManager->checkCredentialsAction($userName, $password);
             $isValid = json_decode($isValid, true);
-            if ($isValid['success'] === true) {
-                $this->connectManager->saveAuthJson($userName, $password);
+            if ($isValid['success'] === true && $this->connectManager->saveAuthJson($userName, $password)) {
                 return new JsonModel(['success' => true]);
             } else {
                 return new JsonModel(['success' => false, 'message' => $isValid['message']]);
