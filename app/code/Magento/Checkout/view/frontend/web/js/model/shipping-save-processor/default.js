@@ -31,7 +31,7 @@ define(
             saveShippingInformation: function() {
                 var billingAddress = quote.billingAddress();
                 if (!billingAddress) {
-                    billingAddress = $.extend(quote.billingAddress(), quote.shippingAddress());
+                    billingAddress = $.extend({}, quote.shippingAddress());
                     quote.billingAddress(billingAddress);
                     quote.shippingAddress().sameAsBilling = 1;
                 }
