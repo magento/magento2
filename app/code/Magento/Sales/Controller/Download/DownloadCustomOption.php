@@ -54,7 +54,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
         /** @var $option \Magento\Quote\Model\Quote\Item\Option */

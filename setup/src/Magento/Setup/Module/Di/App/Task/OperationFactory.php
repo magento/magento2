@@ -33,6 +33,11 @@ class OperationFactory
     const REPOSITORY_GENERATOR = 'repository_generator';
 
     /**
+     * Proxy generator
+     */
+    const PROXY_GENERATOR = 'proxy_generator';
+
+    /**
      * Service data attributes generator
      */
     const DATA_ATTRIBUTES_GENERATOR = 'extension_attributes_generator';
@@ -53,7 +58,8 @@ class OperationFactory
         self::APPLICATION_CODE_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator',
         self::INTERCEPTION => 'Magento\Setup\Module\Di\App\Task\Operation\Interception',
         self::INTERCEPTION_CACHE => 'Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache',
-        self::REPOSITORY_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator'
+        self::REPOSITORY_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator',
+        self::PROXY_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator',
     ];
 
     /**

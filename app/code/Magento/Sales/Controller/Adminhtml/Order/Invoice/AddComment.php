@@ -68,7 +68,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->getRequest()->setParam('invoice_id', $this->getRequest()->getParam('id'));

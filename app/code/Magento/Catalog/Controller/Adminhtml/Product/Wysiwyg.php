@@ -40,7 +40,7 @@ class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);

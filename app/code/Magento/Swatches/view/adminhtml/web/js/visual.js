@@ -26,7 +26,7 @@ define([
                 template: mageTemplate('#swatch-visual-row-template'),
                 add: function (data, render) {
                     var isNewOption = false,
-                        element, visibleRadio;
+                        element;
 
                     if (typeof data.id == 'undefined') {
                         data = {
@@ -46,20 +46,8 @@ define([
                         data: data
                     });
 
-                    if (isNewOption) {
-                        visibleRadio = $$('#swatch-visual-options-panel [name="defaultvisual[]"]').findAll(
-                            function (el) {
-                                return el.up().up().visible();
-                            }
-                        );
-
-                        if (visibleRadio.length === 1) {
-                            visibleRadio[0].checked = true;
-                        }
-
-                        if (!this.isReadOnly) {
-                            this.enableNewOptionDeleteButton(data.id);
-                        }
+                    if (isNewOption && !this.isReadOnly) {
+                        this.enableNewOptionDeleteButton(data.id);
                     }
                     this.itemCount++;
                     this.totalItems++;

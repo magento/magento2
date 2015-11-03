@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid_data_source</item>
@@ -142,19 +142,22 @@
                 </item>
             </argument>
         </column> -->
-        <column name="first_visit_at">
+        <column name="first_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">                
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Session Start Time</item>
                 </item>
             </argument>
         </column>
-        <column name="last_visit_at">
+        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Last Activity</item>
                 </item>
             </argument>

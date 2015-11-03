@@ -184,7 +184,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::executeInternal
      */
     public function testExecuteNewTemplate()
     {
@@ -217,11 +217,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->assertNull($this->editController->execute());
+        $this->assertNull($this->editController->executeInternal());
     }
 
     /**
-     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::executeInternal
      */
     public function testExecuteEdit()
     {
@@ -254,6 +254,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->assertNull($this->editController->execute());
+        $this->assertNull($this->editController->executeInternal());
     }
 }

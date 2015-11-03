@@ -28,7 +28,7 @@ class Index extends \Magento\Marketplace\Controller\Adminhtml\Index
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->getResultPageFactory()->create();

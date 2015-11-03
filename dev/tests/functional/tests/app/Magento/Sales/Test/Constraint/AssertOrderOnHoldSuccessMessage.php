@@ -44,7 +44,7 @@ class AssertOrderOnHoldSuccessMessage extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             $successOnHoldMessage,
-            $orderIndex->getMessagesBlock()->getSuccessMessages()
+            $orderIndex->getMessagesBlock()->getSuccessMessage()
         );
     }
 

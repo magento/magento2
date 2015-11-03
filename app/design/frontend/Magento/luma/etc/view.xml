@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Catalog/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <media>
         <images module="Magento_Catalog">
             <image id="bundled_product_customization_page" type="thumbnail">
@@ -290,5 +290,6 @@
         <item type="directory">Lib::mage/requirejs</item>
         <item type="directory">Lib::mage/adminhtml</item>
         <item type="directory">Lib::mage/backend</item>
+        <item type="directory">Magento_Swagger::swagger-ui</item>
     </exclude>
 </view>

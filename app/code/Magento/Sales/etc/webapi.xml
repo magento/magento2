@@ -61,12 +61,6 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/orders/create" method="PUT">
-        <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
     <route url="/V1/orders/:parent_id" method="PUT">
         <service class="Magento\Sales\Api\OrderAddressRepositoryInterface" method="save"/>
         <resources>
@@ -225,12 +219,6 @@
     </route>
     <route url="/V1/shipment/:id/label" method="GET">
         <service class="Magento\Sales\Api\ShipmentManagementInterface" method="getLabel"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
-    <route url="/V1/orders/" method="POST">
-        <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

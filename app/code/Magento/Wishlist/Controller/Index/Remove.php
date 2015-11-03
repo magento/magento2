@@ -35,7 +35,7 @@ class Remove extends Action\Action implements IndexInterface
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      */
-    public function execute()
+    public function executeInternal()
     {
         $id = (int)$this->getRequest()->getParam('item');
         $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($id);

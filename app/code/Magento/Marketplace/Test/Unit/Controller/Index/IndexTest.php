@@ -19,7 +19,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Marketplace\Controller\Adminhtml\Index\Index::execute
+     * @covers \Magento\Marketplace\Controller\Adminhtml\Index\Index::executeInternal
      */
     public function testExecute()
     {
@@ -50,7 +50,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValue($configMock));
 
-        $this->indexControllerMock->execute();
+        $this->indexControllerMock->executeInternal();
     }
 
     /**

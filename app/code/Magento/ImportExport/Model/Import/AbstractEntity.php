@@ -69,7 +69,7 @@ abstract class AbstractEntity
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
         self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
         self::ERROR_INVALID_ATTRIBUTE_TYPE =>
-            'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+            'Value for \'%s\' attribute contains incorrect value',
         self::ERROR_INVALID_ATTRIBUTE_OPTION =>
             "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
     ];
@@ -792,7 +792,7 @@ abstract class AbstractEntity
                         $emptyHeaderColumns[] = $columnNumber;
                     } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                         $invalidColumns[] = $columnName;
-                    } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                    } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                         $invalidAttributes[] = $columnName;
                     }
                 }
@@ -853,5 +853,15 @@ abstract class AbstractEntity
         $this->countItemsUpdated = count($updated);
         $this->countItemsDeleted = count($deleted);
         return $this;
+    }
+
+    /**
+     * Retrieve valid column names
+     *
+     * @return array
+     */
+    public function getValidColumnNames()
+    {
+        return $this->validColumnNames;
     }
 }

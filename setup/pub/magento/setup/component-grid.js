@@ -113,7 +113,12 @@ angular.module('component-grid', ['ngStorage'])
                 if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
                     $localStorage.titles['update'] = 'Update ' + component.moduleName;
                 }
-                $localStorage.moduleName = component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
+                }
+
                 $scope.nextState();
             };
 
@@ -127,7 +132,11 @@ angular.module('component-grid', ['ngStorage'])
                     $localStorage.titles['uninstall'] = 'Uninstall ' + component.moduleName;
                 }
                 $localStorage.componentType = component.type;
-                $localStorage.moduleName = component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
+                }
                 $state.go('root.readiness-check-uninstall');
             };
 

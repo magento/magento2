@@ -13,7 +13,7 @@ class View extends \Magento\Paypal\Controller\Billing\Agreement
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!($agreement = $this->_initAgreement())) {
             return;

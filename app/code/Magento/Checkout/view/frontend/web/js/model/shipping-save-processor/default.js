@@ -6,6 +6,7 @@
 define(
     [
         'ko',
+        'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'mage/storage',
@@ -16,6 +17,7 @@ define(
     ],
     function (
         ko,
+        $,
         quote,
         resourceUrlManager,
         storage,
@@ -27,9 +29,16 @@ define(
         'use strict';
         return {
             saveShippingInformation: function() {
+                var billingAddress = quote.billingAddress();
+                if (!billingAddress) {
+                    billingAddress = $.extend({}, quote.shippingAddress());
+                    quote.billingAddress(billingAddress);
+                    quote.shippingAddress().sameAsBilling = 1;
+                }
                 var payload = {
                     addressInformation: {
                         shipping_address: quote.shippingAddress(),
+                        billing_address: billingAddress,
                         shipping_method_code: quote.shippingMethod().method_code,
                         shipping_carrier_code: quote.shippingMethod().carrier_code
                     }

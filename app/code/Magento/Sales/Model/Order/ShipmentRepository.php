@@ -14,6 +14,8 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\ShipmentInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterface
 {
@@ -60,10 +62,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
 
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\ShipmentInterface $entity */
-            $entity = $this->metadata->getNewInstance();
-
-            $this->metadata->getMapper()->load($entity, $id);
-
+            $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -77,24 +76,24 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * Find shipments by criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria  $criteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Api\Data\ShipmentInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         //@TODO: fix search logic
         /** @var \Magento\Sales\Api\Data\ShipmentSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
 
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
 
-        $searchResult->setCurPage($criteria->getCurrentPage());
-        $searchResult->setPageSize($criteria->getPageSize());
+        $searchResult->setCurPage($searchCriteria->getCurrentPage());
+        $searchResult->setPageSize($searchCriteria->getPageSize());
 
         return $searchResult;
     }

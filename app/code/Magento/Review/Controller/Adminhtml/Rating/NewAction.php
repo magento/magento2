@@ -13,7 +13,7 @@ class NewAction extends RatingController
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
