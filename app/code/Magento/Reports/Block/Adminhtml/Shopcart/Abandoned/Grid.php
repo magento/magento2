@@ -8,7 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 /**
  * Adminhtml abandoned shopping carts report grid block
  *
- * @method \Magento\Reports\Model\Resource\Quote\Collection getCollection
+ * @method \Magento\Reports\Model\Resource\Quote\Collection getCollection()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)

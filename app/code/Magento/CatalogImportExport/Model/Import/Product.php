@@ -2199,9 +2199,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
 
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
         foreach ($attributeNameValuePairs as $attributeNameValuePair) {
-            $nameAndValue = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeNameValuePair);
-            if (!empty($nameAndValue)) {
-                $rowData[$nameAndValue[0]] = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+            $separatorPosition = strpos($attributeNameValuePair, self::PAIR_NAME_VALUE_SEPARATOR);
+            if ($separatorPosition !== false) {
+                $key = substr($attributeNameValuePair, 0, $separatorPosition);
+                $value = substr(
+                    $attributeNameValuePair,
+                    $separatorPosition + strlen(self::PAIR_NAME_VALUE_SEPARATOR)
+                );
+                $rowData[$key] = $value === false ? '' : $value;
             }
         }
         return $rowData;
