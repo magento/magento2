@@ -73,13 +73,9 @@
     }
 
     .attribute-entity-top {
+                display: flex;
         margin: 0 0 @indent__s;
         &:extend(.abs-clearfix all);
-    }
-
-    .attribute-entity-title-block {
-        float: left;
-        width: 50rem;
     }
 
     .attribute-entity-title {
@@ -93,7 +89,8 @@
     }
 
     .attribute-entity-actions {
-        float: right;
+        margin-left: auto;
+        white-space: nowrap;
     }
 
     .draggable-handle {
