@@ -101,7 +101,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 [
                     'getId',
                     'getItems',
-                    'getPayments',
+                    'getPayment',
                     'getStatusHistories',
                     'getRelatedObjects'
                 ]
@@ -189,8 +189,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->with($this->orderItemMock)
             ->willReturnSelf();
         $this->orderMock->expects($this->exactly(2))
-            ->method('getPayments')
-            ->willReturn([$this->orderPaymentMock]);
+            ->method('getPayment')
+            ->willReturn($this->orderPaymentMock);
         $this->orderPaymentMock->expects($this->once())
             ->method('setParentId')
             ->with('order-id-value')
