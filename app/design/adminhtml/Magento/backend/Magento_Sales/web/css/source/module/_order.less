@@ -120,6 +120,12 @@
     }
 }
 
+.admin__page-subsection {
+    & + & {
+        margin-top: @indent__m;
+    }
+}
+
 .admin__page-section-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
@@ -134,6 +140,9 @@
     .actions {
         display: inline-block;
         margin-left: @indent__xs;
+        &._primary {
+            float: right;
+        }
     }
 }
 
