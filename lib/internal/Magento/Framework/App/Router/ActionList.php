@@ -80,9 +80,12 @@ class ActionList
         if (in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
-        $fullPath = strtolower(
-            str_replace('_', '\\', $module) . '\\controller' . $area
-            . '\\' . str_replace('_', '\\', $namespace) . '\\' . $action
+        $fullPath = str_replace(
+            '_',
+            '\\',
+            strtolower(
+                $module . '\\controller' . $area . '\\' . $namespace . '\\' . $action
+            )
         );
         if (isset($this->actions[$fullPath])) {
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
