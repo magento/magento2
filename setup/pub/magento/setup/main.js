@@ -83,8 +83,8 @@ main.controller('navigationController',
         }
 
         $scope.goToStart = function() {
-            if ($state.current.type === 'installer') {
-                $state.go('root.landing-installer');
+            if ($state.current.type === 'install') {
+                $state.go('root.landing-install');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
             } else {
@@ -103,6 +103,7 @@ main.controller('navigationController',
         mainState: {},
         states: [],
         load: function () {
+            $localStorage.$reset();
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
