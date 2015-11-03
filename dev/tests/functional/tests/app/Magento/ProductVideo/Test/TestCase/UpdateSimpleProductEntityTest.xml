@@ -7,6 +7,26 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest" summary="Add Video to PCF" ticketId="PV-1">
+        <variation name="DeleteVideoFromPCFTestVariation1">
+            <data name="description" xsi:type="string">Delete video youtube</data>
+            <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
+            <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
+            <data name="product/data/media_gallery/images" xsi:type="string" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+        </variation>
+        <variation name="DeleteVideoFromPCFTestVariation2">
+            <data name="description" xsi:type="string">Delete video vimeo</data>
+            <data name="initialProduct/dataset" xsi:type="string">product_with_video_vimeo</data>
+            <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
+            <data name="product/data/media_gallery/images" xsi:type="string" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+        </variation>
         <variation name="AddVideoToPCFTestVariation1">
             <data name="description" xsi:type="string">Add youtube video with all available fields filled in</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
@@ -14,7 +34,7 @@
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/WMp2PvU2qi8</data>
             <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 1</data>
             <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is a test "Foo Test 1"</data>
-            <data name="configData" xsi:type="string">play_if_base,youtube_api_key</data>
+            <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
