@@ -29,7 +29,7 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $widgetBlock = "//body//aside[//*[@id='widget_options_form']]";
+    protected $widgetBlock = "//body//aside[div//*[@id='widget_options_form']]";
 
     /**
      * Insert Variable button selector.
