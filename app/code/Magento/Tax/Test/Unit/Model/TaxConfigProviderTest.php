@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
+use \Magento\Tax\Model\Config;
+
 class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -79,8 +81,8 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
         $cartPriceExclTax,
         $cartSubTotalBoth,
         $cartSubTotalExclTax,
-        $calculationType,
-        $isQuoteVirtual
+        $isQuoteVirtual,
+        $config
     ) {
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingBoth')
             ->will($this->returnValue($cartShippingBoth));
@@ -107,10 +109,14 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->taxConfigMock->expects(($this->any()))->method('displayCartZeroTax')
             ->will($this->returnValue(1));
-        $this->scopeConfigMock->expects($this->once())
+
+        $valueMap = [];
+        foreach ($config as $key => $value) {
+            $valueMap[] = [$key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null, $value];
+        }
+        $this->scopeConfigMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->with(\Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON)
-            ->willReturn($calculationType);
+            ->willReturnMap($valueMap);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn($isQuoteVirtual);
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
@@ -133,6 +139,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => false,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 1,
                 'cartShippingExclTax' => 1,
@@ -140,8 +149,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 1,
                 'cartSubTotalBoth' => 1,
                 'cartSubTotalExclTax' => 1,
-                'calculationType' => 'shipping',
                 'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
             [
                 'expectedResult' => [
@@ -154,6 +168,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => true,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 1,
@@ -161,8 +178,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 1,
                 'cartSubTotalBoth' => 0,
                 'cartSubTotalExclTax' => 1,
-                'calculationType' => 'billing',
                 'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'billing',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
             [
                 'expectedResult' => [
@@ -175,6 +197,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => true,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 0,
@@ -182,8 +207,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 0,
                 'cartSubTotalBoth' => 0,
                 'cartSubTotalExclTax' => 0,
-                'calculationType' => 'shipping',
                 'isQuoteVirtual' => true,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
             [
                 'expectedResult' => [
@@ -196,6 +226,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => true,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 0,
@@ -203,8 +236,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 0,
                 'cartSubTotalBoth' => 0,
                 'cartSubTotalExclTax' => 0,
-                'calculationType' => 'billing',
                 'isQuoteVirtual' => true,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'billing',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
             [
                 'expectedResult' => [
@@ -217,6 +255,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => false,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 1,
                 'cartShippingExclTax' => 0,
@@ -224,8 +265,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 0,
                 'cartSubTotalBoth' => 1,
                 'cartSubTotalExclTax' => 0,
-                'calculationType' => 'shipping',
                 'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
             [
                 'expectedResult' => [
@@ -238,6 +284,9 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isFullTaxSummaryDisplayed' => 1,
                     'isZeroTaxDisplayed' => 1,
                     'reloadOnBillingAddress' => false,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => 12,
+                    'defaultPostcode' => '*',
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 1,
@@ -245,8 +294,13 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'cartPriceExclTax' => 0,
                 'cartSubTotalBoth' => 1,
                 'cartSubTotalExclTax' => 0,
-                'calculationType' => 'shipping',
                 'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
             ],
         ];
     }
