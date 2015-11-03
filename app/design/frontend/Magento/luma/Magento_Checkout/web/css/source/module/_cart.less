@@ -320,8 +320,14 @@
         padding-right: @layout__width-xs-indent;
     }
 
-    .cart-tax-info + .cart-tax-total {
+    .cart .cart-tax-info + .cart-tax-total {
         display: block;
+    }
+
+    .cart.table-wrapper .col.price,
+    .cart.table-wrapper .col.subtotal,
+    .cart.table-wrapper .col.msrp {
+        text-align: left;
     }
 }
 
