@@ -777,10 +777,8 @@ class Checkout
             $this->updateShippingMethod($shippingMethodCode);
         }
 
-        switch ($this->getCheckoutMethod()) {
-            case \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST:
-                $this->prepareGuestQuote();
-                break;
+        if ($this->getCheckoutMethod() == \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST) {
+            $this->prepareGuestQuote();
         }
 
         $this->ignoreAddressValidation();
