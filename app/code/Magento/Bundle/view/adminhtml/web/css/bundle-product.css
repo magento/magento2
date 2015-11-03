@@ -49,15 +49,11 @@
 .field-sku .control .sku {
     display: inline-block;
     width: 140px;
-    margin-right: 15px;
+    margin-right: 11px;
 }
 
 .field-sku .control .sku > input[type='text'] {
     width: 100%;
-}
-
-.field-sku .control .sku + .select {
-    vertical-align: middle;
 }
 
 .field-price .addon > .price {
@@ -73,7 +69,6 @@
 }
 
 .field-price .addon > .price + .select {
-    width: 96px;
     float: left;
 }
 

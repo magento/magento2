@@ -15,7 +15,7 @@ use Magento\Customer\Model\Url as CustomerUrlManager;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Locale\CurrencyInterface as CurrencyManager;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
@@ -63,7 +63,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $httpContext;
 
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
 
@@ -169,7 +169,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param CustomerSession $customerSession
      * @param CustomerUrlManager $customerUrlManager
      * @param HttpContext $httpContext
-     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
@@ -199,7 +199,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         CustomerSession $customerSession,
         CustomerUrlManager $customerUrlManager,
         HttpContext $httpContext,
-        QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
         ConfigurationPool $configurationPool,
@@ -278,7 +278,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
-        $output['defaultCountryId'] = $this->directoryHelper->getDefaultCountry();
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [
             'isEnabled' => $this->scopeConfig->isSetFlag(
