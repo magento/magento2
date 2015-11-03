@@ -26,8 +26,6 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 
     private $composerInformationMock;
 
-    private $applicationFactoryMock;
-
     public function setUp()
     {
         $this->serviceLocatorMock = $this->_getServiceLocatorMock();
@@ -36,7 +34,6 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         );
         $this->curlClientMock = $this->_getCurlClientMock(['setCredentials', 'getBody', 'post']);
         $this->filesystemMock = $this->_getFilesystemMock(['getDirectoryRead', 'getDirectoryWrite']);
-        $this->applicationFactoryMock = $this->_getApplicationFactoryMock(['create']);
     }
 
     /**
@@ -50,8 +47,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -76,8 +72,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $this->serviceLocatorMock
@@ -107,8 +102,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -136,8 +130,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $this->curlClientMock
@@ -172,8 +165,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $this->curlClientMock
@@ -214,8 +206,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $this->curlClientMock
@@ -255,8 +246,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $this->curlClientMock
@@ -301,8 +291,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -378,8 +367,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -414,8 +402,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $directory = $this->_getDirectoryMock();
@@ -460,8 +447,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $directory = $this->_getDirectoryMock();
@@ -526,8 +512,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $directory = $this->_getDirectoryMock();
@@ -573,6 +558,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $connectManager = $this->_getConnectManagerMock(
             [
+                'getDirectory',
                 'getCredentialBaseUrl',
                 'getApplication'
             ],
@@ -580,18 +566,19 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
-        $application = $this->_getApplicationMock(['runComposerCommand']);
+
+        $directory = $this->_getDirectoryMock();
         $connectManager
-            ->expects($this->once())
-            ->method('getApplication')
-            ->will($this->returnValue($application));
-        $this->applicationFactoryMock
-            ->expects($this->never())
-            ->method('runComposerCommand');
+            ->expects($this->any())
+            ->method('getDirectory')
+            ->will($this->returnValue($directory));
+        $directory
+            ->expects($this->any())
+            ->method('writeFile')
+            ->will($this->returnValue($directory));
 
         $connectManager->saveAuthJson('username', 'password');
     }
@@ -607,8 +594,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $directory = $this->_getDirectoryMock();
@@ -639,8 +625,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -667,8 +652,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
         $connectManager
@@ -703,8 +687,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->serviceLocatorMock,
                 $this->composerInformationMock,
                 $this->curlClientMock,
-                $this->filesystemMock,
-                $this->applicationFactoryMock
+                $this->filesystemMock
             ]
         );
 
@@ -780,28 +763,6 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
     protected function _getDirectoryMock()
     {
         return $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-    }
-
-    /**
-     * Gets ApplicationFactory mock
-     *
-     * @param null $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\MagentoComposerApplicationFactory
-     */
-    protected function _getApplicationFactoryMock($methods = null)
-    {
-        return $this->getMock('Magento\Framework\Composer\MagentoComposerApplicationFactory', $methods, [], '', false);
-    }
-
-    /**
-     * Gets Application mock
-     *
-     * @param null $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\MagentoComposerApplication
-     */
-    protected function _getApplicationMock($methods = null)
-    {
-        return $this->getMock('Magento\Composer\MagentoComposerApplication', $methods, [], '', false);
     }
 
     /**
