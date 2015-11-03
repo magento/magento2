@@ -3,16 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Test\Unit\Model;
+namespace Magento\Framework\Search\Test\Unit;
 
-use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 class SearchTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Search\Model\Search
+     * @var \Magento\Framework\Search\Search
      */
     protected $model;
 
@@ -22,19 +20,19 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     protected $requestBuilder;
 
     /**
-     * @var \Magento\Search\Model\SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\SearchEngineInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchEngine;
 
     /**
-     * @var \Magento\Search\Model\SearchResponseBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\SearchResponseBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchResponseBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    protected $scopeResolver;
 
     protected function setUp()
     {
@@ -44,30 +42,30 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchEngine = $this->getMockBuilder('Magento\Search\Model\SearchEngine')
+        $this->searchEngine = $this->getMockBuilder('Magento\Framework\Search\SearchEngineInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchResponseBuilder = $this->getMockBuilder('Magento\Search\Model\SearchResponseBuilder')
+        $this->searchResponseBuilder = $this->getMockBuilder('Magento\Framework\Search\SearchResponseBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->scopeResolver = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->model = $objectManager->getObject('Magento\Search\Model\Search', [
+        $this->model = $objectManager->getObject('Magento\Framework\Search\Search', [
             'requestBuilder' => $this->requestBuilder,
             'searchEngine' => $this->searchEngine,
             'searchResponseBuilder' => $this->searchResponseBuilder,
-            'storeManager' => $this->storeManager,
+            'scopeResolver' => $this->scopeResolver,
         ]);
     }
 
     public function testSearch()
     {
         $requestName = 'requestName';
-        $storeId = 333;
+        $scope = 333;
         $filterField = 'filterField';
         $filterValue = 'filterValue';
 
@@ -98,13 +96,6 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
 
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
-
         $searchResult = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResult')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -122,7 +113,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->with($requestName);
         $this->requestBuilder->expects($this->once())
             ->method('bindDimension')
-            ->with('scope', $storeId);
+            ->with('scope', $scope);
         $this->requestBuilder->expects($this->any())
             ->method('bind');
         $this->requestBuilder->expects($this->once())
@@ -139,9 +130,9 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->with($response)
             ->willReturn($searchResult);
 
-        $this->storeManager->expects($this->once())
-            ->method('getStore')
-            ->willReturn($store);
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($scope);
 
         $searchResult = $this->model->search($searchCriteria);
 
