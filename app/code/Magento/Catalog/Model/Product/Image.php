@@ -332,10 +332,10 @@ class Image extends \Magento\Framework\Model\AbstractModel
         list($width, $height) = explode('x', strtolower($size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
-            = (int)${$wh};
+                = (int)${$wh};
             if (empty(${$wh})) {
                 ${$wh}
-                = null;
+                    = null;
             }
         }
 
@@ -353,7 +353,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_getMemoryLimit() > $this->_getMemoryUsage() + $this->_getNeedMemoryForFile(
             $file
-        ) || $this->_getMemoryLimit() == -1;
+        )
+        || $this->_getMemoryLimit() == -1;
     }
 
     /**
@@ -710,8 +711,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
         } else {
             $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-            ) . $this->_newFile;
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . $this->_newFile;
         }
 
         return $url;
@@ -939,14 +940,17 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getResizedImageInfo()
     {
+        $fileInfo = null;
         if ($this->_newFile === true) {
-            $fileInfo = getimagesize(
-                $this->_assetRepo->createAsset(
-                    "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
-                )->getSourceFile()
+            $asset = $this->_assetRepo->createAsset(
+                "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
             );
+            $img = $asset->getSourceFile();
+            $fileInfo = getimagesize($img);
         } else {
-            $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+            if ($this->_mediaDirectory->isFile($this->_mediaDirectory->getAbsolutePath($this->_newFile))) {
+                $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+            }
         }
         return $fileInfo;
     }
