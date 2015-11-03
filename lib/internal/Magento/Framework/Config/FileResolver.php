@@ -90,13 +90,18 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                 if ($themeConfigFile
                     && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
                 ) {
-                    $iterator[$this->rootDirectory->getRelativePath($themeConfigFile)] = $this->rootDirectory->readFile(
-                        $this->rootDirectory->getRelativePath($themeConfigFile)
-                    );
+                    $iterator[$this->rootDirectory->getRelativePath($themeConfigFile)] =
+                        $this->rootDirectory->readFile(
+                            $this->rootDirectory->getRelativePath(
+                                $themeConfigFile
+                            )
+                        );
                 }
                 $designPath =
-                    $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $this->area . '/' . $this->themePath)
-                    . '/etc/view.xml';
+                    $this->componentRegistrar->getPath(
+                        ComponentRegistrar::THEME,
+                        $this->area . '/' . $this->themePath
+                    ) . '/etc/view.xml';
                 if (file_exists($designPath)) {
                     try {
                         $designDom = new \DOMDocument;
