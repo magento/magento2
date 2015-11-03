@@ -89,6 +89,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $quoteAddressFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $storeManagerMock;
 
     /**
@@ -207,6 +212,14 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->quoteAddressFactory = $this->getMock(
+            'Magento\Quote\Model\Quote\AddressFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
         $this->dataObjectHelperMock = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->checkoutSessionMock = $this->getMock(
             'Magento\Checkout\Model\Session',
@@ -242,6 +255,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
+                'quoteAddressFactory' => $this->quoteAddressFactory,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
@@ -258,6 +272,13 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+
+        $quoteAddress = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+
+        $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
+        $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
+
+        $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($quoteMock);
         $quoteMock->expects($this->any())->method('setStoreId')->with($storeId);
@@ -688,6 +709,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
+                'quoteAddressFactory' => $this->quoteAddressFactory,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
@@ -745,6 +767,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
+                'quoteAddressFactory' => $this->quoteAddressFactory,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
