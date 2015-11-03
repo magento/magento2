@@ -873,19 +873,25 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Retrieve order payment model object
-     *
-     * @return Payment|false
+     * {@inheritdoc}
      */
     public function getPayment()
     {
-        foreach ($this->getPayments() as $payment) {
-            if (!$payment->isDeleted()) {
-                $payment->setOrder($this);
-                return $payment;
+        $payment = $this->getData(OrderInterface::PAYMENT);
+        if ($payment === null) {
+            $paymentItems = $this->getPaymentsCollection()->getItems();
+            if (count($paymentItems)) {
+                $payment = reset($paymentItems);
+                $this->setData(
+                    OrderInterface::PAYMENT,
+                    $payment
+                );
             }
         }
-        return false;
+        if ($payment) {
+            $payment->setOrder($this);
+        }
+        return $payment;
     }
 
     /**
@@ -1432,29 +1438,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @param Payment $payment
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addPayment(Payment $payment)
+    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
         $payment->setOrder($this)->setParentId($this->getId());
         if (!$payment->getId()) {
-            $this->setPayments(array_merge($this->getPayments(), [$payment]));
+            $this->setData(OrderInterface::PAYMENT, $payment);
             $this->setDataChanges(true);
         }
-        return $this;
-    }
-
-    /**
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface $payment
-     * @return Payment
-     */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment)
-    {
-        if (!$this->getIsMultiPayment() && ($previousPayment = $this->getPayment())) {
-            $payment->setEntityId($previousPayment->getEntityId());
-        }
-        $this->addPayment($payment);
         return $payment;
     }
 
@@ -1884,7 +1876,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_actionFlag = [];
         $this->setAddresses(null);
         $this->setItems(null);
-        $this->setPayments(null);
+        $this->setPayment(null);
         $this->setStatusHistories(null);
         $this->_invoices = null;
         $this->_tracks = null;
@@ -1963,49 +1955,17 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @return \Magento\Sales\Api\Data\OrderPaymentInterface[]
-     */
-    public function getPayments()
-    {
-        if ($this->getData(OrderInterface::PAYMENTS) == null) {
-            $this->setData(
-                OrderInterface::PAYMENTS,
-                $this->getPaymentsCollection()->getItems()
-            );
-        }
-        return $this->getData(OrderInterface::PAYMENTS);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @codeCoverageIgnore
-     */
-    public function setPayments(array $payments = null)
-    {
-        return $this->setData(OrderInterface::PAYMENTS, $payments);
-    }
-
-    /**
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
      */
     public function getAddresses()
     {
-        if ($this->getData(OrderInterface::ADDRESSES) == null) {
+        if ($this->getData('addresses') == null) {
             $this->setData(
-                OrderInterface::ADDRESSES,
+                'addresses',
                 $this->getAddressesCollection()->getItems()
             );
         }
-        return $this->getData(OrderInterface::ADDRESSES);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @codeCoverageIgnore
-     */
-    public function setAddresses(array $addresses = null)
-    {
-        return $this->setData(OrderInterface::ADDRESSES, $addresses);
+        return $this->getData('addresses');
     }
 
     /**
@@ -2960,16 +2920,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getRemoteIp()
     {
         return $this->getData(OrderInterface::REMOTE_IP);
-    }
-
-    /**
-     * Returns shipping_address_id
-     *
-     * @return int
-     */
-    public function getShippingAddressId()
-    {
-        return $this->getData(OrderInterface::SHIPPING_ADDRESS_ID);
     }
 
     /**
@@ -3961,14 +3911,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * {@inheritdoc}
      */
-    public function setShippingAddressId($id)
-    {
-        return $this->setData(OrderInterface::SHIPPING_ADDRESS_ID, $id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setAdjustmentNegative($adjustmentNegative)
     {
         return $this->setData(OrderInterface::ADJUSTMENT_NEGATIVE, $adjustmentNegative);
@@ -4257,14 +4199,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * {@inheritdoc}
      */
-    public function setShippingMethod($shippingMethod)
-    {
-        return $this->setData(OrderInterface::SHIPPING_METHOD, $shippingMethod);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setStoreCurrencyCode($code)
     {
         return $this->setData(OrderInterface::STORE_CURRENCY_CODE, $code);
@@ -4405,6 +4339,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function setBaseShippingInclTax($amount)
     {
         return $this->setData(OrderInterface::BASE_SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * Sets shipping method to order
+     *
+     * @param string $shippingMethod
+     * @return $this
+     * @internal
+     */
+    public function setShippingMethod($shippingMethod)
+    {
+        return $this->setData('shipping_method', $shippingMethod);
     }
     //@codeCoverageIgnoreEnd
 }

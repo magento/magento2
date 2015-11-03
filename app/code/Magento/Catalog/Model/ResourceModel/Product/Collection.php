@@ -841,6 +841,40 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Filter Product by Categories
+     *
+     * @param array $categoriesFilter
+     */
+    public function addCategoriesFilter(array $categoriesFilter)
+    {
+        foreach ($categoriesFilter as $conditionType => $values) {
+            $categorySelect = $this->getConnection()->select()->from(
+                ['cat' => $this->getTable('catalog_category_product')],
+                'cat.product_id'
+            )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
+            $selectCondition = [
+                $this->mapConditionType($conditionType) => $categorySelect
+            ];
+            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+        }
+    }
+
+    /**
+     * Map equal and not equal conditions to in and not in
+     *
+     * @param string $conditionType
+     * @return mixed
+     */
+    private function mapConditionType($conditionType)
+    {
+        $conditionsMap = [
+            'eq' => 'in',
+            'neq' => 'nin'
+        ];
+        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
+    }
+
+    /**
      * Join minimal price attribute to result
      *
      * @return $this

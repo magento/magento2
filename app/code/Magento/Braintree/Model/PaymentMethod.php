@@ -409,6 +409,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         if ($token) {
             $transactionParams['paymentMethodToken'] = $token;
             $transactionParams['customerId'] = $customerId;
+            $transactionParams['billing']  = $this->toBraintreeAddress($billing);
+            $transactionParams['shipping'] = $this->toBraintreeAddress($shipping);
         } elseif ($this->getInfoInstance()->getAdditionalInformation('payment_method_nonce')) {
             $transactionParams['paymentMethodNonce'] =
                 $this->getInfoInstance()->getAdditionalInformation('payment_method_nonce');
