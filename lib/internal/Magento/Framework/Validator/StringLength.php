@@ -30,8 +30,7 @@ class StringLength extends \Zend_Validate_StringLength implements \Magento\Frame
                 $result = ini_get('default_charset');
             }
             if (!$result) {
-                #require_once 'Zend/Validate/Exception.php';
-                throw new Zend_Validate_Exception('Given encoding not supported on this OS!');
+                throw new \Zend_Validate_Exception('Given encoding not supported on this OS!');
             }
 
             if (PHP_VERSION_ID < 50600) {
