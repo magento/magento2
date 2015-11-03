@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Config\ViewFactory;
 
 /**
  * Handles theme view.xml files
@@ -21,20 +21,6 @@ class Config implements \Magento\Framework\View\ConfigInterface
     protected $viewConfigs = [];
 
     /**
-     * Module configuration reader
-     *
-     * @var \Magento\Framework\Module\Dir\Reader
-     */
-    protected $moduleReader;
-
-    /**
-     * Root directory
-     *
-     * @var ReadInterface
-     */
-    protected $rootDirectory;
-
-    /**
      * View service
      *
      * @var \Magento\Framework\View\Asset\Repository
@@ -42,60 +28,24 @@ class Config implements \Magento\Framework\View\ConfigInterface
     protected $assetRepo;
 
     /**
-     * View file system model
-     *
-     * @var \Magento\Framework\View\FileSystem
-     */
-    protected $viewFileSystem;
-
-    /**
-     * File name
-     *
-     * @var string
-     */
-    protected $filename;
-
-    /**
-     * File iterator factory
-     *
-     * @var \Magento\Framework\Config\FileIteratorFactory
-     */
-    protected $fileIteratorFactory;
-
-    /**
      * File view factory
      *
      * @var \Magento\Framework\Config\ViewFactory
      */
-    protected $viewFactory;
+    protected $viewConfigFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
+     * @param Asset\Repository $assetRepo
      * @param \Magento\Framework\Config\ViewFactory $viewConfigFactory
-     * @param string $filename
      */
     public function __construct(
-        \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory,
-        \Magento\Framework\Config\ViewFactory $viewFactory,
-        $filename = self::CONFIG_FILE_NAME
+        Repository $assetRepo,
+        ViewFactory $viewConfigFactory
     ) {
-        $this->moduleReader = $moduleReader;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->assetRepo = $assetRepo;
-        $this->viewFileSystem = $viewFileSystem;
-        $this->fileIteratorFactory = $fileIteratorFactory;
-        $this->viewFactory = $viewFactory;
-        $this->filename = $filename;
+        $this->viewConfigFactory = $viewConfigFactory;
     }
 
     /**
@@ -114,21 +64,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
             return $this->viewConfigs[$key];
         }
 
-        $configFiles = $this->moduleReader->getConfigurationFiles(basename($this->filename))->toArray();
-        $themeConfigFile = $currentTheme->getCustomization()->getCustomViewConfigPath();
-        if (empty($themeConfigFile)
-            || !$this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
-        ) {
-            $themeConfigFile = $this->viewFileSystem->getFilename($this->filename, $params);
-        }
-        if ($themeConfigFile
-            && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
-        ) {
-            $configFiles[$this->rootDirectory->getRelativePath($themeConfigFile)] = $this->rootDirectory->readFile(
-                $this->rootDirectory->getRelativePath($themeConfigFile)
-            );
-        }
-        $config = $this->viewFactory->create($configFiles);
+        $config = $this->viewConfigFactory->create();
 
         $this->viewConfigs[$key] = $config;
         return $config;
