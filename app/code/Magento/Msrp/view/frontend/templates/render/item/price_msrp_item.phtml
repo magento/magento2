@@ -35,7 +35,7 @@
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
         <span id="<?php /* @escapeNotVerified */ echo $priceElementId ?>" style="display: none"></span>
         <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>
-        <a href="#"
+        <a href="javascript:void(0);"
            id="<?php /* @escapeNotVerified */ echo($popupId);?>"
            data-mage-init='{"addToCart":{"popupId": "#<?php /* @escapeNotVerified */ echo($popupId);?>",
                                          "productName": "<?php /* @escapeNotVerified */ echo $_product->getName() ?>",
@@ -51,5 +51,5 @@
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
-    <a href="#" id="<?php /* @escapeNotVerified */ echo($helpLinkId);?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo($helpLinkId);?>", "productName": "<?php /* @escapeNotVerified */ echo $_product->getName() ?>"}}' class="link tip"><?php /* @escapeNotVerified */ echo __("What's this?"); ?></a>
+    <a href="javascript:void(0);" id="<?php /* @escapeNotVerified */ echo($helpLinkId);?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo($helpLinkId);?>", "productName": "<?php /* @escapeNotVerified */ echo $_product->getName() ?>"}}' class="link tip"><?php /* @escapeNotVerified */ echo __("What's this?"); ?></a>
 </div>
