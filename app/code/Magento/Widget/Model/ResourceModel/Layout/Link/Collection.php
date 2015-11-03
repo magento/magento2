@@ -101,7 +101,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addUpdatedDaysBeforeFilter($days)
     {
-        $datetime = new \DateTime('now', new \DateTimeZone('GMT'));
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . $days . 'D');
         $datetime->sub($storeInterval);
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
