@@ -87,9 +87,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      * @param boolean $isActionAllowed
      * @param boolean $isAuthenticated
      *
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider dataProviderAroundExecute
      */
-    public function testAroundDispatch(
+    public function testAroundExecute(
         $action,
         $allowedActions,
         $isActionAllowed,
@@ -128,11 +128,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $plugin = new Account($this->session, $allowedActions);
         $this->assertEquals(
             self::EXPECTED_VALUE,
-            $plugin->aroundDispatch($this->subject, $this->proceed, $this->request)
+            $plugin->aroundExecute($this->subject, $this->proceed, $this->request)
         );
     }
 
-    public function dataProviderAroundDispatch()
+    public function dataProviderAroundExecute()
     {
         return [
             [

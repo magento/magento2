@@ -286,7 +286,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
+            } elseif (isset($productData['store_id'])
+                && !empty($productData['store_id'])
+                && $this->storeManager->getStore($productData['store_id'])
+            ) {
+                $product->setWebsiteIds([$this->storeManager->getStore($productData['store_id'])->getWebsiteId()]);
             }
         } else {
             unset($this->instances[$productData['sku']]);
@@ -679,10 +684,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         Collection $collection
     ) {
         $fields = [];
+        $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-            $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+
+            if ($filter->getField() == 'category_id') {
+                $categoryFilter[$conditionType][] = $filter->getValue();
+                continue;
+            }
+            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
+
+        if ($categoryFilter) {
+            $collection->addCategoriesFilter($categoryFilter);
+        }
+
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }

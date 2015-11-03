@@ -139,6 +139,7 @@
     <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
     <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
     <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
+    <preference for="Magento\Framework\Api\Search\SearchInterface" type="Magento\Framework\Search\Search"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -176,7 +177,7 @@
     <type name="Magento\Framework\View\BlockPool" shared="false" />
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
-            <argument name="pathInfoProcessor" xsi:type="object">Magento\Store\App\Request\PathInfoProcessor\Proxy</argument>
+            <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
@@ -1062,11 +1063,12 @@
     </type>
     <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
     <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
-    <type name="Magento\Framework\View\Xsd\Reader">
+    <type name="Magento\Framework\Config\View">
         <arguments>
-            <argument name="fileName" xsi:type="string">view.xsd</argument>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="searchFilesPattern" xsi:type="string">urn:magento:framework:Config/etc/</argument>
+            <argument name="fileName" xsi:type="string">view.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
         </arguments>
     </type>
 </config>

@@ -51,7 +51,7 @@ class FrontController implements FrontControllerInterface
                     if ($actionInstance) {
                         $request->setDispatched(true);
                         $this->response->setNoCacheHeaders();
-                        $result = $actionInstance->dispatch($request);
+                        $result = $actionInstance->execute($request);
                         break;
                     }
                 } catch (\Magento\Framework\Exception\NotFoundException $e) {

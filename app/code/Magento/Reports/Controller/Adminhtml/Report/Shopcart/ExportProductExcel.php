@@ -16,7 +16,7 @@ class ExportProductExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sh
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'shopcart_product.xml';
         $content = $this->_view->getLayout()->createBlock(

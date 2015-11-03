@@ -8,11 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 class CategoryProcessor
 {
     /**
-     * Delimiter in import file between categories.
-     */
-    const DELIMITER_CATEGORIES = '|';
-
-    /**
      * Delimiter in category path.
      */
     const DELIMITER_CATEGORY = '/';
@@ -144,13 +139,14 @@ class CategoryProcessor
      * Returns IDs of categories by string path creating nonexistent ones.
      *
      * @param string $categoriesString
+     * @param string $categoriesSeparator
      *
      * @return array
      */
-    public function upsertCategories($categoriesString)
+    public function upsertCategories($categoriesString, $categoriesSeparator)
     {
         $categoriesIds = [];
-        $categories = explode(self::DELIMITER_CATEGORIES, $categoriesString);
+        $categories = explode($categoriesSeparator, $categoriesString);
 
         foreach ($categories as $category) {
             $categoriesIds[] = $this->upsertCategory($category);

@@ -33,7 +33,7 @@ $params = $block->getParams();
                     'Magento_Checkout/js/action/place-order'
                 ],
                 function(quote, placeOrderAction) {
-                    placeOrderAction(quote.paymentMethod(), true);
+                    placeOrderAction({"method": quote.paymentMethod().method}, true);
                 }
             );
         <?php endif; ?>

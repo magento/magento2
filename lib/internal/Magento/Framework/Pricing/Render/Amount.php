@@ -171,22 +171,16 @@ class Amount extends Template implements AmountRenderInterface
      */
     protected function _toHtml()
     {
-        $adjustmentRenders = $this->getApplicableAdjustmentRenders();
+        $adjustmentRenders = $this->getAdjustmentRenders();
         if ($adjustmentRenders) {
-            $this->adjustmentsHtml = $this->getAdjustments($adjustmentRenders);
+            $adjustmentHtml = $this->getAdjustments($adjustmentRenders);
+            if (!$this->hasSkipAdjustments() ||
+                ($this->hasSkipAdjustments() && $this->getSkipAdjustments() == false)) {
+                $this->adjustmentsHtml = $adjustmentHtml;
+            }
         }
         $html = parent::_toHtml();
         return $html;
-    }
-
-    /**
-     * Collect correspondent Price Adjustment Renders
-     *
-     * @return AdjustmentRenderInterface[]
-     */
-    protected function getApplicableAdjustmentRenders()
-    {
-        return (!$this->hasSkipAdjustments()) ? $this->getAdjustmentRenders() : [];
     }
 
     /**

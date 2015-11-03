@@ -55,12 +55,12 @@ class GetPriceConfigurationObserver implements ObserverInterface
             try {
                 /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->registry->registry('current_product');
-                $weeeAttributes = $this->weeeData->getWeeeAttributesForBundle($product);
+                $weeeAttributesForBundle = $this->weeeData->getWeeeAttributesForBundle($product);
                 $priceConfig = $this->recurConfigAndInsertWeeePrice(
                     $priceConfigObj->getConfig(),
                     'prices',
-                    $this->getWhichCalcPriceToUse($product->getStoreId()),
-                    $weeeAttributes
+                    $this->getWhichCalcPriceToUse($product->getStoreId(), $weeeAttributesForBundle),
+                    $weeeAttributesForBundle
                 );
                 $priceConfigObj->setConfig($priceConfig);
             } catch (\Exception $e) {
@@ -76,16 +76,17 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param  array $input
      * @param  string $searchKey
      * @param  string $calcPrice
-     * @param  array $weeeAttributes
+     * @param  array $weeeAttributesForBundle
      * @return array
      */
-    private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributes = null)
+    private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributesForBundle = null)
     {
         $holder = [];
         if (is_array($input)) {
             foreach ($input as $key => $el) {
                 if (is_array($el)) {
-                    $holder[$key] = $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice, $weeeAttributes);
+                    $holder[$key] =
+                        $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice, $weeeAttributesForBundle);
                     if ($key === $searchKey) {
                         if ((!array_key_exists('weeePrice', $holder[$key])) &&
                             (array_key_exists($calcPrice, $holder[$key]))
@@ -93,8 +94,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
                             //this is required for product options && bundle
                             $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
                             // only do processing on product options
-                            if (array_key_exists('optionId', $input) && $weeeAttributes) {
-                                $holder = $this->insertWeeePrice($holder, $key, $weeeAttributes);
+                            if (array_key_exists('optionId', $input) && $weeeAttributesForBundle) {
+                                $holder = $this->insertWeeePrice($holder, $key, $weeeAttributesForBundle);
                             }
                         }
                     }
@@ -111,18 +112,20 @@ class GetPriceConfigurationObserver implements ObserverInterface
      *
      * @param  array $holder
      * @param  int|string $key
-     * @param  array $weeeAttributes
+     * @param  array $weeeAttributesForBundle
      * @return array
      */
-    private function insertWeeePrice($holder, $key, $weeeAttributes)
+    private function insertWeeePrice($holder, $key, $weeeAttributesForBundle)
     {
-        if (array_key_exists($holder['optionId'], $weeeAttributes)) {
-            if (count($weeeAttributes[$holder['optionId']]) > 0 && is_array($weeeAttributes[$holder['optionId']])) {
+        if (array_key_exists($holder['optionId'], $weeeAttributesForBundle)) {
+            if (count($weeeAttributesForBundle[$holder['optionId']]) > 0 &&
+                is_array($weeeAttributesForBundle[$holder['optionId']])
+            ) {
                 $weeeSum = 0;
-                foreach ($weeeAttributes[$holder['optionId']] as $weeeAttribute) {
+                foreach ($weeeAttributesForBundle[$holder['optionId']] as $weeeAttribute) {
                     $holder[$key]['weeePrice' . $weeeAttribute->getCode()] =
-                        ['amount' => (float)$weeeAttribute->getAmount()];
-                    $weeeSum += (float)$weeeAttribute->getAmount();
+                        ['amount' => (float)$weeeAttribute->getAmountExclTax()];
+                    $weeeSum += (float)$weeeAttribute->getAmountExclTax();
                 }
                 $holder[$key]['weeePrice']['amount'] += (float)$weeeSum;
             } else {
@@ -137,16 +140,19 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * Returns which product price to use as a basis for the Weee's final price
      *
      * @param  int|null $storeId
+     * @param  array|null $weeeAttributesForBundle
      * @return string
      */
-    protected function getWhichCalcPriceToUse($storeId = null)
+    protected function getWhichCalcPriceToUse($storeId = null, $weeeAttributesForBundle = null)
     {
         $calcPrice = 'finalPrice';
-        if ($this->weeeData->geDisplayExcl($storeId) ||
-            $this->weeeData->geDisplayExlDescIncl($storeId) ||
-            ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
-        ) {
-            $calcPrice = 'basePrice';
+        if (!empty($weeeAttributesForBundle)) {
+            if ($this->weeeData->isDisplayExcl($storeId) ||
+                $this->weeeData->isDisplayExclDescIncl($storeId) ||
+                ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax())
+            ) {
+                $calcPrice = 'basePrice';
+            }
         }
         return $calcPrice;
     }

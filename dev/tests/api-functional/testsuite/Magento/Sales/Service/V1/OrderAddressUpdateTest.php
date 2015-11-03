@@ -46,7 +46,6 @@ class OrderAddressUpdateTest extends WebapiAbstract
             OrderAddress::FAX => null,
             OrderAddress::MIDDLENAME => null,
             OrderAddress::PREFIX => null,
-            OrderAddress::QUOTE_ADDRESS_ID => null,
             OrderAddress::REGION_ID => null,
             OrderAddress::SUFFIX => null,
             OrderAddress::VAT_ID => null,

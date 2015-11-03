@@ -52,7 +52,7 @@ class Popup extends \Magento\Framework\App\Action\Action
      * @return void
      * @throws NotFoundException
      */
-    public function execute()
+    public function executeInternal()
     {
         $shippingInfoModel = $this->_shippingInfoFactory->create()->loadByHash($this->getRequest()->getParam('hash'));
         $this->_coreRegistry->register('current_shipping_info', $shippingInfoModel);

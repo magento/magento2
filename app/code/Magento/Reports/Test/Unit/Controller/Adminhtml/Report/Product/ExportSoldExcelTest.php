@@ -67,6 +67,6 @@ class ExportSoldExcelTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
             ->method('create')
             ->with($fileName, $content, \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
 
-        $this->exportSoldExcel->execute();
+        $this->exportSoldExcel->executeInternal();
     }
 }

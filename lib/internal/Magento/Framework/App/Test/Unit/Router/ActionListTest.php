@@ -112,7 +112,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
         $mockClassName = 'Mock_Action_Class';
         $actionClass = $this->getMockClass(
             'Magento\Framework\App\ActionInterface',
-            ['dispatch', 'getResponse'],
+            ['execute', 'getResponse'],
             [],
             $mockClassName
         );
@@ -145,6 +145,14 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
             [
                 'Magento_Module',
                 'Area',
+                'Namespace_A',
+                'Index_edit',
+                ['magento\module\controller\area\namespace\a\index_edit' => $mockClassName],
+                $actionClass
+            ],
+            [
+                'Magento_Module',
+                'Area',
                 'Namespace',
                 'Index',
                 ['magento\module\controller\area\namespace\index' => 'Not_Exist_Class'],
@@ -156,6 +164,14 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Index',
                 [],
+                null
+            ],
+            [
+                'Magento_Module',
+                null,
+                'adminhtml_product',
+                'index',
+                'magento\module\controller\adminhtml\product\index' => '$mockClassName',
                 null
             ],
         ];

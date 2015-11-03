@@ -6,7 +6,7 @@
 
 namespace Magento\ProductVideo\Model\Plugin;
 
-use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage as OriginalBloc;
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage as OriginalBlock;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -20,13 +20,13 @@ class BaseImage
     const ELEMENT_OUTPUT_TEMPLATE = 'Magento_ProductVideo::product/edit/base_image.phtml';
 
     /**
-     * @param OriginalBloc $baseImage
+     * @param OriginalBlock $baseImage
      * @param Template $block
      * @return Template
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterAssignBlockVariables(OriginalBloc $baseImage, Template $block)
+    public function afterAssignBlockVariables(OriginalBlock $baseImage, Template $block)
     {
         $block->assign([
             'videoPlaceholderText' => __('Click here to add videos.'),
@@ -37,13 +37,13 @@ class BaseImage
     }
 
     /**
-     * @param OriginalBloc $baseImage
+     * @param OriginalBlock $baseImage
      * @param Template $block
      * @return Template
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterCreateElementHtmlOutputBlock(OriginalBloc $baseImage, Template $block)
+    public function afterCreateElementHtmlOutputBlock(OriginalBlock $baseImage, Template $block)
     {
         $block->setTemplate(self::ELEMENT_OUTPUT_TEMPLATE);
         return $block;

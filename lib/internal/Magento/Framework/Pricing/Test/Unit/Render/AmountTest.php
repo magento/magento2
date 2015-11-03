@@ -138,14 +138,57 @@ class AmountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test case for getAdjustmentRenders method through toHtml()
+     *
+     * @param bool $hasSkipAdjustments
+     * @param bool|null $skipAdjustments
+     * @param string $expected
+     * @dataProvider dataProviderToHtmlSkipAdjustments
      */
-    public function testToHtmlSkipAdjustments()
+    public function testToHtmlSkipAdjustments($hasSkipAdjustments, $skipAdjustments, $expected)
     {
-        $this->model->setData('skip_adjustments', true);
-        $this->rendererPool->expects($this->never())
-            ->method('getAdjustmentRenders');
+        if ($hasSkipAdjustments) {
+            $this->model->setData('skip_adjustments', $skipAdjustments);
+            $expectedData = [
+                'key1' => 'data1',
+                'css_classes' => 'class1 class2',
+                'module_name' => null,
+                'adjustment_css_classes' => 'class1 class2 render1 render2',
+                'skip_adjustments' => $skipAdjustments
+            ];
+        } else {
+            $expectedData = [
+                'key1'                   => 'data1',
+                'css_classes'            => 'class1 class2',
+                'module_name'            => null,
+                'adjustment_css_classes' => 'class1 class2 render1 render2',
+            ];
+        }
+
+        $this->model->setData('key1', 'data1');
+        $this->model->setData('css_classes', 'class1 class2');
+
+        $adjustmentRender1 = $this->getAdjustmentRenderMock($expectedData, 'html');
+        $adjustmentRender2 = $this->getAdjustmentRenderMock($expectedData);
+        $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
+        $this->rendererPool->expects($this->once())
+            ->method('getAdjustmentRenders')
+            ->will($this->returnValue($adjustmentRenders));
 
         $this->model->toHtml();
+        $this->assertEquals($expected, $this->model->getAdjustmentsHtml());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderToHtmlSkipAdjustments()
+    {
+        return [
+            [false, null, 'html'],
+            [false, null, 'html'],
+            [true, false, 'html'],
+            [true, true, ''],
+        ];
     }
 
     /**
