@@ -159,6 +159,7 @@ define([
             this.attributes(attributes);
             this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
+            this.showPrice();
         },
         changeButtonWizard: function () {
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
@@ -212,6 +213,7 @@ define([
                     $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
                 });
             }
+            this.showPrice();
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};
@@ -368,6 +370,16 @@ define([
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
             });
+        },
+        showPrice: function () {
+            var priceContainer = $('[id="attribute-price-container"]');
+            if (this.productMatrix().length !== 0) {
+                priceContainer.hide();
+                priceContainer.find('input').prop('disabled', true);
+            } else {
+                priceContainer.show();
+                priceContainer.find('input').prop('disabled', false);
+            }
         },
 
         /**

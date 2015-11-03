@@ -302,25 +302,6 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Get data for JS (product type transition)
-     *
-     * @return string
-     */
-    public function getTypeSwitcherData()
-    {
-        return $this->jsonEncoder->encode(
-            [
-                'tab_id' => 'product_info_tabs_downloadable_items',
-                'weight_switcher' => '[data-role=weight-switcher]',
-                'product_has_weight_flag' => \Magento\Catalog\Model\Product\Edit\WeightResolver::HAS_WEIGHT,
-                'weight_id' => 'weight',
-                'current_type' => $this->getProduct()->getTypeId(),
-                'attributes' => $this->_getAttributes(),
-            ]
-        );
-    }
-
-    /**
      * Get formed array with attribute codes and Apply To property
      *
      * @return array

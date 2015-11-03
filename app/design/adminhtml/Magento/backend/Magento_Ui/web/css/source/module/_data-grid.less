@@ -399,6 +399,16 @@ body._in-resize {
             }
         }
     }
+    .data-grid-controls-row td {
+        padding-top: @data-grid-cell__padding-vertical + @field-control__padding-top;
+        &.data-grid-checkbox-cell {
+            padding-top: @field-control__padding-top;
+        }
+        button,
+        [class*='admin__control-'] {
+            margin-top: -@field-control__padding-top - @field-control__border-width - .1rem;
+        }
+    }
     //  Editable row
     &._in-edit {
         tr {

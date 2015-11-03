@@ -20,7 +20,7 @@ class Search extends SuggestElement
      *
      * @var string
      */
-    protected $topPage = './ancestor::body//header[contains(@class, "page-header")]/div[1]';
+    protected $topPage = './ancestor::body//header';
 
     /**
      * Attributes locator.
@@ -80,7 +80,7 @@ class Search extends SuggestElement
      */
     public function isExistAttributeInSearchResult($productAttribute)
     {
-        $this->find($this->topPage, Locator::SELECTOR_XPATH)->click();
+        $this->find($this->topPage, Locator::SELECTOR_XPATH)->hover();
         $this->find($this->actionToggle)->click();
 
         return $this->isExistValueInSearchResult($productAttribute->getFrontendLabel());

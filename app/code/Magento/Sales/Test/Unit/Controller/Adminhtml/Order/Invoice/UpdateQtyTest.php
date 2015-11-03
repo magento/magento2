@@ -257,7 +257,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
 
-        $this->assertSame($resultRaw, $this->controller->execute());
+        $this->assertSame($resultRaw, $this->controller->executeInternal());
     }
 
     /**
@@ -300,7 +300,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultJsonMock));
 
-        $this->assertSame($resultJsonMock, $this->controller->execute());
+        $this->assertSame($resultJsonMock, $this->controller->executeInternal());
     }
 
     /**
@@ -343,6 +343,6 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultJsonMock));
 
-        $this->assertSame($resultJsonMock, $this->controller->execute());
+        $this->assertSame($resultJsonMock, $this->controller->executeInternal());
     }
 }

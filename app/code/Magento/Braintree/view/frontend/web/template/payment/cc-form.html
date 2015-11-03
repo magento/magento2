@@ -70,7 +70,7 @@
                                 data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type', 'data-validate': JSON.stringify({required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'})},
                                             mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
                                             enable: true,
-                                            options: getCcAvailableTypesValues(),
+                                            options: availableCcValues,
                                             optionsValue: 'value',
                                             optionsText: 'type',
                                             optionsCaption: $t('--Please Select--'),
@@ -79,7 +79,7 @@
                         <!-- /ko -->
                         <!-- ko if: (isCcDetectionEnabled())-->
                         <ul class="credit-card-types">
-                            <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
+                            <!-- ko foreach: {data: availableCcValues, as: 'item'} -->
                             <li class="item" data-bind="css: {
                                                             _active: $parent.selectedCardType() == item.value,
                                                             _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value

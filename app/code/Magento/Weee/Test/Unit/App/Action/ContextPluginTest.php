@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchBasedOnDefault()
+    public function testAroundExecuteBasedOnDefault()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -191,10 +191,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $this->contextPlugin->aroundExecute($action, $proceed, $request);
     }
 
-    public function testAroundDispatchBasedOnOrigin()
+    public function testAroundExecuteBasedOnOrigin()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -223,10 +223,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $this->contextPlugin->aroundExecute($action, $proceed, $request);
     }
 
-    public function testAroundDispatchBasedOnBilling()
+    public function testAroundExecuteBasedOnBilling()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -298,10 +298,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $this->contextPlugin->aroundExecute($action, $proceed, $request);
     }
 
-    public function testAroundDispatchBasedOnShipping()
+    public function testAroundExecuteBasedOnShipping()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -373,6 +373,6 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $this->contextPlugin->aroundExecute($action, $proceed, $request);
     }
 }

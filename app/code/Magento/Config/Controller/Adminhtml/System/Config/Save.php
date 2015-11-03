@@ -141,7 +141,7 @@ class Save extends AbstractConfig
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             // custom save logic

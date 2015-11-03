@@ -61,7 +61,7 @@ $hints = [
             <input
                 id="baseUrl"
                 class="form-el-input"
-                type="text"
+                type="url"
                 name="base_url"
                 ng-model="config.address.base_url"
                 ng-class="{'invalid': webconfig.base_url.$invalid && webconfig.submitted}"
@@ -297,22 +297,11 @@ $hints = [
                     tooltip-html-unsafe="The location of session. You can change this later in Magento Admin."
                     tooltip-trigger="focus"
                     tooltip-append-to-body="true"
-                    ng-change="$scope.validate()"
-                    check-Redis
                     >
                     <?php foreach ($this->sessionSave as $value):?>
                         <?php echo "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>"; ?>
                     <?php endforeach; ?>
                 </select>
-
-                <div class="error-container">
-                    <span ng-show="webconfig.session.$error.checkRedis">
-                        Redis PHP extension is not loaded, please follow instructions on
-                        <a href="http://devdocs.magento.com/guides/v2.0/config-guide/redis/config-redis.html"
-                           target="_blank">how to setup Redis</a>,
-                        before selecting this option.
-                    </span>
-                </div>
             </div>
         </div>
     </div>

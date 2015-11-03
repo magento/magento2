@@ -107,7 +107,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute()
+    public function executeInternal()
     {
         $response = new \Magento\Framework\DataObject();
         $response->setError(0);

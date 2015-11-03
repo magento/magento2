@@ -12,6 +12,8 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      */
     const SHIPPING_ADDRESS = 'shipping_address';
 
+    const BILLING_ADDRESS = 'billing_address';
+
     const SHIPPING_METHOD_CODE = 'shipping_method_code';
 
     const SHIPPING_CARRIER_CODE = 'shipping_carrier_code';
@@ -32,6 +34,21 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * @return $this
      */
     public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
+
+    /**
+     * Returns billing address
+     *
+     * @return \Magento\Quote\Api\Data\AddressInterface|null
+     */
+    public function getBillingAddress();
+
+    /**
+     * Set billing address if additional synchronization needed
+     *
+     * @param \Magento\Quote\Api\Data\AddressInterface $address
+     * @return $this
+     */
+    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
 
     /**
      * Returns shipping method code
