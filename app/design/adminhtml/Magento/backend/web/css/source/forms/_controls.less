@@ -73,6 +73,7 @@
     background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
+    max-width: 100%;
     padding-bottom: @field-control__padding-bottom - .1rem;
     padding-right: 4.4rem; // Distance between select switch and inner text
     padding-top: @field-control__padding-top - .1rem;
@@ -217,10 +218,10 @@ option:empty {
     [class*='admin__control-'][type] {
         .lib-css(appearence,none);
         .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-order(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
-        order: 1;
         vertical-align: top;
         width: auto;
         :focus {
@@ -270,13 +271,14 @@ option:empty {
         padding: 0;
     }
     &-suffix {
-        order: 3;
+        .lib-vendor-prefix-order(3);
+
         &:last-child {
             padding-right: 1rem;
         }
     }
     &-prefix {
-        order: 0;
+        .lib-vendor-prefix-order(0);
     }
 }
 
