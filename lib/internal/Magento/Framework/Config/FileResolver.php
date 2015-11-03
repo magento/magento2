@@ -109,7 +109,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                         $iterator[$designPath] = $designDom->saveXML();
                     } catch (\Exception $e) {
                         throw new \Magento\Framework\Exception\LocalizedException(
-                            __('Could not read config file')
+                            new \Magento\Framework\Phrase('Could not read config file')
                         );
                     }
                 }
