@@ -467,7 +467,13 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             }
 
             $widget._Rebuild();
-            $widget._UpdatePrice();
+
+            if ($widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
+            ) {
+                $widget._UpdatePrice();
+            }
+
             $widget._LoadProductMedia();
         },
 
