@@ -156,7 +156,9 @@ angular.module('readiness-check', [])
                 process: function(data) {
                     $scope.extensions.processed = true;
                     angular.extend($scope.extensions, data);
-                    $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    if(data.responseType !== 'error') {
+                        $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    }
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
                 },
@@ -334,4 +336,27 @@ angular.module('readiness-check', [])
                 $scope.progress();
             }
         });
+
+        $scope.wordingOfReadinessCheckAction = function() {
+            var $actionString = 'We\'re making sure your server environment is ready for ';
+            if ($localStorage.moduleName) {
+                $actionString += $localStorage.moduleName;
+            } else {
+                if($state.current.type === 'install' || $state.current.type === 'upgrade') {
+                    $actionString += 'Magento';
+                    if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
+                        $actionString += ' and selected components';
+                    }
+                } else {
+                    $actionString += 'package';
+                }
+            }
+            $actionString += " to be " + $state.current.type;
+            if ($scope.endsWith($state.current.type, 'e')) {
+                $actionString += 'd';
+            } else {
+                $actionString +='ed';
+            }
+            return $actionString;
+        }
     }]);

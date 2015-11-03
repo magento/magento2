@@ -8,7 +8,7 @@ $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
     'navInstallerTitles' => [
-        'installer'    => 'Magento Installer',
+        'install'    => 'Magento Installer',
     ],
     'navInstaller' => [
         [
@@ -24,39 +24,39 @@ return [
             'main'        => true,
             'nav'         => false,
             'order'       => -1,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
-            'id'          => 'root.landing-installer',
-            'url'         => 'landing-installer',
+            'id'          => 'root.landing-install',
+            'url'         => 'landing-install',
             'templateUrl' => "$base/landing-installer",
             'title'       => 'Landing',
             'controller'  => 'landingController',
             'main'        => true,
             'default'     => true,
             'order'       => 0,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
-            'id'          => 'root.readiness-check-installer',
-            'url'         => 'readiness-check-installer',
+            'id'          => 'root.readiness-check-install',
+            'url'         => 'readiness-check-install',
             'templateUrl' => "{$base}/readiness-check-installer",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 1,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
-            'id'          => 'root.readiness-check-installer.progress',
-            'url'         => 'readiness-check-installer/progress',
+            'id'          => 'root.readiness-check-install.progress',
+            'url'         => 'readiness-check-install/progress',
             'templateUrl' => "{$base}/readiness-check-installer/progress",
             'title'       => 'Readiness Check',
             'header'      => 'Step 1: Readiness Check',
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 2,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.add-database',
@@ -68,7 +68,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 3,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.web-configuration',
@@ -80,7 +80,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 4,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.customize-your-store',
@@ -91,7 +91,7 @@ return [
             'controller'  => 'customizeYourStoreController',
             'nav'         => true,
             'order'       => 5,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.create-admin-account',
@@ -103,7 +103,7 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 6,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.install',
@@ -114,7 +114,7 @@ return [
             'controller'  => 'installController',
             'nav'         => true,
             'order'       => 7,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
         [
             'id'          => 'root.success',
@@ -123,7 +123,7 @@ return [
             'controller'  => 'successController',
             'main'        => true,
             'order'       => 8,
-            'type'        => 'installer'
+            'type'        => 'install'
         ],
     ],
 ];
