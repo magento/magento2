@@ -418,7 +418,7 @@ class Config
      *
      * @param   mixed $entityType
      * @param   mixed $code
-     * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|false
+     * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttribute($entityType, $code)
