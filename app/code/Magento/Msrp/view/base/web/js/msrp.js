@@ -80,8 +80,8 @@ define([
          * @private
          */
         initMsrpPopup: function () {
-            var popupDOM = $(this.options.popUpAttr)[0];
-                var $msrpPopup = $(popupDOM.innerHTML.trim());
+            var popupDOM = $(this.options.popUpAttr)[0],
+                $msrpPopup = $(popupDOM.innerHTML.trim());
 
             $msrpPopup.find(this.options.productIdInput).val(this.options.productId);
             $('body').append($msrpPopup);
