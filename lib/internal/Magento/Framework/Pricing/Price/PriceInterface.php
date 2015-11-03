@@ -41,7 +41,7 @@ interface PriceInterface
      * (specify adjustment code to exclude)
      *
      * @param float $amount
-     * @param null|bool|string $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface
      */
