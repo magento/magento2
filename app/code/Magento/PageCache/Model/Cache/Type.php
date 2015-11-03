@@ -31,12 +31,18 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
         \Magento\Framework\Event\ManagerInterface $eventManager
-
     ) {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
         $this->eventManager = $eventManager;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $mode
+     * @param array $tags
+     * @return bool
+     */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
         $this->eventManager->dispatch('adminhtml_cache_refresh_type');
