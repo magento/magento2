@@ -729,6 +729,8 @@ define([
             $productGalleryWrapper.parent().addClass('video-item');
             $imageWidget.removeClass('video-item');
             $productGalleryWrapper.removeClass('video-item');
+            $('.video-item .action-delete').attr('title',  $.mage.__('Delete video'));
+            $('.video-item .action-delete span').html($.mage.__('Delete video'));
         },
 
         /**
