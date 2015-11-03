@@ -96,21 +96,22 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                                 $themeConfigFile
                             )
                         );
-                }
-                $designPath =
-                    $this->componentRegistrar->getPath(
-                        ComponentRegistrar::THEME,
-                        $this->area . '/' . $this->themePath
-                    ) . '/etc/view.xml';
-                if (file_exists($designPath)) {
-                    try {
-                        $designDom = new \DOMDocument;
-                        $designDom->load($designPath);
-                        $iterator[$designPath] = $designDom->saveXML();
-                    } catch (\Exception $e) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
-                            new \Magento\Framework\Phrase('Could not read config file')
-                        );
+                } else {
+                    $designPath =
+                        $this->componentRegistrar->getPath(
+                            ComponentRegistrar::THEME,
+                            $this->area . '/' . $this->themePath
+                        ) . '/etc/view.xml';
+                    if (file_exists($designPath)) {
+                        try {
+                            $designDom = new \DOMDocument;
+                            $designDom->load($designPath);
+                            $iterator[$designPath] = $designDom->saveXML();
+                        } catch (\Exception $e) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                new \Magento\Framework\Phrase('Could not read config file')
+                            );
+                        }
                     }
                 }
                 break;
