@@ -63,6 +63,9 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSchemaUsingInvalidXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
@@ -92,6 +95,9 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testFileSchemaUsingInvalidXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
