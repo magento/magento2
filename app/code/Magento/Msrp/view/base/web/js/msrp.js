@@ -87,15 +87,17 @@ define([
             $('body').append($msrpPopup);
             $msrpPopup.trigger('contentUpdated');
 
-            $msrpPopup.find('button').on('click', function (ev) {
-                ev.preventDefault();
-                this.handleMsrpAddToCart();
-            }.bind(this));
+            $msrpPopup.find('button')
+                .on('click',
+                this.handleMsrpAddToCart.bind(this))
+                .filter(this.options.popupCartButtonId)
+                .text($(this.options.addToCartButton).text());
 
             $msrpPopup.find(this.options.paypalCheckoutButons).on('click',
                 this.handleMsrpPaypalCheckout.bind(this));
 
-            $(this.options.popupId).on('click', this.openPopup.bind(this));
+            $(this.options.popupId).on('click',
+                this.openPopup.bind(this));
 
             this.$popup = $msrpPopup;
         },
@@ -124,40 +126,37 @@ define([
          * @private
          */
         initTierPopup: function () {
-            var tierOptions = JSON.parse($(this.options.attr).attr('data-tier-price')),
-                popupDOM = $(this.options.popUpAttr)[0],
+            var popupDOM = $(this.options.popUpAttr)[0],
                 $tierPopup = $(popupDOM.innerHTML.trim());
 
             $('body').append($tierPopup);
             $tierPopup.find(this.options.productIdInput).val(this.options.productId);
             this.popUpOptions.position.of = $(this.options.helpLinkId);
 
-            $tierPopup.find('button').on('click', function (ev) {
-                ev.preventDefault();
-                this.handleTierAddToCart(tierOptions);
-            }.bind(this));
+            $tierPopup.find('button').on('click',
+                this.handleTierAddToCart.bind(this))
+                .filter(this.options.popupCartButtonId)
+                .text($(this.options.addToCartButton).text());
 
-            $tierPopup.find(this.options.paypalCheckoutButons).on('click', function () {
-                this.handleTierPaypalCheckout(tierOptions);
-            }.bind(this));
+            $tierPopup.find(this.options.paypalCheckoutButons).on('click',
+                this.handleTierPaypalCheckout.bind(this));
 
             $(this.options.attr).on('click', function (e) {
-                this.popUpOptions.position.of = $(e.target);
-                $tierPopup.find(this.options.msrpLabelId).html(tierOptions.msrp);
-                $tierPopup.find(this.options.priceLabelId).html(tierOptions.price);
-                $tierPopup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-                this._toggle($tierPopup);
+                this.$popup = $tierPopup;
+                this.tierOptions = $(e.target).data('tier-price');
+                this.openPopup(e);
             }.bind(this));
-
-            this.$popup = $tierPopup;
         },
 
         /**
          * handle 'AddToCart' click on Msrp popup
+         * @param {Object} ev
          *
          * @private
          */
-        handleMsrpAddToCart: function () {
+        handleMsrpAddToCart: function (ev) {
+            ev.preventDefault();
+
             if (this.options.addToCartButton) {
                 $(this.options.addToCartButton).click();
                 this.closePopup(this.$popup);
@@ -176,14 +175,16 @@ define([
         /**
          * handle 'AddToCart' click on Tier popup
          *
-         * @param {Object} tierOptions
+         * @param {Object} ev
          * @private
          */
-        handleTierAddToCart: function (tierOptions) {
+        handleTierAddToCart: function (ev) {
+            ev.preventDefault();
+
             if (this.options.addToCartButton &&
-                this.options.inputQty && !isNaN(tierOptions.qty)
+                this.options.inputQty && !isNaN(this.tierOptions.qty)
             ) {
-                $(this.options.inputQty).val(tierOptions.qty);
+                $(this.options.inputQty).val(this.tierOptions.qty);
                 $(this.options.addToCartButton).click();
                 this.closePopup(this.$popup);
             }
@@ -192,13 +193,12 @@ define([
         /**
          * handle 'paypal checkout buttons' click on Tier popup
          *
-         * @param {Object} tierOptions
          * @private
          */
-        handleTierPaypalCheckout: function (tierOptions) {
-            if (this.options.inputQty && !isNaN(tierOptions.qty)
+        handleTierPaypalCheckout: function () {
+            if (this.options.inputQty && !isNaN(this.tierOptions.qty)
             ) {
-                $(this.options.inputQty).val(tierOptions.qty);
+                $(this.options.inputQty).val(this.tierOptions.qty);
                 this.closePopup(this.$popup);
             }
         },
@@ -209,9 +209,11 @@ define([
          * @param {Object} event
          */
         openPopup: function (event) {
+            var options = this.tierOptions || this.options;
+
             this.popUpOptions.position.of = $(event.target);
-            this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
-            this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
+            this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+            this.$popup.find(this.options.priceLabelId).html(options.realPrice);
             this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
             this._toggle(this.$popup);
 
