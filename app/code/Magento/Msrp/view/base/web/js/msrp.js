@@ -81,7 +81,7 @@ define([
          */
         initMsrpPopup: function () {
             var popupDOM = $(this.options.popUpAttr)[0],
-                $msrpPopup = $($(popupDOM).html()).clone();
+                $msrpPopup = $(popupDOM.innerHTML.trim());
 
             $msrpPopup.find(this.options.productIdInput).val(this.options.productId);
             $('body').append($msrpPopup);
@@ -106,7 +106,9 @@ define([
          */
         initInfoPopup: function () {
             var infoPopupDOM = $('[data-role=msrp-info-template]')[0],
-                $infoPopup = $(infoPopupDOM.innerText).appendTo('body');
+                $infoPopup = $(infoPopupDOM.innerHTML.trim());
+
+            $('body').append($infoPopup);
 
             $(this.options.helpLinkId).on('click', function (e) {
                 this.popUpOptions.position.of = $(e.target);
@@ -124,8 +126,9 @@ define([
         initTierPopup: function () {
             var tierOptions = JSON.parse($(this.options.attr).attr('data-tier-price')),
                 popupDOM = $(this.options.popUpAttr)[0],
-                $tierPopup = $(popupDOM.innerText).appendTo('body');
+                $tierPopup = $(popupDOM.innerHTML.trim());
 
+            $('body').append($tierPopup);
             $tierPopup.find(this.options.productIdInput).val(this.options.productId);
             this.popUpOptions.position.of = $(this.options.helpLinkId);
 
@@ -223,7 +226,7 @@ define([
          * @private
          */
         _toggle: function ($elem) {
-            $(document).on('mouseup', function (e) {
+            $(document).on('mouseup.msrp', function (e) {
                 if (!$elem.is(e.target) && $elem.has(e.target).length === 0) {
                     this.closePopup($elem);
                 }
@@ -239,7 +242,7 @@ define([
          */
         closePopup: function ($elem) {
             $elem.dropdownDialog('close');
-            $(document).off('mouseup');
+            $(document).off('mouseup.msrp');
         },
 
         /**
