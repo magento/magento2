@@ -6,13 +6,20 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory"/>
+    <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Framework\View\Asset\PreProcessor\ChainFactory"/>
     <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
 
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Developer\Console\Command\XmlCatalogGenerateCommand">
+        <arguments>
+            <argument name="formats" xsi:type="array">
+                <item name="phpstorm" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\PhpStorm</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Developer\Model\View\Page\Config\RendererFactory">
@@ -24,7 +31,6 @@
         </arguments>
     </type>
 
-    <!-- Configuration for \Magento\Developer\Console\Command\SourceThemeDeployCommand -->
     <virtualType name="AssetMaterializationStrategyFactoryForSourceThemeDeploy" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
         <arguments>
             <argument name="strategiesList" xsi:type="array">
@@ -33,20 +39,24 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetPublisherForSourceThemeDeploy" type="Magento\Framework\App\View\Asset\Publisher">
+
+    <virtualType name="AssetPublisherForSymlink" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
             <argument name="materializationStrategyFactory" xsi:type="object">AssetMaterializationStrategyFactoryForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
+
+    <!-- Configuration for \Magento\Developer\Console\Command\SourceThemeDeployCommand -->
+    <virtualType name="FileGeneratorPublicationDecoratorForSourceThemeDeploy" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
         <arguments>
-            <argument name="assetRepo" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
-            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSourceThemeDeploy</argument>
+            <argument name="hasRelatedPublishing" xsi:type="boolean">true</argument>
+            <argument name="assetRepository" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
+            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSymlink</argument>
         </arguments>
-    </type>
+    </virtualType>
     <virtualType name="PreProcessorInstructionImportForSourceThemeDeploy" type="Magento\Framework\Css\PreProcessor\Instruction\Import">
         <arguments>
-            <argument name="relatedFileGenerator" xsi:type="object">Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator</argument>
+            <argument name="relatedFileGenerator" xsi:type="object">FileGeneratorPublicationDecoratorForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
     <virtualType name="AssetPreProcessorPoolForSourceThemeDeploy" type="Magento\Framework\View\Asset\PreProcessor\Pool">
@@ -76,7 +86,7 @@
     </virtualType>
     <type name="Magento\Developer\Console\Command\SourceThemeDeployCommand">
         <arguments>
-            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSourceThemeDeploy</argument>
+            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSymlink</argument>
             <argument name="assetRepository" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
         </arguments>
     </type>
@@ -88,6 +98,7 @@
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>
                 <item name="dev_source_theme_deploy" xsi:type="object">Magento\Developer\Console\Command\SourceThemeDeployCommand</item>
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
+                <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
             </argument>
         </arguments>
     </type>
@@ -108,6 +119,7 @@
 
     <virtualType name="AlternativeSourceProcessors" type="Magento\Framework\View\Asset\PreProcessor\AlternativeSource">
         <arguments>
+            <argument name="filenameResolver" xsi:type="object">Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver</argument>
             <argument name="lockName" xsi:type="string">alternative-source-css</argument>
             <argument name="lockerProcess" xsi:type="object">Magento\Framework\View\Asset\LockerProcess</argument>
             <argument name="alternatives" xsi:type="array">
@@ -124,6 +136,33 @@
         </arguments>
     </type>
 
+    <!-- Configuration for Magento\Framework\Css\PreProcessor\Instruction\Import base flow -->
+    <virtualType name="FileGeneratorPublicationDecoratorForBaseFlow" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
+        <arguments>
+            <argument name="hasRelatedPublishing" xsi:type="boolean">false</argument>
+            <argument name="assetPublisher" xsi:type="object">AssetPublisherForSymlink</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PreProcessorInstructionImportForBaseFlow" type="Magento\Framework\Css\PreProcessor\Instruction\Import">
+        <arguments>
+            <argument name="relatedFileGenerator" xsi:type="object">FileGeneratorPublicationDecoratorForBaseFlow</argument>
+        </arguments>
+    </virtualType>
+    <!-- End configuration for Magento\Framework\Css\PreProcessor\Instruction\Import base flow -->
+
+    <type name="Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation">
+        <arguments>
+            <argument name="alternativeSource" xsi:type="object">AlternativeSourceProcessors</argument>
+            <argument name="lockerProcess" xsi:type="object">Magento\Framework\View\Asset\LockerProcess</argument>
+            <argument name="lockName" xsi:type="string">frontend-compilation-source</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy">
+        <arguments>
+            <argument name="alternativeSource" xsi:type="object">AlternativeSourceProcessors</argument>
+        </arguments>
+    </type>
+
     <virtualType name="AssetPreProcessorPool" type="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
@@ -133,15 +172,15 @@
                     </item>
                     <item name="import" xsi:type="array">
                         <item name="after" xsi:type="string">magento_import</item>
-                        <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
+                        <item name="class" xsi:type="string">PreProcessorInstructionImportForBaseFlow</item>
                     </item>
                 </item>
                 <item name="css" xsi:type="array">
-                    <item name="alternativeSource" xsi:type="array">
-                        <item name="class" xsi:type="string">AlternativeSourceProcessors</item>
+                    <item name="preprocessorStrategy" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy</item>
                     </item>
                     <item name="variable_notation" xsi:type="array">
-                        <item name="after" xsi:type="string">alternativeSource</item>
+                        <item name="after" xsi:type="string">preprocessorStrategy</item>
                         <item name="class" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
                     </item>
                     <item name="module_notation" xsi:type="array">

@@ -409,6 +409,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         if ($token) {
             $transactionParams['paymentMethodToken'] = $token;
             $transactionParams['customerId'] = $customerId;
+            $transactionParams['billing']  = $this->toBraintreeAddress($billing);
+            $transactionParams['shipping'] = $this->toBraintreeAddress($shipping);
         } elseif ($this->getInfoInstance()->getAdditionalInformation('payment_method_nonce')) {
             $transactionParams['paymentMethodNonce'] =
                 $this->getInfoInstance()->getAdditionalInformation('payment_method_nonce');
@@ -918,8 +920,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      */
     public function canVoid()
     {
-        if (($order = $this->_registry->registry('current_order'))
-            && $order->getId() && $order->hasInvoices() ) {
+        if ((($order = $this->_registry->registry('current_order'))
+            && $order->getId() && $order->hasInvoices()) || $this->_registry->registry('current_invoice')) {
             return false;
         }
         return $this->_canVoid;

@@ -48,7 +48,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
         if (isset(self::$paths[$type][$componentName])) {
             throw new \LogicException('\'' . $componentName . '\' component already exists');
         } else {
-            self::$paths[$type][$componentName] = $path;
+            self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
         }
     }
 

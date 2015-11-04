@@ -27,12 +27,12 @@ var lessOptions = {
     },
     setup: {
         files: {
-            '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/setup.less'
+            '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/_setup.less'
         }
     },
     updater: {
         files: {
-            '<%= path.css.updater %>/updater.css': '<%= path.less.setup %>/setup.less'
+            '<%= path.css.updater %>/updater.css': '<%= path.less.setup %>/_setup.less'
         }
     },
     documentation: {
