@@ -13,7 +13,7 @@ class Index extends \Magento\Checkout\Controller\Onepage
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
         $checkoutHelper = $this->_objectManager->get('Magento\Checkout\Helper\Data');

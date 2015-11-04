@@ -56,22 +56,17 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn($id);
+
         $this->metadataMock->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->metadataMock->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertEquals($entity, $this->creditmemo->get($id));
         //retrieve entity from registry
         $this->assertEquals($entity, $this->creditmemo->get($id));
@@ -97,22 +92,17 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn(null);
+
         $this->metadataMock->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->metadataMock->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertNull($entity, $this->creditmemo->get($id));
     }
 

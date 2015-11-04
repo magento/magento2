@@ -16,7 +16,7 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_objectManager->get('Magento\Framework\View\Asset\MergeService')->cleanMergedJsCss();

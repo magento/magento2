@@ -25,7 +25,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $this->_showLastExecutionTime(Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE, 'viewed');
