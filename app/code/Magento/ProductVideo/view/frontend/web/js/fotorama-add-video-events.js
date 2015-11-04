@@ -102,6 +102,7 @@ define([
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
         isFullscreen: 0,
+        inFullscreen: false,
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -113,6 +114,7 @@ define([
         _init: function () {
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
+                this._listenForFullscreen();
                 this._checkForVimeo();
                 this._isVideoBase();
                 this._initFotoramaVideo();
@@ -128,6 +130,19 @@ define([
             if ($(this.element).find('.fotorama__fullscreen-icon')) {
                 this.isFullscreen = true;
             }
+        },
+
+        /**
+         *
+         * @private
+         */
+        _listenForFullscreen: function () {
+            $(this.element).on('fotorama:fullscreenenter', $.proxy(function () {
+                this.inFullscreen = true;
+            }, this));
+            $(this.element).on('fotorama:fullscreenexit', $.proxy(function () {
+                this.inFullscreen = false;
+            }, this));
         },
 
         /**
@@ -499,8 +514,16 @@ define([
                     if (!self.isFullscreen) {
                         self._showCloseVideo();
                     }
+                    $('.' + self.FTAR).addClass('hidden-video');
                 }
             });
+
+            if (this.inFullscreen) {
+                $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+            }
+            $(this.element).on('fotorama:fullscreenenter', $.proxy(function () {
+                $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+            }, this));
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
         },
 
@@ -526,13 +549,25 @@ define([
                     waitForFroogaloop = setInterval($.proxy(function () {
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
+                            fotorama.requestFullScreen();
                             $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                            $('.fotorama__fullscreen-icon').css({
+                                opacity: '1',
+                                visibility: 'visible',
+                                display: 'block'
+                            });
                             this.Base = false;
                         }
                     }, this), 50);
                 } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
                     setTimeout($.proxy(function () {
+                        fotorama.requestFullScreen();
                         $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                        $('.fotorama__fullscreen-icon').css({
+                            opacity: '1',
+                            visibility: 'visible',
+                            display: 'block'
+                        });
                         this.Base = false;
                     }, this), 50);
                 }
@@ -579,6 +614,7 @@ define([
                 self._hideCloseVideo();
 
             });
+            $('.' + this.FTAR).removeClass('hidden-video');
         }
     });
 
