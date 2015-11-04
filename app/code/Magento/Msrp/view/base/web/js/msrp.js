@@ -125,9 +125,9 @@ define([
          */
         initTierPopup: function () {
             var popupDOM = $(this.options.popUpAttr)[0],
-                $tierPopup = $(popupDOM.innerText).appendTo('body');
+                $tierPopup = $(popupDOM.innerText).appendTo('body'),
+                self = this;
 
-            this.tierOptions = JSON.parse($(this.options.attr).attr('data-tier-price'));
             $tierPopup.find(this.options.productIdInput).val(this.options.productId);
             this.popUpOptions.position.of = $(this.options.helpLinkId);
 
@@ -139,10 +139,11 @@ define([
             $tierPopup.find(this.options.paypalCheckoutButons).on('click',
                 this.handleTierPaypalCheckout.bind(this));
 
-            $(this.options.attr).on('click',
-                this.openPopup.bind(this));
-
-            this.$popup = $tierPopup;
+            $(this.options.attr).on('click', function (e) {
+                self.$popup = $tierPopup;
+                self.tierOptions = $(e.target).data('tier-price');
+                self.openPopup(e);
+            });
         },
 
         /**
