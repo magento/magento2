@@ -12,13 +12,24 @@ define(
         'underscore',
         'jquery',
         'Magento_Ui/js/model/messageList',
-        'mage/translate'
+        'mage/translate',
+        'uiRegistry',
+        'mage/utils/wrapper'
     ],
-    function (ko, Component, setPaymentInformationAction, quote, braintreeClientSDK, _, $, messageList, $t) {
+    function (
+        ko,
+        Component,
+        setPaymentInformationAction,
+        quote,
+        braintreeClientSDK,
+        _,
+        $,
+        messageList,
+        $t
+    ) {
         'use strict';
         var configBraintree= window.checkoutConfig.payment.braintree;
         return Component.extend({
-
             placeOrderHandler: null,
             validateHandler: null,
             setPlaceOrderHandler: function(handler) {
@@ -52,7 +63,8 @@ define(
                 storedCards: configBraintree ? configBraintree.storedCards : {},
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
                 creditCardExpMonth: null,
-                creditCardExpYear: null
+                creditCardExpYear: null,
+                lastBillingAddress: null
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -77,8 +89,10 @@ define(
              * @override
              */
             initObservable: function () {
+                var self = this;
                 this.initVars();
                 this._super()
+                    .track('availableCcValues')
                     .observe([
                         'selectedCardToken',
                         'storeInVault',
@@ -105,6 +119,11 @@ define(
                 } else {
                     this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
                 }
+
+                // subscribe on billing address update
+                quote.billingAddress.subscribe(function () {
+                    self.updateAvailableTypeValues();
+                });
 
                 return this;
             },
@@ -293,26 +312,30 @@ define(
                 }
                 return filteredCards;
             },
-            getCcAvailableTypes: function() {
-                var billingAddress = quote.billingAddress;
-                var billingCountryId = billingAddress.countryId;
-                if (typeof billingCountryId == 'undefined') {
-                    billingCountryId = billingAddress.country_id;
-                }
-                var availableTypes = configBraintree.availableCardTypes;
-                var countrySpecificCardTypeConfig = configBraintree.countrySpecificCardTypes;
-                if (billingCountryId && typeof countrySpecificCardTypeConfig.billingCountryId != 'undefined') {
-                    var countrySpecificCardTypes = countrySpecificCardTypeConfig[billingCountryId];
-                    if (typeof countrySpecificCardTypes != 'undefined') {
-                        var filteredTypes = {};
 
-                        for (var key in availableTypes) {
-                            if (_.indexOf(countrySpecificCardTypes, key) != -1) {
-                                filteredTypes[key] = availableTypes[key];
-                            }
+            /**
+             * Get list of available CC types
+             */
+            getCcAvailableTypes: function () {
+                var availableTypes = configBraintree.availableCardTypes;
+                var billingAddress = quote.billingAddress();
+                this.lastBillingAddress = quote.shippingAddress();
+                if (!billingAddress) {
+                    billingAddress = this.lastBillingAddress;
+                }
+                var billingCountryId = billingAddress.countryId;
+                if (billingCountryId &&
+                    typeof configBraintree.countrySpecificCardTypes[billingCountryId] !== 'undefined'
+                ) {
+                    var countrySpecificCardTypes = configBraintree.countrySpecificCardTypes[billingCountryId];
+                    var filteredTypes = {};
+
+                    for (var key in availableTypes) {
+                        if (_.indexOf(countrySpecificCardTypes, key) != -1) {
+                            filteredTypes[key] = availableTypes[key];
                         }
-                        return filteredTypes;
                     }
+                    return filteredTypes;
                 }
                 return availableTypes;
             },
@@ -353,6 +376,13 @@ define(
 
             getCssClass: function () {
                 return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
+            },
+
+            /**
+             * Update list of available CC types values
+             */
+            updateAvailableTypeValues: function () {
+                this.availableCcValues = this.getCcAvailableTypesValues();
             }
         });
     }

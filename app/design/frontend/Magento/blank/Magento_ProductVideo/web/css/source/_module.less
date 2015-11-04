@@ -74,10 +74,22 @@ and (orientation : landscape) {
 }
 
 .fotorama__arr.hidden-video {
-    z-index: -1;
+    z-index: -1 !important;
 }
 
 .fotorama__video-close {
     bottom: 89%;
     top: auto;
+}
+
+.fotorama__stage__shaft:focus .fotorama__stage__frame.fotorama__active:after {
+    bottom: 0;
+    content: '';
+    height: 100px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 12px;
+    width: 100px;
 }
