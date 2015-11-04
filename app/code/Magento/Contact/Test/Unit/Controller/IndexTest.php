@@ -78,7 +78,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue(false));
 
-        $this->_controller->execute(
+        $this->_controller->dispatch(
             $this->getMockForAbstractClass('\Magento\Framework\App\RequestInterface', [], '', false)
         );
     }

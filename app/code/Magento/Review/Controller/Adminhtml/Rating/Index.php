@@ -13,7 +13,7 @@ class Index extends RatingController
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->initEnityId();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
