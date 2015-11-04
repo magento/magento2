@@ -15,7 +15,7 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/carts" method="GET">
+    <route url="/V1/carts/search" method="GET">
         <service class="Magento\Quote\Api\CartRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
