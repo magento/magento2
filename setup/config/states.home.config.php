@@ -16,7 +16,7 @@ return [
         [
             'id'          => 'root.home',
             'url'         => 'home',
-            'title'       => 'Web Setup Wizard',
+            'title'       => 'Setup Wizard',
             'templateUrl' => "$base/home",
             'header'      => 'Home',
             'nav'         => false,
