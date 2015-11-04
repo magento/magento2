@@ -15,7 +15,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_showLastExecutionTime(Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 

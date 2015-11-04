@@ -90,7 +90,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $redirectParams = $this->getRequest()->getParams();
         $params = [];
