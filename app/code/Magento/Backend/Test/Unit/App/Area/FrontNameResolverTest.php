@@ -33,7 +33,8 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             ->will($this->returnValue($this->_defaultFrontName));
         $this->_configMock = $this->getMock('\Magento\Backend\App\Config', [], [], '', false);
-        $this->_model = new FrontNameResolver($this->_configMock, $deploymentConfigMock);
+        $backendUrlMock = $this->getMock('\Magento\Backend\Model\UrlInterface', [], [], '', false);
+        $this->_model = new FrontNameResolver($this->_configMock, $deploymentConfigMock, $backendUrlMock);
     }
 
     public function testIfCustomPathUsed()

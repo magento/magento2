@@ -39,6 +39,11 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     protected $deploymentConfig;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrl;
+
+    /**
      * @param \Magento\Backend\App\Config $config
      * @param DeploymentConfig $deploymentConfig
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
@@ -56,21 +61,29 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     /**
      * Retrieve area front name
      *
-     * @param string $host If set, verify front name is valid for this url (hostname is correct)
-     * @return string
+     * @param bool $checkHost If true, verify front name is valid for this url (hostname is correct)
+     * @return string|bool
      */
-    public function getFrontName($host = null)
+    public function getFrontName($checkHost = false)
     {
-        if ($host) {
-            $bu = $this->backendUrl->getBaseUrl();
-            if (stripos($bu, $host) === false) {
-                return false;
-            }
+        if ($checkHost && !$this->isHostBackend()) {
+            return false;
         }
         $isCustomPathUsed = (bool)(string)$this->config->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_PATH);
         if ($isCustomPathUsed) {
             return (string)$this->config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH);
         }
         return $this->defaultFrontName;
+    }
+
+    /**
+     * Return whether the host from request is the backend host
+     * @return bool
+     */
+    public function isHostBackend()
+    {
+        $backendHost = parse_url(trim($this->backendUrl->getBaseUrl()), PHP_URL_HOST);
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        return (strcasecmp($backendHost, $host) === 0);
     }
 }
