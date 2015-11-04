@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Zend\View\Model\JsonModel;
 
-class ConnectManager
+class MarketplaceManager
 {
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
@@ -61,6 +61,11 @@ class ConnectManager
     protected $pathToInstallPackagesCacheFile = 'install_composer_packages.json';
 
     /**
+     * @var array
+     */
+    protected $errorCodes = [401, 403, 404];
+
+    /**
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Framework\HTTP\Client\Curl $curl
@@ -93,7 +98,7 @@ class ConnectManager
     public function getCredentialBaseUrl()
     {
         $config = $this->getServiceLocator()->get('config');
-        return $config['connect']['check_credentials_url'];
+        return $config['marketplace']['check_credentials_url'];
     }
 
     /**
@@ -111,11 +116,15 @@ class ConnectManager
      */
     public function checkCredentialsAction($token, $secretKey)
     {
-        $serviceUrl = $this->getCheckCredentialUrl();
+        $serviceUrl = $this->getPackagesJsonUrl();
         $this->getCurlClient()->setCredentials($token, $secretKey);
         try {
             $this->getCurlClient()->post($serviceUrl, []);
-            return $this->getCurlClient()->getBody();
+            if ($this->getCurlClient()->getStatus() == 200) {
+                return \Zend_Json::encode(['success' => true]);
+            } else {
+                return \Zend_Json::encode(['success' => false, 'message' => 'Bad credentials']);
+            }
         } catch (\Exception $e) {
             return \Zend_Json::encode(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -158,18 +167,57 @@ class ConnectManager
             $packageNames = array_column($this->getComposerInformation()->getInstalledMagentoPackages(), 'name');
             $installPackages = [];
             foreach ($packagesJsonData['packages'] as $package) {
-                ksort($package);
-                $package = array_pop($package);
-                if (!in_array($package['name'], $packageNames) &&
-                    in_array($package['type'], $this->getComposerInformation()->getPackagesTypes())
-                ) {
-                    $installPackages[$package['name']] = $package;
+                $package = $this->unsetDevVersions($package);
+                if (!empty($package)) {
+                    ksort($package);
+                    $package = array_pop($package);
+                    if ($this->isNewUserPackage($package, $packageNames)) {
+                        $package['vendor'] = explode('/', $package['name'])[0];
+                        $installPackages[$package['name']] = $package;
+                    }
                 }
             }
             return $this->savePackagesForInstallToCache($installPackages) ? true : false;
         } catch (\Exception $e) {
         }
         return false;
+    }
+
+    /**
+     * Check if this new user package
+     * 
+     * @param array $package
+     * @param array $packageNames
+     * @return bool
+     */
+    protected function isNewUserPackage($package, $packageNames)
+    {
+        if (!in_array($package['name'], $packageNames) &&
+            in_array($package['type'], $this->getComposerInformation()->getPackagesTypes()) &&
+            strpos($package['name'], 'magento/product-') === false &&
+            strpos($package['name'], 'magento/project-') === false
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Unset dev versions
+     * 
+     * @param array $package
+     * @return array
+     */
+    protected function unsetDevVersions($package)
+    {
+        foreach ($package as $key => $version) {
+            if (strpos($key, 'dev') !== false) {
+                unset($package[$key]);
+            }
+        }
+        unset($version);
+        
+        return $package;
     }
 
     /**
@@ -269,8 +317,6 @@ class ConnectManager
             DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
             \Magento\Framework\Filesystem\DriverInterface::WRITEABLE_FILE_MODE
         );
-
-        return false;
     }
 
     /**
@@ -311,10 +357,15 @@ class ConnectManager
                 $this->getComposerInformation()->getInstalledMagentoPackages(),
                 'name'
             );
+            $metaPackageByPackage = $this->getMetaPackageForPackage($installPackages);
             foreach ($installPackages as $package) {
                 if (!in_array($package['name'], $availablePackageNames) &&
-                    in_array($package['type'], $this->getComposerInformation()->getPackagesTypes())
+                    in_array($package['type'], $this->getComposerInformation()->getPackagesTypes()) &&
+                    strpos($package['name'], 'magento/product-') === false &&
+                    strpos($package['name'], 'magento/project-') === false
                 ) {
+                    $package['metapackage'] =
+                        isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
                     $actualInstallackages[$package['name']] = $package;
                 }
             }
@@ -325,6 +376,28 @@ class ConnectManager
         return false;
     }
 
+    /**
+     * 
+     * @param array $packages
+     * @return array
+     */
+    protected function getMetaPackageForPackage($packages)
+    {
+        $result = [];
+        foreach ($packages as $package) {
+            if ($package['type'] == \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
+                if (isset($package['require'])) {
+                    foreach ($package['require'] as $key => $requirePackage) {
+                        $result[$key] = $package['name'];
+                    }
+                }
+            }
+        }
+        unset($requirePackage);
+        
+        return $result;
+    }
+    
     /**
      * Load composer packages available for install from cache
      *

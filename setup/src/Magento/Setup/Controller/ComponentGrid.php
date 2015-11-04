@@ -24,9 +24,9 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private $packageInfo;
 
     /**
-     * @var \Magento\Setup\Model\ConnectManager
+     * @var \Magento\Setup\Model\MarketplaceManager
      */
-    private $connectManager;
+    private $marketplaceManager;
 
     /**
      * @var \Magento\Framework\Module\ModuleList
@@ -48,21 +48,21 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\ConnectManager $connectManager
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache,
-        \Magento\Setup\Model\ConnectManager $connectManager
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
         $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
-        $this->connectManager = $connectManager;
+        $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
     }
 
@@ -120,7 +120,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $components[$component['name']]['vendor'] = $componentNameParts[0];
         }
 
-        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+        $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
 
         $lastSyncData['countOfInstall'] =
             isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
@@ -146,8 +146,8 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $this->updatePackagesCache->syncPackagesForUpdate();
         $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
 
-        $this->connectManager->syncPackagesForInstall();
-        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+        $this->marketplaceManager->syncPackagesForInstall();
+        $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
 
         $lastSyncData['countOfInstall'] =
             isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
