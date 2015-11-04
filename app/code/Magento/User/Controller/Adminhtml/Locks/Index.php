@@ -16,7 +16,7 @@ class Index extends \Magento\User\Controller\Adminhtml\Locks
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_User::system_acl_locks');

@@ -53,7 +53,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         $storeId = $this->getRequest()->getParam('store');
         $redirectBack = $this->getRequest()->getParam('back', false);

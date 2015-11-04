@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "80867d6202a3ae5d2f4c079e2cfd702f",
-    "content-hash": "41493176956dcfd2401ac1181d4d4782",
+    "hash": "e4fca60e7de95ce1b8a7f76d7fa40c80",
+    "content-hash": "6372c4ff0d59809e1b9a22251313cc80",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2571,16 +2571,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.10.1",
+            "version": "v1.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "12dbcd1462f1e3a5a96c6c7398af26b28e092a8a"
+                "reference": "e8b3c4e41dc1484210fdc45363c41af6c2d56f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/12dbcd1462f1e3a5a96c6c7398af26b28e092a8a",
-                "reference": "12dbcd1462f1e3a5a96c6c7398af26b28e092a8a",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e8b3c4e41dc1484210fdc45363c41af6c2d56f20",
+                "reference": "e8b3c4e41dc1484210fdc45363c41af6c2d56f20",
                 "shasum": ""
             },
             "require": {
@@ -2621,7 +2621,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-10-12 20:13:46"
+            "time": "2015-10-21 19:19:43"
         },
         {
             "name": "league/climate",
@@ -3926,9 +3926,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.5.0|~5.6.0|~7.0.0"
-    },
-    "platform-dev": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
@@ -3943,5 +3941,6 @@
         "ext-xsl": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*"
-    }
+    },
+    "platform-dev": []
 }

@@ -45,6 +45,6 @@ class ExportAccountsCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminh
             ->expects($this->once())
             ->method('create')
             ->with('new_accounts.csv', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportAccountsCsv->execute();
+        $this->exportAccountsCsv->executeInternal();
     }
 }

@@ -66,8 +66,9 @@ class BuiltinPlugin
     ) {
         $result = $proceed($response);
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
-        if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN
-            || !$usePlugin) {
+        if (!$usePlugin || !$this->config->isEnabled()
+            || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN
+        ) {
             return $result;
         }
 
@@ -76,6 +77,16 @@ class BuiltinPlugin
             $response->setHeader('X-Magento-Cache-Control', $cacheControl);
             $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
         }
+
+        $tagsHeader = $response->getHeader('X-Magento-Tags');
+        $tags = [];
+        if ($tagsHeader) {
+            $tags = explode(',', $tagsHeader->getFieldValue());
+            $response->clearHeader('X-Magento-Tags');
+        }
+        $tags = array_unique(array_merge($tags, [\Magento\PageCache\Model\Cache\Type::CACHE_TAG]));
+        $response->setHeader('X-Magento-Tags', implode(',', $tags));
+
         $this->kernel->process($response);
         return $result;
     }

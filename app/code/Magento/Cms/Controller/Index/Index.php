@@ -32,7 +32,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($coreRoute = null)
+    public function executeInternal($coreRoute = null)
     {
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface'
