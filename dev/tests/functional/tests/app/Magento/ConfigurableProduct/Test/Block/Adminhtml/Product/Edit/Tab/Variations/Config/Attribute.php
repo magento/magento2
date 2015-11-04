@@ -340,7 +340,8 @@ class Attribute extends Form
         return $this->_rootElement->find(
             $this->variationSearchBlock,
             Locator::SELECTOR_CSS,
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute\AttributeSelector'
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute'
+            . '\AttributeSelector'
         );
     }
 
