@@ -49,6 +49,26 @@
     opacity: 0.6;
 }
 
+#integrationGrid_table .icon-error {
+    margin-left: 15px;
+    color: #c00815;
+    font-size: 11px;
+}
+#integrationGrid_table .icon-error:before {
+    font-family: 'MUI-Icons';
+    content: "\e086";
+    font-size: 13px;
+    line-height: 13px;
+    overflow: hidden;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: -1px 5px 0 0;
+}
+
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
     float: none;
 }

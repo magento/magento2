@@ -11,11 +11,6 @@ namespace Magento\Swatches\Model\Plugin;
 class Product
 {
     /**
-     * Name of swatch image role
-     */
-    const ROLE_SWATCH_IMAGE_NAME = 'swatch_image';
-
-    /**
      * Unset swatch image role if product is not simple
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -28,7 +23,7 @@ class Product
             && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
         ) {
             if (is_array($imageRoles)) {
-                unset($imageRoles[self::ROLE_SWATCH_IMAGE_NAME]);
+                unset($imageRoles[\Magento\Swatches\Model\Swatch::SWATCH_IMAGE_NAME]);
             }
         }
 
