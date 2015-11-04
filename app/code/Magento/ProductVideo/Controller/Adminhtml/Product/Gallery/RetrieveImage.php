@@ -73,7 +73,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $baseTmpMediaPath = $this->mediaConfig->getBaseTmpMediaPath();
         try {

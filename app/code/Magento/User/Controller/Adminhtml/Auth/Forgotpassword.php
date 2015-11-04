@@ -13,7 +13,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $email = (string)$this->getRequest()->getParam('email');
         $params = $this->getRequest()->getParams();
