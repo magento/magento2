@@ -546,7 +546,7 @@
                 </group>
                 <group id="express_checkout_frontend" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="120">
                     <label>Frontend Experience Settings</label>
-                    <field id="logo" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="logo" translate="label comment" type="select" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="0">
                         <label>PayPal Product Logo</label>
                         <comment>Displays on catalog pages and homepage.</comment>
                         <config_path>paypal/style/logo</config_path>
