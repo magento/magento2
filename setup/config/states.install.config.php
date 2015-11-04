@@ -30,7 +30,7 @@ return [
             'id'          => 'root.landing-install',
             'url'         => 'landing-install',
             'templateUrl' => "$base/landing-installer",
-            'title'       => 'Landing',
+            'title'       => 'Installation',
             'controller'  => 'landingController',
             'main'        => true,
             'default'     => true,
