@@ -102,7 +102,8 @@ class AssertConfigurableProductPage extends AssertProductPage
      *
      * @return string
      */
-    protected function getLowestConfigurablePrice() {
+    protected function getLowestConfigurablePrice()
+    {
         $price = null;
         $configurableOptions = $this->product->getConfigurableAttributesData();
 
