@@ -543,6 +543,7 @@ class Address extends AbstractCustomer
         }
 
         // let's try to find region ID
+        $entityRow['region_id'] = null;
         if (!empty($rowData[self::COLUMN_REGION])) {
             $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
             $regionNormalized = strtolower($rowData[self::COLUMN_REGION]);
