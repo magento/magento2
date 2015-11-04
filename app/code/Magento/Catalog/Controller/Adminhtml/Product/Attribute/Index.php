@@ -11,7 +11,7 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultPage = $this->createActionPage();
         $resultPage->addContent(

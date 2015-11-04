@@ -65,6 +65,6 @@ class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminh
             ->method('create')
             ->with('products_lowstock.csv', $content, \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
 
-        $this->exportLowstockCsv->executeInternal();
+        $this->exportLowstockCsv->execute();
     }
 }

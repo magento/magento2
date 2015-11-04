@@ -49,7 +49,7 @@ abstract class View extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultForward = $this->resultForwardFactory->create();
         if ($this->getRequest()->getParam('invoice_id')) {

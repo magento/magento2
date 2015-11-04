@@ -13,7 +13,7 @@ class Address extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
         $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);

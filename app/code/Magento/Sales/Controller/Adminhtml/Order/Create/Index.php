@@ -12,7 +12,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initSession();
 

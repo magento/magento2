@@ -57,7 +57,7 @@ class AjaxLogin
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundExecuteInternal(
+    public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {

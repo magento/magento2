@@ -15,7 +15,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $themeId = $this->getRequest()->getParam('id');
         try {
