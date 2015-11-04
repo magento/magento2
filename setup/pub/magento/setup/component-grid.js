@@ -10,7 +10,6 @@ angular.module('component-grid', ['ngStorage'])
             $rootScope.componentsProcessed = false;
             $http.get('index.php/componentGrid/components').success(function(data) {
                 $scope.components = data.components;
-                $scope.displayComponents = data.components;
                 $scope.total = data.total;
                 if(typeof data.lastSyncData.lastSyncDate === "undefined") {
                     $scope.isOutOfSync = true;
@@ -35,9 +34,6 @@ angular.module('component-grid', ['ngStorage'])
                 var begin = (($scope.currentPage - 1) * $scope.rowLimit);
                 var end = parseInt(begin) + parseInt(($scope.rowLimit));
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
-                if ($scope.components !== undefined) {
-                    $scope.displayComponents = $scope.components.slice(begin, end);
-                }
                 if ($scope.currentPage > $scope.numberOfPages) {
                     $scope.currentPage = $scope.numberOfPages;
                 }
@@ -79,9 +75,9 @@ angular.module('component-grid', ['ngStorage'])
                 });
             };
             $scope.isAvailableUpdatePackage = function(packageName) {
-                $localStorage.isConnectAuthorized = typeof $localStorage.isConnectAuthorized !== 'undefined' ? $localStorage.isConnectAuthorized : false;
+                $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
                 var isAvailable = typeof $scope.availableUpdatePackages !== 'undefined'
-                    && $localStorage.isConnectAuthorized
+                    && $localStorage.isMarketplaceAuthorized
                     && packageName in $scope.availableUpdatePackages;
                 return isAvailable;
             };
@@ -117,7 +113,12 @@ angular.module('component-grid', ['ngStorage'])
                 if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
                     $localStorage.titles['update'] = 'Update ' + component.moduleName;
                 }
-                $localStorage.moduleName = component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
+                }
+
                 $scope.nextState();
             };
 
@@ -131,7 +132,11 @@ angular.module('component-grid', ['ngStorage'])
                     $localStorage.titles['uninstall'] = 'Uninstall ' + component.moduleName;
                 }
                 $localStorage.componentType = component.type;
-                $localStorage.moduleName = component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
+                }
                 $state.go('root.readiness-check-uninstall');
             };
 

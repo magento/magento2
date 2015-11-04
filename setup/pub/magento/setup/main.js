@@ -36,8 +36,19 @@ main.controller('navigationController',
     ]
 )
 .controller('mainController', [
-    '$scope', '$state', 'navigationService', '$localStorage',
-    function ($scope, $state, navigationService, $localStorage) {
+    '$scope', '$state', 'navigationService', '$localStorage', '$interval', '$http',
+    function ($scope, $state, navigationService, $localStorage, $interval, $http) {
+        $interval(
+            function () {
+                $http.post('/setup/index.php/session/prolong')
+                    .success(function (result) {
+                    })
+                    .error(function (result) {
+                    });
+            },
+            120000
+        );
+
         $scope.moduleName = $localStorage.moduleName;
         $scope.$on('$stateChangeSuccess', function (event, state) {
             $scope.valid = true;
@@ -83,8 +94,8 @@ main.controller('navigationController',
         }
 
         $scope.goToStart = function() {
-            if ($state.current.type === 'installer') {
-                $state.go('root.landing-installer');
+            if ($state.current.type === 'install') {
+                $state.go('root.landing-install');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
             } else {
@@ -103,6 +114,7 @@ main.controller('navigationController',
         mainState: {},
         states: [],
         load: function () {
+            $localStorage.$reset();
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
