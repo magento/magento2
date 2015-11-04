@@ -12,7 +12,7 @@ class ProcessData extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initSession();
         $this->_processData();

@@ -12,7 +12,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultForward = $this->resultForwardFactory->create();
         $resultForward->forward('edit');

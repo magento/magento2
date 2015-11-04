@@ -13,7 +13,7 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_eventManager->dispatch('adminhtml_cache_flush_all');
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
