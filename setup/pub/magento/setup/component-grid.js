@@ -164,7 +164,6 @@ angular.module('component-grid', ['ngStorage'])
                 }
             };
             $scope.convertDate = function(date) {
-                console.log(date);
                 return new Date(date.replace(/-/g, '/'))
             }
         }
