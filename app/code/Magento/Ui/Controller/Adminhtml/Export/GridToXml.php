@@ -46,7 +46,7 @@ class GridToXml extends Action
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->fileFactory->create('export.xml', $this->converter->getXmlFile(), 'var');
     }

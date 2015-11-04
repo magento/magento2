@@ -38,7 +38,7 @@ class Start extends ImportResultController
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {

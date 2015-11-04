@@ -20,7 +20,7 @@ class Start extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /**
          * Clear old values for creditmemo qty's

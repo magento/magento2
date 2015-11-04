@@ -31,7 +31,7 @@ class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_returnQuote();
         $this->getResponse()->representJson(

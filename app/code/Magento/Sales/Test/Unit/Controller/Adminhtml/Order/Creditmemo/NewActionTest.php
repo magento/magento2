@@ -238,7 +238,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Page',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 }
