@@ -16,7 +16,8 @@ interface FrontNameResolverInterface
     /**
      * Retrieve front name
      *
-     * @return string
+     * @param null|string $host If set, only return frontname if it is valid for the host
+     * @return null|string
      */
-    public function getFrontName();
+    public function getFrontName($host = null);
 }
