@@ -138,6 +138,16 @@ class WebLogger implements LoggerInterface
     }
 
     /**
+     * Checks existence of install.log file
+     *
+     * @return bool
+     */
+    public function logfileExists()
+    {
+        return ($this->directory->isExist($this->logFile));
+    }
+
+    /**
      * Terminates line if the inline logging is started
      *
      * @return void

@@ -574,7 +574,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         }
         $payment->expects($this->any())->method('isDeleted')->will($this->returnValue(false));
 
-        $order->setData(\Magento\Sales\Api\Data\OrderInterface::PAYMENTS, [$payment]);
+        $order->setData(\Magento\Sales\Api\Data\OrderInterface::PAYMENT, $payment);
 
         return $payment;
     }

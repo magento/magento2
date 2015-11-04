@@ -1063,11 +1063,12 @@
     </type>
     <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
     <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
-    <type name="Magento\Framework\View\Xsd\Reader">
+    <type name="Magento\Framework\Config\View">
         <arguments>
-            <argument name="fileName" xsi:type="string">view.xsd</argument>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="searchFilesPattern" xsi:type="string">urn:magento:framework:Config/etc/</argument>
+            <argument name="fileName" xsi:type="string">view.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
         </arguments>
     </type>
 </config>
