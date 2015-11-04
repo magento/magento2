@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Connect;
+use \Magento\Setup\Controller\Marketplace;
 
-class ConnectTest extends \PHPUnit_Framework_TestCase
+class MarketplaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
@@ -16,14 +16,14 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     private $composerInformation;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConnectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\MarketplaceManager
      */
-    private $connectManager;
+    private $marketplaceManager;
 
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\Connect
+     * @var \Magento\Setup\Controller\Marketplace
      */
     private $controller;
 
@@ -31,20 +31,20 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInformation =
             $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
-        $this->connectManager = $this->getMock('Magento\Setup\Model\ConnectManager', [], [], '', false);
-        $this->controller = new Connect($this->composerInformation, $this->connectManager);
+        $this->marketplaceManager = $this->getMock('Magento\Setup\Model\MarketplaceManager', [], [], '', false);
+        $this->controller = new Marketplace($this->composerInformation, $this->marketplaceManager);
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::saveAuthJsonAction
+     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
      */
     public function testSaveAuthJsonAction()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('saveAuthJson')
             ->willReturn(true);
@@ -56,11 +56,11 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::saveAuthJsonAction
+     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
      */
     public function testSaveAuthJsonActionWithError()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->throwException(new \Exception));
@@ -76,15 +76,15 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::checkAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
      */
     public function testCheckAuthAction()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->returnValue(['username' => 'test', 'password' => 'test']));
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
@@ -96,11 +96,11 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::checkAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
      */
     public function testCheckAuthActionWithError()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->throwException(new \Exception));
@@ -113,11 +113,11 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::removeAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
      */
     public function testRemoveCredetinalsAction()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('removeCredentials')
             ->will($this->returnValue(true));
@@ -130,11 +130,11 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::removeAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
      */
     public function testRemoveCredentialsWithError()
     {
-        $this->connectManager
+        $this->marketplaceManager
             ->expects($this->once())
             ->method('removeCredentials')
             ->will($this->throwException(new \Exception));
@@ -147,7 +147,7 @@ class ConnectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Connect::popupAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::popupAuthAction
      */
     public function testPopupAuthAction()
     {

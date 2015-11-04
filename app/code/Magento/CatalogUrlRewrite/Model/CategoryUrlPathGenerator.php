@@ -87,7 +87,7 @@ class CategoryUrlPathGenerator
      */
     protected function isNeedToGenerateUrlPathForParent($category)
     {
-        return $category->isObjectNew() || $category->getLevel() >= self::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
+        return $category->getLevel() >= self::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
     }
 
     /**

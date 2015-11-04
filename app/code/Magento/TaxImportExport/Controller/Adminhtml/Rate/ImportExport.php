@@ -14,7 +14,7 @@ class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

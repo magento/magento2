@@ -216,14 +216,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->saveController->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
-        $this->assertSame($this->resultRedirect, $this->saveController->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionNoId()
@@ -256,7 +256,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->saveController->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveAndContinue()
@@ -303,7 +303,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['block_id' => $this->blockId])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->saveController->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionThrowsException()
@@ -352,6 +352,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['block_id' => $this->blockId])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->saveController->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 }

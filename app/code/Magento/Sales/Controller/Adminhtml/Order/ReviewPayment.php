@@ -16,7 +16,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         try {

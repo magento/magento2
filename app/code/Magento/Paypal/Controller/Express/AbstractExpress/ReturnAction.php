@@ -15,7 +15,7 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void|\Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
