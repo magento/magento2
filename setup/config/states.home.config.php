@@ -43,7 +43,8 @@ return [
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
         [
             'id'          => 'root.upgrade',

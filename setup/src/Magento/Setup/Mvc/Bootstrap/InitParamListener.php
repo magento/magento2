@@ -79,6 +79,52 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $serviceManager = $application->getServiceManager();
         $serviceManager->setService('Magento\Framework\App\Filesystem\DirectoryList', $directoryList);
         $serviceManager->setService('Magento\Framework\Filesystem', $this->createFilesystem($directoryList));
+
+        $eventManager = $application->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 1);
+    }
+
+
+    /**
+     * Check if user login
+     * 
+     * @param object $event
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function authPreDispatch($event)
+    {
+        $controller = $event->getTarget();
+        if (
+            !$controller instanceof \Magento\Setup\Controller\Session &&
+            !$controller instanceof \Magento\Setup\Controller\Install &&
+            !$controller instanceof \Magento\Setup\Controller\Success
+        ) {
+            /** @var Application $application */
+            $application = $event->getApplication();
+            $serviceManager = $application->getServiceManager();
+            $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+            /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+            $objectManager = $objectManagerProvider->get();
+
+            if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                /** @var \Magento\Framework\App\State $adminAppState */
+                $adminAppState = $objectManager->get('Magento\Framework\App\State');
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+                $objectManager->create(
+                    'Magento\Backend\Model\Auth\Session',
+                    [
+                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                        'appState' => $adminAppState
+                    ]
+                );
+
+                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                    $controller->plugin('redirect')->toUrl('/setup/index.php/session/unlogin');
+                }
+            }
+        }
+        return false;
     }
 
     /**
