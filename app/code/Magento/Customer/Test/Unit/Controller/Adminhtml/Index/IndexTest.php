@@ -108,7 +108,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      */
     public function testExecute()
     {
@@ -140,12 +140,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\View\Result\Page',
-            $this->indexController->executeInternal()
+            $this->indexController->execute()
         );
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      */
     public function testExecuteAjax()
     {
@@ -161,7 +161,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Forward',
-            $this->indexController->executeInternal()
+            $this->indexController->execute()
         );
     }
 

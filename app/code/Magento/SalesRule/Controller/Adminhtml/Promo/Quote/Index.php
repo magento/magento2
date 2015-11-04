@@ -13,7 +13,7 @@ class Index extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction()->_addBreadcrumb(__('Catalog'), __('Catalog'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Cart Price Rules'));

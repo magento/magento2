@@ -53,7 +53,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->method('prepend');
         $this->_verifyLoadAndRenderLayout();
         $controller = $this->_createIntegrationController('Edit');
-        $controller->executeInternal();
+        $controller->execute();
     }
 
     public function testEditActionNonExistentIntegration()
@@ -81,7 +81,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             );
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
-        $integrationContr->executeInternal();
+        $integrationContr->execute();
     }
 
     public function testEditActionNoDataAdd()
@@ -91,7 +91,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
-        $integrationContr->executeInternal();
+        $integrationContr->execute();
     }
 
     public function testEditException()
@@ -100,6 +100,6 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         // verify the error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $this->_controller = $this->_createIntegrationController('Edit');
-        $this->_controller->executeInternal();
+        $this->_controller->execute();
     }
 }

@@ -38,7 +38,7 @@ class ListAction extends \Magento\Backend\App\AbstractAction
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $severity = $this->getRequest()->getParam('severity');
         if ($severity) {
