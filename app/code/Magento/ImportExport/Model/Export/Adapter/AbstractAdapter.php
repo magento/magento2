@@ -6,7 +6,7 @@
 namespace Magento\ImportExport\Model\Export\Adapter;
 
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Abstract adapter model
@@ -45,7 +45,7 @@ abstract class AbstractAdapter
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $destination = null,
-        $destinationDirectoryCode = DirectoryList::SYS_TMP
+        $destinationDirectoryCode = DirectoryList::VAR_DIR
     ) {
         $this->_directoryHandle = $filesystem->getDirectoryWrite($destinationDirectoryCode);
         if (!$destination) {
