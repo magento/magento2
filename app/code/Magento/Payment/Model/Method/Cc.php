@@ -86,8 +86,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         if (!$data instanceof \Magento\Framework\DataObject) {
             $data = new \Magento\Framework\DataObject($data);
