@@ -6,6 +6,11 @@
 ?>
 <h2 class="page-title">{{$state.current.header}}</h2>
 <div ng-controller="authDialogController">
+    <div class="message message-error" ng-show="syncError">
+            <span class="message-text">
+                {{ErrorMessage}}
+            </span>
+    </div>
     <div ng-show="$root.isMarketplaceAuthorized" class="componenet-manager-wrap">
         <div class="component-manager-title">
             Magento Marketplace Account
