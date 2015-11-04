@@ -47,8 +47,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         \Magento\Backend\App\Config $config,
         DeploymentConfig $deploymentConfig,
         \Magento\Backend\Model\UrlInterface $backendUrl
-    )
-    {
+    ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
         $this->backendUrl = $backendUrl;
