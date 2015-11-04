@@ -4968,10 +4968,12 @@
         }
     }
     .fieldset-widget-options { // ToDo UI: To be removed after renderer form elements is refactored or updated.
-        .admin__field:last-child {
-            .mage-error {
-                margin-bottom: @indent__m;
-                margin-top: -@indent__xl;
+        .admin__field
+            &:last-child {
+                .mage-error {
+                    margin-bottom: @indent__m;
+                    margin-top: -@indent__xl;
+                }
             }
         }
     }
