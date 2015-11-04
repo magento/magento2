@@ -5,143 +5,98 @@
  */
 namespace Magento\ProductVideo\Test\Unit\Helper;
 
-/**
- * Helper to move images from tmp to catalog directory
- */
+use Magento\ProductVideo\Helper\Media;
+
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config
-     */
-    protected $viewConfigMock;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\DesignInterface
+     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $currentThemeMock;
+    protected $helper;
 
     /**
-     * @var \Magento\ProductVideo\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mediaHelperObject;
+    protected $contextMock;
 
     /**
-     * @var array
+     * Create mock objects
      */
-    protected $videoConfig;
-
-    public function setUp()
+    protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->viewConfigMock = $this->getMock(
-            '\Magento\Framework\View\Config',
-            ['getMediaAttributes', 'getViewConfig'],
-            [],
-            '',
-            false
+        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getMock();
+        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
+        $this->helper = new \Magento\ProductVideo\Helper\Media(
+            $this->contextMock
         );
-
-        $this->viewConfigMock
-            ->expects($this->atLeastOnce())
-            ->method('getViewConfig')
-            ->willReturn($this->viewConfigMock);
-
-        $this->themeCustomization = $this->getMock(
-            'Magento\Framework\View\Design\Theme\Customization',
-            [],
-            [],
-            '',
-            false
-        );
-        $themeMock = $this->getMock(
-            'Magento\Theme\Model\Theme',
-            ['__wakeup', 'getCustomization'],
-            [],
-            '',
-            false
-        );
-        $themeMock->expects(
-            $this->any()
-        )->method(
-            'getCustomization'
-        )->will(
-            $this->returnValue($this->themeCustomization)
-        );
-
-        $this->currentThemeMock = $this->getMock('Magento\Framework\View\DesignInterface');
-        $this->currentThemeMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
-
-        $this->mediaHelperObject = $objectManager->getObject(
-            '\Magento\ProductVideo\Helper\Media',
-            [
-                'configInterface' => $this->viewConfigMock,
-                'designInterface' => $this->currentThemeMock,
-            ]
-        );
-
-    }
-
-    public function dataForVideoPlay()
-    {
-        return [
-            [
-                1,
-            ],
-            [
-                0,
-            ],
-        ];
-    }
-
-    public function dataForVideoStop()
-    {
-        return [
-            [
-                1,
-            ],
-            [
-                0,
-            ],
-        ];
-    }
-
-    public function dataForVideoBackground()
-    {
-        return [
-            [
-                '[255, 255, 255]',
-            ],
-            [
-                '[0, 0, 0]',
-            ],
-        ];
     }
 
     /**
-     * @dataProvider dataForVideoPlay
+     * Test for method getPlayIfBaseAttribute
      */
-    public function testGetPlayIfBaseAttribute($expectedResult)
+    public function testGetPlayIfBaseAttribute()
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
-        $this->mediaHelperObject->getPlayIfBaseAttribute();
+        $return = 'some_value';
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Media::XML_PATH_PLAY_IF_BASE)
+            ->will($this->returnValue($return));
+
+        $this->assertEquals(
+            $return,
+            $this->helper->getPlayIfBaseAttribute()
+        );
     }
 
     /**
-     * @dataProvider dataForVideoStop
+     * Test for method getShowRelatedAttribute
      */
-    public function testGetShowRelatedAttribute($expectedResult)
+    public function testGetShowRelatedAttribute()
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
-        $this->mediaHelperObject->getShowRelatedAttribute();
+        $return = 'some_value';
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Media::XML_PATH_SHOW_RELATED)
+            ->will($this->returnValue($return));
+
+        $this->assertEquals(
+            $return,
+            $this->helper->getShowRelatedAttribute()
+        );
     }
 
     /**
-     * @dataProvider dataForVideoBackground
+     * Test for method getVideoAutoRestartAttribute
      */
-    public function testGetVideoAutoRestartAttribute($expectedResult)
+    public function testGetVideoAutoRestartAttribute()
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaAttributes')->willReturn($expectedResult);
-        $this->mediaHelperObject->getVideoAutoRestartAttribute();
+        $return = 'some_value';
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Media::XML_PATH_VIDEO_AUTO_RESTART)
+            ->will($this->returnValue($return));
+
+        $this->assertEquals(
+            $return,
+            $this->helper->getVideoAutoRestartAttribute()
+        );
+    }
+
+    /**
+     * Test for method getYouTubeApiKey
+     */
+    public function testGetYouTubeApiKey()
+    {
+        $return = 'some_value';
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Media::XML_PATH_YOUTUBE_API_KEY)
+            ->will($this->returnValue($return));
+
+        $this->assertEquals(
+            $return,
+            $this->helper->getYouTubeApiKey()
+        );
     }
 }

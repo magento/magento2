@@ -10,16 +10,25 @@ define([
     'use strict';
 
     return {
+        $initiallyDisabledAttributes: [],
         $links: $('[data-ui-id=product-tabs-tab-link-advanced-pricing]'),
         $tab: $('[data-tab-panel=advanced-pricing]'),
         toggleDisabledAttribute: function (disabled) {
             $('input,select', this.$tab).each(function (index, element) {
-                $(element).attr('disabled', disabled);
+                if (!$.inArray(element, this.$initiallyDisabledAttributes)) {
+                    $(element).attr('disabled', disabled);
+                }
             });
         },
         init: function () {
             $(document).on('changeTypeProduct', this._initType.bind(this));
+            this._setInitialState();
             this._initType();
+        },
+        _setInitialState: function () {
+            if (this.$initiallyDisabledAttributes.length == 0) {
+                this.$initiallyDisabledAttributes = $('input:disabled,select:disabled', this.$tab).toArray();
+            }
         },
         _initType: function () {
             var isConfigurable = productType.type.current === 'configurable';

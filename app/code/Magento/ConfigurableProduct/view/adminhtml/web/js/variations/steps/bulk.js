@@ -297,30 +297,7 @@ define([
 
                 if (!gallery.data('gallery-initialized')) {
                     gallery.mage('productGallery', {
-                        template: '[data-template=gallery-content]',
-                        types: {
-                            "image":{
-                                "code":"image",
-                                "value":null,
-                                "label":"Base Image",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[image]"
-                            },
-                            "small_image":{
-                                "code":"small_image",
-                                "value":null,
-                                "label":"Small Image",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[small_image]"
-                            },
-                            "thumbnail": {
-                                "code":"thumbnail",
-                                "value":null,
-                                "label":"Thumbnail",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[thumbnail]"
-                            }
-                        }
+                        template: '[data-template=gallery-content]'
                     });
 
                     uploadInput.fileupload({
