@@ -13,7 +13,7 @@ class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);

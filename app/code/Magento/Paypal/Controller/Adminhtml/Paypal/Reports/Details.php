@@ -13,7 +13,7 @@ class Details extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $rowId = $this->getRequest()->getParam('id');
         $row = $this->_rowFactory->create()->load($rowId);

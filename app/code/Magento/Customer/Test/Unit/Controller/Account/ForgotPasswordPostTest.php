@@ -107,7 +107,7 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/forgotpassword')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
     public function testExecute()
@@ -143,7 +143,7 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteNoSuchEntityException()
@@ -179,7 +179,7 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteException()
@@ -207,7 +207,7 @@ class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/forgotpassword')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     protected function prepareContext()

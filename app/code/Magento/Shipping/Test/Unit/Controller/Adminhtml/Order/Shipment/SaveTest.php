@@ -249,7 +249,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $this->shipmentLoader->expects($this->never())
                 ->method('load');
 
-            $this->assertEquals($this->resultRedirect, $this->saveAction->executeInternal());
+            $this->assertEquals($this->resultRedirect, $this->saveAction->execute());
         } else {
             $shipmentId = 1000012;
             $orderId = 10003;
@@ -345,7 +345,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($orderId));
             $this->prepareRedirect($path, $arguments);
 
-            $this->saveAction->executeInternal();
+            $this->saveAction->execute();
             $this->assertEquals($this->response, $this->saveAction->getResponse());
         }
     }

@@ -133,7 +133,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->redirect, $this->controller->executeInternal());
+        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     /**
@@ -176,7 +176,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->assertSame($this->redirect, $this->controller->executeInternal());
+        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     public function testExecuteEmptyLoginData()
@@ -207,7 +207,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->assertSame($this->redirect, $this->controller->executeInternal());
+        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     public function testExecuteSuccess()
@@ -255,7 +255,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->assertSame($this->redirect, $this->controller->executeInternal());
+        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     /**
@@ -303,7 +303,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->assertSame($this->redirect, $this->controller->executeInternal());
+        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     /**

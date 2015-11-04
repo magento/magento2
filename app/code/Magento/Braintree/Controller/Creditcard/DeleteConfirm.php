@@ -29,7 +29,7 @@ class DeleteConfirm extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($token = $this->hasToken()) {
             $result = $this->vault->deleteCard($token);
