@@ -13,7 +13,7 @@ class Refresh extends \Magento\Backend\App\Action
     /**
      * {@inheritdoc}
      */
-    public function executeInternal()
+    public function execute()
     {
         $formId = $this->getRequest()->getPost('formId');
         $captchaModel = $this->_objectManager->get('Magento\Captcha\Helper\Data')->getCaptcha($formId);

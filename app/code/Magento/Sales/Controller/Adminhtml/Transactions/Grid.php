@@ -16,7 +16,7 @@ class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions
      *
      * @return Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultLayoutFactory->create();
     }
