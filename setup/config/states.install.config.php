@@ -120,6 +120,7 @@ return [
             'id'          => 'root.success',
             'url'         => 'success',
             'templateUrl' => "{$base}/success",
+            'title'       => 'Success',
             'controller'  => 'successController',
             'main'        => true,
             'order'       => 8,
