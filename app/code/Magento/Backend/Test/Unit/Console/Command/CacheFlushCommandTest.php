@@ -11,24 +11,25 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheFlushCommandTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject */
     private $cacheManager;
 
-    /**
-     * @var CacheFlushCommand
-     */
+    /** @var CacheFlushCommand */
     private $command;
+
+    /** @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    private $eventManagerMock;
 
     public function setUp()
     {
+        $this->eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
-        $this->command = new CacheFlushCommand($this->cacheManager);
+        $this->command = new CacheFlushCommand($this->cacheManager, $this->eventManagerMock);
     }
 
     public function testExecute()
     {
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with('adminhtml_cache_flush_all');
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
         $this->cacheManager->expects($this->once())->method('flush')->with(['A', 'B']);
         $param = ['types' => ['A', 'B']];

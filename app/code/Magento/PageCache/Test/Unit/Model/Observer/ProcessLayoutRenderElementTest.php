@@ -20,9 +20,6 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
     protected $_blockMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Helper\Data */
-    protected $_helperMock;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
     protected $_layoutMock;
 
@@ -118,7 +115,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
                 ->will($this->returnValue([]));
-            
+
             $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
                 ->will($this->returnValue($this->_blockMock));

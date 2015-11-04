@@ -30,6 +30,7 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
     protected function performAction(array $cacheTypes)
     {
         $this->cacheManager->flush($cacheTypes);
+        $this->eventManager->dispatch('adminhtml_cache_flush_all');
     }
 
     /**
