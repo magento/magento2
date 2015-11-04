@@ -8,6 +8,7 @@
 namespace Magento\Framework\App\Action;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
@@ -48,7 +49,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws NotFoundException
      */
     abstract public function dispatch(RequestInterface $request);
 
