@@ -68,3 +68,8 @@ OAuth,OAuth
 "Integrations Configuration","Integrations Configuration"
 "Integration configuration file.","Integration configuration file."
 "No Integrations Found","No Integrations Found"
+"Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup","Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup"
+"Cleanup entries older than X minutes.","Cleanup entries older than X minutes."
+"Timeout for OAuth consumer credentials Post request within X seconds.","Timeout for OAuth consumer credentials Post request within X seconds."
+"Number of maximum redirects for OAuth consumer credentials Post request.","Number of maximum redirects for OAuth consumer credentials Post request."
+"Consumer key/secret will expire if not used within X seconds after Oauth token exchange starts.","Consumer key/secret will expire if not used within X seconds after Oauth token exchange starts."
