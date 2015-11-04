@@ -194,4 +194,8 @@ return [
     ['Magento\Framework\Model\ModelResource', 'Magento\Framework\Model\ResourceModel'],
     ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
     ['Magento\Framework\Model\Test\Unit\ModelResource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
+    [
+        'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super',
+        'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations',
+    ],
 ];
