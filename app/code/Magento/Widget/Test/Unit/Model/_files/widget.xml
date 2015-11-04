@@ -43,7 +43,7 @@
                 <block class="Magento\Backend\Block\Catalog\Product\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Product...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Product...</item>
                         </item>
                     </data>
                 </block>
