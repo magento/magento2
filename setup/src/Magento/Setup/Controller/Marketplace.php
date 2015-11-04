@@ -10,9 +10,9 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Model\ConnectManager;
+use Magento\Setup\Model\MarketplaceManager;
 
-class Connect extends AbstractActionController
+class Marketplace extends AbstractActionController
 {
 
     /**
@@ -21,18 +21,18 @@ class Connect extends AbstractActionController
     private $composerInformation;
 
     /**
-     * @var ConnectManager
+     * @var MarketplaceManager
      */
-    private $connectManager;
+    private $marketplaceManager;
 
     /**
      * @param ComposerInformation $composerInformation
-     * @param ConnectManager $connectManager
+     * @param MarketplaceManager $marketplaceManager
      */
-    public function __construct(ComposerInformation $composerInformation, ConnectManager $connectManager)
+    public function __construct(ComposerInformation $composerInformation, MarketplaceManager $marketplaceManager)
     {
         $this->composerInformation = $composerInformation;
-        $this->connectManager = $connectManager;
+        $this->marketplaceManager = $marketplaceManager;
     }
 
     /**
@@ -49,9 +49,9 @@ class Connect extends AbstractActionController
         try {
             $userName = isset($params['username']) ? $params['username'] : '';
             $password = isset($params['password']) ? $params['password'] : '';
-            $isValid = $this->connectManager->checkCredentialsAction($userName, $password);
+            $isValid = $this->marketplaceManager->checkCredentialsAction($userName, $password);
             $isValid = json_decode($isValid, true);
-            if ($isValid['success'] === true && $this->connectManager->saveAuthJson($userName, $password)) {
+            if ($isValid['success'] === true && $this->marketplaceManager->saveAuthJson($userName, $password)) {
                 return new JsonModel(['success' => true]);
             } else {
                 return new JsonModel(['success' => false, 'message' => $isValid['message']]);
@@ -69,9 +69,9 @@ class Connect extends AbstractActionController
     public function checkAuthAction()
     {
         try {
-            $authDataJson = $this->connectManager->getAuthJsonData();
+            $authDataJson = $this->marketplaceManager->getAuthJsonData();
             if ($authDataJson) {
-                $isValid = $this->connectManager->checkCredentialsAction(
+                $isValid = $this->marketplaceManager->checkCredentialsAction(
                     $authDataJson['username'],
                     $authDataJson['password']
                 );
@@ -96,7 +96,7 @@ class Connect extends AbstractActionController
     public function removeCredentialsAction()
     {
         try {
-            $result = $this->connectManager->removeCredentials();
+            $result = $this->marketplaceManager->removeCredentials();
             return new JsonModel(['success' => $result]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
