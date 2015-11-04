@@ -63,7 +63,7 @@ class UpdateQty extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));

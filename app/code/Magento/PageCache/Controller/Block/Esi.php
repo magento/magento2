@@ -13,7 +13,7 @@ class Esi extends \Magento\PageCache\Controller\Block
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $response = $this->getResponse();
         $blocks = $this->_getBlocks();

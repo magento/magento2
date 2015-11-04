@@ -13,7 +13,7 @@ class Login extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
             $this->_redirect('*/*/');

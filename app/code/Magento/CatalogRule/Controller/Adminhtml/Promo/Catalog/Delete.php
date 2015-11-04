@@ -13,7 +13,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {

@@ -58,7 +58,7 @@ class PrintLabel extends \Magento\Backend\App\Action
      *
      * @return ResponseInterface|void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));

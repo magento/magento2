@@ -55,7 +55,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
