@@ -6,13 +6,11 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Login extends Action implements AccountInterface
+class Login extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session
@@ -44,7 +42,7 @@ class Login extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->session->isLoggedIn()) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

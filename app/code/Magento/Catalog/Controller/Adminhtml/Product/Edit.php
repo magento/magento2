@@ -39,7 +39,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());

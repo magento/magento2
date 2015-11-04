@@ -17,7 +17,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');

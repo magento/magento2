@@ -18,7 +18,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $userId = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser()->getId();
         $password = (string)$this->getRequest()->getParam('password');

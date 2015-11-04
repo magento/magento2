@@ -88,7 +88,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $block->expects($this->once())->method('setIndex')->willReturnSelf();
         $block->expects($this->once())->method('toHtml')->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->controller->executeInternal());
+        $this->assertEquals($this->response, $this->controller->execute());
     }
 
     /**
@@ -99,6 +99,6 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('<index"');
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

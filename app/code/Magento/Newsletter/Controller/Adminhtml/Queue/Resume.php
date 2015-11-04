@@ -13,7 +13,7 @@ class Resume extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $queue = $this->_objectManager->get(
             'Magento\Newsletter\Model\Queue'

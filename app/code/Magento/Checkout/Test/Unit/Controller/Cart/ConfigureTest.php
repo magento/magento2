@@ -162,7 +162,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
         $productMock->expects($this->exactly(2))->method('getId')->willReturn($actualProductId);
 
-        $this->assertSame($pageMock, $this->configureController->executeInternal());
+        $this->assertSame($pageMock, $this->configureController->execute());
     }
 
     /**
@@ -206,6 +206,6 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
-        $this->assertSame($this->resultRedirectMock, $this->configureController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->configureController->execute());
     }
 }

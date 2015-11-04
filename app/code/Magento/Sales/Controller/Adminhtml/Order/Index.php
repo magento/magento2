@@ -12,7 +12,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultPage = $this->_initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
