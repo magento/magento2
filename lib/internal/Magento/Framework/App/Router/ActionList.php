@@ -11,16 +11,16 @@ use Magento\Framework\Module\Dir\Reader as ModuleReader;
 class ActionList
 {
     /**
+     * Not allowed string in route's action path to avoid disclosing admin url
+     */
+    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml_';
+
+    /**
      * List of application actions
      *
      * @var array
      */
     protected $actions;
-
-    /**
-     * @var ModuleReader
-     */
-    protected $moduleReader;
 
     /**
      * @var array
@@ -52,9 +52,8 @@ class ActionList
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
         $data = $cache->load($cacheKey);
-        $this->moduleReader = $moduleReader;
         if (!$data) {
-            $this->actions = $this->moduleReader->getActionFiles();
+            $this->actions = $moduleReader->getActionFiles();
             $cache->save(serialize($this->actions), $cacheKey);
         } else {
             $this->actions = unserialize($data);
@@ -75,6 +74,9 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
+        if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
+            return null;
+        }
         if (in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
@@ -88,7 +90,6 @@ class ActionList
         if (isset($this->actions[$fullPath])) {
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
-
         return null;
     }
 }

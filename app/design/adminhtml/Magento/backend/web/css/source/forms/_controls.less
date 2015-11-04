@@ -53,6 +53,7 @@
 //  Input text styles
 .admin__control-text {
     &:extend(.abs-form-control-pattern all);
+    min-width: 4rem;
 }
 
 //  Select styles
@@ -73,6 +74,7 @@
     background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
+    min-width: 8.5rem;
     padding-bottom: @field-control__padding-bottom - .1rem;
     padding-right: 4.4rem; // Distance between select switch and inner text
     padding-top: @field-control__padding-top - .1rem;
@@ -214,29 +216,41 @@ option:empty {
         position: relative;
         z-index: 1;
     }
-    [class*='admin__control-'][type] {
+    .admin__control-select {
+        width: auto;
+    }
+    .admin__control-text {
+        width: 100%;
+    }
+    [class*='admin__control-'][class] {
         .lib-css(appearence,none);
         .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-shrink(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
         order: 1;
         vertical-align: top;
-        width: auto;
+        & + [class*='admin__control-'] {
+            border-left-color: @field-control__border-color;
+        }
         :focus {
             box-shadow: 0;
         }
-        & + [class*='admin__addon-'] {
+        & ~ [class*='admin__addon-']:last-child {
             padding-left: 1rem;
             position: static !important;
             z-index: 0;
             > * {
                 position: relative;
                 vertical-align: top;
-                z-index: 2;
+                z-index: 1;
+            }
+            &:empty {
+                padding: 0;
             }
         }
-        & + [class*='admin__addon-']:before {
+        & ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern);
             bottom: 0;
             box-sizing: border-box;
@@ -245,13 +259,16 @@ option:empty {
             position: absolute;
             top: 0;
             width: 100%;
-            z-index: 0;
+            z-index: -1;
         }
-        &[disabled] + [class*='admin__addon-']:before {
+        &[disabled] ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern[disabled]);
         }
-        &:focus + [class*='admin__addon-']:before {
+        &:focus ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern:focus);
+        }
+        &:hover ~ [class*='admin__addon-']:last-child:before {
+            &:extend(.abs-form-control-pattern:hover);
         }
     }
 }
