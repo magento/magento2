@@ -11,7 +11,7 @@ class Search extends \Magento\Backend\App\Action
     /**
      * @return mixed
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(

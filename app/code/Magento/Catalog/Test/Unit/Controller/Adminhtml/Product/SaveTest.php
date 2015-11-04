@@ -120,7 +120,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         $this->session->expects($this->once())->method('setProductData')->with($productData);
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
 
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 
     /**

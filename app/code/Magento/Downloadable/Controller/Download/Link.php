@@ -31,7 +31,7 @@ class Link extends \Magento\Downloadable\Controller\Download
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function executeInternal()
+    public function execute()
     {
         $session = $this->_getCustomerSession();
 

@@ -123,6 +123,6 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $testHtml = '<div>Some test html</div>';
         $this->chooserBlockMock->expects($this->once())->method('toHtml')->will($this->returnValue($testHtml));
         $this->resultRaw->expects($this->once())->method('setContents')->with($testHtml);
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

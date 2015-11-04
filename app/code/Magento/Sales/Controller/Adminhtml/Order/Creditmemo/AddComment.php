@@ -72,7 +72,7 @@ class AddComment extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->getRequest()->setParam('creditmemo_id', $this->getRequest()->getParam('id'));
