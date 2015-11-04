@@ -8,6 +8,7 @@ angular.module('component-grid', ['ngStorage'])
     .controller('componentGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state',
         function ($rootScope, $scope, $http, $localStorage, $state) {
             $rootScope.componentsProcessed = false;
+            $scope.syncError = false;
             $http.get('index.php/componentGrid/components').success(function(data) {
                 $scope.components = data.components;
                 $scope.total = data.total;
@@ -65,7 +66,13 @@ angular.module('component-grid', ['ngStorage'])
             $scope.sync = function() {
                 $scope.isHiddenSpinner = false;
                 $http.get('index.php/componentGrid/sync').success(function(data) {
-                    $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    if(typeof data.lastSyncData.lastSyncDate !== "undefined") {
+                        $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    }
+                    if (data.error !== '') {
+                        $scope.syncError = true;
+                        $scope.ErrorMessage = data.error;
+                    }
                     $scope.availableUpdatePackages = data.lastSyncData.packages;
                     $scope.countOfUpdate = data.lastSyncData.countOfUpdate;
                     $scope.countOfInstall = data.lastSyncData.countOfInstall;
@@ -157,6 +164,7 @@ angular.module('component-grid', ['ngStorage'])
                 }
             };
             $scope.convertDate = function(date) {
+                console.log(date);
                 return new Date(date.replace(/-/g, '/'))
             }
         }
