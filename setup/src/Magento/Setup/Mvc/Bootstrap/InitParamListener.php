@@ -87,7 +87,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * Check if user login
-     * 
+     *
      * @param object $event
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -103,11 +103,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
-            $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
-            /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
-            $objectManager = $objectManagerProvider->get();
-
-            if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+                /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+                $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
                 $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
