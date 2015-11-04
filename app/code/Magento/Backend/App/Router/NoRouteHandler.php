@@ -20,15 +20,23 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
     protected $routeConfig;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrl;
+
+    /**
      * @param \Magento\Backend\Helper\Data $helper
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      */
     public function __construct(
         \Magento\Backend\Helper\Data $helper,
-        \Magento\Framework\App\Route\ConfigInterface $routeConfig
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Backend\Model\UrlInterface $backendUrl
     ) {
         $this->helper = $helper;
         $this->routeConfig = $routeConfig;
+        $this->backendUrl = $backendUrl;
     }
 
     /**
@@ -43,11 +51,15 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         $areaFrontName = array_shift($requestPathParams);
 
         if ($areaFrontName == $this->helper->getAreaFrontName()) {
-            $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');
-            $actionNamespace = 'noroute';
-            $actionName = 'index';
-            $request->setModuleName($moduleName)->setControllerName($actionNamespace)->setActionName($actionName);
-            return true;
+            $baseUrl = $this->backendUrl->getBaseUrl();
+            if (!stripos($baseUrl, $_SERVER['HTTP_HOST']) === false)
+            {
+                $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');
+                $actionNamespace = 'noroute';
+                $actionName = 'index';
+                $request->setModuleName($moduleName)->setControllerName($actionNamespace)->setActionName($actionName);
+                return true;
+            }
         }
         return false;
     }
