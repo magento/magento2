@@ -190,13 +190,12 @@ define([
         /**
          * handle 'paypal checkout buttons' click on Tier popup
          *
-         * @param {Object} tierOptions
          * @private
          */
-        handleTierPaypalCheckout: function (tierOptions) {
-            if (this.options.inputQty && !isNaN(tierOptions.qty)
+        handleTierPaypalCheckout: function () {
+            if (this.options.inputQty && !isNaN(this.tierOptions.qty)
             ) {
-                $(this.options.inputQty).val(tierOptions.qty);
+                $(this.options.inputQty).val(this.tierOptions.qty);
                 this.closePopup(this.$popup);
             }
         },
