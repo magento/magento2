@@ -157,7 +157,7 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $controller = $this->getController();
-        $this->assertSame($this->resultForwardMock, $controller->executeInternal());
+        $this->assertSame($this->resultForwardMock, $controller->execute());
     }
 
     public function testExecuteWithoutWishlist()
@@ -176,7 +176,7 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultForwardMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultForwardMock, $this->getController()->execute());
     }
 
     public function testExecutePassed()
@@ -204,6 +204,6 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 }

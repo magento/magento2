@@ -26,7 +26,7 @@ class ExportLowstockCsv extends \Magento\Reports\Controller\Adminhtml\Report\Pro
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $fileName = 'products_lowstock.csv';

@@ -28,7 +28,7 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

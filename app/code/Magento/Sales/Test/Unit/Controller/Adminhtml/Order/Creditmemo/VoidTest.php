@@ -207,7 +207,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Forward',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -243,7 +243,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -279,7 +279,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -333,7 +333,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 }

@@ -50,7 +50,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
     /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $shipmentId = $this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {

@@ -18,7 +18,7 @@
                 <label for="import_rates_file" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Import Tax Rates') ?></span></label>
                 <div class="admin__field-control">
                     <input type="file" id="import_rates_file" name="import_rates_file" class="input-file required-entry"/>
-                    <?php echo $block->getButtonHtml('Import Tax Rates', '', 'import-submit') ?>
+                    <?php echo $block->getButtonHtml(__('Import Tax Rates'), '', 'import-submit') ?>
                 </div>
             </div>
         <?php if ($block->getUseContainer()): ?>
@@ -52,7 +52,7 @@ require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
             <div class="fieldset admin__field">
                 <span class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Export Tax Rates') ?></span></span>
                 <div class="admin__field-control">
-                    <?php echo $block->getButtonHtml('Export Tax Rates', "this.form.submit()") ?>
+                    <?php echo $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
                 </div>
             </div>
         <?php if ($block->getUseContainer()): ?>

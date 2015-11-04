@@ -144,7 +144,7 @@ $product->setTypeId(
 )->setAttributeSetId(
     4
 )->setName(
-    'Simple Images'
+    'Simple Images Two'
 )->setSku(
     'simple_with_images'
 )->setPrice(
