@@ -52,8 +52,7 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
 
         if ($areaFrontName == $this->helper->getAreaFrontName()) {
             $baseUrl = $this->backendUrl->getBaseUrl();
-            if (!stripos($baseUrl, $_SERVER['HTTP_HOST']) === false)
-            {
+            if (!stripos($baseUrl, $_SERVER['HTTP_HOST']) === false) {
                 $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');
                 $actionNamespace = 'noroute';
                 $actionName = 'index';
