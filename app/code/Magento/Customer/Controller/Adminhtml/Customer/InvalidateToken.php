@@ -125,7 +125,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($customerId = $this->getRequest()->getParam('customer_id')) {

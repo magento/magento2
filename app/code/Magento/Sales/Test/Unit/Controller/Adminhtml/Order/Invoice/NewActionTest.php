@@ -285,7 +285,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->resultPageMock));
 
-        $this->assertSame($this->resultPageMock, $this->controller->executeInternal());
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteNoOrder()
@@ -329,6 +329,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 }

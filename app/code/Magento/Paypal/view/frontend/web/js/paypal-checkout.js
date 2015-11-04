@@ -53,7 +53,7 @@ define([
                              *
                              */
                             cancel: function () {
-                                self.redirect(returnUrl);
+                                self._redirect(returnUrl);
                             }
                         }
                     });

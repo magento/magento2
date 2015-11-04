@@ -40,7 +40,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product FPT'
 )->setSku(
     'simple'
 )->setPrice(

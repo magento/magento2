@@ -15,7 +15,7 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->_validateMinimumAmount()) {
             return;

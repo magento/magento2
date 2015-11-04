@@ -87,12 +87,12 @@ class Adapter implements MethodInterface
     public function __construct(
         ManagerInterface $eventManager,
         ValueHandlerPoolInterface $valueHandlerPool,
-        ValidatorPoolInterface $validatorPool,
-        CommandPoolInterface $commandPool,
         PaymentDataObjectFactory $paymentDataObjectFactory,
         $code,
         $formBlockType,
-        $infoBlockType
+        $infoBlockType,
+        CommandPoolInterface $commandPool = null,
+        ValidatorPoolInterface $validatorPool = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -102,6 +102,20 @@ class Adapter implements MethodInterface
         $this->formBlockType = $formBlockType;
         $this->eventManager = $eventManager;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
+    }
+
+    /**
+     * Returns Validator pool
+     *
+     * @return ValidatorPoolInterface
+     * @throws \DomainException
+     */
+    public function getValidatorPool()
+    {
+        if ($this->validatorPool === null) {
+            throw new \DomainException('Validator pool is not configured for use.');
+        }
+        return $this->validatorPool;
     }
 
     /**
@@ -244,7 +258,7 @@ class Adapter implements MethodInterface
         $checkResult = new DataObject();
         $checkResult->setData('is_available', true);
         try {
-            $validator = $this->validatorPool->get('availability');
+            $validator = $this->getValidatorPool()->get('availability');
             $result = $validator->validate(
                 [
                     'payment' => $this->paymentDataObjectFactory->create($this->getInfoInstance())
@@ -252,7 +266,7 @@ class Adapter implements MethodInterface
             );
 
             $checkResult->setData('is_available', $result->isValid());
-        } catch (NotFoundException $e) {
+        } catch (\Exception $e) {
             // pass
         }
 
@@ -283,8 +297,8 @@ class Adapter implements MethodInterface
     public function canUseForCountry($country)
     {
         try {
-            $validator = $this->validatorPool->get('country');
-        } catch (NotFoundException $e) {
+            $validator = $this->getValidatorPool()->get('country');
+        } catch (\Exception $e) {
             return true;
         }
 
@@ -298,8 +312,8 @@ class Adapter implements MethodInterface
     public function canUseForCurrency($currencyCode)
     {
         try {
-            $validator = $this->validatorPool->get('currency');
-        } catch (NotFoundException $e) {
+            $validator = $this->getValidatorPool()->get('currency');
+        } catch (\Exception $e) {
             return true;
         }
 
@@ -353,8 +367,8 @@ class Adapter implements MethodInterface
     public function validate()
     {
         try {
-            $validator = $this->validatorPool->get('global');
-        } catch (NotFoundException $e) {
+            $validator = $this->getValidatorPool()->get('global');
+        } catch (\Exception $e) {
             return $this;
         }
 
@@ -500,10 +514,15 @@ class Adapter implements MethodInterface
      * @return void
      * @throws NotFoundException
      * @throws \Exception
+     * @throws \DomainException
      */
     private function executeCommand($commandCode, InfoInterface $payment, array $arguments = [])
     {
         if ($this->canPerformCommand($commandCode)) {
+            if ($this->commandPool === null) {
+                throw new \DomainException('Command pool is not configured for use.');
+            }
+
             try {
                 $command = $this->commandPool->get($commandCode);
                 $arguments['payment'] = $this->paymentDataObjectFactory->create($payment);
@@ -580,14 +599,20 @@ class Adapter implements MethodInterface
 
     /**
      * {inheritdoc}
+     * @param DataObject $data
+     * @return $this
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
-        if (is_array($data)) {
-            $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\DataObject) {
-            $this->getInfoInstance()->addData($data->getData());
-        }
+        $this->eventManager->dispatch(
+            'payment_method_assign_data_' . $this->getCode(),
+            [
+                'method' => $this,
+                'data' => $data
+            ]
+        );
+
+        $this->getInfoInstance()->addData($data->getData());
         return $this;
     }
 
