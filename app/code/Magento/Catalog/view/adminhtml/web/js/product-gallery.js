@@ -6,7 +6,8 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'Magento_Catalog/catalog/base-image-uploader'
 ], function ($, mageTemplate) {
     'use strict';
 
