@@ -15,6 +15,22 @@
 @import '../../css/source/_variables.less'; // Local theme variables
 @import '../../css/source/lib/_responsive.less';
 
+.fotorama_spin {
+    display: none;
+    &.fotorama_spinner {
+        display: block;
+        width: 64px;
+        height: 64px;
+        background-image: url('@{baseDir}../images/loader-1.gif');
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: @z-index-1;
+    }
+}
 
 .fotorama-translate3d(@x; @y; @z) {
     -webkit-transform: translate3d(@x, @y, @z);
