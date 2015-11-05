@@ -75,9 +75,9 @@ angular.module('component-grid', ['ngStorage'])
                 });
             };
             $scope.isAvailableUpdatePackage = function(packageName) {
-                $localStorage.isConnectAuthorized = typeof $localStorage.isConnectAuthorized !== 'undefined' ? $localStorage.isConnectAuthorized : false;
+                $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
                 var isAvailable = typeof $scope.availableUpdatePackages !== 'undefined'
-                    && $localStorage.isConnectAuthorized
+                    && $localStorage.isMarketplaceAuthorized
                     && packageName in $scope.availableUpdatePackages;
                 return isAvailable;
             };

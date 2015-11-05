@@ -58,7 +58,11 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
         $billingAgreement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         )->getFirstItem();
-        $data = [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()];
+        $data = new \Magento\Framework\DataObject(
+            [
+                AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()
+            ]
+        );
         $this->_model->assignData($data);
         $this->assertEquals(
             'REF-ID-TEST-678',

@@ -4,4 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-return ['connect' => ['check_credentials_url' => 'repo.magento.com']];
+return ['marketplace' => ['check_credentials_url' => 'repo.magento.com']];
