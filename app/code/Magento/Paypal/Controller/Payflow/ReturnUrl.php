@@ -24,7 +24,7 @@ class ReturnUrl extends Payflow
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         /** @var \Magento\Checkout\Block\Onepage\Success $redirectBlock */

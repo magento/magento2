@@ -201,6 +201,6 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
             ->method('renderLayout')
             ->will($this->returnValue(1));
 
-        $this->object->executeInternal();
+        $this->object->execute();
     }
 }

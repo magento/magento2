@@ -15,7 +15,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $passwordResetToken = (string)$this->getRequest()->getQuery('token');
         $userId = (int)$this->getRequest()->getQuery('id');

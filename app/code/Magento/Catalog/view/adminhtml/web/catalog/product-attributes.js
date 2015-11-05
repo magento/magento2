@@ -20,7 +20,7 @@ define([
             var self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
-                title: 'New Attribute',
+                title: $.mage.__('New Attribute'),
                 type: 'slide',
                 buttons: [],
                 opened: function () {
