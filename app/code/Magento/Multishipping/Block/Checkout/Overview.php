@@ -36,10 +36,22 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsReader
+     */
+    protected $totalsReader;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
      * @param array $data
      */
     public function __construct(
@@ -47,6 +59,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Tax\Helper\Data $taxHelper,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
         array $data = []
     ) {
         $this->_taxHelper = $taxHelper;
@@ -54,6 +68,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
     }
 
     /**
@@ -98,12 +114,12 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get object with payment info posted data
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getPayment()
     {
         if (!$this->hasData('payment')) {
-            $payment = new \Magento\Framework\Object($this->getRequest()->getPost('payment'));
+            $payment = new \Magento\Framework\DataObject($this->getRequest()->getPost('payment'));
             $this->setData('payment', $payment);
         }
         return $this->_getData('payment');
@@ -318,8 +334,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getBillinAddressTotals()
     {
-        $_address = $this->getQuote()->getBillingAddress();
-        return $this->getShippingAddressTotals($_address);
+        $address = $this->getQuote()->getBillingAddress();
+        return $this->getShippingAddressTotals($address);
     }
 
     /**
@@ -353,10 +369,10 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Return row-level item html
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function getRowItemHtml(\Magento\Framework\Object $item)
+    public function getRowItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
         $renderer = $this->_getRowItemRenderer($type)->setItem($item);

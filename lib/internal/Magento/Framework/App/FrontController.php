@@ -15,11 +15,20 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @param RouterList $routerList
+     * @var \Magento\Framework\App\Response\Http
      */
-    public function __construct(RouterList $routerList)
-    {
+    protected $response;
+
+    /**
+     * @param RouterList $routerList
+     * @param \Magento\Framework\App\Response\Http $response
+     */
+    public function __construct(
+        RouterList $routerList,
+        \Magento\Framework\App\Response\Http $response
+    ) {
         $this->_routerList = $routerList;
+        $this->response = $response;
     }
 
     /**
@@ -41,8 +50,12 @@ class FrontController implements FrontControllerInterface
                     $actionInstance = $router->match($request);
                     if ($actionInstance) {
                         $request->setDispatched(true);
-                        $actionInstance->getResponse()->setNoCacheHeaders();
-                        $result = $actionInstance->dispatch($request);
+                        $this->response->setNoCacheHeaders();
+                        if ($actionInstance instanceof \Magento\Framework\App\Action\AbstractAction) {
+                            $result = $actionInstance->dispatch($request);
+                        } else {
+                            $result = $actionInstance->execute();
+                        }
                         break;
                     }
                 } catch (\Magento\Framework\Exception\NotFoundException $e) {

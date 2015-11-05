@@ -9,34 +9,33 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheStatusCommandTest extends \PHPUnit_Framework_TestCase
+class CacheStatusCommandTest extends AbstractCacheCommandTest
 {
-    /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheManager;
-
-    /**
-     * @var CacheStatusCommand
-     */
-    private $command;
-
     public function setUp()
     {
-        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
-        $this->command = new CacheStatusCommand($this->cacheManager);
+        parent::setUp();
+        $this->command = new CacheStatusCommand($this->cacheManagerMock);
     }
 
     public function testExecute()
     {
         $cacheTypes = ['A' => 0, 'B' => 1, 'C' => 1];
-        $this->cacheManager->expects($this->once())->method('getStatus')->willReturn($cacheTypes);
+        $this->cacheManagerMock->expects($this->once())->method('getStatus')->willReturn($cacheTypes);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
-        $expect = 'Current status:' . PHP_EOL;
-        foreach ($cacheTypes as $cacheType => $status) {
-            $expect .= sprintf('%30s: %d', $cacheType, $status) . PHP_EOL;
+
+        $this->assertEquals($this->getExpectedExecutionOutput($cacheTypes), $commandTester->getDisplay());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExpectedExecutionOutput(array $types)
+    {
+        $output = 'Current status:' . PHP_EOL;
+        foreach ($types as $type => $status) {
+            $output .= sprintf('%30s: %d', $type, $status) . PHP_EOL;
         }
-        $this->assertEquals($expect, $commandTester->getDisplay());
+        return $output;
     }
 }

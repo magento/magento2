@@ -3,32 +3,41 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     './column'
-], function (Column) {
+], function (_, Column) {
     'use strict';
 
     return Column.extend({
+
+        /*eslint-disable eqeqeq*/
         /**
          * Retrieves label associated with a provided value.
          *
-         * @param {(String|Number)} value - Value of the option.
          * @returns {String}
          */
-        getLabel: function (value) {
+        getLabel: function () {
             var options = this.options || [],
-                label = '';
+                values = this._super(),
+                label = [];
 
-            value = value || '';
+            if (!Array.isArray(values)) {
+                values = [values];
+            }
 
-            /*eslint-disable eqeqeq*/
-            options.some(function (item) {
-                label = item.label;
-
-                return item.value == value;
+            values = values.map(function (value) {
+                return value + '';
             });
-            /*eslint-enable eqeqeq*/
 
-            return label;
+            options.forEach(function (item) {
+                if (_.contains(values, item.value + '')) {
+                    label.push(item.label);
+                }
+            });
+
+            return label.join(', ');
         }
+
+        /*eslint-enable eqeqeq*/
     });
 });

@@ -31,9 +31,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $quoteRepositoryMock = $this->getMockBuilder('Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $sessionTransparentMock = $this->getMockBuilder('Magento\Framework\Session\Generic')
             ->setMethods(['getQuoteId'])
             ->disableOriginalConstructor()
@@ -107,14 +105,14 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $expectedResult
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @param string $avsSecurityCodeFlag
      *
      * @dataProvider validationDataProvider
      */
     public function testValidation(
         $expectedResult,
-        \Magento\Framework\Object $response,
+        \Magento\Framework\DataObject $response,
         $avsSecurityCodeFlag
     ) {
         $this->configMock->expects($this->once())
@@ -137,7 +135,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'cvv2match' => 'Y',
                     ]
@@ -146,7 +144,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'cvv2match' => 'Y',
                     ]
@@ -155,7 +153,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'cvv2match' => 'X',
                     ]
@@ -164,7 +162,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'cvv2match' => 'N',
                     ]
@@ -173,7 +171,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'cvv2match' => null,
                     ]
@@ -182,7 +180,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(),
+                'response' => new \Magento\Framework\DataObject(),
                 'configValue' => '1',
             ],
         ];

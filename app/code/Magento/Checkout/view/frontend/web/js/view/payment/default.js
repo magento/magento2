@@ -14,7 +14,10 @@ define(
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry'
+        'uiRegistry',
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Ui/js/model/messages',
+        'uiLayout'
     ],
     function (
         ko,
@@ -27,11 +30,20 @@ define(
         paymentService,
         checkoutData,
         checkoutDataResolver,
-        registry
+        registry,
+        additionalValidators,
+        Messages,
+        layout
     ) {
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
+            /**
+             * After place order callback
+             */
+            afterPlaceOrder: function () {
+                //
+            },
             isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
             /**
              * Initialize view.
@@ -73,6 +85,31 @@ define(
              * @returns {Component} Chainable.
              */
             initChildren: function () {
+                this.messageContainer = new Messages();
+                this.createMessagesComponent();
+
+                return this;
+            },
+
+            /**
+             * Create child message renderer component
+             *
+             * @returns {Component} Chainable.
+             */
+            createMessagesComponent: function () {
+
+                var messagesComponent = {
+                    parent: this.name,
+                    name: this.name + '.messages',
+                    displayArea: 'messages',
+                    component: 'Magento_Ui/js/view/messages',
+                    config: {
+                        messageContainer: this.messageContainer
+                    }
+                };
+
+                layout([messagesComponent]);
+
                 return this;
             },
 
@@ -80,24 +117,20 @@ define(
              * Place order.
              */
             placeOrder: function (data, event) {
+                var self = this,
+                    placeOrder;
+
                 if (event) {
                     event.preventDefault();
                 }
-                var self = this,
-                    placeOrder,
-                    emailValidationResult = customer.isLoggedIn(),
-                    loginFormSelector = 'form[data-role=email-with-possible-login]';
-                if (!customer.isLoggedIn()) {
-                    $(loginFormSelector).validation();
-                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
-                }
-                if (emailValidationResult && this.validate()) {
-                    this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
-                    $.when(placeOrder).fail(function(){
+                if (this.validate() && additionalValidators.validate()) {
+                    this.isPlaceOrderActionAllowed(false);
+                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder, this.messageContainer);
+
+                    $.when(placeOrder).fail(function () {
                         self.isPlaceOrderActionAllowed(true);
-                    });
+                    }).done(this.afterPlaceOrder.bind(this));
                     return true;
                 }
                 return false;
@@ -124,11 +157,6 @@ define(
                 return {
                     "method": this.item.method,
                     "po_number": null,
-                    "cc_owner": null,
-                    "cc_number": null,
-                    "cc_type": null,
-                    "cc_exp_year": null,
-                    "cc_exp_month": null,
                     "additional_data": null
                 };
             },

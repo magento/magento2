@@ -5,10 +5,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="visitor_clean" instance="Magento\Customer\Model\Visitor" method="clean">
             <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
+    <group id="index">
+        <job name="update_last_visit_at" instance="Magento\Customer\Model\Observer\Grid" method="syncCustomerGrid">
+            <schedule>*/5 * * * *</schedule>
         </job>
     </group>
 </config>

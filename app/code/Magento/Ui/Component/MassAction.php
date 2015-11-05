@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-
 /**
  * Class MassAction
  */
@@ -15,15 +13,27 @@ class MassAction extends AbstractComponent
     const NAME = 'massaction';
 
     /**
-     * Default component data
-     *
-     * @var array
+     * @inheritDoc
      */
-    protected $_data = [
-        'config' => [
-            'actions' => []
-        ]
-    ];
+    public function prepare()
+    {
+        $config = $this->getConfiguration();
+
+        foreach ($this->getChildComponents() as $actionComponent) {
+            $config['actions'][] = $actionComponent->getConfiguration();
+        };
+
+        $origConfig = $this->getConfiguration();
+        if ($origConfig !== $config) {
+            $config = array_replace_recursive($config, $origConfig);
+        }
+
+        $this->setData('config', $config);
+        $this->components = [];
+
+        parent::prepare();
+    }
+
 
     /**
      * Get component name
@@ -33,31 +43,5 @@ class MassAction extends AbstractComponent
     public function getComponentName()
     {
         return static::NAME;
-    }
-
-    /**
-     * Register component
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        $config = $this->getData('config');
-        if (isset($config['actions'])) {
-            $config['actions'] = array_values($config['actions']);
-            array_walk_recursive(
-                $config['actions'],
-                function (&$item, $key, $context) {
-                    /** @var ContextInterface $context */
-                    if ($key === 'url') {
-                        $item = $context->getUrl($item);
-                    }
-                },
-                $this->getContext()
-            );
-            $this->setData('config', $config);
-        }
-
-        parent::prepare();
     }
 }

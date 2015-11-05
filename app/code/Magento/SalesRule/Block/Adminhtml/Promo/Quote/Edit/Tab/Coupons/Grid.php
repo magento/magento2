@@ -23,21 +23,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
      */
     protected $_salesRuleCoupon;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $salesRuleCoupon
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $salesRuleCoupon
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $salesRuleCoupon,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $salesRuleCoupon,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
@@ -68,7 +68,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
 
         /**
-         * @var \Magento\SalesRule\Model\Resource\Coupon\Collection $collection
+         * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection
          */
         $collection = $this->_salesRuleCoupon->create()->addRuleToFilter($priceRule)->addGeneratedCouponsFilter();
 

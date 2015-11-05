@@ -10,7 +10,7 @@ var config = {
             braintreeDataJs:            'Magento_Braintree/js/cc-data',
             braintreeForm:              'Magento_Braintree/js/cc-form',
             braintreeEditForm:          'Magento_Braintree/js/cc-edit-form',
-            braintreePayPalShortcut:    'Magento_Braintree/js/braintree-paypal-shortcut',
+            braintreePayPalMinicart:    'Magento_Braintree/js/button/braintree-paypal-minicart',
             transparent:                'Magento_Payment/transparent'
         }
     }

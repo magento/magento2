@@ -10,8 +10,8 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Resource\Rule _getResource()
- * @method \Magento\CatalogRule\Model\Resource\Rule getResource()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
  * @method \Magento\CatalogRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -104,7 +104,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Iterator
+     * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
     protected $_resourceIterator;
 
@@ -134,7 +134,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -153,18 +153,18 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
      * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
@@ -175,18 +175,18 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
         \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Model\Resource\Iterator $resourceIterator,
+        \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = []
@@ -214,7 +214,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\Resource\Rule');
+        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
 
@@ -289,7 +289,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->setCollectedAttributes([]);
 
             if ($this->getWebsiteIds()) {
-                /** @var $productCollection \Magento\Catalog\Model\Resource\Product\Collection */
+                /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
@@ -342,9 +342,65 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $map = [];
         $websites = $this->_storeManager->getWebsites(true);
         foreach ($websites as $website) {
+            // Continue if website has no store to be able to create catalog rule for website without store
+            if ($website->getDefaultStore() === null) {
+                continue;
+            }
             $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
         return $map;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateData(\Magento\Framework\DataObject $dataObject)
+    {
+        $result = parent::validateData($dataObject);
+        if ($result === true) {
+            $result = [];
+        }
+
+        $action = $dataObject->getData('simple_action');
+        $discount = $dataObject->getData('discount_amount');
+        $result = array_merge($result, $this->validateDiscount($action, $discount));
+        if ($dataObject->getData('sub_is_enable') == 1) {
+            $action = $dataObject->getData('sub_simple_action');
+            $discount = $dataObject->getData('sub_discount_amount');
+            $result = array_merge($result, $this->validateDiscount($action, $discount));
+        }
+
+        return !empty($result) ? $result : true;
+    }
+
+    /**
+     * Validate discount based on action
+     *
+     * @param string $action
+     * @param string|int|float $discount
+     *
+     * @return array Validation errors
+     */
+    protected function validateDiscount($action, $discount)
+    {
+        $result = [];
+        switch ($action) {
+            case 'by_percent':
+            case 'to_percent':
+                if ($discount < 0 || $discount > 100) {
+                    $result[] = __('Percentage discount should be between 0 and 100.');
+                };
+                break;
+            case 'by_fixed':
+            case 'to_fixed':
+                if ($discount < 0) {
+                    $result[] = __('Discount value should be 0 or greater.');
+                };
+                break;
+            default:
+                $result[] = __('Unknown action.');
+        }
+        return $result;
     }
 
     /**

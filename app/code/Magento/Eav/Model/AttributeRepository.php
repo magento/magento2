@@ -6,7 +6,7 @@
  */
 namespace Magento\Eav\Model;
 
-use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -23,12 +23,12 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     protected $eavConfig;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $eavResource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
      */
     protected $attributeCollectionFactory;
 
@@ -49,16 +49,17 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
     /**
      * @param Config $eavConfig
-     * @param Resource\Entity\Attribute $eavResource
-     * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Eav\Model\Resource\Entity\Attribute $eavResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
@@ -93,7 +94,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             throw InputException::requiredField('entity_type_code');
         }
 
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection $attributeCollection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $attributeCollection */
         $attributeCollection = $this->attributeCollectionFactory->create();
         $this->joinProcessor->process($attributeCollection);
         $attributeCollection->addFieldToFilter('entity_type_code', ['eq' => $entityTypeCode]);
@@ -194,7 +195,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * Helper function that adds a FilterGroup to the collection.
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */

@@ -28,12 +28,12 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Wishlist\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -53,7 +53,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $itemFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemsFactory;
 
@@ -104,10 +104,10 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->helper = $this->getMockBuilder('Magento\Wishlist\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Wishlist')
+        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Wishlist')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Wishlist\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Wishlist\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
@@ -119,7 +119,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->itemsFactory = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\CollectionFactory')
+        $this->itemsFactory = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -184,8 +184,8 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int|\Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemId
-     * @param \Magento\Framework\Object $buyRequest
-     * @param null|array|\Magento\Framework\Object $param
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param null|array|\Magento\Framework\DataObject $param
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @dataProvider updateItemDataProvider
@@ -194,7 +194,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $productId = 1;
-        $stores = [(new \Magento\Framework\Object())->setId($storeId)];
+        $stores = [(new \Magento\Framework\DataObject())->setId($storeId)];
 
         $newItem = $this->getMockBuilder('Magento\Wishlist\Model\Item')->disableOriginalConstructor()->getMock();
         $newItem->expects($this->any())->method('setProductId')->will($this->returnSelf());
@@ -239,7 +239,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($product));
 
-        $items = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $items = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -280,7 +280,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     public function updateItemDataProvider()
     {
         return [
-            '0' => [1, new \Magento\Framework\Object(), null],
+            '0' => [1, new \Magento\Framework\DataObject(), null],
         ];
     }
 }

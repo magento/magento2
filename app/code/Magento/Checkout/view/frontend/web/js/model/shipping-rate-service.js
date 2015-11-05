@@ -18,11 +18,10 @@ define(
 
         quote.shippingAddress.subscribe(function () {
             var type = quote.shippingAddress().getType();
-            var rates = [];
             if (processors[type]) {
-                rates = processors[type].getRates(quote.shippingAddress());
+                processors[type].getRates(quote.shippingAddress());
             } else {
-                rates = processors['default'].getRates(quote.shippingAddress());
+                processors['default'].getRates(quote.shippingAddress());
             }
         });
 

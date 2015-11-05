@@ -11,7 +11,6 @@ use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -85,7 +84,6 @@ class Curl extends ProductCurl implements DownloadableProductInterface
                 $data['downloadable']['link'][$key]['price'] = $link['price'];
                 $data['downloadable']['link'][$key]['number_of_downloads'] = $link['number_of_downloads'];
                 $data['downloadable']['link'][$key]['is_shareable'] = $link['is_shareable'];
-                $data['downloadable']['link'][$key]['sort_order'] = $link['sort_order'];
                 $data['downloadable']['link'][$key]['sample']['type'] = 'url';
                 $data['downloadable']['link'][$key]['sample']['url'] = $link['sample']['sample_url'];
             }
@@ -116,7 +114,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 

@@ -4,13 +4,19 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div ng-include="'index.php/navigation/menu'"></div>
-<div
-    id="main"
-    class="main {{class}}"
-    ng-controller="mainController"
-    >
-    <div ui-view="root">
-        <div ui-view></div>
-    </div>
+<div ng-include="'index.php/navigation/side-menu'" style="display: inline-block"></div>
+<div class="{{$state.current.type == 'install' && !$state.current.wrapper ?  'container' : 'page-wrapper'}}">
+    <div ng-include="'index.php/navigation/header-bar'"></div>
+    <main id="anchor-content" class="page-content">
+        <?php echo $this->render('navigation/menu.phtml');?>
+        <div
+            id="main"
+            class="{{class}}"
+            ng-controller="mainController"
+            >
+            <div ui-view="root">
+                <div ui-view></div>
+            </div>
+        </div>
+    </main>
 </div>

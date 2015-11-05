@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="sales" translate="label" sortOrder="400">
             <label>Sales</label>
@@ -112,6 +112,12 @@
                     <label>Use Aggregated Data (beta)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Improves dashboard performance but provides non-realtime data.</comment>
+                </field>
+            </group>
+            <group id="orders" translate="label,comment" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Orders Cron Settings</label>
+                <field id="delete_pending_after" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Pending Payment Order Lifetime (minutes)</label>
                 </field>
             </group>
         </section>

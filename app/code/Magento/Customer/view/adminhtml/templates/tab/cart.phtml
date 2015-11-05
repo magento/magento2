@@ -12,7 +12,7 @@
 <div class="content-header skip-header">
     <table>
         <tr>
-            <td style="width:50%;"><h4><?php echo $block->getCartHeader(); ?></h4></td>
+            <td style="width:50%;"><h4><?php /* @escapeNotVerified */ echo $block->getCartHeader(); ?></h4></td>
         </tr>
     </table>
 </div>
@@ -24,22 +24,24 @@
 ?>
 <script>
 require([
+    "Magento_Ui/js/modal/alert",
+    "Magento_Ui/js/modal/confirm",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(){
+], function(alert, confirm){
 
-<?php echo $block->getJsObjectName() ?>cartControl = {
+<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>cartControl = {
     reload: function (params) {
         if (!params) {
             params = {};
         }
-        <?php echo $block->getJsObjectName() ?>.reloadParams = params;
-        <?php echo $block->getJsObjectName() ?>.reload();
-        <?php echo $block->getJsObjectName() ?>.reloadParams = {};
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reloadParams = params;
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reload();
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reloadParams = {};
     },
 
     configureItem: function (itemId) {
-        productConfigure.setOnLoadIFrameCallback('<?php echo $listType ?>', this.cbOnLoadIframe.bind(this));
-        productConfigure.showItemConfiguration('<?php echo $listType ?>', itemId);
+        productConfigure.setOnLoadIFrameCallback('<?php /* @escapeNotVerified */ echo $listType ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?php /* @escapeNotVerified */ echo $listType ?>', itemId);
         return false;
     },
 
@@ -51,17 +53,24 @@ require([
     },
 
     removeItem: function (itemId) {
+        var self = this;
+
         if (!itemId) {
-            alert('<?php echo $block->escapeJsQuote(__('No item specified.')) ?>');
-            return false;
-        }
-        if(!confirm('<?php echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>')) {
+            alert({
+                content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('No item specified.')) ?>'
+            });
+
             return false;
         }
 
-        this.reload({'delete':itemId});
-
-        return false;
+        confirm({
+            content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>',
+            actions: {
+                confirm: function(){
+                    self.reload({'delete':itemId});
+                }
+            }
+        });
     }
 };
 
@@ -72,10 +81,10 @@ $params = [
 ];
 ?>
 productConfigure.addListType(
-    '<?php echo $listType ?>',
+    '<?php /* @escapeNotVerified */ echo $listType ?>',
     {
-        urlFetch: '<?php echo $block->getUrl('customer/cart_product_composite_cart/configure', $params) ?>',
-        urlConfirm: '<?php echo $block->getUrl('customer/cart_product_composite_cart/update', $params) ?>'
+        urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/cart_product_composite_cart/configure', $params) ?>',
+        urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/cart_product_composite_cart/update', $params) ?>'
     }
 );
 

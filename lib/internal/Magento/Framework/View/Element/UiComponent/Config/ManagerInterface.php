@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Interface ManagerInterface
  */

@@ -5,17 +5,14 @@
  */
 
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $entityModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Eav\Model\Entity');
 $entityTypeId = $entityModel->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setAttributeCode(
     'fpt_for_all'
@@ -35,7 +32,7 @@ $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $product->setTypeId(
     'simple'
 )->setId(
-    1
+    101
 )->setAttributeSetId(
     $attributeSetId
 )->setStoreId(
@@ -43,11 +40,11 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product FPT'
 )->setSku(
     'simple'
 )->setPrice(
     100
 )->setFptForAll(
-    [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.07, 'delete' => '']]
+    [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 12.70, 'delete' => '']]
 )->save();

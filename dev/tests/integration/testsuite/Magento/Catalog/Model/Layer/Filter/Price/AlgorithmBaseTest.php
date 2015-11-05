@@ -29,7 +29,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
     protected $_filter;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     protected $priceResource;
 
@@ -38,7 +38,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
-     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
+     * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
@@ -57,10 +57,39 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             ),
         ];
 
+        /** @var \Magento\Framework\Search\EntityMetadata $entityMetadata */
+        $entityMetadata = $objectManager->create('Magento\Framework\Search\EntityMetadata', ['entityId' => 'id']);
+        $idKey = $entityMetadata->getEntityId();
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
+        $documentFactory = $objectManager->create(
+            'Magento\Framework\Search\Adapter\Mysql\DocumentFactory',
+            ['entityMetadata' => $entityMetadata]
+        );
+
+        /** @var \Magento\Framework\Search\Document[] $documents */
+        $documents = [];
+        foreach ($entityIds as $entityId) {
+            $rawDocument = [
+                [
+                    'name' => $idKey,
+                    'value' => $entityId,
+                ],
+                [
+                    'name' => 'score',
+                    'value' => 1,
+                ],
+            ];
+            $documents[] = $documentFactory->create($rawDocument);
+        }
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
+        $temporaryStorage = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\TemporaryStorage');
+        $table = $temporaryStorage->storeDocuments($documents);
+
         /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
         $dataProvider = $objectManager->create('Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider');
-        $select = $dataProvider->getDataSet($termBucket, $dimensions);
-        $select->where('main_table.entity_id IN (?)', $entityIds);
+        $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
         $intervalFactory = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory');

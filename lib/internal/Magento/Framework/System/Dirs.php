@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\System;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 class Dirs
 {
     /**
@@ -73,7 +75,7 @@ class Dirs
      * @return true
      * @throws \Exception
      */
-    public static function mkdirStrict($path, $recursive = true, $mode = 0777)
+    public static function mkdirStrict($path, $recursive = true, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
     {
         $exists = file_exists($path);
         if ($exists && is_dir($path)) {

@@ -33,7 +33,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     public function getTabLabel()
     {
-        return __('Frontend App Options');
+        return __('Widget Options');
     }
 
     /**
@@ -43,7 +43,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     public function getTabTitle()
     {
-        return __('Frontend App Options');
+        return __('Widget Options');
     }
 
     /**
@@ -105,7 +105,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Add field to Options form based on option configuration
      *
-     * @param \Magento\Framework\Object $parameter
+     * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _addField($parameter)

@@ -74,7 +74,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'not_delete' => '72701',  // not deleted address
     ];
 
-    /** @var \Magento\Customer\Model\Resource\Customer */
+    /** @var \Magento\Customer\Model\ResourceModel\Customer */
     protected $customerResource;
 
     /**
@@ -82,9 +82,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->customerResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Model\Resource\Customer'
+            'Magento\Customer\Model\ResourceModel\Customer'
         );
         $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             $this->_testClassName
@@ -110,11 +110,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // check message templates
         $this->assertAttributeInternalType(
             'array',
-            '_messageTemplates',
+            'errorMessageTemplates',
             $this->_entityAdapter,
             'Templates must be an array.'
         );
-        $this->assertAttributeNotEmpty('_messageTemplates', $this->_entityAdapter, 'Templates must not be empty');
+        $this->assertAttributeNotEmpty('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
 
         // check attributes
         $this->assertAttributeInternalType(
@@ -243,7 +243,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Model\Address'
         );
         $tableName = $addressModel->getResource()->getEntityTable();
-        $addressId = $objectManager->get('Magento\ImportExport\Model\Resource\Helper')
+        $addressId = $objectManager->get('Magento\ImportExport\Model\ResourceModel\Helper')
             ->getNextAutoincrement($tableName);
 
         $newEntityData = [
@@ -398,7 +398,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
-        )->isDataValid();
+        )
+            ->validateData()
+            ->hasToBeTerminated();
         $this->assertFalse($result, 'Validation result must be false.');
 
         // import data
@@ -415,7 +417,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // get addresses
         $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Address\Collection'
+            'Magento\Customer\Model\ResourceModel\Address\Collection'
         );
         $addressCollection->addAttributeToSelect($requiredAttributes);
         $addresses = [];
@@ -492,8 +494,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
-        )->isDataValid();
-        $this->assertTrue($result, 'Validation result must be true.');
+        )->validateData()->hasToBeTerminated();
+        $this->assertTrue(!$result, 'Validation result must be true.');
 
         // import data
         $this->_entityAdapter->importData();
@@ -502,9 +504,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $keyAttribute = 'postcode';
 
         // get addresses
-        /** @var $addressCollection \Magento\Customer\Model\Resource\Address\Collection */
+        /** @var $addressCollection \Magento\Customer\Model\ResourceModel\Address\Collection */
         $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Address\Collection'
+            'Magento\Customer\Model\ResourceModel\Address\Collection'
         );
         $addressCollection->addAttributeToSelect($keyAttribute);
         $addresses = [];

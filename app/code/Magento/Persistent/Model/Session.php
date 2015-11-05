@@ -107,7 +107,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -123,7 +123,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -142,10 +142,11 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Persistent\Model\Resource\Session');
+        $this->_init('Magento\Persistent\Model\ResourceModel\Session');
     }
 
     /**
@@ -153,6 +154,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $loadExpired
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setLoadExpired($loadExpired = true)
     {
@@ -176,6 +178,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return string
+     * @codeCoverageIgnore
      */
     public function getExpiredBefore($store = null)
     {
@@ -220,7 +223,10 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        $info = $this->jsonHelper->jsonDecode($this->getInfo());
+        $info = null;
+        if ($this->getInfo()) {
+            $info = $this->jsonHelper->jsonDecode($this->getInfo());
+        }
         if (is_array($info)) {
             foreach ($info as $key => $value) {
                 $this->setData($key, $value);
@@ -252,6 +258,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $id
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCustomerId($id)
     {
@@ -351,6 +358,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Delete 'persistent' cookie
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function afterDeleteCommit()
     {

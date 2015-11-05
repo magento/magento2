@@ -37,15 +37,20 @@ class ReturnWizard extends \Magento\Paypal\Controller\Billing\Agreement
                     $this->_getSession()->getCustomerId()
                 )->place();
 
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('The billing agreement "%1" has been created.', $agreement->getReferenceId())
                 );
                 return $resultRedirect->setPath('*/*/view', ['agreement' => $agreement->getId()]);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    $e->getMessage()
+                );
             } catch (\Exception $e) {
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->messageManager->addError(__('We couldn\'t finish the billing agreement wizard.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('We couldn\'t finish the billing agreement wizard.')
+                );
             }
 
             return $resultRedirect->setPath('*/*/index');

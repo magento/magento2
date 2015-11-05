@@ -61,7 +61,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
     protected $catalogProductHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -99,9 +99,9 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->disableOriginalConstructor()
-            ->setMethods(['getIdFieldName', '_construct', '_getReadAdapter', '_getWriteAdapter'])
+            ->setMethods(['getIdFieldName', '_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
@@ -127,7 +127,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetExcludeProductIds()
     {
-        $collection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Compare\Item\Collection')
+        $collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getEntityId'])
             ->getMock();

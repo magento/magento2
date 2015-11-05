@@ -34,16 +34,20 @@ class FilterFactory
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+     * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context)
+    public function create($attribute, $context, $config = [])
     {
         $columnName = $attribute->getAttributeCode();
-        $config = [
-            'dataScope' => $columnName,
-            'label' => __($attribute->getDefaultFrontendLabel()),
-        ];
-        if ($attribute->usesSource()) {
+        $config = array_merge(
+            [
+                'dataScope' => $columnName,
+                'label' => __($attribute->getDefaultFrontendLabel()),
+            ],
+            $config
+        );
+        if ($attribute->usesSource() && $attribute->getSourceModel()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
             $config['caption'] = __('Select...');
         }

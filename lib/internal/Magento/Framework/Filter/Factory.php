@@ -19,7 +19,7 @@ class Factory extends AbstractFactory
         'email' => 'Magento\Framework\Filter\Email',
         'money' => 'Magento\Framework\Filter\Money',
         'simple' => 'Magento\Framework\Filter\Template\Simple',
-        'object' => 'Magento\Framework\Filter\Object',
+        'object' => 'Magento\Framework\Filter\DataObject',
         'sprintf' => 'Magento\Framework\Filter\Sprintf',
         'template' => 'Magento\Framework\Filter\Template',
         'arrayFilter' => 'Magento\Framework\Filter\ArrayFilter',

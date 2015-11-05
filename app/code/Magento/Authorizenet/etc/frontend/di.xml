@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Authorizenet\Model\Directpost">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
@@ -23,13 +23,13 @@
             <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
         </arguments>
     </type>
-    <virtualType name="AuthorizenetCcConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="directpost" xsi:type="const">Magento\Authorizenet\Model\Directpost::METHOD_CODE</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <virtualType name="DirectpostIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Authorizenet\Model\Directpost::METHOD_CODE</argument>
@@ -38,7 +38,6 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="authorizenet_cc_config_provider" xsi:type="object">AuthorizenetCcConfigProvider</item>
                 <item name="authorizenet_iframe_cc_config_provider" xsi:type="object">DirectpostIframeCcConfigProvider</item>
             </argument>
         </arguments>

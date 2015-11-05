@@ -7,11 +7,9 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Stdlib\String as StringHelper;
-use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Dir
 {
@@ -25,37 +23,18 @@ class Dir
     /**#@-*/
 
     /**
-     * Modules root directory
-     *
-     * @var ReadInterface
-     */
-    protected $_modulesDirectory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\String
-     */
-    protected $_string;
-
-    /**
      * Module registry
      *
-     * @var ModuleRegistryInterface
+     * @var ComponentRegistrarInterface
      */
-    private $moduleRegistry;
+    private $componentRegistrar;
 
     /**
-     * @param Filesystem $filesystem
-     * @param StringHelper $string
-     * @param ModuleRegistryInterface $moduleRegistry
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(
-        Filesystem $filesystem,
-        StringHelper $string,
-        ModuleRegistryInterface $moduleRegistry
-    ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
-        $this->_string = $string;
-        $this->moduleRegistry = $moduleRegistry;
+    public function __construct(ComponentRegistrarInterface $componentRegistrar)
+    {
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -68,10 +47,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        if (null === $path = $this->moduleRegistry->getModulePath($moduleName)) {
-            $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
-            $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
-        }
+        $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
 
         if ($type) {
             if (!in_array($type, [

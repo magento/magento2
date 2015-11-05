@@ -6,11 +6,13 @@
 -->
 <div
     class="admin__data-grid-filters-current"
-    data-bind="css: {_show: hasData()}">
+    data-bind="css: {
+        _show: hasPreviews()
+    }">
     <div class="admin__current-filters-title-wrap">
         <span
             class="admin__current-filters-title"
-            data-bind="text: $t('Active filters:')"></span>
+            data-bind="i18n: 'Active filters:'"></span>
     </div>
     <div class="admin__current-filters-list-wrap">
         <ul class="admin__current-filters-list" data-role="filter-list">
@@ -34,7 +36,7 @@
                         data-action="grid-filter-remove-chip"
                         data-bind="click: $parent.clear.bind($parent, elem)"
                         type="button">
-                        <span data-bind="text: $t('Remove')"></span>
+                        <span data-bind="i18n: 'Remove'"></span>
                     </button>
                 </li>
                 <!-- /ko -->
@@ -47,10 +49,10 @@
             type="button"
             data-action="grid-filter-reset"
             data-bind="
-                text: $t('Clear all'),
+                i18n: 'Clear all',
                 click: clear,
                 attr: {
-                    'data-action': hasData() ? 'grid-filter-reset' : ''
+                    'data-action': hasPreviews() ? 'grid-filter-reset' : ''
                 }"
             ></button>
     </div>

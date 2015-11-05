@@ -11,19 +11,19 @@ use Magento\Mtf\Client\Locator;
 
 /**
  * Class Product
- * Wishlist item product form
+ * Wish List item Product form
  */
 class Product extends Form
 {
     /**
-     * Selector for 'Add to Cart' button
+     * Locator value for "Add to Cart" button.
      *
      * @var string
      */
     protected $addToCart = '.action.tocart';
 
     /**
-     * Selector for 'Remove item' button
+     * Locator value for "Remove item" button.
      *
      * @var string
      */
@@ -37,74 +37,84 @@ class Product extends Form
     protected $viewDetails = '.details.tooltip';
 
     /**
-     * Selector for 'Details block' element
+     * Locator value for "Details" block.
      *
      * @var string
      */
     protected $detailsBlock = '.product-item-tooltip';
 
     /**
-     * Edit button css selector
+     * Locator value for "Edit" button.
      *
      * @var string
      */
     protected $edit = '.action.edit';
 
     /**
-     * Selector for option's label
+     * Locator value for option's label.
      *
      * @var string
      */
     protected $optionLabel = '.tooltip.content .label';
 
     /**
-     * Selector for option's value
+     * Locator value for option's value.
      *
      * @var string
      */
     protected $optionValue = '.tooltip.content .values';
 
     /**
-     * Selector for click on footer block
+     * Locator value for Footer block.
      *
      * @var string
      */
     protected $footer = './ancestor::body//footer';
 
     /**
-     * Fill item product details
+     * Locator value for item Price.
+     *
+     * @var string
+     */
+    protected $price = '.price';
+
+    /**
+     * Fill item with details.
      *
      * @param array $fields
      * @return void
      */
     public function fillProduct(array $fields)
     {
+        $this->hoverProductBlock();
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping);
     }
 
     /**
-     * Click button 'Add To Cart'
+     * Click "Add to Cart" button.
      *
      * @return void
      */
     public function clickAddToCart()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->addToCart)->click();
     }
 
     /**
-     * Remove product from wish list
+     * Remove item from Wish List.
      *
      * @return void
      */
     public function remove()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->remove)->click();
     }
 
     /**
-     * Get product options
+     * Get Product options.
      *
      * @return array|null
      */
@@ -134,12 +144,39 @@ class Product extends Form
     }
 
     /**
-     * Click edit button
+     * Click "Edit" button.
      *
      * @return void
      */
     public function clickEdit()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->edit)->click();
+    }
+
+    /**
+     * Hover Product block so that possible actions appear.
+     *
+     * @return void
+     */
+    public function hoverProductBlock()
+    {
+        $this->_rootElement->find($this->price)->hover();
+    }
+
+    /**
+     * Get Wish List data for the Product.
+     *
+     * @param mixed $qty
+     * @return array
+     */
+    public function getWishlistData($qty = null)
+    {
+        $this->hoverProductBlock();
+        $mapping = $this->dataMapping();
+        if (!is_numeric($qty)) {
+            unset($mapping['qty']);
+        }
+        return $this->_getData($mapping);
     }
 }

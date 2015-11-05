@@ -36,16 +36,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         /** @var $_configDataObject \Magento\Config\Model\Config */
         $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Config\Model\Config');
-        $_configDataObject->setSection('dev')->setWebsite('base');
-
-        $_configData = $_configDataObject->load();
-        $this->assertArrayHasKey('dev/debug/template_hints', $_configData);
+        $_configData = $_configDataObject->setSection('dev')->load();
+        $this->assertArrayHasKey('dev/debug/template_hints_admin', $_configData);
         $this->assertArrayHasKey('dev/debug/template_hints_blocks', $_configData);
 
         $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Config\Model\Config');
-        $_configDataObject->setSection('dev');
-        $_configData = $_configDataObject->load();
-        $this->assertArrayNotHasKey('dev/debug/template_hints', $_configData);
+        $_configData = $_configDataObject->setSection('dev')->setWebsite('base')->load();
+        $this->assertArrayNotHasKey('dev/debug/template_hints_admin', $_configData);
         $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
     }
 

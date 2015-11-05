@@ -10,9 +10,9 @@ use \Magento\Framework\Module\PackageInfo;
 class PackageInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $loader;
+    private $componentRegistrar;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -26,11 +26,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->loader->expects($this->once())
-            ->method('load')
-            ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPaths')
+            ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
 
         $composerData = [
             'A/composer.json' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
@@ -47,7 +47,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->loader, $this->reader, new \Magento\Framework\Stdlib\String());
+        $this->packageInfo = new PackageInfo($this->reader, $this->componentRegistrar);
     }
 
     public function testGetModuleName()
@@ -57,6 +57,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('C', $this->packageInfo->getModuleName('c'));
         $this->assertEquals('D', $this->packageInfo->getModuleName('d'));
         $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
+        $this->assertEquals(
+            'Magento_TestModuleName',
+            $this->packageInfo->getModuleName('magento/module-test-module-name')
+        );
+        $this->assertArrayHasKey('Magento_TestModuleName', $this->packageInfo->getNonExistingDependencies());
     }
 
     public function testGetPackageName()

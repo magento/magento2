@@ -42,6 +42,7 @@ define([
             var self = this;
             $(event.handleObj.selector).each(function(index, element){
                 if ($(element).is('input[type=text]')
+                    || $(element).is('input[type=email]')
                     || $(element).is('input[type=checkbox]:checked')
                     || $(element).is('input[type=radio]:checked')
                     || $('#' + element.id + ' option:selected').length
@@ -65,7 +66,7 @@ define([
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
                 if (!params)
-                    params = {};
+                    params = {'data': {}};
 
                 if (!$.isEmptyObject(dataToAdd)) {
                     self._removeExcessiveData(params, dataToAdd);

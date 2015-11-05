@@ -7,39 +7,16 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $expressions = []; foreach ( $this->main as $item ): ?>
-    <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')'; ?>
-<?php endforeach; ?>
 
-<header
-    class="header ng-cloak"
-    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
-    >
-    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
-    <h1 class="header-title">Magento Installation</h1>
-</header>
-
-<nav
-    ng-controller="navigationController"
-    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
-    id="menu"
-    class="nav ng-cloak"
-    >
-
+<nav ng-controller="navigationController" id="menu" class="nav ng-scope show"
+         ng-hide="$state.current.noMenu || $state.current.main || $state.current.default">
     <ul class="nav-bar">
-        <?php foreach ($this->menu as $item): ?>
-        <li ng-class="{ active: $state.includes('<?php echo $item['id'] ?>'), disabled: itemStatus(<?php echo $item['order']; ?>)}"
-            id="<?php echo $item['id']; ?>"
-            >
+        <li ng-repeat="menuState in menu | filter: {type: $state.current.type}:true"
+            ng-class="{active: $state.includes(menuState.id), disabled: itemStatus(menuState.order)}">
             <a
-                ng-class=""
-                ui-sref="<?php echo $item['id']; ?>"
-                href="#/<?php echo $item['url']; ?>"
-                >
-                <?php echo nl2br( $item['title'] ); ?>
-            </a>
+               class="white-space-pre-line" ui-sref="{{menuState.id}}"
+               href="{{menuState.url}}">{{menuState.title}}</a>
         </li>
-        <?php endforeach; ?>
     </ul>
-
 </nav>
+

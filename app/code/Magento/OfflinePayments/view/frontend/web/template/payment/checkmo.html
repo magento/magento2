@@ -13,6 +13,9 @@
         <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -21,13 +24,13 @@
         <!-- ko if: getMailingAddress() || getPayableTo() -->
         <dl class="items check payable">
             <!-- ko if: getPayableTo() -->
-            <dt class="title"><!-- ko text: $t('Make Check payable to:') --><!-- /ko --></dt>
-            <dd class="content"><!-- ko text: $t(getPayableTo()) --><!-- /ko --></dd>
+            <dt class="title"><!-- ko i18n: 'Make Check payable to:' --><!-- /ko --></dt>
+            <dd class="content"><!-- ko text: getPayableTo() --><!-- /ko --></dd>
             <!-- /ko -->
             <!-- ko if: getMailingAddress() -->
-            <dt class="title"><!-- ko text: $t('Send Check to:') --><!-- /ko --></dt>
+            <dt class="title"><!-- ko i18n: 'Send Check to:' --><!-- /ko --></dt>
             <dd class="content">
-                <address class="checkmo mailing address" data-bind="html: $t(getMailingAddress())"></address>
+                <address class="checkmo mailing address" data-bind="html: getMailingAddress()"></address>
             </dd>
             <!-- /ko -->
         </dl>
@@ -48,7 +51,7 @@
                         enable: (getCode() == isChecked())
                         "
                         disabled>
-                    <span data-bind="text: $t('Place Order')"></span>
+                    <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>

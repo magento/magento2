@@ -4,22 +4,24 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 // @codingStandardsIgnoreFile
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 ?>
-<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
+<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?php echo $block->getSaveAsFlag() ?>" />
+        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?php /* @escapeNotVerified */ echo $block->getSaveAsFlag() ?>" />
     </div>
-    <?php echo $block->getForm() ?>
+    <?php /* @escapeNotVerified */ echo $block->getForm() ?>
 </form>
-<form action="<?php echo $block->getPreviewUrl() ?>" method="post" id="newsletter_template_preview_form" target="_blank">
+<form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="newsletter_template_preview_form" target="_blank">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
@@ -29,9 +31,11 @@
 require([
     'jquery',
     'tinymce',
+    'Magento_Ui/js/modal/prompt',
+    'Magento_Ui/js/modal/confirm',
     'mage/mage',
     'prototype'
-], function(jQuery, tinyMCE){
+], function(jQuery, tinyMCE, prompt, confirm){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
@@ -79,20 +83,26 @@ require([
         },
 
         stripTags: function () {
-            if(!window.confirm("<?php echo __('Are you sure that you want to strip all tags?') ?>")) {
-                return false;
-            }
-            if(this.isEditor()) {
-                this.getEditor().turnOff();
-                this.getEditor().getToggleButton().hide();
-            }
-            this.unconvertedText = $(this.id).value;
-            $('convert_button').hide();
-            $('convert_button_back').show();
-            $(this.id).value =  $(this.id).value.stripScripts().stripTags();
-            $('field_template_styles').hide();
-            this.typeChange = true;
-            return false;
+            var self = this;
+
+            confirm({
+                content: "<?php /* @escapeNotVerified */ echo __('Are you sure that you want to strip all tags?') ?>",
+                actions: {
+                    confirm: function(){
+                        if(self.isEditor()) {
+                            self.getEditor().turnOff();
+                            self.getEditor().getToggleButton().hide();
+                        }
+                        self.unconvertedText = $(self.id).value;
+                        $('convert_button').hide();
+                        $('convert_button_back').show();
+                        $(self.id).value =  $(self.id).value.stripScripts().stripTags();
+                        $('field_template_styles').hide();
+                        self.typeChange = true;
+                    }
+                }
+            });
+
         },
 
         unStripTags: function () {
@@ -121,24 +131,38 @@ require([
         },
 
         saveAs: function() {
+            var self = this;
+
             if (this.typeChange) {
                 $('change_flag_element').value = '1';
             }
 
             if($F('code').blank() || $F('code')==templateControl.templateName) {
-               value = prompt('<?php echo __('Please enter a new template name.') ?>', templateControl.templateName + '<?php echo __(' Copy') ?>');
-               if(!value) {
-                   if(value !== null) {
-                       $('code').value = '';
-                       // Temporary solution will be replaced after refactoring of newsletter functionality
-                       jQuery('#newsletter_template_edit_form').triggerHandler('save');
-                   }
-                   return false;
-               } else {
-                   $('code').value = value;
-               }
-            }
 
+                prompt({
+                    content: '<?php /* @escapeNotVerified */ echo __('Please enter a new template name.') ?>',
+                    value: templateControl.templateName + '<?php /* @escapeNotVerified */ echo __(' Copy') ?>',
+                    actions: {
+                        confirm: function(value) {
+                            $('code').value = value;
+                            self._saveAs();
+
+                            return false;
+                        },
+                        cancel: function(){
+                            $('code').value = '';
+                            // Temporary solution will be replaced after refactoring of newsletter functionality
+                            jQuery('#newsletter_template_edit_form').triggerHandler('save');
+                            self._saveAs();
+
+                            return false;
+                        }
+                    }
+                });
+            }
+        },
+
+        _saveAs: function() {
             $('save_as_flag').value = '1';
 
             if(this.isEditor()) {
@@ -151,9 +175,9 @@ require([
 
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = 1;
+                $('preview_type').value = <?php /* @escapeNotVerified */ echo TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
-                $('preview_type').value = 2;
+                $('preview_type').value = <?php /* @escapeNotVerified */ echo $block->getTemplateType() ?>;
             }
             if (this.isEditor() && tinyMCE.get(this.id)) {
                 tinyMCE.triggerSave();
@@ -174,9 +198,14 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php echo __('Are you sure you want to delete this template?') ?>")) {
-                   window.location.href = '<?php echo $block->getDeleteUrl() ?>';
-            }
+            confirm({
+                content: "<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this template?') ?>",
+                actions: {
+                    confirm: function() {
+                        window.location.href = '<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>';
+                    }
+                }
+            });
         },
 
         isEditor: function() {
@@ -189,7 +218,7 @@ require([
     };
 
     templateControl.init();
-    templateControl.templateName = "<?php echo $block->getJsTemplateName() ?>";
+    templateControl.templateName = "<?php /* @escapeNotVerified */ echo $block->getJsTemplateName() ?>";
 //]]>
 
 });

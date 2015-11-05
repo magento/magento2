@@ -38,12 +38,12 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavAttribute;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -58,14 +58,12 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            '\Magento\Framework\Model\Resource\AbstractResource',
+            '\Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 'updateAttributes',
-                '_getWriteAdapter',
-                '_getReadAdapter',
+                'getConnection',
                 '_construct',
                 'getIdFieldName',
-                'getConnection'
             ],
             [],
             '',
@@ -97,13 +95,19 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->eavAttribute = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['__wakeup', 'isIndexable'],
             [],
             '',
             false
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

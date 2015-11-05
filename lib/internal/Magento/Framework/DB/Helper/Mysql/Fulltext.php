@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Helper\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Fulltext
 {
@@ -42,14 +42,14 @@ class Fulltext
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private $adapter;
+    private $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
-        $this->adapter = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->connection = $resource->getConnection();
     }
     
     /**
@@ -66,7 +66,7 @@ class Fulltext
             $columns = implode(', ', $columns);
         }
 
-        $expression = $this->adapter->quote($expression);
+        $expression = $this->connection->quote($expression);
 
         $condition = self::MATCH . " ({$columns}) " . self::AGAINST . " ({$expression} {$mode})";
         return $condition;

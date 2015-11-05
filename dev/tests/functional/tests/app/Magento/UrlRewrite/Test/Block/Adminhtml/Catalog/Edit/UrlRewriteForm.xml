@@ -31,6 +31,5 @@
             <selector>[name=description]</selector>
             <input>text</input>
         </description>
-        <redirect/>
     </fields>
 </mapping>

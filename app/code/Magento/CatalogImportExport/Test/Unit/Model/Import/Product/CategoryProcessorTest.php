@@ -59,7 +59,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
 
         $categoryCollection =
             $this->objectManagerHelper->getCollectionMock(
-                'Magento\Catalog\Model\Resource\Category\Collection',
+                'Magento\Catalog\Model\ResourceModel\Category\Collection',
                 [
                     self::PARENT_CATEGORY_ID => $parentCategory,
                     self::CHILD_CATEGORY_ID => $childCategory,
@@ -82,7 +82,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $categoryColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
             ['create'],
             [],
             '',
@@ -110,7 +110,8 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testUpsertCategories()
     {
-        $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME);
+        $categoriesSeparator = ',';
+        $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME, $categoriesSeparator);
         $this->assertArrayHasKey(self::CHILD_CATEGORY_ID, array_flip($categoryIds));
     }
 

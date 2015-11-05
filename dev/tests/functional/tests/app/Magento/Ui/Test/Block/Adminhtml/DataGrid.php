@@ -12,6 +12,8 @@ use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DataGrid extends Grid
 {
@@ -44,6 +46,20 @@ class DataGrid extends Grid
     protected $selectItem = 'tbody tr [data-action="select-row"]';
 
     /**
+     * Secondary part of row locator template for getRow() method
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[*[contains(.,normalize-space("%s"))]]';
+
+    /**
+     * Secondary part of row locator template for getRow() method with strict option
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[*[text()[normalize-space()="%s"]]]';
+
+    /**
      * Mass action toggle list.
      *
      * @var string
@@ -55,7 +71,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleButton = '.action-multiselect-toggle';
+    protected $massActionToggleButton = 'th [data-toggle="dropdown"]';
 
     /**
      * Mass action button.
@@ -72,6 +88,61 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
+     * Column header locator.
+     *
+     * @var string
+     */
+    protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
+
+    /**
+     * @var string
+     */
+    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+
+    /**
+     * @var string
+     */
+    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchField = '.data-grid-search-control-wrap .data-grid-search-control';
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
+
+    /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '[class$=no-data]';
+
+    /**
+     * Selector for alert.
+     *
+     * @var string
+     */
+    protected $alertModal = '._show[data-role=modal]';
+
+    /**
+     * Locator for 'Sort' link.
+     *
+     * @var string
+     */
+    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+
+    /**
+     * Current page input.
+     *
+     * @var string
+     */
+    protected $currentPage = '#pageCurrent';
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -82,6 +153,7 @@ class DataGrid extends Grid
         if ($chipsHolder->isVisible()) {
             parent::resetFilter();
         }
+        $this->waitLoader();
     }
 
     /**
@@ -177,28 +249,142 @@ class DataGrid extends Grid
      */
     public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
+        $this->waitLoader();
+        $this->resetFilter();
         if ($this->_rootElement->find($this->noRecords)->isVisible()) {
             return;
         }
-        if (!is_array($action)) {
-            $action = [$action => '-'];
-        }
-        foreach ($items as $item) {
-            $this->searchAndSelect($item);
-        }
+        $this->selectItems($items);
         if ($massActionSelection) {
             $this->_rootElement->find($this->massActionToggleButton)->click();
             $this->_rootElement
                 ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
                 ->click();
         }
-        $actionType = key($action);
+        $actionType = is_array($action) ? key($action) : $action;
         $this->_rootElement->find($this->massActionButton)->click();
         $this->_rootElement
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
-        if ($acceptAlert) {
-            $this->browser->find($this->actionButton)->click();
+        if (is_array($action)) {
+            $this->_rootElement
+                ->find(sprintf($this->massActionToggleList, end($action)), Locator::SELECTOR_XPATH)
+                ->click();
         }
+        if ($acceptAlert) {
+            $element = $this->browser->find($this->alertModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
+        }
+    }
+
+    /**
+     * Select items without using grid search.
+     *
+     * @param array $items
+     * @param bool $isSortable
+     * @return void
+     * @throws \Exception
+     */
+    public function selectItems(array $items, $isSortable = true)
+    {
+        if ($isSortable) {
+            $this->sortGridByField('ID');
+        }
+        foreach ($items as $item) {
+            $this->_rootElement->find($this->currentPage)->setValue('');
+            $this->waitLoader();
+            $selectItem = $this->getRow($item)->find($this->selectItem);
+            do {
+                if ($selectItem->isVisible()) {
+                    if (!$selectItem->isSelected()) {
+                        $selectItem->click();
+                    }
+                    break;
+                }
+            } while ($this->nextPage());
+            if (!$selectItem->isVisible()) {
+                throw new \Exception('Searched item was not found.');
+            }
+        }
+    }
+
+    /**
+     * Sort grid by field.
+     *
+     * @param string $field
+     * @param string $sort
+     * @return void
+     */
+    public function sortGridByField($field, $sort = "desc")
+    {
+        $reverseSort = $sort == 'desc' ? 'asc' : 'desc';
+        $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $reverseSort, $field), Locator::SELECTOR_XPATH);
+        if ($sortBlock->isVisible()) {
+            $sortBlock->click();
+            $this->waitLoader();
+        }
+    }
+
+    /**
+     * @param string $columnLabel
+     */
+    public function sortByColumn($columnLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getFirstItemId()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        return $this->_rootElement->find($this->selectItem)->getValue();
+    }
+
+    /**
+     * Return ids of all items currently displayed in grid
+     *
+     * @return string[]
+     */
+    public function getAllIds()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $rowsCheckboxes = $this->_rootElement->getElements($this->selectItem);
+        $ids = [];
+        foreach ($rowsCheckboxes as $checkbox) {
+            $ids[] = $checkbox->getValue();
+        }
+        return $ids;
+    }
+
+    /**
+     * @param string $id
+     * @param string $headerLabel
+     * @return array|string
+     */
+    public function getColumnValue($id, $headerLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * @param string $text
+     */
+    public function fullTextSearch($text)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find($this->fullTextSearchField)->setValue($text);
+        $this->_rootElement->find($this->fullTextSearchButton)->click();
     }
 }

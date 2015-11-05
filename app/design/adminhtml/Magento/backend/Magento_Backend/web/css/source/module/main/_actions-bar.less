@@ -48,7 +48,7 @@
             z-index: @page-actions__fixed__z-index;
             .page-actions-inner {
                 &:before {
-                    .text-overflow-ellipsis();
+                    .lib-text-overflow-ellipsis();
                     color: @page-title__color;
                     content: attr(data-title);
                     float: left;
@@ -72,7 +72,7 @@
         &.action-back {
             //  ToDo UI: Should be changed to ._back
             float: left;
-            .vendor-prefix-order(-1);
+            .lib-vendor-prefix-order(-1);
             &:before {
                 &:extend(.abs-icon all);
                 content: @icon-back-arrow__content;
@@ -86,24 +86,24 @@
             //  ToDo UI: Should be changed to .action-primary
             &:extend(.abs-action-primary all);
             &:extend(.abs-action-l all);
-            .vendor-prefix-order(2);
+            .lib-vendor-prefix-order(2);
         }
         &.save {
             //  ToDo UI: Should be changed to ._save
             &:not(.primary) {
-                .vendor-prefix-order(1);
+                .lib-vendor-prefix-order(1);
             }
         }
         &.delete {
             //  ToDo UI: Should be changed to ._delete
-            .vendor-prefix-order(-1);
+            .lib-vendor-prefix-order(-1);
         }
     }
     .actions-split {
         &:extend(.abs-actions-split-xl all);
         float: right;
         margin-left: @_page-action__indent;
-        .vendor-prefix-order(2);
+        .lib-vendor-prefix-order(2);
         .dropdown-menu {
             .item {
                 display: block;
@@ -115,7 +115,7 @@
 .page-actions-buttons {
     float: right;
     justify-content: flex-end;
-    .vendor-prefix-display(flex);
+    .lib-vendor-prefix-display(flex);
     .customer-index-edit & {
         background-color: transparent;
     }

@@ -14,11 +14,15 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $order = $this->_initOrder();
         $resultRedirect = $this->resultRedirectFactory->create();
+        if (!$this->isValidPostRequest()) {
+            $this->messageManager->addError(__('You have not put the order on hold.'));
+            return $resultRedirect->setPath('sales/*/');
+        }
+        $order = $this->_initOrder();
         if ($order) {
             try {
-                $order->hold()->save();
+                $this->orderManagement->hold($order->getEntityId());
                 $this->messageManager->addSuccess(__('You put the order on hold.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

@@ -14,7 +14,6 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -356,12 +355,12 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
                 continue;
             }
             $url = $_ENV['app_backend_url'] . 'sales/order_create/loadBlock/block/' . $step . '?isAjax=true';
-            $curl->write(CurlInterface::POST, $url, '1.1', [], $data[$key]);
+            $curl->write($url, $data[$key]);
             $curl->read();
         }
         $url = $_ENV['app_backend_url'] . 'sales/order_create/save';
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.1', [], $data['order_data']);
+        $curl->write($url, $data['order_data']);
         $response = $curl->read();
         $curl->close();
 

@@ -20,14 +20,21 @@ class Cancel extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
         if ($agreementModel && $agreementModel->canCancel()) {
             try {
                 $agreementModel->cancel();
-                $this->messageManager->addSuccess(__('You canceled the billing agreement.'));
+                $this->messageManager->addSuccessMessage(
+                    __('You canceled the billing agreement.')
+                );
                 $this->_redirect('paypal/*/view', ['_current' => true]);
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    $e->getMessage()
+                );
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t cancel the billing agreement.'));
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('We can\'t cancel the billing agreement.')
+                );
             }
             $this->_redirect('paypal/*/view', ['_current' => true]);
         }

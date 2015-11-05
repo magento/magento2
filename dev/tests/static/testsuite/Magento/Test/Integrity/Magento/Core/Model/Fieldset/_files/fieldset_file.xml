@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:DataObject/etc/fieldset_file.xsd">
     <scope id="global">
         <fieldset id="sales_copy_order">
             <field name="customer_email">

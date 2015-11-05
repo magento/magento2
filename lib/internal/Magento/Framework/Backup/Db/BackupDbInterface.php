@@ -14,4 +14,11 @@ interface BackupDbInterface
      * @return void
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup);
+
+    /**
+     * Get database backup size
+     *
+     * @return int
+     */
+    public function getDBBackupSize();
 }

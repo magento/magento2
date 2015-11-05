@@ -12,7 +12,7 @@ namespace Magento\Sales\Model\Convert;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Order extends \Magento\Framework\Object
+class Order extends \Magento\Framework\DataObject
 {
     /**
      * Core event manager proxy
@@ -22,9 +22,9 @@ class Order extends \Magento\Framework\Object
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
-    protected $_orderInvoiceFactory;
+    protected $invoiceRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice\ItemFactory
@@ -32,14 +32,14 @@ class Order extends \Magento\Framework\Object
     protected $_invoiceItemFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
-    protected $_orderShipmentFactory;
+    protected $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
      */
-    protected $_creditmemoFactory;
+    protected $creditmemoRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\ItemFactory
@@ -47,40 +47,40 @@ class Order extends \Magento\Framework\Object
     protected $_creditmemoItemFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
-        \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
-        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
+        \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
-        $this->_orderInvoiceFactory = $orderInvoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
         $this->_invoiceItemFactory = $invoiceItemFactory;
-        $this->_orderShipmentFactory = $orderShipmentFactory;
+        $this->shipmentRepository = $shipmentRepository;
         $this->_shipmentItemFactory = $shipmentItemFactory;
-        $this->_creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoRepository = $creditmemoRepository;
         $this->_creditmemoItemFactory = $creditmemoItemFactory;
         $this->_objectCopyService = $objectCopyService;
         parent::__construct($data);
@@ -94,7 +94,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toInvoice(\Magento\Sales\Model\Order $order)
     {
-        $invoice = $this->_orderInvoiceFactory->create();
+        $invoice = $this->invoiceRepository->create();
         $invoice->setOrder(
             $order
         )->setStoreId(
@@ -139,7 +139,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toShipment(\Magento\Sales\Model\Order $order)
     {
-        $shipment = $this->_orderShipmentFactory->create();
+        $shipment = $this->shipmentRepository->create();
         $shipment->setOrder(
             $order
         )->setStoreId(
@@ -184,7 +184,7 @@ class Order extends \Magento\Framework\Object
      */
     public function toCreditmemo(\Magento\Sales\Model\Order $order)
     {
-        $creditmemo = $this->_creditmemoFactory->create();
+        $creditmemo = $this->creditmemoRepository->create();
         $creditmemo->setOrder(
             $order
         )->setStoreId(

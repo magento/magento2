@@ -5,13 +5,11 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-
 /**
  * Quote payment information
  *
- * @method \Magento\Quote\Model\Resource\Quote\Payment _getResource()
- * @method \Magento\Quote\Model\Resource\Quote\Payment getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
+ * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
  * @method int getQuoteId()
  * @method \Magento\Quote\Model\Quote\Payment setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -68,7 +66,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,7 +79,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -106,7 +104,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Payment');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Payment');
     }
 
     /**
@@ -145,7 +143,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function importData(array $data)
     {
-        $data = new \Magento\Framework\Object($data);
+        $data = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
             [$this->_eventObject => $this, 'input' => $data]
@@ -273,112 +271,6 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function setMethod($method)
     {
         return $this->setData(self::KEY_METHOD, $method);
-    }
-
-    /**
-     * Get credit card owner
-     *
-     * @return string|null
-     */
-    public function getCcOwner()
-    {
-        return $this->getData(self::KEY_CC_OWNER);
-    }
-
-    /**
-     * Set credit card owner
-     *
-     * @param string $ccOwner
-     * @return $this
-     */
-    public function setCcOwner($ccOwner)
-    {
-        return $this->setData(self::KEY_CC_OWNER, $ccOwner);
-    }
-
-    /**
-     * Get credit card number
-     *
-     * @return string|null
-     */
-    public function getCcNumber()
-    {
-        return $this->getData(self::KEY_CC_NUMBER);
-    }
-
-    /**
-     * Set credit card number
-     *
-     * @param string $ccNumber
-     * @return $this
-     */
-    public function setCcNumber($ccNumber)
-    {
-        return $this->setData(self::KEY_CC_NUMBER, $ccNumber);
-    }
-
-    /**
-     * Get credit card type
-     *
-     * @return string|null
-     */
-    public function getCcType()
-    {
-        return $this->getData(self::KEY_CC_TYPE);
-    }
-
-    /**
-     * Set credit card type
-     *
-     * @param string $ccType
-     * @return $this
-     */
-    public function setCcType($ccType)
-    {
-        return $this->setData(self::KEY_CC_TYPE, $ccType);
-    }
-
-    /**
-     * Get credit card expiration year
-     *
-     * @return string|null
-     */
-    public function getCcExpYear()
-    {
-        $expirationYear = $this->getData(self::KEY_CC_EXP_YEAR) ?: null;
-        return $expirationYear;
-    }
-
-    /**
-     * Set credit card expiration year
-     *
-     * @param string $ccExpYear
-     * @return $this
-     */
-    public function setCcExpYear($ccExpYear)
-    {
-        return $this->setData(self::KEY_CC_EXP_YEAR, $ccExpYear);
-    }
-
-    /**
-     * Get credit card expiration month
-     *
-     * @return string|null
-     */
-    public function getCcExpMonth()
-    {
-        return $this->getData(self::KEY_CC_EXP_MONTH);
-    }
-
-    /**
-     * Set credit card expiration month
-     *
-     * @param string $ccExpMonth
-     * @return $this
-     */
-    public function setCcExpMonth($ccExpMonth)
-    {
-        return $this->setData(self::KEY_CC_EXP_MONTH, $ccExpMonth);
     }
 
     /**

@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
 
 define([
     'Magento_Ui/js/lib/registry/storage'
@@ -16,7 +17,7 @@ define([
                 expect(storage).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(storage);
+                var type = typeof storage;
 
                 expect(type).toEqual('object');
             });
@@ -31,7 +32,7 @@ define([
                 expect(storage.hasOwnProperty('get')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(storage.get);
+                var type = typeof storage.get;
 
                 expect(type).toEqual('function');
             });
@@ -39,7 +40,7 @@ define([
                 var elem = 'magento',
                     value = 'magentoValue';
 
-                storage.data[elem] = value;
+                storage.data.set(elem, value);
                 expect(storage.get([elem])).toEqual([value]);
             });
             it('Check returned value if called withot arguments', function () {
@@ -51,7 +52,7 @@ define([
                 expect(storage.hasOwnProperty('set')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(storage.set);
+                var type = typeof storage.set;
 
                 expect(type).toEqual('function');
             });
@@ -59,7 +60,7 @@ define([
                 expect(storage.set()).toBeDefined();
             });
             it('Check returned value type', function () {
-                var type = typeof(storage.set());
+                var type = typeof storage.set();
 
                 expect(type).toEqual('object');
             });
@@ -68,7 +69,7 @@ define([
                     value = 'magentoValue';
 
                 storage.set(elem, value);
-                expect(storage.data[elem]).toEqual(value);
+                expect(storage.data.get(elem)).toEqual(value);
             });
         });
         describe('"storage.remove" method', function () {
@@ -76,7 +77,7 @@ define([
                 expect(storage.hasOwnProperty('remove')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(storage.remove);
+                var type = typeof storage.remove;
 
                 expect(type).toEqual('function');
             });
@@ -84,17 +85,17 @@ define([
                 expect(storage.remove([])).toBeDefined();
             });
             it('Check returned value type', function () {
-                var type = typeof(storage.remove([]));
+                var type = typeof storage.remove([]);
 
                 expect(type).toEqual('object');
             });
             it('Check if called with argument "elem" ', function () {
-                var elem = ['magento'],
+                var elem = 'magento',
                     value = 'magentoValue';
 
-                storage.data[elem] = value;
-                storage.remove(elem);
-                expect(storage.data[elem]).not.toBeDefined();
+                storage.data.set(elem, value);
+                storage.remove([elem]);
+                expect(storage.data.get(elem)).not.toBeDefined();
             });
         });
         describe('"storage.has" method', function () {
@@ -102,7 +103,7 @@ define([
                 expect(storage.hasOwnProperty('has')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(storage.has);
+                var type = typeof storage.has;
 
                 expect(type).toEqual('function');
             });
@@ -110,7 +111,7 @@ define([
                 var elem = 'magento',
                     value = 'magentoValue';
 
-                storage.data[elem] = value;
+                storage.data.set(elem, value);
                 expect(storage.has([elem])).toEqual(true);
             });
             it('Check returned value if data has not element property', function () {

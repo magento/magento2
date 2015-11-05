@@ -5,14 +5,14 @@
  */
 namespace Magento\Catalog\Model\Product\Compare;
 
-use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 
 /**
  * Product Compare List Model
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class ListCompare extends \Magento\Framework\Object
+class ListCompare extends \Magento\Framework\DataObject
 {
     /**
      * Customer visitor
@@ -31,14 +31,14 @@ class ListCompare extends \Magento\Framework\Object
     /**
      * Catalog product compare item
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
      */
     protected $_catalogProductCompareItem;
 
     /**
      * Item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -53,16 +53,16 @@ class ListCompare extends \Magento\Framework\Object
      * Constructor
      *
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = []

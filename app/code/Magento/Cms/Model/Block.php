@@ -6,13 +6,13 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * CMS block model
  *
- * @method \Magento\Cms\Model\Resource\Block _getResource()
- * @method \Magento\Cms\Model\Resource\Block getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Block _getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Block getResource()
  */
 class Block extends \Magento\Framework\Model\AbstractModel implements BlockInterface, IdentityInterface
 {
@@ -38,7 +38,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Block');
+        $this->_init('Magento\Cms\Model\ResourceModel\Block');
     }
 
     /**
@@ -65,7 +65,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG . '_' . $this->getId(), self::CACHE_TAG . '_' . $this->getIdentifier()];
     }
 
     /**

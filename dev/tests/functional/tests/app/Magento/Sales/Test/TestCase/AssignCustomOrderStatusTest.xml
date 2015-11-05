@@ -6,17 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\AssignCustomOrderStatusTest">
+    <testCase name="Magento\Sales\Test\TestCase\AssignCustomOrderStatusTest" summary="Assign Custom Order Status" ticketId="MAGETWO-29382">
         <variation name="AssignCustomOrderStatusTestVariation1">
-            <data name="orderStatusState/state" xsi:type="string">Pending</data>
-            <data name="orderStatusState/is_default" xsi:type="string">No</data>
-            <data name="orderStatusState/visible_on_front" xsi:type="string">Yes</data>
-            <data name="statusToCheck" xsi:type="string">Pending</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
-        </variation>
-        <variation name="AssignCustomOrderStatusTestVariation2">
             <data name="orderStatusState/state" xsi:type="string">Pending</data>
             <data name="orderStatusState/is_default" xsi:type="string">Yes</data>
             <data name="orderStatusState/visible_on_front" xsi:type="string">No</data>
@@ -24,7 +15,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderNotVisibleOnMyAccount" />
         </variation>
-        <variation name="AssignCustomOrderStatusTestVariation3">
+        <variation name="AssignCustomOrderStatusTestVariation2">
             <data name="orderStatusState/state" xsi:type="string">Pending</data>
             <data name="orderStatusState/is_default" xsi:type="string">Yes</data>
             <data name="orderStatusState/visible_on_front" xsi:type="string">Yes</data>

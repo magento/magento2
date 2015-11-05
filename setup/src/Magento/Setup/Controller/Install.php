@@ -19,6 +19,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\SampleData;
 
 /**
  * Install controller
@@ -43,20 +44,28 @@ class Install extends AbstractActionController
     private $progressFactory;
 
     /**
+     * @var \Magento\Framework\Setup\SampleData\State
+     */
+    protected $sampleDataState;
+
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
+     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
-        ProgressFactory $progressFactory
+        ProgressFactory $progressFactory,
+        \Magento\Framework\Setup\SampleData\State $sampleDataState
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
+        $this->sampleDataState = $sampleDataState;
     }
 
     /**
@@ -73,6 +82,7 @@ class Install extends AbstractActionController
      * Index Action
      *
      * @return JsonModel
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function startAction()
     {
@@ -90,13 +100,13 @@ class Install extends AbstractActionController
                 $this->installer->getInstallInfo()[SetupConfigOptionsList::KEY_ENCRYPTION_KEY]
             );
             $json->setVariable('success', true);
+            if ($this->sampleDataState->hasError()) {
+                $json->setVariable('isSampleDataError', true);
+            }
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch (\Exception $e) {
             $this->log->logError($e);
             $json->setVariable('success', false);
-            if ($e instanceof \Magento\Setup\SampleDataException) {
-                $json->setVariable('isSampleDataError', true);
-            }
         }
         return $json;
     }
@@ -110,17 +120,27 @@ class Install extends AbstractActionController
     {
         $percent = 0;
         $success = false;
+        $contents = [];
         $json = new JsonModel();
+
+        // Depending upon the install environment and network latency, there is a possibility that
+        // "progress" check request may arrive before the Install POST request. In that case
+        // "install.log" file may not be created yet. Check the "install.log" is created before
+        // trying to read from it.
+        if (!$this->log->logfileExists()) {
+            return $json->setVariables(['progress' => $percent, 'success' => true, 'console' => $contents]);
+        }
+
         try {
             $progress = $this->progressFactory->createFromLog($this->log);
             $percent = sprintf('%d', $progress->getRatio() * 100);
             $success = true;
             $contents = $this->log->get();
-        } catch (\Exception $e) {
-            $contents = [(string)$e];
-            if ($e instanceof \Magento\Setup\SampleDataException) {
+            if ($this->sampleDataState->hasError()) {
                 $json->setVariable('isSampleDataError', true);
             }
+        } catch (\Exception $e) {
+            $contents = [(string)$e];
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
     }
@@ -134,7 +154,12 @@ class Install extends AbstractActionController
      */
     private function importDeploymentConfigForm()
     {
-        $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        $content = $this->getRequest()->getContent();
+        $source = [];
+        if ($content) {
+            $source = Json::decode($content, Json::TYPE_ARRAY);
+        }
+
         $result = [];
         $result[SetupConfigOptionsList::INPUT_KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
@@ -147,6 +172,8 @@ class Install extends AbstractActionController
             ? $source['config']['address']['admin'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
             ? $source['config']['encrypt']['key'] : null;
+        $result[SetupConfigOptionsList::INPUT_KEY_SESSION_SAVE] = isset($source['config']['sessionSave']['type'])
+            ? $source['config']['sessionSave']['type'] : SetupConfigOptionsList::SESSION_SAVE_FILES;
         $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
             ? implode(',', $source['store']['selectedModules']) : '';
         $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
@@ -163,9 +190,13 @@ class Install extends AbstractActionController
      */
     private function importUserConfigForm()
     {
-        $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = [];
-        if (!empty($source['config']['address']['base_url'])) {
+        $source = [];
+        $content = $this->getRequest()->getContent();
+        if ($content) {
+            $source = Json::decode($content, Json::TYPE_ARRAY);
+        }
+        if (isset($source['config']['address']['base_url']) && !empty($source['config']['address']['base_url'])) {
             $result[UserConfig::KEY_BASE_URL] = $source['config']['address']['base_url'];
         }
         $result[UserConfig::KEY_USE_SEF_URL] = isset($source['config']['rewrites']['allowed'])
@@ -194,11 +225,16 @@ class Install extends AbstractActionController
      * Maps data from request to format of admin account model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importAdminUserForm()
     {
-        $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = [];
+        $source = [];
+        $content = $this->getRequest()->getContent();
+        if ($content) {
+            $source = Json::decode($content, Json::TYPE_ARRAY);
+        }
         $result[AdminAccount::KEY_USER] = isset($source['admin']['username']) ? $source['admin']['username'] : '';
         $result[AdminAccount::KEY_PASSWORD] = isset($source['admin']['password']) ? $source['admin']['password'] : '';
         $result[AdminAccount::KEY_EMAIL] = isset($source['admin']['email']) ? $source['admin']['email'] : '';

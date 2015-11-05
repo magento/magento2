@@ -70,13 +70,17 @@ class AbstractType extends \Magento\Backend\Block\Widget
     /**
      * Get html of Price Type select element
      *
+     * @param string $extraParams
      * @return string
      */
-    public function getPriceTypeSelectHtml()
+    public function getPriceTypeSelectHtml($extraParams = '')
     {
         if ($this->getCanEditPrice() === false) {
-            $this->getChildBlock('option_price_type')->setExtraParams('disabled="disabled"');
+            $extraParams .= ' disabled="disabled"';
+            $this->getChildBlock('option_price_type');
         }
+        $this->getChildBlock('option_price_type')->setExtraParams($extraParams);
+
         return $this->getChildHtml('option_price_type');
     }
 }

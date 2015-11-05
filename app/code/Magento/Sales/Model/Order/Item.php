@@ -12,8 +12,8 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 /**
  * Order Item Model
  *
- * @method \Magento\Sales\Model\Resource\Order\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Item getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
@@ -105,7 +105,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -118,7 +118,7 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -143,7 +143,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Item');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Item');
     }
 
     /**
@@ -465,7 +465,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getProductOptions()
     {
-        $data = $this->_getData(OrderItemInterface::PRODUCT_OPTIONS);
+        $data = $this->_getData('product_options');
         return is_string($data) ? unserialize($data) : $data;
     }
 
@@ -643,7 +643,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
@@ -651,7 +651,7 @@ class Item extends AbstractModel implements OrderItemInterface
         if (!$option) {
             $option = [];
         }
-        $buyRequest = new \Magento\Framework\Object($option);
+        $buyRequest = new \Magento\Framework\DataObject($option);
         $buyRequest->setQty($this->getQtyOrdered() * 1);
         return $buyRequest;
     }
@@ -2339,6 +2339,22 @@ class Item extends AbstractModel implements OrderItemInterface
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
         return $this->setData(OrderItemInterface::BASE_WEEE_TAX_ROW_DISPOSITION, $baseWeeeTaxRowDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductOption()
+    {
+        return $this->getData(self::KEY_PRODUCT_OPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption)
+    {
+        return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
 
     /**

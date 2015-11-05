@@ -21,11 +21,15 @@ class AssertGrandTotalInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
-        $checkoutCart->open();
+        if ($requireReload) {
+            $checkoutCart->open();
+            $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
+        }
 
         $fixtureGrandTotal = number_format($cart->getGrandTotal(), 2);
         $pageGrandTotal = $checkoutCart->getTotalsBlock()->getGrandTotal();

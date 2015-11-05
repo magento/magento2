@@ -12,12 +12,12 @@ use Magento\Catalog\Model\Product;
  * Product View block
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class View extends AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -65,7 +65,7 @@ class View extends AbstractProduct implements \Magento\Framework\Object\Identity
      * @param Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -80,7 +80,7 @@ class View extends AbstractProduct implements \Magento\Framework\Object\Identity
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
@@ -201,7 +201,7 @@ class View extends AbstractProduct implements \Magento\Framework\Object\Identity
             $additional['wishlist_next'] = 1;
         }
 
-        $addUrlKey = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $addUrlKey = \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED;
         $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', ['_use_rewrite' => true, '_current' => true]);
         $additional[$addUrlKey] = $this->urlEncoder->encode($addUrlValue);
 
@@ -219,7 +219,6 @@ class View extends AbstractProduct implements \Magento\Framework\Object\Identity
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->getProduct();
 
-        $config = [];
         if (!$this->hasOptions()) {
             $config = [
                 'productId' => $product->getId(),
@@ -260,7 +259,7 @@ class View extends AbstractProduct implements \Magento\Framework\Object\Identity
             'tierPrices' => $tierPrices
         ];
 
-        $responseObject = new \Magento\Framework\Object();
+        $responseObject = new \Magento\Framework\DataObject();
         $this->_eventManager->dispatch('catalog_product_view_config', ['response_object' => $responseObject]);
         if (is_array($responseObject->getAdditionalOptions())) {
             foreach ($responseObject->getAdditionalOptions() as $option => $value) {

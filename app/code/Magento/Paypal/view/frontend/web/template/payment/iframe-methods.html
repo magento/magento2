@@ -13,6 +13,9 @@
         <label class="label" data-bind="attr: {'for': getCode()}"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -29,15 +32,16 @@
                         type="submit"
                         data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
                         class="button action primary checkout">
-                    <span data-bind="text: $t('Continue')"></span>
+                    <span data-bind="i18n: 'Continue'"></span>
                 </button>
             </div>
         </div>
         <div data-bind="visible: isInAction()">
             <div id="iframe-warning" class="message notice">
-                <div><!-- ko text: $t('Please do not refresh the page until you complete payment.') --><!-- /ko --></div>
+                <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
-            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}"
+            <!-- ko if: isPaymentReady() -->
+            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}, event: {load: iframeLoaded}"
                     data-container="paypal-iframe"
                     class="paypal iframe"
                     scrolling="no"
@@ -45,9 +49,9 @@
                     border="0"
                     height="610"
                     width="100%"
-            >
+                    >
             </iframe>
+            <!-- /ko -->
         </div>
     </div>
 </div>
-

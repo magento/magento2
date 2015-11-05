@@ -299,7 +299,7 @@ class Info
     /**
      * Grab data from source and map it into payment
      *
-     * @param array|\Magento\Framework\Object|callback $from
+     * @param array|\Magento\Framework\DataObject|callback $from
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return void
      */
@@ -309,21 +309,21 @@ class Info
         if (is_object($from)) {
             $from = [$from, 'getDataUsingMethod'];
         }
-        \Magento\Framework\Object\Mapper::accumulateByMap($from, [$payment, 'setAdditionalInformation'], $fullMap);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($from, [$payment, 'setAdditionalInformation'], $fullMap);
     }
 
     /**
      * Grab data from payment and map it into target
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param array|\Magento\Framework\Object|callback $to
+     * @param array|\Magento\Framework\DataObject|callback $to
      * @param array|null $map
-     * @return array|\Magento\Framework\Object
+     * @return array|\Magento\Framework\DataObject
      */
     public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, array $map = null)
     {
         $fullMap = array_merge($this->_paymentMap, $this->_systemMap);
-        \Magento\Framework\Object\Mapper::accumulateByMap(
+        \Magento\Framework\DataObject\Mapper::accumulateByMap(
             [$payment, 'getAdditionalInformation'],
             $to,
             $map ? $map : array_flip($fullMap)
@@ -568,7 +568,9 @@ class Info
             }
             if (!empty($this->_paymentMapFull[$key]['value'])) {
                 if ($labelValuesOnly) {
-                    $result[$this->_paymentMapFull[$key]['label']] = $this->_paymentMapFull[$key]['value'];
+                    $value = $this->_paymentMapFull[$key]['value'];
+                    $value = is_array($value) ? array_map('__', $value) : __($value);
+                    $result[$this->_paymentMapFull[$key]['label']] = $value;
                 } else {
                     $result[$key] = $this->_paymentMapFull[$key];
                 }

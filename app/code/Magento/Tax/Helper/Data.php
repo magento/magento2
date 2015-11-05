@@ -59,13 +59,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $jsonHelper;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -76,17 +69,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Entity\AttributeFactory
-     */
-    protected $_attributeFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Tax\ItemFactory
-     */
-    protected $_taxItemFactory;
-
-    /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
      */
     protected $_orderTaxCollectionFactory;
 
@@ -94,18 +77,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
-
-    /**
-     * Tax calculation service
-     *
-     * @var TaxCalculationInterface
-     */
-    protected $taxCalculation;
-
-    /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
 
     /**
      * \Magento\Catalog\Helper\Data
@@ -127,16 +98,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context                         $context
      * @param \Magento\Framework\Json\Helper\Data                           $jsonHelper
-     * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param Config                                                        $taxConfig
      * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
-     * @param \Magento\Eav\Model\Entity\AttributeFactory                    $attributeFactory
-     * @param \Magento\Sales\Model\Resource\Order\Tax\ItemFactory       $taxItemFactory
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
+     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
-     * @param TaxCalculationInterface                                       $taxCalculation
-     * @param CustomerSession                                               $customerSession
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
      * @param OrderTaxManagementInterface                                   $orderTaxManagement
      * @param PriceCurrencyInterface                                        $priceCurrency
@@ -145,16 +111,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\Registry $coreRegistry,
         Config $taxConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Sales\Model\Resource\Order\Tax\ItemFactory $taxItemFactory,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
+        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        TaxCalculationInterface $taxCalculation,
-        CustomerSession $customerSession,
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,
         PriceCurrencyInterface $priceCurrency
@@ -163,15 +124,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->priceCurrency = $priceCurrency;
         $this->_config = $taxConfig;
         $this->jsonHelper = $jsonHelper;
-        $this->_coreRegistry = $coreRegistry;
         $this->_storeManager = $storeManager;
         $this->_localeFormat = $localeFormat;
-        $this->_attributeFactory = $attributeFactory;
-        $this->_taxItemFactory = $taxItemFactory;
         $this->_orderTaxCollectionFactory = $orderTaxCollectionFactory;
         $this->_localeResolver = $localeResolver;
-        $this->taxCalculation = $taxCalculation;
-        $this->customerSession = $customerSession;
         $this->catalogHelper = $catalogHelper;
         $this->orderTaxManagement = $orderTaxManagement;
     }
@@ -494,7 +450,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getShippingPrice($price, $includingTax = null, $shippingAddress = null, $ctc = null, $store = null)
     {
-        $pseudoProduct = new \Magento\Framework\Object();
+        $pseudoProduct = new \Magento\Framework\DataObject();
         $pseudoProduct->setTaxClassId($this->getShippingTaxClass($store));
 
         $billingAddress = false;

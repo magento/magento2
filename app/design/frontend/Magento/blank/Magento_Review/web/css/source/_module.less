@@ -10,7 +10,7 @@
 & when (@media-common = true) {
 
 .rating-summary {
-    .mixin-rating-summary();
+    .lib-rating-summary();
     .rating-result {
         margin-left: -5px;
     }
@@ -19,12 +19,12 @@
 .product-reviews-summary,
 .table-reviews {
     .rating-summary {
-        .mixin-rating-summary-label-hide();
+        .lib-rating-summary-label-hide();
     }
 }
 
 .review-control-vote {
-    .mixin-rating-vote();
+    .lib-rating-vote();
 }
 
 //
@@ -34,10 +34,10 @@
     &.add.review {
         margin-bottom: @indent__xl;
         > .title {
-            .heading(h2);
+            .lib-heading(h2);
         }
         .legend {
-            .heading(h3);
+            .lib-heading(h3);
             margin: 0 0 @indent__base;
         }
         .field.rating {
@@ -55,14 +55,14 @@
     }
     &.reviews.list {
         > .title {
-            .heading(h2);
+            .lib-heading(h2);
         }
         .review {
             &.item {
                 margin-bottom: @indent__xl;
             }
             &.title {
-                .heading(h3);
+                .lib-heading(h3);
             }
         }
     }
@@ -147,21 +147,21 @@
         .title {
         }
         .customer-review-rating {
-            .css(margin-bottom, @indent__base);
+            .lib-css(margin-bottom, @indent__base);
             .item {
-                .css(margin-bottom, @indent__s);
+                .lib-css(margin-bottom, @indent__s);
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
         .review-title {
-            .heading(h3);
-            .css(font-weight, @font-weight__semibold);
-            .css(margin-bottom, @indent__base);
+            .lib-heading(h3);
+            .lib-css(font-weight, @font-weight__semibold);
+            .lib-css(margin-bottom, @indent__base);
         }
         .review-content {
-            .css(margin-bottom, @indent__base);
+            .lib-css(margin-bottom, @indent__base);
         }
         .review-date {
         }
@@ -224,7 +224,7 @@
     }
     &-form {
         .action.submit.primary {
-            .button-revert-secondary-color();
+            .lib-button-revert-secondary-color();
         }
         .actions-toolbar .actions-primary {
         }
@@ -255,7 +255,7 @@
     }
     &-list {
         .block-title strong {
-            .heading(h2);
+            .lib-heading(h2);
         }
         margin-bottom: @indent__l;
     }
@@ -263,7 +263,7 @@
         padding: @indent__base 0;
         border-bottom: 1px solid @color-gray79;
         margin: 0;
-        .clearer();
+        .lib-clearer();
         &:last-child {
             border-width: 0;
         }
@@ -284,7 +284,7 @@
         }
     }
     &-title {
-        .heading(h3);
+        .lib-heading(h3);
         margin: 0 0 @indent__base;
     }
     &-content {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Customer log data logger.
  *
@@ -15,7 +17,7 @@ class Logger
     /**
      * Resource instance.
      *
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -25,11 +27,11 @@ class Logger
     protected $logFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Customer\Model\LogFactory $logFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        ResourceConnection $resource,
         \Magento\Customer\Model\LogFactory $logFactory
     ) {
         $this->resource = $resource;
@@ -52,10 +54,10 @@ class Logger
             throw new \InvalidArgumentException("Log data is empty");
         }
 
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection('write');
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
-        $adapter->insertOnDuplicate(
+        $connection->insertOnDuplicate(
             $this->resource->getTableName('customer_log'),
             array_merge(['customer_id' => $customerId], $data),
             array_keys($data)
@@ -92,10 +94,10 @@ class Logger
      */
     protected function loadLogData($customerId)
     {
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->resource->getConnection('read');
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->resource->getConnection();
 
-        $select = $adapter->select()
+        $select = $connection->select()
             ->from(
                 ['cl' => $this->resource->getTableName('customer_log')]
             )
@@ -113,6 +115,6 @@ class Logger
             )
             ->limit(1);
 
-        return $adapter->fetchRow($select);
+        return $connection->fetchRow($select);
     }
 }

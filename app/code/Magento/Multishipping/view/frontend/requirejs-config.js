@@ -6,7 +6,9 @@
 var config = {
     map: {
         '*': {
-            multiShipping: 'Magento_Multishipping/js/multi-shipping'
+            multiShipping: 'Magento_Multishipping/js/multi-shipping',
+            orderOverview: 'Magento_Multishipping/js/overview',
+            payment: 'Magento_Multishipping/js/payment'
         }
     }
 };

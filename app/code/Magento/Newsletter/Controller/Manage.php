@@ -39,7 +39,7 @@ abstract class Manage extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_customerSession->authenticate($this)) {
+        if (!$this->_customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);

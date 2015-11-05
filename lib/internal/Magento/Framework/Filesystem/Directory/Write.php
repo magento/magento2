@@ -6,6 +6,7 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Write extends Read implements WriteInterface
 {
@@ -14,7 +15,7 @@ class Write extends Read implements WriteInterface
      *
      * @var int
      */
-    protected $permissions = 0777;
+    protected $permissions = DriverInterface::WRITEABLE_DIRECTORY_MODE;
 
     /**
      * Constructor
@@ -188,6 +189,21 @@ class Write extends Read implements WriteInterface
     {
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->driver->changePermissions($absolutePath, $permissions);
+    }
+
+    /**
+     * Recursively change permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
+    {
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        return $this->driver->changePermissionsRecursively($absolutePath, $dirPermissions, $filePermissions);
     }
 
     /**

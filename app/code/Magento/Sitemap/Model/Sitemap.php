@@ -13,8 +13,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Sitemap model
  *
- * @method \Magento\Sitemap\Model\Resource\Sitemap _getResource()
- * @method \Magento\Sitemap\Model\Resource\Sitemap getResource()
+ * @method \Magento\Sitemap\Model\ResourceModel\Sitemap _getResource()
+ * @method \Magento\Sitemap\Model\ResourceModel\Sitemap getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -112,17 +112,17 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $_escaper;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Catalog\ProductFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Cms\PageFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory
      */
     protected $_cmsFactory;
 
@@ -152,14 +152,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory
-     * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
-     * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -170,14 +170,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Escaper $escaper,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory,
-        \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
-        \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
+        \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory,
+        \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory,
+        \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -201,7 +201,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\Resource\Sitemap');
+        $this->_init('Magento\Sitemap\Model\ResourceModel\Sitemap');
     }
 
     /**
@@ -230,7 +230,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
@@ -238,7 +238,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
@@ -246,7 +246,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
@@ -336,7 +336,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     public function generateXml()
     {
         $this->_initSitemapItems();
-        /** @var $sitemapItem \Magento\Framework\Object */
+        /** @var $sitemapItem \Magento\Framework\DataObject */
         foreach ($this->_sitemapItems as $sitemapItem) {
             $changefreq = $sitemapItem->getChangefreq();
             $priority = $sitemapItem->getPriority();

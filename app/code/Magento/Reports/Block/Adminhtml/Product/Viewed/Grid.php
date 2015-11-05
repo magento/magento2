@@ -25,7 +25,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @var string
      */
-    protected $_resourceCollectionName = 'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection';
+    protected $_resourceCollectionName = 'Magento\Reports\Model\ResourceModel\Report\Product\Viewed\Collection';
 
     /**
      * Init grid parameters
@@ -114,8 +114,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     /**
      * Don't use orders in collection
      *
-     * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

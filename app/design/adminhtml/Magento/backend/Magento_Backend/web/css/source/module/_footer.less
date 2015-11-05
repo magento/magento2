@@ -27,7 +27,7 @@
     margin-top: auto;
     padding: 2.6rem 2rem 6rem 3rem;
     a {
-        .link(
+        .lib-link(
             @_link-color: @footer-link__color,
             @_link-text-decoration: @footer-link__text-decoration,
             @_link-color-visited: false,
@@ -54,6 +54,7 @@
 //  Copyright
 .copyright {
     margin-bottom: -.2rem;
+    text-align: left;
     position: relative;
     .link-copyright {
         display: inline-block;
@@ -85,15 +86,10 @@
 
 .footer-legal {
     padding-top: 1rem;
-    text-align: right;
 }
 
-//  Locale switcher
-.locale-switcher {
-    .label {
-        display: block;
-        margin-bottom: 1rem;
-    }
+.footer-legal-system {
+    text-align: right;
 }
 
 //

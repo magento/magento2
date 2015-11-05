@@ -14,7 +14,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Quote\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $quoteItemCollectionFactory;
 
@@ -26,7 +26,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Quote\Model\QueryResolver $queryResolver
      * @param array $data
      */
@@ -34,7 +34,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Quote\Model\QueryResolver $queryResolver,
-        \Magento\Reports\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
+        \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         array $data = []
     ) {
         $this->quoteItemCollectionFactory = $quoteItemCollectionFactory;
@@ -56,7 +56,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      */
     protected function _prepareCollection()
     {
-        /** @var \Magento\Reports\Model\Resource\Quote\Item\Collection $collection */
+        /** @var \Magento\Reports\Model\ResourceModel\Quote\Item\Collection $collection */
         $collection = $this->quoteItemCollectionFactory->create();
         $collection->prepareActiveCartItems();
         $this->setCollection($collection);
@@ -141,7 +141,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      *
      * @return string
      */

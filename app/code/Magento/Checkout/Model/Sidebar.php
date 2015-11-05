@@ -38,6 +38,7 @@ class Sidebar
      * @param Cart $cart
      * @param HelperData $helperData
      * @param ResolverInterface $resolver
+     * @codeCoverageIgnore
      */
     public function __construct(
         Cart $cart,

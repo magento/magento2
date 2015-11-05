@@ -5,6 +5,9 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import edit form block
  *
@@ -108,10 +111,45 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'disabled' => true,
                     'values' => $this->_behaviorFactory->create($behaviorClass)->toOptionArray(),
                     'class' => $behaviorCode,
+                    'onchange' => 'varienImport.handleImportBehaviorSelector();',
+                    'note' => ' ',
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                'select',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                    'title' => __(' '),
+                    'label' => __(' '),
+                    'required' => true,
+                    'class' => $behaviorCode,
+                    'disabled' => true,
+                    'values' => [
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error',
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries'
+                    ],
+                    'after_element_html' => $this->getDownloadSampleFileHtml(),
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                    'label' => __('Allowed Errors Count'),
+                    'title' => __('Allowed Errors Count'),
+                    'required' => true,
+                    'disabled' => true,
+                    'value' => 10,
+                    'class' => $behaviorCode . ' validate-number validate-greater-than-zero input-text',
+                    'note' => __(
+                        'Please specify number of errors to halt import process'
+                    ),
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
                 'text',
                 [
                     'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
@@ -133,7 +171,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'required' => true,
                     'disabled' => true,
                     'class' => $behaviorCode,
-                    'value' => ',',
+                    'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
         }

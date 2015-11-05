@@ -24,7 +24,7 @@ namespace Magento\CatalogRule\Model\Rule;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
-class Job extends \Magento\Framework\Object
+class Job extends \Magento\Framework\DataObject
 {
     /**
      * @var RuleProductProcessor

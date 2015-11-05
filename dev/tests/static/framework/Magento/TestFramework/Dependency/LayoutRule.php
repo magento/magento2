@@ -371,10 +371,12 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
     protected function _checkDependenciesByRegexp($currentModule, &$contents, $patterns = [])
     {
         $result = [];
+
         foreach ($patterns as $pattern => $type) {
             if (preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
                     $module = $match['namespace'] . '\\' . $match['module'];
+
                     if ($currentModule != $module) {
                         $result[$module] = ['type' => $type, 'source' => $match['source']];
                     }

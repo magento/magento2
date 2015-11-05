@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -44,15 +46,23 @@ class CustomerGroup extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
-                    ->getCode();
+                try {
+                    $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
+                        ->getCode();
+                } catch (NoSuchEntityException $exception) {
+                    $item[$this->getData('name')] = __('Group was removed');
+                } catch (\Exception $exception) {
+                    $item[$this->getData('name')] = '';
+                }
             }
         }
+
+        return $dataSource;
     }
 }

@@ -56,14 +56,28 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions(array $expected, array $data)
     {
-        $this->_imageHelperMock->expects($this->at(0))
-            ->method('init')
-            ->will($this->returnValue('http://example.com/base_img_url'));
+        if (count($data['allowed_products'])) {
+            $imageHelper1 = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $imageHelper1->expects($this->any())
+                ->method('getUrl')
+                ->willReturn('http://example.com/base_img_url');
 
-        for ($i = 1; $i <= count($data['allowed_products']); $i++) {
-            $this->_imageHelperMock->expects($this->at($i))
+            $imageHelper2 = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $imageHelper2->expects($this->any())
+                ->method('getUrl')
+                ->willReturn('http://example.com/base_img_url_2');
+
+            $this->_imageHelperMock->expects($this->any())
                 ->method('init')
-                ->will($this->returnValue('http://example.com/base_img_url_' . $i));
+                ->willReturnMap([
+                    [$data['current_product_mock'], 'product_page_image_large', [], $imageHelper1],
+                    [$data['allowed_products'][0], 'product_page_image_large', [], $imageHelper1],
+                    [$data['allowed_products'][1], 'product_page_image_large', [], $imageHelper2],
+                ]);
         }
 
         $this->assertEquals(
@@ -93,10 +107,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
             $attribute = $this->getMock(
-                'Magento\Framework\Object', ['getProductAttribute'], [], '', false
+                'Magento\Framework\DataObject', ['getProductAttribute'], [], '', false
             );
             $productAttribute = $this->getMock(
-                'Magento\Framework\Object',
+                'Magento\Framework\DataObject',
                 ['getId', 'getAttributeCode'],
                 [],
                 '',
@@ -125,7 +139,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->getMock(
-                'Magento\Catalog\Model\Product', ['getData', 'getImage', 'getId', '__wakeup'], [], '', false
+                'Magento\Catalog\Model\Product', ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages'], [], '', false
             );
             $productMock->expects($this->any())
                 ->method('getData')
@@ -145,19 +159,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_id_1' => [
                     'attribute_code_value_1' => ['product_id_1', 'product_id_2'],
                 ],
-                'images' => [
-                    'attribute_id_1' => [
-                        'attribute_code_value_1' => [
-                            'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2',
-                        ],
+                'index' => [
+                    'product_id_1' => [
+                        'attribute_id_1' => 'attribute_code_value_1',
+                        'attribute_id_2' => 'attribute_code_value_2'
                     ],
-                    'attribute_id_2' => [
-                        'attribute_code_value_2' => [
-                            'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2',
-                        ],
-                    ],
+
+                    'product_id_2' => [
+                        'attribute_id_1' => 'attribute_code_value_1',
+                        'attribute_id_2' => 'attribute_code_value_2'
+                    ]
+
                 ],
                 'attribute_id_2' => [
                     'attribute_code_value_2' => ['product_id_1', 'product_id_2'],

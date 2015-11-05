@@ -47,7 +47,7 @@ define([
     return {
         "min_text_length": [
             function (value, params) {
-                return value.length >= +params;
+                return value.length == 0 || value.length >= +params;
             },
             $.mage.__('Please enter more or equal than {0} symbols.')
         ],

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Install\Test\TestCase\InstallTest">
+    <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface" ticketId="MAGETWO-31431">
         <variation name="InstallTestVariation1">
             <data name="description" xsi:type="string">Install with default values.</data>
             <data name="user/dataset" xsi:type="string">default</data>
@@ -33,12 +33,11 @@
             <constraint name="Magento\Install\Test\Constraint\AssertKeyCreated" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
-            <constraint name="Magento\Install\Test\Constraint\AssertLanguageSelected" />
         </variation>
         <variation name="InstallTestVariation4">
             <data name="description" xsi:type="string">Install with table prefix.</data>
             <data name="user/dataset" xsi:type="string">default</data>
-            <data name="install/dbTablePrefix" xsi:type="string">prefix1_</data>
+            <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
             <data name="install/storeLanguage" xsi:type="string">Chinese (China)</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />

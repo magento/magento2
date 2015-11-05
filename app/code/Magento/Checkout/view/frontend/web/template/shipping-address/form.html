@@ -8,7 +8,7 @@
     <!-- ko foreach: getRegion('before-fields') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
-    <fieldset id="shipping-new-address-form" class="fieldset address">
+    <div id="shipping-new-address-form" class="fieldset address">
         <!-- ko foreach: getRegion('additional-fieldsets') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
@@ -16,9 +16,9 @@
         <div class="field choice" data-bind="visible: !isFormInline">
             <input type="checkbox" class="checkbox" id="shipping-save-in-address-book" data-bind="checked: saveInAddressBook" />
             <label class="label" for="shipping-save-in-address-book">
-                <span data-bind="text: $t('Save in address book')"></span>
+                <span data-bind="i18n: 'Save in address book'"></span>
             </label>
         </div>
         <!-- /ko -->
-    </fieldset>
+    </div>
 </form>

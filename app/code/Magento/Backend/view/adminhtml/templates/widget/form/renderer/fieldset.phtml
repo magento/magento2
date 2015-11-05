@@ -39,26 +39,26 @@ if ($isField) {
 
 <?php if ($isWrapped): ?>
     <div class="fieldset-wrapper <?php echo($isCollapsable) ? 'admin__collapsible-block-wrapper ' : ''; ?>"
-        id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>"
-        data-role="<?php echo $id ?>-wrapper">
+        id="<?php /* @escapeNotVerified */ echo $containerId ? $containerId : $id . '-wrapper';?>"
+        data-role="<?php /* @escapeNotVerified */ echo $id ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
-            <strong <?php echo($isCollapsable) ?
+            <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
-                <span><?php echo $element->getLegend() ?></span>
+                <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
             </strong>
-            <?php echo $titleActions; ?>
+            <?php /* @escapeNotVerified */ echo $titleActions; ?>
         </div>
         <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?php echo($isCollapsable) ? ' collapse' : ''; ?>"
-            id="<?php echo $id ?>-content"
-            data-role="<?php echo $id ?>-content">
+            id="<?php /* @escapeNotVerified */ echo $id ?>-content"
+            data-role="<?php /* @escapeNotVerified */ echo $id ?>-content">
 <?php endif; ?>
 
     <?php if (!$element->getNoContainer()): ?>
-        <fieldset class="<?php echo $cssClass ?>" id="<?php echo $id ?>">
+        <fieldset class="<?php /* @escapeNotVerified */ echo $cssClass ?>" id="<?php /* @escapeNotVerified */ echo $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?php echo $isField ? 'label' : 'legend'?>">
-                <span><?php echo $element->getLegend() ?></span>
+            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label admin__field-label' : 'admin__legend legend'?>">
+                <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
             </legend><br />
         <?php endif; ?>
     <?php endif; ?>
@@ -78,7 +78,7 @@ if ($isField) {
     <?php else: ?>
 
         <?php if ($isField && $count > 1):?>
-            <div class="fields-group-<?php echo $count?>">
+            <div class="fields-group-<?php /* @escapeNotVerified */ echo $count?>">
         <?php endif; ?>
 
         <?php echo $element->getBasicChildrenHtml(); ?>
@@ -91,16 +91,16 @@ if ($isField) {
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
             <?php echo(!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
-            <details data-mage-init='{"details": {}}' class="details" id="details<?php echo $id ?>">
-                <summary class="details-summary" id="details-summary<?php echo $id ?>">
-                    <span><?php echo $advancedLabel ?></span>
+            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?php /* @escapeNotVerified */ echo $id ?>">
+                <summary class="details-summary admin__collapsible-title" id="details-summary<?php /* @escapeNotVerified */ echo $id ?>">
+                    <span><?php /* @escapeNotVerified */ echo $advancedLabel ?></span>
                 </summary>
-                <div class="details-content" id="details-content<?php echo $id ?>">
+                <div class="details-content admin__fieldset" id="details-content<?php /* @escapeNotVerified */ echo $id ?>">
                     <?php echo $element->getAdvancedChildrenHtml(); ?>
                 </div>
             </details>
         <?php elseif ($element->hasAdvanced() && $isField): ?>
-            <div class="nested" id="nested<?php echo $id ?>">
+            <div class="nested" id="nested<?php /* @escapeNotVerified */ echo $id ?>">
                 <?php echo $element->getAdvancedChildrenHtml(); ?>
             </div>
         <?php endif; ?>

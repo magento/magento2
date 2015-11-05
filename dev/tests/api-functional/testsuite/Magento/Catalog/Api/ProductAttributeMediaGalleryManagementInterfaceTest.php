@@ -9,6 +9,9 @@ namespace Magento\Catalog\Api;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class ProductAttributeMediaGalleryManagementInterfaceTest
+ */
 class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     /**
@@ -106,6 +109,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -138,6 +142,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -187,6 +192,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
                 'position' => 10,
                 'types' => ['thumbnail'],
                 'disabled' => true,
+                'media_type' => 'image',
             ],
             // Store ID is not provided so the default one must be used
         ];
@@ -225,6 +231,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
                 'position' => 10,
                 'types' => ['thumbnail'],
                 'disabled' => true,
+                'media_type' => 'image',
             ],
             'store_id' => 1,
         ];
@@ -279,6 +286,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -303,6 +311,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $encodedContent = 'not_a_base64_encoded_content';
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -327,6 +336,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $encodedContent = base64_encode('not_an_image');
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -351,6 +361,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $encodedContent = base64_encode(file_get_contents($this->testImagePath));
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -375,6 +386,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -398,6 +410,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
+            'media_type' => 'image',
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -423,6 +436,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => 'simple',
             'entry' => [
                 'id' => $this->getTargetGalleryEntryId(),
+                'media_type' => 'image',
                 'label' => 'Updated Image Text',
                 'position' => 10,
                 'types' => ['thumbnail'],
@@ -449,6 +463,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => 'wrong_product_sku',
             'entry' => [
                 'id' => 9999,
+                'media_type' => 'image',
                 'label' => 'Updated Image Text',
                 'position' => 1,
                 'types' => ['thumbnail'],
@@ -471,6 +486,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => 'simple',
             'entry' => [
                 'id' => 9999,
+                'media_type' => 'image',
                 'label' => 'Updated Image Text',
                 'position' => 1,
                 'types' => ['thumbnail'],
@@ -532,6 +548,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $expected = [
             'label' => $image['label'],
+            'media_type' => $image['media_type'],
             'position' => $image['position'],
             'disabled' => (bool)$image['disabled'],
             'file' => $image['file'],
@@ -551,7 +568,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         $requestData = [
             'sku' => $productSku,
-            'imageId' => $imageId,
+            'entryId' => $imageId,
         ];
         $data = $this->_webApiCall($serviceInfo, $requestData);
         $actual = (array)$data;
@@ -559,6 +576,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertEquals($expected['position'], $actual['position']);
         $this->assertEquals($expected['file'], $actual['file']);
         $this->assertEquals($expected['types'], $actual['types']);
+        $this->assertEquals($expected['media_type'], $actual['media_type']);
         $this->assertEquals($expected['disabled'], (bool)$actual['disabled']);
     }
 

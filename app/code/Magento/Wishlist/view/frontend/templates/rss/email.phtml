@@ -12,6 +12,6 @@
 <p style="font-size:12px; line-height:16px; margin:0 0 16px;">
     <?php echo __("RSS link to %1's wishlist", $block->escapeHtml($this->helper('Magento\Wishlist\Helper\Data')->getCustomerName())) ?>
     <br />
-    <a href="<?php echo $block->getLink(); ?>"><?php echo $block->getLink(); ?></a>
+    <a href="<?php /* @escapeNotVerified */ echo $block->getLink(); ?>"><?php /* @escapeNotVerified */ echo $block->getLink(); ?></a>
 </p>
 <?php endif; ?>

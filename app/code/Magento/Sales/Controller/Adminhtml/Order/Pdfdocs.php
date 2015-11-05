@@ -7,8 +7,23 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\Order\Pdf\Invoice;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Order\Pdf\Shipment;
+use Magento\Sales\Model\Order\Pdf\Creditmemo;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
 
+/**
+ * Class Pdfdocs
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
@@ -17,15 +32,78 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
     protected $fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var Invoice
+     */
+    protected $pdfInvoice;
+
+    /**
+     * @var Shipment
+     */
+    protected $pdfShipment;
+
+    /**
+     * @var Creditmemo
+     */
+    protected $pdfCreditmemo;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @var ShipmentCollectionFactory
+     */
+    protected $shipmentCollectionFactory;
+
+    /**
+     * @var InvoiceCollectionFactory
+     */
+    protected $invoiceCollectionFactory;
+
+    /**
+     * @var CreditmemoCollectionFactory
+     */
+    protected $creditmemoCollectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param FileFactory $fileFactory
+     * @param Invoice $pdfInvoice
+     * @param Shipment $pdfShipment
+     * @param Creditmemo $pdfCreditmemo
+     * @param DateTime $dateTime
+     * @param ShipmentCollectionFactory $shipmentCollectionFactory
+     * @param InvoiceCollectionFactory $invoiceCollectionFactory
+     * @param CreditmemoCollectionFactory $creditmemoCollectionFactory
+     * @param OrderCollectionFactory $orderCollectionFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        Filter $filter,
+        FileFactory $fileFactory,
+        Invoice $pdfInvoice,
+        Shipment $pdfShipment,
+        Creditmemo $pdfCreditmemo,
+        DateTime $dateTime,
+        ShipmentCollectionFactory $shipmentCollectionFactory,
+        InvoiceCollectionFactory $invoiceCollectionFactory,
+        CreditmemoCollectionFactory $creditmemoCollectionFactory,
+        OrderCollectionFactory $orderCollectionFactory
     ) {
+        $this->pdfInvoice = $pdfInvoice;
+        $this->pdfShipment = $pdfShipment;
+        $this->pdfCreditmemo = $pdfCreditmemo;
         $this->fileFactory = $fileFactory;
-        parent::__construct($context);
+        $this->dateTime = $dateTime;
+        $this->shipmentCollectionFactory = $shipmentCollectionFactory;
+        $this->invoiceCollectionFactory = $invoiceCollectionFactory;
+        $this->creditmemoCollectionFactory = $creditmemoCollectionFactory;
+        $this->collectionFactory = $orderCollectionFactory;
+        parent::__construct($context, $filter);
     }
 
     /**
@@ -38,62 +116,38 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $flag = false;
-        /** @var \Magento\Sales\Model\Order $order */
-        foreach ($collection->getItems() as $order) {
-            $invoices = $order->getInvoiceCollection();
-            if ($invoices->getSize()) {
-                $flag = true;
-                if (!isset($pdf)) {
-                    $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')
-                        ->getPdf($invoices);
-                } else {
-                    $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')
-                        ->getPdf($invoices);
-                    $pdf->pages = array_merge($pdf->pages, $pages->pages);
-                }
-            }
+        $orderIds = $collection->getAllIds();
 
-            $shipments = $order->getShipmentsCollection();
-            if ($shipments->getSize()) {
-                $flag = true;
-                if (!isset($pdf)) {
-                    $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')
-                        ->getPdf($shipments);
-                } else {
-                    $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')
-                        ->getPdf($shipments);
-                    $pdf->pages = array_merge($pdf->pages, $pages->pages);
-                }
-            }
+        $shipments = $this->shipmentCollectionFactory->create()->setOrderFilter(['in' => $orderIds]);
+        $invoices = $this->invoiceCollectionFactory->create()->setOrderFilter(['in' => $orderIds]);
+        $creditmemos = $this->creditmemoCollectionFactory->create()->setOrderFilter(['in' => $orderIds]);
 
-            $creditmemos = $order->getCreditmemosCollection();
-            if ($creditmemos->getSize()) {
-                $flag = true;
-                if (!isset($pdf)) {
-                    $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')
-                        ->getPdf($creditmemos);
-                } else {
-                    $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')
-                        ->getPdf($creditmemos);
-                    $pdf->pages = array_merge($pdf->pages, $pages->pages);
-                }
-            }
+        $documents = [];
+        if ($invoices->getSize()) {
+            $documents[] = $this->pdfInvoice->getPdf($invoices);
         }
-        if ($flag) {
-            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')
-                ->date('Y-m-d_H-i-s');
-            return $this->fileFactory->create(
-                'docs' . $date . '.pdf',
-                $pdf->render(),
-                DirectoryList::VAR_DIR,
-                'application/pdf'
-            );
-        } else {
+        if ($shipments->getSize()) {
+            $documents[] = $this->pdfShipment->getPdf($shipments);
+        }
+        if ($creditmemos->getSize()) {
+            $documents[] = $this->pdfCreditmemo->getPdf($creditmemos);
+        }
+
+        if (empty($documents)) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            $resultRedirect->setPath('sales/*/');
-            return $resultRedirect;
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+
+        $pdf = array_shift($documents);
+        foreach ($documents as $document) {
+            $pdf->pages = array_merge($pdf->pages, $document->pages);
+        }
+
+        return $this->fileFactory->create(
+            sprintf('docs%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $pdf->render(),
+            DirectoryList::VAR_DIR,
+            'application/pdf'
+        );
     }
 }

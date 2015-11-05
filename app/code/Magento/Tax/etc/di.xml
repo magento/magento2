@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Tax\Api\TaxRuleRepositoryInterface"
                 type="Magento\Tax\Model\TaxRuleRepository"/>
     <preference for="Magento\Tax\Api\TaxCalculationInterface"
@@ -15,7 +15,7 @@
             <argument name="taxConfig" xsi:type="object">Magento\Tax\Model\Config\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Tax\Model\Resource\Calculation">
+    <type name="Magento\Tax\Model\ResourceModel\Calculation">
         <arguments>
             <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
         </arguments>
@@ -64,20 +64,25 @@
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
-    <type name="Magento\Quote\Model\Cart\CartTotalRepository">
+    <type name="Magento\Quote\Model\Cart\TotalsConverter">
         <plugin name="add_tax_details" type="Magento\Tax\Model\Quote\GrandTotalDetailsPlugin"/>
     </type>
-    <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
+    <type name="Magento\Tax\Model\ResourceModel\Report\Tax\Createdat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <type name="Magento\Tax\Model\Resource\Report\Tax\Updatedat">
+    <type name="Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="save_order_tax" type="Magento\Tax\Model\Plugin\OrderSave"/>
+    </type>
+    <type name="Magento\Tax\Model\ResourceModel\Sales\Order\Tax">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
     </type>
 </config>

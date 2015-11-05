@@ -18,7 +18,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
     public function execute()
     {
         /** start csv content and set template */
-        $headers = new \Magento\Framework\Object(
+        $headers = new \Magento\Framework\DataObject(
             [
                 'code' => __('Code'),
                 'country_name' => __('Country'),
@@ -65,7 +65,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         unset($title);
 
         $collection = $this->_objectManager->create(
-            'Magento\Tax\Model\Resource\Calculation\Rate\Collection'
+            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection'
         )->joinCountryTable()->joinRegionTable();
 
         while ($rate = $collection->fetchItem()) {

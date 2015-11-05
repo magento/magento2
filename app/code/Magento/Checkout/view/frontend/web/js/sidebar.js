@@ -8,9 +8,12 @@ define([
     "jquery",
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData){
+], function($, authenticationPopup, customerData, alert, confirm, customerData){
 
     $.widget('mage.sidebar', {
         options: {
@@ -19,8 +22,19 @@ define([
         },
         scrollHeight: 0,
 
-        _create: function() {
+        /**
+         * Create sidebar.
+         * @private
+         */
+        _create: function () {
+            var self = this;
+
             this._initContent();
+            customerData.get('cart').subscribe(function () {
+                $(self.options.targetElement).trigger('contentUpdated');
+                self._calcHeight();
+                self._isOverflowed();
+            });
         },
 
         _initContent: function() {
@@ -37,8 +51,12 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (customer() == false && !cart().isGuestCheckoutAllowed) {
-                    authenticationPopup.showModal();
+                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                    if (this.options.url.isRedirectRequired) {
+                        location.href = this.options.url.loginUrl;
+                    } else {
+                        authenticationPopup.showModal();
+                    }
 
                     return false;
                 }
@@ -46,16 +64,27 @@ define([
             }, this);
             events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
-                if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(event.target));
-                }
+                confirm({
+                    content: self.options.confirmMessage,
+                    actions: {
+                        confirm: function () {
+                            self._removeItem($(event.currentTarget));
+                        },
+                        always: function (event) {
+                            event.stopImmediatePropagation();
+                        }
+                    }
+                });
             };
             events['keyup ' + this.options.item.qty] = function(event) {
                 self._showItemButton($(event.target));
             };
             events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
-                self._updateItemQty($(event.target));
+                self._updateItemQty($(event.currentTarget));
+            };
+            events['focusout ' + this.options.item.qty] = function(event) {
+                self._validateQty($(event.currentTarget));
             };
 
             this._on(this.element, events);
@@ -85,7 +114,6 @@ define([
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
-                elem.val(itemQty);
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -103,6 +131,18 @@ define([
                 && (changed.length > 0)
                 && (changed - 0 == changed)
                 && (changed - 0 > 0);
+        },
+
+        /**
+         * @param {Object} elem
+         * @private
+         */
+        _validateQty: function(elem) {
+            var itemQty = elem.data('item-qty');
+
+            if (!this._isValidQty(itemQty, elem.val())) {
+                elem.val(itemQty);
+            }
         },
 
         _hideItemButton: function(elem) {
@@ -169,7 +209,9 @@ define([
                     } else {
                         var msg = response.error_message;
                         if (msg) {
-                            window.alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                         }
                     }
                 })

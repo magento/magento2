@@ -49,13 +49,16 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $factory->expects($this->exactly(2))->method('create')->will(
             $this->returnCallback(
                 function ($className) {
-                    if ($className === 'Magento\Framework\Object') {
-                        return $this->getMock('Magento\Framework\Object', [], [], '', false);
+                    if ($className === 'Magento\Framework\DataObject') {
+                        return $this->getMock('Magento\Framework\DataObject', [], [], '', false);
                     }
                 }
             )
         );
 
+        $connectionMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+            ->disableOriginalConstructor()
+            ->getMock();
         $sharedInstances = [
             'Magento\Framework\App\Cache\Type\Config' => $cache,
             'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
@@ -67,11 +70,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
             'Magento\Framework\Cache\FrontendInterface' =>
                 $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'Magento\Framework\App\Resource' => $this->getMockBuilder('Magento\Framework\App\Resource')
-                ->disableOriginalConstructor()
-                ->getMock(),
-            'Magento\Framework\App\Resource\Config' => $this->getMock(
-                'Magento\Framework\App\Resource\Config',
+            'Magento\Framework\App\ResourceConnection' => $connectionMock,
+            'Magento\Framework\App\ResourceConnection\Config' => $this->getMock(
+                'Magento\Framework\App\ResourceConnection\Config',
                 [],
                 [],
                 '',
@@ -85,13 +86,13 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             $primaryLoaderMock
         );
 
-        $model->addSharedInstance($resource, 'Magento\Framework\App\Resource');
-        $instance1 = $model->get('Magento\Framework\Object');
+        $model->addSharedInstance($resource, 'Magento\Framework\App\ResourceConnection');
+        $instance1 = $model->get('Magento\Framework\DataObject');
 
-        $this->assertSame($instance1, $model->get('Magento\Framework\Object'));
+        $this->assertSame($instance1, $model->get('Magento\Framework\DataObject'));
         $this->assertSame($model, $model->clearCache());
         $this->assertSame($model, $model->get('Magento\Framework\ObjectManagerInterface'));
-        $this->assertSame($resource, $model->get('Magento\Framework\App\Resource'));
-        $this->assertNotSame($instance1, $model->get('Magento\Framework\Object'));
+        $this->assertSame($resource, $model->get('Magento\Framework\App\ResourceConnection'));
+        $this->assertNotSame($instance1, $model->get('Magento\Framework\DataObject'));
     }
 }

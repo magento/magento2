@@ -16,7 +16,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -58,7 +58,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -82,7 +82,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -102,7 +102,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -120,7 +120,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
     }
@@ -152,7 +152,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
     }
@@ -168,7 +168,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $result = $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
         unset($result['fullpath'], $result['secret_key']);
@@ -241,8 +241,8 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         return [
             'type' => 'image/jpeg',
             'title' => 'test.jpg',
-            'quote_path' => 'pub/media/custom_options/quote/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
-            'order_path' => 'pub/media/custom_options/order/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
+            'quote_path' => 'custom_options/quote/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
+            'order_path' => 'custom_options/order/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
             'size' => '3300',
             'width' => 136,
             'height' => 131,

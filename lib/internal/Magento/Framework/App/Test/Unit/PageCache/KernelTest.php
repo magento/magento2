@@ -86,9 +86,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             [$data, 'existing key', $data, true, false],
             [$data, 'existing key', $data, false, true],
             [
-                new \Magento\Framework\Object($data),
+                new \Magento\Framework\DataObject($data),
                 'existing key',
-                new \Magento\Framework\Object($data),
+                new \Magento\Framework\DataObject($data),
                 true,
                 false
             ],
@@ -98,10 +98,12 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testProcessSaveCache()
+    /**
+     * @param $httpCode
+     * @dataProvider testProcessSaveCacheDataProvider
+     */
+    public function testProcessSaveCache($httpCode, $at)
     {
-        $httpCode = 200;
-
         $cacheControlHeader = \Zend\Http\Header\CacheControl::fromString(
             'Cache-Control: public, max-age=100, s-maxage=100'
         );
@@ -116,19 +118,35 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($cacheControlHeader)
         );
         $this->responseMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'getHttpResponseCode'
-        )->will(
-            $this->returnValue($httpCode)
-        );
-        $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue(true));
-        $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
-        $this->responseMock->expects($this->at(3))->method('getHeader')->with('X-Magento-Tags');
-        $this->responseMock->expects($this->at(4))->method('clearHeader')->with($this->equalTo('Set-Cookie'));
-        $this->responseMock->expects($this->at(5))->method('clearHeader')->with($this->equalTo('X-Magento-Tags'));
-        $this->cacheMock->expects($this->once())->method('save');
+        )->willReturn($httpCode);
+        $this->requestMock->expects($this->once())
+            ->method('isGet')
+            ->willReturn(true);
+        $this->responseMock->expects($this->once())
+            ->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->at($at[0]))
+            ->method('getHeader')
+            ->with('X-Magento-Tags');
+        $this->responseMock->expects($this->at($at[1]))
+            ->method('clearHeader')
+            ->with($this->equalTo('Set-Cookie'));
+        $this->responseMock->expects($this->at($at[2]))
+            ->method('clearHeader')
+            ->with($this->equalTo('X-Magento-Tags'));
+        $this->cacheMock->expects($this->once())
+            ->method('save');
         $this->kernel->process($this->responseMock);
+    }
+
+    public function testProcessSaveCacheDataProvider()
+    {
+        return [
+            [200, [3, 4, 5]],
+            [404, [4, 5, 6]]
+        ];
     }
 
     /**
@@ -167,13 +185,11 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         return [
             ['private, max-age=100', 200, true, false],
             ['private, max-age=100', 200, false, false],
-            ['private, max-age=100', 404, true, false],
             ['private, max-age=100', 500, true, false],
             ['no-store, no-cache, must-revalidate, max-age=0', 200, true, false],
             ['no-store, no-cache, must-revalidate, max-age=0', 200, false, false],
             ['no-store, no-cache, must-revalidate, max-age=0', 404, true, false],
             ['no-store, no-cache, must-revalidate, max-age=0', 500, true, false],
-            ['public, max-age=100, s-maxage=100', 404, true, true],
             ['public, max-age=100, s-maxage=100', 500, true, true],
             ['public, max-age=100, s-maxage=100', 200, false, true]
         ];

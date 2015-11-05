@@ -107,7 +107,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * Retrieve resource instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
      */
     abstract protected function _getResource();
 
@@ -178,9 +178,9 @@ abstract class AbstractGroupPrice extends Price
         // if attribute scope is website and edit in store view scope
         // add global group prices for duplicates find
         if (!$attribute->isScopeGlobal() && $object->getStoreId()) {
-            $origGroupPrices = $object->getOrigData($attribute->getName());
-            if ($origGroupPrices) {
-                foreach ($origGroupPrices as $price) {
+            $origPrices = $object->getOrigData($attribute->getName());
+            if ($origPrices) {
+                foreach ($origPrices as $price) {
                     if ($price['website_id'] == 0) {
                         $compare = join(
                             '-',
@@ -312,11 +312,11 @@ abstract class AbstractGroupPrice extends Price
         $new = [];
 
         // prepare original data for compare
-        $origGroupPrices = $object->getOrigData($this->getAttribute()->getName());
-        if (!is_array($origGroupPrices)) {
-            $origGroupPrices = [];
+        $origPrices = $object->getOrigData($this->getAttribute()->getName());
+        if (!is_array($origPrices)) {
+            $origPrices = [];
         }
-        foreach ($origGroupPrices as $data) {
+        foreach ($origPrices as $data) {
             if ($data['website_id'] > 0 || $data['website_id'] == '0' && $isGlobal) {
                 $key = join(
                     '-',
@@ -384,7 +384,7 @@ abstract class AbstractGroupPrice extends Price
 
         if (!empty($insert)) {
             foreach ($insert as $data) {
-                $price = new \Magento\Framework\Object($data);
+                $price = new \Magento\Framework\DataObject($data);
                 $price->setEntityId($productId);
                 $this->_getResource()->savePriceData($price);
 
@@ -395,7 +395,7 @@ abstract class AbstractGroupPrice extends Price
         if (!empty($update)) {
             foreach ($update as $k => $v) {
                 if ($old[$k]['price'] != $v['value']) {
-                    $price = new \Magento\Framework\Object(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
+                    $price = new \Magento\Framework\DataObject(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
                     $this->_getResource()->savePriceData($price);
 
                     $isChanged = true;
@@ -420,9 +420,9 @@ abstract class AbstractGroupPrice extends Price
     public function getAffectedFields($object)
     {
         $data = [];
-        $groupPrices = (array)$object->getData($this->getAttribute()->getName());
+        $prices = (array)$object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
-        foreach ($groupPrices as $value) {
+        foreach ($prices as $value) {
             $data[$tableName][] = [
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'entity_id' => $object->getId(),
@@ -436,7 +436,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * Get resource model instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
      */
     public function getResource()
     {

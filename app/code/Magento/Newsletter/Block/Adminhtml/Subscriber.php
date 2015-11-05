@@ -11,7 +11,7 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
-use Magento\Newsletter\Model\Resource\Queue\Collection;
+use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 
 class Subscriber extends \Magento\Backend\Block\Template
 {
@@ -28,18 +28,18 @@ class Subscriber extends \Magento\Backend\Block\Template
     protected $_template = 'subscriber/list.phtml';
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Queue\CollectionFactory
+     * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory,
+        \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -64,7 +64,7 @@ class Subscriber extends \Magento\Backend\Block\Template
     public function getQueueCollection()
     {
         if ($this->_queueCollection === null) {
-            /** @var $this->_queueCollection \Magento\Newsletter\Model\Resource\Queue\Collection */
+            /** @var $this->_queueCollection \Magento\Newsletter\Model\ResourceModel\Queue\Collection */
             $this->_queueCollection = $this
                 ->_collectionFactory
                 ->create()

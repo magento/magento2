@@ -8,166 +8,132 @@
 
 ?>
 <!-- TODO: refactor form styles and js -->
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-warning" style="display: none;">
-    <div class="popup">
-        <div class="popup-inner">
-            <div class="popup-header">
-                <div class="popup-title"><?php echo __('Warning') ?></div>
-            </div>
-            <div class="popup-content">
-                <div class="messages">
-                    <div class="message message-warning">
-                        <p><?php echo __('You will lose any data created since the backup was made, including admin users, customers and orders.')?></p>
-                        <p><?php echo __('Are you sure you want to continue?')?></p>
+<script type="text/x-magento-template" id="rollback-warning-template">
+<p><?php /* @escapeNotVerified */ echo __('You will lose any data created since the backup was made, including admin users, customers and orders.')?></p>
+<p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
+</script>
+<script type="text/x-magento-template" id="backup-options-template">
+    <div class="backup-messages" style="display: none;">
+        <div class="messages"></div>
+    </div>
+    <div class="messages">
+        <div class="message message-warning">
+            <?php /* @escapeNotVerified */ echo __('This may take a few moments.')?>
+            <?php /* @escapeNotVerified */ echo __('Be sure your store is in maintenance mode during backup.')?></div>
+    </div>
+    <form action="" method="post" id="backup-form" class="form-inline">
+        <fieldset class="admin__fieldset form-list question">
+            <div class="admin__field field _required">
+                <label for="backup_name" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Backup Name')?></span></label>
+                <div class="admin__field-control">
+                    <input type="text" name="backup_name" id="backup_name"
+                           class="admin__control-text required-entry validate-alphanum-with-spaces validate-length maximum-length-50"
+                           maxlength="50" />
+                    <div class="admin__field-note">
+                        <?php /* @escapeNotVerified */ echo __('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'); ?>
                     </div>
                 </div>
+            </div>
 
-                <div class="actions">
-                    <button type="button" class="action primary" onclick="backup.requestPassword()"><?php echo __('OK')?></button>
-                    <button type="button" class="action cancel" onclick="backup.hidePopups()"><?php echo __('Cancel')?></button>
+            <div class="admin__field field maintenance-checkbox-container">
+                <label for="backup_maintenance_mode" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Maintenance mode')?></span></label>
+                <div class="admin__field-control">
+                    <div class="admin__field-option">
+                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
+                        <label class="admin__field-label" for="backup_maintenance_mode"><?php /* @escapeNotVerified */ echo __('Please put your store into maintenance mode during backup.')?></label>
+                    </div>
                 </div>
             </div>
+
+            <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">
+                <label for="exclude_media" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Exclude')?></span></label>
+                <div class="admin__field-control">
+                    <div class="admin__field-option">
+                        <input class="admin__control-checkbox" type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
+                        <label class="admin__field-label" for="exclude_media"><?php /* @escapeNotVerified */ echo __('Exclude media folder from backup') ?></label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script type="text/x-magento-template" id="rollback-request-password-template">
+    <div class="backup-messages" style="display: none;">
+        <div class="messages"></div>
+    </div>
+    <div class="messages">
+        <div class="message message-warning">
+            <?php /* @escapeNotVerified */ echo __('Please enter the password to confirm rollback.')?><br>
+            <?php /* @escapeNotVerified */ echo __('This action cannot be undone.')?>
+            <p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
         </div>
     </div>
-</div>
-
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-warning" style="display: none;">
-    <div class="popup">
-        <div class="popup-inner">
-            <div class="popup-header">
-                <div class="popup-title"><?php echo __('Warning') ?></div>
+    <form action="" method="post" id="rollback-form" class="form-inline">
+        <fieldset class="admin__fieldset password-box-container">
+            <div class="admin__field field _required">
+                <label for="password" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('User Password')?></span></label>
+                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="off"></div>
             </div>
-            <div class="popup-content">
-                <div class="messages">
-                    <div class="message message-warning">
-                        <?php echo __("It will take time to create a backup. ")?><?php echo __('Please wait while we create your backup.')?><br>
-                        <?php echo __('Are you sure you want to continue?')?>
+
+            <div class="admin__field field maintenance-checkbox-container">
+                <label for="rollback_maintenance_mode" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Maintenance mode')?></span></label>
+                <div class="admin__field-control">
+                    <div class="admin__field-option">
+                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>  
+                        <label class="admin__field-label" for="rollback_maintenance_mode"><?php /* @escapeNotVerified */ echo __('Please put your store into maintenance mode during rollback processing.')?></label>  
+                    </div>  
+                </div>
+            </div>
+
+            <div class="admin__field field maintenance-checkbox-container" id="use-ftp-checkbox-row" style="display: none;">
+                <label for="use_ftp" class="admin__field-label">
+                    <span><?php /* @escapeNotVerified */ echo __('FTP')?></span>
+                </label>
+                <div class="admin__field-control">
+                    <div class="admin__field-option">
+                        <input class="admin__control-checkbox" type="checkbox" name="use_ftp" value="1" id="use_ftp" onclick="backup.toggleFtpCredentialsForm(event)"/>
+                        <label class="admin__field-label" for="use_ftp"><?php /* @escapeNotVerified */ echo __('Use FTP Connection')?></label>
                     </div>
                 </div>
-                <div class="actions">
-                    <button type="button" class="action primary" onclick="backup.requestBackupOptions()"><?php echo __('OK')?></button>
-                    <button type="button" class="action cancel" onclick="backup.hidePopups()"><?php echo __('Cancel')?></button>
-                </div>
             </div>
+        </fieldset>
+        <div class="entry-edit" id="ftp-credentials-container" style="display: none;">
+            <fieldset class="admin__fieldset">
+                <legend class="admin__legend legend"><span><?php /* @escapeNotVerified */ echo __('FTP credentials')?></span></legend><br />
+                <div class="admin__field field _required">
+                    <label class="admin__field-label" for="ftp_host"><span><?php /* @escapeNotVerified */ echo __('FTP Host') ?></span></label>
+                    <div class="admin__field-control">
+                        <input type="text" class="admin__control-text" name="ftp_host" id="ftp_host">
+                    </div>
+                </div>
+
+                <div class="admin__field field _required">
+                    <label class="admin__field-label" for="ftp_user"><span><?php /* @escapeNotVerified */ echo __('FTP Login') ?></span></label>
+                    <div class="admin__field-control">
+                        <input type="text" class="admin__control-text" name="ftp_user" id="ftp_user">
+                    </div>
+                </div>
+                <div class="admin__field field _required">
+                    <label class="admin__field-label" for="ftp_pass">
+                        <span><?php /* @escapeNotVerified */ echo __('FTP Password') ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="off">
+                    </div>
+                </div>
+                <div class="admin__field field">
+                    <label class="admin__field-label" for="ftp_path">
+                        <span><?php /* @escapeNotVerified */ echo __('Magento root directory') ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <input type="text" class="admin__control-text" name="ftp_path" id="ftp_path">
+                    </div>
+                </div>
+            </fieldset>
         </div>
-    </div>
-</div>
-
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-options" style="display: none;">
-    <div class="popup">
-        <div class="popup-inner">
-            <div class="popup-header">
-                <div class="popup-title"><?php echo __('Backup options') ?></div>
-            </div>
-            <div class="popup-content">
-                <div class="backup-messages" style="display: none;"><div class="messages"></div></div>
-                <div class="messages">
-                    <div class="message message-warning"><?php echo __('Please specify backup creation option.')?></div>
-                </div>
-                <form action="" method="post" id="backup-form" class="form-inline">
-                    <fieldset class="fieldset form-list question">
-                        <div class="field">
-                            <label for="backup_name" class="label"><span><?php echo __('Backup Name')?></span></label>
-                            <div class="control">
-                                <input type="text" name="backup_name" id="backup_name"
-                                       class="required-entry validate-alphanum-with-spaces validate-length maximum-length-50"
-                                       maxlength="50" />
-                                <div class="note">
-                                    <?php echo __('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'); ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field maintenance-checkbox-container">
-                            <div class="control">
-                                <input type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
-                                <label for="backup_maintenance_mode"><?php echo __('Please put your store into maintenance mode during backup.')?></label>
-                            </div>
-                        </div>
-
-                        <div class="field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">
-                            <div class="control">
-                                <input type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
-                                <label for="exclude_media"><?php echo __('Exclude media folder from backup') ?></label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-
-                <div class="actions">
-                    <button type="button" class="action primary" data-mage-init='{"button":{"event":"submit","target":"#backup-form"}}'><?php echo __('OK')?></button>
-                    <button type="button" class="action cancel" onclick="backup.hidePopups()"><?php echo __('Cancel')?></button>
-                </div>
-            </div>
-        </div>
-    </div>
- </div>
-
-<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-request-password" style="display: none;">
-    <div class="popup popup-notice">
-        <div class="popup-inner">
-            <div class="popup-header">
-                <div class="popup-title"><?php echo __('Please enter a password.') ?></div>
-            </div>
-            <div class="popup-content">
-                <div class="backup-messages" style="display: none;"><div class="messages"></div></div>
-                <div class="messages">
-                    <div class="message message-warning">
-                        <?php echo __('Please enter the password to confirm rollback.')?><br>
-                        <?php echo __('This action cannot be undone.')?>
-                        <p><?php echo __('Are you sure you want to continue?')?></p>
-                    </div>
-                </div>
-                <form action="" method="post" id="rollback-form" class="form-inline">
-                    <div class="password-box-container">
-
-                        <div class="field required">
-                            <label for="password" class="label"><span><?php echo __('User Password')?></span></label>
-                            <div class="control"><input type="password" name="password" id="password" class="required-entry"></div>
-                        </div>
-
-                        <div class="field maintenance-checkbox-container">
-                            <input type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>
-                            <label for="rollback_maintenance_mode"><?php echo __('Please put your store into maintenance mode during rollback processing.')?></label>
-                        </div>
-
-                        <div class="field maintenance-checkbox-container" id="use-ftp-checkbox-row" style="display: none;">
-                            <input type="checkbox" name="use_ftp" value="1" id="use_ftp" onClick="backup.toggleFtpCredentialsForm();"/> <label for="use_ftp"><?php echo __('Use FTP Connection')?></label>
-                        </div>
-                    </div>
-                    <div class="entry-edit" id="ftp-credentials-container" style="display: none;">
-                        <fieldset class="fieldset">
-                            <legend class="legend"><span><?php echo __('FTP credentials')?></span></legend><br />
-                            <div class="field required">
-                                <label for="ftp_host"><span><?php echo __('FTP Host') ?></span></label>
-                                <div class="control"><input type="text" name="ftp_host" id="ftp_host"></div>
-                            </div>
-
-                            <div class="field required">
-                                <label for="ftp_user"><span><?php echo __('FTP Login') ?></span></label>
-                                <div class="control"><input type="text" name="ftp_user" id="ftp_user"></div>
-                            </div>
-                            <div class="field required">
-                                <label for="ftp_pass"><span><?php echo __('FTP Password') ?></span></label>
-                                <div class="control"><input type="password" name="ftp_pass" id="ftp_pass"></div>
-                            </div>
-                            <div class="field">
-                                <label for="ftp_path"><span><?php echo __('Magento root directory') ?></span></label>
-                                <div class="control"><input type="text" name="ftp_path" id="ftp_path"></div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </form>
-
-                <div class="actions">
-                    <button type="button" class="action primary" data-mage-init='{"button":{"event":"submit","target":"#rollback-form"}}'><?php echo __('OK')?></button>
-                    <button type="button" class="action cancel" onclick="backup.hidePopups()"><?php echo __('Cancel')?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+    </form>
+</script>
 <?php
     $rollbackUrl = $block->getUrl('*/*/rollback');
     $backupUrl = $block->getUrl('*/*/create');
@@ -181,8 +147,8 @@ require([
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?php echo $block->escapeJsQuote($rollbackUrl);?>';
-    backup.backupUrl = '<?php echo $block->escapeJsQuote($backupUrl);?>';
+    backup.rollbackUrl = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($rollbackUrl);?>';
+    backup.backupUrl = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($backupUrl);?>';
 //]]>
 
 });

@@ -9,8 +9,8 @@ namespace Magento\Shipping\Model\Order;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  * @method int getParentId()
  * @method float getWeight()
  * @method float getQty()
@@ -35,9 +35,9 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
@@ -49,9 +49,9 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -61,7 +61,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
             $extensionFactory,
             $customAttributeFactory,
             $storeManager,
-            $shipmentFactory,
+            $shipmentRepository,
             $resource,
             $resourceCollection,
             $data

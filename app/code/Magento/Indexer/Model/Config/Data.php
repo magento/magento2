@@ -8,20 +8,20 @@ namespace Magento\Indexer\Model\Config;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State\Collection
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection
      */
     protected $stateCollection;
 
     /**
-     * @param \Magento\Indexer\Model\Config\Reader $reader
+     * @param \Magento\Framework\Indexer\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection
+     * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection
      * @param string $cacheId
      */
     public function __construct(
-        \Magento\Indexer\Model\Config\Reader $reader,
+        \Magento\Framework\Indexer\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection,
+        \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection,
         $cacheId = 'indexer_config'
     ) {
         $this->stateCollection = $stateCollection;

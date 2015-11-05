@@ -16,6 +16,11 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     private $serviceLocatorMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @var Navigation
      */
     private $navigation;
@@ -24,64 +29,67 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceLocatorMock =
             $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-
-        $this->navigation = new Navigation($this->serviceLocatorMock);
-    }
-
-    public function testGetData()
-    {
         $this->serviceLocatorMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
             ->will($this->returnValue([
-                'nav' => [
+                'navInstallerTitles' => [
+                    'install' => 'SomeTitle'
+                 ],
+                'navInstaller' => [
                     ['key1' => 'value1'],
                     ['key2' => 'value2'],
-                ]
-            ]));
-
-        $this->assertEquals([['key1' => 'value1'], ['key2' => 'value2']], $this->navigation->getData());
-    }
-
-    public function testGetMenuItems()
-    {
-        $this->serviceLocatorMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->will($this->returnValue([
-                'nav' => [
-                    ['key1' => 'value1'],
-                    ['key2' => 'value2'],
-                    ['nav-bar' => 'abc', 'key3' => 'value3'],
-                    ['nav-bar' => ''],
-                    ['nav-bar' => false],
-                ]
-            ]));
-
-        $this->assertEquals(
-            [['nav-bar' => 'abc', 'key3' => 'value3']],
-            array_values($this->navigation->getMenuItems())
-        );
-    }
-
-    public function testGetMainItems()
-    {
-        $this->serviceLocatorMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->will($this->returnValue([
-                'nav' => [
-                    ['key1' => 'value1'],
-                    ['key2' => 'value2'],
+                    ['nav' => 'abc', 'key3' => 'value3'],
+                    ['nav' => ''],
+                    ['nav' => false],
                     ['main' => 'abc', 'key3' => 'value3'],
                     ['main' => ''],
                     ['main' => false],
                 ]
             ]));
+        $this->deploymentConfig = $this->getMock(
+            'Magento\Framework\App\DeploymentConfig',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
+    }
 
+    public function testGetType()
+    {
+        $this->assertEquals(Navigation::NAV_INSTALLER, $this->navigation->getType());
+    }
+
+    public function testGetData()
+    {
+        $this->assertEquals(
+            [
+                ['key1' => 'value1'],
+                ['key2' => 'value2'],
+                ['nav' => 'abc', 'key3' => 'value3'],
+                ['nav' => ''],
+                ['nav' => false],
+                ['main' => 'abc', 'key3' => 'value3'],
+                ['main' => ''],
+                ['main' => false],
+            ],
+            $this->navigation->getData()
+        );
+    }
+
+    public function testGetMenuItems()
+    {
+        $this->assertEquals(
+            [['nav' => 'abc', 'key3' => 'value3']],
+            $this->navigation->getMenuItems()
+        );
+    }
+
+    public function testGetMainItems()
+    {
         $this->assertEquals([['main' => 'abc', 'key3' => 'value3']], array_values($this->navigation->getMainItems()));
     }
 }

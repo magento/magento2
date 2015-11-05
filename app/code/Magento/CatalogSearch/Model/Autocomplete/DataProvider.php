@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Model\Autocomplete;
 
-use Magento\Search\Model\Resource\Query\Collection;
+use Magento\Search\Model\ResourceModel\Query\Collection;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 use Magento\Search\Model\Autocomplete\ItemFactory;

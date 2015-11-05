@@ -7,22 +7,71 @@
 
 <div
     class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks"
-    data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
+    data-bind="collapsible"
+    data-role="toolbar-menu-item">
     <button
         class="admin__action-dropdown"
         type="button"
-        data-bind="click: toggleOpened"
+        data-bind="toggleCollapsible"
         data-toggle="dropdown"
         aria-haspopup="true">
-        <span class="admin__action-dropdown-text"
-                data-bind="text: activeView() ? activeView().label() : $t('Default View') "></span>
+        <span
+            class="admin__action-dropdown-text"
+            data-bind="text: activeView.label"></span>
     </button>
     <ul class="admin__action-dropdown-menu">
-        <!-- ko foreach: elems -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
-        <li data-bind="visible: hasChanges" class="action-dropdown-menu-action action-dropdown-menu-item-last">
-            <a href="" data-bind="click: createNewView, text: $t('Save Current View')"></a>
+        <li 
+            data-bind="repeat: {
+                foreach: viewsArray,
+                item: '$view'
+            }"
+            data-repeat-bind="
+                css: {
+                    _edit: isEditing($view().index)
+                },
+                outerClick: endEdit.bind($data, $view().index),
+                template: viewTmpl
+            ">
+        </li>
+        <li data-bind="
+                visible: hasChanges,
+                outerClick: hideCustom.bind($data),
+                css: {
+                        _edit: customVisible,
+                        'action-dropdown-menu-action action-dropdown-menu-item-last': !customVisible
+                    }
+                ">
+            <a href=""
+                data-bind="
+                    visible: !customVisible,
+                    click: showCustom,
+                    i18n: 'Save View As...'
+                "></a>
+            <div class="action-dropdown-menu-item-edit" data-bind="visible: customVisible">
+                <input
+                    class="admin__control-text"
+                    data-bind="
+                        value: customLabel,
+                        autoselect,
+                        hasFocus: isCustomVisible(),
+                        keyboard: {
+                            13: applyCustom.bind($data),
+                            27: hideCustom.bind($data)
+                        }"
+                    type="text">
+                <div class="action-dropdown-menu-item-actions">
+                   <button
+                        class="action-submit"
+                        data-bind="
+                            attr: {
+                                title: $t('Save all changes')
+                            },
+                            click: applyCustom"
+                        type="button">
+                        <span data-bind="i18n: 'Submit'"></span>
+                    </button>
+                </div>
+            </div>
         </li>
     </ul>
 </div>

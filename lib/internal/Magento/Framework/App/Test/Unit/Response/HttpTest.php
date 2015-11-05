@@ -35,9 +35,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context */
     protected $dateTimeMock;
 
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManager;
+
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->requestMock = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
         )->disableOriginalConstructor()->getMock();
@@ -49,9 +55,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $objectManager->getObject(
+        $this->model = $this->objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
+                'request' => $this->requestMock,
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
@@ -84,18 +91,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->contextMock->expects($this->once())
-            ->method('getData')
-            ->with()
-            ->will(
-                $this->returnValue($data)
-            );
+            ->method('getVaryString')
+            ->will($this->returnValue($expectedCookieValue));
 
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->with()
-            ->will(
-                $this->returnValue($sensitiveCookieMetadataMock)
-            );
+            ->will($this->returnValue($sensitiveCookieMetadataMock));
 
         $this->cookieManagerMock->expects($this->once())
             ->method('setSensitiveCookie')
@@ -103,7 +104,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->model->sendVary();
     }
 
-    public function testSendVaryEmptyData()
+    public function testSendVaryEmptyDataDeleteCookie()
     {
         $expectedCookieName = Http::COOKIE_VARY_STRING;
         $cookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadata');
@@ -111,13 +112,31 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('/')
             ->will($this->returnSelf());
+        $this->contextMock->expects($this->once())
+            ->method('getVaryString')
+            ->willReturn(null);
         $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('createCookieMetadata')
-            ->with()
-            ->will($this->returnValue($cookieMetadataMock));
+            ->method('createSensitiveCookieMetadata')
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
             ->with($expectedCookieName, $cookieMetadataMock);
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->willReturn('value');
+        $this->model->sendVary();
+    }
+
+    public function testSendVaryEmptyData()
+    {
+        $this->contextMock->expects($this->once())
+            ->method('getVaryString')
+            ->willReturn(null);
+        $this->cookieMetadataFactoryMock->expects($this->never())
+            ->method('createSensitiveCookieMetadata');
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
         $this->model->sendVary();
     }
 

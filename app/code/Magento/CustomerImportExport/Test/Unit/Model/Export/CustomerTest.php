@@ -76,7 +76,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                'Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory',
                 [],
                 [],
                 '',
@@ -84,7 +84,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ),
             $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false),
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory', [], [], '', false),
             $this->_getModelDependencies()
         );
     }
@@ -154,7 +154,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;
@@ -177,7 +177,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $storeData = ['id' => $id, 'code' => $code];
-            $stores[$id] = new \Magento\Framework\Object($storeData);
+            $stores[$id] = new \Magento\Framework\DataObject($storeData);
         }
 
         return $stores;

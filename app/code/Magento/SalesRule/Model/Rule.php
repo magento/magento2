@@ -10,8 +10,8 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
- * @method \Magento\SalesRule\Model\Resource\Rule _getResource()
- * @method \Magento\SalesRule\Model\Resource\Rule getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -163,7 +163,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_condProdCombineF;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\Collection
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
      */
     protected $_couponCollection;
 
@@ -181,9 +181,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory
      * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
      * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
-     * @param \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -197,9 +197,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
-        \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -220,7 +220,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\Resource\Rule');
+        $this->_init('Magento\SalesRule\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
 
@@ -231,11 +231,31 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected function _afterLoad()
     {
+        $this->loadRelations();
+        return parent::_afterLoad();
+    }
+
+    /**
+     * Load all relative data
+     *
+     * @return void
+     */
+    public function loadRelations()
+    {
+        $this->loadCouponCode();
+    }
+
+    /**
+     * Load coupon code
+     *
+     * @return void
+     */
+    public function loadCouponCode()
+    {
         $this->setCouponCode($this->getPrimaryCoupon()->getCode());
-        if ($this->getUsesPerCoupon() !== null && !$this->getUseAutoGeneration()) {
+        if ($this->getUsesPerCoupon() == null && !$this->getUseAutoGeneration()) {
             $this->setUsesPerCoupon($this->getPrimaryCoupon()->getUsageLimit());
         }
-        return parent::_afterLoad();
     }
 
     /**
@@ -419,7 +439,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon'),
             ];
-            $transport = new \Magento\Framework\Object(
+            $transport = new \Magento\Framework\DataObject(
                 ['coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false]
             );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', ['transport' => $transport]);

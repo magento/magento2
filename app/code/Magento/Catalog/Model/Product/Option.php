@@ -4,20 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Catalog product option model
  *
- * @method \Magento\Catalog\Model\Resource\Product\Option getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
@@ -25,8 +26,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Option extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
     const OPTION_GROUP_TEXT = 'text';
 
@@ -77,34 +77,34 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * @var Product
      */
-    protected $_product;
+    protected $product;
 
     /**
      * @var array
      */
-    protected $_options = [];
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $_values = null;
+    protected $values = null;
 
     /**
      * Catalog product option value
      *
      * @var Option\Value
      */
-    protected $_productOptionValue;
+    protected $productOptionValue;
 
     /**
      * Product option factory
      *
      * @var \Magento\Catalog\Model\Product\Option\Type\Factory
      */
-    protected $_optionFactory;
+    protected $optionTypeFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -120,9 +120,9 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
      * @param Option\Type\Factory $optionFactory
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -134,14 +134,14 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_productOptionValue = $productOptionValue;
-        $this->_optionFactory = $optionFactory;
+        $this->productOptionValue = $productOptionValue;
+        $this->optionTypeFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
         $this->string = $string;
         parent::__construct(
@@ -158,7 +158,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getResource()
     {
@@ -170,7 +170,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Option');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option');
         parent::_construct();
     }
 
@@ -182,7 +182,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function addValue(Option\Value $value)
     {
-        $this->_values[$value->getId()] = $value;
+        $this->values[$value->getId()] = $value;
         return $this;
     }
 
@@ -194,8 +194,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValueById($valueId)
     {
-        if (isset($this->_values[$valueId])) {
-            return $this->_values[$valueId];
+        if (isset($this->values[$valueId])) {
+            return $this->values[$valueId];
         }
 
         return null;
@@ -206,7 +206,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValues()
     {
-        return $this->_values;
+        return $this->values;
     }
 
     /**
@@ -216,7 +216,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValueInstance()
     {
-        return $this->_productOptionValue;
+        return $this->productOptionValue;
     }
 
     /**
@@ -227,7 +227,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function addOption($option)
     {
-        $this->_options[] = $option;
+        $this->options[] = $option;
         return $this;
     }
 
@@ -238,7 +238,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getOptions()
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
@@ -249,7 +249,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setOptions($options)
     {
-        $this->_options = $options;
+        $this->options = $options;
         return $this;
     }
 
@@ -260,7 +260,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function unsetOptions()
     {
-        $this->_options = [];
+        $this->options = [];
         return $this;
     }
 
@@ -271,7 +271,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getProduct()
     {
-        return $this->_product;
+        return $this->product;
     }
 
     /**
@@ -282,7 +282,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setProduct(Product $product = null)
     {
-        $this->_product = $product;
+        $this->product = $product;
         return $this;
     }
 
@@ -294,7 +294,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getGroupByType($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             $type = $this->getType();
         }
         $optionGroupsToTypes = [
@@ -324,7 +324,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         $group = $this->getGroupByType($type);
         if (!empty($group)) {
-            return $this->_optionFactory->create(
+            return $this->optionTypeFactory->create(
                 'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
             );
         }
@@ -451,24 +451,24 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * Delete prices of option
      *
-     * @param int $option_id
+     * @param int $optionId
      * @return $this
      */
-    public function deletePrices($option_id)
+    public function deletePrices($optionId)
     {
-        $this->getResource()->deletePrices($option_id);
+        $this->getResource()->deletePrices($optionId);
         return $this;
     }
 
     /**
      * Delete titles of option
      *
-     * @param int $option_id
+     * @param int $optionId
      * @return $this
      */
-    public function deleteTitles($option_id)
+    public function deleteTitles($optionId)
     {
-        $this->getResource()->deleteTitles($option_id);
+        $this->getResource()->deleteTitles($optionId);
         return $this;
     }
 
@@ -476,11 +476,12 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * Get Product Option Collection
      *
      * @param Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     public function getProductOptionCollection(Product $product)
     {
-        $collection = $this->getCollection()->addFieldToFilter(
+        $collection = clone $this->getCollection();
+        $collection->addFieldToFilter(
             'product_id',
             $product->getId()
         )->addTitleToResult(
@@ -519,12 +520,12 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * Get collection of values by given option ids
      *
      * @param array $optionIds
-     * @param int $store_id
+     * @param int $storeId
      * @return Collection
      */
-    public function getOptionValuesByOptionId($optionIds, $store_id)
+    public function getOptionValuesByOptionId($optionIds, $storeId)
     {
-        $collection = $this->_productOptionValue->getValuesByOption($optionIds, $this->getId(), $store_id);
+        $collection = $this->productOptionValue->getValuesByOption($optionIds, $this->getId(), $storeId);
 
         return $collection;
     }
@@ -563,7 +564,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     protected function _clearData()
     {
         $this->_data = [];
-        $this->_values = null;
+        $this->values = null;
         return $this;
     }
 
@@ -574,8 +575,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     protected function _clearReferences()
     {
-        if (!empty($this->_values)) {
-            foreach ($this->_values as $value) {
+        if (!empty($this->values)) {
+            foreach ($this->values as $value) {
                 $value->unsetOption();
             }
         }
@@ -848,7 +849,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setValues(array $values = null)
     {
-        $this->_values = $values;
+        $this->values = $values;
         return $this;
     }
 

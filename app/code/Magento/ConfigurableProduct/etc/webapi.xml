@@ -6,11 +6,11 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/configurable-products/:sku/children" method="GET">
         <service class="Magento\ConfigurableProduct\Api\LinkManagementInterface" method="getChildren"/>
         <resources>
-            <resource ref="Magento_Catalog::products"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/children/:childSku" method="DELETE">
@@ -34,13 +34,13 @@
     <route url="/V1/configurable-products/:sku/options/:id" method="GET">
         <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::products"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options/all" method="GET">
         <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Catalog::products"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options" method="POST">

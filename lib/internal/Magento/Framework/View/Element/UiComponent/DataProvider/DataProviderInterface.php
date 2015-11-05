@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+
 /**
  * Interface DataProviderInterface
  */
@@ -80,23 +82,12 @@ interface DataProviderInterface
     public function getData();
 
     /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     */
-    public function addField($field, $alias = null);
-
-    /**
      * Add field filter to collection
      *
-     * @param string|int|array|null $condition
-     * @param null|string|array $field
-     * @param string $type
+     * @param \Magento\Framework\Api\Filter $filter
      * @return mixed
      */
-    public function addFilter($condition, $field = null, $type = 'regular');
+    public function addFilter(\Magento\Framework\Api\Filter $filter);
 
     /**
      * Add ORDER BY to the end or to the beginning
@@ -117,25 +108,14 @@ interface DataProviderInterface
     public function setLimit($offset, $size);
 
     /**
-     * Removes field from select
+     * Returns search criteria
      *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
+     * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
      */
-    public function removeField($field, $isAlias = false);
+    public function getSearchCriteria();
 
     /**
-     * Removes all fields from select
-     *
-     * @return void
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
-    public function removeAllFields();
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count();
+    public function getSearchResult();
 }

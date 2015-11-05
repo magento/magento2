@@ -10,12 +10,12 @@ use Magento\Directory\Helper\Data;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_regionCollection;
 
@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $configCacheType = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
 
         $this->_countryCollection = $this->getMock(
-            'Magento\Directory\Model\Resource\Country\Collection',
+            'Magento\Directory\Model\ResourceModel\Country\Collection',
             [],
             [],
             '',
@@ -59,14 +59,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_regionCollection = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\Collection',
+            'Magento\Directory\Model\ResourceModel\Region\Collection',
             [],
             [],
             '',
             false
         );
         $regCollectionFactory = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\CollectionFactory',
+            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory',
             ['create'],
             [],
             '',
@@ -103,8 +103,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetRegionJson()
     {
         $countries = [
-            new \Magento\Framework\Object(['country_id' => 'Country1']),
-            new \Magento\Framework\Object(['country_id' => 'Country2'])
+            new \Magento\Framework\DataObject(['country_id' => 'Country1']),
+            new \Magento\Framework\DataObject(['country_id' => 'Country2'])
         ];
         $countryIterator = new \ArrayIterator($countries);
         $this->_countryCollection->expects(
@@ -116,13 +116,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $regions = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name']
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['country_id' => 'Country1', 'region_id' => 'r2', 'code' => 'r2-code', 'name' => 'r2-name']
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 ['country_id' => 'Country2', 'region_id' => 'r3', 'code' => 'r3-code', 'name' => 'r3-name']
             )
         ];
@@ -236,5 +236,54 @@ class DataTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnValue($country));
 
         $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
+    }
+
+    public function testGetCountryCollection()
+    {
+        $this->_countryCollection->expects(
+            $this->once()
+        )->method(
+            'isLoaded'
+        )->will(
+            $this->returnValue(0)
+        );
+
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->_countryCollection->expects(
+            $this->once()
+        )->method(
+            'loadByStore'
+        )->with(
+            $store
+        );
+
+        $this->_object->getCountryCollection($store);
+    }
+
+    /**
+     * @param string $topCountriesValue
+     * @param array $expectedResult
+     * @dataProvider topCountriesDataProvider
+     */
+    public function testGetTopCountryCodesReturnsParsedConfigurationValue($topCountriesValue, $expectedResult)
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')->with(\Magento\Directory\Helper\Data::XML_PATH_TOP_COUNTRIES)
+            ->willReturn($topCountriesValue);
+
+        $this->assertEquals($expectedResult, $this->_object->getTopCountryCodes());
+    }
+
+    /**
+     * @return array
+     */
+    public function topCountriesDataProvider()
+    {
+        return [
+            [null, []],
+            ['', []],
+            ['US', ['US']],
+            ['US,RU', ['US', 'RU']],
+        ];
     }
 }

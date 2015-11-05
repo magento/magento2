@@ -21,24 +21,24 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     /**
      * Backup resource model
      *
-     * @var \Magento\Backup\Model\Resource\Db
+     * @var \Magento\Backup\Model\ResourceModel\Db
      */
     protected $_resourceDb = null;
 
     /**
      * Core resource model
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource = null;
 
     /**
-     * @param \Magento\Backup\Model\Resource\Db $resourceDb
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Backup\Model\ResourceModel\Db $resourceDb
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        \Magento\Backup\Model\Resource\Db $resourceDb,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Backup\Model\ResourceModel\Db $resourceDb,
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;
@@ -54,7 +54,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     /**
      * Retrieve resource model
      *
-     * @return \Magento\Backup\Model\Resource\Db
+     * @return \Magento\Backup\Model\ResourceModel\Db
      */
     public function getResource()
     {
@@ -179,6 +179,25 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
         $backup->close();
 
         return $this;
+    }
+
+    /**
+     * Get database backup size
+     *
+     * @return int
+     */
+    public function getDBBackupSize()
+    {
+        $tables = $this->getResource()->getTables();
+        $ignoreDataTablesList = $this->getIgnoreDataTablesList();
+        $size = 0;
+        foreach ($tables as $table) {
+            $tableStatus = $this->getResource()->getTableStatus($table);
+            if ($tableStatus->getRows() && !in_array($table, $ignoreDataTablesList)) {
+                $size += $tableStatus->getDataLength() + $tableStatus->getIndexLength();
+            }
+        }
+        return $size;
     }
 
     /**

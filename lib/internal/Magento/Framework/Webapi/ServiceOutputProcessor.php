@@ -9,11 +9,12 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
  * Data object converter for REST
  */
-class ServiceOutputProcessor
+class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {
     /**
      * @var DataObjectProcessor
@@ -55,28 +56,7 @@ class ServiceOutputProcessor
     {
         /** @var string $dataType */
         $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
-        if (is_array($data)) {
-            $result = [];
-            $arrayElementType = substr($dataType, 0, -2);
-            foreach ($data as $datum) {
-                if (is_object($datum)) {
-                    $datum = $this->processDataObject(
-                        $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
-                    );
-                }
-                $result[] = $datum;
-            }
-            return $result;
-        } elseif (is_object($data)) {
-            return $this->processDataObject(
-                $this->dataObjectProcessor->buildOutputDataArray($data, $dataType)
-            );
-        } elseif ($data === null) {
-            return [];
-        } else {
-            /** No processing is required for scalar types */
-            return $data;
-        }
+        return $this->convertValue($data, $dataType);
     }
 
     /**
@@ -99,5 +79,38 @@ class ServiceOutputProcessor
             }
         }
         return $dataObjectArray;
+    }
+
+    /**
+     * Convert associative array into proper data object.
+     *
+     * @param array $data
+     * @param string $type
+     * @return array|object
+     */
+    public function convertValue($data, $type)
+    {
+        if (is_array($data)) {
+            $result = [];
+            $arrayElementType = substr($type, 0, -2);
+            foreach ($data as $datum) {
+                if (is_object($datum)) {
+                    $datum = $this->processDataObject(
+                        $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
+                    );
+                }
+                $result[] = $datum;
+            }
+            return $result;
+        } elseif (is_object($data)) {
+            return $this->processDataObject(
+                $this->dataObjectProcessor->buildOutputDataArray($data, $type)
+            );
+        } elseif ($data === null) {
+            return [];
+        } else {
+            /** No processing is required for scalar types */
+            return $data;
+        }
     }
 }

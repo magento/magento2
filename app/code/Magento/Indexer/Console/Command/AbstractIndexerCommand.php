@@ -5,12 +5,12 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Indexer\Model\IndexerFactory;
-use Magento\Indexer\Model\Indexer\CollectionFactory;
 use Magento\Indexer\Model\IndexerInterface;
-use Magento\Indexer\Model\Indexer;
-use Magento\Store\Model\StoreManager;
 use Magento\Framework\App\ObjectManagerFactory;
 
 /**
@@ -18,26 +18,15 @@ use Magento\Framework\App\ObjectManagerFactory;
  */
 abstract class AbstractIndexerCommand extends Command
 {
-    /**#@+
-     * Names of input arguments or options
+    /**
+     * @var ObjectManagerFactory
      */
-    const INPUT_KEY_ALL = 'all';
-    const INPUT_KEY_INDEXERS = 'index';
-    /**#@- */
+    private $objectManagerFactory;
 
     /**
-     * Collection of Indexers factory
-     *
-     * @var CollectionFactory
+     * @var ObjectManagerInterface
      */
-    protected $collectionFactory;
-
-    /**
-     * Indexer factory
-     *
-     * @var IndexerFactory
-     */
-    protected $indexerFactory;
+    private $objectManager;
 
     /**
      * Constructor
@@ -45,17 +34,7 @@ abstract class AbstractIndexerCommand extends Command
      */
     public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
-        $params = $_SERVER;
-        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-        $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $objectManager = $objectManagerFactory->create($params);
-
-
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode('adminmhtml'); //TODO: temporary fix.
-        $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
-        $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
+        $this->objectManagerFactory = $objectManagerFactory;
         parent::__construct();
     }
 
@@ -66,7 +45,26 @@ abstract class AbstractIndexerCommand extends Command
      */
     protected function getAllIndexers()
     {
-        /** @var Indexer[] $indexers */
-        return $this->collectionFactory->create()->getItems();
+        $collectionFactory = $this->getObjectManager()->create('Magento\Indexer\Model\Indexer\CollectionFactory');
+        return $collectionFactory->create()->getItems();
+    }
+
+    /**
+     * Gets initialized object manager
+     *
+     * @return ObjectManagerInterface
+     */
+    protected function getObjectManager()
+    {
+        if (null == $this->objectManager) {
+            $area = FrontNameResolver::AREA_CODE;
+            $this->objectManager = $this->objectManagerFactory->create($_SERVER);
+            /** @var \Magento\Framework\App\State $appState */
+            $appState = $this->objectManager->get('Magento\Framework\App\State');
+            $appState->setAreaCode($area);
+            $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+            $this->objectManager->configure($configLoader->load($area));
+        }
+        return $this->objectManager;
     }
 }

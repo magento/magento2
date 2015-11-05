@@ -8,7 +8,7 @@ namespace Magento\Framework\Pricing\Price;
 
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
@@ -103,7 +103,7 @@ abstract class AbstractPrice implements PriceInterface
 
     /**
      * @param float $amount
-     * @param null|bool|string $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface|bool|float
      */

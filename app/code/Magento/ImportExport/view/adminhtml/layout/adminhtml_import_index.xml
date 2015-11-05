@@ -5,7 +5,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_ImportExport::css/importexport.css"/>
+    </head>
     <body>
         <referenceContainer name="content">
             <block class="Magento\ImportExport\Block\Adminhtml\Import\Edit\Before" template="Magento_ImportExport::import/form/before.phtml" name="import.form.before" as="form_before"/>

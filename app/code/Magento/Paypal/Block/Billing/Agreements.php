@@ -20,7 +20,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     /**
      * Billing agreements collection
      *
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
      */
     protected $_billingAgreements = null;
 
@@ -30,7 +30,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
      */
     protected $_agreementCollection;
 
@@ -42,14 +42,14 @@ class Agreements extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementCollection
      * @param \Magento\Paypal\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementCollection,
         \Magento\Paypal\Helper\Data $helper,
         array $data = []
     ) {
@@ -83,7 +83,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve billing agreements collection
      *
-     * @return \Magento\Paypal\Model\Resource\Billing\Agreement\Collection
+     * @return \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
      */
     public function getBillingAgreements()
     {
@@ -102,7 +102,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve item value by key
      *
-     * @param \Magento\Framework\Object|\Magento\Paypal\Model\Billing\Agreement $item
+     * @param \Magento\Framework\DataObject|\Magento\Paypal\Model\Billing\Agreement $item
      * @param string $key
      * @return string
      */

@@ -7,8 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
 
 use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 
 class QueryContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +43,7 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->requestQuery = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->queryContainer = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer',
@@ -59,7 +58,11 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
         $this->matchContainerFactory->expects($this->once())->method('create')
             ->willReturn('asdf');
 
-        $result = $this->queryContainer->addMatchQuery($this->select, $this->requestQuery, Bool::QUERY_CONDITION_MUST);
+        $result = $this->queryContainer->addMatchQuery(
+            $this->select,
+            $this->requestQuery,
+            BoolExpression::QUERY_CONDITION_MUST
+        );
         $this->assertEquals($this->select, $result);
     }
 
@@ -68,22 +71,15 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
         $this->matchContainerFactory->expects($this->once())->method('create')
             ->willReturn('asdf');
 
-        $result = $this->queryContainer->addMatchQuery($this->select, $this->requestQuery, Bool::QUERY_CONDITION_MUST);
+        $result = $this->queryContainer->addMatchQuery(
+            $this->select,
+            $this->requestQuery,
+            BoolExpression::QUERY_CONDITION_MUST
+        );
         $this->assertEquals($this->select, $result);
 
-        $queries = $this->queryContainer->getDerivedQueries();
+        $queries = $this->queryContainer->getMatchQueries();
         $this->assertCount(1, $queries);
         $this->assertEquals('asdf', reset($queries));
-    }
-
-    public function testFilters()
-    {
-        $this->assertEmpty($this->queryContainer->getFilters());
-        $this->queryContainer->addFilter('filter');
-        $this->assertCount(1, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
-        $this->queryContainer->clearFilters();
-        $this->assertCount(0, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
     }
 }

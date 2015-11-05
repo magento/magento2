@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+
 
 /**
+ * @var \Magento\Paypal\Block\Iframe $block
  * @see \Magento\Paypal\Block\Iframe
  */
 ?>
@@ -18,13 +19,13 @@
     (function() {
         'use strict';
 
-        var cartUrl = '<?php echo $block->getUrl('checkout/cart') ?>',
-            successUrl = '<?php echo $block->getUrl('checkout/onepage/success') ?>',
-            goToSuccessPage = '<?php echo $block->getGotoSuccessPage() ?>',
+        var cartUrl = '<?php echo $block->escapeUrl($block->getUrl('checkout/cart')); ?>',
+            successUrl = '<?php echo $block->escapeUrl($block->getUrl('checkout/onepage/success')); ?>',
+            goToSuccessPage = '<?php echo $block->escapeUrl($block->getGotoSuccessPage()); ?>',
             require = window.top.require,
             windowContext = window,
             errorMessage = {
-                message: '<?php echo $block->getErrorMsg() ?>'
+                message: '<?php echo $block->escapeHtml($block->getErrorMsg()); ?>'
             };
 
         require([

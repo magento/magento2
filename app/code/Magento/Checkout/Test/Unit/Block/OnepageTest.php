@@ -35,37 +35,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $contextMock = $this->getMock('\Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $directoryHelperMock = $this->getMock('\Magento\Directory\Helper\Data', [], [], '', false);
-        $configCacheTypeMock = $this->getMock('\Magento\Framework\App\Cache\Type\Config', [], [], '', false);
-        $customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $resourceSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $addressConfigMock = $this->getMock('\Magento\Customer\Model\Address\Config', [], [], '', false);
-        $httpContextMock = $this->getMock('\Magento\Framework\App\Http\Context', [], [], '', false);
-        $addressMapperMock = $this->getMock('\Magento\Customer\Model\Address\Mapper', [], [], '', false);
         $this->formKeyMock = $this->getMock('\Magento\Framework\Data\Form\FormKey', [], [], '', false);
         $this->configProviderMock = $this->getMock(
             '\Magento\Checkout\Model\CompositeConfigProvider',
-            [],
-            [],
-            '',
-            false
-        );
-        $countryCollectionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\Resource\Country\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $regionCollectionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\Resource\Region\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $customerRepositoryMock = $this->getMock(
-            '\Magento\Customer\Api\CustomerRepositoryInterface',
             [],
             [],
             '',
@@ -84,16 +56,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
-            $directoryHelperMock,
-            $configCacheTypeMock,
-            $customerSessionMock,
-            $resourceSessionMock,
-            $countryCollectionFactoryMock,
-            $regionCollectionFactoryMock,
-            $customerRepositoryMock,
-            $addressConfigMock,
-            $httpContextMock,
-            $addressMapperMock,
             $this->formKeyMock,
             $this->configProviderMock,
             [$this->layoutProcessorMock]

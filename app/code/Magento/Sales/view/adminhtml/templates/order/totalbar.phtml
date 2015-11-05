@@ -12,8 +12,8 @@
     <tr>
     <?php foreach ($block->getTotals() as $_total): ?>
         <td <?php if ($_total['grand']): ?>class="grand-total"<?php endif; ?>>
-            <?php echo $_total['label'] ?><br />
-            <?php echo $_total['value'] ?>
+            <?php /* @escapeNotVerified */ echo $_total['label'] ?><br />
+            <?php /* @escapeNotVerified */ echo $_total['value'] ?>
         </td>
     <?php endforeach; ?>
     </tr>

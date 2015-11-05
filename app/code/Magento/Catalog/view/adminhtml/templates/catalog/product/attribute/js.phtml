@@ -8,7 +8,13 @@
 
 ?>
 <script>
-require(["jquery", "collapsable", "prototype"], function(jQuery){
+require([
+    "jquery",
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/prompt',
+    "collapsable",
+    "prototype"
+], function(jQuery, alert, prompt){
 
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
@@ -189,7 +195,7 @@ function switchDefaultValueField()
         break;
 
         <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
-            case '<?php echo $type; ?>':
+            case '<?php /* @escapeNotVerified */ echo $type; ?>':
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
                         getFrontTab().hide();
@@ -201,7 +207,7 @@ function switchDefaultValueField()
                     <?php elseif ($one == '_scope'): ?>
                         scopeVisibility = false;
                     <?php else: ?>
-                        setRowVisibility('<?php echo $one; ?>', false);
+                        setRowVisibility('<?php /* @escapeNotVerified */ echo $one; ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
             break;
@@ -260,36 +266,48 @@ function updateRequriedOptions()
 
 function saveAttributeInNewSet(promptMessage)
 {
-    var newAttributeSetName = prompt(promptMessage, '');
+    var newAttributeSetName;
 
-    if (newAttributeSetName == null) {
-        return;
-    }
+    prompt({
+        content: promptMessage,
+        actions: {
+            confirm: function(val) {
+                newAttributeSetName = val;
 
-    var rules = ['required-entry', 'validate-no-html-tags'];
-    for (var i = 0; i < rules.length; i++) {
-        if (!jQuery.validator.methods[rules[i]](newAttributeSetName)) {
-            alert(jQuery.validator.messages[rules[i]]);
-            return;
+                if (!newAttributeSetName) {
+                    return;
+                }
+
+                var rules = ['required-entry', 'validate-no-html-tags'];
+                for (var i = 0; i < rules.length; i++) {
+                    if (!jQuery.validator.methods[rules[i]](newAttributeSetName)) {
+                        alert({
+                            content: jQuery.validator.messages[rules[i]]
+                        });
+
+                        return;
+                    }
+                }
+
+                var newAttributeSetNameInputId = 'new_attribute_set_name';
+
+                if ($(newAttributeSetNameInputId)) {
+                    $(newAttributeSetNameInputId).value = newAttributeSetName;
+                } else {
+                    $('edit_form').insert({
+                        top: new Element('input', {
+                            type: 'hidden',
+                            id: newAttributeSetNameInputId,
+                            name: 'new_attribute_set_name',
+                            value: newAttributeSetName
+                        })
+                    });
+                }
+                // Temporary solution will replaced after refactoring of attributes functionality
+                jQuery('#edit_form').triggerHandler('save');
+            }
         }
-    }
-
-    var newAttributeSetNameInputId = 'new_attribute_set_name';
-
-    if ($(newAttributeSetNameInputId)) {
-        $(newAttributeSetNameInputId).value = newAttributeSetName;
-    } else {
-        $('edit_form').insert({
-            top: new Element('input', {
-                type: 'hidden',
-                id: newAttributeSetNameInputId,
-                name: 'new_attribute_set_name',
-                value: newAttributeSetName
-            })
-        });
-    }
-    // Temporary solution will replaced after refactoring of attributes functionality
-    jQuery('#edit_form').triggerHandler('save');
+    });
 }
 
 if($('frontend_input')){

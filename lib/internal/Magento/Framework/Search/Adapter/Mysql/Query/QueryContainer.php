@@ -18,15 +18,6 @@ class QueryContainer
     private $queries = [];
 
     /**
-     * @var string[]
-     */
-    private $filters = [];
-
-    /**
-     * @var int
-     */
-    private $filtersCount = 0;
-    /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory
      */
     private $matchContainerFactory;
@@ -62,43 +53,9 @@ class QueryContainer
     }
 
     /**
-     * @param string $filter
-     * @return void
-     */
-    public function addFilter($filter)
-    {
-        $this->filters[] = '(' . $filter . ')';
-        $this->filtersCount++;
-    }
-
-    /**
-     * @return void
-     */
-    public function clearFilters()
-    {
-        $this->filters = [];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getFilters()
-    {
-        return $this->filters;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFiltersCount()
-    {
-        return $this->filtersCount;
-    }
-
-    /**
      * @return MatchContainer[]
      */
-    public function getDerivedQueries()
+    public function getMatchQueries()
     {
         return $this->queries;
     }

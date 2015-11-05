@@ -56,9 +56,9 @@ class ProductRepositoryTest extends WebapiAbstract
 
     protected function getConfigurableAttributeOptions()
     {
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection */
         $optionCollection = $this->objectManager->create(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
         );
         $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
         return $options;
@@ -126,7 +126,6 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $response = $this->createConfigurableProduct();
         $this->assertEquals(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
-        $this->assertEquals(50, $response['price']);
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
         );

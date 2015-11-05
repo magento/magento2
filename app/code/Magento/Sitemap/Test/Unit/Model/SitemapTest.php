@@ -16,22 +16,22 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected $_helperMockSitemap;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Sitemap
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Catalog\Category
+     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\Category
      */
     protected $_sitemapCategoryMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Catalog\Product
+     * @var \Magento\Sitemap\Model\ResourceModel\Catalog\Product
      */
     protected $_sitemapProductMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Cms\Page
+     * @var \Magento\Sitemap\Model\ResourceModel\Cms\Page
      */
     protected $_sitemapCmsPageMock;
 
@@ -56,13 +56,13 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_sitemapCategoryMock = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Catalog\Category'
+            'Magento\Sitemap\Model\ResourceModel\Catalog\Category'
         )->disableOriginalConstructor()->getMock();
         $this->_sitemapProductMock = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Catalog\Product'
+            'Magento\Sitemap\Model\ResourceModel\Catalog\Product'
         )->disableOriginalConstructor()->getMock();
         $this->_sitemapCmsPageMock = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Cms\Page'
+            'Magento\Sitemap\Model\ResourceModel\Cms\Page'
         )->disableOriginalConstructor()->getMock();
         $this->_helperMockSitemap = $this->getMock(
             'Magento\Sitemap\Helper\Data',
@@ -114,7 +114,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_helperMockSitemap->expects($this->any())->method('getPagePriority')->will($this->returnValue('0.25'));
 
         $this->_resourceMock = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Sitemap'
+            'Magento\Sitemap\Model\ResourceModel\Sitemap'
         )->setMethods(
             ['_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup']
         )->disableOriginalConstructor()->getMock();
@@ -508,10 +508,10 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
                 ]
@@ -524,20 +524,20 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'url' => 'product2.html',
                             'updated_at' => '2012-12-21 00:00:00',
-                            'images' => new \Magento\Framework\Object(
+                            'images' => new \Magento\Framework\DataObject(
                                 [
                                     'collection' => [
-                                        new \Magento\Framework\Object(
+                                        new \Magento\Framework\DataObject(
                                             ['url' => 'image1.png', 'caption' => 'caption & > title < "']
                                         ),
-                                        new \Magento\Framework\Object(
+                                        new \Magento\Framework\DataObject(
                                             ['url' => 'image_no_caption.png', 'caption' => null]
                                         ),
                                     ],
@@ -585,7 +585,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected function _getModelConstructorArgs()
     {
         $categoryFactory = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Catalog\CategoryFactory'
+            'Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory'
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
@@ -598,14 +598,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         );
 
         $productFactory = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Catalog\ProductFactory'
+            'Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory'
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $productFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapProductMock));
 
         $cmsFactory = $this->getMockBuilder(
-            'Magento\Sitemap\Model\Resource\Cms\PageFactory'
+            'Magento\Sitemap\Model\ResourceModel\Cms\PageFactory'
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();

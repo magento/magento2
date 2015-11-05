@@ -18,7 +18,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     /**
      * Format type object
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_type;
 
@@ -71,7 +71,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     /**
      * Retrieve format type object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getType()
     {
@@ -81,10 +81,10 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     /**
      * Retrieve format type object
      *
-     * @param  \Magento\Framework\Object $type
+     * @param  \Magento\Framework\DataObject $type
      * @return $this
      */
-    public function setType(\Magento\Framework\Object $type)
+    public function setType(\Magento\Framework\DataObject $type)
     {
         $this->_type = $type;
         return $this;
@@ -93,7 +93,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     /**
      * @param AbstractAddress|null $address
      * @return string
-     * @deprecated All new code should use renderArray based on Metadata service
+     * All new code should use renderArray based on Metadata service
      */
     public function getFormat(AbstractAddress $address = null)
     {

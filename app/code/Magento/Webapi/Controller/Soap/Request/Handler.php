@@ -12,10 +12,11 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Webapi\Controller\Soap\Request as SoapRequest;
+use Magento\Framework\Webapi\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * Handler of requests to SOAP server.
@@ -98,16 +99,16 @@ class Handler
     {
         $requestedServices = $this->_request->getRequestedServices();
         $serviceMethodInfo = $this->_apiConfig->getServiceMethodInfo($operation, $requestedServices);
-        $serviceClass = $serviceMethodInfo[SoapConfig::KEY_CLASS];
-        $serviceMethod = $serviceMethodInfo[SoapConfig::KEY_METHOD];
+        $serviceClass = $serviceMethodInfo[ServiceMetadata::KEY_CLASS];
+        $serviceMethod = $serviceMethodInfo[ServiceMetadata::KEY_METHOD];
 
         // check if the operation is a secure operation & whether the request was made in HTTPS
-        if ($serviceMethodInfo[SoapConfig::KEY_IS_SECURE] && !$this->_request->isSecure()) {
+        if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
         $isAllowed = false;
-        foreach ($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES] as $resource) {
+        foreach ($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES] as $resource) {
             if ($this->_authorization->isAllowed($resource)) {
                 $isAllowed = true;
                 break;
@@ -118,7 +119,7 @@ class Handler
             throw new AuthorizationException(
                 __(
                     AuthorizationException::NOT_AUTHORIZED,
-                    ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                    ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );
         }

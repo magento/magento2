@@ -33,17 +33,15 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($eventDispatcherMock)
         );
         $this->_resourceMock = $this->getMock(
-            'Magento\Framework\Model\Resource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 'getIdFieldName',
                 'beginTransaction',
                 'save',
                 'commit',
                 'addCommitCallback',
-                'getConnection'
             ],
             [],
             '',

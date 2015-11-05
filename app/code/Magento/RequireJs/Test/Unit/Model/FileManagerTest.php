@@ -207,4 +207,43 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->object->createMinResolverAsset();
     }
+
+    public function testCreateRequireJsMixinsAsset()
+    {
+        $path = 'relative path';
+        $this->configMock
+            ->expects($this->once())
+            ->method('getMixinsFileRelativePath')
+            ->will($this->returnValue($path));
+        $this->assetRepoMock
+            ->expects($this->once())
+            ->method('createArbitrary')
+            ->with($path, '')
+            ->willReturn($this->asset);
+
+        $this->assertSame($this->asset, $this->object->createRequireJsMixinsAsset());
+    }
+
+    public function testClearBundleJsPool()
+    {
+        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fileSystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->willReturn($this->dir);
+        $this->assetRepoMock
+            ->expects($this->once())
+            ->method('getStaticViewFileContext')
+            ->willReturn($context);
+        $context->expects($this->once())
+            ->method('getPath')
+            ->willReturn('/path/to/directory');
+        $this->dir->expects($this->once())
+            ->method('delete')
+            ->with('/path/to/directory/' . \Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR)
+            ->willReturn(true);
+        $this->assertTrue($this->object->clearBundleJsPool());
+    }
 }

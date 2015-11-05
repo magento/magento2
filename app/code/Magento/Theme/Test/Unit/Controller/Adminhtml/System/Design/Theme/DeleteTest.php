@@ -102,7 +102,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $path = 'adminhtml/system_design_editor/index/';
+        $path = 'adminhtml/*/';
         $themeId = 1;
         $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
             ->setMethods(['load', 'getId', 'isVirtual', 'delete'])

@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
+use Magento\Framework\App\ResourceConnection;
+
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,7 +20,17 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected $_dbAdapter = null;
+    protected $_connection = null;
+
+    public function setUp()
+    {
+        set_error_handler(null);
+    }
+
+    public function tearDown()
+    {
+        restore_error_handler();
+    }
 
     /**
      * Test lost connection re-initializing
@@ -27,7 +39,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testWaitTimeout()
     {
-        if (!$this->_getDbAdapter() instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
+        if (!$this->_getConnection() instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
             $this->markTestSkipped('This test is for \Magento\Framework\DB\Adapter\Pdo\Mysql');
         }
         try {
@@ -49,7 +61,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             // Reset connection on failure to restore global variables
-            $this->_getDbAdapter()->closeConnection();
+            $this->_getConnection()->closeConnection();
             throw $e;
         }
     }
@@ -89,14 +101,14 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
          * @link https://bugs.php.net/bug.php?id=63812
          */
         $phpErrorReporting = error_reporting();
-        /** @var $pdoConnection PDO */
-        $pdoConnection = $this->_getDbAdapter()->getConnection();
+        /** @var $pdoConnection \PDO */
+        $pdoConnection = $this->_getConnection()->getConnection();
         $pdoWarningsEnabled = $pdoConnection->getAttribute(\PDO::ATTR_ERRMODE) & \PDO::ERRMODE_WARNING;
         if (!$pdoWarningsEnabled) {
             error_reporting($phpErrorReporting & ~E_WARNING);
         }
         try {
-            $result = $this->_getDbAdapter()->query($sql);
+            $result = $this->_getConnection()->query($sql);
             error_reporting($phpErrorReporting);
         } catch (\Exception $e) {
             error_reporting($phpErrorReporting);
@@ -110,13 +122,14 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      *
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function _getDbAdapter()
+    protected function _getConnection()
     {
-        if (is_null($this->_dbAdapter)) {
-            /** @var $coreResource \Magento\Framework\App\Resource */
-            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
-            $this->_dbAdapter = $coreResource->getConnection('default_setup');
+        if (is_null($this->_connection)) {
+            /** @var $coreResource \Magento\Framework\App\ResourceConnection */
+            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Framework\App\ResourceConnection');
+            $this->_connection = $coreResource->getConnection();
         }
-        return $this->_dbAdapter;
+        return $this->_connection;
     }
 }

@@ -33,7 +33,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteAddressMock;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Address\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteAddressCollectionMock;
 
@@ -78,12 +78,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Object\Factory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactoryMock;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteItemCollectionFactoryMock;
 
@@ -93,7 +93,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $paymentFactoryMock;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory
      */
     protected $quotePaymentCollectionFactoryMock;
 
@@ -128,7 +128,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyServiceMock;
 
@@ -160,7 +160,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->quoteAddressCollectionMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Address\Collection',
+            'Magento\Quote\Model\ResourceModel\Quote\Address\Collection',
             [],
             [],
             '',
@@ -183,14 +183,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ['getById']
         );
         $this->objectCopyServiceMock = $this->getMock(
-            'Magento\Framework\Object\Copy',
+            'Magento\Framework\DataObject\Copy',
             ['copyFieldsetToTarget'],
             [],
             '',
             false
         );
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->objectFactoryMock = $this->getMock('\Magento\Framework\Object\Factory', ['create'], [], '', false);
+        $this->objectFactoryMock = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->quoteAddressFactoryMock->expects(
             $this->any()
         )->method(
@@ -211,7 +211,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote')
+        $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -228,14 +228,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
         $this->quoteItemCollectionFactoryMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Item\CollectionFactory',
+            'Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->quotePaymentCollectionFactoryMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory',
+            'Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory',
             ['create'],
             [],
             '',
@@ -803,7 +803,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = 'test_string';
         $requestMock = $this->getMock(
-            '\Magento\Framework\Object'
+            '\Magento\Framework\DataObject'
         );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
@@ -842,7 +842,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $expectedResult = $itemMock;
         $requestMock = $this->getMock(
-            '\Magento\Framework\Object'
+            '\Magento\Framework\DataObject'
         );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
@@ -872,7 +872,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Item\Collection',
+            'Magento\Quote\Model\ResourceModel\Quote\Item\Collection',
             [],
             [],
             '',
@@ -971,7 +971,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('isDeleted')
             ->willReturn(false);
         $quotePaymentCollectionMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Payment\Collection',
+            'Magento\Quote\Model\ResourceModel\Quote\Payment\Collection',
             ['setQuoteFilter', 'getFirstItem'],
             [],
             '',
@@ -1010,7 +1010,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
         $quotePaymentCollectionMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Payment\Collection',
+            'Magento\Quote\Model\ResourceModel\Quote\Payment\Collection',
             ['setQuoteFilter', 'getFirstItem'],
             [],
             '',
@@ -1097,7 +1097,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $collectionMock = $this->getMock(
-            'Magento\Quote\Model\Resource\Quote\Item\Collection',
+            'Magento\Quote\Model\ResourceModel\Quote\Item\Collection',
             [],
             [],
             '',
@@ -1154,7 +1154,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemsCollection()
     {
-        $itemCollectionMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Collection')
+        $itemCollectionMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['setQuote'])
             ->getMock();
@@ -1165,7 +1165,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with(
-                $this->isInstanceOf('Magento\Quote\Model\Resource\Quote\Collection')
+                $this->isInstanceOf('Magento\Quote\Model\ResourceModel\Quote\Collection')
             );
         $itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quote);
 
@@ -1174,7 +1174,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllItems()
     {
-        $itemOneMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+        $itemOneMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote\Item')
             ->setMethods(['isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1182,7 +1182,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('isDeleted')
             ->willReturn(false);
 
-        $itemTwoMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+        $itemTwoMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote\Item')
             ->setMethods(['isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -114,7 +114,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         $data = [];
         if ($this->_data) {
             $data = $this->_data;
-        } elseif ($entity instanceof \Magento\Framework\Object) {
+        } elseif ($entity instanceof \Magento\Framework\DataObject) {
             $data = $entity->getData();
         }
 
@@ -163,6 +163,9 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         $attributesByCode = [];
         $attributesCodes = [];
         foreach ($attributes as $attribute) {
+            if (!$attribute->getIsVisible()) {
+                continue;
+            }
             $attributeCode = $attribute->getAttributeCode();
             $attributesByCode[$attributeCode] = $attribute;
             $attributesCodes[] = $attributeCode;

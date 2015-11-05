@@ -23,6 +23,7 @@ interface CreditmemoManagementInterface
      *
      * @param int $id The credit memo ID.
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function cancel($id);
 
@@ -41,4 +42,16 @@ interface CreditmemoManagementInterface
      * @return bool
      */
     public function notify($id);
+
+    /**
+     * Prepare creditmemo to refund and save it.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
+     * @param bool $offlineRequested
+     * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     */
+    public function refund(
+        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
+        $offlineRequested = false
+    );
 }

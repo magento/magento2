@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
     <body>
-        <remove name="minicart" />
-        <remove name="header.panel" />
-        <remove name="top.search" />
-        <remove name="catalog.topnav" />
-        <remove name="footer-container" />
-        <remove name="catalog.compare.link" />
+        <referenceBlock name="minicart" remove="true"/>
+        <referenceContainer name="header.panel" remove="true"/>
+        <referenceBlock name="top.search" remove="true"/>
+        <referenceBlock name="catalog.topnav" remove="true"/>
+        <referenceContainer name="footer-container" remove="true"/>
+        <referenceBlock name="catalog.compare.link" remove="true"/>
     </body>
 </page>

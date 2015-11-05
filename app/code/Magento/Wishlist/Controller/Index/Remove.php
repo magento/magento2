@@ -7,10 +7,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Remove extends Action\Action implements IndexInterface
+class Remove extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -64,7 +63,7 @@ class Remove extends Action\Action implements IndexInterface
         if ($url) {
             $refererUrl = $url;
         }
-        if ($request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED) && $refererUrl) {
+        if ($request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED) && $refererUrl) {
             $redirectUrl = $refererUrl;
         } else {
             $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));

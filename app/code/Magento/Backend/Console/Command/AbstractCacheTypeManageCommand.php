@@ -6,11 +6,28 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Cache\Manager;
 
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
+    /** @var EventManagerInterface */
+    protected $eventManager;
+
+    /**
+     * @param Manager $cacheManager
+     * @param EventManagerInterface $eventManager
+     */
+    public function __construct(
+        Manager $cacheManager,
+        EventManagerInterface $eventManager
+    ) {
+        $this->eventManager = $eventManager;
+        parent::__construct($cacheManager);
+    }
+
     /**
      * Perform a cache management action on cache types
      *
@@ -35,11 +52,7 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption(self::INPUT_KEY_ALL)) {
-            $types = $this->cacheManager->getAvailableTypes();
-        } else {
-            $types = $this->getRequestedTypes($input);
-        }
+        $types = $this->getRequestedTypes($input);
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
         $output->writeln(join(PHP_EOL, $types));

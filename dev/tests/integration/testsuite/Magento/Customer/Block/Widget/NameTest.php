@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test \Magento\Customer\Block\Widget\Name
+ * @magentoAppArea frontend
  */
 class NameTest extends \PHPUnit_Framework_TestCase
 {

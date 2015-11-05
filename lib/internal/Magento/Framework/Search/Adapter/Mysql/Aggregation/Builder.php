@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container as AggregationContainer;
 use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\RequestInterface;
@@ -33,13 +35,13 @@ class Builder
     private $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param DataProviderContainer $dataProviderContainer
      * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         DataProviderContainer $dataProviderContainer,
         AggregationContainer $aggregationContainer,
         EntityMetadata $entityMetadata
@@ -52,37 +54,20 @@ class Builder
 
     /**
      * @param RequestInterface $request
-     * @param int[] $documents
+     * @param Table|Select|Table $documentsTable
      * @return array
      */
-    public function build(RequestInterface $request, array $documents)
+    public function build(RequestInterface $request, Table $documentsTable)
     {
-        $entityIds = $this->getEntityIds($documents);
-
-        return $this->processAggregations($request, $entityIds);
-    }
-
-    /**
-     * @param array $documents
-     * @return int[]
-     */
-    private function getEntityIds($documents)
-    {
-        $fieldName = $this->entityMetadata->getEntityId();
-        $entityIds = [];
-        foreach ($documents as $document) {
-            $entityIds[] = $document[$fieldName];
-        }
-
-        return $entityIds;
+        return $this->processAggregations($request, $documentsTable);
     }
 
     /**
      * @param RequestInterface $request
-     * @param int[] $entityIds
+     * @param Table $documentsTable
      * @return array
      */
-    private function processAggregations(RequestInterface $request, array $entityIds)
+    private function processAggregations(RequestInterface $request, Table $documentsTable)
     {
         $aggregations = [];
         $buckets = $request->getAggregation();
@@ -93,7 +78,7 @@ class Builder
                 $dataProvider,
                 $request->getDimensions(),
                 $bucket,
-                $entityIds
+                $documentsTable
             );
         }
 

@@ -18,15 +18,15 @@ interface RendererInterface
     /**
      * Set format type object
      *
-     * @param \Magento\Framework\Object $type
+     * @param \Magento\Framework\DataObject $type
      * @return void
      */
-    public function setType(\Magento\Framework\Object $type);
+    public function setType(\Magento\Framework\DataObject $type);
 
     /**
      * Retrieve format type object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getType();
 
@@ -36,7 +36,7 @@ interface RendererInterface
      * @param AddressModelInterface $address
      * @param string|null $format
      * @return mixed
-     * @deprecated All new code should use renderArray based on Metadata service
+     * All new code should use renderArray based on Metadata service
      */
     public function render(AddressModelInterface $address, $format = null);
 

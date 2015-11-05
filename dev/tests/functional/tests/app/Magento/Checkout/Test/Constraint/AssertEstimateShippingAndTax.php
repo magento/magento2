@@ -10,6 +10,7 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Assert that grand total is equal to expected.
@@ -54,6 +55,7 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
     /**
      * @constructor
      * @param ObjectManager $objectManager
+     * @param EventManagerInterface $eventManager
      * @param AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart
      * @param AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart
      * @param AssertTaxInShoppingCart $assertTaxInShoppingCart
@@ -61,12 +63,13 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
      */
     public function __construct(
         ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
         AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart,
         AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart,
         AssertTaxInShoppingCart $assertTaxInShoppingCart,
         AssertShippingInShoppingCart $assertShippingInShoppingCart
     ) {
-        parent::__construct($objectManager);
+        parent::__construct($objectManager, $eventManager);
         $this->assertSubtotalInShoppingCart = $assertSubtotalInShoppingCart;
         $this->assertGrandTotalInShoppingCart = $assertGrandTotalInShoppingCart;
         $this->assertTaxInShoppingCart = $assertTaxInShoppingCart;
@@ -81,21 +84,22 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
         if ($cart->hasData('tax_amount')) {
-            $this->assertTaxInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertTaxInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('subtotal')) {
-            $this->assertSubtotalInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertSubtotalInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('grand_total')) {
-            $this->assertGrandTotalInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertGrandTotalInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('shipping_amount')) {
-            $this->assertShippingInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertShippingInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
     }
 

@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="paypal_fetch_settlement_reports" instance="Magento\Paypal\Model\Observer" method="fetchReports" />
+        <job name="paypal_fetch_settlement_reports" instance="Magento\Paypal\Cron\FetchReports" method="execute"/>
     </group>
 </config>

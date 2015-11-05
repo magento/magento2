@@ -8,17 +8,15 @@ namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class PromoForm
- * Form for creation of a Catalog Price Rule
+ * Form for creation of a Catalog Price Rule.
  */
 class PromoForm extends FormTabs
 {
     /**
-     * Fill form with tabs
+     * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement $element
@@ -35,7 +33,7 @@ class PromoForm extends FormTabs
     }
 
     /**
-     * Replace placeholders in each values of data
+     * Replace placeholders in each values of data.
      *
      * @param array $tabs
      * @param array $replace

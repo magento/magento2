@@ -218,7 +218,7 @@ class Authentication
         }
 
         $this->_response->setRedirect($requestUri);
-        $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+        $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
         return true;
     }
 }

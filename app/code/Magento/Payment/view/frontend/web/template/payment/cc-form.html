@@ -8,17 +8,17 @@
 <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
     <!-- ko if: (isShowLegend())-->
     <legend class="legend">
-        <span><!-- ko text: $t('Credit Card Information')--><!-- /ko --></span>
+        <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
     </legend><br />
     <!-- /ko -->
-    <div class="field type required">
-        <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
-            <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
-        </label>
+    <div class="field type">
         <div class="control">
             <ul class="credit-card-types">
                 <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
-                <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
+                <li class="item" data-bind="css: {
+                                                 _active: $parent.selectedCardType() == item.value,
+                                                 _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value
+                                                 } ">
                     <!--ko if: $parent.getIcons(item.value) -->
                     <img data-bind="attr: {
                         'src': $parent.getIcons(item.value).url,
@@ -41,7 +41,7 @@
     </div>
     <div class="field number required">
         <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
-            <span><!-- ko text: $t('Credit Card Number')--><!-- /ko --></span>
+            <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
         </label>
         <div class="control">
             <input type="number" name="payment[cc_number]" class="input-text" value=""
@@ -50,7 +50,7 @@
                                     id: getCode() + '_cc_number',
                                     title: $t('Credit Card Number'),
                                     'data-container': getCode() + '-cc-number',
-                                    'data-validate': JSON.stringify({'required-number':true, 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
+                                    'data-validate': JSON.stringify({'required-number':true, 'validate-card-type':getCcAvailableTypesValues(), 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                               enable: isActive($parents),
                               value: creditCardNumber,
                               valueUpdate: 'keyup' "/>
@@ -58,7 +58,7 @@
     </div>
     <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
         <label data-bind="attr: {for: getCode() + '_expiration'}" class="label">
-            <span><!-- ko text: $t('Expiration Date')--><!-- /ko --></span>
+            <span><!-- ko i18n: 'Expiration Date'--><!-- /ko --></span>
         </label>
         <div class="control">
             <div class="fields group group-2">
@@ -96,7 +96,7 @@
     <!-- ko if: (hasVerification())-->
     <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'}">
         <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
-            <span><!-- ko text: $t('Card Verification Number')--><!-- /ko --></span>
+            <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
         </label>
         <div class="control _with-tooltip">
             <input type="number"
@@ -115,7 +115,7 @@
                       tabindex="0"
                       data-toggle="dropdown"
                       data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
-                    <span><!-- ko text: $t('What is this?')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'What is this?'--><!-- /ko --></span>
                 </span>
                 <div class="field-tooltip-content"
                      data-target="dropdown"
@@ -129,12 +129,12 @@
         <div class="nested">
             <div class="field switch-solo required">
                 <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label">
-                    <span><!-- ko text: $t('Switch/Solo/Maestro Only')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Switch/Solo/Maestro Only'--><!-- /ko --></span>
                 </label>
             </div>
             <div class="field number required">
                 <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label">
-                    <span><!-- ko text: $t('Issue Number')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Issue Number'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <input type="number" name="payment[cc_ss_issue]"
@@ -146,7 +146,7 @@
 
             <div class="field date required">
                 <label data-bind="attr: {for: getCode() + '_start_month'}" class="label">
-                    <span><!-- ko text: $t('Start Date')--><!-- /ko --></span>
+                    <span><!-- ko i18n: 'Start Date'--><!-- /ko --></span>
                 </label>
                 <div class="control">
                     <div class="fields group group-2">

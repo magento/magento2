@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 
 /**
@@ -20,7 +20,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Products collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected $_collection = null;
 
@@ -64,7 +64,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_direction = \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION;
+    protected $_direction = ProductList::DEFAULT_SORT_DIRECTION;
 
     /**
      * Default View mode
@@ -103,7 +103,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_toolbarModel;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList
+     * @var ProductList
      */
     protected $_productListHelper;
 
@@ -123,7 +123,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param ToolbarModel $toolbarModel
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
+     * @param ProductList $productListHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
@@ -133,7 +133,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\Config $catalogConfig,
         ToolbarModel $toolbarModel,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Catalog\Helper\Product\ProductList $productListHelper,
+        ProductList $productListHelper,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = []
     ) {
@@ -198,7 +198,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Return products collection instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -356,7 +356,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Compare defined order field vith current order field
+     * Compare defined order field with current order field
      *
      * @param string $order
      * @return bool
@@ -376,7 +376,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $urlParams = [];
         $urlParams['_current'] = true;
-        $urlParams['_escape'] = true;
+        $urlParams['_escape'] = false;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
         return $this->getUrl('*/*/*', $urlParams);
@@ -632,7 +632,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Framework\Object) {
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
@@ -672,16 +672,17 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getWidgetOptionsJson(array $customOptions = [])
     {
-        $postData = $this->_postDataHelper->getPostData(
-            $this->getPagerUrl(),
-            [\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl()]
-        );
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
         $options = [
-            'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,
-            'directionCookie' => ToolbarModel::DIRECTION_COOKIE_NAME,
-            'orderCookie' => ToolbarModel::ORDER_COOKIE_NAME,
-            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME,
-            'postData' => json_decode($postData),
+            'mode' => ToolbarModel::MODE_PARAM_NAME,
+            'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
+            'order' => ToolbarModel::ORDER_PARAM_NAME,
+            'limit' => ToolbarModel::LIMIT_PARAM_NAME,
+            'modeDefault' => $defaultMode,
+            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
+            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'url' => $this->getPagerUrl(),
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);

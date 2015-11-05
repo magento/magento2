@@ -25,7 +25,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
     protected $salesConfigMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $magentoObjectMock;
 
@@ -77,7 +77,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->magentoObjectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->magentoObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', 'getData'])
             ->getMock();
@@ -290,7 +290,8 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'quote' => $quoteMock,
             'other' => 'other',
         ];
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\Collection\AbstractCollection')
+        $collectionClassName = 'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection';
+        $collectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())
