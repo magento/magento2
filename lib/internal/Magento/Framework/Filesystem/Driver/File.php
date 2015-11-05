@@ -304,7 +304,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage(),
+                        $this->getWarningMessage()
                     ]
                 )
             );
@@ -334,7 +334,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage(),
+                        $this->getWarningMessage()
                     ]
                 )
             );

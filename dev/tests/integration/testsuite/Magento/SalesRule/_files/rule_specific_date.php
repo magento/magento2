@@ -5,6 +5,9 @@
  */
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
+$tomorrow = new \DateTime();
+$tomorrow->add(\DateInterval::createFromDateString('+1 day'));
+
 $rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
 $rule->setName(
     '#1'
@@ -25,5 +28,5 @@ $rule->setName(
 )->setFromDate(
     date('Y-m-d')
 )->setToDate(
-    date('Y-m-d')
+    $tomorrow->format('Y-m-d')
 )->save();
