@@ -18,6 +18,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM');
+        }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->_schemaFile = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue_merged.xsd');
     }
