@@ -334,7 +334,11 @@ require([
 
             _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
+            _FINISH_UPDATE_INFORMATION_TRIGGER: 'finish_update_information',
+
             _videoInformation: null,
+
+            _currentVideoUrl: null,
 
             /**
              * @private
@@ -342,6 +346,11 @@ require([
             _init: function () {
                 this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
                 this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
+                this.element.on(this._FINISH_UPDATE_INFORMATION_TRIGGER, $.proxy(
+                    function () {
+                        this._currentVideoUrl = null;
+                    }, this
+                ));
             },
 
             /**
@@ -354,6 +363,12 @@ require([
                     type,
                     id,
                     googleapisUrl;
+
+                if (this._currentVideoUrl === url) {
+                    return;
+                }
+
+                this._currentVideoUrl = url;
 
                 this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
                     url: url
@@ -440,6 +455,7 @@ require([
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
                 }
 
                 /**
@@ -468,6 +484,7 @@ require([
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
                 }
 
                 type = videoInfo.type;
@@ -489,16 +506,22 @@ require([
                         }
                     );
                 } else if (type === 'vimeo') {
-                    $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
-                        {
+                    $.ajax({
+                        url: 'http://www.vimeo.com/api/v2/video/' + id + '.json',
+                        dataType: 'jsonp',
+                        data: {
                             format: 'json'
                         },
-                        $.proxy(_onVimeoLoaded, self)
-                    ).fail(
-                        function () {
-                            self._onRequestError('Video not found');
+                        timeout: 5000,
+                        success:  $.proxy(_onVimeoLoaded, self),
+
+                        /**
+                         * @private
+                         */
+                        error: function () {
+                            self._onRequestError($.mage.__('Video not found'));
                         }
-                    );
+                    });
                 }
             },
 
@@ -518,6 +541,8 @@ require([
              */
             _onRequestError: function (error) {
                 this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
+                this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, false);
+                this._currentVideoUrl = null;
             },
 
             /**
