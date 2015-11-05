@@ -15,7 +15,7 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_coreRegistry->register(
             RegistryConstants::CURRENT_TAX_RATE_FORM_DATA,

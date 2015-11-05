@@ -795,6 +795,7 @@
         height: 33px;
         &:focus {
             border-color: #007bdb;
+            box-shadow: none;
             outline: 0;
         }
     }
@@ -874,6 +875,7 @@
         transition: all 0.1s ease-in;
         &:focus {
             border-color: #007bdb;
+            box-shadow: none;
             outline: 0;
         }
         &[disabled] {
@@ -2181,7 +2183,7 @@
         }
         .field {
             margin: 0 0 5px;
-            input[type="checkbox"] {
+            input[type="checkbox"]:not(.banner-content-checkbox) {
                 margin-right: 8px;
                 position: relative;
                 top: 2px;
@@ -2630,14 +2632,6 @@
     // Banner Properties
     #banner_properties_customer_segment_ids {
         min-width: 20%;
-    }
-
-    // Content
-
-    .field-store_0_content_use input[type="checkbox"] {
-        margin-right: 8px;
-        position: relative;
-        top: 2px;
     }
 
     //

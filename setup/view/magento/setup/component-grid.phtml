@@ -6,9 +6,14 @@
 ?>
 <h2 class="page-title">{{$state.current.header}}</h2>
 <div ng-controller="authDialogController">
-    <div ng-show="$root.isConnectAuthorized" class="componenet-manager-wrap">
+    <div class="message message-error" ng-show="syncError">
+            <span class="message-text">
+                {{ErrorMessage}}
+            </span>
+    </div>
+    <div ng-show="$root.isMarketplaceAuthorized" class="componenet-manager-wrap">
         <div class="component-manager-title">
-            Magento Connect Account
+            Magento Marketplace Account
             <div class="componenet-manager-account">
                 <a ng-click="reset()" href="#" class="sign-in-out">Reset</a>
             </div>
@@ -42,15 +47,15 @@
         </div>
     </div>
 
-    <div ng-show="!$root.isConnectAuthorized" class="componenet-manager-wrap">
+    <div ng-show="!$root.isMarketplaceAuthorized" class="componenet-manager-wrap">
         <div class="component-manager-title">
-            Magento Connect Account
+            Magento Marketplace Account
             <div class="componenet-manager-account">
                 <a href="" ng-click="open()" class="sign-in-out">Sign In</a>
             </div>
         </div>
         <div class="component-manager-content">
-            <a href="" ng-click="open()">Sign in</a> to sync your Magento Connect purchases
+            <a href="" ng-click="open()">Sign in</a> to sync your Magento Marketplace purchases
         </div>
     </div>
 
@@ -143,7 +148,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="component in displayComponents | orderBy:predicate:reverse | limitTo:rowLimit">
+            <tr ng-repeat="component in components | orderBy:predicate:reverse
+                | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+                >
                 <td class="data-grid-indicator-cell">
                     <span class="component-indicator"
                           ng-class="getIndicatorInfo(component, 'icon')"
@@ -171,8 +178,8 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
-                                ng-show="component.update || component.uninstall ||
-                                !component.disable || !component.update"
+                                ng-show="isAvailableUpdatePackage(component.name) || component.uninstall ||
+                                component.enable || component.disable"
                                 ng-click="toggleActiveActionsCell(component)"
                                 ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
@@ -213,4 +220,4 @@
     </div>
 </div>
 
-<div ng-include="'index.php/connect/popup-auth'" style="display: inline-block"></div>
+<div ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

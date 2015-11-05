@@ -304,7 +304,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage(),
+                        $this->getWarningMessage()
                     ]
                 )
             );
@@ -334,7 +334,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage(),
+                        $this->getWarningMessage()
                     ]
                 )
             );
@@ -710,7 +710,7 @@ class File implements DriverInterface
             if (!is_string($value)) {
                 $value = (string)$value;
             }
-            if (isset($value[0]) && $value[0] === '=') {
+            if (isset($value[0]) && in_array($value[0], ['=', '+', '-'])) {
                 $data[$key] = ' ' . $value;
             }
         }

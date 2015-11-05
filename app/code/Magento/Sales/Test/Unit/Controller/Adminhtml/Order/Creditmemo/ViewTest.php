@@ -223,7 +223,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Forward',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -269,7 +269,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Page',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 

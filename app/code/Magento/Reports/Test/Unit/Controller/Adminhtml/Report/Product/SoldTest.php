@@ -83,6 +83,6 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
                 [new Phrase('Products Ordered'), new Phrase('Products Ordered')]
             );
 
-        $this->sold->executeInternal();
+        $this->sold->execute();
     }
 }

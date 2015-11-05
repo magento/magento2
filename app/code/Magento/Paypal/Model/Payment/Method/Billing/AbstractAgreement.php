@@ -104,10 +104,11 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * Assign data to info model instance
      *
-     * @param mixed $data
+     * @param \Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         $result = parent::assignData($data);
 

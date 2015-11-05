@@ -58,7 +58,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Check not logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Login::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Login::execute
      */
     public function testNotLoggedLoginAction()
     {
@@ -72,7 +72,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Check logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Login::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Login::execute
      * @magentoDbIsolation enabled
      */
     public function testLoggedLoginAction()
@@ -120,7 +120,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Logout::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\Logout::execute
      * @magentoDbIsolation enabled
      */
     public function testLogoutAction()
@@ -138,7 +138,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson::execute
      * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson::_getDeniedJson
      * @magentoDbIsolation enabled
      */
@@ -158,7 +158,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe::execute
      * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe::_getDeniedIframe
      * @magentoDbIsolation enabled
      */
