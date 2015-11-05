@@ -15,6 +15,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidXmlFile($xsdFile, $invalidXmlFile, $expectedErrorsQty)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM');
+        }
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$invalidXmlFile}");
         $schema = __DIR__ . "/../../etc/{$xsdFile}";

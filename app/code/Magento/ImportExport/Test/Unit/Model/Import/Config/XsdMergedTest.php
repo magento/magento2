@@ -20,6 +20,9 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM');
+        }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->_xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_ImportExport:etc/import_merged.xsd');
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();

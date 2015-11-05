@@ -14,6 +14,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM');
+        }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->_xsdFile = $urnResolver->getRealPath('urn:magento:module:Magento_Cron:etc/crontab.xsd');
     }
