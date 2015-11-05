@@ -45,7 +45,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingInvalidXml()
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
         }
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
         $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget.xsd');
@@ -62,7 +62,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     public function testFileSchemaUsingInvalidXml()
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
         }
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
         $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget_file.xsd');
