@@ -11,7 +11,8 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Design\Fallback\RulePool;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -35,11 +36,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     /**
      * @var string
      */
-    protected $themePath;
-
-    /**
-     * @var string
-     */
     protected $area;
 
     /**
@@ -48,9 +44,9 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     protected $rootDirectory;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
      */
-    protected $componentRegistrar;
+    protected $resolver;
 
     /**
      * @param Reader $moduleReader
@@ -58,7 +54,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ResolverInterface $resolver
      */
     public function __construct(
         Reader $moduleReader,
@@ -66,16 +62,15 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         DesignInterface $designInterface,
         DirectoryList $directoryList,
         Filesystem $filesystem,
-        ComponentRegistrar $componentRegistrar
+        ResolverInterface $resolver
     ) {
         $this->directoryList = $directoryList;
         $this->iteratorFactory = $iteratorFactory;
         $this->moduleReader = $moduleReader;
         $this->currentTheme = $designInterface->getDesignTheme();
-        $this->themePath = $designInterface->getThemePath($this->currentTheme);
         $this->area = $designInterface->getArea();
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->componentRegistrar = $componentRegistrar;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -97,11 +92,12 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                             )
                         );
                 } else {
-                    $designPath =
-                        $this->componentRegistrar->getPath(
-                            ComponentRegistrar::THEME,
-                            $this->area . '/' . $this->themePath
-                        ) . '/etc/view.xml';
+                    $designPath = $this->resolver->resolve(
+                        RulePool::TYPE_FILE,
+                        'etc/view.xml',
+                        $this->area,
+                        $this->currentTheme
+                    );
                     if (file_exists($designPath)) {
                         try {
                             $designDom = new \DOMDocument;
