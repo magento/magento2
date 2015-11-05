@@ -506,7 +506,7 @@ define([
             var self = this;
 
             $image.find('.magnify-lens').remove();
-            $image.on('click', function () {
+            $image.on('click tap', function () {
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
                     $('.fotorama__arr--next').hide();
                     $('.fotorama__arr--prev').hide();
