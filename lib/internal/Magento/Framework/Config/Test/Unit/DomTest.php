@@ -164,7 +164,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     public function testValidateUnknownError()
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM');
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
