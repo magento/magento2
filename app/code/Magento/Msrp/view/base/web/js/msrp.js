@@ -210,11 +210,6 @@ define([
             this.$popup.find(this.options.msrpLabelId).html(this.options.msrpPrice);
             this.$popup.find(this.options.priceLabelId).html(this.options.realPrice);
             this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
-            this.$popup.find('button').on('click', function () {
-                if (this.options.addToCartButton) {
-                    $(this.options.addToCartButton).click();
-                }
-            }.bind(this));
             this._toggle(this.$popup);
 
             if (!this.options.isSaleable) {

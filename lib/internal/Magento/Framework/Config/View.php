@@ -71,7 +71,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getVars($module)
     {
-        $this->setData();
+        $this->initData();
         return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
     }
 
@@ -84,7 +84,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getVarValue($module, $var)
     {
-        $this->setData();
+        $this->initData();
         if (!isset($this->data['vars'][$module])) {
             return false;
         }
@@ -110,7 +110,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getMediaEntities($module, $mediaType)
     {
-        $this->setData();
+        $this->initData();
         return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
     }
 
@@ -124,7 +124,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
-        $this->setData();
+        $this->initData();
         return isset($this->data['media'][$module][$mediaType][$mediaId])
             ? $this->data['media'][$module][$mediaType][$mediaId]
             : [];
@@ -195,11 +195,16 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     protected function getItems()
     {
-        $this->setData();
+        $this->initData();
         return isset($this->data['exclude']) ? $this->data['exclude'] : [];
     }
 
-    protected function setData()
+    /**
+     * Initialize data array
+     *
+     * @return void
+     */
+    protected function initData()
     {
         if ($this->data === null) {
             $this->data = $this->read();

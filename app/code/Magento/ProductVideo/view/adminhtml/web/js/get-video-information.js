@@ -63,8 +63,8 @@ require([
                         break;
                     default:
                         throw {
-                            name: 'Video Error',
-                            message: 'Unknown video type',
+                            name: $.mage.__('Video Error'),
+                            message: $.mage.__('Unknown video type'),
 
                             /**
                              * Return string
@@ -366,7 +366,7 @@ require([
                 videoInfo = this._validateURL(url);
 
                 if (!videoInfo) {
-                    this._onRequestError('Invalid video url');
+                    this._onRequestError($.mage.__('Invalid video url'));
 
                     return;
                 }
@@ -401,7 +401,7 @@ require([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push('Youtube API key is invalid');
+                                errorsMessage.push($.mage.__('Youtube API key is invalid'));
 
                                 break;
                             }
@@ -409,7 +409,8 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video cant be shown due to the following reason: ' + $.unique(errorsMessage).join(', ');
+                        return $.mage.__('Video cant be shown due to the following reason: ') +
+                            $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
@@ -419,7 +420,7 @@ require([
                     }
 
                     if (!data.items || data.items.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return;
                     }
@@ -449,7 +450,7 @@ require([
                         respData;
 
                     if (data.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
