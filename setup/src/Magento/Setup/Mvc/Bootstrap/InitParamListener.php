@@ -120,7 +120,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 );
 
                 if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                    $controller->plugin('redirect')->toUrl('/setup/index.php/session/unlogin');
+                    $controller->plugin('redirect')->toUrl('index.php/session/unlogin');
                 }
             }
         }
