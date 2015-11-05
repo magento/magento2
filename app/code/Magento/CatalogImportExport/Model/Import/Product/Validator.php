@@ -104,6 +104,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         $doCheck = false;
         if ($attrCode == Product::COL_SKU) {
             $doCheck = true;
+        } elseif ($attrCode == 'price') {
+            $doCheck = false;
         } elseif ($attributeParams['is_required'] && $this->getRowScope($rowData) == Product::SCOPE_DEFAULT
             && $this->context->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
         ) {
@@ -124,7 +126,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
-        if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
+        if (isset($rowData['product_type']) && !empty($attrParams['apply_to'])
+            && !in_array($rowData['product_type'], $attrParams['apply_to'])
+        ) {
             return true;
         }
 
