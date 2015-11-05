@@ -721,7 +721,6 @@ define([
             videoForm.validation();
 
             if (this._videoRequestComplete === false) {
-                this._videoUrlWidget.trigger('error_updated_information', 'Video not found');
                 videoLoaded = false;
             }
 

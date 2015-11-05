@@ -584,7 +584,10 @@ require([
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
                         '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
                     ].join(''));
-                    id = href.href.match(vimeoRegex)[3];
+
+                    if (href.href.match(vimeoRegex) != null) {
+                        id = href.href.match(vimeoRegex)[3];
+                    }
                 }
 
                 if ((!id || !type) && forceVideo) {
