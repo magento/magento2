@@ -239,7 +239,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithExistentCustomer()
@@ -512,11 +512,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/edit', ['id' => $customerId, '_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomer()
@@ -760,11 +760,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/index', [])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndValidationException()
@@ -900,11 +900,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndLocalizedException()
@@ -1040,11 +1040,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndException()
@@ -1181,6 +1181,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 }

@@ -30,7 +30,7 @@ class Review extends \Magento\Framework\App\Action\Action
     /**
      * @return \Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultPageFactory->create();
     }

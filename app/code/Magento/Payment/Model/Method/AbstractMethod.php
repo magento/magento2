@@ -763,9 +763,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param array|\Magento\Framework\DataObject $data
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @api
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);

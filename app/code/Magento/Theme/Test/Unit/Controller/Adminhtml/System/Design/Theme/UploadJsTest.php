@@ -99,7 +99,7 @@ class UploadJsTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\
             ->method('representJson')
             ->with('{"error":"true","message":"We cannot find a theme with id "' . $themeId . '"."}');
 
-        $this->_model->executeInternal();
+        $this->_model->execute();
     }
 
     public function testExecuteWithException()
@@ -149,7 +149,7 @@ class UploadJsTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\
             ->method('representJson')
             ->with('{"error":"true","message":"We can\'t upload the JS file right now."}');
 
-        $this->_model->executeInternal();
+        $this->_model->execute();
     }
 
     public function testExecute()
@@ -244,6 +244,6 @@ class UploadJsTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\
             ->method('representJson')
             ->with('{"error":false,"files":{"fileOne":{"name":"name"}}}');
 
-        $this->_model->executeInternal();
+        $this->_model->execute();
     }
 }

@@ -7,13 +7,11 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class CreatePassword extends Action implements AccountInterface
+class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $accountManagement;
@@ -51,7 +49,7 @@ class CreatePassword extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
         $customerId = (int)$this->getRequest()->getParam('id');

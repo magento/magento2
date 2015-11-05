@@ -464,7 +464,7 @@ class SetupUtil
         $product->isObjectNew(true);
         $product->setTypeId('simple')
             ->setAttributeSetId(4)
-            ->setName('Simple Product')
+            ->setName('Simple Product' . $sku)
             ->setSku($sku)
             ->setPrice($price)
             ->setTaxClassId($taxClassId)
