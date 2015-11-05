@@ -102,14 +102,17 @@ main.controller('navigationController',
     return {
         mainState: {},
         states: [],
+        titlesWithModuleName: ['enable', 'disable', 'update', 'uninstall'],
         load: function () {
-            $localStorage.$reset();
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
                 $localStorage.menu = data.menu;
+                self.titlesWithModuleName.forEach(function (value) {
+                    data.titles[value] = data.titles[value] + $localStorage.moduleName;
+                });
                 $localStorage.titles = data.titles;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);

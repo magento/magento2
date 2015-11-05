@@ -114,15 +114,11 @@ angular.module('component-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[component.name]['latestVersion']
                     }
                 ];
-                if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['update'] = 'Update ' + component.moduleName;
-                }
                 if (component.moduleName) {
                     $localStorage.moduleName = component.moduleName;
                 } else {
                     $localStorage.moduleName = component.name;
                 }
-
                 $scope.nextState();
             };
 
@@ -132,9 +128,6 @@ angular.module('component-grid', ['ngStorage'])
                         name: component.name
                     }
                 ];
-                if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['uninstall'] = 'Uninstall ' + component.moduleName;
-                }
                 $localStorage.componentType = component.type;
                 if (component.moduleName) {
                     $localStorage.moduleName = component.moduleName;
@@ -151,12 +144,12 @@ angular.module('component-grid', ['ngStorage'])
                             name: component.moduleName
                         }
                     ];
-                    if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
-                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                            + component.moduleName;
-                    }
                     $localStorage.componentType = component.type;
-                    $localStorage.moduleName = component.moduleName;
+                    if (component.moduleName) {
+                        $localStorage.moduleName = component.moduleName;
+                    } else {
+                        $localStorage.moduleName = component.name;
+                    }
                     $state.go('root.readiness-check-'+type);
                 }
             };
