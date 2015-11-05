@@ -37,7 +37,7 @@ class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM');
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $this->formatter = $this->getMock('Magento\Developer\Model\Tools\Formatter', [], [], '', false);
         $this->domFactory = $this->getMock('Magento\Framework\DomDocument\DomDocumentFactory', [], [], '', false);
