@@ -40,6 +40,9 @@ define([
                         data.intype = swatchOptionTextDefaultInputType;
                     }
 
+                    if (!this.totalItems) {
+                        data.checked = 'checked';
+                    }
                     element = this.template({
                         data: data
                     });
@@ -110,7 +113,6 @@ define([
 
                     if (from === arrayLength) {
                         this.updateItemsCountField();
-                        this.bindRemoveButtons();
                         this.rendered = 1;
                         jQuery('body').trigger('processStop');
 
