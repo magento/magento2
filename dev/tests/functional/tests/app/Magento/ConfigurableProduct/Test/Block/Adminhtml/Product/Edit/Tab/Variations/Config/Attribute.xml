@@ -15,7 +15,7 @@
         </pricing_value>
         <is_percent>
             <selector>.field-pricing-measure</selector>
-            <input>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\ToggleDropdown</input>
+            <input>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute\ToggleDropdown</input>
         </is_percent>
         <include>
             <selector>.include[name$="[include]"]</selector>

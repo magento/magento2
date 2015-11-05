@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config as TabVariation;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config as TabVariation;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -37,7 +37,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($assertProduct);
         $productBlockForm->openTab('variations');
-        /** @var \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config  $variationsTab */
+        /** @var \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config  $variationsTab */
         $variationsTab = $productBlockForm->getTab('variations');
         $variationsTab->createConfigurations();
         $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
