@@ -97,7 +97,9 @@ class LoginPost extends Action implements AccountInterface
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
-                    $this->messageManager->addError(__('Unspecified error occured. Please contact us for assistence!'));
+                    $this->messageManager->addError(
+                        __('An unspecified error occurred. Please contact us for assistance.')
+                    );
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));
