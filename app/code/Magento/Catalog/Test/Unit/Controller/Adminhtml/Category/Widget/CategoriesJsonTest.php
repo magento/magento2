@@ -141,6 +141,6 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $testHtml = '<div>Some test html</div>';
         $this->chooserBlockMock->expects($this->once())->method('getTreeJson')->will($this->returnValue($testHtml));
         $this->resultJson->expects($this->once())->method('setJsonData')->with($testHtml)->willReturnSelf();
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

@@ -16,7 +16,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();

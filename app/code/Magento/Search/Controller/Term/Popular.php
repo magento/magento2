@@ -35,7 +35,7 @@ class Popular extends Action
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         $searchTerms = $this->scopeConfig->getValue(
             'catalog/seo/search_terms',
@@ -45,13 +45,13 @@ class Popular extends Action
             $this->_redirect('noroute');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**
      * @return \Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

@@ -18,7 +18,7 @@ class ExpressCheckout extends Index
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->messageManager->addNotice(__('Your shopping cart has been updated with new prices.'));
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

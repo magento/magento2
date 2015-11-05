@@ -39,10 +39,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->object = new \Magento\Multishipping\Controller\Checkout\Plugin($this->cartMock);
     }
 
-    public function testExecuteInternalTurnsOffMultishippingModeOnQuote()
+    public function testExecuteTurnsOffMultishippingModeOnQuote()
     {
         $subject = $this->getMock('Magento\Checkout\Controller\Index\Index', [], [], '', false);
         $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(0);
-        $this->object->beforeExecuteInternal($subject);
+        $this->object->beforeExecute($subject);
     }
 }

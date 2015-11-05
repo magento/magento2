@@ -106,7 +106,7 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerSession->setCustomerId($fixtureCustomerId);
 
         /** Execute SUT */
-        $billingAgreementController->executeInternal();
+        $billingAgreementController->execute();
 
         /** Ensure that billing agreement record was created in the DB */
         /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */

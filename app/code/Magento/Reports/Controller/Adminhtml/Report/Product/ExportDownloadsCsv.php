@@ -25,7 +25,7 @@ class ExportDownloadsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Pr
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'products_downloads.csv';
         $content = $this->_view->getLayout()->createBlock(
