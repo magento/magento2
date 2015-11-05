@@ -225,7 +225,7 @@
             <var name="width"></var> <!-- Width of magnifier block -->
             <var name="height"></var> <!-- Height of magnifier block -->
             <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
-            <var name="enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+            <var name="disabled">true</var> <!-- Turn on/off magnifier (true/false) -->
         </var>
 
         <var name="breakpoints">
@@ -236,9 +236,6 @@
                 <var name="options">
                     <var name="options">
                         <var name="nav">dots</var>
-                    </var>
-                    <var name="magnifierOpts">
-                        <var name="enabled">false</var>
                     </var>
                 </var>
             </var>
