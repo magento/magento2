@@ -46,7 +46,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
      */
-    protected $resolverInterface;
+    protected $resolver;
 
     /**
      * @param Reader $moduleReader
@@ -54,7 +54,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
-     * @param ResolverInterface $resolverInterface
+     * @param ResolverInterface $resolver
      */
     public function __construct(
         Reader $moduleReader,
@@ -62,7 +62,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         DesignInterface $designInterface,
         DirectoryList $directoryList,
         Filesystem $filesystem,
-        ResolverInterface $resolverInterface
+        ResolverInterface $resolver
     ) {
         $this->directoryList = $directoryList;
         $this->iteratorFactory = $iteratorFactory;
@@ -70,7 +70,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         $this->currentTheme = $designInterface->getDesignTheme();
         $this->area = $designInterface->getArea();
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->resolverInterface = $resolverInterface;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -92,7 +92,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                             )
                         );
                 } else {
-                    $designPath = $this->resolverInterface->resolve(
+                    $designPath = $this->resolver->resolve(
                         RulePool::TYPE_FILE,
                         'etc/view.xml',
                         $this->area,
