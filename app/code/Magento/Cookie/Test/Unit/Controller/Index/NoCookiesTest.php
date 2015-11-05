@@ -95,7 +95,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('setDispatched')->with($this->isTrue());
 
         // Make the call to test
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteRedirectPath()
@@ -126,7 +126,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('setDispatched')->with($this->isTrue());
 
         // Make the call to test
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteDefault()
@@ -139,6 +139,6 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('setDispatched')->with($this->isTrue());
 
         // Make the call to test
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

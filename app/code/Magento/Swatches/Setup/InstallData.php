@@ -60,7 +60,7 @@ class InstallData implements InstallDataInterface
                 'frontend' => 'Magento\Catalog\Model\Product\Attribute\Frontend\Image',
                 'required' => false,
                 'sort_order' => 3,
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'used_in_product_listing' => true
             ]
         );

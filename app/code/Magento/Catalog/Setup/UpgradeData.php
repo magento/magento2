@@ -114,6 +114,12 @@ class UpgradeData implements UpgradeDataInterface
                 'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
             );
         }
+
+        if (version_compare($context->getVersion(), '2.0.3') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $categorySetup->updateAttribute(3, 51, 'default_value', 1);
+        }
         $setup->endSetup();
     }
 }

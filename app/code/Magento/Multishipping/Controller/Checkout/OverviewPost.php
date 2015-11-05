@@ -65,7 +65,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    public function executeInternal()
     {
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             $this->_forward('backToAddresses');

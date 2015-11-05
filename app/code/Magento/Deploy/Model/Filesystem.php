@@ -3,17 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Deploy\Model;
 
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 
 /**
- * A class to manage Magento modes
+ * Class Filesystem
  *
+ * A class to manage Magento modes
  */
 class Filesystem
 {
@@ -118,36 +117,9 @@ class Filesystem
 
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
-        $this->deployCss($output);
         // Trigger code generation
         $this->compile($output);
         $this->lockStaticResources();
-    }
-
-    /**
-     * Deploy CSS
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return void
-     */
-    protected function deployCss(
-        \Symfony\Component\Console\Output\OutputInterface $output
-    ) {
-        $themeLocalePairs = $this->storeView->retrieveThemeLocalePairs();
-        foreach ($themeLocalePairs as $themeLocalePair) {
-            $theme = $themeLocalePair['theme'] ?: self::DEFAULT_THEME;
-            $cmd = $this->functionCallPath . 'dev:source_theme:deploy'
-                . ' --' . SourceThemeDeployCommand::TYPE_ARGUMENT . '="less"'
-                . ' --' . SourceThemeDeployCommand::THEME_OPTION . '="' . $theme . '"'
-                . ' --' . SourceThemeDeployCommand::LOCALE_OPTION . '="' . $themeLocalePair['locale'] . '"';
-
-            /**
-             * @todo build a solution that does not depend on exec
-             */
-            $execOutput = $this->shell->execute($cmd);
-            $output->writeln($execOutput);
-        }
-        $output->writeln('CSS deployment complete');
     }
 
     /**

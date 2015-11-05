@@ -14,7 +14,8 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'jquery/file-uploader',
-    'mage/translate'
+    'mage/translate',
+    'Magento_ConfigurableProduct/js/variations/variations'
 ], function (Component, $, ko, _, Collapsible, mageTemplate, alert) {
     'use strict';
 
@@ -55,7 +56,7 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable(),
-                    currencySymbol: this.variationsComponent().getCurrencySymbol()
+                    currencySymbol: ''
                 },
                 quantity: {
                     label: 'quantity',
@@ -64,6 +65,11 @@ define([
                     attribute: ko.observable()
                 }
             });
+
+            this.variationsComponent(function (variationsComponent) {
+                this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol()
+            }.bind(this));
+
             this.makeOptionSections = function () {
                 this.images = new self.makeImages(null);
                 this.price = self.price;
@@ -291,30 +297,7 @@ define([
 
                 if (!gallery.data('gallery-initialized')) {
                     gallery.mage('productGallery', {
-                        template: '[data-template=gallery-content]',
-                        types: {
-                            "image":{
-                                "code":"image",
-                                "value":null,
-                                "label":"Base Image",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[image]"
-                            },
-                            "small_image":{
-                                "code":"small_image",
-                                "value":null,
-                                "label":"Small Image",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[small_image]"
-                            },
-                            "thumbnail": {
-                                "code":"thumbnail",
-                                "value":null,
-                                "label":"Thumbnail",
-                                "scope":"<br\/>[STORE VIEW]",
-                                "name":"product[thumbnail]"
-                            }
-                        }
+                        template: '[data-template=gallery-content]'
                     });
 
                     uploadInput.fileupload({

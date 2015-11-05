@@ -113,7 +113,11 @@ class OrderStatus implements DataProviderInterface
     public function getCacheKey()
     {
         $order = $this->getOrder();
-        return 'rss_order_status_data_' . md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
+        $key = '';
+        if ($order !== null) {
+            $key = md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
+        }
+        return 'rss_order_status_data_' . $key;
     }
 
     /**
@@ -150,7 +154,7 @@ class OrderStatus implements DataProviderInterface
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
-        if ($order->getIncrementId() != $data['increment_id'] || $order->getCustomerId() != $data['customer_id']) {
+        if ($order->getIncrementId() !== $data['increment_id'] || $order->getCustomerId() !== $data['customer_id']) {
             $order = null;
         }
         $this->order = $order;
