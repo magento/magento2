@@ -128,7 +128,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $image = $this->curl->read();
         if (empty($image)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Could not get video information. Please check your connection and try again.')
+                __('Could not get preview image information. Please check your connection and try again.')
             );
         }
         $this->fileUtility->saveFile($localFilePath, $image);

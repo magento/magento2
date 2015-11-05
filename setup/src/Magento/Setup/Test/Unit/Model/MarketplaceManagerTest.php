@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-class ConnectManagerTest extends \PHPUnit_Framework_TestCase
+class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -32,16 +32,16 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $this->composerInformationMock = $this->_getComposerInformationMock(
             ['getPackagesTypes', 'getInstalledMagentoPackages']
         );
-        $this->curlClientMock = $this->_getCurlClientMock(['setCredentials', 'getBody', 'post']);
+        $this->curlClientMock = $this->_getCurlClientMock(['setCredentials', 'getStatus', 'getBody', 'post']);
         $this->filesystemMock = $this->_getFilesystemMock(['getDirectoryRead', 'getDirectoryWrite']);
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getCheckCredentialUrl
+     * @covers \Magento\Setup\Model\MarketplaceManager::getCheckCredentialUrl
      */
     public function testGetCheckCredentialUrl()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getCredentialBaseUrl'],
             [
                 $this->serviceLocatorMock,
@@ -50,23 +50,23 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
 
         $this->assertEquals(
             $this->urlPrefix . $this->checkingCredentialsUrl . '/check_credentials',
-            $connectManager->getCheckCredentialUrl()
+            $marketplaceManager->getCheckCredentialUrl()
         );
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getCredentialBaseUrl
+     * @covers \Magento\Setup\Model\MarketplaceManager::getCredentialBaseUrl
      */
     public function testGetCredentialBaseUrl()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getServiceLocator'],
             [
                 $this->serviceLocatorMock,
@@ -79,24 +79,24 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('config')
-            ->will($this->returnValue(['connect' => ['check_credentials_url' => $this->checkingCredentialsUrl]]));
-        $connectManager
+            ->will($this->returnValue(['marketplace' => ['check_credentials_url' => $this->checkingCredentialsUrl]]));
+        $marketplaceManager
             ->expects($this->once())
             ->method('getServiceLocator')
             ->will($this->returnValue($this->serviceLocatorMock));
 
         $this->assertEquals(
             $this->checkingCredentialsUrl,
-            $connectManager->getCredentialBaseUrl()
+            $marketplaceManager->getCredentialBaseUrl()
         );
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getPackagesJsonUrl
+     * @covers \Magento\Setup\Model\MarketplaceManager::getPackagesJsonUrl
      */
     public function testGetPackagesJsonUrl()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getCredentialBaseUrl'],
             [
                 $this->serviceLocatorMock,
@@ -105,25 +105,25 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
 
         $this->assertEquals(
             $this->urlPrefix . $this->checkingCredentialsUrl . '/packages.json',
-            $connectManager->getPackagesJsonUrl()
+            $marketplaceManager->getPackagesJsonUrl()
         );
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::checkCredentialsAction
+     * @covers \Magento\Setup\Model\MarketplaceManager::checkCredentialsAction
      */
     public function testCheckCredentialsAction()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
-                'getCheckCredentialUrl',
+                'getPackagesJsonUrl',
                 'getCurlClient'
             ],
             [
@@ -139,26 +139,26 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->with('username', 'password');
         $this->curlClientMock
             ->expects($this->once())
-            ->method('getBody');
-        $connectManager
+            ->method('getStatus');
+        $marketplaceManager
             ->expects($this->exactly(3))
             ->method('getCurlClient')
             ->will($this->returnValue($this->curlClientMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
-            ->method('getCheckCredentialUrl');
+            ->method('getPackagesJsonUrl');
 
-        $connectManager->checkCredentialsAction('username', 'password');
+        $marketplaceManager->checkCredentialsAction('username', 'password');
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::checkCredentialsAction
+     * @covers \Magento\Setup\Model\MarketplaceManager::checkCredentialsAction
      */
     public function testCheckCredentialsActionWithException()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
-                'getCheckCredentialUrl',
+                'getPackagesJsonUrl',
                 'getCurlClient'
             ],
             [
@@ -180,23 +180,23 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $this->curlClientMock
             ->expects($this->never())
             ->method('getBody');
-        $connectManager
+        $marketplaceManager
             ->expects($this->exactly(2))
             ->method('getCurlClient')
             ->will($this->returnValue($this->curlClientMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
-            ->method('getCheckCredentialUrl');
+            ->method('getPackagesJsonUrl');
 
-        $connectManager->checkCredentialsAction('username', 'password');
+        $marketplaceManager->checkCredentialsAction('username', 'password');
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getPackagesJson
+     * @covers \Magento\Setup\Model\MarketplaceManager::getPackagesJson
      */
     public function testGetPackagesJson()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getPackagesJsonUrl',
                 'getAuthJsonData',
@@ -216,27 +216,27 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $this->curlClientMock
             ->expects($this->once())
             ->method('getBody');
-        $connectManager
+        $marketplaceManager
             ->expects($this->exactly(3))
             ->method('getCurlClient')
             ->will($this->returnValue($this->curlClientMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->returnValue(['username' => 'username', 'password' => 'password']));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getPackagesJsonUrl');
 
-        $connectManager->getPackagesJson();
+        $marketplaceManager->getPackagesJson();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getPackagesJson
+     * @covers \Magento\Setup\Model\MarketplaceManager::getPackagesJson
      */
     public function testGetPackagesJsonWithException()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getPackagesJsonUrl',
                 'getAuthJsonData',
@@ -261,27 +261,27 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $this->curlClientMock
             ->expects($this->never())
             ->method('getBody');
-        $connectManager
+        $marketplaceManager
             ->expects($this->exactly(2))
             ->method('getCurlClient')
             ->will($this->returnValue($this->curlClientMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->returnValue(['username' => 'username', 'password' => 'password']));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getPackagesJsonUrl');
 
-        $connectManager->getPackagesJson();
+        $marketplaceManager->getPackagesJson();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::syncPackagesForInstall
+     * @covers \Magento\Setup\Model\MarketplaceManager::syncPackagesForInstall
      */
     public function testSyncPackagesForInstall()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getPackagesJson',
                 'getComposerInformation',
@@ -294,7 +294,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getPackagesJson')
             ->will($this->returnValue(
@@ -341,24 +341,24 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPackagesTypes')
             ->will($this->returnValue(['magento2-module']));
-        $connectManager
+        $marketplaceManager
             ->expects($this->exactly(2))
             ->method('getComposerInformation')
             ->will($this->returnValue($this->composerInformationMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('savePackagesForInstallToCache')
             ->will($this->returnValue(true));
 
-        $connectManager->syncPackagesForInstall();
+        $marketplaceManager->syncPackagesForInstall();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getAuthJsonData
+     * @covers \Magento\Setup\Model\MarketplaceManager::getAuthJsonData
      */
     public function testGetAuthJsonData()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getAuthJson',
                 'getCredentialBaseUrl'
@@ -370,7 +370,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getAuthJson')
             ->will($this->returnValue(
@@ -384,19 +384,19 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
-        $connectManager->getAuthJsonData();
+        $marketplaceManager->getAuthJsonData();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getAuthJson
+     * @covers \Magento\Setup\Model\MarketplaceManager::getAuthJson
      */
     public function testGetAuthJson()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getFilesystem'],
             [
                 $this->serviceLocatorMock,
@@ -422,20 +422,20 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('readFile')
             ->will($this->returnValue(true));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getFilesystem')
             ->will($this->returnValue($this->filesystemMock));
 
-        $connectManager->getAuthJson();
+        $marketplaceManager->getAuthJson();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::removeCredentials
+     * @covers \Magento\Setup\Model\MarketplaceManager::removeCredentials
      */
     public function testRemoveCredentials()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getCredentialBaseUrl',
                 'getFilesystem',
@@ -463,11 +463,11 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('isReadable')
             ->will($this->returnValue(true));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getFilesystem')
             ->will($this->returnValue($this->filesystemMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getAuthJson')
             ->will($this->returnValue(
@@ -481,11 +481,11 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
-        $connectManager
+        $marketplaceManager
             ->expects($this->never())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
@@ -493,15 +493,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('writeFile');
 
-        $connectManager->removeCredentials();
+        $marketplaceManager->removeCredentials();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::removeCredentials
+     * @covers \Magento\Setup\Model\MarketplaceManager::removeCredentials
      */
     public function testRemoveCredentialsEmptyHttpbasic()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getCredentialBaseUrl',
                 'getFilesystem',
@@ -528,19 +528,19 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('isReadable')
             ->will($this->returnValue(true));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getFilesystem')
             ->will($this->returnValue($this->filesystemMock));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getAuthJson')
             ->will($this->returnValue([]));
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
-        $connectManager
+        $marketplaceManager
             ->expects($this->never())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
@@ -548,15 +548,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('writeFile');
 
-        $connectManager->removeCredentials();
+        $marketplaceManager->removeCredentials();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::saveAuthJson
+     * @covers \Magento\Setup\Model\MarketplaceManager::saveAuthJson
      */
     public function testSaveAuthJson()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'getDirectory',
                 'getCredentialBaseUrl',
@@ -571,7 +571,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $directory = $this->_getDirectoryMock();
-        $connectManager
+        $marketplaceManager
             ->expects($this->any())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
@@ -580,15 +580,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->method('writeFile')
             ->will($this->returnValue($directory));
 
-        $connectManager->saveAuthJson('username', 'password');
+        $marketplaceManager->saveAuthJson('username', 'password');
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::savePackagesForInstallToCache
+     * @covers \Magento\Setup\Model\MarketplaceManager::savePackagesForInstallToCache
      */
     public function testSavePackagesForInstallToCache()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getDirectory'],
             [
                 $this->serviceLocatorMock,
@@ -598,7 +598,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $directory = $this->_getDirectoryMock();
-        $connectManager
+        $marketplaceManager
             ->expects($this->any())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
@@ -607,15 +607,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->method('writeFile')
             ->will($this->returnValue($directory));
 
-        $connectManager->savePackagesForInstallToCache([]);
+        $marketplaceManager->savePackagesForInstallToCache([]);
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getPackagesForInstall
+     * @covers \Magento\Setup\Model\MarketplaceManager::getPackagesForInstall
      */
     public function testGetPackagesForInstallEmptyData()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'loadPackagesForInstallFromCache',
                 'getComposerInformation',
@@ -628,21 +628,21 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('loadPackagesForInstallFromCache')
             ->will($this->returnValue(false));
 
 
-        $this->assertFalse($connectManager->getPackagesForInstall());
+        $this->assertFalse($marketplaceManager->getPackagesForInstall());
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::getPackagesForInstall
+     * @covers \Magento\Setup\Model\MarketplaceManager::getPackagesForInstall
      */
     public function testGetPackagesForInstall()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             [
                 'loadPackagesForInstallFromCache',
                 'getComposerInformation',
@@ -655,7 +655,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->filesystemMock
             ]
         );
-        $connectManager
+        $marketplaceManager
             ->expects($this->once())
             ->method('loadPackagesForInstallFromCache')
             ->will($this->returnValue([
@@ -664,7 +664,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
                     ['name' => 'test2', "type" =>  "magento2-module"]
                 ]
             ]));
-        $connectManager
+        $marketplaceManager
             ->expects($this->exactly(2))
             ->method('getComposerInformation')
             ->will($this->returnValue($this->composerInformationMock));
@@ -673,15 +673,15 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getInstalledMagentoPackages')
             ->will($this->returnValue(['name' => 'test1']));
 
-        $connectManager->getPackagesForInstall();
+        $marketplaceManager->getPackagesForInstall();
     }
 
     /**
-     * @covers \Magento\Setup\Model\ConnectManager::loadPackagesForInstallFromCache
+     * @covers \Magento\Setup\Model\MarketplaceManager::loadPackagesForInstallFromCache
      */
     public function testLoadPackagesForInstallFromCache()
     {
-        $connectManager = $this->_getConnectManagerMock(
+        $marketplaceManager = $this->_getMarketplaceManagerMock(
             ['getDirectory'],
             [
                 $this->serviceLocatorMock,
@@ -692,7 +692,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $directory = $this->_getDirectoryMock();
-        $connectManager
+        $marketplaceManager
             ->expects($this->any())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
@@ -709,7 +709,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->will($this->returnValue(true));
 
-        $connectManager->loadPackagesForInstallFromCache();
+        $marketplaceManager->loadPackagesForInstallFromCache();
     }
 
     /**
@@ -766,13 +766,13 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Gets ConnectManager mock
+     * Gets MarketplaceManager mock
      *
      * @param null $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConnectManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\MarketplaceManager
      */
-    protected function _getConnectManagerMock($methods = null, $arguments = [])
+    protected function _getMarketplaceManagerMock($methods = null, $arguments = [])
     {
-        return $this->getMock('Magento\Setup\Model\ConnectManager', $methods, $arguments, '', false);
+        return $this->getMock('Magento\Setup\Model\MarketplaceManager', $methods, $arguments, '', false);
     }
 }
