@@ -176,8 +176,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->imageHelper->expects($this->exactly(2))->method('init')
             ->willReturnMap([
-                [$this->product, 'swatch_image', [], $this->imageHelper],
-                [$this->product, 'swatch_thumb', [], $this->imageHelper],
+                [$this->product, 'swatch_image', ['type' => 'swatch_image'], $this->imageHelper],
+                [$this->product, 'swatch_thumb', ['type' => 'swatch_image'], $this->imageHelper],
             ]);
 
         $this->jsonEncoder->expects($this->once())->method('encode');
@@ -222,8 +222,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->imageHelper->expects($this->exactly(2))->method('init')
             ->willReturnMap([
-                [$this->product, 'swatch_image_base', [], $this->imageHelper],
-                [$this->product, 'swatch_thumb_base', [], $this->imageHelper],
+                [$this->product, 'swatch_image_base', ['type' => 'image'], $this->imageHelper],
+                [$this->product, 'swatch_thumb_base', ['type' => 'image'], $this->imageHelper],
             ]);
 
         $this->jsonEncoder->expects($this->once())->method('encode');

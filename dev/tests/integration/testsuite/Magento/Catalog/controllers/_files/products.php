@@ -9,6 +9,13 @@
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 $obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$obectManager->get(
+    'Magento\Framework\View\DesignInterface'
+)->setArea(
+    'frontend'
+)->setDefaultDesignTheme();
+
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
