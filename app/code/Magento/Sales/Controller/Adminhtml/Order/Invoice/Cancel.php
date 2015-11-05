@@ -13,7 +13,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {

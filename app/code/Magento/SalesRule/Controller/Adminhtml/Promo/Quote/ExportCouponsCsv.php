@@ -15,7 +15,7 @@ class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
      *
      * @return \Magento\Framework\App\ResponseInterface|null
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initRule();
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');

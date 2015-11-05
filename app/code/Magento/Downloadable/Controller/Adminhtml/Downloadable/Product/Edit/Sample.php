@@ -31,7 +31,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $sampleId = $this->getRequest()->getParam('id', 0);
         /** @var \Magento\Downloadable\Model\Sample $sample */

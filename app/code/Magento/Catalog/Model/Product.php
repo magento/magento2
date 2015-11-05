@@ -968,9 +968,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function eavReindexCallback()
     {
-        if ($this->isObjectNew() || $this->hasDataChanges()) {
+        if ($this->isObjectNew() || $this->isDataChanged($this)) {
             $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
+    }
+
+    /**
+     * Check if data was changed
+     *
+     * @return bool
+     */
+    public function isDataChanged()
+    {
+        foreach (array_keys($this->getData()) as $field) {
+            if ($this->dataHasChangedFor($field)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
