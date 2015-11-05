@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
 
 /**
@@ -46,7 +46,7 @@ class MatrixTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             'test_configurable'
         );
         $attributeOptions = $usedAttribute->getSource()->getAllOptions(false);
-        /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix */
+        /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\LayoutInterface'
         )->createBlock(
