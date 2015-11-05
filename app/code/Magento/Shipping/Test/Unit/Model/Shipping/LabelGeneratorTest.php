@@ -62,6 +62,7 @@ class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->trackFactory = $this->getMockBuilder('Magento\Sales\Model\Order\Shipment\TrackFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
