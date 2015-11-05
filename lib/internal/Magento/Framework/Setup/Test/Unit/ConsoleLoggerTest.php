@@ -22,6 +22,9 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->console = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
         $outputFormatter = $this->getMock(
             'Symfony\Component\Console\Formatter\OutputFormatterInterface',

@@ -32,6 +32,9 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->composerInfo = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $this->phpInfo = $this->getMock('Magento\Setup\Model\PhpInformation', [], [], '', false);
         $this->versionParser = $this->getMock('Composer\Package\Version\VersionParser', [], [], '', false);

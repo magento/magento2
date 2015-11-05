@@ -76,6 +76,9 @@ class InstallTest extends \PHPUnit_Framework_TestCase
 
     public function testStartActionException()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->webLogger->expects($this->once())->method('clear');
         $this->installer->expects($this->once())->method('install')
             ->willThrowException($this->getMock('\Exception'));
