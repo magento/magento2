@@ -11,7 +11,6 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 
@@ -37,22 +36,12 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     /**
      * @var string
      */
-    protected $themePath;
-
-    /**
-     * @var string
-     */
     protected $area;
 
     /**
      * @var Filesystem\Directory\ReadInterface
      */
     protected $rootDirectory;
-
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrar
-     */
-    protected $componentRegistrar;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
@@ -65,7 +54,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
-     * @param ComponentRegistrar $componentRegistrar
      * @param ResolverInterface $resolverInterface
      */
     public function __construct(
@@ -74,17 +62,14 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         DesignInterface $designInterface,
         DirectoryList $directoryList,
         Filesystem $filesystem,
-        ComponentRegistrar $componentRegistrar,
         ResolverInterface $resolverInterface
     ) {
         $this->directoryList = $directoryList;
         $this->iteratorFactory = $iteratorFactory;
         $this->moduleReader = $moduleReader;
         $this->currentTheme = $designInterface->getDesignTheme();
-        $this->themePath = $designInterface->getThemePath($this->currentTheme);
         $this->area = $designInterface->getArea();
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->componentRegistrar = $componentRegistrar;
         $this->resolverInterface = $resolverInterface;
     }
 
@@ -120,7 +105,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                             $iterator[$designPath] = $designDom->saveXML();
                         } catch (\Exception $e) {
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('Could not read config file')
+                                new \Magento\Framework\Phrase('Could not read config file')
                             );
                         }
                     }
