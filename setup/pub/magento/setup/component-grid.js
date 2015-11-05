@@ -117,15 +117,15 @@ angular.module('component-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[component.name]['latestVersion']
                     }
                 ];
-                if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['update'] = 'Update ' + component.moduleName;
-                }
                 if (component.moduleName) {
                     $localStorage.moduleName = component.moduleName;
                 } else {
                     $localStorage.moduleName = component.name;
                 }
-
+                if ($localStorage.titles['update'].indexOf($localStorage.moduleName) < 0 ) {
+                    $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
+                }
+                $rootScope.titles = $localStorage.titles;
                 $scope.nextState();
             };
 
@@ -135,15 +135,16 @@ angular.module('component-grid', ['ngStorage'])
                         name: component.name
                     }
                 ];
-                if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['uninstall'] = 'Uninstall ' + component.moduleName;
-                }
-                $localStorage.componentType = component.type;
                 if (component.moduleName) {
                     $localStorage.moduleName = component.moduleName;
                 } else {
                     $localStorage.moduleName = component.name;
                 }
+                if ($localStorage.titles['uninstall'].indexOf($localStorage.moduleName) < 0 ) {
+                    $localStorage.titles['uninstall'] = 'Uninstall ' + $localStorage.moduleName;
+                }
+                $rootScope.titles = $localStorage.titles;
+                $localStorage.componentType = component.type;
                 $state.go('root.readiness-check-uninstall');
             };
 
@@ -154,12 +155,17 @@ angular.module('component-grid', ['ngStorage'])
                             name: component.moduleName
                         }
                     ];
-                    if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
-                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                            + component.moduleName;
+                    if (component.moduleName) {
+                        $localStorage.moduleName = component.moduleName;
+                    } else {
+                        $localStorage.moduleName = component.name;
                     }
+                    if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
+                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                            + $localStorage.moduleName;
+                    }
+                    $rootScope.titles = $localStorage.titles;
                     $localStorage.componentType = component.type;
-                    $localStorage.moduleName = component.moduleName;
                     $state.go('root.readiness-check-'+type);
                 }
             };
