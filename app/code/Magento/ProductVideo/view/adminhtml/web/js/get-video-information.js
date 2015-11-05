@@ -336,6 +336,8 @@ require([
 
             _videoInformation: null,
 
+            _currentVideoUrl: null,
+
             /**
              * @private
              */
@@ -354,6 +356,12 @@ require([
                     type,
                     id,
                     googleapisUrl;
+
+                if (this._currentVideoUrl === url) {
+                    return;
+                }
+
+                this._currentVideoUrl = url;
 
                 this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
                     url: url
