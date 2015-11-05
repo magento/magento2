@@ -7,6 +7,8 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use Magento\Framework\Webapi\Request;
+
 class Server
 {
     const SOAP_DEFAULT_ENCODING = 'UTF-8';
@@ -34,7 +36,7 @@ class Server
     protected $_configScope;
 
     /**
-     * @var \Magento\Webapi\Controller\Soap\Request
+     * @var Request
      */
     protected $_request;
 
@@ -63,7 +65,7 @@ class Server
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
-     * @param \Magento\Webapi\Controller\Soap\Request $request
+     * @param Request $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
@@ -73,7 +75,7 @@ class Server
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
-        \Magento\Webapi\Controller\Soap\Request $request,
+        Request $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,

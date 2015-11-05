@@ -10,26 +10,26 @@
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-switcher">
         <label for="order_<?php echo $block->getHtmlId() ?>_period"
-               class="label"><?php echo __('Select Range:') ?></label>
+               class="label"><?php /* @escapeNotVerified */ echo __('Select Range:') ?></label>
         <select name="period" id="order_<?php echo $block->getHtmlId() ?>_period"
                 onchange="changeDiagramsPeriod(this);" class="admin__control-select">
             <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
                 <?php if (in_array($value, ['custom'])) {
                     continue;
                 } ?>
-                <option value="<?php echo $value ?>"
+                <option value="<?php /* @escapeNotVerified */ echo $value ?>"
                     <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
-                    ><?php echo $label ?></option>
+                    ><?php /* @escapeNotVerified */ echo $label ?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <?php if ($block->getCount()): ?>
     <div class="dashboard-diagram-image">
-        <img src="<?php echo $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
+        <img src="<?php /* @escapeNotVerified */ echo $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
     </div>
     <?php else: ?>
     <div class="dashboard-diagram-nodata">
-        <span><?php echo __('No Data Found') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('No Data Found') ?></span>
     </div>
     <?php endif; ?>
 </div>

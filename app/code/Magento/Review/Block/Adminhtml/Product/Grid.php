@@ -16,7 +16,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Website collection
      *
-     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
      */
     protected $_websitesFactory;
 
@@ -24,13 +24,13 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -39,13 +39,13 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory,
         array $data = []
     ) {
         $this->_websitesFactory = $websitesFactory;
@@ -148,7 +148,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Get catalog product row url
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

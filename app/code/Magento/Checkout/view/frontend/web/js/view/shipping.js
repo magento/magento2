@@ -120,7 +120,7 @@ define(
 
             initElement: function(element) {
                 if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
                 }
             },
 
@@ -176,7 +176,7 @@ define(
             },
 
             /** Shipping Method View **/
-            rates: shippingService.getSippingRates(),
+            rates: shippingService.getShippingRates(),
             isLoading: shippingService.isLoading,
             isSelected: ko.computed(function () {
                     return quote.shippingMethod()
@@ -201,7 +201,7 @@ define(
                 }
             },
 
-            validateShippingInformation: function() {
+            validateShippingInformation: function () {
                 var shippingAddress,
                     addressData,
                     loginFormSelector = 'form[data-role=email-with-possible-login]',
@@ -224,6 +224,9 @@ define(
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
+                    if (this.source.get('shippingAddress.custom_attributes')) {
+                        this.source.trigger('shippingAddress.custom_attributes.data.validate');
+                    };
                     if (this.source.get('params.invalid')
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code

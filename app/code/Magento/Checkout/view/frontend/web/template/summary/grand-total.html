@@ -6,9 +6,9 @@
 -->
 <!-- ko if: isDisplayed() -->
 <tr>
-    <td colspan="2" data-bind="text: $t(title)"></td>
+    <td colspan="2" data-bind="text: title"></td>
     <td class="col grandtotal">
-        <span data-bind ="text: getValue(), attr:{'data-label': $t(title)}"></span>
+        <span data-bind ="text: getValue(), attr:{'data-label': title}"></span>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->

@@ -7,8 +7,10 @@
  *
  * @var \Magento\Backend\Block\Widget\Form\Container $block
  */
+
+// @codingStandardsIgnoreFile
 ?>
-<div><p><?php echo __('The integration you selected asks you to approve access to the following:'); ?></p></div>
+<div><p><?php /* @escapeNotVerified */ echo __('The integration you selected asks you to approve access to the following:'); ?></p></div>
 <div id="integration-activate-permissions-tabs">
     <?php echo $block->getChildHtml('tabs'); ?>
 </div>

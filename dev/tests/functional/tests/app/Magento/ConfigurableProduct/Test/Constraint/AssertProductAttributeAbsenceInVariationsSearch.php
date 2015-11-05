@@ -6,34 +6,36 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config as VariationsTab;
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute as AttributeBlock;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config as VariationsTab;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute as AttributeBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductAttributeAbsenceInVariationsSearch
- * Check that deleted attribute can't be added to product template on Product Page via Add Attribute control
+ * Check that deleted attribute can't be added to attribute set on Product Page via Add Attribute control.
  */
 class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
 {
     /**
-     * Label "Variations" tab
+     * Label "Variations" tab.
      */
     const TAB_VARIATIONS = 'variations';
 
     /**
-     * Assert that deleted attribute can't be added to product template on Product Page via Add Attribute control
+     * Assert that deleted attribute can't be added to attribute set on Product Page via Add Attribute control.
      *
      * @param CatalogProductAttribute $productAttribute
+     * @param ConfigurableProduct $assertProduct
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
      * @return void
      */
     public function processAssert(
         CatalogProductAttribute $productAttribute,
+        ConfigurableProduct $assertProduct,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage
     ) {
@@ -41,18 +43,19 @@ class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
         $productGrid->getGridPageActionBlock()->addProduct('simple');
 
         /** @var VariationsTab $variationsTab */
+        $newProductPage->getProductForm()->fill($assertProduct);
         $variationsTab = $newProductPage->getProductForm()->getTab(self::TAB_VARIATIONS);
         $variationsTab->showContent();
-        /** @var AttributeBlock $attributesBlock */
-        $attributesBlock = $variationsTab->getAttributeBlock();
+        $variationsTab->createConfigurations();
+        $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
         \PHPUnit_Framework_Assert::assertFalse(
-            $attributesBlock->getAttributeSelector()->isExistAttributeInSearchResult($productAttribute),
+            $attributesGrid->isRowVisible(['frontend_label' => $productAttribute->getFrontendLabel()]),
             "Product attribute found in Attribute Search form."
         );
     }
 
     /**
-     * Text absent Product Attribute in Attribute Search form
+     * Text absent Product Attribute in Attribute Search form.
      *
      * @return string
      */

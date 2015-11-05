@@ -18,44 +18,46 @@ use Magento\Framework\App\Action\Action;
 <?php
 $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 <?php if (!$_productCollection->count()): ?>
-    <div class="message info empty"><div><?php echo __('We can\'t find products matching the selection.') ?></div></div>
+    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></div></div>
 <?php else: ?>
     <?php echo $block->getToolbarHtml() ?>
     <?php echo $block->getAdditionalHtml() ?>
-    <?php if ($block->getMode() == 'grid') {
-    $viewMode = 'grid';
-    $image = 'category_page_grid';
-    $showDescription = false;
-    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
-} else {
-    $viewMode = 'list';
-    $image = 'category_page_list';
-    $showDescription = true;
-    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
-}
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
     /**
      * Position for actions regarding image size changing in vde if needed
      */
     $pos = $block->getPositioned();
-    $position = '';
-    if ($pos != null) {
-        $position = ' style="left:' . $block->getVar("{$image}:width") . 'px;'
-            . 'top:' . $block->getVar("{$image}:height") . 'px;"';
-    }
     ?>
-    <div class="products wrapper <?php echo $viewMode; ?> products-<?php echo $viewMode; ?>">
+    <div class="products wrapper <?php /* @escapeNotVerified */ echo $viewMode; ?> products-<?php /* @escapeNotVerified */ echo $viewMode; ?>">
         <?php $iterator = 1; ?>
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-                <?php echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+                <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info" data-container="product-grid">
+                    <?php
+                    $productImage = $block->getImage($_product, $image);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
                     <?php // Product Image ?>
-                    <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
-                        <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
+                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
+                        <?php echo $productImage->toHtml(); ?>
                     </a>
                     <div class="product details product-item-details">
                         <?php
@@ -63,12 +65,12 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                         ?>
                         <strong class="product name product-item-name">
                             <a class="product-item-link"
-                               href="<?php echo $_product->getProductUrl() ?>">
-                                <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
                             </a>
                         </strong>
                         <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
-                        <?php echo $block->getProductPrice($_product) ?>
+                        <?php /* @escapeNotVerified */ echo $block->getProductPrice($_product) ?>
                         <?php echo $block->getProductDetailsHtml($_product); ?>
 
                         <div class="product-item-inner">
@@ -76,20 +78,21 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                 <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
-                                        <form data-role="tocart-form" action="<?php echo $postParams['action']; ?>" method="post">
-                                            <input type="hidden" name="product" value="<?php echo $postParams['data']['product']; ?>">
-                                            <input type="hidden" name="<?php echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                        <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                            <?php echo $block->getBlockHtml('formkey')?>
                                             <button type="submit"
                                                     title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
                                                     class="action tocart primary">
-                                                <span><?php echo __('Add to Cart') ?></span>
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
                                             </button>
                                         </form>
                                     <?php else: ?>
                                         <?php if ($_product->getIsSalable()): ?>
-                                            <div class="stock available"><span><?php echo __('In stock') ?></span></div>
+                                            <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
                                         <?php else: ?>
-                                            <div class="stock unavailable"><span><?php echo __('Out of stock') ?></span></div>
+                                            <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -99,10 +102,10 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                            class="action towishlist"
                                            title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
                                            aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
-                                           data-post='<?php echo $block->getAddToWishlistParams($_product); ?>'
+                                           data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($_product); ?>'
                                            data-action="add-to-wishlist"
                                            role="button">
-                                            <span><?php echo __('Add to Wish List') ?></span>
+                                            <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php
@@ -112,17 +115,17 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                        class="action tocompare"
                                        title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
                                        aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-                                       data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'
+                                       data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_product); ?>'
                                        role="button">
-                                        <span><?php echo __('Add to Compare') ?></span>
+                                        <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
                                     </a>
                                 </div>
                             </div>
                             <?php if ($showDescription):?>
                                 <div class="product description product-item-description">
-                                    <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>"
-                                       class="action more"><?php echo __('Learn More') ?></a>
+                                    <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" title="<?php /* @escapeNotVerified */ echo $_productNameStripped ?>"
+                                       class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
                                 </div>
                             <?php endif; ?>
                         </div>

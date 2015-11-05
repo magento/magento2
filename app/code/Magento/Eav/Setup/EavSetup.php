@@ -7,7 +7,7 @@ namespace Magento\Eav\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -108,7 +108,7 @@ class EavSetup
     /**
      * Gets attribute group collection factory
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
     public function getAttributeGroupCollectionFactory()
     {
@@ -527,6 +527,14 @@ class EavSetup
             if ($sortOrder === null) {
                 $data['sort_order'] = $this->getAttributeGroupSortOrder($entityTypeId, $setId, $sortOrder);
             }
+            if (empty($data['attribute_group_code'])) {
+                $attributeGroupCode = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-');
+                if (empty($attributeGroupCode)) {
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5($name);
+                }
+                $data['attribute_group_code'] = $attributeGroupCode;
+            }
             $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_group'), $data);
         }
 
@@ -728,7 +736,7 @@ class EavSetup
             )
         ) {
             throw new LocalizedException(
-                __('An attribute code must be fewer than %1 characters.', $attributeCodeMaxLength)
+                __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)
             );
         }
 
@@ -803,7 +811,7 @@ class EavSetup
     }
 
     /**
-     * Add Attribure Option
+     * Add Attribute Option
      *
      * @param array $option
      * @return void

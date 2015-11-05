@@ -9,8 +9,7 @@
 /* @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
-<a class="product-item-photo" href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
-    <?php echo $imageBlock->init($product, 'wishlist_thumbnail')->toHtml() ?>
+<a class="product-item-photo" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
+    <?php echo $block->getImage($product, 'wishlist_thumbnail')->toHtml(); ?>
 </a>

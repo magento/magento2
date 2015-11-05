@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
+use Magento\Framework\App\ResourceConnection;
+
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,7 +20,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -26,7 +28,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
     }
 
     /**
@@ -67,8 +69,6 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->with(
-            'write'
         )->will(
             $this->returnValue($this->_connectionMock)
         );

@@ -4,12 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Admin product edit tabs
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
-class Tabs extends \Magento\Backend\Block\Widget\Tabs
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Accordion;
+use Magento\Backend\Block\Widget\Tabs as WigetTabs;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Catalog\Helper\Catalog;
+use Magento\Catalog\Helper\Data;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+
+/**
+ * Admin product edit tabs
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Tabs extends WigetTabs
 {
     const BASIC_TAB_GROUP_CODE = 'basic';
 
@@ -28,62 +41,62 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var Data
      */
     protected $_catalogData = null;
 
     /**
      * Adminhtml catalog
      *
-     * @var \Magento\Catalog\Helper\Catalog
+     * @var Catalog
      */
     protected $_helperCatalog = null;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     protected $_moduleManager;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
     protected $_translateInline;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Helper\Catalog $helperCatalog
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param Session $authSession
+     * @param Manager $moduleManager
+     * @param CollectionFactory $collectionFactory
+     * @param Catalog $helperCatalog
+     * @param Data $catalogData
+     * @param Registry $registry
+     * @param InlineInterface $translateInline
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Helper\Catalog $helperCatalog,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        Session $authSession,
+        Manager $moduleManager,
+        CollectionFactory $collectionFactory,
+        Catalog $helperCatalog,
+        Data $catalogData,
+        Registry $registry,
+        InlineInterface $translateInline,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -107,7 +120,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @param int $attributeSetId
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
     public function getGroupCollection($attributeSetId)
     {
@@ -189,15 +202,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 unset($advancedGroups['advanced-pricing']);
             }
 
-            if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')) {
+            if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')
+                && $this->getChildBlock('advanced-inventory')
+            ) {
                 $this->addTab(
                     'advanced-inventory',
                     [
                         'label' => __('Advanced Inventory'),
                         'content' => $this->_translateHtml(
-                            $this->getLayout()->createBlock(
-                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory'
-                            )->toHtml()
+                            $this->getChildHtml('advanced-inventory')
                         ),
                         'group_code' => self::ADVANCED_TAB_GROUP_CODE
                     ]
@@ -320,6 +333,21 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _translateHtml($html)
     {
         $this->_translateInline->processResponseBody($html);
+        return $html;
+    }
+
+    /**
+     * @param string $parentTab
+     * @return string
+     */
+    public function getAccordion($parentTab)
+    {
+        $html = '';
+        foreach ($this->_tabs as $childTab) {
+            if ($childTab->getParentTab() === $parentTab->getId()) {
+                $html .= $this->getChildBlock('child-tab')->setTab($childTab)->toHtml();
+            }
+        }
         return $html;
     }
 }

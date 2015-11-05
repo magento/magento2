@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Test\Unit\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Eav\Model\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +27,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $typeFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
 
@@ -51,7 +51,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Type\CollectionFactory')
+        $this->collectionFactoryMock =
+            $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -82,7 +83,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributeCache($cacheEnabled, $loadCalls, $cachedValue)
     {
-        $attributeCollectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
+        $attributeCollectionMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
@@ -99,7 +100,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $factoryCalls = [
-            ['Magento\Eav\Model\Resource\Entity\Attribute\Collection', [], $attributeCollectionMock],
+            ['Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection', [], $attributeCollectionMock],
             ['Magento\Eav\Model\Entity\Attribute', [], $entityAttributeMock],
         ];
 
@@ -114,7 +115,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::ATTRIBUTES_CACHE_ID)
             ->willReturn($cachedValue);
 
-        $collectionStub = new Object([
+        $collectionStub = new DataObject([
             ['entity_type_code' => 'type_code_1', 'entity_type_id' => 1],
         ]);
         $this->collectionFactoryMock
@@ -125,7 +126,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->typeFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn(new Object(['id' => 101]));
+            ->willReturn(new DataObject(['id' => 101]));
 
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())

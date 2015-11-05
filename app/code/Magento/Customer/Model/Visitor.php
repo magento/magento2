@@ -6,15 +6,22 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Framework\Indexer\StateInterface;
+
 /**
  * Class Visitor
  * @package Magento\Customer\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
     const VISITOR_TYPE_CUSTOMER = 'c';
 
     const VISITOR_TYPE_VISITOR = 'v';
+
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
+    const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
 
     /**
      * @var string[]
@@ -56,14 +63,20 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\HTTP\Header $httpHeader
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
@@ -77,7 +90,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\Header $httpHeader,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
@@ -90,6 +104,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->ignores = $ignores;
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -99,7 +114,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Visitor');
+        $this->_init('Magento\Customer\Model\ResourceModel\Visitor');
         $userAgent = $this->httpHeader->getHttpUserAgent();
         if ($this->ignoredUserAgents) {
             if (in_array($userAgent, $this->ignoredUserAgents)) {
@@ -280,5 +295,21 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         $this->getResource()->clean($this);
         return $this;
+    }
+
+    /**
+     * Retrieve Online Interval (in minutes)
+     *
+     * @return int Minutes Interval
+     */
+    public function getOnlineInterval()
+    {
+        $configValue = intval(
+            $this->scopeConfig->getValue(
+                static::XML_PATH_ONLINE_INTERVAL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
+        return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }

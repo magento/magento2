@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -158,7 +159,7 @@ class Ftp extends AbstractIo
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mkdir($dir, $mode = 0777, $recursive = true)
+    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
     {
         return @ftp_mkdir($this->_conn, $dir);
     }

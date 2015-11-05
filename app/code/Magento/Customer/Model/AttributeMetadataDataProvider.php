@@ -19,7 +19,7 @@ class AttributeMetadataDataProvider
     private $eavConfig;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory
+     * @var \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory
      */
     private $attrFormCollectionFactory;
 
@@ -32,12 +32,12 @@ class AttributeMetadataDataProvider
      * Initialize data provider with data source
      *
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory
+     * @param \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory $attrFormCollectionFactory
      * @param \Magento\Store\Model\StoreManager $storeManager
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory,
+        \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory $attrFormCollectionFactory,
         \Magento\Store\Model\StoreManager $storeManager
     ) {
         $this->eavConfig = $eavConfig;
@@ -70,7 +70,7 @@ class AttributeMetadataDataProvider
         if (null === $storeId) {
             $storeId = $this->storeManager->getStore()->getId();
         }
-        $object = new \Magento\Framework\Object(
+        $object = new \Magento\Framework\DataObject(
             [
                 'store_id' => $storeId,
                 'attribute_set_id' => $attributeSetId,
@@ -84,7 +84,7 @@ class AttributeMetadataDataProvider
      *
      * @param string $entityType
      * @param string $formCode
-     * @return \Magento\Customer\Model\Resource\Form\Attribute\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection
      */
     public function loadAttributesCollection($entityType, $formCode)
     {

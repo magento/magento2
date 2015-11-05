@@ -15,9 +15,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     public function execute()
     {
         $id = $this->getRequest()->getParam('attribute_id');
-        /** @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */
+        /** @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $model = $this->_objectManager->create(
-            'Magento\Catalog\Model\Resource\Eav\Attribute'
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
         )->setEntityTypeId(
             $this->_entityTypeId
         );
@@ -52,9 +52,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
         $item = $id ? __('Edit Product Attribute') : __('New Product Attribute');
 
-        $resultPage = $this->createActionPage();
+        $resultPage = $this->createActionPage($item);
         $resultPage->getConfig()->getTitle()->prepend($id ? $model->getName() : __('New Product Attribute'));
-        $resultPage->addBreadcrumb($item, $item);
         $resultPage->getLayout()
             ->getBlock('attribute_edit_js')
             ->setIsPopup((bool)$this->getRequest()->getParam('popup'));

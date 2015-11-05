@@ -6,13 +6,14 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
-class IndexStructure
+class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
@@ -24,11 +25,11 @@ class IndexStructure
     private $indexScopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param IndexScopeResolver $indexScopeResolver
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         IndexScopeResolver $indexScopeResolver
     ) {
         $this->resource = $resource;
@@ -40,21 +41,22 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function delete($index, array $dimensions)
+    public function delete($index, array $dimensions = [])
     {
-        $adapter = $this->getAdapter();
         $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
+        if ($this->resource->getConnection()->isTableExists($tableName)) {
+            $this->resource->getConnection()->dropTable($tableName);
         }
     }
 
     /**
      * @param string $index
-     * @param Dimension[] $dimensions
+     * @param array $fields
+     * @param array $dimensions
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
-    public function create($index, array $dimensions)
+    public function create($index, array $fields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
     }
@@ -66,8 +68,7 @@ class IndexStructure
      */
     protected function createFulltextIndex($tableName)
     {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName)
+        $table = $this->resource->getConnection()->newTable($tableName)
             ->addColumn(
                 'entity_id',
                 Table::TYPE_INTEGER,
@@ -94,15 +95,6 @@ class IndexStructure
                 ['data_index'],
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             );
-        $adapter->createTable($table);
-    }
-
-    /**
-     * @return false|AdapterInterface
-     */
-    private function getAdapter()
-    {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-        return $adapter;
+        $this->resource->getConnection()->createTable($table);
     }
 }

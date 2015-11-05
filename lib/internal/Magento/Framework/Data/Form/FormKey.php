@@ -41,9 +41,26 @@ class FormKey
      */
     public function getFormKey()
     {
-        if (!$this->session->getData(self::FORM_KEY)) {
-            $this->session->setData(self::FORM_KEY, $this->mathRandom->getRandomString(16));
+        if (!$this->isPresent()) {
+            $this->set($this->mathRandom->getRandomString(16));
         }
         return $this->session->getData(self::FORM_KEY);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPresent()
+    {
+        return (bool)$this->session->getData(self::FORM_KEY);
+    }
+
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function set($value)
+    {
+        $this->session->setData(self::FORM_KEY, $value);
     }
 }

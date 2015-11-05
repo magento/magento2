@@ -13,6 +13,11 @@ namespace Magento\Framework\Message;
 interface MessageInterface
 {
     /**
+     * Default identifier
+     */
+    const DEFAULT_IDENTIFIER = 'default_message_identifier';
+
+    /**
      * Error type
      */
     const TYPE_ERROR = 'error';
@@ -91,4 +96,20 @@ interface MessageInterface
      * @return string
      */
     public function toString();
+
+    /**
+     * Sets message data
+     *
+     * @param array $data
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setData(array $data = []);
+
+    /**
+     * Returns message data
+     *
+     * @return array
+     */
+    public function getData();
 }

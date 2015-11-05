@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,8 +94,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertCustomerData(array $expectedData)
     {
-        /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
-        $collection = $this->_objectManager->create('Magento\Customer\Model\Resource\Customer\Collection');
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        $collection = $this->_objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
         $collection->addAttributeToSelect($this->_customerAttributes);
         $customers = $collection->getItems();
 
@@ -145,19 +146,26 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
         $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
+        $this->_entityAdapter->getErrorAggregator()->initValidationStrategy(
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR,
+            10
+        );
+
         // set fixture CSV file
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $rootDirectory)
-        )->isDataValid();
+        )
+            ->validateData()
+            ->hasToBeTerminated();
         if ($errors) {
-            $this->assertFalse($result);
-        } else {
             $this->assertTrue($result);
+        } else {
+            $this->assertFalse($result);
         }
 
         // assert validation errors
         // can't use error codes because entity adapter gathers only error messages from aggregated adapters
-        $actualErrors = array_values($this->_entityAdapter->getErrorMessages());
+        $actualErrors = array_values($this->_entityAdapter->getErrorAggregator()->getRowsGroupedByErrorCode());
         $this->assertEquals($errors, $actualErrors);
 
         // assert data before import
@@ -192,7 +200,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
-            '$errors' => [[6]], // row #6 has no website
+            '$errors' => [],
         ];
 
         return $sourceData;

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <name>
+            <selector>[name$="[name]"]</selector>
+        </name>
+        <sku>
+            <selector>[name$="[sku]"]</selector>
+        </sku>
+        <price>
+            <selector>[name$="[price]"]</selector>
+        </price>
+        <quantity_and_stock_status composite="1">
+            <qty>
+                <selector>[name$="[quantity_and_stock_status][qty]"]</selector>
+            </qty>
+        </quantity_and_stock_status>
+        <weight>
+            <selector>[name$="[weight]"]</selector>
+        </weight>
+    </fields>
+</mapping>
+

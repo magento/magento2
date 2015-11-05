@@ -25,6 +25,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param \Magento\Eav\Model\Entity\Attribute\Config\Converter $converter
      * @param \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

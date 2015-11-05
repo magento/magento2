@@ -141,7 +141,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
         $product->expects($this->any())->method('setParameters')->willReturn('');
         $entityFactory->expects($this->any())->method('create')->willReturn($product);
-        $importData = $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false);
+        $importData = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
         $csvFactory = $this->getMock('Magento\ImportExport\Model\Export\Adapter\CsvFactory', [], [], '', false);
         $httpFactory = $this->getMock('Magento\Framework\HTTP\Adapter\FileTransferFactory', [], [], '', false);
         $uploaderFactory = $this->getMock('Magento\MediaStorage\Model\File\UploaderFactory', [], [], '', false);
@@ -152,7 +152,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', [], [], '', false);
+        $indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
         $importHistoryModel = $this->getMock('Magento\ImportExport\Model\History', [], [], '', false);
         $localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
         $import = new \Magento\ImportExport\Model\Import(

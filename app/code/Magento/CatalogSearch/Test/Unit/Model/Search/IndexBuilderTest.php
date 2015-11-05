@@ -14,6 +14,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var  \Magento\CatalogSearch\Model\Search\TableMapper|MockObject */
+    private $tableMapper;
+
     /** @var  \Magento\Framework\Search\Adapter\Mysql\ConditionManager|MockObject */
     private $conditionManager;
 
@@ -21,7 +24,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     private $scopeResolver;
 
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject */
-    private $adapter;
+    private $connection;
 
     /** @var \Magento\Framework\DB\Select|MockObject */
     private $select;
@@ -50,32 +53,26 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['from', 'joinLeft', 'where', 'joinInner'])
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->setMethods(['select', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->adapter->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
-            ->will($this->returnValue($this->adapter));
+            ->will($this->returnValue($this->connection));
 
         $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getIndex', 'getDimensions', 'getQuery'])
             ->getMockForAbstractClass();
-        $this->request->expects($this->once())
-            ->method('getQuery')
-            ->willReturn(
-                $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')->getMockForAbstractClass()
-            );
 
         $this->config = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
@@ -84,7 +81,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
+        $this->scopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -114,6 +111,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
+        $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->tableMapper->expects($this->once())
+            ->method('addTables')
+            ->with($this->select, $this->request)
+            ->willReturnArgument(0);
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Search\IndexBuilder',
@@ -122,7 +127,8 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->config,
                 'storeManager' => $this->storeManager,
                 'conditionManager' => $this->conditionManager,
-                'scopeResolver' => $this->scopeResolver
+                'scopeResolver' => $this->scopeResolver,
+                'tableMapper' => $this->tableMapper,
             ]
         );
     }
@@ -168,7 +174,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with('cataloginventory/options/show_out_of_stock')
             ->will($this->returnValue(false));
-        $this->adapter->expects($this->once())->method('quoteInto')
+        $this->connection->expects($this->once())->method('quoteInto')
             ->with(' AND stock_index.website_id = ?', 1)->willReturn(' AND stock_index.website_id = 1');
         $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
         $website->expects($this->once())->method('getId')->willReturn(1);

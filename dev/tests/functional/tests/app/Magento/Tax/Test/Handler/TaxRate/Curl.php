@@ -6,58 +6,54 @@
 
 namespace Magento\Tax\Test\Handler\TaxRate;
 
+use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Curl handler for creating Tax Rate
+ * Curl handler for creating Tax Rate.
  */
 class Curl extends AbstractCurl implements TaxRateInterface
 {
     /**
-     * Mapping for countries
+     * Mapping values for data.
      *
      * @var array
      */
-    protected $countryId = [
-        'AU' => 'Australia',
-        'US' => 'United States',
-        'GB' => 'United Kingdom',
+    protected $mappingData = [
+        'tax_country_id' => [
+            'Australia' => 'AU',
+            'United States' => 'US',
+            'United Kingdom' => 'GB',
+        ],
+        'tax_region_id' => [
+            '*' => '0',
+            'California' => '12',
+            'New York' => '43',
+            'Texas' => '57',
+        ],
+        'zip_is_range' => [
+            'Yes' => '1',
+            'No' => '0'
+        ]
     ];
 
     /**
-     * Mapping for regions
-     *
-     * @var array
-     */
-    protected $regionId = [
-        '0' => '*',
-        '12' => 'California',
-        '43' => 'New York',
-        '57' => 'Texas',
-    ];
-
-    /**
-     * Post request for creating tax rate
+     * Post request for creating tax rate.
      *
      * @param FixtureInterface $fixture [optional]
-     * @return mixed|string
+     * @return array
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $data = $fixture->getData();
-        $data['tax_country_id'] = array_search($data['tax_country_id'], $this->countryId);
-        if (isset($data['tax_region_id'])) {
-            $data['tax_region_id'] = array_search($data['tax_region_id'], $this->regionId);
-        }
+        /** @var TaxRate $fixture */
+        $data = $this->prepareData($fixture);
 
         $url = $_ENV['app_backend_url'] . 'tax/rate/ajaxSave/?isAjax=true';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
@@ -66,7 +62,18 @@ class Curl extends AbstractCurl implements TaxRateInterface
     }
 
     /**
-     * Return saved tax rate id
+     * Prepare tax rate data.
+     *
+     * @param TaxRate $taxRate
+     * @return array
+     */
+    public function prepareData(TaxRate $taxRate)
+    {
+        return $this->replaceMappingData($taxRate->getData());
+    }
+
+    /**
+     * Return saved tax rate id.
      *
      * @param $response
      * @return int|null

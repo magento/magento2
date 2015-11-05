@@ -24,7 +24,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
         $this->_rootResourceMock = new \Magento\Framework\Acl\RootResource('Magento_Backend::all');
         $this->_model = new \Magento\Authorization\Model\Acl\Loader\Rule(
             $this->_rootResourceMock,
@@ -39,9 +39,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
 
-        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapterMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
-        $adapterMock->expects(
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects(
             $this->once()
         )->method(
             'fetchAll'
@@ -55,7 +55,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue($adapterMock));
+        $this->_resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
 
         $aclMock = $this->getMock('Magento\Framework\Acl');
         $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));

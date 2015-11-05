@@ -97,23 +97,26 @@ define(
                         requestedItemIndex = index;
                     }
                 });
-                if (requestedItemIndex == -1) {
-                    return false;
-                }
                 return activeItemIndex > requestedItemIndex;
             },
 
-            navigateTo: function(code) {
+            navigateTo: function(code, scrollToElementId) {
                 var sortedItems = steps.sort(this.sortItems);
+                var bodyElem = $.browser.safari || $.browser.chrome ? $("body") : $("html");
+                scrollToElementId = scrollToElementId || null;
+
                 if (!this.isProcessed(code)) {
                     return;
                 }
                 sortedItems.forEach(function(element) {
                     if (element.code == code) {
                         element.isVisible(true);
-                        $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
+                        bodyElem.animate({scrollTop: $('#' + code).offset().top}, 0, function () {
                             window.location = window.checkoutConfig.checkoutUrl + "#" + code;
                         });
+                        if (scrollToElementId && $('#' + scrollToElementId).length) {
+                            bodyElem.animate({scrollTop: $('#' + scrollToElementId).offset().top}, 0);
+                        }
                     } else {
                         element.isVisible(false);
                     }
@@ -132,9 +135,8 @@ define(
                 if (steps().length > activeIndex + 1) {
                     var code = steps()[activeIndex + 1].code;
                     steps()[activeIndex + 1].isVisible(true);
-                    $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
-                        window.location = window.checkoutConfig.checkoutUrl + "#" + code;
-                    });
+                    window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
                 }
             }
         };

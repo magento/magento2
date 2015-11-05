@@ -43,14 +43,14 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * Init validators
-     *
-     * @return void
+     * @param \Magento\CatalogImportExport\Model\Import\Product $context
+     * @return $this
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->validators as $validator) {
-            $validator->init();
+            $validator->init($context);
         }
+        return $this;
     }
 }

@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="cms_page_link" class="Magento\Cms\Block\Widget\Page\Link" is_email_compatible="true"
             placeholder_image="Magento_Cms::images/widget_page_link.png">
         <label translate="true">CMS Page Link</label>
@@ -17,7 +17,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Page\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Page...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Page...</item>
                         </item>
                     </data>
                 </block>
@@ -52,7 +52,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Block\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Block...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Block...</item>
                         </item>
                     </data>
                 </block>

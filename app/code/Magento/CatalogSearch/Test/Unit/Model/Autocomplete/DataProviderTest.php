@@ -26,7 +26,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     private $itemFactory;
 
     /**
-     * @var \Magento\Search\Model\Resource\Query\Collection |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\Query\Collection |\PHPUnit_Framework_MockObject_MockObject
      */
     private $suggestCollection;
 
@@ -34,7 +34,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->suggestCollection = $this->getMockBuilder('Magento\Search\Model\Resource\Query\Collection')
+        $this->suggestCollection = $this->getMockBuilder('Magento\Search\Model\ResourceModel\Query\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getIterator'])
             ->getMock();
@@ -111,7 +111,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $collectionData = [];
         foreach ($data as $collectionItem) {
-            $collectionData[] = new \Magento\Framework\Object($collectionItem);
+            $collectionData[] = new \Magento\Framework\DataObject($collectionItem);
         }
         $this->suggestCollection->expects($this->any())
             ->method('getIterator')

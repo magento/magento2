@@ -10,6 +10,8 @@
 
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class FieldTest extends \PHPUnit_Framework_TestCase
 {
     const FIELD_TEST_CONSTANT = "field test constant";
@@ -18,11 +20,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Config\Model\Config\Structure\Element\Field
      */
     protected $_model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,21 +46,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected $_depMapperMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_iteratorMock;
-
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $objectManager = new ObjectManager($this);
+
         $this->_backendFactoryMock = $this->getMock(
             'Magento\Config\Model\Config\BackendFactory',
             [],
@@ -100,20 +86,20 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Field(
-            $this->_storeManagerMock,
-            $this->_backendFactoryMock,
-            $this->_sourceFactoryMock,
-            $this->_commentFactoryMock,
-            $this->_blockFactoryMock,
-            $this->_depMapperMock
+        $this->_model = $objectManager->getObject(
+            'Magento\Config\Model\Config\Structure\Element\Field',
+            [
+                'backendFactory' => $this->_backendFactoryMock,
+                'sourceFactory' => $this->_sourceFactoryMock,
+                'commentFactory' => $this->_commentFactoryMock,
+                'blockFactory' => $this->_blockFactoryMock,
+                'dependencyMapper' => $this->_depMapperMock,
+            ]
         );
     }
 
     protected function tearDown()
     {
-        unset($this->_iteratorMock);
-        unset($this->_storeManagerMock);
         unset($this->_backendFactoryMock);
         unset($this->_sourceFactoryMock);
         unset($this->_commentFactoryMock);
@@ -383,7 +369,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'multiselect'],
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Framework\Object', ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->getMock('Magento\Framework\DataObject', ['setPath', 'retrieveElements']);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(
@@ -405,7 +391,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'select'],
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Framework\Object', ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->getMock('Magento\Framework\DataObject', ['setPath', 'retrieveElements']);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

@@ -126,7 +126,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
             $this->assertVarPathWritable();
             $extraConfig = ['[client]', 'user=' . $this->_user, 'password="' . $this->_password . '"'];
             file_put_contents($this->_defaultsExtraFile, implode(PHP_EOL, $extraConfig));
-            chmod($this->_defaultsExtraFile, 0644);
+            chmod($this->_defaultsExtraFile, 0640);
         }
     }
 }

@@ -38,19 +38,16 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-
         $this->attributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            [],
+            ['getAttributeCode', 'getFrontendLabel'],
             [],
             '',
             false
         );
-        $this->attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('datetime'));
 
-        $this->model = new \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime($this->booleanFactoryMock, $this->localeDateMock);
+        $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);
         $this->model->setAttribute($this->attributeMock);
     }
 
@@ -58,14 +55,51 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeValue = '11-11-2011';
         $date = new \DateTime($attributeValue);
-        $object = new \Magento\Framework\Object(['datetime' => $attributeValue]);
-        $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
-            ->will($this->returnValue('text'));
+        $object = new \Magento\Framework\DataObject(['datetime' => $attributeValue]);
 
-        $this->localeDateMock->expects($this->once())->method('formatDateTime')
+        $this->attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn('datetime');
+        $this->attributeMock->expects($this->any())
+            ->method('getData')
+            ->with('frontend_input')
+            ->willReturn('text');
+        $this->localeDateMock->expects($this->once())
+            ->method('formatDateTime')
             ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE, null, null, null)
             ->willReturn($attributeValue);
 
         $this->assertEquals($attributeValue, $this->model->getValue($object));
+    }
+
+    /**
+     * @param mixed $labelText
+     * @param string $attributeCode
+     * @param string $expectedResult
+     * @dataProvider getLabelDataProvider
+     */
+    public function testGetLocalizedLabel($labelText, $attributeCode, $expectedResult)
+    {
+        $this->attributeMock->expects($this->exactly(2))
+            ->method('getFrontendLabel')
+            ->willReturn($labelText);
+        $this->attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+
+        $this->assertInstanceOf('\Magento\Framework\Phrase', $this->model->getLocalizedLabel());
+        $this->assertSame($expectedResult, (string)$this->model->getLocalizedLabel());
+    }
+
+    /**
+     * @return array
+     */
+    public function getLabelDataProvider()
+    {
+        return [
+            [null, 'test code', 'test code'],
+            ['', 'test code', 'test code'],
+            ['test label', 'test code', 'test label'],
+        ];
     }
 }

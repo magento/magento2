@@ -37,7 +37,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
         $this->_scopePullMock = $this->getMock('Magento\Framework\App\Config\ScopePool', [], [], '', false);
         $this->_collectionFactory = $this->getMock(
-            'Magento\Store\Model\Resource\Config\Collection\ScopedFactory',
+            'Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory',
             ['create'],
             [],
             '',
@@ -113,8 +113,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(['path' => 'config/key1', 'value' => 'website_db_value1']),
-                    new \Magento\Framework\Object(['path' => 'config/key3', 'value' => 'website_db_value3']),
+                    new \Magento\Framework\DataObject(['path' => 'config/key1', 'value' => 'website_db_value1']),
+                    new \Magento\Framework\DataObject(['path' => 'config/key3', 'value' => 'website_db_value3']),
                 ]
             )
         );

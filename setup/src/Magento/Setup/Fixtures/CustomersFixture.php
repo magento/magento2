@@ -91,10 +91,16 @@ class CustomersFixture extends Fixture
             '_address_default_shipping_'  => '1',
         ];
         $generator = new Generator($pattern, $customersNumber);
-        /** @var Magento\ImportExport\Model\Import $import */
+        /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->fixtureModel->getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'customer_composite', 'behavior' => 'append']]
+            [
+                'data' => [
+                    'entity' => 'customer_composite',
+                    'behavior' => 'append',
+                    'validation_strategy' => 'validation-stop-on-errors'
+                ]
+            ]
         );
         // it is not obvious, but the validateSource() will actually save import queue data to DB
         $import->validateSource($generator);

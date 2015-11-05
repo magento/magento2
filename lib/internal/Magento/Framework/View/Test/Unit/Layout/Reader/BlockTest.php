@@ -9,11 +9,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-/**
- * Class BlockTest
- *
- * @covers \Magento\Framework\View\Layout\Reader\Block
- */
+use Magento\Framework\View\Layout\Reader\Block;
+
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -43,9 +40,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function getElement($xml, $elementType)
     {
-        $xml = '<' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>'
+        $xml = '<' . Block::TYPE_BLOCK . '>'
             . $xml
-            . '</' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>';
+            . '</' . Block::TYPE_BLOCK . '>';
 
         $xml = simplexml_load_string($xml, 'Magento\Framework\View\Layout\Element');
         return $xml->{$elementType};
@@ -67,7 +64,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * Return testing instance of block
      *
      * @param array $arguments
-     * @return \Magento\Framework\View\Layout\Reader\Block
+     * @return Block
      */
     protected function getBlock(array $arguments)
     {
@@ -129,10 +126,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 $literal,
                 [
                     'attributes' => [
-                        'group' => '',
-                        'class' => '',
-                        'template' => '',
-                        'ttl' => '',
+                        Block::ATTRIBUTE_GROUP => '',
+                        Block::ATTRIBUTE_CLASS => '',
+                        Block::ATTRIBUTE_TEMPLATE => '',
+                        Block::ATTRIBUTE_TTL => '',
+                        Block::ATTRIBUTE_DISPLAY => '',
+                        Block::ATTRIBUTE_ACL => ''
                     ],
                     'actions' => [
                         ['someMethod', [], 'action_config_path', 'scope'],
@@ -176,17 +175,25 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $literal
+     * @param string $remove
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
      * @dataProvider processReferenceDataProvider
      */
     public function testProcessReference(
         $literal,
+        $remove,
         $getCondition,
-        $setCondition
+        $setCondition,
+        $setRemoveCondition
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
+
+        $this->scheduledStructure->expects($setRemoveCondition)
+            ->method('setElementToRemoveList')
+            ->with($literal);
 
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
@@ -205,11 +212,19 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         ['someMethod', [], 'action_config_path', 'scope'],
                     ],
                     'arguments' => [],
+                    'attributes' => [
+                        Block::ATTRIBUTE_GROUP => '',
+                        Block::ATTRIBUTE_CLASS => '',
+                        Block::ATTRIBUTE_TEMPLATE => '',
+                        Block::ATTRIBUTE_TTL => '',
+                        Block::ATTRIBUTE_DISPLAY => '',
+                        Block::ATTRIBUTE_ACL => ''
+                    ]
                 ]
             );
 
         $this->prepareReaderPool(
-            '<' . $literal . ' name="' . $literal . '">'
+            '<' . $literal . ' name="' . $literal . '" remove="' . $remove . '">'
             . '<action method="someMethod" ifconfig="action_config_path" />'
             . '</' . $literal . '>',
             $literal
@@ -231,8 +246,10 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function processReferenceDataProvider()
     {
         return [
-            ['referenceBlock', $this->once(), $this->once()],
-            ['page', $this->never(), $this->never()]
+            ['referenceBlock', 'false', $this->once(), $this->once(), $this->never()],
+            ['referenceBlock', 'true', $this->never(), $this->never(), $this->once()],
+            ['page', 'false', $this->never(), $this->never(), $this->never()],
+            ['page', 'true', $this->never(), $this->never(), $this->never()],
         ];
     }
 }

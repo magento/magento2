@@ -116,28 +116,25 @@ class DevTestsRunCommand extends Command
     {
         $this->commands = [
             'unit'                   => ['../tests/unit', ''],
-            'unit-performance'       => ['../tests/performance/framework/tests/unit', ''],
             'unit-static'            => ['../tests/static/framework/tests/unit', ''],
             'unit-integration'       => ['../tests/integration/framework/tests/unit', ''],
             'integration'            => ['../tests/integration', ''],
             'integration-integrity'  => ['../tests/integration', ' testsuite/Magento/Test/Integrity'],
             'static-default'         => ['../tests/static', ''],
             'static-legacy'          => ['../tests/static', ' testsuite/Magento/Test/Legacy'],
-            'static-integration-php' => ['../tests/static', ' testsuite/Magento/Test/Php/Exemplar'],
             'static-integration-js'  => ['../tests/static', ' testsuite/Magento/Test/Js/Exemplar'],
         ];
         $this->types = [
             'all'             => array_keys($this->commands),
-            'unit'            => ['unit', 'unit-performance', 'unit-static', 'unit-integration'],
+            'unit'            => ['unit', 'unit-static', 'unit-integration'],
             'integration'     => ['integration'],
             'integration-all' => ['integration', 'integration-integrity'],
             'static'          => ['static-default'],
-            'static-all'      => ['static-default', 'static-legacy', 'static-integration-php', 'static-integration-js'],
+            'static-all'      => ['static-default', 'static-legacy', 'static-integration-js'],
             'integrity'       => ['static-default', 'static-legacy', 'integration-integrity'],
             'legacy'          => ['static-legacy'],
             'default'         => [
                 'unit',
-                'unit-performance',
                 'unit-static',
                 'unit-integration',
                 'integration',

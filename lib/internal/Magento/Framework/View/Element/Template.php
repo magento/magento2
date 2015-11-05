@@ -255,7 +255,11 @@ class Template extends AbstractBlock
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
-            $this->_logger->critical("Invalid template file: '{$fileName}'");
+            $templatePath = $fileName ?: $this->getTemplate();
+            $this->_logger->critical(
+                "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
+                . " block's name: '{$this->getNameInLayout()}'"
+            );
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);
@@ -291,11 +295,11 @@ class Template extends AbstractBlock
     /**
      * Get data from specified object
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string $key
      * @return mixed
      */
-    public function getObjectData(\Magento\Framework\Object $object, $key)
+    public function getObjectData(\Magento\Framework\DataObject $object, $key)
     {
         return $object->getDataUsingMethod((string)$key);
     }

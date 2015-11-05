@@ -10,23 +10,23 @@
 
 <?php /** @var \Magento\Framework\Pricing\Render\Amount $block */ ?>
 
-<span class="price-container <?php echo $block->getAdjustmentCssClasses() ?>"
+<span class="price-container <?php /* @escapeNotVerified */ echo $block->getAdjustmentCssClasses() ?>"
         <?php echo $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>
     <?php if ($block->getDisplayLabel()): ?>
-        <span class="price-label"><?php echo $block->getDisplayLabel(); ?></span>
+        <span class="price-label"><?php /* @escapeNotVerified */ echo $block->getDisplayLabel(); ?></span>
     <?php endif; ?>
-    <span <?php if ($block->getPriceId()): ?> id="<?php echo $block->getPriceId() ?>"<?php endif;?>
+    <span <?php if ($block->getPriceId()): ?> id="<?php /* @escapeNotVerified */ echo $block->getPriceId() ?>"<?php endif;?>
         <?php echo($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
-        data-price-amount="<?php echo $block->getDisplayValue(); ?>"
-        data-price-type="<?php echo $block->getPriceType(); ?>"
-        class="price-wrapper <?php echo $block->getPriceWrapperCss(); ?>"
+        data-price-amount="<?php /* @escapeNotVerified */ echo $block->getDisplayValue(); ?>"
+        data-price-type="<?php /* @escapeNotVerified */ echo $block->getPriceType(); ?>"
+        class="price-wrapper <?php /* @escapeNotVerified */ echo $block->getPriceWrapperCss(); ?>"
         <?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
-        <?php echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
+        <?php /* @escapeNotVerified */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
     </span>
     <?php if ($block->hasAdjustmentsHtml()): ?>
         <?php echo $block->getAdjustmentsHtml() ?>
     <?php endif; ?>
     <?php if ($block->getSchema()): ?>
-        <meta itemprop="priceCurrency" content="<?php echo $block->getDisplayCurrencyCode()?>" />
+        <meta itemprop="priceCurrency" content="<?php /* @escapeNotVerified */ echo $block->getDisplayCurrencyCode()?>" />
     <?php endif; ?>
 </span>

@@ -45,7 +45,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->catalogProductLink = $this->getMock(
-            '\Magento\GroupedProduct\Model\Resource\Product\Link',
+            '\Magento\GroupedProduct\Model\ResourceModel\Product\Link',
             [],
             [],
             '',
@@ -88,7 +88,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getChildrenIds'
         )->with(
             $parentId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         )->will(
             $this->returnValue($childrenIds)
         );
@@ -105,7 +105,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getParentIdsByChild'
         )->with(
             $childId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         )->will(
             $this->returnValue($parentIds)
         );
@@ -245,10 +245,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setLinkTypeId'
         )->with(
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
         $collection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             ['setFlag', 'setIsStrongMode', 'setProduct'],
             [],
             '',
@@ -267,7 +267,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessBuyRequest($superGroup, $result)
     {
-        $buyRequest = $this->getMock('\Magento\Framework\Object', ['getSuperGroup'], [], '', false);
+        $buyRequest = $this->getMock('\Magento\Framework\DataObject', ['getSuperGroup'], [], '', false);
         $buyRequest->expects($this->any())->method('getSuperGroup')->will($this->returnValue($superGroup));
 
         $this->assertEquals($result, $this->_model->processBuyRequest($this->product, $buyRequest));
@@ -301,11 +301,11 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     public function testPrepareForCartAdvancedEmpty()
     {
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $expectedMsg = "Please specify the quantity of product(s).";
 
         $productCollection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             [],
             [],
             '',
@@ -385,7 +385,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedNoProductsStrictTrue()
     {
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([0 => 0]);
         $expectedMsg = "Please specify the quantity of product(s).";
 
@@ -408,7 +408,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedNoProductsStrictFalse()
     {
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([0 => 0]);
 
         $cached = true;
@@ -446,7 +446,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
@@ -484,7 +484,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
@@ -521,7 +521,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
@@ -558,7 +558,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
@@ -589,7 +589,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
-        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 0]);
 
         $cached = true;

@@ -252,7 +252,7 @@ class Editor extends Textarea
         if ($this->getConfig('add_widgets')) {
             $buttonsHtml .= $this->_getButtonHtml(
                 [
-                    'title' => $this->translate('Insert Frontend App...'),
+                    'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('" . $this->getConfig(
                         'widget_window_url'
                     ) . "widget_target_id/" . $this->getHtmlId() . "')",
@@ -385,14 +385,14 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return $html;
+            return '<div class="admin__control-wysiwig">' .$html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(
             'no_display'
         ) ? ' style="display:none;"' : '') . ($this->getConfig(
             'container_class'
-        ) ? ' class="' . $this->getConfig(
+        ) ? ' class="admin__control-wysiwig ' . $this->getConfig(
             'container_class'
         ) . '"' : '') . '>' . $html . '</div>';
 
@@ -407,8 +407,8 @@ class Editor extends Textarea
      */
     public function getConfig($key = null)
     {
-        if (!$this->_getData('config') instanceof \Magento\Framework\Object) {
-            $config = new \Magento\Framework\Object();
+        if (!$this->_getData('config') instanceof \Magento\Framework\DataObject) {
+            $config = new \Magento\Framework\DataObject();
             $this->setConfig($config);
         }
         if ($key !== null) {

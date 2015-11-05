@@ -101,6 +101,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     public function __construct(\Magento\Catalog\Block\Product\Context $context, array $data = [])
     {
         $this->_imageHelper = $context->getImageHelper();
+        $this->imageBuilder = $context->getImageBuilder();
         $this->_compareProduct = $context->getCompareProduct();
         $this->_wishlistHelper = $context->getWishlistHelper();
         $this->_cartHelper = $context->getCartHelper();
@@ -228,39 +229,18 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * to get correct values in different products lists.
      * E.g. crosssells, upsells, new products, recently viewed
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected function _addProductAttributesAndPrices(\Magento\Catalog\Model\Resource\Product\Collection $collection)
-    {
+    protected function _addProductAttributesAndPrices(
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+    ) {
         return $collection
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addUrlRewrite();
-    }
-
-    /**
-     * Retrieve given media attribute label or product name if no label
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param string $mediaAttributeCode
-     *
-     * @return string
-     */
-    public function getImageLabel($product = null, $mediaAttributeCode = 'image')
-    {
-        if ($product === null) {
-            $product = $this->getProduct();
-        }
-
-        $label = $product->getData($mediaAttributeCode . '_label');
-        if (empty($label)) {
-            $label = $product->getName();
-        }
-
-        return $label;
     }
 
     /**
@@ -393,141 +373,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function displayProductStockStatus()
     {
-        $statusInfo = new \Magento\Framework\Object(['display_status' => true]);
+        $statusInfo = new \Magento\Framework\DataObject(['display_status' => true]);
         $this->_eventManager->dispatch('catalog_block_product_status_display', ['status' => $statusInfo]);
         return (bool) $statusInfo->getDisplayStatus();
-    }
-
-    /**
-     * Product thumbnail image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getThumbnailUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'thumbnail')
-            ->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Product thumbnail image sidebar url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getThumbnailSidebarUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'thumbnail')
-            ->resize($this->getThumbnailSidebarSize());
-    }
-
-    /**
-     * Thumbnail image sidebar size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSidebarSize()
-    {
-        return $this->getVar('product_thumbnail_image_sidebar_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Product small image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getSmallImageUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'small_image')
-            ->resize($this->getSmallImageSize());
-    }
-
-    /**
-     * Small image size getter
-     *
-     * @return int
-     */
-    public function getSmallImageSize()
-    {
-        return $this->getVar('product_small_image_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Product small image sidebar url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getSmallImageSidebarUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'small_image')
-            ->resize($this->getSmallImageSidebarSize());
-    }
-
-    /**
-     * Small image sidebar size getter
-     *
-     * @return int
-     */
-    public function getSmallImageSidebarSize()
-    {
-        return $this->getVar('product_small_image_sidebar_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Product base image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getBaseImageUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'image')
-            ->resize($this->getBaseImageSize());
-    }
-
-    /**
-     * Base image size getter
-     *
-     * @return int
-     */
-    public function getBaseImageSize()
-    {
-        return $this->getVar('product_base_image_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Product base image icon url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getBaseImageIconUrl($product)
-    {
-        return (string) $this->_imageHelper->init($product, 'image')
-            ->resize($this->getBaseImageIconSize());
-    }
-
-    /**
-     * Base image icon size getter
-     *
-     * @return int
-     */
-    public function getBaseImageIconSize()
-    {
-        return $this->getVar('product_base_image_icon_size', 'Magento_Catalog');
     }
 
     /**
@@ -641,5 +489,21 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         ) : $this->getChildBlock(
             'details.renderers'
         );
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

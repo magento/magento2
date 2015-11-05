@@ -44,7 +44,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationInfo()
     {
         $info = $this->_model->getRelationInfo();
-        $this->assertInstanceOf('Magento\Framework\Object', $info);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $info);
         $this->assertEquals('catalog_product_super_link', $info->getTable());
         $this->assertEquals('parent_id', $info->getParentFieldName());
         $this->assertEquals('product_id', $info->getChildFieldName());
@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->_model->getConfigurableAttributes($this->_product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
             $collection
         );
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
@@ -163,7 +163,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->_model->getConfigurableAttributeCollection($this->_product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
             $collection
         );
     }
@@ -188,7 +188,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
             $this->_model->getUsedProductCollection($this->_product)
         );
     }
@@ -271,7 +271,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Framework\Object(
+        $buyRequest = new \Magento\Framework\DataObject(
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
         $result = $this->_model->prepareForCart($buyRequest, $this->_product);
@@ -280,7 +280,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         foreach ($result as $product) {
             $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
         }
-        $this->assertInstanceOf('Magento\Framework\Object', $result[1]->getCustomOption('parent_product_id'));
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result[1]->getCustomOption('parent_product_id'));
     }
 
     public function testGetSpecifyOptionMessage()
@@ -339,9 +339,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->_product->setCustomOptions(
             [
-                'simple_product' => new \Magento\Framework\Object(
+                'simple_product' => new \Magento\Framework\DataObject(
                         [
-                            'product' => new \Magento\Framework\Object(['weight' => 2]),
+                            'product' => new \Magento\Framework\DataObject(['weight' => 2]),
                         ]
                     ),
             ]
@@ -351,7 +351,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignProductToOption()
     {
-        $option = new \Magento\Framework\Object();
+        $option = new \Magento\Framework\DataObject();
         $this->_model->assignProductToOption('test', $option, $this->_product);
         $this->assertEquals('test', $option->getProduct());
         // other branch of logic depends on \Magento\Sales module
@@ -378,7 +378,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $buyRequest = new \Magento\Framework\Object(['super_attribute' => ['10', 'string']]);
+        $buyRequest = new \Magento\Framework\DataObject(['super_attribute' => ['10', 'string']]);
         $result = $this->_model->processBuyRequest($this->_product, $buyRequest);
         $this->assertEquals(['super_attribute' => [10]], $result);
     }
@@ -414,110 +414,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $productsData
-     * @dataProvider generateSimpleProductsDataProvider
-     */
-    public function testGenerateSimpleProducts($productsData)
-    {
-        $this->_product->setNewVariationsAttributeSetId(4);
-        // Default attribute set id
-        $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
-        $this->assertEquals(3, count($generatedProducts));
-        foreach ($generatedProducts as $productId) {
-            /** @var $product \Magento\Catalog\Model\Product */
-            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
-            );
-            $product->load($productId);
-            $this->assertNotNull($product->getName());
-            $this->assertNotNull($product->getSku());
-            $this->assertNotNull($product->getPrice());
-            $this->assertNotNull($product->getWeight());
-        }
-    }
-
-    /**
-     * @param array $productsData
-     * @dataProvider generateSimpleProductsWithPartialDataDataProvider
-     * @magentoDbIsolation enabled
-     */
-    public function testGenerateSimpleProductsWithPartialData($productsData)
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
-        $stockRegistry = $objectManager->get('Magento\CatalogInventory\Api\StockRegistryInterface');
-        $this->_product->setNewVariationsAttributeSetId(4);
-        $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
-        foreach ($generatedProducts as $productId) {
-            $stockItem = $stockRegistry->getStockItem($productId);
-            $this->assertEquals('0', $stockItem->getManageStock());
-            $this->assertEquals('1', $stockItem->getIsInStock());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public static function generateSimpleProductsDataProvider()
-    {
-        return [
-            [
-                [
-                    [
-                        'name' => '1-aaa',
-                        'configurable_attribute' => '{"configurable_attribute":"25"}',
-                        'price' => '3',
-                        'sku' => '1-aaa',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6',
-                    ],
-                    [
-                        'name' => '1-bbb',
-                        'configurable_attribute' => '{"configurable_attribute":"24"}',
-                        'price' => '3',
-                        'sku' => '1-bbb',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6'
-                    ],
-                    [
-                        'name' => '1-ccc',
-                        'configurable_attribute' => '{"configurable_attribute":"23"}',
-                        'price' => '3',
-                        'sku' => '1-ccc',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6'
-                    ],
-                ],
-            ]
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function generateSimpleProductsWithPartialDataDataProvider()
-    {
-        return [
-            [
-                [
-                    [
-                        'name' => '1-aaa',
-                        'configurable_attribute' => '{"configurable_attribute":"23"}',
-                        'price' => '3',
-                        'sku' => '1-aaa-1',
-                        'quantity_and_stock_status' => ['qty' => ''],
-                        'weight' => '6',
-                    ],
-                ],
-            ]
-        ];
-    }
-
-    /**
      * Find and instantiate a catalog attribute model by attribute code
      *
      * @param string $code
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected function _getAttributeByCode($code)
     {
@@ -538,7 +438,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Framework\Object(
+        $buyRequest = new \Magento\Framework\DataObject(
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
         $this->_model->prepareForCart($buyRequest, $this->_product);

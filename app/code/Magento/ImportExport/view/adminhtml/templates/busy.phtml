@@ -6,11 +6,11 @@
 ?>
 <div class="fieldset">
     <div class="legend">
-        <span><?php echo __('Status'); ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Status'); ?></span>
     </div><br>
     <div class="messages">
         <div class="message message-success success">
-            <div><?php echo $block->getStatusMessage(); ?>hh</div>
+            <div><?php /* @escapeNotVerified */ echo $block->getStatusMessage(); ?>hh</div>
         </div>
     </div>
 </div>

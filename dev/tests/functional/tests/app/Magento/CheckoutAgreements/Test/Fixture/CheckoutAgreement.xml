@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="checkoutAgreement" module="Magento_CheckoutAgreements"
-             type="flat" entity_type="checkout_agreement" collection="Magento\CheckoutAgreements\Model\Resource\Agreement\Collection"
+             type="flat" entity_type="checkout_agreement" collection="Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection"
              repository_class="Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement"
              handler_interface="Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement\CheckoutAgreementInterface"
              class="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement">
@@ -18,6 +18,7 @@
         <field name="checkbox_text" is_required="" />
         <field name="is_active" is_required="" />
         <field name="is_html" is_required="" />
+        <field name="mode" is_required="" />
         <field name="stores" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores" />
     </fixture>
 </config>

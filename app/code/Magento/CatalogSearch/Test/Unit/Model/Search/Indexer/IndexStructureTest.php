@@ -11,22 +11,22 @@ use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\IndexStructure
+ * Test for \Magento\Framework\Indexer\IndexStructure
  */
 class IndexStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connection;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\IndexStructure
@@ -35,22 +35,17 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
-            ->willReturn($this->adapter);
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
-            ->setMethods(['resolve'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
+            ->willReturn($this->connection);
+        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -104,9 +99,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $position = $this->mockFulltextTable($position, $expectedTable, true);
+        $this->mockFulltextTable($position, $expectedTable, true);
 
-        $this->target->create($index, $dimensions);
+        $this->target->create($index, [], $dimensions);
     }
 
     /**
@@ -130,12 +125,12 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     private function mockDropTable($callNumber, $tableName, $isTableExist)
     {
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('isTableExists')
             ->with($tableName)
             ->willReturn($isTableExist);
         if ($isTableExist) {
-            $this->adapter->expects($this->at($callNumber++))
+            $this->connection->expects($this->at($callNumber++))
                 ->method('dropTable')
                 ->with($tableName)
                 ->willReturn(true);
@@ -192,11 +187,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             )->willReturnSelf();
 
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('newTable')
             ->with($tableName)
             ->willReturn($table);
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('createTable')
             ->with($table)
             ->willReturnSelf();

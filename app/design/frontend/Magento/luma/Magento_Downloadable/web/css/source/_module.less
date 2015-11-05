@@ -15,7 +15,7 @@
         margin-right: 15px;
     }
     .action.download {
-        .icon-font(
+        .lib-icon-font(
             @_icon-font-content: @icon-download,
             @_icon-font-margin: 0 5px 0 0
         );
@@ -75,7 +75,7 @@
     .price-including-tax {
         display: inline;
         font-weight: @font-weight__semibold;
-        .font-size(14);
+        .lib-font-size(14);
     }
     .field.choice {
         box-sizing: border-box;
@@ -104,7 +104,7 @@
     }
     &-all {
         .label {
-            .link();
+            .lib-link();
             cursor: pointer;
         }
         input {
@@ -130,7 +130,7 @@
     .table-downloadable-products {
         .product-name {
             display: block;
-            .css(margin-bottom, @indent__xs);
+            .lib-css(margin-bottom, @indent__xs);
         }
         .col.title {
             &:before {

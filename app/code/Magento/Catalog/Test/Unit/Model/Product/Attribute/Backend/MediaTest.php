@@ -18,7 +18,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $_objectHelper;
 
     /**
-     * @var \Magento\Framework\Object | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObject;
 
@@ -49,7 +49,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $fileStorageDb = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $this->resourceModel = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
             [
                 'getMainTable',
                 '__wakeup',
@@ -76,7 +76,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->mediaDirectory)
         );
 
-        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\ProductFactory')
+        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\ProductFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -92,7 +92,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'resourceProductAttribute' => $this->resourceModel
             ]
         );
-        $this->dataObject = $this->getMockBuilder('Magento\Framework\Object')
+        $this->dataObject = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes'])
             ->getMock();
@@ -117,7 +117,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setAttribute($attribute);
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $object->setImage(['images' => [['value_id' => $valueId]]]);
         $object->setId(555);
 
@@ -129,168 +129,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ],
             $this->model->getAffectedFields($object)
         );
-    }
-
-    public function testAfterSaveDuplicate()
-    {
-        $attributeCode = 'test_code';
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
-
-        $this->dataObject->expects($this->once())
-            ->method('getIsDuplicate')
-            ->will($this->returnValue(true));
-        $this->dataObject->setData($attributeCode, []);
-
-        $this->model->setAttribute($attributeMock);
-        $this->assertNull($this->model->afterSave($this->dataObject));
-    }
-
-    public function testAfterSaveNoAttribute()
-    {
-        $attributeCode = 'test_code';
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
-
-        $this->dataObject->expects($this->once())
-            ->method('getIsDuplicate')
-            ->will($this->returnValue(false));
-        $this->dataObject->setData($attributeCode, []);
-
-        $this->model->setAttribute($attributeMock);
-        $this->assertNull($this->model->afterSave($this->dataObject));
-    }
-
-    public function testAfterSaveDeleteFiles()
-    {
-        $storeId = 1;
-        $storeIds = ['store_1' => 1, 'store_2' => 2];
-        $attributeCode = 'test_code';
-        $toDelete = [1];
-        $mediaPath = 'catalog/media';
-        $filePathToRemove = $mediaPath . '/file/path';
-        $attributeValue = [
-            'images' => [
-                [
-                    'removed' => true,
-                    'value_id' => 1,
-                    'file' => 'file/path',
-                ],
-                [
-                    'removed' => false,
-                    'value_id' => 1,
-                    'file' => 'file/path2'
-                ],
-            ],
-        ];
-        $assignedImages = [
-            ['filepath' => 'path_to_image'],
-        ];
-
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
-
-        $this->dataObject->expects($this->once())
-            ->method('getIsDuplicate')
-            ->will($this->returnValue(false));
-        $this->dataObject->expects($this->once())
-            ->method('isLockedAttribute')
-            ->will($this->returnValue(false));
-        $this->dataObject->setData($attributeCode, $attributeValue);
-        $this->dataObject->setId(1);
-        $this->dataObject->setStoreId($storeId);
-        $this->dataObject->setStoreIds($storeIds);
-
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['getAssignedImages', '__wakeup'])
-            ->getMock();
-        $productMock->expects($this->any())
-            ->method('getAssignedImages')
-            ->will($this->returnValue($assignedImages));
-
-        $this->productFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($productMock));
-
-        $this->resourceModel->expects($this->once())
-            ->method('deleteGallery')
-            ->with($toDelete);
-
-        $this->mediaConfig->expects($this->once())
-            ->method('getBaseMediaPath')
-            ->will($this->returnValue($mediaPath));
-
-        $this->mediaDirectory->expects($this->once())
-            ->method('delete')
-            ->with($filePathToRemove);
-
-        $this->model->setAttribute($attributeMock);
-        $this->assertNull($this->model->afterSave($this->dataObject));
-    }
-
-    /**
-     * @dataProvider afterLoadDataProvider
-     * @param array $image
-     */
-    public function testAfterLoad($image)
-    {
-        $attributeCode = 'attr_code';
-        $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $this->resourceModel->expects($this->any())->method('loadGallery')->will($this->returnValue([$image]));
-
-        $this->model->setAttribute($attribute);
-        $this->model->afterLoad($this->dataObject);
-        $this->assertEquals([$image], $this->dataObject->getAttrCode('images'));
-    }
-
-    public function afterLoadDataProvider()
-    {
-        return [
-            [
-                [
-                    'label' => 'label_1',
-                    'position' => 'position_1',
-                    'disabled' => 'true',
-                ],
-                [
-                    'label' => 'label_2',
-                    'position' => 'position_2',
-                    'disabled' => 'true'
-                ],
-            ],
-            [
-                [
-                    'label' => null,
-                    'position' => null,
-                    'disabled' => null,
-                ],
-                [
-                    'label' => null,
-                    'position' => null,
-                    'disabled' => null
-                ]
-            ]
-        ];
     }
 
     /**
@@ -308,7 +146,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $attributeEntity = $this->getMock(
-            '\Magento\Framework\Model\Resource\AbstractResourceAbstractEntity',
+            '\Magento\Framework\Model\ResourceModel\AbstractResourceAbstractEntity',
             ['checkAttributeUniqueValue']
         );
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
@@ -328,75 +166,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         return [
             [true],
             [false]
-        ];
-    }
-
-    /**
-     * @dataProvider beforeSaveDataProvider
-     * @param array $value
-     */
-    public function testBeforeSave($value)
-    {
-        $attributeCode = 'attr_code';
-        $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
-            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntityType', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $mediaAttributes = [
-            'image' => $attribute,
-            'small_image' => $attribute,
-            'thumbnail' => $attribute,
-        ];
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $this->dataObject->expects($this->any())->method('getIsDuplicate')->will($this->returnValue(false));
-        $this->model->setAttribute($attribute);
-        $this->dataObject->setData(['attr_code' => ['images' => $value]]);
-        $this->dataObject->expects($this->any())->method('getMediaAttributes')
-            ->will(($this->returnValue($mediaAttributes)));
-        $this->model->beforeSave($this->dataObject);
-        foreach ($this->dataObject['attr_code']['images'] as $imageType => $imageData) {
-            if (isset($imageData['new_file'])) {
-                $value[$imageType]['file'] = $imageData['file'];
-                $value[$imageType]['new_file'] = $imageData['new_file'];
-            }
-            $this->assertEquals($value[$imageType], $imageData);
-        }
-    }
-
-    public function beforeSaveDataProvider()
-    {
-        return [
-            [
-                [
-                    'image_1' => [
-                        'position' => '1',
-                        'file' => '/m/y/mydrawing1.jpg.tmp',
-                        'value_id' => '',
-                        'label' => 'image 1',
-                        'disableed' => '0',
-                        'removed' => '',
-                    ],
-                    'image_2' => [
-                        'position' => '1',
-                        'file' => '/m/y/mydrawing2.jpg.tmp',
-                        'value_id' => '',
-                        'label' => 'image 2',
-                        'disableed' => '0',
-                        'removed' => '',
-                    ],
-                    'image_removed' => [
-                        'position' => '1',
-                        'file' => '/m/y/mydrawing3.jpg.tmp',
-                        'value_id' => '',
-                        'label' => 'image 3',
-                        'disableed' => '0',
-                        'removed' => '1',
-                    ],
-                ],
-            ]
         ];
     }
 }

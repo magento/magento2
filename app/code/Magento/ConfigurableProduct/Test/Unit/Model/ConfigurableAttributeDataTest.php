@@ -22,7 +22,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
     protected $configurableAttributeData;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute|
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|
      * \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeMock;
@@ -47,7 +47,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->attributeMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute',
             [],
             [],
             '',
@@ -131,7 +131,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
             ->with($this->product)
             ->willReturn([$attributeMock]);
 
-        $configuredValueMock = $this->getMockBuilder('Magento\Framework\Object')
+        $configuredValueMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $configuredValueMock->expects($this->any())

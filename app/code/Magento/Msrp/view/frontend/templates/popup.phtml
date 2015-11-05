@@ -11,6 +11,7 @@
 /** @var \Magento\Msrp\Block\Popup $block */
 ?>
 <?php if ($block->isEnabled()): ?>
+    <script data-role="msrp-popup-template" type="text/x-magento-template">
     <div id="map-popup-click-for-price" class="map-popup">
         <div class="popup-header">
             <strong class="title" id="map-popup-heading-price"></strong>
@@ -19,44 +20,45 @@
             <div class="map-info-price" id="map-popup-content">
                 <div class="price-box">
                     <div class="map-msrp" id="map-popup-msrp-box">
-                        <span class="label"><?php echo __('Price'); ?></span>
+                        <span class="label"><?php /* @escapeNotVerified */ echo __('Price'); ?></span>
                         <span class="old-price map-old-price" id="map-popup-msrp">
                             <span class="price"></span>
                         </span>
                     </div>
                     <div class="map-price" id="map-popup-price-box">
-                        <span class="label"><?php echo __('Actual Price'); ?></span>
+                        <span class="label"><?php /* @escapeNotVerified */ echo __('Actual Price'); ?></span>
                         <span id="map-popup-price" class="actual-price"></span>
                     </div>
                 </div>
                 <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
                     <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
-
-                    <div class="additional-addtocart-box">
-                        <?php echo $block->getChildHtml(); ?>
-                    </div>
                     <button type="button"
                             title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
                             class="action tocart primary"
                             id="map-popup-button">
-                        <span><?php echo __('Add to Cart'); ?></span>
+                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart'); ?></span>
                     </button>
+                    <div class="additional-addtocart-box">
+                        <?php echo $block->getChildHtml(); ?>
+                    </div>
                 </form>
             </div>
             <div class="map-text" id="map-popup-text">
-                <?php echo $block->getExplanationMessage(); ?>
+                <?php /* @escapeNotVerified */ echo $block->getExplanationMessage(); ?>
             </div>
         </div>
     </div>
-
+    </script>
+    <script data-role="msrp-info-template" type="text/x-magento-template">
     <div id="map-popup-what-this" class="map-popup">
         <div class="popup-header">
             <strong class="title" id="map-popup-heading-what-this"></strong>
         </div>
         <div class="popup-content">
             <div class="map-help-text" id="map-popup-text-what-this">
-                <?php echo $block->getExplanationMessageWhatsThis(); ?>
+                <?php /* @escapeNotVerified */ echo $block->getExplanationMessageWhatsThis(); ?>
             </div>
         </div>
     </div>
+    </script>
 <?php endif; ?>

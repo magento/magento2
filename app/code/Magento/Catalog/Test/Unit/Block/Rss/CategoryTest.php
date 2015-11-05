@@ -163,9 +163,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->rssModel->expects($this->once())->method('getProductCollection')
             ->will($this->returnValue([$product]));
         $this->imageHelper->expects($this->once())->method('init')
-            ->with($product, 'thumbnail')
+            ->with($product, 'rss_thumbnail')
             ->will($this->returnSelf());
-        $this->imageHelper->expects($this->once())->method('resize')->with(75, 75)
+        $this->imageHelper->expects($this->once())->method('getUrl')
             ->will($this->returnValue('image_link'));
 
         $data = $this->block->getRssData();
@@ -209,7 +209,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__sleep', '__wakeup', 'getTreeModel', 'getResourceCollection', 'getId', 'getName'])
             ->disableOriginalConstructor()->getMock();
 
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Category\Collection')
+        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Collection')
             ->setMethods([
                 'addIdFilter',
                 'addAttributeToSelect',
@@ -232,12 +232,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $category->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));
         $this->categoryFactory->expects($this->once())->method('create')->will($this->returnValue($category));
 
-        $node = new \Magento\Framework\Object(['id' => 1]);
+        $node = new \Magento\Framework\DataObject(['id' => 1]);
         $nodes = $this->getMockBuilder('Magento\Framework\Data\Tree\Node')
             ->setMethods(['getChildren'])->disableOriginalConstructor()->getMock();
         $nodes->expects($this->once())->method('getChildren')->will($this->returnValue([$node]));
 
-        $tree = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Category\Tree')
+        $tree = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Tree')
             ->setMethods(['loadChildren', 'loadNode'])->disableOriginalConstructor()->getMock();
         $tree->expects($this->once())->method('loadNode')->will($this->returnSelf());
         $tree->expects($this->once())->method('loadChildren')->will($this->returnValue($nodes));

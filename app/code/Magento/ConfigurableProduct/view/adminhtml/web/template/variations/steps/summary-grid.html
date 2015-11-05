@@ -1,0 +1,49 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="admin__collapsible-block-wrapper opened">
+    <div class="fieldset-wrapper-title">
+        <strong class="admin__collapsible-title" data-toggle="collapse" data-bind="attr:{'data-target': '#'+id}">
+            <span data-bind="text: title"></span>
+        </strong>
+    </div>
+
+    <div class="fieldset-wrapper-content in collapse" data-collapsed="true" data-bind="attr: {id: id}">
+        <div class="note" data-bind="text: note"></div>
+        <table class="data-grid data-grid-configurable">
+            <thead>
+            <tr>
+                <!-- ko foreach: { data: grid.columns, as: 'column' } -->
+                <th class="data-grid-th" data-bind="text: column"></th>
+                <!-- /ko -->
+            </tr>
+            </thead>
+
+            <tbody>
+            <!-- ko foreach: { data: grid, as: 'product' } -->
+            <tr>
+                <!-- ko foreach: { data: product, as: 'property' } -->
+                <!-- ko if: property && property.preview -->
+                <td class="data-grid-thumbnail-cell">
+                    <div class="images-uploaded">
+                        <img data-bind="attr: {src: property.preview}"/>
+                        <span data-bind="text: property.images.length"></span>
+                    </div>
+                </td>
+                <!-- /ko -->
+                <!-- ko ifnot: property && property.preview -->
+                <td>
+                    <span data-bind='text: property'></span>
+                </td>
+                <!-- /ko -->
+                <!-- /ko -->
+            </tr>
+            <!-- /ko -->
+            </tbody>
+        </table>
+    </div>
+</div>

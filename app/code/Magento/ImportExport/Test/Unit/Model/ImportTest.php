@@ -11,7 +11,7 @@ namespace Magento\ImportExport\Test\Unit\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
 
     /**
@@ -39,7 +39,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_importData;
 
@@ -59,7 +59,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistry;
 
@@ -110,6 +110,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,17 +128,19 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities'])
             ->getMockForAbstractClass();
-        $this->_entityFactory = $this->getMock(
-            '\Magento\ImportExport\Model\Import\Entity\Factory',
-            ['create', 'isNeedToLogInHistory'],
-            [],
-            '',
-            false
-        );
-            $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
+        $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
+        $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
+            ->disableOriginalConstructor()
+            ->setMethods(['importData', '_saveValidatedBunches', 'getErrorAggregator'])
+            ->getMockForAbstractClass();
+        $this->_entityAdapter->method('getErrorAggregator')->willReturn(
+            $this->getErrorAggregatorObject(['initValidationStrategy'])
+        );
+        $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
+
+        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\ResourceModel\Import\Data')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_csvFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Export\Adapter\CsvFactory')
@@ -151,7 +155,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_behaviorFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Source\Import\Behavior\Factory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerRegistry = $this->getMockBuilder('\Magento\Indexer\Model\IndexerRegistry')
+        $this->indexerRegistry = $this->getMockBuilder('\Magento\Framework\Indexer\IndexerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
         $this->historyModel = $this->getMockBuilder('\Magento\ImportExport\Model\History')
@@ -195,22 +199,17 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ])
             ->setMethods([
                 'getDataSourceModel',
-                '_getEntityAdapter',
                 'setData',
                 'getProcessedEntitiesCount',
                 'getProcessedRowsCount',
-                'getInvalidRowsCount',
-                'getErrorsCount',
                 'getEntity',
                 'getBehavior',
                 'isReportEntityType',
+                '_getEntityAdapter'
             ])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
-        $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
-            ->disableOriginalConstructor()
-            ->setMethods(['importData'])
-            ->getMockForAbstractClass();
+
     }
 
     /**
@@ -238,34 +237,36 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->import->expects($this->any())
                     ->method('addLogComment')
                     ->with($this->isInstanceOf($phraseClass));
-        $this->_entityAdapter->expects($this->once())
+        $this->_entityAdapter->expects($this->any())
                     ->method('importData')
                     ->will($this->returnSelf());
-        $this->import->expects($this->once())
+        $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
                     ->will($this->returnValue($this->_entityAdapter));
-
+        $this->_importConfig
+            ->expects($this->any())
+            ->method('getEntities')
+            ->willReturn(
+                [
+                    $entityTypeCode => [
+                        'model' => $entityTypeCode
+                    ]
+                ]
+            );
         $importOnceMethodsReturnNull = [
-            'getEntity',
-            'getBehavior',
-            'getProcessedRowsCount',
-            'getProcessedEntitiesCount',
-            'getInvalidRowsCount',
-            'getErrorsCount',
+            'getBehavior'
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
             $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
         }
 
-        $this->import->importSource();
+        $this->assertEquals(true, $this->import->importSource());
     }
 
     /**
      * Test importSource with expected exception
      *
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists.
      */
     public function testImportSourceException()
     {
@@ -277,7 +278,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeCode')
             ->will($this->returnValue($entityTypeCode));
         $behaviour = 'behaviour';
-        $this->_importData->expects($this->once())
+        $this->_importData->expects($this->any())
             ->method('getBehavior')
             ->will($this->returnValue($behaviour));
         $this->import->expects($this->any())
@@ -291,14 +292,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->import->expects($this->any())
             ->method('addLogComment')
             ->with($this->isInstanceOf($phraseClass));
-        $this->_entityAdapter->expects($this->once())
+        $this->_entityAdapter->expects($this->any())
             ->method('importData')
             ->will($this->throwException($exceptionMock));
-        $this->import->expects($this->once())
+        $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->will($this->returnValue($this->_entityAdapter));
         $importOnceMethodsReturnNull = [
-            'getEntity',
             'getBehavior',
         ];
 
@@ -322,7 +322,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributeType()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['getFrontendInput', 'usesSource'])
+            ->disableOriginalConstructor()->getMock();
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
+        $attribute->expects($this->any())->method('usesSource')->willReturn(true);
+        $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
     }
 
     /**

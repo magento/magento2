@@ -3,9 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
 
 define([
-    'Magento_Ui/js/lib/registry/registry'
+    'uiRegistry'
 ], function (registry) {
     'use strict';
 
@@ -15,7 +16,7 @@ define([
                 expect(registry).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry);
+                var type = typeof registry;
 
                 expect(type).toEqual('object');
             });
@@ -25,7 +26,7 @@ define([
                 expect(registry.hasOwnProperty('set')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.set);
+                var type = typeof registry.set;
 
                 expect(type).toEqual('function');
             });
@@ -33,7 +34,7 @@ define([
                 expect(registry.set()).toBeDefined();
             });
             it('Check returned value type', function () {
-                var type = typeof(registry.set());
+                var type = typeof registry.set();
 
                 expect(type).toEqual('object');
             });
@@ -42,7 +43,7 @@ define([
                     prop = 'magento';
                 
                 registry.set(elem, prop);
-                expect(registry.storage.data[elem]).toEqual(prop);
+                expect(registry.storage.data.get(elem)).toEqual(prop);
             });
         });
         describe('"registry.get" method', function () {
@@ -50,21 +51,22 @@ define([
                 expect(registry.hasOwnProperty('get')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.get);
+                var type = typeof registry.get;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
-                expect(registry.get()).toBeDefined();
+                expect(registry.get()).toBeUndefined();
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = registry.get() instanceof Array;
 
-                expect(type).toEqual(true);
+                expect(type).toBeFalsy();
             });
             it('Check called callback with arguments', function () {
                 var elems = ['magento'],
-                    callback = function(){};
+                    callback = function () {};
+
                 registry.events.wait = jasmine.createSpy();
                 registry.get(elems, callback);
                 expect(registry.events.wait).toHaveBeenCalledWith(elems, callback);
@@ -75,7 +77,7 @@ define([
                 expect(registry.hasOwnProperty('remove')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.remove);
+                var type = typeof registry.remove;
 
                 expect(type).toEqual('function');
             });
@@ -100,15 +102,14 @@ define([
                 expect(registry.hasOwnProperty('has')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.has);
+                var type = typeof registry.has;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if registry.storage has property', function () {
-                var name = 'magento',
-                    value = 'magentoValue';
+                var name = 'magento';
 
-                registry.storage.data[name] = value;
+                registry.storage.data.set(name, 'magentoValue');
                 expect(registry.has(name)).toEqual(true);
             });
             it('Check returned value if registry.storage has not property', function () {
@@ -129,17 +130,17 @@ define([
                 expect(registry.hasOwnProperty('async')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.async);
+                var type = typeof registry.async;
 
                 expect(type).toEqual('function');
-            })
+            });
         });
         describe('"registry.create" method', function () {
             it('Check for defined', function () {
                 expect(registry.hasOwnProperty('create')).toBeDefined();
             });
             it('Check type', function () {
-                var type = typeof(registry.async);
+                var type = typeof registry.async;
 
                 expect(type).toEqual('function');
             });

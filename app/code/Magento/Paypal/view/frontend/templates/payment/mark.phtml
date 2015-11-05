@@ -5,24 +5,28 @@
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * Note: This mark is a requirement of PayPal
+ * @var \Magento\Paypal\Block\Express\Form $block
  * @see \Magento\Paypal\Block\Express\Form
  */
+$url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 ?>
 <!-- PayPal Logo -->
-<img src="<?php echo $block->escapeHtml($block->getPaymentAcceptanceMarkSrc()) ?>"
-     alt="<?php echo __('Acceptance Mark') ?>" class="paypal icon"/>
-<a href="<?php echo $block->getPaymentAcceptanceMarkHref() ?>"
-   onclick="javascript:window.open('<?php echo $block->getPaymentAcceptanceMarkHref() ?>','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=0, top=0, width=400, height=350'); return false;"
+<img src="<?php echo $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
+     alt="<?php echo $block->escapeHtml(__('Acceptance Mark')); ?>" class="paypal icon"/>
+<a href="<?php /* @noEscape */ echo $url; ?>"
+   onclick="javascript:window.open(
+           '<?php /* @noEscape */ echo $url; ?>',
+           'olcwhatispaypal',
+           'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
+           'left=0, top=0, width=400, height=350'
+       ); return false;"
    class="action paypal about">
     <?php if ($block->getPaymentWhatIs()) {
-    echo __($block->getPaymentWhatIs());
+        echo $block->escapeHtml(__($block->getPaymentWhatIs()));
 } else {
-    echo __('What is PayPal?');
+        echo $block->escapeHtml(__('What is PayPal?'));
 } ?>
 </a>
 <!-- PayPal Logo -->

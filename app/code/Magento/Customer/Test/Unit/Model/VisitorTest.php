@@ -30,7 +30,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -49,7 +49,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Visitor')
+        $this->resource = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Visitor')
             ->setMethods([
                 'beginTransaction',
                 '__sleep',
@@ -104,18 +104,18 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
                 'ignores' => ['test_route_name' => true]
             ]
         );
-        $request = new \Magento\Framework\Object(['route_name' => 'test_route_name']);
-        $action =  new \Magento\Framework\Object(['request' => $request]);
-        $event =  new \Magento\Framework\Object(['controller_action' => $action]);
-        $observer = new \Magento\Framework\Object(['event' => $event]);
+        $request = new \Magento\Framework\DataObject(['route_name' => 'test_route_name']);
+        $action =  new \Magento\Framework\DataObject(['request' => $request]);
+        $event =  new \Magento\Framework\DataObject(['controller_action' => $action]);
+        $observer = new \Magento\Framework\DataObject(['event' => $event]);
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
 
     public function testBindCustomerLogin()
     {
-        $customer = new \Magento\Framework\Object(['id' => '1']);
-        $observer = new \Magento\Framework\Object([
-            'event' => new \Magento\Framework\Object(['customer' => $customer]),
+        $customer = new \Magento\Framework\DataObject(['id' => '1']);
+        $observer = new \Magento\Framework\DataObject([
+            'event' => new \Magento\Framework\DataObject(['customer' => $customer]),
         ]);
 
         $this->visitor->bindCustomerLogin($observer);
@@ -131,7 +131,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindCustomerLogout()
     {
-        $observer = new \Magento\Framework\Object();
+        $observer = new \Magento\Framework\DataObject();
 
         $this->visitor->setCustomerId('1');
         $this->visitor->bindCustomerLogout($observer);
@@ -144,9 +144,9 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindQuoteCreate()
     {
-        $quote = new \Magento\Framework\Object(['id' => '1', 'is_checkout_cart' => true]);
-        $observer = new \Magento\Framework\Object([
-            'event' => new \Magento\Framework\Object(['quote' => $quote]),
+        $quote = new \Magento\Framework\DataObject(['id' => '1', 'is_checkout_cart' => true]);
+        $observer = new \Magento\Framework\DataObject([
+            'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
         ]);
         $this->visitor->bindQuoteCreate($observer);
         $this->assertTrue($this->visitor->getDoQuoteCreate());
@@ -154,9 +154,9 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindQuoteDestroy()
     {
-        $quote = new \Magento\Framework\Object(['id' => '1']);
-        $observer = new \Magento\Framework\Object([
-            'event' => new \Magento\Framework\Object(['quote' => $quote]),
+        $quote = new \Magento\Framework\DataObject(['id' => '1']);
+        $observer = new \Magento\Framework\DataObject([
+            'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
         ]);
         $this->visitor->bindQuoteDestroy($observer);
         $this->assertTrue($this->visitor->getDoQuoteDestroy());

@@ -6,16 +6,17 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\CheckoutAgreements\Test\TestCase\DeleteTermEntityTest">
-    <variation name="DeleteTermEntityTestVariation1">
-      <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <data name="agreement/dataset" xsi:type="string">term_enabled_text</data>
-      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
-      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-      <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" />
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid" />
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
-    </variation>
-  </testCase>
+    <testCase name="Magento\CheckoutAgreements\Test\TestCase\DeleteTermEntityTest" summary="Delete Terms And Conditions" ticketId="MAGETWO-29687">
+        <variation name="DeleteTermEntityTestVariation1">
+            <data name="configData" xsi:type="string">checkout_term_condition</data>
+            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="agreement/dataset" xsi:type="string">term_enabled_text</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
+        </variation>
+    </testCase>
 </config>

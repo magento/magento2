@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="configurable"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct"
              handler_interface="Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\ConfigurableProductInterface"
@@ -36,7 +36,6 @@
         <field name="enable_googlecheckout" is_required="0" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />
@@ -54,7 +53,7 @@
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
-        <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" />
+        <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
         <field name="quantity_and_stock_status" is_required="0" group="product-details" />
         <field name="required_options" is_required="0" />
         <field name="short_description" is_required="0" group="autosettings" />
@@ -74,7 +73,7 @@
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="autosettings" />
         <field name="weight" is_required="0" group="product-details" />
-        <field name="is_virtual" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
         <field name="id" />
         <field name="type_id" group="null" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />

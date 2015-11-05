@@ -81,15 +81,20 @@ class Payment extends Block
      */
     public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
-        $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
-        if ($paymentSelector->isVisible()) {
-            $paymentSelector->click();
-        } else {
-            $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
-            if (!$paymentLabel->isVisible()) {
-                throw new \Exception('Such payment method is absent.');
-            }
+        $paymentSelector = sprintf($this->paymentMethodInput, $payment['method']);
+        $paymentLabelSelector = sprintf($this->paymentMethodLabel, $payment['method']);
+
+        try {
+            $this->waitForElementVisible($paymentLabelSelector);
+        } catch (\Exception $exception) {
+            throw new \Exception('Such payment method is absent.');
         }
+
+        $paymentRadioButton = $this->_rootElement->find($paymentSelector);
+        if ($paymentRadioButton->isVisible()) {
+            $paymentRadioButton->click();
+        }
+
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
@@ -126,13 +131,6 @@ class Payment extends Block
     public function placeOrder()
     {
         $this->_rootElement->find($this->placeOrder)->click();
-        $browser = $this->browser;
-        $selector = $this->waitElement;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
+        $this->waitForElementNotVisible($this->waitElement);
     }
 }

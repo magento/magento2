@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextFactory;
 /**
  * Class UiComponentFactory
  */
-class UiComponentFactory extends Object
+class UiComponentFactory extends DataObject
 {
     /**
      * Object manager
@@ -144,7 +144,7 @@ class UiComponentFactory extends Object
                 $identifier,
                 $bundleComponents[$identifier]
             );
-            $componentArguments = array_merge($componentArguments, $arguments);
+            $componentArguments = array_replace_recursive($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
                 $componentArguments['context'] = $this->contextFactory->create([
                     'namespace' => $identifier
@@ -164,16 +164,19 @@ class UiComponentFactory extends Object
             $componentArguments['components'] = $components;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
-            $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));
+            $component = $this->objectManager->create(
+                $className,
+                array_replace_recursive($componentArguments, $arguments)
+            );
 
             return $component;
         } else {
-            $defaultData = $this->componentManager->createRawComponentData($name, true);
+            $defaultData = $this->componentManager->createRawComponentData($name);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
                 $className,
-                array_merge_recursive($componentArguments, $arguments)
+                array_replace_recursive($componentArguments, $arguments)
             );
 
             return $component;

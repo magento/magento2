@@ -7,12 +7,13 @@ namespace Magento\Catalog\Model\Entity;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Product attribute extension with event dispatching
  *
- * @method \Magento\Catalog\Model\Resource\Attribute _getResource()
- * @method \Magento\Catalog\Model\Resource\Attribute getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
+ * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
  * @method string getFrontendInputRenderer()
  * @method \Magento\Catalog\Model\Entity\Attribute setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
@@ -77,7 +78,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -85,8 +86,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -99,7 +101,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
@@ -107,8 +109,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatterInterface $dateTimeFormatter,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -129,6 +132,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
+            $dateTimeFormatter,
             $resource,
             $resourceCollection,
             $data

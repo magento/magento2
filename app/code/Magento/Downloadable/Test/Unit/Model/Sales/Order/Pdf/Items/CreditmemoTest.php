@@ -28,7 +28,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         $arguments = [
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'orderItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory',
                 [],
                 [],
                 '',
@@ -56,7 +56,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'orderTaxCollectionFactory' => $this->getMock(
-                'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory',
+                'Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory',
                 [],
                 [],
                 '',
@@ -93,7 +93,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         $modelConstructorArgs = $objectManager->getConstructArguments(
             'Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo',
-            ['string' => new \Magento\Framework\Stdlib\String(), 'filterManager' => $filterManager]
+            ['string' => new \Magento\Framework\Stdlib\StringUtils(), 'filterManager' => $filterManager]
         );
 
         $this->_model = $this->getMock(
@@ -151,7 +151,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_model->setItem(
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'name' => 'Downloadable Documentation',
                     'sku' => 'downloadable-documentation',
@@ -160,7 +160,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                     'qty' => 1,
                     'tax_amount' => 2.00,
                     'discount_tax_compensation_amount' => 0.00,
-                    'order_item' => new \Magento\Framework\Object(
+                    'order_item' => new \Magento\Framework\DataObject(
                         [
                             'product_options' => [
                                 'options' => [['label' => 'Test Custom Option', 'value' => 'test value']],
@@ -177,9 +177,9 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'getLinks'
         )->will(
             $this->returnValue(
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     ['purchased_items' => [
-                        new \Magento\Framework\Object(['link_title' => 'Magento User Guide']), ],
+                        new \Magento\Framework\DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
             )

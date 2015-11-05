@@ -6,9 +6,7 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * @var \Magento\BundleImportExport\Model\Import\Product\Type\Bundle
@@ -16,14 +14,14 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     protected $bundle;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
-
-    /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $select;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -35,35 +33,91 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $params;
 
-    /** @var
-     * \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFac;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFac;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $setCollection;
 
+    /**
+     *
+     * @return void
+     */
+    protected function initFetchAllCalls()
+    {
+        $fetchAllForInitAttributes = [
+            [
+                'attribute_set_name' => '1',
+                'attribute_id' => '1',
+            ],
+            [
+                'attribute_set_name' => '2',
+                'attribute_id' => '2',
+            ],
+        ];
+
+        $fetchAllForOtherCalls = [[
+            'selection_id' => '1',
+            'option_id' => '1',
+            'parent_product_id' => '1',
+            'product_id' => '1',
+            'position' => '1',
+            'is_default' => '1'
+        ]];
+
+        $this->connection
+            ->method('fetchAll')
+            ->with($this->select)
+            ->will($this->onConsecutiveCalls(
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes
+            ));
+    }
+
     protected function setUp()
     {
+        parent::setUp();
+
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getBehavior', 'getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope', 'getConnection'],
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection'
+            ],
             [],
             '',
             false
         );
+        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
@@ -71,42 +125,34 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
-        ]));
+        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->initFetchAllCalls();
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection', 'getTableName'],
             [],
             '',
             false
         );
-        $this->resource->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connection)
-        );
-        $this->resource->expects($this->any())->method('getTableName')->will(
-            $this->returnValue('tableName')
-        );
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
+        $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
         $this->attrSetColFac = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->setCollection = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
             ['setEntityTypeFilter'],
             [],
             '',
@@ -119,24 +165,20 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->method('setEntityTypeFilter')
             ->will($this->returnValue([]));
         $this->prodAttrColFac = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $attrCollection =
-            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
-
-        $this->prodAttrColFac->expects($this->any())->method('create')->will(
-            $this->returnValue($attrCollection)
-        );
+        $this->prodAttrColFac->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
         $this->params = [
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->bundle = $this->objectManagerHelper->getObject(
             'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
@@ -168,17 +210,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $allowImport
         ));
 
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
             '1' => [
                 'option_id' => '1',
                 'parent_id' => '1',
@@ -223,15 +255,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]));
-        $this->connection->expects($this->any())->method('fetchAll')->with($select)->will($this->returnValue([[
-            'selection_id' => '1',
-            'option_id' => '1',
-            'parent_product_id' => '1',
-            'product_id' => '1',
-            'position' => '1',
-            'is_default' => '1'
-        ]]));
-
         $this->bundle->saveData();
     }
 
@@ -354,8 +377,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
         $rowData = [
-            'price_type' => 'fixed',
-            'price_view' => 'bundle_price_view'
+            'bundle_price_type' => 'dynamic',
+            'bundle_price_view' => 'bundle_price_view'
         ];
         $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);
     }

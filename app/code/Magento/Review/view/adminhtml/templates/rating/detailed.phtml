@@ -8,23 +8,21 @@
 
 ?>
 <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-    <div class="nested">
-        <?php foreach ($block->getRating() as $_rating): ?>
-        <div class="field field-rating">
-            <label class="label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
-            <?php $_iterator = 1; ?>
-            <?php $_options = ($_rating->getRatingOptions()) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
-            <div class="control" data-widget="ratingControl">
-            <?php foreach (array_reverse($_options) as $_option): ?>
-                <input type="radio" name="ratings[<?php echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
-                <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>">&#9733;</label>
-            <?php $_iterator++ ?>
-            <?php endforeach; ?>
-            </div>
-        </div>
+    <?php foreach ($block->getRating() as $_rating): ?>
+    <div class="admin__field admin__field-rating">
+        <label class="admin__field-label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
+        <?php $_iterator = 1; ?>
+        <?php $_options = ($_rating->getRatingOptions()) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
+        <div class="admin__field-control" data-widget="ratingControl">
+        <?php foreach (array_reverse($_options) as $_option): ?>
+            <input type="radio" name="ratings[<?php /* @escapeNotVerified */ echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>" value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
+            <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>">&#9733;</label>
+        <?php $_iterator++ ?>
         <?php endforeach; ?>
-        <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+        </div>
     </div>
+    <?php endforeach; ?>
+    <input type="hidden" name="validate_rating" class="validate-rating" value="" />
 <script>
 require([
     "jquery",
@@ -37,5 +35,5 @@ require([
 });
 </script>
 <?php else: ?>
-    <?php echo __("Rating isn't Available") ?>
+    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
 <?php endif; ?>

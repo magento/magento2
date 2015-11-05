@@ -40,7 +40,7 @@ class Start extends \Magento\Paypal\Controller\Express\AbstractExpress
                     $this->_getQuote()->getStoreId()
                 )
             ) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     __('To check out, please sign in with your email address.')
                 );
 
@@ -80,10 +80,12 @@ class Start extends \Magento\Paypal\Controller\Express\AbstractExpress
                 return;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t start Express Checkout.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t start Express Checkout.')
+            );
         }
 
         $this->_redirect('checkout/cart');

@@ -9,7 +9,7 @@
 ?>
 <script type="text/x-magento-init">
 <?php
-    echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
+    /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
         '*' => ['Magento_Customer/js/customer-data' => [
             'sectionLoadUrl' => $block->getCustomerDataUrl('customer/section/load'),
             'cookieLifeTime' => $block->getCookieLifeTime(),

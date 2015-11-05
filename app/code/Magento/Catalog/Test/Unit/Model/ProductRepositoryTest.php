@@ -134,7 +134,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    protected $storeManagerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -155,6 +155,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getMediaAttributes',
                 'getProductLinks',
                 'setProductLinks',
+                'validate',
+                'save'
             ],
             [],
             '',
@@ -169,7 +171,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -196,7 +198,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
@@ -222,9 +224,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ['getLinkTypes'], [], '', false);
         $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
@@ -245,7 +254,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'imageProcessor' => $this->imageProcessorMock,
-                'storeManager' => $this->storeManager,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
     }
@@ -553,11 +562,14 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->deleteById($sku));
     }
 
-    public function testGetList()
+    /**
+     * @dataProvider fieldName
+     */
+    public function testGetList($fieldName)
     {
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
         $attributeCode = 'attribute_code';
-        $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $extendedSearchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $productAttributeSearchResultsMock = $this->getMockForAbstractClass(
             '\Magento\Catalog\Api\Data\ProductAttributeInterface',
@@ -578,7 +590,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterGroupFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
-        $itemsMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
+        $itemsMock = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
@@ -596,15 +608,14 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
         $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterGroupFilterMock]);
         $filterGroupFilterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterGroupFilterMock->expects($this->once())->method('getField')->willReturn('field');
+        $filterGroupFilterMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
         $filterGroupFilterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->with([['attribute' => 'field', 'eq' => 'value']]);
+        $this->expectAddToFilter($fieldName, $collectionMock);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('field');
+        $sortOrderMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
         $sortOrderMock->expects($this->once())->method('getDirection')
             ->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('field', 'ASC');
+        $collectionMock->expects($this->once())->method('addOrder')->with($fieldName, 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(4);
         $collectionMock->expects($this->once())->method('setCurPage')->with(4);
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(42);
@@ -1054,6 +1065,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     ImageContentInterface::TYPE => 'image/jpeg',
                     ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
+                'media_type' => 'media_type',
             ],
         ];
 
@@ -1116,6 +1128,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     'label' => 'label_text',
                     'position' => 10,
                     'disabled' => false,
+                    'media_type' => 'media_type',
                 ]
             );
 
@@ -1196,5 +1209,32 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
+    }
+
+    /**
+     * @param $fieldName
+     * @param $collectionMock
+     * @return void
+     */
+    public function expectAddToFilter($fieldName, $collectionMock)
+    {
+        if ($fieldName == 'category_id') {
+            $collectionMock->expects($this->once())->method('addCategoriesFilter')
+                ->with(['eq' => ['value']]);
+        } else {
+            $collectionMock->expects($this->once())->method('addFieldToFilter')
+                ->with([['attribute' => $fieldName, 'eq' => 'value']]);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function fieldName()
+    {
+        return [
+            ['category_id'],
+            ['field']
+        ];
     }
 }

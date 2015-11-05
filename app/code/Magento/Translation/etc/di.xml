@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config" />
     <preference for="Magento\Framework\Translate\Inline\ProviderInterface" type="Magento\Framework\Translate\Inline\Provider" />
     <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser" />
-    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\Resource\Translate" />
+    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\ResourceModel\Translate" />
     <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State" />
     <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
     <preference for="Magento\Translation\Model\Js\DataProviderInterface" type="Magento\Translation\Model\Js\DataProvider"/>
@@ -57,27 +57,30 @@
     <type name="Magento\Translation\Model\Js\Config">
         <arguments>
             <argument name="patterns" xsi:type="array">
-                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~</item>
-                <item name="mage_translation_static" xsi:type="string">~\$t\([\'|\"](.+?)[\'|\"]\)~</item>
+                <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
+                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\((['"])(.+?)\1\)~</item>
+                <item name="mage_translation_static" xsi:type="string">~\$t\((["'])(.+?)\1\)~</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+
+    <virtualType name="AssetPreProcessorPool">
         <arguments>
-            <argument name="preProcessors" xsi:type="array">
+            <argument name="preprocessors" xsi:type="array">
                 <item name="js" xsi:type="array">
-                    <item name="js" xsi:type="array">
-                        <item name="js_translation" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
+                    <item name="js_translation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
                     </item>
                 </item>
                 <item name="json" xsi:type="array">
-                    <item name="json" xsi:type="array">
-                        <item name="json_generation" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
+                    <item name="json_generation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
                     </item>
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
+
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">

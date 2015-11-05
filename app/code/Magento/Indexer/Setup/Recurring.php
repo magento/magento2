@@ -8,14 +8,15 @@ namespace Magento\Indexer\Setup;
 
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Indexer\Model\ConfigInterface;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
-use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
 /**
  * @codeCoverageIgnore
@@ -94,7 +95,7 @@ class Recurring implements InstallSchemaInterface
 
             if (isset($stateIndexers[$indexerId])) {
                 if ($stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
-                    $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
+                    $stateIndexers[$indexerId]->setStatus(StateInterface::STATUS_INVALID);
                     $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
                     $stateIndexers[$indexerId]->save();
                 }
@@ -103,7 +104,7 @@ class Recurring implements InstallSchemaInterface
                 $state = $this->stateFactory->create();
                 $state->loadByIndexer($indexerId);
                 $state->setHashConfig($expectedHashConfig);
-                $state->setStatus(State::STATUS_INVALID);
+                $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
             }
         }

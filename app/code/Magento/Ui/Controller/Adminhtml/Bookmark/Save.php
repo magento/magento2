@@ -87,10 +87,13 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    protected function execute()
+    public function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
+        if (!$jsonData) {
+            throw new \InvalidArgumentException('Invalid parameter "data"');
+        }
         $data = $this->jsonDecoder->decode($jsonData);
         $action = key($data);
         switch($action) {

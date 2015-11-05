@@ -51,7 +51,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Display price attribute value in base order currency and in place order currency
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   string $code
      * @param   bool $strong
      * @param   string $separator
@@ -75,7 +75,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get "double" prices html (block with base and place currency)
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   float $basePrice
      * @param   float $price
      * @param   bool $strong
@@ -113,8 +113,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Filter collection by removing not available product types
      *
-     * @param \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection $collection
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function applySalableProductTypesFilter($collection)
     {

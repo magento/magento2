@@ -1,0 +1,7 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.braintree-section .entry-edit-head > .config-heading .heading strong {padding-left:150px;background:url(images/braintree_logo.png) no-repeat 0 0 / 145px auto;line-height:36px;}
+.braintree-section .entry-edit-head > .config-heading:before {background: url("images/braintree_allinone.png") no-repeat 0 0 / 100% auto;content: "";display: inline;float: right;height: 35px;width: 280px;}

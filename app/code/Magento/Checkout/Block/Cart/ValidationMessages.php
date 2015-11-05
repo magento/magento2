@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
 /**
  * Shopping cart validation messages block
  */
@@ -21,15 +23,18 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Framework\Locale\CurrencyInterface $currency,
         array $data = []
@@ -39,6 +44,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
             $messageFactory,
             $collectionFactory,
             $messageManager,
+            $interpretationStrategy,
             $data
         );
         $this->cartHelper = $cartHelper;
@@ -101,6 +107,9 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
                 $messages[] = $message;
             }
         }
-        $this->messageManager->addUniqueMessages($messages);
+
+        if ($messages) {
+            $this->messageManager->addUniqueMessages($messages);
+        }
     }
 }

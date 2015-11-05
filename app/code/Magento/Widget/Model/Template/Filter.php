@@ -12,7 +12,7 @@ namespace Magento\Widget\Model\Template;
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
     /**
-     * @var \Magento\Widget\Model\Resource\Widget
+     * @var \Magento\Widget\Model\ResourceModel\Widget
      */
     protected $_widgetResource;
 
@@ -22,7 +22,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     protected $_widget;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -34,12 +34,13 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
-     * @param \Magento\Widget\Model\Resource\Widget $widgetResource
+     * @param \Magento\Email\Model\Source\Variables $configVariables
+     * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -51,7 +52,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
-        \Magento\Widget\Model\Resource\Widget $widgetResource,
+        \Magento\Email\Model\Source\Variables $configVariables,
+        \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
         $this->_widgetResource = $widgetResource;
@@ -68,17 +70,18 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $layoutFactory,
             $appState,
             $urlModel,
-            $emogrifier
+            $emogrifier,
+            $configVariables
         );
     }
 
     /**
-     * Generate widget
+     * General method for generate widget
      *
      * @param string[] $construction
      * @return string
      */
-    public function widgetDirective($construction)
+    public function generateWidget($construction)
     {
         $params = $this->getParameters($construction[2]);
 
@@ -112,6 +115,17 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         }
 
         return $widget->toHtml();
+    }
+
+    /**
+     * Generate widget
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function widgetDirective($construction)
+    {
+        return $this->generateWidget($construction);
     }
 
     /**

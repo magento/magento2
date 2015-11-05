@@ -31,7 +31,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     private $magentoObject;
 
@@ -45,20 +45,20 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory'
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attribute = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute'
         )
             ->setMethods(['getUsedAttributes', 'getAttributeId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->magentoObject = $this->getMockBuilder('Magento\Framework\Object')
+        $this->magentoObject = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();

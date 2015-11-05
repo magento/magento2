@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
  * Class Status
@@ -46,12 +46,16 @@ class Status extends Column
      * @param array $dataSource
      * @return void
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->statuses[$item[$this->getData('name')]];
+                $item[$this->getData('name')] = isset($this->statuses[$item[$this->getData('name')]])
+                    ? $this->statuses[$item[$this->getData('name')]]
+                    : $item[$this->getData('name')];
             }
         }
+
+        return $dataSource;
     }
 }

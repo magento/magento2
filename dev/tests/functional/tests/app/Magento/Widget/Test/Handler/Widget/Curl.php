@@ -34,10 +34,10 @@ class Curl extends AbstractCurl
             'Sidebar Main' => 'sidebar.main',
         ],
         'page_group' => [
-            'All Pages' => 'all_pages',
-            'Specified Page' => 'pages',
-            'Page Layouts' => 'page_layouts',
-            'Non-Anchor Categories' => 'notanchor_categories',
+            'Generic Pages/All Pages' => 'all_pages',
+            'Generic Pages/Specified Page' => 'pages',
+            'Generic Pages/Page Layouts' => 'page_layouts',
+            'Categories/Non-Anchor Categories' => 'notanchor_categories',
         ],
         'template' => [
             'CMS Page Link Block Template' => 'widget/link/link_block.phtml',
@@ -62,10 +62,9 @@ class Curl extends AbstractCurl
     protected $widgetInstanceTemplate = '';
 
     /**
-     * Constructor
-     *
      * @constructor
      * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
      */
     public function __construct(DataInterface $configuration, EventManagerInterface $eventManager)
     {
@@ -78,26 +77,17 @@ class Curl extends AbstractCurl
      *
      * @param FixtureInterface $fixture [optional]
      * @throws \Exception
-     * @return null|array instance id
+     * @return array
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        $code = $this->mappingData['code'][$fixture->getCode()];
+        $themeId = $this->getThemeId($fixture->getThemeId());
         $data = $this->prepareData($fixture);
-        $url = $_ENV['app_backend_url'] . 'admin/widget_instance/save/code/'
-            . $data['code'] . '/theme_id/' . $data['theme_id'];
-        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
-        if (isset($data['page_id'])) {
-            $data['parameters']['page_id'] = $data['page_id'][0];
-            unset($data['page_id']);
-        }
-        $data['parameters']['unique_id'] = md5(microtime(1));
-        if ($fixture->hasData('store_ids')) {
-            $data['store_ids'][0] = $fixture->getDataFieldConfig('store_ids')['source']->getStores()[0]->getStoreId();
-        }
-        unset($data['code']);
-        unset($data['theme_id']);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $url = $_ENV['app_backend_url'] . 'admin/widget_instance/save/code/' . $code . '/theme_id/' . $themeId;
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
@@ -120,33 +110,68 @@ class Curl extends AbstractCurl
     protected function prepareData(FixtureInterface $widget)
     {
         $data = $this->replaceMappingData($widget->getData());
-        $data['theme_id'] = $this->getThemeId($data['theme_id']);
+        if ($widget->hasData('store_ids')) {
+            $data['store_ids'][0] = $widget->getDataFieldConfig('store_ids')['source']->getStores()[0]->getStoreId();
+        }
+        unset($data['code']);
+        unset($data['theme_id']);
 
-        return $this->prepareWidgetInstance($data);
+        $data = $this->prepareWidgetInstance($data);
+        $data = $this->prepareParameters($data);
+
+        return $data;
     }
 
     /**
-     * Prepare Widget Instance data.
+     * Prepare widget Frontend options.
      *
      * @param array $data
-     * @throws \Exception
      * @return array
      */
-    protected function prepareWidgetInstance($data)
+    protected function prepareParameters(array $data)
     {
+        return $this->prepareEntity($data);
+    }
+
+    /**
+     * Prepare entity parameters data.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareEntity(array $data)
+    {
+        if (isset($data['parameters']['entities'])) {
+            $data['parameters']['page_id'] = $data['parameters']['entities'][0]->getPageId();
+            unset($data['parameters']['entities']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Prepare Widget Instance (layout) data.
+     *
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    protected function prepareWidgetInstance(array $data)
+    {
+        $widgetInstances = [];
         foreach ($data['widget_instance'] as $key => $widgetInstance) {
             $pageGroup = $widgetInstance['page_group'];
-
-            if (!isset($widgetInstance[$pageGroup]['page_id'])) {
-                $widgetInstance[$pageGroup]['page_id'] = 0;
-            }
             $method = 'prepare' . str_replace(' ', '', ucwords(str_replace('_', ' ', $pageGroup))) . 'Group';
             if (!method_exists(__CLASS__, $method)) {
                 throw new \Exception('Method for prepare page group "' . $method . '" is not exist.');
             }
-            $widgetInstance[$pageGroup] = $this->$method($widgetInstance[$pageGroup]);
-            $data['widget_instance'][$key] = $widgetInstance;
+            $widgetInstances[$key]['page_group'] = $pageGroup;
+            $widgetInstances[$key][$pageGroup] = $this->$method($widgetInstance);
+            if (!isset($widgetInstance[$pageGroup]['page_id'])) {
+                $widgetInstances[$key][$pageGroup]['page_id'] = 0;
+            }
         }
+        $data['widget_instance'] = $widgetInstances;
 
         return $data;
     }
@@ -159,13 +184,16 @@ class Curl extends AbstractCurl
      */
     protected function prepareAllPagesGroup(array $widgetInstancePageGroup)
     {
-        $widgetInstancePageGroup['layout_handle'] = 'default';
-        $widgetInstancePageGroup['for'] = 'all';
-        if (!isset($widgetInstancePageGroup['template'])) {
-            $widgetInstancePageGroup['template'] = $this->widgetInstanceTemplate;
-        }
+        $widgetInstance['layout_handle'] = isset($widgetInstancePageGroup['layout_handle'])
+            ? $widgetInstancePageGroup['layout_handle']
+            : 'default';
+        $widgetInstance['for'] = 'all';
+        $widgetInstance['block'] = $widgetInstancePageGroup['block'];
+        $widgetInstance['template'] = isset($widgetInstancePageGroup['template'])
+            ? $widgetInstancePageGroup['template']
+            : $this->widgetInstanceTemplate;
 
-        return $widgetInstancePageGroup;
+        return $widgetInstance;
     }
 
     /**
@@ -205,31 +233,14 @@ class Curl extends AbstractCurl
      */
     protected function getThemeId($title)
     {
-        $filter = $this->encodeFilter(['theme_title' => $title]);
+        $filter = base64_encode('theme_title=' . $title);
         $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0');
+        $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
 
         preg_match('/<tr data-role="row" title="[^"]+system_design_theme\/edit\/id\/([\d]+)\/"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
-    }
-
-    /**
-     * Encoded filter parameters.
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
     }
 }

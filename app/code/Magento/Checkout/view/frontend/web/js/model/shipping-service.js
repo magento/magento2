@@ -29,7 +29,7 @@ define(
              *
              * @returns {*}
              */
-            getSippingRates: function() {
+            getShippingRates: function() {
                 return shippingRates;
             }
         };

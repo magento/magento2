@@ -5,11 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_shipment_save_after">
-        <observer name="braintree" instance="Magento\Braintree\Model\Observer" method="processBraintreePayment" />
+        <observer name="braintree" instance="Magento\Braintree\Observer\ProcessBraintreePayment" />
     </event>
     <event name="customer_delete_commit_after">
-        <observer name="braintree" instance="Magento\Braintree\Model\Observer" method="deleteBraintreeCustomer" />
+        <observer name="braintree" instance="Magento\Braintree\Observer\DeleteBraintreeCustomer" />
+    </event>
+    <event name="checkout_submit_before">
+        <observer name="braintree" instance="Magento\Braintree\Observer\ProcessBraintreeAddress" />
     </event>
 </config>

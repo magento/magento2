@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\File;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 /**
  * File upload class
  *
@@ -221,7 +223,7 @@ class Uploader
         $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
 
         if ($this->_result) {
-            chmod($destinationFile, 0777);
+            $this->chmod($destinationFile);
             if ($this->_enableFilesDispersion) {
                 $fileName = str_replace('\\', '/', self::_addDirSeparator($this->_dispretionPath)) . $fileName;
             }
@@ -235,6 +237,15 @@ class Uploader
         }
 
         return $this->_result;
+    }
+
+    /**
+     * @param string $file
+     * @return void
+     */
+    protected function chmod($file)
+    {
+        chmod($file, DriverInterface::WRITEABLE_DIRECTORY_MODE);
     }
 
     /**
@@ -542,7 +553,9 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        if (!(@is_dir($destinationFolder) || @mkdir($destinationFolder, 0777, true))) {
+        if (!(@is_dir($destinationFolder)
+            || @mkdir($destinationFolder, DriverInterface::WRITEABLE_DIRECTORY_MODE, true)
+        )) {
             throw new \Exception("Unable to create directory '{$destinationFolder}'.");
         }
         return $this;

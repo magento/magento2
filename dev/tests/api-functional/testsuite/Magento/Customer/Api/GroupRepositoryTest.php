@@ -8,7 +8,7 @@ namespace Magento\Customer\Api;
 
 use Magento\Customer\Model\Data\Group as CustomerGroup;
 use Magento\Customer\Model\GroupRegistry;
-use Magento\Customer\Model\Resource\GroupRepository;
+use Magento\Customer\Model\ResourceModel\GroupRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -44,7 +44,7 @@ class GroupRepositoryTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get('Magento\Customer\Model\GroupRegistry');
-        $this->groupRepository = $objectManager->get('Magento\Customer\Model\Resource\GroupRepository');
+        $this->groupRepository = $objectManager->get('Magento\Customer\Model\ResourceModel\GroupRepository');
         $this->customerGroupFactory = $objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
     }
 
@@ -53,6 +53,7 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public function tearDown()
     {
+        parent::tearDown();
     }
 
     /**
@@ -60,6 +61,7 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public static function tearDownAfterClass()
     {
+        parent::tearDownAfterClass();
     }
 
     /**

@@ -47,9 +47,9 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param string|null $connectionName
+     * @param string $connectionName
      * @param array $data
      */
     public function __construct(
@@ -58,7 +58,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $connectionName = null,
         array $data = []
@@ -94,7 +94,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\AbstractResource
+     * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      */
     protected function _getResource()
     {
@@ -119,7 +119,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
     /**
      * Specify connection name
      *
-     * @param  string $connectionName
+     * @param string $connectionName
      * @return $this
      */
     public function setConnectionName($connectionName)

@@ -11,5 +11,5 @@
 <?php /** @var $block \Magento\Review\Block\Product\View\Other */ ?>
 <?php $_product = $block->getProduct(); ?>
 <div class="actions">
-    <a href="<?php echo $_product->getProductUrl() ?>" class="action back"><span><?php echo __('Back to Main Product Info') ?></span></a>
+    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="action back"><span><?php /* @escapeNotVerified */ echo __('Back to Main Product Info') ?></span></a>
 </div>

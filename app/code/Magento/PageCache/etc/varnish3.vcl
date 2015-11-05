@@ -46,7 +46,12 @@ sub vcl_recv {
     if (req.request != "GET" && req.request != "HEAD") {
         return (pass);
     }
-    
+
+    # Bypass shopping cart and checkout requests
+    if (req.url ~ "/checkout") {
+        return (pass);
+    }
+
     # normalize url in case of leading HTTP scheme and domain
     set req.url = regsub(req.url, "^http[s]?://", "");
 
@@ -80,8 +85,8 @@ sub vcl_fetch {
         set beresp.do_gzip = true;
     }
 
-    # cache only successfully responses
-    if (beresp.status != 200) {
+    # cache only successfully responses and 404s
+    if (beresp.status != 200 && beresp.status != 404) {
         set beresp.ttl = 0s;
         return (hit_for_pass);
     } elsif (beresp.http.Cache-Control ~ "private") {

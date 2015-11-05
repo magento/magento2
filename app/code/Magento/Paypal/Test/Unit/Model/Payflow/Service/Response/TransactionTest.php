@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
@@ -26,7 +26,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     protected $sessionTransparent;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -53,7 +53,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sessionTransparent = $this->getMock('Magento\Framework\Session\Generic', ['getQuoteId'], [], '', false);
-        $this->quoteRepository = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->transparent = $this->getMock('Magento\Paypal\Model\Payflow\Transparent', [], [], '', false);
         $this->paymentMethodManagementInterface = $this->getMock(
             'Magento\Quote\Api\PaymentMethodManagementInterface',
@@ -83,7 +83,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     public function testGetResponseObject()
     {
         $gatewayTransactionResponse = [];
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
 
         $this->transparent->expects($this->once())
             ->method('getDebugReplacePrivateDataKeys')
@@ -108,7 +108,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     public function testSavePaymentInQuote()
     {
         $quoteId = 1;
-        $response = new Object();
+        $response = new DataObject();
 
         $payment = $this->getMockBuilder('Magento\Quote\Model\Quote\Payment')
             ->disableOriginalConstructor()

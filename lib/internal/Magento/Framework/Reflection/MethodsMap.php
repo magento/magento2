@@ -8,14 +8,22 @@ namespace Magento\Framework\Reflection;
 
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
+use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
  */
 class MethodsMap
 {
+    const SERVICE_METHOD_PARAMS_CACHE_PREFIX = 'service_method_params_';
     const SERVICE_INTERFACE_METHODS_CACHE_PREFIX = 'serviceInterfaceMethodsMap';
     const BASE_MODEL_CLASS = 'Magento\Framework\Model\AbstractExtensibleModel';
+
+    const METHOD_META_NAME = 'name';
+    const METHOD_META_TYPE = 'type';
+    const METHOD_META_HAS_DEFAULT_VALUE = 'isDefaultValueAvailable';
+    const METHOD_META_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
@@ -95,6 +103,38 @@ class MethodsMap
             }
         }
         return $this->serviceInterfaceMethodsMap[$key];
+    }
+
+    /**
+     * Retrieve requested service method params metadata.
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @return array
+     */
+    public function getMethodParams($serviceClassName, $serviceMethodName)
+    {
+        $cacheId = self::SERVICE_METHOD_PARAMS_CACHE_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
+        $params = $this->cache->load($cacheId);
+        if ($params !== false) {
+            return unserialize($params);
+        }
+        $serviceClass = new ClassReflection($serviceClassName);
+        /** @var MethodReflection $serviceMethod */
+        $serviceMethod = $serviceClass->getMethod($serviceMethodName);
+        $params = [];
+        /** @var ParameterReflection $paramReflection */
+        foreach ($serviceMethod->getParameters() as $paramReflection) {
+            $isDefaultValueAvailable = $paramReflection->isDefaultValueAvailable();
+            $params[] = [
+                self::METHOD_META_NAME => $paramReflection->getName(),
+                self::METHOD_META_TYPE => $this->typeProcessor->getParamType($paramReflection),
+                self::METHOD_META_HAS_DEFAULT_VALUE => $isDefaultValueAvailable,
+                self::METHOD_META_DEFAULT_VALUE => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
+            ];
+        }
+        $this->cache->save(serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
+        return $params;
     }
 
     /**

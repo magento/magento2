@@ -13,4 +13,4 @@
 $_item = $block->getItem();
 ?>
 
-<?php echo $block->displayPrices($block->getBaseTotalAmount($_item), $block->getTotalAmount($_item)) ?>
+<?php /* @escapeNotVerified */ echo $block->displayPrices($block->getBaseTotalAmount($_item), $block->getTotalAmount($_item)) ?>

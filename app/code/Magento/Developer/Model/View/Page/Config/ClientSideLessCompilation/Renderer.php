@@ -22,7 +22,7 @@ class Renderer extends Config\Renderer
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
@@ -31,7 +31,7 @@ class Renderer extends Config\Renderer
         \Magento\Framework\View\Asset\MergeService $assetMergeService,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
@@ -54,19 +54,14 @@ class Renderer extends Config\Renderer
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
-        $taggedAttributes = parent::addDefaultAttributes($contentType, $attributes);
-
-        if ($taggedAttributes !== $attributes) {
-            return $taggedAttributes;
-        }
-
         switch ($contentType) {
-            case 'less':
-                $taggedAttributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
+            case 'css':
+                return ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
 
         }
-        return $taggedAttributes;
+
+        return parent::addDefaultAttributes($contentType, $attributes);
     }
 
     /**

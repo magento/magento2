@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model;
 
-use Magento\Indexer\Model\Indexer\State;
+use Magento\Framework\Indexer\StateInterface;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -37,7 +37,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\ConfigInterface',
+            'Magento\Framework\Indexer\ConfigInterface',
             [],
             '',
             false,
@@ -91,7 +91,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStatus'
         )->will(
-            $this->returnValue(State::STATUS_INVALID)
+            $this->returnValue(StateInterface::STATUS_INVALID)
         );
         $indexer1Mock = $this->getMock(
             'Magento\Indexer\Model\Indexer',
@@ -115,7 +115,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStatus'
         )->will(
-            $this->returnValue(State::STATUS_VALID)
+            $this->returnValue(StateInterface::STATUS_VALID)
         );
         $indexer2Mock = $this->getMock(
             'Magento\Indexer\Model\Indexer',

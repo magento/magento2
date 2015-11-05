@@ -65,7 +65,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -75,7 +75,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -172,7 +172,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
@@ -215,7 +215,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Get collection instance
      *
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
      */
     public function getResourceCollection()
     {

@@ -110,7 +110,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         $source = $this->getSource();
 
         $this->_totals = [];
-        $this->_totals['subtotal'] = new \Magento\Framework\Object(
+        $this->_totals['subtotal'] = new \Magento\Framework\DataObject(
             ['code' => 'subtotal', 'value' => $source->getSubtotal(), 'label' => __('Subtotal')]
         );
 
@@ -118,7 +118,7 @@ class Totals extends \Magento\Framework\View\Element\Template
          * Add shipping
          */
         if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
-            $this->_totals['shipping'] = new \Magento\Framework\Object(
+            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'field' => 'shipping_amount',
@@ -137,7 +137,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             } else {
                 $discountLabel = __('Discount');
             }
-            $this->_totals['discount'] = new \Magento\Framework\Object(
+            $this->_totals['discount'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'discount',
                     'field' => 'discount_amount',
@@ -147,7 +147,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             );
         }
 
-        $this->_totals['grand_total'] = new \Magento\Framework\Object(
+        $this->_totals['grand_total'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'grand_total',
                 'field' => 'grand_total',
@@ -161,10 +161,10 @@ class Totals extends \Magento\Framework\View\Element\Template
          * Base grandtotal
          */
         if ($this->getOrder()->isCurrencyDifferent()) {
-            $this->_totals['base_grandtotal'] = new \Magento\Framework\Object(
+            $this->_totals['base_grandtotal'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'base_grandtotal',
-                    'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
+                    'value' => $this->getOrder()->formatPrice($source->getGrandTotal()),
                     'label' => __('Grand Total to be Charged'),
                     'is_formated' => true,
                 ]
@@ -176,11 +176,11 @@ class Totals extends \Magento\Framework\View\Element\Template
     /**
      * Add new total to totals array after specific total or before last total by default
      *
-     * @param   \Magento\Framework\Object $total
+     * @param   \Magento\Framework\DataObject $total
      * @param   null|string $after
      * @return  $this
      */
-    public function addTotal(\Magento\Framework\Object $total, $after = null)
+    public function addTotal(\Magento\Framework\DataObject $total, $after = null)
     {
         if ($after !== null && $after != 'last' && $after != 'first') {
             $totals = [];
@@ -214,11 +214,11 @@ class Totals extends \Magento\Framework\View\Element\Template
     /**
      * Add new total to totals array before specific total or after first total by default
      *
-     * @param   \Magento\Framework\Object $total
+     * @param   \Magento\Framework\DataObject $total
      * @param   null|string $before
      * @return  $this
      */
-    public function addTotalBefore(\Magento\Framework\Object $total, $before = null)
+    public function addTotalBefore(\Magento\Framework\DataObject $total, $before = null)
     {
         if ($before !== null) {
             if (!is_array($before)) {
@@ -318,7 +318,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     /**
      * Format total value based on order currency
      *
-     * @param   \Magento\Framework\Object $total
+     * @param   \Magento\Framework\DataObject $total
      * @return  string
      */
     public function formatValue($total)

@@ -54,7 +54,7 @@ class Plugin
      * @param Closure $proceed
      * @param Product $product
      * @param RequestInterface $request
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -63,8 +63,11 @@ class Plugin
         Closure $proceed,
         \Magento\Catalog\Model\Product $product,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Object $response
+        \Magento\Framework\DataObject $response
     ) {
+        if ($request->has('attributes')) {
+            $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        }
         $result = $proceed($product, $request, $response);
         $variationProducts = (array)$request->getPost('variations-matrix');
         if ($variationProducts) {
@@ -108,7 +111,11 @@ class Plugin
             $product->addData($this->getRequiredDataFromProduct($parentProduct));
             $product->addData($productData);
             $product->setCollectExceptionMessages(true);
-            $configurableAttribute = $this->jsonHelper->jsonDecode($productData['configurable_attribute']);
+            $configurableAttribute = [];
+            $encodedData = $productData['configurable_attribute'];
+            if ($encodedData) {
+                $configurableAttribute = $this->jsonHelper->jsonDecode($encodedData);
+            }
             $configurableAttribute = implode('-', $configurableAttribute);
 
             $errorAttributes = $product->validate();

@@ -23,21 +23,21 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    protected $optionsContext = '#product-options-wrapper > fieldset';
+    protected $optionsContext = '#product-options-wrapper';
 
     /**
      * Selector for single option block
      *
      * @var string
      */
-    protected $optionElement = './div[contains(@class,"field")][%d]';
+    protected $optionElement = '#product-options-wrapper > * > .field';
 
     /**
      * Selector for title of option
      *
      * @var string
      */
-    protected $title = './/span[1]';
+    protected $title = 'label > span:nth-child(1), legend > span:nth-child(1)';
 
     /**
      * Selector for required option
@@ -156,16 +156,13 @@ class CustomOptions extends Form
     protected function getListOptions()
     {
         $customOptions = [];
-        $context = $this->_rootElement->find($this->optionsContext);
 
-        $count = 1;
-        $optionElement = $context->find(sprintf($this->optionElement, $count), Locator::SELECTOR_XPATH);
-        while ($optionElement->isVisible()) {
-            $title = $optionElement->find($this->title, Locator::SELECTOR_XPATH)->getText();
+        $optionElements = $this->_rootElement->getElements($this->optionElement);
+        foreach ($optionElements as $optionElement) {
+            $title = $optionElement->find($this->title)->getText();
             $customOptions[$title] = $optionElement;
-            ++$count;
-            $optionElement = $context->find(sprintf($this->optionElement, $count), Locator::SELECTOR_XPATH);
         }
+
         return $customOptions;
     }
 
@@ -384,7 +381,7 @@ class CustomOptions extends Form
      */
     protected function parseOptionText($optionText)
     {
-        preg_match('`^(.*?)\+\$(\d.*?)$`', $optionText, $match);
+        preg_match('`^(.*?) \+ ?\$([\d\.,]*?)$`', $optionText, $match);
         $optionPrice = isset($match[2]) ? str_replace(',', '', $match[2]) : 0;
         $optionTitle = isset($match[1]) ? trim($match[1]) : $optionText;
 

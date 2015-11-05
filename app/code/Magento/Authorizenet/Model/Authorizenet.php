@@ -5,6 +5,9 @@
  */
 namespace Magento\Authorizenet\Model;
 
+use Magento\Authorizenet\Model\TransactionService;
+use Magento\Framework\HTTP\ZendClientFactory;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -16,11 +19,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * AIM gateway url
      */
     const CGI_URL = 'https://secure.authorize.net/gateway/transact.dll';
-
-    /**
-     * Transaction Details gateway url
-     */
-    const CGI_URL_TD = 'https://apitest.authorize.net/xml/v1/request.api';
 
     const REQUEST_METHOD_CC = 'CC';
 
@@ -89,11 +87,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected $responseFactory;
 
     /**
-     * Stored information about transaction
+     * @var \Magento\Authorizenet\Model\TransactionService;
+     */
+    protected $transactionService;
+
+    /**
+     * Fields that should be replaced in debug with '***'
      *
      * @var array
      */
-    protected $transactionDetails = [];
+    protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
+
+    /**
+     * @var \Magento\Framework\HTTP\ZendClientFactory
+     */
+    protected $httpClientFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -108,7 +116,9 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @param \Magento\Authorizenet\Model\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Response\Factory $responseFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Authorizenet\Model\TransactionService $transactionService
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -126,13 +136,17 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        TransactionService $transactionService,
+        ZendClientFactory $httpClientFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->dataHelper = $dataHelper;
         $this->requestFactory = $requestFactory;
         $this->responseFactory = $responseFactory;
+        $this->transactionService = $transactionService;
+        $this->httpClientFactory = $httpClientFactory;
 
         parent::__construct(
             $context,
@@ -194,13 +208,13 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Fetch fraud details
      *
      * @param string $transactionId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
-        $responseXmlDocument = $this->getTransactionDetails($transactionId);
-        $response = new \Magento\Framework\Object();
+        $responseXmlDocument = $this->transactionService->getTransactionDetails($this, $transactionId);
+        $response = new \Magento\Framework\DataObject();
 
         if (empty($responseXmlDocument->transaction->FDSFilters->FDSFilter)) {
             return $response;
@@ -257,14 +271,14 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     /**
      * Prepare request to gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return \Magento\Authorizenet\Model\Request
      * @link http://www.authorize.net/support/AIM_guide.pdf
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function buildRequest(\Magento\Framework\Object $payment)
+    protected function buildRequest(\Magento\Framework\DataObject $payment)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
@@ -364,11 +378,12 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
-        $debugData = ['request' => $request->getData()];
         $result = $this->responseFactory->create();
-        $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url');
-        $client->setUri($uri ? $uri : self::CGI_URL);
+        /** @var \Magento\Framework\HTTP\ZendClient $client */
+        $client = $this->httpClientFactory->create();
+        $url = $this->getConfigData('cgi_url') ?: self::CGI_URL;
+        $debugData = ['url' => $url, 'request' => $request->getData()];
+        $client->setUri($url);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
 
         foreach ($request->getData() as $key => $value) {
@@ -381,21 +396,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         try {
             $response = $client->request();
+            $responseBody = $response->getBody();
+            $debugData['response'] = $responseBody;
         } catch (\Exception $e) {
             $result->setXResponseCode(-1)
                 ->setXResponseReasonCode($e->getCode())
                 ->setXResponseReasonText($e->getMessage());
 
-            $debugData['result'] = $result->getData();
-            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(
                 $this->dataHelper->wrapGatewayError($e->getMessage())
             );
+        } finally {
+            $this->_debug($debugData);
         }
 
-        $responseBody = $response->getBody();
         $r = explode(self::RESPONSE_DELIM_CHAR, $responseBody);
-
         if ($r) {
             $result->setXResponseCode((int)str_replace('"', '', $r[0]))
                 ->setXResponseReasonCode((int)str_replace('"', '', $r[2]))
@@ -413,10 +428,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 __('Something went wrong in the payment gateway.')
             );
         }
-
-        $debugData['result'] = $result->getData();
-        $this->_debug($debugData);
-
         return $result;
     }
 
@@ -429,84 +440,5 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected function isGatewayActionsLocked($payment)
     {
         return $payment->getAdditionalInformation(self::GATEWAY_ACTIONS_LOCKED_STATE_KEY);
-    }
-
-    /**
-     * This function returns full transaction details for a specified transaction ID.
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
-     * @link http://developer.authorize.net/api/transaction_details/
-     */
-    protected function getTransactionResponse($transactionId)
-    {
-        $responseXmlDocument = $this->getTransactionDetails($transactionId);
-
-        $response = new \Magento\Framework\Object();
-        $response->setXResponseCode((string)$responseXmlDocument->transaction->responseCode)
-            ->setXResponseReasonCode((string)$responseXmlDocument->transaction->responseReasonCode)
-            ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
-
-        return $response;
-    }
-
-    /**
-     * Load transaction details
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\Simplexml\Element
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function loadTransactionDetails($transactionId)
-    {
-        $requestBody = sprintf(
-            '<?xml version="1.0" encoding="utf-8"?>' .
-            '<getTransactionDetailsRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">' .
-            '<merchantAuthentication><name>%s</name><transactionKey>%s</transactionKey></merchantAuthentication>' .
-            '<transId>%s</transId>' .
-            '</getTransactionDetailsRequest>',
-            $this->getConfigData('login'),
-            $this->getConfigData('trans_key'),
-            $transactionId
-        );
-
-        $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url_td');
-        $client->setUri($uri ? $uri : self::CGI_URL_TD);
-        $client->setConfig(['timeout' => 45]);
-        $client->setHeaders(['Content-Type: text/xml']);
-        $client->setMethod(\Zend_Http_Client::POST);
-        $client->setRawData($requestBody);
-
-        $debugData = ['request' => $requestBody];
-
-        try {
-            $responseBody = $client->request()->getBody();
-            $debugData['result'] = $responseBody;
-            $this->_debug($debugData);
-            libxml_use_internal_errors(true);
-            $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
-            libxml_use_internal_errors(false);
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment updating error.'));
-        }
-
-        $this->transactionDetails[$transactionId] = $responseXmlDocument;
-        return $responseXmlDocument;
-    }
-
-    /**
-     * Get transaction information
-     *
-     * @param string $transactionId
-     * @return \Magento\Framework\Simplexml\Element
-     */
-    protected function getTransactionDetails($transactionId)
-    {
-        return isset($this->transactionDetails[$transactionId])
-            ? $this->transactionDetails[$transactionId]
-            : $this->loadTransactionDetails($transactionId);
     }
 }

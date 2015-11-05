@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Test\Constraint\AssertProductInGrid">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
@@ -76,22 +76,22 @@
             <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetSuccessSaveMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetForm">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetInGrid">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateOnProductForm">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetOnProductForm">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
@@ -126,7 +126,7 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateGroupOnProductForm">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetGroupOnProductForm">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
@@ -136,7 +136,7 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessDeleteMessage">
+    <type name="Magento\Catalog\Test\Constraint\AssertAttributeSetSuccessDeleteMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
@@ -149,6 +149,11 @@
     <type name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">low</argument>
         </arguments>
     </type>
 </config>

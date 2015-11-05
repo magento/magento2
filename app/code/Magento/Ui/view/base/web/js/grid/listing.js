@@ -2,37 +2,51 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
+    'ko',
     'underscore',
-    'uiComponent',
     'Magento_Ui/js/lib/spinner',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, Component, loader, layout) {
+    'uiLayout',
+    'uiCollection'
+], function (ko, _, loader, layout, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/listing',
+            stickyTmpl: 'ui/grid/sticky/listing',
             positions: false,
-            storageConfig: {
-                positions: '${ $.storageConfig.path }.positions'
-            },
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/grid/dnd',
-                containerTmpl: 'ui/grid/dnd/listing',
+                columnsProvider: '${ $.name }',
                 enabled: true
+            },
+            editorConfig: {
+                name: '${ $.name }_editor',
+                component: 'Magento_Ui/js/grid/editing/editor',
+                columnsProvider: '${ $.name }',
+                dataProvider: '${ $.provider }',
+                enabled: false
+            },
+            resizeConfig: {
+                name: '${ $.name }_resize',
+                columnsProvider: '${ $.name }',
+                component: 'Magento_Ui/js/grid/resize',
+                enabled: false
             },
             imports: {
                 rows: '${ $.provider }:data.items'
             },
             listens: {
-                elems: 'setPositions',
+                elems: 'updatePositions updateVisible',
                 '${ $.provider }:reload': 'showLoader',
                 '${ $.provider }:reloaded': 'hideLoader'
             },
             modules: {
-                dnd: '${ $.dndConfig.name }'
+                dnd: '${ $.dndConfig.name }',
+                resize: '${ $.resizeConfig.name }'
             }
         },
 
@@ -42,11 +56,12 @@ define([
          * @returns {Listing} Chainable.
          */
         initialize: function () {
-            this._super();
+            _.bindAll(this, 'updateVisible');
 
-            if (this.dndConfig.enabled) {
-                this.initDnd();
-            }
+            this._super()
+                .initDnd()
+                .initEditor()
+                .initResize();
 
             return this;
         },
@@ -58,7 +73,10 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('rows');
+                .track({
+                    rows: [],
+                    visibleColumns: []
+                });
 
             return this;
         },
@@ -69,7 +87,35 @@ define([
          * @returns {Listing} Chainable.
          */
         initDnd: function () {
-            layout([this.dndConfig]);
+            if (this.dndConfig.enabled) {
+                layout([this.dndConfig]);
+            }
+
+            return this;
+        },
+
+        /**
+         * Inititalizes resize component.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initResize: function () {
+            if (this.resizeConfig.enabled) {
+                layout([this.resizeConfig]);
+            }
+
+            return this;
+        },
+
+        /**
+         * Creates inline editing component.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initEditor: function () {
+            if (this.editorConfig.enabled) {
+                layout([this.editorConfig]);
+            }
 
             return this;
         },
@@ -79,13 +125,15 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initElement: function () {
+        initElement: function (element) {
             var currentCount = this.elems().length,
                 totalCount = this.initChildCount;
 
             if (totalCount === currentCount) {
                 this.initPositions();
             }
+
+            element.on('visible', this.updateVisible);
 
             return this._super();
         },
@@ -96,14 +144,9 @@ define([
          * @returns {Listing} Chainable.
          */
         initPositions: function () {
-            var link = {
-                positions: this.storageConfig.positions
-            };
-
             this.on('positions', this.applyPositions.bind(this));
 
-            this.setLinks(link, 'imports')
-                .setLinks(link, 'exports');
+            this.setStatefull('positions');
 
             return this;
         },
@@ -113,7 +156,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        setPositions: function () {
+        updatePositions: function () {
             var positions = {};
 
             this.elems.each(function (elem, index) {
@@ -148,6 +191,46 @@ define([
         },
 
         /**
+         * Returns reference to 'visibleColumns' array.
+         *
+         * @returns {Array}
+         */
+        getVisible: function () {
+            var observable = ko.getObservable(this, 'visibleColumns');
+
+            return observable || this.visibleColumns;
+        },
+
+        /**
+         * Returns total number of displayed columns in grid.
+         *
+         * @returns {Number}
+         */
+        countVisible: function () {
+            return this.visibleColumns.length;
+        },
+
+        /**
+         * Updates array of visible columns.
+         *
+         * @returns {Listing} Chainable.
+         */
+        updateVisible: function () {
+            this.visibleColumns = this.elems.filter('visible');
+
+            return this;
+        },
+
+        /**
+         * Checks if grid has data.
+         *
+         * @returns {Boolean}
+         */
+        hasData: function () {
+            return !!this.rows.length;
+        },
+
+        /**
          * Hides loader.
          */
         hideLoader: function () {
@@ -159,24 +242,6 @@ define([
          */
         showLoader: function () {
             loader.get(this.name).show();
-        },
-
-        /**
-         * Returns total number of displayed columns in grid.
-         *
-         * @returns {Number}
-         */
-        countVisible: function () {
-            return this.elems.filter('visible').length;
-        },
-
-        /**
-         * Checks if grid has data.
-         *
-         * @returns {Boolean}
-         */
-        hasData: function () {
-            return !!this.rows().length;
         }
     });
 });

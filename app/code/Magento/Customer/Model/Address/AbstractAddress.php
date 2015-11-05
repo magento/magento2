@@ -127,7 +127,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -146,7 +146,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -253,20 +253,30 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Enforce format of the street field
+     * Enforce format of the street field or other multiline custom attributes
      *
      * @param array|string $key
      * @param null $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
             $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value)) {
+        } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
+    }
+
+    /**
+     * Check that address can have multiline attribute by this code (as street or some custom attribute)
+     * @param string $code
+     * @return bool
+     */
+    protected function isAddressMultilineAttribute($code)
+    {
+        return $code == 'street' || in_array($code, $this->getCustomAttributesCodes());
     }
 
     /**
@@ -278,7 +288,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _implodeArrayField(array $data)
     {
         foreach ($data as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value) && $this->isAddressMultilineAttribute($key)) {
                 $data[$key] = $this->_implodeArrayValues($data[$key]);
             }
         }
@@ -453,7 +463,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param string $type
      * @return string|null
-     * @deprecated
      */
     public function format($type)
     {
@@ -490,7 +499,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param int|null $defaultBillingAddressId
      * @param int|null $defaultShippingAddressId
      * @return AddressInterface
-     * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

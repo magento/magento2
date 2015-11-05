@@ -11,27 +11,28 @@
 <?php if ($websites = $block->getWebsites()): ?>
 
 <div class="store-switcher store-view">
-    <span class="store-switcher-label"><?php echo __('Store View:') ?></span>
+    <span class="store-switcher-label"><?php /* @escapeNotVerified */ echo __('Store View:') ?></span>
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
-               data-role="store-view-id" data-param="<?php echo $block->getStoreVarName() ?>"
+               data-role="store-view-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreVarName() ?>"
                value="<?php echo $block->escapeHtml($block->getStoreId()) ?>"
-               onchange="switchScope(this);"<?php echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
-               data-role="store-group-id" data-param="<?php echo $block->getStoreGroupVarName() ?>"
+               data-role="store-group-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreGroupVarName() ?>"
                value="<?php echo $block->escapeHtml($block->getStoreGroupId()) ?>"
-               onchange="switchScope(this);"<?php echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <input type="hidden" name="website_switcher" id="website_switcher"
-               data-role="website-id" data-param="<?php echo $block->getWebsiteVarName() ?>"
+               data-role="website-id" data-param="<?php /* @escapeNotVerified */ echo $block->getWebsiteVarName() ?>"
                value="<?php echo $block->escapeHtml($block->getWebsiteId()) ?>"
-               onchange="switchScope(this);"<?php echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <button
             type="button"
             class="admin__action-dropdown"
             data-mage-init='{"dropdown":{}}'
             data-toggle="dropdown"
-            aria-haspopup="true">
-            <?php echo $block->getCurrentSelectionName() ?>
+            aria-haspopup="true"
+            id="store-change-button">
+            <?php /* @escapeNotVerified */ echo $block->getCurrentSelectionName() ?>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()): ?>
@@ -43,12 +44,12 @@
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) {
                         ?>
                         <a data-role="store-view-id" data-value="" href="#">
-                            <?php echo $block->getDefaultSelectionName() ?>
+                            <?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?>
                         </a>
                     <?php
                     } else {
                         ?>
-                        <span><?php echo $block->getDefaultSelectionName() ?></span>
+                        <span><?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?></span>
                     <?php
                     } ?>
                 </li>
@@ -120,7 +121,7 @@
             <?php endforeach; ?>
             <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
                 <li class="dropdown-toolbar">
-                    <a href="<?php echo $block->getUrl('*/system_store') ?>"><?php echo __('Stores Configuration') ?></a>
+                    <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/system_store') ?>"><?php /* @escapeNotVerified */ echo __('Stores Configuration') ?></a>
                 </li>
             <?php endif; ?>
         </ul>
@@ -129,7 +130,10 @@
 </div>
 
 <script>
-require(['jquery'], function(jQuery){
+require([
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function(jQuery, confirm){
 
     (function($) {
         var $storesList = $('[data-role=stores-list]');
@@ -168,15 +172,43 @@ require(['jquery'], function(jQuery){
             };
             scopeSwitcherHandler(switcherParams);
         } else {
-            var url = '<?php echo $block->getSwitchUrl() ?>' + scopeParams;
+
             <?php if ($block->getUseConfirm()): ?>
-            if (confirm("<?php echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>")) {
-                setLocation(url);
-            } else {
-                obj.value = '<?php echo $block->getStoreId() ?>';
-            }
+
+            confirm({
+                content:  "<?php /* @escapeNotVerified */ echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
+                actions: {
+                    confirm: function() {
+                        reload();
+                    },
+                    cancel: function() {
+                        obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
+                    }
+                }
+            });
+
             <?php else: ?>
+                reload();
+            <?php endif; ?>
+        }
+
+        function reload() {
+            <?php if (!$block->isUsingIframe()): ?>
+            var url = '<?php /* @escapeNotVerified */ echo $block->getSwitchUrl() ?>' + scopeParams;
             setLocation(url);
+            <?php else: ?>
+            jQuery('#preview_selected_store').val(scopeId);
+            jQuery('#preview_form').submit();
+
+            jQuery('.store-switcher .dropdown-menu li a').each(function() {
+                var $this = jQuery(this);
+
+                if ($this.data('role') === 'store-view-id' && $this.data('value') == scopeId) {
+                    jQuery('#store-change-button').html($this.text());
+                }
+            });
+
+            jQuery('#store-change-button').click();
             <?php endif; ?>
         }
     }

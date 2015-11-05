@@ -81,4 +81,29 @@ class PostDataProcessor
         }
         return $errorNo;
     }
+
+    /**
+     * Check if required fields is not empty
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function validateRequireEntry(array $data)
+    {
+        $requiredFields = [
+            'title' => __('Page Title'),
+            'stores' => __('Store View'),
+            'is_active' => __('Status')
+        ];
+        $errorNo = true;
+        foreach ($data as $field => $value) {
+            if (in_array($field, array_keys($requiredFields)) && $value == '') {
+                $errorNo = false;
+                $this->messageManager->addError(
+                    __('To apply changes you should fill in hidden required "%1" field', $requiredFields[$field])
+                );
+            }
+        }
+        return $errorNo;
+    }
 }

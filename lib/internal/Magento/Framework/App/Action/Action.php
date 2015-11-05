@@ -47,7 +47,6 @@ abstract class Action extends AbstractAction
     protected $_redirect;
 
     /**
-     * @deprecated
      * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
@@ -119,11 +118,6 @@ abstract class Action extends AbstractAction
         \Magento\Framework\Profiler::stop($profilerKey);
         return $result ?: $this->_response;
     }
-
-    /**
-     * @return ResultInterface
-     */
-    abstract protected function execute();
 
     /**
      * Throw control to different action (control and module if was specified).

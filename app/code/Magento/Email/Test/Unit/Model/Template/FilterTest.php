@@ -16,7 +16,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
@@ -71,6 +71,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $backendUrlBuilder;
 
     /**
+     * @var \Magento\Email\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configVariables;
+
+    /**
      * @var \Pelago\Emogrifier
      */
     private $emogrifier;
@@ -79,7 +84,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,6 +130,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->emogrifier = $this->objectManager->getObject('\Pelago\Emogrifier');
+
+        $this->configVariables = $this->getMockBuilder('Magento\Email\Model\Source\Variables')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -147,6 +156,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 $this->appState,
                 $this->backendUrlBuilder,
                 $this->emogrifier,
+                $this->configVariables,
                 [],
             ])
             ->setMethods($mockedMethods)
@@ -272,7 +282,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'CSS with error does not get inlined' => [
                 '<html><p></p></html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\View\Asset\ContentProcessorInterface::ERROR_MESSAGE_PREFIX,
                 ['<html><p></p></html>'],
             ],
             'Ensure disableStyleBlocksParsing option is working' => [
@@ -329,5 +339,47 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $filter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 
         $this->assertEquals($exceptionResult, $filter->filter($value));
+    }
+
+    public function testConfigDirectiveAvailable()
+    {
+        $path = "web/unsecure/base_url";
+        $availableConfigs = [['value' => $path]];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $scopeConfigValue = 'value';
+
+        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getData')
+            ->willReturn($availableConfigs);
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn($scopeConfigValue);
+
+        $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    public function testConfigDirectiveUnavailable()
+    {
+        $path = "web/unsecure/base_url";
+        $availableConfigs = [];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $scopeConfigValue = '';
+
+        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getData')
+            ->willReturn($availableConfigs);
+        $this->scopeConfig->expects($this->never())
+            ->method('getValue')
+            ->willReturn($scopeConfigValue);
+
+        $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
 }

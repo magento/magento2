@@ -6,12 +6,18 @@
 namespace Magento\Sales\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Order extends \Magento\Backend\App\Action
 {
@@ -60,6 +66,21 @@ abstract class Order extends \Magento\Backend\App\Action
     protected $resultRawFactory;
 
     /**
+     * @var OrderManagementInterface
+     */
+    protected $orderManagement;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -68,6 +89,12 @@ abstract class Order extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         Action\Context $context,
@@ -77,7 +104,10 @@ abstract class Order extends \Magento\Backend\App\Action
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -86,6 +116,9 @@ abstract class Order extends \Magento\Backend\App\Action
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->orderManagement = $orderManagement;
+        $this->orderRepository = $orderRepository;
+        $this->logger = $logger;
         parent::__construct($context);
     }
 
@@ -106,14 +139,18 @@ abstract class Order extends \Magento\Backend\App\Action
     /**
      * Initialize order model instance
      *
-     * @return \Magento\Sales\Model\Order|false
+     * @return \Magento\Sales\Api\Data\OrderInterface|false
      */
     protected function _initOrder()
     {
         $id = $this->getRequest()->getParam('order_id');
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($id);
-
-        if (!$order->getId()) {
+        try {
+            $order = $this->orderRepository->get($id);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        } catch (InputException $e) {
             $this->messageManager->addError(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
@@ -129,5 +166,15 @@ abstract class Order extends \Magento\Backend\App\Action
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Sales::sales_order');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isValidPostRequest()
+    {
+        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
+        $isPost = $this->getRequest()->isPost();
+        return ($formKeyIsValid && $isPost);
     }
 }

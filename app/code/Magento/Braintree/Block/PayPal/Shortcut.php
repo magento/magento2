@@ -15,6 +15,14 @@ use Magento\Braintree\Model\Config\PayPal as PayPalConfig;
  */
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
+    /**
+     * Key for the flag of mini cart
+     */
+    const MINI_CART_FLAG_KEY = 'is_in_mini_cart';
+
+    /**
+     * Default template name
+     */
     const PAYPAL_SHORTCUT_TEMPLATE = 'PayPal/shortcut.phtml';
 
     /**
@@ -88,9 +96,17 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     /**
      * @return bool
      */
-    protected function isInMiniCart()
+    public function isInMiniCart()
     {
-        return ($this->getContainer()->getModuleName() == 'Magento_Catalog');
+        return (bool)$this->getData(self::MINI_CART_FLAG_KEY);
+    }
+
+    /**
+     * @return string
+     */
+    public function getButtonDataUrl()
+    {
+        return $this->_urlBuilder->getUrl('braintree/paypal/getbuttondata');
     }
 
     /**
@@ -125,7 +141,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     public function getReviewPageUrl()
     {
-        return $this->_urlBuilder->getUrl('braintree/paypal/review');
+        return $this->_urlBuilder->getUrl('braintree/paypal/review', ['_secure' => true]);
     }
 
     /**
@@ -183,7 +199,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     {
         if ($this->isInMiniCart()) {
             return 'braintree_paypal_container_minicart';
-
         } else {
             return 'braintree_paypal_container' . $this->mathRandom->getRandomString(5);
         }

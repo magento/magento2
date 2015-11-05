@@ -5,24 +5,25 @@
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
+ * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
+$specificInfo = $block->getSpecificInformation();
 ?>
-<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?>
 
-<?php if ($_specificInfo = $block->getSpecificInformation()):?>
-<table class="data-table admin__table-secondary">
-<?php foreach ($_specificInfo as $_label => $_value):?>
-    <tr>
-        <th><?php echo $block->escapeHtml($_label)?>:</th>
-        <td><?php echo nl2br(implode("\n", $block->getValueAsArray($_value, true)))?></td>
-    </tr>
-<?php endforeach; ?>
-</table>
+<?php if ($specificInfo): ?>
+    <table class="data-table admin__table-secondary">
+    <?php foreach ($specificInfo as $label => $value):?>
+        <tr>
+            <th><?php echo $block->escapeHtml($label)?>:</th>
+            <td>
+                <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </table>
 <?php endif;?>
 
 <?php echo $block->getChildHtml()?>

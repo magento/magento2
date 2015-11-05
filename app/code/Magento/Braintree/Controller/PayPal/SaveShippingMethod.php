@@ -31,19 +31,18 @@ class SaveShippingMethod extends \Magento\Braintree\Controller\PayPal
                 return;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update shipping method.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update shipping method.'));
         }
         if ($isAjax) {
             $this->getResponse()->setBody(
                 '<script>window.location.href = '
-                . $this->_url->getUrl('*/*/review')
+                . $this->_url->getUrl('*/*/review', ['_secure' => true])
                 . ';</script>'
             );
         } else {
-            $this->_redirect('*/*/review');
+            $this->_redirect('*/*/review', ['_secure' => true]);
         }
     }
 }

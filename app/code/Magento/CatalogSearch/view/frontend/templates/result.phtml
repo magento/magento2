@@ -14,7 +14,7 @@
     <div class="message notice">
         <div>
             <?php foreach ($messages as $message):?>
-                <?php echo $message?><br />
+                <?php /* @escapeNotVerified */ echo $message?><br />
             <?php endforeach;?>
         </div>
     </div>
@@ -25,11 +25,11 @@
 
 <div class="message notice">
     <div>
-        <?php echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
+        <?php /* @escapeNotVerified */ echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
         <?php echo $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>
-                <br /><?php echo $message?>
+                <br /><?php /* @escapeNotVerified */ echo $message?>
             <?php endforeach;?>
         <?php endif; ?>
     </div>

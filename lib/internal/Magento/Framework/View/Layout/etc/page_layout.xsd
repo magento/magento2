@@ -6,14 +6,13 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="elements.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
 
     <xs:complexType name="pageLayoutType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>

@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column\Creditmemo;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 /**
  * Class State
@@ -25,18 +25,18 @@ class State extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param CreditmemoFactory $creditmemoFactory
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        CreditmemoFactory $creditmemoFactory,
+        CreditmemoRepositoryInterface $creditmemoRepository,
         array $components = [],
         array $data = []
     ) {
-        $this->states = $creditmemoFactory->create()->getStates();
+        $this->states = $creditmemoRepository->create()->getStates();
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -44,14 +44,18 @@ class State extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->states[$item[$this->getData('name')]];
+                $item[$this->getData('name')] = isset($this->states[$item[$this->getData('name')]])
+                    ? $this->states[$item[$this->getData('name')]]
+                    : $item[$this->getData('name')];
             }
         }
+
+        return $dataSource;
     }
 }

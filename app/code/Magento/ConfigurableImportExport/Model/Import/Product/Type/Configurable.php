@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -26,6 +29,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_INVALID_WEBSITE = 'invalidSuperAttrWebsite';
 
+    const ERROR_DUPLICATED_VARIATIONS = 'duplicatedVariations';
+
     /**
      * Validation failure message template definitions
      *
@@ -35,6 +40,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with this code is not super',
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
     ];
 
     /**
@@ -119,26 +125,26 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_productTypesConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * Instance of mysql database adapter.
+     * Instance of database adapter.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
     /**
      * Instance of product collection factory.
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productColFac;
 
@@ -178,22 +184,22 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
     ) {
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
@@ -344,11 +350,23 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Array of SKU to array of super attribute values for all products.
      *
+     * @param array $bunch
      * @return $this
      */
-    protected function _loadSkuSuperData()
+    protected function _loadSkuSuperDataForBunch(array $bunch)
     {
-        if (!$this->_skuSuperData) {
+        $newSku = $this->_entityModel->getNewSku();
+        $oldSku = $this->_entityModel->getOldSku();
+        $productIds = [];
+        foreach ($bunch as $rowData) {
+            $sku = $rowData[ImportProduct::COL_SKU];
+            $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
+            $productIds[] = $productData['entity_id'];
+        }
+
+        $this->_productSuperAttrs = [];
+        $this->_skuSuperData = [];
+        if (!empty($productIds)) {
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $optionTable = $this->_resource->getTableName('eav_attribute_option');
             $select = $this->_connection->select()->from(
@@ -362,6 +380,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'o.attribute_id'
                 ),
                 ['option_id']
+            )->where(
+                'product_id IN ( ? )',
+                $productIds
             );
 
             foreach ($this->_connection->fetchAll($select) as $row) {
@@ -613,7 +634,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if ($this->_getSuperAttributeId($productId, $attrParams['id'])) {
                 $productSuperAttrId = $this->_getSuperAttributeId($productId, $attrParams['id']);
             } elseif (isset($this->_superAttributesData['attributes'][$productId][$attrParams['id']])) {
-                $productSuperAttrId = $this->_superAttributesData['attributes'][$productId][$attrParams['id']]['product_super_attribute_id'];
+                $attributes = $this->_superAttributesData['attributes'];
+                $productSuperAttrId = $attributes[$productId][$attrParams['id']]['product_super_attribute_id'];
                 $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
@@ -696,11 +718,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_productSuperData = [];
         $this->_productData = null;
 
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
-            $this->_loadSkuSuperData();
-        }
-
         while ($bunch = $this->_entityModel->getNextBunch()) {
+            if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+                $this->_loadSkuSuperDataForBunch($bunch);
+            }
             if (!$this->configurableInBunch($bunch)) {
                 continue;
             }
@@ -780,13 +801,22 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $error = false;
         $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        $skus = [];
+        $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {
             $dataWithExtraVirtualRows[] = $rowData;
         }
-        foreach ($dataWithExtraVirtualRows as $data) {
-            $error |= !parent::isRowValid($data, $rowNum, $isNewProduct);
+        foreach ($dataWithExtraVirtualRows as $option) {
+            if (isset($option['_super_products_sku'])) {
+                if (in_array($option['_super_products_sku'], $skus)) {
+                    $error = true;
+                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                }
+                $skus[] = $option['_super_products_sku'];
+            }
+            $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
     }

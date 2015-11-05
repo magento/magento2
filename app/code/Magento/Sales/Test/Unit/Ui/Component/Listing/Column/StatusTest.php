@@ -26,14 +26,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Status\Collection', [], [], '', false);
+        $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
         $collection->expects($this->once())
             ->method('toOptionHash')
             ->willReturn($itemMapping);
 
         $collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
-            [],
+            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            ['create'],
             [],
             '',
             false
@@ -43,12 +43,18 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collection);
 
         $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\Status',
-            ['collectionFactory' => $collectionFactoryMock]
+            ['collectionFactory' => $collectionFactoryMock, 'context' => $contextMock]
         );
         $model->setData('name', $itemName);
-        $model->prepareDataSource($dataSource);
+        $dataSource = $model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

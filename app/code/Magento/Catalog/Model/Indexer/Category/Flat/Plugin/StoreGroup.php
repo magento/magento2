@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
 class StoreGroup
 {
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -16,11 +16,11 @@ class StoreGroup
     protected $state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $state
     ) {
         $this->indexerRegistry = $indexerRegistry;
@@ -39,15 +39,15 @@ class StoreGroup
     }
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $subject
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject
      * @param callable $proceed
      * @param \Magento\Framework\Model\AbstractModel $group
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Framework\Model\Resource\Db\AbstractDb $subject,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $group
     ) {

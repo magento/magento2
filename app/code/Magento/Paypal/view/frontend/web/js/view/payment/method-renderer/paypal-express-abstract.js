@@ -8,9 +8,10 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/view/payment/default',
-        'Magento_Paypal/js/action/set-payment-method'
+        'Magento_Paypal/js/action/set-payment-method',
+        'Magento_Checkout/js/model/payment/additional-validators'
     ],
-    function ($, Component, setPaymentMethodAction) {
+    function ($, Component, setPaymentMethodAction, additionalValidators) {
         'use strict';
 
         return Component.extend({
@@ -69,10 +70,12 @@ define(
 
             /** Redirect to paypal */
             continueToPayPal: function () {
-                //update payment method information if additional data was changed
-                this.selectPaymentMethod();
-                setPaymentMethodAction();
-                return false;
+                if (additionalValidators.validate()) {
+                    //update payment method information if additional data was changed
+                    this.selectPaymentMethod();
+                    setPaymentMethodAction(this.messageContainer);
+                    return false;
+                }
             }
         });
     }

@@ -7,6 +7,8 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
+use Magento\Framework\Module\Dir;
+
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
@@ -28,7 +30,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $dir = $moduleReader->getModuleDir('etc', 'Magento_Sales');
+        $dir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Sales');
         $this->_schema = $dir . '/pdf.xsd';
         $this->_schemaFile = $dir . '/pdf_file.xsd';
     }

@@ -60,7 +60,7 @@ define([
             this.ajaxConfig = {
                 url: this.url,
                 data: {
-                    FORM_KEY: FORM_KEY
+                    FORM_KEY: window.FORM_KEY
                 },
                 success:    this.onDataLoaded
             };

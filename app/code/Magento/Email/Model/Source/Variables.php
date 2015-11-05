@@ -72,4 +72,15 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
         }
         return $optionArray;
     }
+
+    /**
+     * Return available config variables
+     *
+     * @return array
+     * @codeCoverageIgnore
+     */
+    public function getData()
+    {
+        return  $this->_configVariables;
+    }
 }

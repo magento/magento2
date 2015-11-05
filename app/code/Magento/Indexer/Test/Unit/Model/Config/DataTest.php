@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $reader;
 
@@ -23,7 +23,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $cache;
 
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateCollection;
 
@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock('Magento\Indexer\Model\Config\Reader', ['read'], [], '', false);
+        $this->reader = $this->getMock('Magento\Framework\Indexer\Config\Reader', ['read'], [], '', false);
         $this->cache = $this->getMockForAbstractClass(
             'Magento\Framework\Config\CacheInterface',
             [],
@@ -50,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['test', 'load', 'save']
         );
         $this->stateCollection = $this->getMock(
-            'Magento\Indexer\Model\Resource\Indexer\State\Collection',
+            'Magento\Indexer\Model\ResourceModel\Indexer\State\Collection',
             ['getItems'],
             [],
             '',

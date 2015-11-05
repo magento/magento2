@@ -1,0 +1,45 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__data-grid-pager-wrap" data-role="toolbar-menu-item">
+    <!-- ko scope: sizes -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+
+    <div class="admin__data-grid-pager">
+        <button
+            class="action-previous"
+            type="button"
+            data-bind="
+                attr: {
+                    title: $t('Previous Page')
+                },
+                css: {
+                    disabled: isFirst()
+                },
+                click: prev">
+        </button>
+        <input
+            id="pageCurrent"
+            class="admin__control-text"
+            data-bind="value: _current"
+            type="number" />
+        <label class="admin__control-support-text" for="pageCurrent">
+            of <span data-bind="text: pages"></span>
+        </label>
+        <button
+            class="action-next"
+            data-bind="
+                attr: {
+                    title: $t('Next Page')
+                },
+                css: {
+                    disabled: isLast()
+                },
+                click: next">
+        </button>
+    </div>
+</div>

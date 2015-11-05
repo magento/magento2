@@ -13,33 +13,33 @@ use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for New Instance of WidgetEntity
+ * Test Creation for New Instance of WidgetEntity.
  */
 abstract class AbstractCreateWidgetEntityTest extends Injectable
 {
     /**
-     * WidgetInstanceIndex page
+     * WidgetInstanceIndex page.
      *
      * @var WidgetInstanceIndex
      */
     protected $widgetInstanceIndex;
 
     /**
-     * WidgetInstanceNew page
+     * WidgetInstanceNew page.
      *
      * @var WidgetInstanceNew
      */
     protected $widgetInstanceNew;
 
     /**
-     * WidgetInstanceEdit page
+     * WidgetInstanceEdit page.
      *
      * @var WidgetInstanceEdit
      */
     protected $widgetInstanceEdit;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param WidgetInstanceIndex $widgetInstanceIndex
      * @param WidgetInstanceNew $widgetInstanceNew
@@ -57,7 +57,7 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
     }
 
     /**
-     * Delete all widgets
+     * Delete all widgets.
      *
      * @return void
      */

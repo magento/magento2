@@ -47,7 +47,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->catalogUrlMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Url',
+            '\Magento\Catalog\Model\ResourceModel\Url',
             ['getRewriteByProductStore'],
             [],
             '',
@@ -94,7 +94,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemData = ['item' => 'data'];
         $shortcutButtonsHtml = '<span>Buttons</span>';
 
-        $subtotalMock = $this->getMock('\Magento\Framework\Object', ['getValue'], [], '', false);
+        $subtotalMock = $this->getMock('\Magento\Framework\DataObject', ['getValue'], [], '', false);
         $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
         $totals = ['subtotal' => $subtotalMock];
 
@@ -133,7 +133,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
         $productMock->expects($this->once())
             ->method('setUrlDataObject')
-            ->with(new \Magento\Framework\Object($productRewrite[$productId]))
+            ->with(new \Magento\Framework\DataObject($productRewrite[$productId]))
             ->willReturnSelf();
 
         $this->catalogUrlMock->expects($this->once())

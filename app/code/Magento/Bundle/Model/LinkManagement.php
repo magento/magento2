@@ -26,7 +26,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $linkFactory;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\BundleFactory
+     * @var \Magento\Bundle\Model\ResourceModel\BundleFactory
      */
     protected $bundleFactory;
 
@@ -36,7 +36,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $bundleSelection;
 
     /**
-     * @var Resource\Option\CollectionFactory
+     * @var \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
      */
     protected $optionCollection;
 
@@ -48,9 +48,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
-     * @param \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory
+     * @param \Magento\Bundle\Model\ResourceModel\BundleFactory $bundleFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
-     * @param \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory $optionCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
@@ -58,8 +58,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
         \Magento\Bundle\Model\SelectionFactory $bundleSelection,
-        \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory,
-        \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection,
+        \Magento\Bundle\Model\ResourceModel\BundleFactory $bundleFactory,
+        \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory $optionCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
@@ -84,7 +84,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         $childrenList = [];
         foreach ($this->getOptions($product) as $option) {
-            if ($optionId !== null && $option->getOptionId() != $optionId) {
+            if (!$option->getSelections() || ($optionId !== null && $option->getOptionId() != $optionId)) {
                 continue;
             }
             /** @var \Magento\Catalog\Model\Product $selection */
@@ -221,7 +221,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             );
         }
 
-        /* @var $resource \Magento\Bundle\Model\Resource\Bundle */
+        /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getId());
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
@@ -291,7 +291,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
                 __('Requested bundle option product doesn\'t exist')
             );
         }
-        /* @var $resource \Magento\Bundle\Model\Resource\Bundle */
+        /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
         $resource = $this->bundleFactory->create();
         $resource->dropAllUnneededSelections($product->getId(), $excludeSelectionIds);
         $resource->saveProductRelations($product->getId(), array_unique($usedProductIds));

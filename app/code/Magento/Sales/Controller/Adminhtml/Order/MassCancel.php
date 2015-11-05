@@ -5,10 +5,24 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        parent::__construct($context, $filter);
+        $this->collectionFactory = $collectionFactory;
+    }
+
     /**
      * Cancel selected orders
      *
@@ -38,7 +52,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
             $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
         }
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
+        $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
     }
 }

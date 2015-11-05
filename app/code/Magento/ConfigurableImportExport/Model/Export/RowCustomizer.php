@@ -7,6 +7,7 @@ namespace Magento\ConfigurableImportExport\Model\Export;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
 
 class RowCustomizer implements RowCustomizerInterface
 {
@@ -18,13 +19,14 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Prepare configurable data for export
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @param int $productIds
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param int[] $productIds
      * @return void
      */
     public function prepareData($collection, $productIds)
     {
-        $collection->addAttributeToFilter(
+        $productCollection = clone $collection;
+        $productCollection->addAttributeToFilter(
             'entity_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
@@ -32,7 +34,7 @@ class RowCustomizer implements RowCustomizerInterface
             ['eq' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE]
         );
 
-        while ($product = $collection->fetchItem()) {
+        while ($product = $productCollection->fetchItem()) {
             $productAttributesOptions = $product->getTypeInstance()->getConfigurableOptions($product);
 
             foreach ($productAttributesOptions as $productAttributeOption) {
@@ -51,11 +53,11 @@ class RowCustomizer implements RowCustomizerInterface
 
                 foreach ($variations as $sku => $values) {
                     $variations[$sku] =
-                        'sku=' . $sku . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+                        'sku=' . $sku . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
                 }
                 $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
-                $variationsLabels = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
+                $variationsLabels = implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
 
                 $this->configurableData[$product->getId()] = [
                     'configurable_variations' => $variations,

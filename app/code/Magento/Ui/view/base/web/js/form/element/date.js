@@ -15,18 +15,25 @@ define([
             options: {}
         },
 
-        initProperties: function () {
+        /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
-            return this._super();
+            return this;
         },
 
         /**
-         * Converts initial value to the specified date format.
+         * Formats provided value according to 'dateFormat' property.
          *
          * @returns {String}
          */
-        getInitialValue: function () {
+        normalizeData: function () {
             var value = this._super();
 
             if (value) {

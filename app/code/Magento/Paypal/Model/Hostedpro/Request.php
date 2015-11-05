@@ -5,12 +5,14 @@
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
+use \Magento\Sales\Model\Order;
+
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Framework\Object
+class Request extends \Magento\Framework\DataObject
 {
     /**
      * Request's order model
@@ -48,6 +50,13 @@ class Request extends \Magento\Framework\Object
     protected $_customerAddress = null;
 
     /**
+     * Tax data
+     *
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxData;
+
+    /**
      * Locale Resolver
      *
      * @var \Magento\Framework\Locale\Resolver
@@ -57,15 +66,18 @@ class Request extends \Magento\Framework\Object
     /**
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param \Magento\Customer\Helper\Address $customerAddress
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Customer\Helper\Address $customerAddress,
+        \Magento\Tax\Helper\Data $taxData,
         array $data = []
     ) {
         $this->_customerAddress = $customerAddress;
         $this->localeResolver = $localeResolver;
+        $this->_taxData = $taxData;
         parent::__construct($data);
     }
 
@@ -126,6 +138,71 @@ class Request extends \Magento\Framework\Object
     }
 
     /**
+     * Add amount data to request
+     *
+     * @access public
+     * @param \Magento\Sales\Model\Order $order
+     * @return $this
+     */
+    public function setAmount(Order $order)
+    {
+        $this->addData($this->_getAmountData($order));
+        return $this;
+    }
+
+    /**
+     * Calculate amount for order
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     * @throws \Exception
+     */
+    protected function _getAmountData(Order $order)
+    {
+        // if tax is included - need add to request only total amount
+        if ($this->_taxData->getConfig()->priceIncludesTax()) {
+            return $this->getTaxableAmount($order);
+        } else {
+            return $this->getNonTaxableAmount($order);
+        }
+    }
+
+    /**
+     * Get payment amount data with excluded tax
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getNonTaxableAmount(Order $order)
+    {
+        return [
+            'subtotal' => $this->_formatPrice(
+                $this->_formatPrice(
+                    $order->getPayment()->getBaseAmountAuthorized()
+                ) - $this->_formatPrice(
+                    $order->getBaseTaxAmount()
+                ) - $this->_formatPrice(
+                    $order->getBaseShippingAmount()
+                )
+            ),
+            'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
+            'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+        ];
+    }
+
+    /**
+     * Get order amount data with included tax
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getTaxableAmount(Order $order)
+    {
+        $amount = $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized());
+        return [
+            'amount' => $amount,
+            'subtotal' => $amount // subtotal always is required
+        ];
+    }
+
+    /**
      * Get payment request data as array
      *
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
@@ -161,17 +238,6 @@ class Request extends \Magento\Framework\Object
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
         $request = [
-            'subtotal' => $this->_formatPrice(
-                $this->_formatPrice(
-                    $order->getPayment()->getBaseAmountAuthorized()
-                ) - $this->_formatPrice(
-                    $order->getBaseTaxAmount()
-                ) - $this->_formatPrice(
-                    $order->getBaseShippingAmount()
-                )
-            ),
-            'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
-            'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
             'invoice' => $order->getIncrementId(),
             'address_override' => 'true',
             'currency_code' => $order->getBaseCurrencyCode(),
@@ -194,11 +260,11 @@ class Request extends \Magento\Framework\Object
     /**
      * Get shipping address request data
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getShippingAddress(\Magento\Framework\Object $address)
+    protected function _getShippingAddress(\Magento\Framework\DataObject $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = [
@@ -222,11 +288,11 @@ class Request extends \Magento\Framework\Object
     /**
      * Get billing address request data
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getBillingAddress(\Magento\Framework\Object $address)
+    protected function _getBillingAddress(\Magento\Framework\DataObject $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = [

@@ -13,7 +13,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     /**
      * Helper collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|array
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|array
      */
     protected $_collection;
 
@@ -25,7 +25,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     protected $_params = [];
 
     /**
-     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -72,7 +72,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
                 } else {
                     $result[] = null;
                 }
-            } elseif ($item instanceof \Magento\Framework\Object) {
+            } elseif ($item instanceof \Magento\Framework\DataObject) {
                 $result[] = $item->getData($index);
             } else {
                 $result[] = null;

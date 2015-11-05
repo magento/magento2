@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="cms_wysiwyg_images_static_urls_allowed">
-        <observer name="catalog_wysiwyg" instance="Magento\Catalog\Model\Observer" method="catalogCheckIsUsingStaticUrlsAllowed" />
+        <observer name="catalog_wysiwyg" instance="Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver" />
     </event>
 </config>

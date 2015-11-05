@@ -49,7 +49,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLoadTreeUrl()
     {
-        $row = new \Magento\Framework\Object(['id' => 1]);
+        $row = new \Magento\Framework\DataObject(['id' => 1]);
         $this->assertStringStartsWith(
             'http://localhost/index.php',
             $this->_treeBlock->getLoadTreeUrl($row),
@@ -63,6 +63,6 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     public function testGetCategoryCollection()
     {
         $collection = $this->_treeBlock->getCategoryCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Collection', $collection);
     }
 }

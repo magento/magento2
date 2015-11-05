@@ -5,18 +5,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>
-    <vars module="Magento_Catalog">
-        <var name="product_listing_thumbnail:type">thumbnail</var>
-        <var name="product_listing_thumbnail:width">75</var>
-        <var name="product_listing_thumbnail:ratio">1</var>
-        <var name="product_listing_thumbnail:height">75</var>
-        <var name="product_listing_thumbnail_preview:type">thumbnail</var>
-        <var name="product_listing_thumbnail_preview:ratio">1</var>
-    </vars>
+    <media>
+        <images module="Magento_Catalog">
+            <image id="product_listing_thumbnail" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="product_listing_thumbnail_preview" type="thumbnail"/>
+            <image id="product_thumbnail_image" type="thumbnail">
+                <width>75</width>
+                <height>75</height>
+            </image>
+        </images>
+    </media>
     <exclude>
         <item type="file">Lib::mage/common.js</item>
         <item type="file">Lib::mage/cookies.js</item>
@@ -27,8 +32,6 @@
         <item type="file">Lib::mage/dropdown.js</item>
         <item type="file">Lib::mage/dropdowns.js</item>
         <item type="file">Lib::mage/fieldset-controls.js</item>
-        <item type="file">Lib::mage/gallery-fullscreen.js</item>
-        <item type="file">Lib::mage/gallery.js</item>
         <item type="file">Lib::mage/item-table.js</item>
         <item type="file">Lib::mage/list.js</item>
         <item type="file">Lib::mage/loader.js</item>

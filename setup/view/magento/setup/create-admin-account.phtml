@@ -19,7 +19,7 @@ $passwordWizard = sprintf(
         </div>
     <p>%s</p>',
     'Password Strength:',
-    'Enter a mix of 6 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol (Ex: BuyIt$54).'
+    'Enter a mix of 7 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol (Ex: BuyIt$54).'
 );
 ?>
 
@@ -42,13 +42,14 @@ $passwordWizard = sprintf(
 <h2 class="page-sub-title">{{$state.current.header}}</h2>
 
 <p>
-    Create a new Admin account to manage you store.
+    Create a new Admin account to manage your store.
 </p>
 
 <form
     novalidate
     name="account"
     role="form"
+    autocomplete="off"
     >
 
     <div
@@ -145,7 +146,7 @@ $passwordWizard = sprintf(
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
-                    Please enter a mix of at least 6 alpha-numeric characters.
+                    Please enter a mix of at least 7 alpha-numeric characters.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.

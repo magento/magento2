@@ -38,7 +38,9 @@ abstract class Agreement extends \Magento\Backend\App\Action
         $agreementModel = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement')->load($agreementId);
 
         if (!$agreementModel->getId()) {
-            $this->messageManager->addError(__('Please specify the correct billing agreement ID and try again.'));
+            $this->messageManager->addErrorMessage(
+                __('Please specify the correct billing agreement ID and try again.')
+            );
             return false;
         }
 

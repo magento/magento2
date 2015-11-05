@@ -314,7 +314,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->willReturn($paymentMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(new \Magento\Framework\Phrase('Incorrect payment method.'));
 
         $resultRedirect = $this->getMockBuilder('\Magento\Framework\Controller\Result\Redirect')
@@ -338,7 +338,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn('incorrect_method');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(new \Magento\Framework\Phrase('Incorrect payment method.'));
 
         $resultRedirect = $this->getMockBuilder('\Magento\Framework\Controller\Result\Redirect')
@@ -380,13 +380,14 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $this->setupCart();
         $errorMessage = new \Magento\Framework\Phrase('Selected payment type is not allowed for billing country.');
+        $exception = new \Magento\Framework\Exception\LocalizedException($errorMessage);
 
         $this->paymentMethodInstanceMock->expects($this->once())
             ->method('validate')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException($errorMessage));
+            ->willThrowException($exception);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with(new \Magento\Framework\Phrase('Selected payment type is not allowed for billing country.'));
+            ->method('addExceptionMessage')
+            ->with($exception, $errorMessage);
 
         $resultRedirect = $this->getMockBuilder('\Magento\Framework\Controller\Result\Redirect')
             ->disableOriginalConstructor()
@@ -427,8 +428,8 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $errorMsg = new \Magento\Framework\Phrase('error');
         $exception = new \Magento\Framework\Exception\LocalizedException($errorMsg);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with($errorMsg);
+            ->method('addExceptionMessage')
+            ->with($exception, $errorMsg);
 
         $this->checkoutMock->expects($this->once())
             ->method('initializeQuoteForReview')

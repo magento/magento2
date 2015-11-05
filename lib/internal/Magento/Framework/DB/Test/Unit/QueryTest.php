@@ -21,7 +21,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     protected $criteriaMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -56,7 +56,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $this->selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            ['reset', 'columns', 'getAdapter'],
+            ['reset', 'columns', 'getConnection'],
             [],
             '',
             false
@@ -71,7 +71,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -115,20 +115,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllIds()
     {
-        $adapterMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['fetchCol']
-        );
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['fetchCol'], [], '', false);
         $this->resourceMock->expects($this->once())
             ->method('getIdFieldName')
             ->will($this->returnValue('return-value'));
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('fetchCol')
@@ -144,21 +136,13 @@ class QueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSize()
     {
-        $adapterMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['fetchOne']
-        );
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['fetchOne'], [], '', false);
 
         $this->selectMock->expects($this->once())
             ->method('columns')
             ->with('COUNT(*)');
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('fetchOne')
@@ -188,17 +172,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchItem()
     {
-        $adapterMock = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['query']
-        );
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['query'], [], '', false);
         $this->selectMock->expects($this->once())
-            ->method('getAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($adapterMock));
         $adapterMock->expects($this->once())
             ->method('query')

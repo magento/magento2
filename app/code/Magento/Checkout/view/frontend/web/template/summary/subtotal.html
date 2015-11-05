@@ -6,9 +6,9 @@
 -->
 
 <tr class="totals">
-    <th class="mark" scope="row" data-bind="text: $t(title)"></th>
+    <th class="mark" scope="row" data-bind="text: title"></th>
     <td class="amount">
-        <span class="price" data-bind ="text: getValue(), attr:{'data-label': $t(title)}"></span>
+        <span class="price" data-bind ="text: getValue(), attr:{'data-label': title}"></span>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->

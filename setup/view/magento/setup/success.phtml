@@ -64,7 +64,11 @@
     </dl>
 
     <p class="bold" ng-repeat="message in messages">{{message}}</p>
-
+    <?php if ($this->isSampleDataErrorInstallation) : ?>
+        <div class="message message-warning">
+            <span class="message-text"><strong>Something went wrong while installing sample data.</strong> Please check <code>var/log/system.log</code> for details. You can retry installing the data now or just start using Magento.</span>
+        </div>
+    <?php endif; ?>
     <div ng-show="config.address.actual_base_url">
         <a
             class="btn btn-large btn-prime"

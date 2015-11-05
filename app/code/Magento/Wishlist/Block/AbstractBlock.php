@@ -14,7 +14,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_collection;
 
@@ -70,7 +70,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Prepare additional conditions to collection
      *
-     * @param \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return \Magento\Wishlist\Block\Customer\Wishlist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -82,7 +82,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -92,7 +92,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Wishlist Product Items collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItems()
     {
@@ -288,17 +288,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getImageUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'small_image')->resize($this->getImageSize());
-    }
-
-    /**
-     * Product image size getter
-     *
-     * @return int
-     */
-    public function getImageSize()
-    {
-        return $this->getVar('product_image_size', 'Magento_Wishlist');
+        return $this->_imageHelper->init($product, 'wishlist_small_image')->getUrl();
     }
 
     /**

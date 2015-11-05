@@ -8,7 +8,6 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -18,7 +17,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends \Magento\Customer\Controller\Account
+class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
@@ -29,37 +28,35 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /**
      * @var AccountRedirect
      */
-    private $accountRedirect;
+    protected $accountRedirect;
+
+    /**
+     * @var Session
+     */
+    protected $session;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
         Validator $formKeyValidator,
         AccountRedirect $accountRedirect
     ) {
+        $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
         $this->accountRedirect = $accountRedirect;
-        parent::__construct(
-            $context,
-            $customerSession,
-            $resultPageFactory
-        );
+        parent::__construct($context);
     }
 
     /**
@@ -70,7 +67,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        if ($this->_getSession()->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
+        if ($this->session->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*/');
@@ -82,8 +79,8 @@ class LoginPost extends \Magento\Customer\Controller\Account
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
-                    $this->_getSession()->setCustomerDataAsLoggedIn($customer);
-                    $this->_getSession()->regenerateId();
+                    $this->session->setCustomerDataAsLoggedIn($customer);
+                    $this->session->regenerateId();
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
                     $message = __(
@@ -92,16 +89,13 @@ class LoginPost extends \Magento\Customer\Controller\Account
                         $value
                     );
                     $this->messageManager->addError($message);
-                    $this->_getSession()->setUsername($login['username']);
-                }
-                catch (AuthenticationException $e) {
+                    $this->session->setUsername($login['username']);
+                } catch (AuthenticationException $e) {
                     $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
-                    $this->_getSession()->setUsername($login['username']);
+                    $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
-                        __('Something went wrong while validating the login and password.')
-                    );
+                    $this->messageManager->addError(__('Invalid login or password.'));
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));

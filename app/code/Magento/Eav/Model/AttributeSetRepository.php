@@ -10,8 +10,8 @@ use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
-use Magento\Eav\Model\Resource\Entity\Attribute\Set as AttributeSetResource;
-use Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set as AttributeSetResource;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -58,6 +58,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
@@ -93,7 +94,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 

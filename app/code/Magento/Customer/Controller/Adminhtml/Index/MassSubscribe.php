@@ -5,29 +5,71 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-class MassSubscribe extends \Magento\Customer\Controller\Adminhtml\Index
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\Controller\ResultFactory;
+
+/**
+ * Class MassSubscribe
+ */
+class MassSubscribe extends AbstractMassAction
 {
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var SubscriberFactory
+     */
+    protected $subscriberFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param SubscriberFactory $subscriberFactory
+     */
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        CustomerRepositoryInterface $customerRepository,
+        SubscriberFactory $subscriberFactory
+    ) {
+        parent::__construct($context, $filter, $collectionFactory);
+        $this->customerRepository = $customerRepository;
+        $this->subscriberFactory = $subscriberFactory;
+    }
+
     /**
      * Customer mass subscribe action
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $customerIds = $this->getRequest()->getParam('customer');
-        $customersUpdated = $this->actUponMultipleCustomers(
-            function ($customerId) {
-                // Verify customer exists
-                $this->_customerRepository->getById($customerId);
-                $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
-            },
-            $customerIds
-        );
+        $customersUpdated = 0;
+        foreach ($collection->getAllIds() as $customerId) {
+            // Verify customer exists
+            $this->customerRepository->getById($customerId);
+            $this->subscriberFactory->create()->subscribeCustomerById($customerId);
+            $customersUpdated++;
+        }
+
         if ($customersUpdated) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('customer/*/index');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath($this->getComponentRefererUrl());
+
         return $resultRedirect;
     }
 }

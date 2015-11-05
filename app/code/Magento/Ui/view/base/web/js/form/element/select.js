@@ -7,7 +7,7 @@ define([
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
@@ -31,14 +31,14 @@ define([
      * @param  {Array} nodes
      * @return {Object}
      */
-    function parseOptions(nodes) {
+    function parseOptions(nodes, captionValue) {
         var caption,
             value;
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value == null || value === '') {
+            if (value === null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
@@ -75,6 +75,13 @@ define([
         return value;
     }
 
+    /**
+     * Recursively set to object item like value and item.value like key.
+     *
+     * @param {Array} data
+     * @param {Object} result
+     * @returns {Object}
+     */
     function indexOptions(data, result) {
         var value;
 
@@ -121,10 +128,12 @@ define([
          * Parses options and merges the result with instance
          *
          * @param  {Object} config
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var result = parseOptions(config.options);
+            var options = config.options,
+                captionValue = config.captionValue || '',
+                result = parseOptions(options, captionValue);
 
             if (config.caption) {
                 delete result.caption;
@@ -141,7 +150,7 @@ define([
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         initObservable: function () {
             this._super();
@@ -154,6 +163,11 @@ define([
             return this;
         },
 
+        /**
+         * Set link for filter.
+         *
+         * @returns {Object} Chainable
+         */
         initFilter: function () {
             var filter = this.filterBy;
 
@@ -168,7 +182,7 @@ define([
         /**
          * Creates input from template, renders it via renderer.
          *
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         initInput: function () {
             layout([utils.template(inputNode, this)]);
@@ -177,16 +191,19 @@ define([
         },
 
         /**
-         * Calls 'getInitialValue' of parent and if the result of it is not empty
-         * string, returs it, else returnes caption or first found option's value
+         * Matches specfied value with existing options
+         * or, if value is not specified, returns value of the first option.
          *
-         * @returns {Number|String}
+         * @returns {*}
          */
-        getInitialValue: function () {
-            var value = this._super();
+        normalizeData: function () {
+            var value = this._super(),
+                option;
 
             if (value !== '') {
-                return value;
+                option = this.getOption(value);
+
+                return option && option.value;
             }
 
             if (!this.caption) {
@@ -214,6 +231,11 @@ define([
             this.setOptions(result);
         },
 
+        /**
+         * Change visibility for input.
+         *
+         * @param {Boolean} isVisible
+         */
         toggleInput: function (isVisible) {
             registry.get(this.customName, function (input) {
                 input.setVisible(isVisible);
@@ -226,7 +248,7 @@ define([
          *  passing !options.length as a parameter
          *
          * @param {Array} data
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable
          */
         setOptions: function (data) {
             var isVisible;
@@ -249,8 +271,7 @@ define([
          * Processes preview for option by it's value, and sets the result
          * to 'preview' observable
          *
-         * @param {String} value
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         getPreview: function () {
             var value = this.value(),
@@ -260,6 +281,10 @@ define([
             this.preview(preview);
 
             return preview;
+        },
+
+        getOption: function (value) {
+            return this.indexedOptions[value];
         }
     });
 });

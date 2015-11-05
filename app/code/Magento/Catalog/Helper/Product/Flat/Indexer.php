@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Catalog Product Flat Indexer Helper
  *
@@ -26,7 +28,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -79,7 +81,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_entityTypeId;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Config
+     * @var \Magento\Catalog\Model\ResourceModel\Config
      */
     protected $_catalogConfig;
 
@@ -91,7 +93,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Config factory
      *
-     * @var \Magento\Catalog\Model\Resource\ConfigFactory
+     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
      */
     protected $_configFactory;
 
@@ -122,10 +124,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mview\View\Changelog $changelog
@@ -136,10 +138,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
+        \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mview\View\Changelog $changelog,
@@ -202,7 +204,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Product Template ID',
+            'comment' => 'Attribute Set ID',
         ];
         $columns['type_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -323,7 +325,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeCodes()
     {
         if ($this->_attributeCodes === null) {
-            $adapter = $this->_resource->getConnection('read');
+            $connection = $this->_resource->getConnection();
             $this->_attributeCodes = [];
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
@@ -336,7 +338,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                 'entity_type_id' => $this->getEntityTypeId(),
             ];
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['main_table' => $this->getTable('eav_attribute')]
             )->join(
                 ['additional_table' => $this->getTable('catalog_eav_attribute')],
@@ -346,17 +348,17 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             );
             $whereCondition = [
                 'main_table.backend_type = :backend_type',
-                $adapter->quoteInto('additional_table.is_used_for_promo_rules = ?', 1),
-                $adapter->quoteInto('additional_table.used_in_product_listing = ?', 1),
-                $adapter->quoteInto('additional_table.used_for_sort_by = ?', 1),
-                $adapter->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes),
+                $connection->quoteInto('additional_table.is_used_for_promo_rules = ?', 1),
+                $connection->quoteInto('additional_table.used_in_product_listing = ?', 1),
+                $connection->quoteInto('additional_table.used_for_sort_by = ?', 1),
+                $connection->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes),
             ];
             if ($this->isAddFilterableAttributes()) {
-                $whereCondition[] = $adapter->quoteInto('additional_table.is_filterable > ?', 0);
+                $whereCondition[] = $connection->quoteInto('additional_table.is_filterable > ?', 0);
             }
 
             $select->where(implode(' OR ', $whereCondition));
-            $attributesData = $adapter->fetchAll($select, $bind);
+            $attributesData = $connection->fetchAll($select, $bind);
             $this->_eavConfig->importAttributesData($this->getEntityType(), $attributesData);
 
             foreach ($attributesData as $data) {
@@ -429,7 +431,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $eavAttributes = [];
         $flatColumnsList = $this->getFlatColumns();
-        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         foreach ($attributes as $attribute) {
             $eavTable = $attribute->getBackend()->getTable();
             $attributeCode = $attribute->getAttributeCode();
@@ -492,7 +494,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function deleteAbandonedStoreFlatTables()
     {
-        $connection = $this->_resource->getConnection('write');
+        $connection = $this->_resource->getConnection();
         $existentTables = $connection->getTables($connection->getTableName('catalog_product_flat_%'));
         $this->_changelog->setViewId('catalog_product_flat');
         foreach ($existentTables as $key => $tableName) {

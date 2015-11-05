@@ -6,7 +6,7 @@
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
 
 use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
-use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEntityTest
 {
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshot;
 
@@ -27,7 +27,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
     protected function setUp()
     {
         $this->entitySnapshot = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             ['isModified', 'registerSnapshot'],
             [],
             '',
@@ -35,7 +35,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         );
 
         $this->entityRelationComposite = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             ['processRelations'],
             [],
             '',
@@ -70,7 +70,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         }
         $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
 
-        $entityType = new \Magento\Framework\Object();
+        $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');
         $entityType->setEntityTypeId(0);
         $entityType->setEntityTable('table');
@@ -88,7 +88,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
                 'getAffectedFields',
                 'isStatic',
                 'getEntityValueId',
-                'getEntityIdField'
             ]
         );
 
@@ -102,14 +101,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
 
         $backendModel->expects($this->any())->method('isStatic')->will($this->returnValue(false));
         $backendModel->expects($this->never())->method('getEntityValueId');
-        $backendModel->expects(
-            isset($productData['entity_id']) ? $this->never() : $this->once()
-        )->method(
-            'getEntityIdField'
-        )->will(
-            $this->returnValue('entity_id')
-        );
-
         $backendModel->setAttribute($attribute);
 
         $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
@@ -143,10 +134,12 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\VersionControl\AbstractEntity')
             ->setConstructorArgs($arguments)
-            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
+            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
 
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
+        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
+
 
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
@@ -156,7 +149,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             )
         );
 
-        $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);
         $model->save($object);
     }

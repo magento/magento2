@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
-    <xs:include schemaLocation="ui_components.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:etc/ui_components.xsd"/>
     <!-- Definition the document element -->
     <xs:element name="components" type="definition"/>
     <!-- Registering components in the system -->
@@ -48,10 +48,15 @@
             <xs:element type="dataTypeMedia" name="image"/>
             <xs:element type="dataTypeDate" name="date"/>
             <xs:element type="dataTypeEmail" name="email"/>
+            <xs:element type="dataTypeMedia" name="file"/>
             <xs:element type="nav" name="nav"/>
             <xs:element type="actions" name="actions"/>
             <xs:element type="bookmark" name="bookmark"/>
             <xs:element type="exportButton" name="exportButton"/>
+            <xs:element type="action" name="action"/>
+            <xs:element name="component" type="component" />
+            <xs:element name="actionsColumn" type="actionsColumn" />
+            <xs:element name="selectionsColumn" type="selectionsColumn" />
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->

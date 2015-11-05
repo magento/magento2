@@ -64,37 +64,29 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-$quoteManagement = $objectManager->create('Magento\Quote\Model\QuoteManagement');
+$quoteManagement = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
 
 $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
 /** @var $item \Magento\Sales\Model\Order\Item */
 $item = $order->getAllItems()[0];
 
-/** @var \Magento\Sales\Model\Service\Order $orderService */
-$orderService = $objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order]);
+/** @var \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory */
+$invoiceFactory = $objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
-$invoice = $orderService->prepareInvoice([$item->getId() => 10]);
+$invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 
-$creditmemo = $orderService->prepareInvoiceCreditmemo($invoice, ['qtys' => [$item->getId() => 5]]);
+/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
+$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
+$creditmemo = $creditmemoFactory->createByInvoice($invoice, ['qtys' => [$item->getId() => 5]]);
 
 foreach ($creditmemo->getAllItems() as $creditmemoItem) {
     //Workaround to return items to stock
     $creditmemoItem->setBackToStock(true);
 }
 
-$creditmemo->register();
-$creditmemo->save();
-
-/** @var \Magento\Framework\DB\Transaction $transactionSave */
-$transactionSave = $objectManager->create('Magento\Framework\DB\Transaction')
-    ->addObject($creditmemo)
-    ->addObject($creditmemo->getOrder());
-if ($creditmemo->getInvoice()) {
-    $transactionSave->addObject($creditmemo->getInvoice());
-}
-
-$transactionSave->save();
+$creditmemoManagement = $objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface');
+$creditmemoManagement->refund($creditmemo);

@@ -21,6 +21,6 @@
     if ($_imgUrl = $_category->getImageUrl()) {
         $_imgHtml = '<div class="category-image"><img src="' . $_imgUrl . '" alt="' . $block->escapeHtml($_category->getName()) . '" title="' . $block->escapeHtml($_category->getName()) . '" class="image" /></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
-        echo $_imgHtml;
+        /* @escapeNotVerified */ echo $_imgHtml;
     }
 ?>

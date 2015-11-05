@@ -5,12 +5,11 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\Factory;
+use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of base files introduced by modules
@@ -18,39 +17,33 @@ use Magento\Framework\View\File\Factory;
 class Base implements CollectorInterface
 {
     /**
-     * File factory
-     *
-     * @var Factory
+     * @var DirSearch
+     */
+    protected $componentDirSearch;
+
+    /**
+     * @var string
+     */
+    private $subDir;
+
+    /**
+     * @var FileFactory
      */
     private $fileFactory;
 
     /**
-     * Modules directory
-     *
-     * @var ReadInterface
-     */
-    protected $modulesDirectory;
-
-    /**
-     * Subdirectory where the files are located
-     *
-     * @var string
-     */
-    protected $subDir;
-
-    /**
      * Constructor
      *
-     * @param Filesystem $filesystem
-     * @param Factory $fileFactory
+     * @param DirSearch $dirSearch
+     * @param FileFactory $fileFactory
      * @param string $subDir
      */
     public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory,
+        DirSearch $dirSearch,
+        FileFactory $fileFactory,
         $subDir = ''
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->componentDirSearch = $dirSearch;
         $this->fileFactory = $fileFactory;
         $this->subDir = $subDir ? $subDir . '/' : '';
     }
@@ -58,36 +51,27 @@ class Base implements CollectorInterface
     /**
      * Retrieve files
      *
-     * @param ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $result = [];
-        $namespace = $module = '*';
-        $sharedFiles = $this->modulesDirectory->search("{$namespace}/{$module}/view/base/{$this->subDir}{$filePath}");
-
-        $filePathPtn = strtr(preg_quote($filePath), ['\*' => '[^/]+']);
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/base/{$this->subDir}" . $filePathPtn . "$#i";
+        $sharedFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/base/{$this->subDir}{$filePath}"
+        );
         foreach ($sharedFiles as $file) {
-            $filename = $this->modulesDirectory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
-            $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName(), null, true);
         }
         $area = $theme->getData('area');
-        $themeFiles = $this->modulesDirectory->search("{$namespace}/{$module}/view/{$area}/{$this->subDir}{$filePath}");
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/{$this->subDir}" . $filePathPtn . "$#i";
+        $themeFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/{$area}/{$this->subDir}{$filePath}"
+        );
         foreach ($themeFiles as $file) {
-            $filename = $this->modulesDirectory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
-            $result[] = $this->fileFactory->create($filename, $moduleFull);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName());
         }
         return $result;
     }

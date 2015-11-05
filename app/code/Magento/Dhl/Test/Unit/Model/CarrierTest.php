@@ -5,6 +5,7 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\Xml\Security;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
@@ -25,19 +26,38 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $error;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorFactory;
+
+    /**
+     * @var \Magento\Dhl\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $carrier;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scope;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $scopeConfig = $this->getMockBuilder(
+
+        $this->scope = $this->getMockBuilder(
             '\Magento\Framework\App\Config\ScopeConfigInterface'
-        )->setMethods(
-            ['isSetFlag', 'getValue']
         )->disableOriginalConstructor()->getMock();
-        $scopeConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
-        $scopeConfig->expects(
+
+        $this->scope->expects(
             $this->any()
         )->method(
             'getValue'
@@ -55,6 +75,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback(
                 function ($data) {
                     $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
                     return $helper->getObject(
                         '\Magento\Shipping\Model\Simplexml\Element',
                         ['data' => $data['data']]
@@ -124,12 +145,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/countries.xml'))
         );
-        $filesystem = $this->getMockBuilder(
-            '\Magento\Framework\Filesystem'
-        )->disableOriginalConstructor()->setMethods(
-            ['getDirectoryRead']
-        )->getMock();
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirectory));
+        $readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $readFactory->expects($this->any())->method('create')->willReturn($modulesDirectory);
         $storeManager = $this->getMockBuilder(
             '\Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->setMethods(
@@ -143,16 +160,28 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $website->expects($this->any())->method('getBaseCurrencyCode')->will($this->returnValue('USD'));
         $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
 
+        $this->error = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\RateResult\Error')
+            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->getMock();
+
+        $this->errorFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+
         $this->_model = $this->_helper->getObject(
             'Magento\Dhl\Model\Carrier',
             [
-                'scopeConfig' => $scopeConfig,
+                'scopeConfig' => $this->scope,
                 'xmlSecurity' => new Security(),
                 'xmlElFactory' => $xmlElFactory,
                 'rateFactory' => $rateFactory,
+                'rateErrorFactory' => $this->errorFactory,
                 'rateMethodFactory' => $rateMethodFactory,
                 'httpClientFactory' => $httpClientFactory,
-                'filesystem' => $filesystem,
+                'readFactory' => $readFactory,
                 'storeManager' => $storeManager,
                 'data' => ['id' => 'dhl', 'store' => '1']
             ]
@@ -176,6 +205,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'carriers/dhl/password' => 'some password',
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
+            'carriers/dhl/showmethod' => 1,
+            'carriers/dhl/title' => 'dhl Title',
+            'carriers/dhl/specificerrmsg' => 'dhl error message',
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -221,7 +253,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {
@@ -233,6 +265,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectRates()
     {
+        $this->scope->expects($this->any())->method('isSetFlag')->willReturn(true);
+
         $this->_httpResponse->expects(
             $this->any()
         )->method(
@@ -246,5 +280,29 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             require __DIR__ . '/_files/rates_request_data_dhl.php'
         );
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
+    }
+
+    public function testCollectRatesErrorMessage()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(false);
+
+        $this->error->expects($this->once())->method('setCarrier')->with('dhl');
+        $this->error->expects($this->once())->method('setCarrierTitle');
+        $this->error->expects($this->once())->method('setErrorMessage');
+
+        $request = new RateRequest();
+        $request->setPackageWeight(1);
+
+        $this->assertSame($this->error, $this->_model->collectRates($request));
+    }
+
+    public function testCollectRatesFail()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $request = new RateRequest();
+        $request->setPackageWeight(1);
+
+        $this->assertFalse(false, $this->_model->collectRates($request));
     }
 }

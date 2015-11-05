@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Class TableBuilder
  */
@@ -29,14 +31,14 @@ class TableBuilder
 
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
     }
 
     /**
@@ -100,7 +102,7 @@ class TableBuilder
      * Create empty temporary table with given columns list
      *
      * @param string $tableName  Table name
-     * @param array $columns array('columnName' => \Magento\Catalog\Model\Resource\Eav\Attribute, ...)
+     * @param array $columns array('columnName' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute, ...)
      * @param string $valueFieldSuffix
      *
      * @return array
@@ -122,7 +124,7 @@ class TableBuilder
 
             $valueTemporaryTable->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
 
-            /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             foreach ($columns as $columnName => $attribute) {
                 $attributeCode = $attribute->getAttributeCode();
                 if (isset($flatColumns[$attributeCode])) {
@@ -257,7 +259,7 @@ class TableBuilder
 
                 $selectValue->from(['e' => $temporaryTableName], $keyColumn);
 
-                /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+                /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
                     $countTableName = 't' . $iterationNum++;
                     $joinCondition = sprintf(

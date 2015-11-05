@@ -1,0 +1,44 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form data-role="checkout-agreements" method="post">
+    <div class="checkout-agreements" data-bind="visible: isVisible">
+        <!-- ko foreach: agreements -->
+            <!-- ko if: ($parent.isAgreementRequired($data)) -->
+            <div class="checkout-agreement">
+                <input type="checkbox"
+                       data-bind="attr: {
+                                    'id': 'agreement_' + agreementId,
+                                    'name': 'agreement[' + agreementId + ']',
+                                    'value': agreementId
+                                    }"
+                       data-validate="{required:true}"
+                        >
+                <label data-bind="attr: {'for': 'agreement_' + agreementId}">
+                    <button type="button"
+                            class="action action-show"
+                            data-bind="click: function(data, event) { return $parent.showContent(data, event) }"
+                            >
+                        <span data-bind="html: checkboxText"></span>
+                    </button>
+                </label>
+            </div>
+            <!-- /ko -->
+            <!-- ko ifnot: ($parent.isAgreementRequired($data)) -->
+            <div class="checkout-agreement">
+                <button type="button" class="action action-show"
+                        data-bind="click: function(data, event) { return $parent.showContent(data, event) }">
+                    <span data-bind="html: checkboxText"></span>
+                </button>
+            </div>
+            <!-- /ko -->
+        <!-- /ko -->
+        <div id="checkout-agreements-modal" data-bind="afterRender: initModal" style="display: none">
+            <div class="checkout-agreements-item-title" data-bind="html: modalTitle"></div>
+            <div class="checkout-agreements-item-content" data-bind="html: modalContent"></div>
+        </div>
+    </div>
+</form>

@@ -63,7 +63,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * A variable for transporting output into observer during rendering
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_renderingOutput;
 
@@ -196,7 +196,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
-        $this->_renderingOutput = new \Magento\Framework\Object();
+        $this->_renderingOutput = new \Magento\Framework\DataObject();
 
         $this->_processorFactory = $processorFactory;
         $this->_eventManager = $eventManager;
@@ -247,8 +247,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
     /**
      * TODO Will be eliminated in MAGETWO-28359
-     *
-     * @deprecated
      * @return void
      */
     public function publicBuild()
@@ -470,7 +468,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     {
         $this->build();
         if (!isset($this->_renderElementCache[$name]) || !$useCache) {
-            $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
+            if ($this->displayElement($name)) {
+                $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
+            } else {
+                return $this->_renderElementCache[$name] = '';
+            }
         }
         $this->_renderingOutput->setData('output', $this->_renderElementCache[$name]);
         $this->_eventManager->dispatch(
@@ -478,6 +480,25 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             ['element_name' => $name, 'layout' => $this, 'transport' => $this->_renderingOutput]
         );
         return $this->_renderingOutput->getData('output');
+    }
+
+    /**
+     * Define whether to display element
+     * Display if 'display' attribute is absent (false, null) or equal true ('1', true, 'true')
+     * In any other cases - do not display
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function displayElement($name)
+    {
+        $display = $this->structure->getAttribute($name, 'display');
+        if ($display === '' || $display === false || $display === null
+            || filter_var($display, FILTER_VALIDATE_BOOLEAN)) {
+
+            return true;
+        }
+        return false;
     }
 
     /**

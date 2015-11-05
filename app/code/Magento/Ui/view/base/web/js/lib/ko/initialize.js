@@ -3,19 +3,27 @@
  * See COPYING.txt for license details.
  */
 /** Loads all available knockout bindings, sets custom template engine, initializes knockout on page */
+
 define([
     'ko',
     './template/engine',
+    'knockoutjs/knockout-repeat',
+    'knockoutjs/knockout-fast-foreach',
+    'knockoutjs/knockout-es5',
     './bind/scope',
+    './bind/staticChecked',
     './bind/datepicker',
-    './bind/stop_propagation',
     './bind/outer_click',
     './bind/keyboard',
     './bind/optgroup',
     './bind/fadeVisible',
     './bind/mage-init',
     './bind/after-render',
-    './extender/observable_array'
+    './bind/i18n',
+    './bind/collapsible',
+    './bind/autoselect',
+    './extender/observable_array',
+    './extender/bound-nodes'
 ], function (ko, templateEngine) {
     'use strict';
 

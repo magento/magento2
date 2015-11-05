@@ -17,7 +17,7 @@ use Magento\Customer\Model\Context;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Category
@@ -67,7 +67,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -79,7 +79,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Category $catalogCategory
@@ -90,7 +90,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Category $catalogCategory,
@@ -186,7 +186,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     public function getCurrentChildCategories()
     {
         $categories = $this->_catalogLayer->getCurrentCategory()->getChildrenCategories();
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
         $this->_catalogLayer->prepareProductCollection($productCollection);
         $productCollection->addCountToCategories($categories);
@@ -196,7 +196,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     /**
      * Checkin activity of category
      *
-     * @param   \Magento\Framework\Object $category
+     * @param   \Magento\Framework\DataObject $category
      * @return  bool
      */
     public function isCategoryActive($category)

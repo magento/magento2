@@ -44,12 +44,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $productType;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionCollection;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectionCollection;
 
@@ -64,12 +64,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $bundleSelectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\Resource\BundleFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\ResourceModel\BundleFactory
      */
     protected $bundleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\Resource\Option\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
      */
     protected $optionCollectionFactoryMock;
 
@@ -114,11 +114,11 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getSelections', 'getOptionId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+        $this->optionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Option\Collection')
             ->setMethods(['appendSelections'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+        $this->selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -136,10 +136,10 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Bundle\Model\SelectionFactory', ['create'], [], '', false
         );
         $this->bundleFactoryMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\BundleFactory', ['create'], [], '', false
+            '\Magento\Bundle\Model\ResourceModel\BundleFactory', ['create'], [], '', false
         );
         $this->optionCollectionFactoryMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option\CollectionFactory', ['create'], [], '', false
+            '\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory', ['create'], [], '', false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
@@ -228,7 +228,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$this->option]));
 
         $this->option->expects($this->any())->method('getOptionId')->will($this->returnValue(10));
-        $this->option->expects($this->never())->method('getSelections');
+        $this->option->expects($this->once())->method('getSelections')->willReturn([1, 2]);
 
         $this->dataObjectHelperMock->expects($this->never())->method('populateWithArray');
 
@@ -290,7 +290,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $optionsCollectionMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false
         );
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
@@ -340,7 +340,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
             ->with($this->equalTo('1'))
@@ -352,7 +352,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($optionsCollectionMock)
         );
 
-        $bundle = $this->getMock('\Magento\Bundle\Model\Resource\Bundle', [], [], '', false);
+        $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')->with('product_id')->will($this->returnValue([]));
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
         $this->model->addChild($productMock, 1, $productLink);
@@ -391,7 +391,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
+        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
             ->with($this->equalTo(1))
@@ -407,7 +407,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ['option_id' => 1, 'product_id' => 12],
             ['option_id' => 1, 'product_id' => 13],
         ];
-        $bundle = $this->getMock('\Magento\Bundle\Model\Resource\Bundle', [], [], '', false);
+        $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
             ->with('product_id')
             ->will($this->returnValue($selections));
@@ -449,7 +449,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
         $optionsCollectionMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false
         );
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
@@ -466,7 +466,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ['option_id' => 1, 'product_id' => 11],
             ['option_id' => 1, 'product_id' => 12],
         ];
-        $bundle = $this->getMock('\Magento\Bundle\Model\Resource\Bundle', [], [], '', false);
+        $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
             ->with('product_id')
             ->will($this->returnValue($selections));
@@ -516,7 +516,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
         $optionsCollectionMock = $this->getMock(
-            '\Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false
         );
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
@@ -533,7 +533,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ['option_id' => 1, 'product_id' => 11],
             ['option_id' => 1, 'product_id' => 12],
         ];
-        $bundle = $this->getMock('\Magento\Bundle\Model\Resource\Bundle', [], [], '', false);
+        $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
             ->with('product_id')
             ->will($this->returnValue($selections));
@@ -842,7 +842,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     public function testRemoveChild()
     {
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($this->product));
-        $bundle = $this->getMock('\Magento\Bundle\Model\Resource\Bundle', [], [], '', false);
+        $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
         $productSku = 'productSku';
         $optionId = 1;

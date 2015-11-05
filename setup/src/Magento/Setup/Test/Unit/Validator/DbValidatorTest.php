@@ -42,7 +42,56 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->willReturn($pdo);
+        $pdo->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn(
+                [
+                    ['SELECT'],
+                    ['INSERT'],
+                    ['UPDATE'],
+                    ['DELETE'],
+                    ['CREATE'],
+                    ['DROP'],
+                    ['REFERENCES'],
+                    ['INDEX'],
+                    ['ALTER'],
+                    ['CREATE TEMPORARY TABLES'],
+                    ['LOCK TABLES'],
+                    ['EXECUTE'],
+                    ['CREATE VIEW'],
+                    ['SHOW VIEW'],
+                    ['CREATE ROUTINE'],
+                    ['ALTER ROUTINE'],
+                    ['EVENT'],
+                    ['TRIGGER'],
+                ]
+            );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database user does not have enough privileges.
+     */
+    public function testCheckDatabaseConnectionNotEnoughPrivileges()
+    {
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with('SELECT version()')
+            ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->willReturn($pdo);
+        $pdo->expects($this->atLeastOnce())->method('fetchAll')->willReturn([['SELECT']]);
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
     public function testCheckDatabaseTablePrefix()
@@ -57,6 +106,18 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
     public function testCheckDatabaseTablePrefixWrongFormat()
     {
         $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Table prefix length can't be more than
+     */
+    public function testCheckDatabaseTablePrefixWrongLength()
+    {
+        $this->assertEquals(
+            true,
+            $this->dbValidator->checkDatabaseTablePrefix('mvbXzXzItSIr0wrZW3gqgV2UKrWiK1Mj7bkBlW72rZW3gqgV2UKrWiK1M')
+        );
     }
 
     /**

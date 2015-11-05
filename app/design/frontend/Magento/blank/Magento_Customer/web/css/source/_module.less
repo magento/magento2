@@ -18,11 +18,11 @@
         }
         .block-title {
             &:extend(.abs-login-block-title all);
-            .font-size(18);
+            .lib-font-size(18);
         }
     }
     .fieldset {
-        .form-hasrequired(bottom);
+        .lib-form-hasrequired(bottom);
         &:after {
             margin-top: 35px;
         }
@@ -139,7 +139,7 @@
     }
     .title {
         strong {
-            .heading(h4);
+            .lib-heading(h4);
             .column.main & {
                 font-size: @h3__font-size;
             }
@@ -155,7 +155,7 @@
 }
 
 .control.captcha-image {
-    .css(margin-top, @indent__s);
+    .lib-css(margin-top, @indent__s);
     .captcha-img {
         vertical-align: middle;
     }
@@ -197,7 +197,7 @@
     .control.captcha-image {
         .captcha-img {
             display: block;
-            .css(margin-bottom, @indent__s);
+            .lib-css(margin-bottom, @indent__s);
         }
     }
     .customer-account-index {

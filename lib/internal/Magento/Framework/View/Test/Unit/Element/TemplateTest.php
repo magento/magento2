@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -12,36 +13,41 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Element\Template
      */
-    protected $_block;
+    protected $block;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystem;
+    protected $filesystem;
 
     /**
      * @var \Magento\Framework\View\TemplateEngineInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_templateEngine;
+    protected $templateEngine;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Resolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_resolver;
+    protected $resolver;
 
     /**
      * @var \Magento\Framework\View\Element\Template\File\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_validator;
+    protected $validator;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
      */
     private $rootDirMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
-        $this->_resolver = $this->getMock(
+        $this->resolver = $this->getMock(
             'Magento\Framework\View\Element\Template\File\Resolver',
             [],
             [],
@@ -49,7 +55,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_validator = $this->getMock(
+        $this->validator = $this->getMock(
             'Magento\Framework\View\Element\Template\File\Validator',
             [],
             [],
@@ -60,47 +66,36 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->rootDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $this->rootDirMock->expects($this->any())
             ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $appDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $themesDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $themesDirMock->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnValue('themedir'));
+            ->willReturnArgument(0);
 
-        $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $this->_filesystem->expects($this->any())
+        $this->filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, DriverPool::FILE, $themesDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::APP, DriverPool::FILE, $appDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, DriverPool::FILE, $this->rootDirMock],
-                [
-                    \Magento\Framework\App\Filesystem\DirectoryList::TEMPLATE_MINIFICATION_DIR, DriverPool::FILE,
-                    $this->rootDirMock
-                ],
-            ]));
+            ->with(DirectoryList::ROOT, DriverPool::FILE)
+            ->willReturn($this->rootDirMock);
 
-        $this->_templateEngine = $this->getMock(
+        $this->templateEngine = $this->getMock(
             'Magento\Framework\View\TemplateEnginePool',
             ['render', 'get'],
             [],
             '',
             false
         );
-
-        $this->_templateEngine->expects($this->any())->method('get')->will($this->returnValue($this->_templateEngine));
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
         $appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
-        $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
+        $appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_block = $helper->getObject(
+        $this->block = $helper->getObject(
             'Magento\Framework\View\Element\Template',
             [
-                'filesystem' => $this->_filesystem,
-                'enginePool' => $this->_templateEngine,
-                'resolver' => $this->_resolver,
-                'validator' => $this->_validator,
+                'filesystem' => $this->filesystem,
+                'enginePool' => $this->templateEngine,
+                'resolver' => $this->resolver,
+                'validator' => $this->validator,
                 'appState' => $appState,
+                'logger' => $this->loggerMock,
                 'data' => ['template' => 'template.phtml', 'module_name' => 'Fixture_Module']
             ]
         );
@@ -109,37 +104,57 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetTemplateFile()
     {
         $params = ['module' => 'Fixture_Module', 'area' => 'frontend'];
-        $this->_resolver->expects($this->once())->method('getTemplateFileName')->with('template.phtml', $params);
-        $this->_block->getTemplateFile();
+        $this->resolver->expects($this->once())->method('getTemplateFileName')->with('template.phtml', $params);
+        $this->block->getTemplateFile();
     }
 
     public function testFetchView()
     {
         $this->expectOutputString('');
         $template = 'themedir/template.phtml';
-        $this->_validator->expects($this->once())
+        $this->validator->expects($this->once())
             ->method('isValid')
             ->with($template)
-            ->will($this->returnValue(true));
-
+            ->willReturn(true);
         $output = '<h1>Template Contents</h1>';
         $vars = ['var1' => 'value1', 'var2' => 'value2'];
-        $this->_templateEngine->expects($this->once())->method('render')->will($this->returnValue($output));
-        $this->_block->assign($vars);
-        $this->assertEquals($output, $this->_block->fetchView($template));
+        $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
+        $this->block->assign($vars);
+        $this->assertEquals($output, $this->block->fetchView($template));
+    }
+
+    public function testFetchViewWithNoFileName()
+    {
+        $output = '';
+        $template = false;
+        $templatePath = 'wrong_template_path.pthml';
+        $moduleName = 'Acme';
+        $blockName = 'acme_test_module_test_block';
+        $exception = "Invalid template file: '{$templatePath}' in module: '{$moduleName}' block's name: '{$blockName}'";
+        $this->block->setTemplate($templatePath);
+        $this->block->setData('module_name', $moduleName);
+        $this->block->setNameInLayout($blockName);
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(false);
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception)
+            ->willReturn(null);
+        $this->assertEquals($output, $this->block->fetchView($template));
     }
 
     public function testSetTemplateContext()
     {
         $template = 'themedir/template.phtml';
-        $context = new \Magento\Framework\Object();
-        $this->_validator->expects($this->once())
+        $context = new \Magento\Framework\DataObject();
+        $this->validator->expects($this->once())
             ->method('isValid')
             ->with($template)
-            ->will($this->returnValue(true));
-
-        $this->_templateEngine->expects($this->once())->method('render')->with($context);
-        $this->_block->setTemplateContext($context);
-        $this->_block->fetchView($template);
+            ->willReturn(true);
+        $this->templateEngine->expects($this->once())->method('render')->with($context);
+        $this->block->setTemplateContext($context);
+        $this->block->fetchView($template);
     }
 }

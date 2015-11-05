@@ -26,7 +26,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourcePageMock;
 
@@ -42,7 +42,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'eventDispatcher' => $this->eventManagerMock
             ]
         );
-        $this->resourcePageMock = $this->getMockBuilder('Magento\Cms\Model\Resource\Page')
+        $this->resourcePageMock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -58,13 +58,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
                     $this->getMockBuilder('Magento\Framework\Registry')
                         ->disableOriginalConstructor()
                         ->getMock(),
-                    $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+                    $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
                         ->disableOriginalConstructor()
                         ->setMethods(
                             [
                                 '_construct',
-                                '_getReadAdapter',
-                                '_getWriteAdapter',
+                                'getConnection',
                             ]
                         )
                         ->getMockForAbstractClass(),

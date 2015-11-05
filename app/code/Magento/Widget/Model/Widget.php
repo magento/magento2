@@ -98,7 +98,7 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
@@ -109,16 +109,16 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfigAsObject($type)
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         if ($widget === null) {
             return $object;
         }
@@ -138,10 +138,10 @@ class Widget
     /**
      * Prepare widget parameters
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return array
      */
-    protected function prepareWidgetParameters(\Magento\Framework\Object $object)
+    protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
     {
         $params = $object->getData('parameters');
         $newParams = [];
@@ -152,7 +152,7 @@ class Widget
                     $data = $this->prepareDropDownValues($data, $key, $sortOrder);
                     $data = $this->prepareHelperBlock($data);
 
-                    $newParams[$key] = new \Magento\Framework\Object($data);
+                    $newParams[$key] = new \Magento\Framework\DataObject($data);
                     $sortOrder++;
                 }
             }
@@ -197,7 +197,7 @@ class Widget
     protected function prepareHelperBlock(array $data)
     {
         if (isset($data['helper_block'])) {
-            $helper = new \Magento\Framework\Object();
+            $helper = new \Magento\Framework\DataObject();
             if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
                 $helper->addData($data['helper_block']['data']);
             }
@@ -277,7 +277,7 @@ class Widget
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
-        $directive = '{{widget type="' . preg_quote($type) . '"';
+        $directive = '{{widget type="' . $type . '"';
 
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
@@ -404,8 +404,8 @@ class Widget
     /**
      * Widget parameters sort callback
      *
-     * @param \Magento\Framework\Object $firstElement
-     * @param \Magento\Framework\Object $secondElement
+     * @param \Magento\Framework\DataObject $firstElement
+     * @param \Magento\Framework\DataObject $secondElement
      * @return int
      */
     protected function sortParameters($firstElement, $secondElement)

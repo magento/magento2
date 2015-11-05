@@ -13,12 +13,12 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that created widget displayed on frontend on Product page
+ * Check that created widget displayed on frontend on Product page.
  */
 class AssertWidgetOnProductPage extends AbstractConstraint
 {
     /**
-     * Assert that created widget displayed on frontend on Product page
+     * Assert that created widget displayed on frontend on Product page.
      *
      * @param CatalogProductView $productView
      * @param BrowserInterface $browser
@@ -37,9 +37,9 @@ class AssertWidgetOnProductPage extends AbstractConstraint
         $adminCache->getActionsBlock()->flushMagentoCache();
         $adminCache->getMessagesBlock()->waitSuccessMessage();
 
-        $urlKey = $widget->getLayout()[0]['entities']['url_key'];
+        $urlKey = $widget->getWidgetInstance()[0]['entities']['url_key'];
         $browser->open($_ENV['app_frontend_url'] . $urlKey . '.html');
-        $widgetText = $widget->getWidgetOptions()['link_text'];
+        $widgetText = $widget->getParameters()['link_text'];
 
         \PHPUnit_Framework_Assert::assertTrue(
             $productView->getWidgetView()->isWidgetVisible($widget, $widgetText),
@@ -48,12 +48,12 @@ class AssertWidgetOnProductPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return "Widget is present on Product page";
+        return "Widget is present on Product page.";
     }
 }

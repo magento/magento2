@@ -33,7 +33,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $imageHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -45,15 +45,21 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkoutSessionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
+        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
         $this->layoutMock = $this->getMock('\Magento\Framework\View\Layout', [], [], '', false);
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->viewMock = $this->getMock('\Magento\Catalog\Model\Product\Image\View', [], [], '', false);
+        $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
             '\Magento\Framework\App\Config\ScopeConfigInterface',
             [],
@@ -64,7 +70,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             '\Magento\Framework\View\Element\Template\Context',
-            ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig'],
+            ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig', 'getRequest'],
             [],
             '',
             false
@@ -81,10 +87,17 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->will($this->returnValue($this->scopeConfigMock));
+        $contextMock->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($this->requestMock));
 
         $this->model = $this->_objectManager->getObject(
             'Magento\Checkout\Block\Cart\Sidebar',
-            ['context' => $contextMock, 'imageView' => $this->viewMock, 'checkoutSession' => $this->checkoutSessionMock]
+            [
+                'context' => $contextMock,
+                'imageHelper' => $this->imageHelper,
+                'checkoutSession' => $this->checkoutSessionMock
+            ]
         );
     }
 
@@ -131,16 +144,20 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             ['checkout/cart', [], $shoppingCartUrl],
             ['checkout', [], $checkoutUrl],
-            ['checkout/sidebar/updateItemQty', [], $updateItemQtyUrl],
-            ['checkout/sidebar/removeItem', [], $removeItemUrl]
+            ['checkout/sidebar/updateItemQty', ['_secure' => false], $updateItemQtyUrl],
+            ['checkout/sidebar/removeItem', ['_secure' => false], $removeItemUrl]
         ];
+
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(false);
 
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
-        $this->viewMock->expects($this->once())->method('isWhiteBorders')->willReturn(false);
+        $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }

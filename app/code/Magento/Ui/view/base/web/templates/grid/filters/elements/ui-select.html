@@ -1,0 +1,120 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<label
+    class="admin__form-field-label"
+    data-bind="attr: {for: uid}">
+    <span data-bind="text: label"></span>
+</label>
+
+<div
+    class="admin__action-multiselect-wrap action-select-wrap"
+    tabindex="0"
+    data-bind="css: {_active: listVisible},
+                event: {
+                    focusin: function() { onFocusIn($element) },
+                    focusout: onFocusOut,
+                    keydown: keydownSwitcher
+                },
+                outerClick: outerClick.bind($data)">
+    <!-- ko ifnot: chipsEnabled -->
+    <div
+        class="action-select admin__action-multiselect"
+        data-bind="
+                    css: {_active: multiselectFocus},
+                    text: setCaption(),
+                    click: function(data, event) {
+                        toggleListVisible(data, event)
+                    }">
+    </div>
+    <!-- /ko -->
+    <!-- ko if: chipsEnabled -->
+    <div
+        class="action-select admin__action-multiselect"
+        data-bind="
+                    css: {_active: multiselectFocus},
+                    click: function(data, event) {
+                        toggleListVisible(data, event)
+                    }">
+            <span data-bind="
+                visible: !hasData(),
+                text: selectedPlaceholders.defaultPlaceholder">
+            </span>
+            <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
+                <span class="admin__action-multiselect-crumb">
+                    <span data-bind="text: label">
+                    </span>
+                    <button
+                            class="action-close"
+                            type="button"
+                            tabindex="-1"
+                            data-bind="click: $parent.removeSelected.bind($parent, value)">
+                        <span
+                                class="action-close-text"
+                                data-bind="text: 'Close'">
+                        </span>
+                    </button>
+                </span>
+            <!-- /ko -->
+    </div>
+    <!-- /ko -->
+    <div
+        class="action-menu"
+        data-bind="css: {
+                _active: listVisible
+            }">
+        <!-- ko if: filterOptions -->
+        <div class="admin__action-multiselect-search-wrap">
+            <input
+                    class="admin__control-text admin__action-multiselect-search"
+                    type="text"
+                    data-bind="
+                    event: {
+                        keydown: filterOptionsKeydown
+                    },
+                    attr: {id: uid+2}
+                    valueUpdate: 'afterkeydown',
+                    value: filterInputValue,
+                    hasFocus: filterOptionsFocus
+                ">
+            <label
+                    class="admin__action-multiselect-search-label"
+                    data-bind="attr: {for: uid+2}">
+
+            </label>
+        </div>
+        <!-- /ko -->
+        <ul class="admin__action-multiselect-menu-inner"
+            data-bind="
+                event: {
+                    mousemove: function(){onMousemove($data, $index(), event)}
+                }
+            ">
+            <!-- ko foreach: { data: options, as: 'option'}  -->
+            <li
+                class="action-menu-item"
+                data-bind="
+                            css: {
+                                _selected: $parent.isSelected(option.value),
+                                _hover: $parent.isHovered($index(), $element)
+                            },
+                            click: $parent.toggleOptionSelected.bind($parent, $data, $index())">
+                <input
+                    class="admin__control-checkbox"
+                    type="checkbox"
+                    tabindex="-1"
+                    data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                <label
+                    class="admin__action-multiselect-label"
+                    data-bind="text: option.label">
+                </label>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+

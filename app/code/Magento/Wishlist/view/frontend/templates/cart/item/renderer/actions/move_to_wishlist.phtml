@@ -10,8 +10,8 @@
 ?>
 <?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
     <a href="#"
-       data-post='<?php echo $block->getMoveFromCartParams(); ?>'
+       data-post='<?php /* @escapeNotVerified */ echo $block->getMoveFromCartParams(); ?>'
        class="use-ajax action action-towishlist">
-        <span><?php echo __('Move to Wishlist'); ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Move to Wishlist'); ?></span>
     </a>
 <?php endif ?>

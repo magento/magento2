@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
-class Template extends \Magento\Framework\Object implements \Magento\Framework\Option\ArrayInterface
+class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Framework\Registry
@@ -18,19 +18,19 @@ class Template extends \Magento\Framework\Object implements \Magento\Framework\O
     private $_emailConfig;
 
     /**
-     * @var \Magento\Email\Model\Resource\Template\CollectionFactory
+     * @var \Magento\Email\Model\ResourceModel\Template\CollectionFactory
      */
     protected $_templatesFactory;
 
     /**
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Email\Model\Resource\Template\CollectionFactory $templatesFactory
+     * @param \Magento\Email\Model\ResourceModel\Template\CollectionFactory $templatesFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Email\Model\Resource\Template\CollectionFactory $templatesFactory,
+        \Magento\Email\Model\ResourceModel\Template\CollectionFactory $templatesFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = []
     ) {
@@ -47,7 +47,7 @@ class Template extends \Magento\Framework\Object implements \Magento\Framework\O
      */
     public function toOptionArray()
     {
-        /** @var $collection \Magento\Email\Model\Resource\Template\Collection */
+        /** @var $collection \Magento\Email\Model\ResourceModel\Template\Collection */
         if (!($collection = $this->_coreRegistry->registry('config_system_email_template'))) {
             $collection = $this->_templatesFactory->create();
             $collection->load();

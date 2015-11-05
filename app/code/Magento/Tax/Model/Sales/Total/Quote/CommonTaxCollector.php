@@ -11,7 +11,7 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -22,6 +22,7 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterface;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
 /**
  * Tax totals calculation model
@@ -287,17 +288,17 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Add quote items
      *
-     * @param QuoteAddress $address
+     * @param ShippingAssignmentInterface $shippingAssignment
      * @param bool $useBaseCurrency
      * @param bool $priceIncludesTax
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface[]
      */
     public function mapItems(
-        QuoteAddress $address,
+        ShippingAssignmentInterface $shippingAssignment,
         $priceIncludesTax,
         $useBaseCurrency
     ) {
-        $items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
         if (!count($items)) {
             return [];
         }
@@ -361,43 +362,48 @@ class CommonTaxCollector extends AbstractTotal
     }
 
     /**
-     * @param QuoteAddress $address
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param QuoteAddress\Total $total
      * @param bool $useBaseCurrency
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface
      */
-    public function getShippingDataObject(QuoteAddress $address, $useBaseCurrency)
-    {
-        if ($address->getShippingTaxCalculationAmount() === null) {
+    public function getShippingDataObject(
+        ShippingAssignmentInterface $shippingAssignment,
+        QuoteAddress\Total $total,
+        $useBaseCurrency
+    ) {
+        $store = $shippingAssignment->getShipping()->getAddress()->getQuote()->getStore();
+        if ($total->getShippingTaxCalculationAmount() === null) {
             //Save the original shipping amount because shipping amount will be overridden
             //with shipping amount excluding tax
-            $address->setShippingTaxCalculationAmount($address->getShippingAmount());
-            $address->setBaseShippingTaxCalculationAmount($address->getBaseShippingAmount());
+            $total->setShippingTaxCalculationAmount($total->getShippingAmount());
+            $total->setBaseShippingTaxCalculationAmount($total->getBaseShippingAmount());
         }
-        if ($address->getShippingTaxCalculationAmount() !== null) {
+        if ($total->getShippingTaxCalculationAmount() !== null) {
             /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface $itemDataObject */
             $itemDataObject = $this->quoteDetailsItemDataObjectFactory->create()
                 ->setType(self::ITEM_TYPE_SHIPPING)
                 ->setCode(self::ITEM_CODE_SHIPPING)
                 ->setQuantity(1);
             if ($useBaseCurrency) {
-                $itemDataObject->setUnitPrice($address->getBaseShippingTaxCalculationAmount());
+                $itemDataObject->setUnitPrice($total->getBaseShippingTaxCalculationAmount());
             } else {
-                $itemDataObject->setUnitPrice($address->getShippingTaxCalculationAmount());
+                $itemDataObject->setUnitPrice($total->getShippingTaxCalculationAmount());
             }
-            if ($address->getShippingDiscountAmount()) {
+            if ($total->getShippingDiscountAmount()) {
                 if ($useBaseCurrency) {
-                    $itemDataObject->setDiscountAmount($address->getBaseShippingDiscountAmount());
+                    $itemDataObject->setDiscountAmount($total->getBaseShippingDiscountAmount());
                 } else {
-                    $itemDataObject->setDiscountAmount($address->getShippingDiscountAmount());
+                    $itemDataObject->setDiscountAmount($total->getShippingDiscountAmount());
                 }
             }
             $itemDataObject->setTaxClassKey(
                 $this->taxClassKeyDataObjectFactory->create()
                     ->setType(TaxClassKeyInterface::TYPE_ID)
-                    ->setValue($this->_config->getShippingTaxClass($address->getQuote()->getStore()))
+                    ->setValue($this->_config->getShippingTaxClass($store))
             );
             $itemDataObject->setIsTaxIncluded(
-                $this->_config->shippingPriceIncludesTax($address->getQuote()->getStore())
+                $this->_config->shippingPriceIncludesTax($store)
             );
             return $itemDataObject;
         }
@@ -408,13 +414,14 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Populate QuoteDetails object from quote address object
      *
-     * @param QuoteAddress $address
+     * @param ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $itemDataObjects
      * @return \Magento\Tax\Api\Data\QuoteDetailsInterface
      */
-    protected function prepareQuoteDetails(QuoteAddress $address, $itemDataObjects)
+    protected function prepareQuoteDetails(ShippingAssignmentInterface $shippingAssignment, $itemDataObjects)
     {
-        $items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
+        $address = $shippingAssignment->getShipping()->getAddress();
         if (!count($items)) {
             return $this->quoteDetailsDataObjectFactory->create();
         }
@@ -471,15 +478,21 @@ class CommonTaxCollector extends AbstractTotal
      * Set the following aggregated values in the quote object:
      * subtotal, subtotalInclTax, tax, discount_tax_compensation,
      *
-     * @param QuoteAddress $address
+     * @param ShippingAssignmentInterface $shippingAssignment
      * @param array $itemTaxDetails
+     * @param QuoteAddress\Total $total
      * @return $this
      */
-    protected function processProductItems(QuoteAddress $address, array $itemTaxDetails)
-    {
+    protected function processProductItems(
+        ShippingAssignmentInterface $shippingAssignment,
+        array $itemTaxDetails,
+        QuoteAddress\Total $total
+    ) {
+        $store = $shippingAssignment->getShipping()->getAddress()->getQuote()->getStore();
+
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
-        foreach ($this->_getAddressItems($address) as $addressItem) {
+        foreach ($shippingAssignment->getItems() as $addressItem) {
             $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
         }
 
@@ -494,7 +507,7 @@ class CommonTaxCollector extends AbstractTotal
             /** @var TaxDetailsItemInterface $baseTaxDetail */
             $baseTaxDetail = $itemTaxDetail[self::KEY_BASE_ITEM];
             $quoteItem = $keyedAddressItems[$code];
-            $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $address->getQuote()->getStore());
+            $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
 
             //Update aggregated values
             if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
@@ -512,15 +525,16 @@ class CommonTaxCollector extends AbstractTotal
         }
 
         //Set aggregated values
-        $address->setTotalAmount('subtotal', $subtotal);
-        $address->setBaseTotalAmount('subtotal', $baseSubtotal);
-        $address->setTotalAmount('tax', $tax);
-        $address->setBaseTotalAmount('tax', $baseTax);
-        $address->setTotalAmount('discount_tax_compensation', $discountTaxCompensation);
-        $address->setBaseTotalAmount('discount_tax_compensation', $baseDiscountTaxCompensation);
+        $total->setTotalAmount('subtotal', $subtotal);
+        $total->setBaseTotalAmount('subtotal', $baseSubtotal);
+        $total->setTotalAmount('tax', $tax);
+        $total->setBaseTotalAmount('tax', $baseTax);
+        $total->setTotalAmount('discount_tax_compensation', $discountTaxCompensation);
+        $total->setBaseTotalAmount('discount_tax_compensation', $baseDiscountTaxCompensation);
 
-        $address->setSubtotalInclTax($subtotalInclTax);
-        $address->setBaseSubtotalInclTax($baseSubtotalInclTax);
+        $total->setSubtotalInclTax($subtotalInclTax);
+        $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
         return $this;
     }
@@ -528,18 +542,21 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Process applied taxes for items and quote
      *
-     * @param QuoteAddress $address
+     * @param QuoteAddress\Total $total
      * @param array $itemsByType
      * @return $this
      */
-    protected function processAppliedTaxes(QuoteAddress $address, Array $itemsByType)
-    {
-        $address->setAppliedTaxes([]);
+    protected function processAppliedTaxes(
+        QuoteAddress\Total $total,
+        ShippingAssignmentInterface $shippingAssignment,
+        Array $itemsByType
+    ) {
+        $total->setAppliedTaxes([]);
         $allAppliedTaxesArray = [];
 
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
-        foreach ($this->_getAddressItems($address) as $addressItem) {
+        foreach ($shippingAssignment->getItems() as $addressItem) {
             $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
         }
 
@@ -585,7 +602,7 @@ class CommonTaxCollector extends AbstractTotal
 
                 foreach ($appliedTaxesArray as $appliedTaxArray) {
                     $this->_saveAppliedTaxes(
-                        $address,
+                        $total,
                         [$appliedTaxArray],
                         $appliedTaxArray['amount'],
                         $appliedTaxArray['base_amount'],
@@ -595,7 +612,7 @@ class CommonTaxCollector extends AbstractTotal
             }
         }
 
-        $address->setItemsAppliedTaxes($allAppliedTaxesArray);
+        $total->setItemsAppliedTaxes($allAppliedTaxesArray);
 
         return $this;
     }
@@ -644,30 +661,35 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Update tax related fields for shipping
      *
-     * @param QuoteAddress $address
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param QuoteAddress\Total $total
      * @param TaxDetailsItemInterface $shippingTaxDetails
      * @param TaxDetailsItemInterface $baseShippingTaxDetails
      * @return $this
      */
-    protected function processShippingTaxInfo(QuoteAddress $address, $shippingTaxDetails, $baseShippingTaxDetails)
-    {
-        $address->setTotalAmount('shipping', $shippingTaxDetails->getRowTotal());
-        $address->setBaseTotalAmount('shipping', $baseShippingTaxDetails->getRowTotal());
-        $address->setTotalAmount('shipping_discount_tax_compensation', $shippingTaxDetails->getDiscountTaxCompensationAmount());
-        $address->setBaseTotalAmount('shipping_discount_tax_compensation', $baseShippingTaxDetails->getDiscountTaxCompensationAmount());
+    protected function processShippingTaxInfo(
+        ShippingAssignmentInterface $shippingAssignment,
+        QuoteAddress\Total $total,
+        $shippingTaxDetails,
+        $baseShippingTaxDetails
+    ) {
+        $total->setTotalAmount('shipping', $shippingTaxDetails->getRowTotal());
+        $total->setBaseTotalAmount('shipping', $baseShippingTaxDetails->getRowTotal());
+        $total->setTotalAmount('shipping_discount_tax_compensation', $shippingTaxDetails->getDiscountTaxCompensationAmount());
+        $total->setBaseTotalAmount('shipping_discount_tax_compensation', $baseShippingTaxDetails->getDiscountTaxCompensationAmount());
 
-        $address->setShippingInclTax($shippingTaxDetails->getRowTotalInclTax());
-        $address->setBaseShippingInclTax($baseShippingTaxDetails->getRowTotalInclTax());
-        $address->setShippingTaxAmount($shippingTaxDetails->getRowTax());
-        $address->setBaseShippingTaxAmount($baseShippingTaxDetails->getRowTax());
+        $total->setShippingInclTax($shippingTaxDetails->getRowTotalInclTax());
+        $total->setBaseShippingInclTax($baseShippingTaxDetails->getRowTotalInclTax());
+        $total->setShippingTaxAmount($shippingTaxDetails->getRowTax());
+        $total->setBaseShippingTaxAmount($baseShippingTaxDetails->getRowTax());
 
         //Add the shipping tax to total tax amount
-        $address->addTotalAmount('tax', $shippingTaxDetails->getRowTax());
-        $address->addBaseTotalAmount('tax', $baseShippingTaxDetails->getRowTax());
+        $total->addTotalAmount('tax', $shippingTaxDetails->getRowTax());
+        $total->addBaseTotalAmount('tax', $baseShippingTaxDetails->getRowTax());
 
-        if ($this->_config->discountTax($address->getQuote()->getStore())) {
-            $address->setShippingAmountForDiscount($shippingTaxDetails->getRowTotalInclTax());
-            $address->setBaseShippingAmountForDiscount($baseShippingTaxDetails->getRowTotalInclTax());
+        if ($this->_config->discountTax($shippingAssignment->getShipping()->getAddress()->getQuote()->getStore())) {
+            $total->setShippingAmountForDiscount($shippingTaxDetails->getRowTotalInclTax());
+            $total->setBaseShippingAmountForDiscount($baseShippingTaxDetails->getRowTotalInclTax());
         }
 
         return $this;
@@ -722,7 +744,7 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Collect applied tax rates information on address level
      *
-     * @param QuoteAddress $address
+     * @param QuoteAddress\Total $total
      * @param array $applied
      * @param float $amount
      * @param float $baseAmount
@@ -732,13 +754,13 @@ class CommonTaxCollector extends AbstractTotal
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveAppliedTaxes(
-        QuoteAddress $address,
+        QuoteAddress\Total $total,
         $applied,
         $amount,
         $baseAmount,
         $rate
     ) {
-        $previouslyAppliedTaxes = $address->getAppliedTaxes();
+        $previouslyAppliedTaxes = $total->getAppliedTaxes();
         $process = count($previouslyAppliedTaxes);
 
         foreach ($applied as $row) {
@@ -774,7 +796,7 @@ class CommonTaxCollector extends AbstractTotal
                 unset($previouslyAppliedTaxes[$row['id']]);
             }
         }
-        $address->setAppliedTaxes($previouslyAppliedTaxes);
+        $total->setAppliedTaxes($previouslyAppliedTaxes);
     }
 
     /**
