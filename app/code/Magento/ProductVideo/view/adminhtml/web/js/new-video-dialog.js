@@ -696,37 +696,45 @@ define([
          */
         _blockActionButtons: function (status) {
             $('.page-actions-buttons').find('button.video-create-button').attr('disabled', status);
+            $('.page-actions-buttons').find('button.video-edit').attr('disabled', status);
         },
 
         /**
          * Check form
-         * @returns {*}
+         * @param {Function} callback
          */
-        isValid: function () {
+        isValid: function (callback) {
             var videoForm = $(this._videoFormSelector),
                 videoLoaded = true;
 
-            videoForm.mage('validation', {
+            this._blockActionButtons(true);
+            this._videoUrlWidget.on('finish_update_information.validation', $.proxy(
+                function (event, status) {
+                    videoForm.mage('validation', {
 
-                /**
-                 *
-                 * @param {jQuery} error
-                 * @param {jQuery} element
-                 */
-                errorPlacement: function (error, element) {
-                    error.insertAfter(element);
-                }
-            }).on('highlight.validate', function () {
-                $(this).validation('option');
-            });
-            videoForm.validation();
+                        /**
+                         * @param {jQuery} error
+                         * @param {jQuery} element
+                         */
+                        errorPlacement: function (error, element) {
+                            error.insertAfter(element);
+                        }
+                    }).on('highlight.validate', function () {
+                        $(this).validation('option');
+                    });
+                    videoForm.validation();
 
-            if (this._videoRequestComplete === false) {
-                this._videoUrlWidget.trigger('error_updated_information', 'Video not found');
-                videoLoaded = false;
-            }
+                    if (this._videoRequestComplete === false) {
+                        videoLoaded = false;
+                    }
 
-            return videoForm.valid() && videoLoaded;
+                    callback(status && videoForm.valid() && videoLoaded);
+                    this._videoUrlWidget.off('finish_update_information.validation');
+                    this._blockActionButtons(false);
+                }, this
+            ));
+
+            this._videoUrlWidget.trigger('update_video_information');
         },
 
         /**
@@ -763,19 +771,24 @@ define([
                 nvs.addClass(reqClass);
             }
 
-            if (!this.isValid()) {
-                return;
-            }
+            this.isValid($.proxy(
+                function (videoValidStatus) {
 
-            if (this._tempPreviewImageData) {
-                this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
-            } else {
-                this._uploadImage(file, null, $.proxy(function () {
-                    this.close();
-                }, this));
-            }
+                    if (!videoValidStatus) {
+                        return;
+                    }
 
-            nvs.removeClass(reqClass);
+                    if (this._tempPreviewImageData) {
+                        this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
+                    } else {
+                        this._uploadImage(file, null, $.proxy(function () {
+                            this.close();
+                        }, this));
+                    }
+
+                    nvs.removeClass(reqClass);
+                }, this
+            ));
         },
 
         /**
@@ -785,55 +798,66 @@ define([
         _onUpdate: function () {
             var inputFile, itemId, _inputSelector, mediaFields, imageData, flagChecked, fileName, callback;
 
-            if (!this.isValid()) {
-                return;
-            }
-            imageData = this.imageData;
-            inputFile       = $(this._videoPreviewInputSelector);
-            itemId          = $(this._itemIdSelector).val();
-            itemId              = itemId.slice(1, itemId.length - 1);
-            _inputSelector  = '[name*="[' + itemId + ']"]';
-            mediaFields     = $('input' + _inputSelector);
-            $.each(mediaFields, function (i, el) {
-                var elName      = el.name,
-                start       = elName.indexOf(itemId) + itemId.length + 2,
-                fieldName   = elName.substring(start, el.name.length - 1),
-                _field      = $('#' + fieldName),
-                _tmp;
+            this.isValid($.proxy(
+                function (videoValidStatus) {
 
-                if (_field.length > 0) {
-                    _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
-                    $(_tmp).val(_field.val());
-                    imageData[fieldName] = _field.val();
-                }
-            });
-            flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
-            $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
-            $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
-            imageData.disabled = flagChecked;
+                    if (!videoValidStatus) {
+                        return;
+                    }
 
-            if (this._tempPreviewImageData) {
-                this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
+                    imageData = this.imageData;
+                    inputFile       = $(this._videoPreviewInputSelector);
+                    itemId          = $(this._itemIdSelector).val();
+                    itemId              = itemId.slice(1, itemId.length - 1);
+                    _inputSelector  = '[name*="[' + itemId + ']"]';
+                    mediaFields     = $('input' + _inputSelector);
+                    $.each(mediaFields, function (i, el) {
+                        var elName      = el.name,
+                            start       = elName.indexOf(itemId) + itemId.length + 2,
+                            fieldName   = elName.substring(start, el.name.length - 1),
+                            _field      = $('#' + fieldName),
+                            _tmp;
 
-                return;
-            }
-            fileName = inputFile.get(0).files;
+                        if (_field.length > 0) {
+                            _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
+                            $(_tmp).val(_field.val());
+                            imageData[fieldName] = _field.val();
+                        }
+                    });
+                    flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
+                    $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
+                    imageData.disabled = flagChecked;
 
-            if (!fileName || !fileName.length) {
-                fileName = null;
-            }
-            inputFile.replaceWith(inputFile);
+                    if (this._tempPreviewImageData) {
+                        this._onImageLoaded(
+                            this._tempPreviewImageData,
+                            null,
+                            imageData.file,
+                            $.proxy(this.close, this)
+                        );
 
-            callback = $.proxy(function () {
-                this.close();
-            }, this);
+                        return;
+                    }
+                    fileName = inputFile.get(0).files;
 
-            if (fileName) {
-                this._uploadImage(fileName, imageData.file, callback);
-            } else {
-                this._replaceImage(imageData.file, imageData.file, imageData);
-                callback(0, imageData);
-            }
+                    if (!fileName || !fileName.length) {
+                        fileName = null;
+                    }
+                    inputFile.replaceWith(inputFile);
+
+                    callback = $.proxy(function () {
+                        this.close();
+                    }, this);
+
+                    if (fileName) {
+                        this._uploadImage(fileName, imageData.file, callback);
+                    } else {
+                        this._replaceImage(imageData.file, imageData.file, imageData);
+                        callback(0, imageData);
+                    }
+                }, this
+            ));
         },
 
         /**
