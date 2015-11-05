@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Super\Config;
+namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
 /**
  * Class MatrixTest
@@ -13,7 +13,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
     /**
      * Object under test
      *
-     * @var \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix
+     * @var \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix
      */
     protected $_block;
 
@@ -48,7 +48,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Form', $data);
         $this->_block = $helper->getObject(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
+            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix',
             $data
         );
     }
