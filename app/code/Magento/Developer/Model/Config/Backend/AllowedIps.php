@@ -30,6 +30,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -40,6 +41,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -48,7 +50,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
     ) {
         $this->messageManager = $messageManager;
         $this->escaper = $escaper;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**

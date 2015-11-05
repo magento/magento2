@@ -24,14 +24,14 @@ angular.module('readiness-check', [])
         };
         switch ($state.current.type) {
             case 'uninstall':
-                $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/uninstall-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
                 break;
             case 'enable':
             case 'disable':
-                $scope.dependencyUrl = 'index.php/environment/enable-disable-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {
                         type: $state.current.type,
@@ -40,7 +40,7 @@ angular.module('readiness-check', [])
                 }
                 break;
             default:
-                $scope.dependencyUrl = 'index.php/environment/component-dependency';
+                $scope.dependencyUrl = 'index.php/dependency-check/component-dependency';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
@@ -156,7 +156,9 @@ angular.module('readiness-check', [])
                 process: function(data) {
                     $scope.extensions.processed = true;
                     angular.extend($scope.extensions, data);
-                    $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    if(data.responseType !== 'error') {
+                        $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    }
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
                 },
@@ -334,4 +336,27 @@ angular.module('readiness-check', [])
                 $scope.progress();
             }
         });
+
+        $scope.wordingOfReadinessCheckAction = function() {
+            var $actionString = 'We\'re making sure your server environment is ready for ';
+            if ($localStorage.moduleName) {
+                $actionString += $localStorage.moduleName;
+            } else {
+                if($state.current.type === 'install' || $state.current.type === 'upgrade') {
+                    $actionString += 'Magento';
+                    if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
+                        $actionString += ' and selected components';
+                    }
+                } else {
+                    $actionString += 'package';
+                }
+            }
+            $actionString += " to be " + $state.current.type;
+            if ($scope.endsWith($state.current.type, 'e')) {
+                $actionString += 'd';
+            } else {
+                $actionString +='ed';
+            }
+            return $actionString;
+        }
     }]);

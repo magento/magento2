@@ -228,6 +228,8 @@ define([
 
         _videoPlayerSelector: '.mage-new-video-dialog',
 
+        _videoRequestComplete: null,
+
         /**
          * Bind events
          * @private
@@ -243,15 +245,20 @@ define([
                 youtubeKey: this.options.youTubeApiKey,
                 eventSource: 'focusout'
             });
+
             this._videoInformationGetBtn = $(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = $(this._videoUrlSelector);
             this._videoInformationGetEditBtn = $(this._editVideoBtnSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
+
             this._videoUrlWidget.on('updated_video_information', $.proxy(this._onGetVideoInformationSuccess, this));
             this._videoUrlWidget.on('error_updated_information', $.proxy(this._onGetVideoInformationError, this));
-
+            this._videoUrlWidget.on(
+                'request_video_information',
+                $.proxy(this._onGetVideoInformationStartRequest, this)
+            );
         },
 
         /**
@@ -261,10 +268,6 @@ define([
         _onGetVideoInformationClick: function () {
             this._onlyVideoPlayer = false;
             this._isEditPage = false;
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'click'
-            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -273,11 +276,14 @@ define([
          * @private
          */
         _onGetVideoInformationFocusOut: function () {
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'focusout'
-            });
             this._videoUrlWidget.trigger('update_video_information');
+        },
+
+        /**
+         * @private
+         */
+        _onGetVideoInformationStartRequest: function () {
+            this._videoRequestComplete = false;
         },
 
         /**
@@ -287,10 +293,6 @@ define([
         _onGetVideoInformationEditClick: function () {
             this._onlyVideoPlayer = true;
             this._isEditPage = true;
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'click'
-            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -323,6 +325,8 @@ define([
                     }
                 }
             });
+
+            this._videoRequestComplete = true;
 
             if (!this._isEditPage) {
                 player.updateInputFields({
@@ -699,7 +703,8 @@ define([
          * @returns {*}
          */
         isValid: function () {
-            var videoForm = $(this._videoFormSelector);
+            var videoForm = $(this._videoFormSelector),
+                videoLoaded = true;
 
             videoForm.mage('validation', {
 
@@ -715,7 +720,12 @@ define([
             });
             videoForm.validation();
 
-            return videoForm.valid();
+            if (this._videoRequestComplete === false) {
+                this._videoUrlWidget.trigger('error_updated_information', 'Video not found');
+                videoLoaded = false;
+            }
+
+            return videoForm.valid() && videoLoaded;
         },
 
         /**
@@ -729,6 +739,8 @@ define([
             $productGalleryWrapper.parent().addClass('video-item');
             $imageWidget.removeClass('video-item');
             $productGalleryWrapper.removeClass('video-item');
+            $('.video-item .action-delete').attr('title',  $.mage.__('Delete video'));
+            $('.video-item .action-delete span').html($.mage.__('Delete video'));
         },
 
         /**

@@ -290,5 +290,6 @@
         <item type="directory">Lib::mage/requirejs</item>
         <item type="directory">Lib::mage/adminhtml</item>
         <item type="directory">Lib::mage/backend</item>
+        <item type="directory">Magento_Swagger::swagger-ui</item>
     </exclude>
 </view>

@@ -326,9 +326,11 @@ require([
                 eventSource: '' //where is data going from - focus out or click on button
             },
 
-            _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
+            _REQUEST_VIDEO_INFORMATION_TRIGGER: 'request_video_information',
 
             _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
+
+            _START_UPDATE_INFORMATION_TRIGGER: 'update_video_information',
 
             _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
@@ -338,7 +340,8 @@ require([
              * @private
              */
             _init: function () {
-                this._onRequestHandler();
+                this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
+                this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
             },
 
             /**
@@ -352,8 +355,11 @@ require([
                     id,
                     googleapisUrl;
 
+                this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
+                    url: url
+                });
+
                 if (!url) {
-                    //this._onRequestError("Video url is undefined");
                     return;
                 }
 
@@ -498,13 +504,19 @@ require([
             /**
              * @private
              */
-            _onRequestError: function (error) {
+            _onVideoInvalid: function (event, data) {
                 this._videoInformation = null;
-                this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
                 this.element.val('');
                 alert({
-                    content: 'Error: "' + error + '"'
+                    content: 'Error: "' + data + '"'
                 });
+            },
+
+            /**
+             * @private
+             */
+            _onRequestError: function (error) {
+                this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
             },
 
             /**

@@ -13,7 +13,7 @@ class Index extends \Magento\Contact\Controller\Index
      *
      * @return void
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->_view->loadLayout();
         $this->_view->renderLayout();

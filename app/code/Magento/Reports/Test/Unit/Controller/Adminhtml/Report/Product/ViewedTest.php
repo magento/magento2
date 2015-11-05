@@ -151,7 +151,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->expects($this->once())
             ->method('renderLayout');
 
-        $this->viewed->execute();
+        $this->viewed->executeInternal();
     }
 
     /**
@@ -202,7 +202,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->method('setActive')
             ->willThrowException(new \Exception());
 
-        $this->viewed->execute();
+        $this->viewed->executeInternal();
     }
 
     /**
@@ -222,6 +222,6 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->method('setActive')
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException($errorText));
 
-        $this->viewed->execute();
+        $this->viewed->executeInternal();
     }
 }

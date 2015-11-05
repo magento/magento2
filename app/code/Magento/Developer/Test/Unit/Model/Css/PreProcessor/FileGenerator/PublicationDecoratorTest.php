@@ -6,6 +6,7 @@
 namespace Magento\Developer\Test\Unit\Model\Css\PreProcessor\FileGenerator;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator;
 
@@ -41,6 +42,9 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
         $localAssetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+
         $relatedFileId = 'file_id';
 
         $relatedFiles = [[$relatedFileId, $localAssetMock]];
@@ -61,7 +65,9 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
             $filesystemMock,
             $assetRepoMock,
             $fileTemporaryMock,
-            $publisherMock
+            $publisherMock,
+            $scopeConfigMock,
+            true
         );
 
         $model->generate($importGeneratorMock);

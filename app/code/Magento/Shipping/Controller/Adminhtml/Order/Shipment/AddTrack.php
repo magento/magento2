@@ -41,7 +41,7 @@ class AddTrack extends \Magento\Backend\App\Action
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute()
+    public function executeInternal()
     {
         try {
             $carrier = $this->getRequest()->getPost('carrier');

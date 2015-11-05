@@ -106,23 +106,16 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
+            ->method('load')
+            ->with($orderItemId)
+            ->willReturn($orderItemMock);
+        $orderItemMock->expects($this->once())
             ->method('getItemId')
             ->willReturn(null);
-
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemResourceMock->expects($this->once())
-            ->method('load')
-            ->with($orderItemMock, $orderItemId)
-            ->willReturnSelf();
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($orderItemMock);
-        $this->metadata->expects($this->once())
-            ->method('getMapper')
-            ->willReturn($orderItemResourceMock);
 
         $model = new ItemRepository(
             $this->objectFactory,
@@ -147,23 +140,16 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $orderItemMock = $this->getOrderMock($productType, $productOption);
 
         $orderItemMock->expects($this->once())
+            ->method('load')
+            ->with($orderItemId)
+            ->willReturn($orderItemMock);
+        $orderItemMock->expects($this->once())
             ->method('getItemId')
             ->willReturn($orderItemId);
-
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemResourceMock->expects($this->once())
-            ->method('load')
-            ->with($orderItemMock, $orderItemId)
-            ->willReturnSelf();
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($orderItemMock);
-        $this->metadata->expects($this->once())
-            ->method('getMapper')
-            ->willReturn($orderItemResourceMock);
 
         $model = $this->getModel($orderItemMock, $productType);
         $this->assertSame($orderItemMock, $model->get($orderItemId));
@@ -246,6 +232,10 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
+            ->method('load')
+            ->with($orderItemId)
+            ->willReturn($orderItemMock);
+        $orderItemMock->expects($this->once())
             ->method('getItemId')
             ->willReturn($orderItemId);
         $orderItemMock->expects($this->once())
@@ -262,15 +252,11 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($orderItemMock)
             ->willReturnSelf();
-        $orderItemResourceMock->expects($this->once())
-            ->method('load')
-            ->with($orderItemMock, $orderItemId)
-            ->willReturnSelf();
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($orderItemMock);
-        $this->metadata->expects($this->exactly(2))
+        $this->metadata->expects($this->exactly(1))
             ->method('getMapper')
             ->willReturn($orderItemResourceMock);
 

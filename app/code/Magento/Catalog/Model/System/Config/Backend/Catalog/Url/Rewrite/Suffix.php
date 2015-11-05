@@ -39,12 +39,13 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\ResourceConnection $appResource
+     * @param ResourceConnection $appResource
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -52,6 +53,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $appResource,
@@ -60,7 +62,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->urlRewriteHelper = $urlRewriteHelper;
         $this->connection = $appResource->getConnection();
         $this->urlFinder = $urlFinder;

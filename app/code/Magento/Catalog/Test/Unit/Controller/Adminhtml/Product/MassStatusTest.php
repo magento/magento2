@@ -80,6 +80,6 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
     public function testMassStatusAction()
     {
         $this->priceProcessor->expects($this->once())->method('reindexList');
-        $this->action->execute();
+        $this->action->executeInternal();
     }
 }

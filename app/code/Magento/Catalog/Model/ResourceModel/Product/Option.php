@@ -119,23 +119,21 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $optionId = $connection->fetchOne($statement);
 
                 if ($optionId) {
-                    if ($object->getStoreId() == '0') {
-                        $data = $this->_prepareDataForTable(
-                            new \Magento\Framework\DataObject(
-                                ['price' => $object->getPrice(), 'price_type' => $object->getPriceType()]
-                            ),
-                            $priceTable
-                        );
+                    $data = $this->_prepareDataForTable(
+                        new \Magento\Framework\DataObject(
+                            ['price' => $object->getPrice(), 'price_type' => $object->getPriceType()]
+                        ),
+                        $priceTable
+                    );
 
-                        $connection->update(
-                            $priceTable,
-                            $data,
-                            [
-                                'option_id = ?' => $object->getId(),
-                                'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                            ]
-                        );
-                    }
+                    $connection->update(
+                        $priceTable,
+                        $data,
+                        [
+                            'option_id = ?' => $object->getId(),
+                            'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                        ]
+                    );
                 } else {
                     $data = $this->_prepareDataForTable(
                         new \Magento\Framework\DataObject(

@@ -78,6 +78,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $this->stockRegistry->expects($this->any())->method('getStockItem')->willReturn($this->stockItemMock);
 
         $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $convertedPrice = 1231313;
         // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
         $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
 
@@ -114,7 +115,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
 
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $quoteItem->setProduct($product)->setQuote($quote)->setOriginalCustomPrice($price);
+        $quoteItem->setProduct($product)->setQuote($quote);
 
         $parentQuoteItem = false;
         if ($itemHasParent) {
@@ -122,6 +123,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             $parentQuoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
         }
         $quoteItem->setParentItem($parentQuoteItem);
+        //This value will be overwritten
+        $quoteItem->setConvertedPrice(10);
 
         $priceModel = $this->getMock('\Magento\Catalog\Model\Product\Type\Price', [], [], '', false);
         $priceModel->expects($this->any())->method('getChildFinalPrice')->willReturn($price);
@@ -149,6 +152,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedPrice, $quoteItem->getPrice());
         $this->assertEquals($expectedOriginalPrice, $quoteItem->getBaseOriginalPrice());
+        $this->assertEquals($convertedPrice, $quoteItem->getCalculationPrice());
+        $this->assertEquals($convertedPrice, $quoteItem->getConvertedPrice());
     }
 
     public function testFetch()

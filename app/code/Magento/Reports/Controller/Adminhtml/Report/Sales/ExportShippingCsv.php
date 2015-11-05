@@ -16,7 +16,7 @@ class ExportShippingCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sal
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function executeInternal()
     {
         $fileName = 'shipping.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');

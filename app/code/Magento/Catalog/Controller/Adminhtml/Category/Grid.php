@@ -39,7 +39,7 @@ class Grid extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function executeInternal()
     {
         $category = $this->_initCategory(true);
         if (!$category) {

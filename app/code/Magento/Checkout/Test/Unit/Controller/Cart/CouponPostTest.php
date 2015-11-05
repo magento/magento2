@@ -142,7 +142,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->quoteRepository = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -174,7 +174,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithGoodCouponAndItems()
@@ -232,7 +232,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithGoodCouponAndNoItems()
@@ -286,7 +286,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithBadCouponAndItems()
@@ -337,7 +337,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->with('You canceled the coupon code.')
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 
     public function testExecuteWithBadCouponAndNoItems()
@@ -382,6 +382,6 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->controller->executeInternal();
     }
 }

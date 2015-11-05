@@ -187,7 +187,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultPageMock, $this->controller->execute());
+        $this->assertEquals($this->resultPageMock, $this->controller->executeInternal());
     }
 
     /**
@@ -209,7 +209,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultForwardMock, $this->controller->execute());
+        $this->assertEquals($this->resultForwardMock, $this->controller->executeInternal());
     }
 
     protected function loadShipment($orderId, $shipmentId, $shipment, $tracking, $comeFrom, $returnShipment)

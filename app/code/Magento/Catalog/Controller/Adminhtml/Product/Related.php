@@ -31,7 +31,7 @@ class Related extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function execute()
+    public function executeInternal()
     {
         $this->productBuilder->build($this->getRequest());
         $resultLayout = $this->resultLayoutFactory->create();

@@ -70,7 +70,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function execute()
+    public function executeInternal()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
