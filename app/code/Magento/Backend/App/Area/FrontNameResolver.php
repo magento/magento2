@@ -8,7 +8,10 @@
 namespace Magento\Backend\App\Area;
 
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
 {
@@ -38,24 +41,22 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     protected $deploymentConfig;
 
-    /**
-     * @var \Magento\Backend\Model\UrlInterface
-     */
-    protected $backendUrl;
+    /** @var ScopeConfigInterface */
+    private $configInterface;
 
     /**
      * @param \Magento\Backend\App\Config $config
      * @param DeploymentConfig $deploymentConfig
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param ScopeConfigInterface $configInterface
      */
     public function __construct(
         \Magento\Backend\App\Config $config,
         DeploymentConfig $deploymentConfig,
-        \Magento\Backend\Model\UrlInterface $backendUrl
+        ScopeConfigInterface $configInterface
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
-        $this->backendUrl = $backendUrl;
+        $this->configInterface = $configInterface;
     }
 
     /**
@@ -82,7 +83,8 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     public function isHostBackend()
     {
-        $backendHost = parse_url(trim($this->backendUrl->getBaseUrl()), PHP_URL_HOST);
+        $backendUrl = $this->configInterface->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+        $backendHost = parse_url(trim($backendUrl), PHP_URL_HOST);
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
         return (strcasecmp($backendHost, $host) === 0);
     }
