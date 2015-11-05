@@ -36,8 +36,19 @@ main.controller('navigationController',
     ]
 )
 .controller('mainController', [
-    '$scope', '$state', 'navigationService', '$localStorage',
-    function ($scope, $state, navigationService, $localStorage) {
+    '$scope', '$state', 'navigationService', '$localStorage', '$interval', '$http',
+    function ($scope, $state, navigationService, $localStorage, $interval, $http) {
+        $interval(
+            function () {
+                $http.post('index.php/session/prolong')
+                    .success(function (result) {
+                    })
+                    .error(function (result) {
+                    });
+            },
+            120000
+        );
+
         $scope.moduleName = $localStorage.moduleName;
         $scope.$on('$stateChangeSuccess', function (event, state) {
             $scope.valid = true;

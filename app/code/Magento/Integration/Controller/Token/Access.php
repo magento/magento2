@@ -58,7 +58,7 @@ class Access extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $requestUrl = $this->helper->getRequestUrl($this->getRequest());

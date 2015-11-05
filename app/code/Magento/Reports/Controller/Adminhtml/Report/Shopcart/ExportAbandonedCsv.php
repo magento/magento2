@@ -16,7 +16,7 @@ class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sh
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'shopcart_abandoned.csv';
         $content = $this->_view->getLayout()->createBlock(
