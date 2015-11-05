@@ -40,7 +40,7 @@ main.controller('navigationController',
     function ($scope, $state, navigationService, $localStorage, $interval, $http) {
         $interval(
             function () {
-                $http.post('/setup/index.php/session/prolong')
+                $http.post('index.php/session/prolong')
                     .success(function (result) {
                     })
                     .error(function (result) {

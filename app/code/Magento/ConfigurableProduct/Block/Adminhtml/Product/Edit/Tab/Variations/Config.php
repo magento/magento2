@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super;
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations;
 
 use Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
