@@ -122,7 +122,7 @@ angular.module('component-grid', ['ngStorage'])
                 if ($localStorage.titles['update'].indexOf($localStorage.moduleName) < 0 ) {
                     $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
                 }
-                $rootScope.titles = $localStorage.titles;
+                $state.titles = $localStorage.titles;
                 $scope.nextState();
             };
 
@@ -140,7 +140,7 @@ angular.module('component-grid', ['ngStorage'])
                 if ($localStorage.titles['uninstall'].indexOf($localStorage.moduleName) < 0 ) {
                     $localStorage.titles['uninstall'] = 'Uninstall ' + $localStorage.moduleName;
                 }
-                $rootScope.titles = $localStorage.titles;
+                $state.titles = $localStorage.titles;
                 $localStorage.componentType = component.type;
                 $state.go('root.readiness-check-uninstall');
             };
@@ -161,7 +161,7 @@ angular.module('component-grid', ['ngStorage'])
                         $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
                             + $localStorage.moduleName;
                     }
-                    $rootScope.titles = $localStorage.titles;
+                    $state.titles = $localStorage.titles;
                     $localStorage.componentType = component.type;
                     $state.go('root.readiness-check-'+type);
                 }
