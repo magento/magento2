@@ -600,7 +600,7 @@ define([
                     return;
                 }
 
-                if (!videoPreview.is('visible')) {
+                if (!videoPreview.is(':visible')) {
                     videoPreview.show();
                 }
 
