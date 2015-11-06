@@ -48,7 +48,7 @@ class PlaceOrder extends \Magento\Braintree\Controller\PayPal
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {

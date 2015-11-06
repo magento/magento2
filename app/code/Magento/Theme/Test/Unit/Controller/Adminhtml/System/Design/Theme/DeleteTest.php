@@ -147,7 +147,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->executeInternal());
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->execute());
     }
 
     /**
@@ -218,7 +218,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $logger->expects($this->once())
             ->method('critical');
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     /**
@@ -255,6 +255,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addError');
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->executeInternal());
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->controller->execute());
     }
 }

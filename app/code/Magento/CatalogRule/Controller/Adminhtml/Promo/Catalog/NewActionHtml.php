@@ -13,7 +13,7 @@ class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Cata
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));

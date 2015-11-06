@@ -104,7 +104,7 @@ class SystemPackage
         $enterpriseVersions = $this->infoCommand->run('magento/product-enterprise-edition');
         $eeVersions = [];
         $maxVersion = '';
-        if (array_key_exists('available_versions', $enterpriseVersions)) {
+        if (is_array($enterpriseVersions) && array_key_exists('available_versions', $enterpriseVersions)) {
             $enterpriseVersions = $this->sortVersions($enterpriseVersions);
             if (isset($enterpriseVersions['available_versions'][0])) {
                 $maxVersion = $enterpriseVersions['available_versions'][0];

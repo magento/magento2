@@ -13,7 +13,7 @@ class NewAction extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('edit');
     }
