@@ -41,6 +41,10 @@ define([
                     if (!data.intype) {
                         data.intype = optionDefaultInputType;
                     }
+
+                    if (!this.totalItems) {
+                        data.checked = 'checked';
+                    }
                     element = this.template({
                         data: data
                     });

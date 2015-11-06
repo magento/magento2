@@ -14,7 +14,7 @@ class AjaxSave extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->vault->processNonce(

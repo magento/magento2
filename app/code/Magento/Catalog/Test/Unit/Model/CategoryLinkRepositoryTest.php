@@ -145,7 +145,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save product "55" with position %position to category 42
+     * @expectedExceptionMessage Could not save product "55" with position 1 to category 42
      */
     public function testDeleteByIdsWithCouldNotSaveException()
     {

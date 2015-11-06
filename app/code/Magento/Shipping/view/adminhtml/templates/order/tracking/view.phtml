@@ -60,7 +60,7 @@
                     <div id="shipment_tracking_info_response_<?php /* @escapeNotVerified */ echo $_track->getId() ?>"></div>
                     <?php endif; ?>
                 </td>
-                <td class="col-delete last"><a class="action-delete" href="#" onclick="deleteTrackingNumber('<?php /* @escapeNotVerified */ echo $block->getRemoveUrl($_track) ?>'); return false;"><span><?php /* @escapeNotVerified */ echo __('Delete') ?></span></a></td>
+                <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?php /* @escapeNotVerified */ echo $block->getRemoveUrl($_track) ?>'); return false;"><span><?php /* @escapeNotVerified */ echo __('Delete') ?></span></button></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

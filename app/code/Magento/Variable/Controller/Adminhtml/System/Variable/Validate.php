@@ -13,7 +13,7 @@ class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         $response = new \Magento\Framework\DataObject(['error' => false]);
         $variable = $this->_initVariable();
