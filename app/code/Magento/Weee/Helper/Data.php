@@ -801,15 +801,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     true,
                     false
                 );
+                $priceTaxDisplay = $this->getTaxDisplayConfig();
+                $priceIncludesTax = $this->displayTotalsInclTax();
                 foreach ($weeeAttributes as $weeeAttribute) {
-                    if ($this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
-                        $this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
-                        if ($this->displayTotalsInclTax() == false) {
+                    if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
+                        $priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+                        if ($priceIncludesTax == false) {
                             $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
                         }
                     }
-                    if ($this->getTaxDisplayConfig() == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
-                        if ($this->displayTotalsInclTax() == true) {
+                    else if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                        if ($priceIncludesTax == true) {
                             $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
                         }
                     }
