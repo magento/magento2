@@ -12,7 +12,7 @@ class Index extends \Magento\Tax\Controller\Adminhtml\Rule
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultPage = $this->initResultPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Tax Rules'));

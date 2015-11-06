@@ -134,7 +134,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    protected $storeManagerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -155,6 +155,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getMediaAttributes',
                 'getProductLinks',
                 'setProductLinks',
+                'validate',
+                'save'
             ],
             [],
             '',
@@ -222,9 +224,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ['getLinkTypes'], [], '', false);
         $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
@@ -245,7 +254,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'imageProcessor' => $this->imageProcessorMock,
-                'storeManager' => $this->storeManager,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
     }

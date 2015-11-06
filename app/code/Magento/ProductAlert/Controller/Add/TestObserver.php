@@ -13,7 +13,7 @@ class TestObserver extends AddController
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $object = new DataObject();
         /** @var \Magento\ProductAlert\Model\Observer $observer */

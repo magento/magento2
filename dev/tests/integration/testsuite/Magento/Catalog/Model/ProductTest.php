@@ -69,7 +69,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         )->setAttributeSetId(
             4
         )->setName(
-            'Simple Product'
+            'Simple Product 1'
         )->setSku(
             uniqid()
         )->setPrice(

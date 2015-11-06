@@ -16,7 +16,7 @@ class ExportTaxExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'tax.xml';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');

@@ -36,7 +36,7 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
      *
      * @return  \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $error = __('invalid request');
         $httpCode = 400;

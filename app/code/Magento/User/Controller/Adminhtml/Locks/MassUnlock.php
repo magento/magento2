@@ -18,7 +18,7 @@ class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             // unlock users
