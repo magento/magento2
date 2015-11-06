@@ -27,8 +27,14 @@
                     <th class="col-delete">&nbsp;</th>
                 </tr>
             </thead>
-            <tbody data-role="options-container"></tbody>
+            <tbody data-role="options-container" class="ignore-validate"></tbody>
             <tfoot>
+            <tr>
+                <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="validation">
+                    <input type="hidden" class="required-dropdown-attribute-entry" name="dropdown_attribute_validation"/>
+                </th>
+            </tr>
+            <tr>
                 <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
                         <button id="add_new_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Option'); ?>"
@@ -37,6 +43,7 @@
                         </button>
                     <?php endif; ?>
                 </th>
+            </tr>
             </tfoot>
         </table>
         <input type="hidden" id="option-count-check" value="" />
