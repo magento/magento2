@@ -9,27 +9,26 @@ namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Op
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
- * Class Grid
- * 'Add Products to Bundle Option' grid
+ * 'Add Products to Bundle Option' grid.
  */
 class Grid extends GridInterface
 {
     /**
-     * Selector for 'Add Selected Products' button
+     * Selector for 'Add Selected Products' button.
      *
      * @var string
      */
     protected $addProducts = 'button.action-add';
 
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
-    protected $selectItem = 'tbody tr .col-id';
+    protected $selectItem = 'tbody tr .col-id input';
 
     /**
-     * Filters param for grid
+     * Filters param for grid.
      *
      * @var array
      */
@@ -43,7 +42,7 @@ class Grid extends GridInterface
     ];
 
     /**
-     * Press 'Add Selected Products' button
+     * Press 'Add Selected Products' button.
      *
      * @return void
      */

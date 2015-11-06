@@ -163,6 +163,30 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
+     * Default manage stock data.
+     *
+     * @var array
+     */
+    protected $manageStock = [
+        'Yes' => [
+            'manage_stock' => 'Yes',
+            'use_config_manage_stock' => 'Yes',
+            'enable_qty_increments' => 'No',
+            'use_config_enable_qty_increments' => 'Yes',
+        ],
+        'No' => [
+            'manage_stock' => 'No',
+            'use_config_manage_stock' => 'No',
+            'min_sale_qty' => 1,
+            'use_config_min_sale_qty' => 1,
+            'max_sale_qty' => 10000 ,
+            'use_config_max_sale_qty' => 1,
+            'enable_qty_increments' => 'No',
+            'use_config_enable_qty_increments' => 'No',
+        ]
+    ];
+
+    /**
      * Select custom options.
      *
      * @var array

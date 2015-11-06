@@ -59,7 +59,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         'product_links',
         'options',
         'media_gallery_entries',
-        'group_prices',
         'tier_prices',
         'extension_attributes'
     ];
@@ -121,7 +120,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->fields['product']['type_id'] = $config['type_id'];
         $this->prepareFpt();
         $this->prepareAdvancedInventory();
-        $this->prepareGroupPrice();
         $this->prepareTierPrice();
         $this->prepareCustomOptions();
     }
@@ -220,32 +218,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
 
         $this->fields['product']['extension_attributes']['stock_item'] = $stockData;
         unset($this->fields['product']['stock_data']);
-    }
-
-    /**
-     * Preparation of group price data.
-     *
-     * @return void
-     */
-    protected function prepareGroupPrice()
-    {
-        if (isset($this->fields['product']['group_price'])) {
-            $this->fields['product']['group_prices'] = $this->fields['product']['group_price'];
-            unset($this->fields['product']['group_price']);
-
-            foreach ($this->fields['product']['group_prices'] as $key => $priceInfo) {
-                $priceInfo['customer_group_id'] = $priceInfo['cust_group'];
-                unset($priceInfo['cust_group']);
-
-                $priceInfo['value'] = $priceInfo['price'];
-                unset($priceInfo['price']);
-
-                unset($priceInfo['website_id']);
-                unset($priceInfo['delete']);
-
-                $this->fields['product']['group_prices'][$key] = $priceInfo;
-            }
-        }
     }
 
     /**
