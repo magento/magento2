@@ -16,7 +16,7 @@ class Start extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_initCheckout();

@@ -179,7 +179,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())->method('addSuccess');
         $this->responseMock->expects($this->once())->method('representJson');
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -192,7 +192,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
         $this->responseMock->expects($this->once())->method('representJson');
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -217,7 +217,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($logerMock));
         $this->responseMock->expects($this->once())->method('representJson');
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -236,6 +236,6 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             );
         $this->responseMock->expects($this->once())->method('representJson');
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 }

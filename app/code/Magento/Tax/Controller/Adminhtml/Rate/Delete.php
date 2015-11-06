@@ -16,7 +16,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($rateId = $this->getRequest()->getParam('rate')) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

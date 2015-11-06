@@ -13,7 +13,7 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');

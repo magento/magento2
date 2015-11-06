@@ -57,7 +57,7 @@ abstract class AbstractAction extends Action implements UiActionInterface
      */
     public function executeAjaxRequest()
     {
-        $this->executeInternal();
+        $this->execute();
     }
 
     /**

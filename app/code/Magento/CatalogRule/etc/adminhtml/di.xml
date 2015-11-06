@@ -14,7 +14,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product">
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="apply_catalog_rules_after_product_save" type="Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules"/>
     </type>
     <type name="Magento\Catalog\Model\Category">

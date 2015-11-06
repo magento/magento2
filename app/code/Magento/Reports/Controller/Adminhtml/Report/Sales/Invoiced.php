@@ -15,7 +15,7 @@ class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_showLastExecutionTime(Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
 
