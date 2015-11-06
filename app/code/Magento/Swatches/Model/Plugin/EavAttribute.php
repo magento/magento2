@@ -51,26 +51,18 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Swatches\Helper\Data $swatchHelper
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
-        $this->messageManager = $messageManager;
     }
 
     /**
@@ -172,7 +164,7 @@ class EavAttribute
 
         if (!empty($optionsArray) && is_array($optionsArray)) {
             $optionsArray = $this->prepareOptionIds($optionsArray);
-            $attributeSavedOptions = $attribute->getSource()->getAllOptions(false);
+            $attributeSavedOptions = $attribute->getSource()->getAllOptions();
             $this->prepareOptionLinks($optionsArray, $attributeSavedOptions);
         }
 
