@@ -506,8 +506,10 @@ require([
                         }
                     );
                 } else if (type === 'vimeo') {
-                    $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
-                        {
+                    $.ajax({
+                        url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
+                        dataType: 'jsonp',
+                        data: {
                             format: 'json'
                         },
                         timeout: 5000,
