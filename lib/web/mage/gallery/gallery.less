@@ -102,15 +102,6 @@
     }
 }
 
-.circle {
-    position: absolute;
-    background-color: silver;
-    opacity: 0.7;
-    border-radius: 100%;
-    height: 1px;
-    width: 1px;
-}
-
 .fotorama__zoom-in,
 .fotorama__zoom-out {
     display: none;
@@ -215,6 +206,8 @@
 .fotorama__fullscreen-icon:focus:after,
 .fotorama__nav__frame:focus .fotorama__dot:after,
 .fotorama__nav__frame:focus .fotorama__thumb:after,
+.fotorama__zoom-out:focus:after,
+.fotorama__zoom-in:focus:after,
 .fotorama__stage__shaft:focus .fotorama__stage__frame.fotorama__active:after {
     background-color: rgba(0, 175, 234, .5);
     border-radius: inherit;
@@ -223,6 +216,7 @@
     position: absolute;
     width: 100%;
     left:0;
+    top:0;
 }
 
 .fotorama-transform-disabled {
@@ -757,7 +751,9 @@
     }
 }
 
-.fotorama__fullscreen-icon {
+.fotorama__fullscreen-icon,
+.fotorama__zoom-out,
+.fotorama__zoom-in {
     &:focus {
         &:extend(.fotorama-focus);
         border-radius: 50%;
