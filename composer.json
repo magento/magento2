@@ -117,6 +117,7 @@
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
+        "magento/module-new-relic-reporting": "self.version",
         "magento/module-newsletter": "self.version",
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
