@@ -7,6 +7,7 @@ namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -50,18 +51,26 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -72,11 +81,20 @@ class EavAttribute
      */
     public function beforeSave(Attribute $attribute)
     {
-        if ($this->swatchHelper->isSwatchAttribute($attribute)) {
+        if ($this->swatchHelper->isSwatchAttribute($attribute) && $this->validateOptions($attribute)) {
             $this->setProperOptionsArray($attribute);
             $this->swatchHelper->assembleAdditionalDataEavAttribute($attribute);
         }
         $this->convertSwatchToDropdown($attribute);
+    }
+
+    protected function validateOptions(Attribute $attribute)
+    {
+        $attributeSavedOptions = $attribute->getSource()->getAllOptions(false);
+        if (!count($attributeSavedOptions)) {
+            throw new InputException(__('Admin is a required field in the each row'));
+        }
+        return true;
     }
 
     /**
@@ -154,7 +172,7 @@ class EavAttribute
 
         if (!empty($optionsArray) && is_array($optionsArray)) {
             $optionsArray = $this->prepareOptionIds($optionsArray);
-            $attributeSavedOptions = $attribute->getSource()->getAllOptions();
+            $attributeSavedOptions = $attribute->getSource()->getAllOptions(false);
             $this->prepareOptionLinks($optionsArray, $attributeSavedOptions);
         }
 
