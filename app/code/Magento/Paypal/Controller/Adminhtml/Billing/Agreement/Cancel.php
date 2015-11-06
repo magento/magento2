@@ -13,7 +13,7 @@ class Cancel extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $agreementModel = $this->_initBillingAgreement();
 

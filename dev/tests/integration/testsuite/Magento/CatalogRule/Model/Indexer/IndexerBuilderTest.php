@@ -68,11 +68,13 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareProducts();
 
-        $this->indexerBuilder->reindexByIds([
-            $this->product->getId(),
-            $this->productSecond->getId(),
-            $this->productThird->getId(),
-        ]);
+        $this->indexerBuilder->reindexByIds(
+            [
+                $this->product->getId(),
+                $this->productSecond->getId(),
+                $this->productThird->getId(),
+            ]
+        );
 
         $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, 1));
         $this->assertEquals(
@@ -107,8 +109,11 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->load(1)->setData('test_attribute', 'test_attribute_value')->save();
         $this->productSecond = clone $this->product;
-        $this->productSecond->setId(null)->save();
+        $this->productSecond->setId(null)->setUrlKey('product-second')->save();
         $this->productThird = clone $this->product;
-        $this->productThird->setId(null)->setData('test_attribute', 'NO_test_attribute_value')->save();
+        $this->productThird->setId(null)
+            ->setUrlKey('product-third')
+            ->setData('test_attribute', 'NO_test_attribute_value')
+            ->save();
     }
 }

@@ -26,7 +26,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
         if (false === $this->_fileHandler) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to open file ', [$this->_filePath])
+                new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath])
             );
         }
     }
@@ -40,7 +40,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
         if (empty($result) && !empty($data)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to write data to ', [$this->_filePath])
+                new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath])
             );
         }
     }

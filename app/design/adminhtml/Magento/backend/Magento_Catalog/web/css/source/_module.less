@@ -3,6 +3,18 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Catalog product grid
+//  ---------------------------------------------
+
+.catalog-product-index {
+    .admin__data-grid-wrap {
+        .data-row {
+            cursor: pointer;
+        }
+    }
+}
+
 .product-composite-configure-inner {
     .admin__control-text {
         &.qty {
@@ -49,5 +61,20 @@ div.removed,
     }
     .admin__control-addon {
         width: auto; // IE9 width fix
+    }
+}
+
+//
+//  Create attribute panel iframe page configuration
+//  ---------------------------------------------
+
+.catalog-product-attribute-edit {
+    &.attribute-popup {
+        .page-wrapper {
+            width: 100%;
+            .page-content {
+                padding-left: 0;
+            }
+        }
     }
 }

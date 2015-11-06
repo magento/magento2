@@ -186,7 +186,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('*/', [])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -218,7 +218,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('*/', [])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -286,7 +286,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('*/', [])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -407,7 +407,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('*/*', ['wishlist_id' => 56])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
     /**
      * Test execute add success critical exception
@@ -545,6 +545,6 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('*/*', ['wishlist_id' => 56])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->getController()->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 }
