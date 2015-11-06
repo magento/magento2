@@ -81,6 +81,8 @@ class EavAttribute
     }
 
     /**
+     * Validate that attribute options is exists
+     *
      * @param Attribute $attribute
      * @return bool
      * @throws InputException
