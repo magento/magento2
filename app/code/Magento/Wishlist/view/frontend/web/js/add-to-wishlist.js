@@ -11,7 +11,7 @@ define([
     
     $.widget('mage.addToWishlist', {
         options: {
-            bundleInfo: 'div.control [name^=bundle_option]:not([name*=qty])',
+            bundleInfo: 'div.control [name^=bundle_option]',
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
@@ -43,6 +43,7 @@ define([
             $(event.handleObj.selector).each(function(index, element){
                 if ($(element).is('input[type=text]')
                     || $(element).is('input[type=email]')
+                    || $(element).is('input[type=number]')
                     || $(element).is('input[type=checkbox]:checked')
                     || $(element).is('input[type=radio]:checked')
                     || $('#' + element.id + ' option:selected').length
