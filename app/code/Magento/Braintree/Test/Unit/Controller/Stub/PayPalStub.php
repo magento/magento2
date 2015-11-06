@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Controller\Stub;
 
 class PayPalStub extends \Magento\Braintree\Controller\PayPal
 {
-    protected function executeInternal()
+    public function execute()
     {
         // Empty method stub for test
     }

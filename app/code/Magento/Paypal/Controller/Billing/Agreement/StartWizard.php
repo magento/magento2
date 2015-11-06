@@ -13,7 +13,7 @@ class StartWizard extends \Magento\Paypal\Controller\Billing\Agreement
      *
      * @return \Magento\Framework\App\Response\Http
      */
-    public function executeInternal()
+    public function execute()
     {
         $agreement = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement');
         $paymentCode = $this->getRequest()->getParam('payment_method');

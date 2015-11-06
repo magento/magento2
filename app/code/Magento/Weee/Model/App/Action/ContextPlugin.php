@@ -100,7 +100,7 @@ class ContextPlugin
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function aroundExecute(
+    public function aroundDispatch(
         \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request

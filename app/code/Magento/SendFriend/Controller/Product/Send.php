@@ -45,7 +45,7 @@ class Send extends \Magento\SendFriend\Controller\Product
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $product = $this->_initProduct();
 

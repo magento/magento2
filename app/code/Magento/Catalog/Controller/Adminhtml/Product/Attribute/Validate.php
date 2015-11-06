@@ -44,7 +44,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);

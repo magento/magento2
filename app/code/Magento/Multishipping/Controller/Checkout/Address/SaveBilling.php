@@ -11,7 +11,7 @@ class SaveBilling extends \Magento\Multishipping\Controller\Checkout\Address
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($addressId = $this->getRequest()->getParam('id')) {
             $this->_objectManager->create(
