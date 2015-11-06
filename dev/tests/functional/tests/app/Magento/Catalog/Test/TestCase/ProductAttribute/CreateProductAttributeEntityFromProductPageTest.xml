@@ -43,6 +43,7 @@
             <data name="attribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
+            <data name="assertProduct/data/price" xsi:type="string">15</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable" />
