@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
-use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
@@ -60,12 +60,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $resourceModel;
 
@@ -138,10 +138,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
-     * @param Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param Resource\Product $resourceModel
+     * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
      * @param Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -153,7 +153,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ImageContentValidatorInterface $contentValidator
      * @param ImageContentInterfaceFactory $contentFactory
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -162,10 +161,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ProductFactory $productFactory,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
         \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\Catalog\Model\Resource\Product $resourceModel,
+        \Magento\Catalog\Model\ResourceModel\Product $resourceModel,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -287,7 +286,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
+            } elseif (isset($productData['store_id'])
+                && !empty($productData['store_id'])
+                && $this->storeManager->getStore($productData['store_id'])
+            ) {
+                $product->setWebsiteIds([$this->storeManager->getStore($productData['store_id'])->getWebsiteId()]);
             }
         } else {
             unset($this->instances[$productData['sku']]);
@@ -467,6 +471,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 'label' => $newEntry['label'],
                 'position' => $newEntry['position'],
                 'disabled' => $newEntry['disabled'],
+                'media_type' => $newEntry['media_type'],
             ]
         );
         return $this;
@@ -546,7 +551,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productOptions = $product->getProductOptions();
         }
         $isDeleteOptions = $product->getIsDeleteOptions();
-        $groupPrices = $product->getData('group_price');
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
@@ -583,9 +587,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($saveOptions) {
                 $product->setProductOptions($productOptions);
                 $product->setCanSaveCustomOptions(true);
-            }
-            if ($groupPrices !== null) {
-                $product->setData('group_price', $groupPrices);
             }
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
@@ -638,7 +639,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
 
@@ -683,10 +684,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         Collection $collection
     ) {
         $fields = [];
+        $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-            $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+
+            if ($filter->getField() == 'category_id') {
+                $categoryFilter[$conditionType][] = $filter->getValue();
+                continue;
+            }
+            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
+
+        if ($categoryFilter) {
+            $collection->addCategoriesFilter($categoryFilter);
+        }
+
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }

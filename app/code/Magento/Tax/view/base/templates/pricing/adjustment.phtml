@@ -10,10 +10,6 @@
 
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 
-<?php
-//getAdjustmentCode
-?>
-
 <?php if ($block->displayBothPrices()): ?>
     <span id="<?php /* @escapeNotVerified */ echo $block->buildIdWithPrefix('price-excluding-tax-') ?>"
           data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>"

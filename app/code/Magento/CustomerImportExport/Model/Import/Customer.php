@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -15,7 +16,7 @@ class Customer extends AbstractCustomer
     /**
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Attribute\Collection';
 
     /**#@+
      * Permanent column names
@@ -107,12 +108,12 @@ class Customer extends AbstractCustomer
     /**
      * Address attributes collection
      *
-     * @var \Magento\Customer\Model\Resource\Attribute\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Attribute\Collection
      */
     protected $_attributeCollection;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -135,38 +136,38 @@ class Customer extends AbstractCustomer
     /**
      * Customer fields in file
      */
-    public $customerFields = [
-        'group_id',
-        'store_id',
-        'updated_at',
-        'created_at',
-        'created_in',
-        'prefix',
-        'firstname',
-        'middlename',
-        'lastname',
-        'suffix',
-        'dob',
+    protected $customerFields = [
+        CustomerInterface::GROUP_ID,
+        CustomerInterface::STORE_ID,
+        CustomerInterface::UPDATED_AT,
+        CustomerInterface::CREATED_AT,
+        CustomerInterface::CREATED_IN,
+        CustomerInterface::PREFIX,
+        CustomerInterface::FIRSTNAME,
+        CustomerInterface::MIDDLENAME,
+        CustomerInterface::LASTNAME,
+        CustomerInterface::SUFFIX,
+        CustomerInterface::DOB,
         'password_hash',
-        'taxvat',
-        'confirmation',
-        'gender',
+        CustomerInterface::TAXVAT,
+        CustomerInterface::CONFIRMATION,
+        CustomerInterface::GENDER,
         'rp_token',
         'rp_token_created_at',
-        ];
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
-     * @param \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -175,14 +176,14 @@ class Customer extends AbstractCustomer
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
-        \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
+        \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         array $data = []
     ) {
@@ -237,13 +238,8 @@ class Customer extends AbstractCustomer
 
         $this->_initStores(true)->_initAttributes();
 
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
-        );
-
         $this->_customerModel = $customerFactory->create();
-        /** @var $customerResource \Magento\Customer\Model\Resource\Customer */
+        /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
     }
@@ -381,7 +377,9 @@ class Customer extends AbstractCustomer
                 $attributeParameters = $this->_attributes[$attributeCode];
 
                 if ('select' == $attributeParameters['type']) {
-                    $value = $attributeParameters['options'][strtolower($value)];
+                    $value = isset($attributeParameters['options'][strtolower($value)])
+                        ? $attributeParameters['options'][strtolower($value)]
+                        : 0;
                 } elseif ('datetime' == $attributeParameters['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($value));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
@@ -561,5 +559,18 @@ class Customer extends AbstractCustomer
     public function getEntityTable()
     {
         return $this->_entityTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidColumnNames()
+    {
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->customerFields
+        );
+
+        return $this->validColumnNames;
     }
 }

@@ -68,9 +68,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0
         ],
-        'is_virtual' => [
+        'product_has_weight' => [
             'Yes' => 1,
-            'No' => 0
+            'No' => 0,
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
@@ -159,30 +159,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 'California' => 12,
                 '*' => 0
             ]
-        ]
-    ];
-
-    /**
-     * Default manage stock data.
-     *
-     * @var array
-     */
-    protected $manageStock = [
-        'Yes' => [
-            'manage_stock' => 'Yes',
-            'use_config_manage_stock' => 'Yes',
-            'enable_qty_increments' => 'No',
-            'use_config_enable_qty_increments' => 'Yes',
-        ],
-        'No' => [
-            'manage_stock' => 'No',
-            'use_config_manage_stock' => 'No',
-            'min_sale_qty' => 1,
-            'use_config_min_sale_qty' => 1,
-            'max_sale_qty' => 10000 ,
-            'use_config_max_sale_qty' => 1,
-            'enable_qty_increments' => 'No',
-            'use_config_enable_qty_increments' => 'No',
         ]
     ];
 
@@ -403,15 +379,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 $this->fields['product']['tier_price']
             );
         }
-        if (isset($this->fields['product']['group_price'])) {
-            $this->fields['product']['group_price'] = $this->preparePriceFields(
-                $this->fields['product']['group_price']
-            );
-        }
     }
 
     /**
-     * Preparation of group, tier price data.
+     * Preparation of tier price data.
      *
      * @param array $fields
      * @return array

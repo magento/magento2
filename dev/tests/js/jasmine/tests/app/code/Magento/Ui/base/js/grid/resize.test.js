@@ -51,8 +51,9 @@ define([
                 expect(type).toEqual('object');
             });
             it('Check "this.table" variable', function () {
-                obj.initTable('magento');
-                expect(obj.table).toEqual('magento');
+                arg = document.createElement('table');
+                obj.initTable(arg);
+                expect(arg.classList.contains(obj.fixedLayoutClass)).toBeTruthy();
             });
         });
         describe('"initColumn" method', function () {

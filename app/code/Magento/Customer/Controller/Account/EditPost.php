@@ -6,8 +6,6 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -20,7 +18,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPost extends Action implements AccountInterface
+class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;

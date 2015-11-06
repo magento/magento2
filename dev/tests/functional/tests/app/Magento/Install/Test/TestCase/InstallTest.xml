@@ -33,12 +33,11 @@
             <constraint name="Magento\Install\Test\Constraint\AssertKeyCreated" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
-            <constraint name="Magento\Install\Test\Constraint\AssertLanguageSelected" />
         </variation>
         <variation name="InstallTestVariation4">
             <data name="description" xsi:type="string">Install with table prefix.</data>
             <data name="user/dataset" xsi:type="string">default</data>
-            <data name="install/dbTablePrefix" xsi:type="string">prefix1_</data>
+            <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
             <data name="install/storeLanguage" xsi:type="string">Chinese (China)</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />

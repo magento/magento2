@@ -81,7 +81,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -90,7 +90,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -350,19 +350,19 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate rule data
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\DataObject $dataObject
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function validateData(\Magento\Framework\DataObject $object)
+    public function validateData(\Magento\Framework\DataObject $dataObject)
     {
         $result = [];
         $fromDate = $toDate = null;
 
-        if ($object->hasFromDate() && $object->hasToDate()) {
-            $fromDate = $object->getFromDate();
-            $toDate = $object->getToDate();
+        if ($dataObject->hasFromDate() && $dataObject->hasToDate()) {
+            $fromDate = $dataObject->getFromDate();
+            $toDate = $dataObject->getToDate();
         }
 
         if ($fromDate && $toDate) {
@@ -374,14 +374,14 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
+        if ($dataObject->hasWebsiteIds()) {
+            $websiteIds = $dataObject->getWebsiteIds();
             if (empty($websiteIds)) {
                 $result[] = __('Please specify a website.');
             }
         }
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
+        if ($dataObject->hasCustomerGroupIds()) {
+            $customerGroupIds = $dataObject->getCustomerGroupIds();
             if (empty($customerGroupIds)) {
                 $result[] = __('Please specify Customer Groups.');
             }

@@ -145,12 +145,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/countries.xml'))
         );
-        $filesystem = $this->getMockBuilder(
-            '\Magento\Framework\Filesystem'
-        )->disableOriginalConstructor()->setMethods(
-            ['getDirectoryRead']
-        )->getMock();
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirectory));
+        $readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $readFactory->expects($this->any())->method('create')->willReturn($modulesDirectory);
         $storeManager = $this->getMockBuilder(
             '\Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->setMethods(
@@ -185,7 +181,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'rateMethodFactory' => $rateMethodFactory,
                 'httpClientFactory' => $httpClientFactory,
-                'filesystem' => $filesystem,
+                'readFactory' => $readFactory,
                 'storeManager' => $storeManager,
                 'data' => ['id' => 'dhl', 'store' => '1']
             ]

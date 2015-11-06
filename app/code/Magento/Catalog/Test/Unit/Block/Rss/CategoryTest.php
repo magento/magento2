@@ -209,7 +209,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__sleep', '__wakeup', 'getTreeModel', 'getResourceCollection', 'getId', 'getName'])
             ->disableOriginalConstructor()->getMock();
 
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Category\Collection')
+        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Collection')
             ->setMethods([
                 'addIdFilter',
                 'addAttributeToSelect',
@@ -237,7 +237,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getChildren'])->disableOriginalConstructor()->getMock();
         $nodes->expects($this->once())->method('getChildren')->will($this->returnValue([$node]));
 
-        $tree = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Category\Tree')
+        $tree = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Tree')
             ->setMethods(['loadChildren', 'loadNode'])->disableOriginalConstructor()->getMock();
         $tree->expects($this->once())->method('loadNode')->will($this->returnSelf());
         $tree->expects($this->once())->method('loadChildren')->will($this->returnValue($nodes));

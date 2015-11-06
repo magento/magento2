@@ -33,4 +33,11 @@ interface CategoryManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function move($categoryId, $parentId, $afterId = null);
+
+    /**
+     * Provide the number of category count
+     *
+     * @return int
+     */
+    public function getCount();
 }

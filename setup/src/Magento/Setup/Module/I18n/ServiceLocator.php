@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n;
 
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  *  Service Locator (instead DI container)
@@ -112,7 +113,7 @@ class ServiceLocator
     private static function _getContext()
     {
         if (null === self::$_context) {
-            self::$_context = new Context();
+            self::$_context = new Context(new ComponentRegistrar());
         }
         return self::$_context;
     }

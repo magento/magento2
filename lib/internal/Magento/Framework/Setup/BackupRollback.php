@@ -227,7 +227,7 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
@@ -246,7 +246,7 @@ class BackupRollback
         }
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
-        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\Resource\Db'));
+        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\ResourceModel\Db'));
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());

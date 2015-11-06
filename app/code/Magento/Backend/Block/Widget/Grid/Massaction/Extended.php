@@ -11,7 +11,6 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
- * @deprecated support Magento 1.x grid massaction implementation
  * @TODO MAGETWO-31510: Remove deprecated class
  */
 class Extended extends \Magento\Backend\Block\Widget

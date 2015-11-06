@@ -67,7 +67,7 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $className = '\Magento\SalesRule\Model\RuleFactory';
         $this->ruleFactory = $this->getMock($className, ['create'], [], '', false);
 
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\CollectionFactory';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory';
         $this->collectionFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\SalesRule\Model\Coupon\Massgenerator';
@@ -261,9 +261,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $coupon = $this->getMock($className, [], [], '', false);
         $coupon->expects($this->exactly(3))->method('delete');
 
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Coupon\Collection';
         /**
-         * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+         * @var  \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection
          */
         $couponCollection = $this->getMock($className, [], [], '', false);
 
@@ -285,9 +285,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
     {
         $ids = [1, 2, 3];
 
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Coupon\Collection';
         /**
-         * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+         * @var  \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection
          */
         $couponCollection = $this->getMock($className, [], [], '', false);
         $couponCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
@@ -313,9 +313,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $coupon->expects($this->any())->method('delete')->willThrowException(new \Exception());
 
         /**
-         * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+         * @var  \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection
          */
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Coupon\Collection';
         $couponCollection = $this->getMock($className, [], [], '', false);
         $couponCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
         $couponCollection->expects($this->once())->method('getItems')->willReturn([$coupon, $coupon, $coupon]);
@@ -341,9 +341,9 @@ class CouponManagementServiceTest extends \PHPUnit_Framework_TestCase
         $coupon = $this->getMock($className, [], [], '', false);
         $coupon->expects($this->exactly(3))->method('delete');
 
-        $className = '\Magento\SalesRule\Model\Resource\Coupon\Collection';
+        $className = '\Magento\SalesRule\Model\ResourceModel\Coupon\Collection';
         /**
-         * @var  \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+         * @var  \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection
          */
         $couponCollection = $this->getMock($className, [], [], '', false);
 

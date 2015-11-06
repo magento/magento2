@@ -279,21 +279,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
 
     /**
-     * Gets list of product group prices
-     *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
-     */
-    public function getGroupPrices();
-
-    /**
-     * Sets list of product group prices
-     *
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
-     * @return $this
-     */
-    public function setGroupPrices(array $groupPrices = null);
-
-    /**
      * Gets list of product tier prices
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null

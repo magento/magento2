@@ -16,7 +16,6 @@ use Magento\Customer\Model\GroupManagement;
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    const KEY_GROUP_PRICE = 'group_price';
     const KEY_TIER_PRICE = 'tier_price';
     const PRICE_SCOPE_GLOBAL = 0;
     const PRICE_SCOPE_WEBSITE = 1;
@@ -35,11 +34,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Model\Product
      */
     protected $product;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gpFactory;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -65,16 +59,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product');
-
-        $this->gpFactory = $this->getMockForAbstractClass(
-            'Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['create']
-        );
 
         $this->tpFactory = $this->getMockForAbstractClass(
             'Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory',
@@ -125,7 +109,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product\Type\Price',
             [
-                'groupPriceFactory' => $this->gpFactory,
                 'tierPriceFactory' => $this->tpFactory,
                 'config' => $this->scopeConfigMock,
                 'storeManager' => $storeMangerMock,
@@ -135,7 +118,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetGroupPricesWithNull
      * testGetTierPricesWithNull
      *
      * @dataProvider nullPricesDataProvider
@@ -157,84 +139,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function nullPricesDataProvider()
     {
         return [
-            'testGetGroupPricesWithNull' => [$this::KEY_GROUP_PRICE, 'setGroupPrices'],
             'testGetTierPricesWithNull' => [$this::KEY_TIER_PRICE, 'setTierPrices']
         ];
-    }
-
-    /**
-     * testGetGroupPrices
-     * testSetGroupPrices
-     *
-     * @dataProvider pricesDataProvider
-     */
-    public function testGroupPrices($priceScope, $expectedWebsiteId)
-    {
-        // establish the behavior of the mocks
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValue($priceScope));
-        $this->websiteMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($expectedWebsiteId));
-        $this->gpFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback(function () {
-                return $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\GroupPrice');
-            }));
-
-        // create sample GroupPrice objects that would be coming from a REST call
-        $gp1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\GroupPrice');
-        $gp1->setValue(10);
-        $gp1->setCustomerGroupId(1);
-        $gp2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\GroupPrice');
-        $gp2->setValue(20);
-        $gp2->setCustomerGroupId(2);
-        $gps = [$gp1, $gp2];
-
-        // force the product to have null group prices
-        $this->product->setData($this::KEY_GROUP_PRICE, null);
-        $this->assertNull($this->product->getData($this::KEY_GROUP_PRICE));
-
-        // set the product with the GroupPrice objects
-        $this->model->setGroupPrices($this->product, $gps);
-
-        // test the data actually set on the product
-        $gpArray = $this->product->getData($this::KEY_GROUP_PRICE);
-        $this->assertNotNull($gpArray);
-        $this->assertTrue(is_array($gpArray));
-        $this->assertEquals(sizeof($gps), sizeof($gpArray));
-
-        for ($i = 0; $i < sizeof($gps); $i++) {
-            $gpData = $gpArray[$i];
-            $this->assertEquals($expectedWebsiteId, $gpData['website_id'], 'Website Id does not match');
-            $this->assertEquals($gps[$i]->getValue(), $gpData['price'], 'Price/Value does not match');
-            $this->assertEquals($gps[$i]->getValue(), $gpData['website_price'], 'WebsitePrice/Value does not match');
-            $this->assertEquals(
-                $gps[$i]->getCustomerGroupId(),
-                $gpData['cust_group'],
-                'Customer group Id does not match'
-            );
-        }
-
-        // test with the data retrieved as a REST object
-        $gpRests = $this->model->getGroupPrices($this->product);
-        $this->assertNotNull($gpRests);
-        $this->assertTrue(is_array($gpRests));
-        $this->assertEquals(sizeof($gps), sizeof($gpRests));
-
-        for ($i = 0; $i < sizeof($gps); $i++) {
-            $this->assertEquals(
-                $gps[$i]->getValue(),
-                $gpRests[$i]->getValue(),
-                'REST: Price/Value does not match'
-            );
-            $this->assertEquals(
-                $gps[$i]->getCustomerGroupId(),
-                $gpRests[$i]->getCustomerGroupId(),
-                'REST: Customer group Id does not match'
-            );
-        }
     }
 
     /**

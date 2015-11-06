@@ -7,7 +7,6 @@ namespace Magento\Framework\Config\Test\Unit;
 
 use \Magento\Framework\Config\FileIterator;
 
-
 /**
  * Class FileIteratorTest
  */
@@ -19,9 +18,9 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryMock;
+    protected $fileRead;
 
     /**
      * Array of relative file paths
@@ -30,21 +29,22 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $filePaths;
 
+    /**
+     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileReadFactory;
+
     protected function setUp()
     {
         $this->filePaths = ['/file1', '/file2'];
-        $this->directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-
-        $this->fileIterator = new FileIterator(
-            $this->directoryMock,
-            $this->filePaths
-        );
+        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 
     protected function tearDown()
     {
         $this->fileIterator = null;
-        $this->directoryMock = null;
         $this->filePaths = null;
     }
 
@@ -53,9 +53,12 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
         $contents = ['content1', 'content2'];
         $index = 0;
         foreach ($this->filePaths as $filePath) {
-            $this->directoryMock->expects($this->at($index))
-                ->method('readFile')
+            $this->fileReadFactory->expects($this->at($index))
+                ->method('create')
                 ->with($filePath)
+                ->willReturn($this->fileRead);
+            $this->fileRead->expects($this->at($index))
+                ->method('readAll')
                 ->will($this->returnValue($contents[$index++]));
         }
         $index = 0;
@@ -71,9 +74,12 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
         $index = 0;
         foreach ($this->filePaths as $filePath) {
             $expectedArray[$filePath] = $contents[$index];
-            $this->directoryMock->expects($this->at($index))
-                ->method('readFile')
+            $this->fileReadFactory->expects($this->at($index))
+                ->method('create')
                 ->with($filePath)
+                ->willReturn($this->fileRead);
+            $this->fileRead->expects($this->at($index))
+                ->method('readAll')
                 ->will($this->returnValue($contents[$index++]));
         }
         $this->assertEquals($expectedArray, $this->fileIterator->toArray());

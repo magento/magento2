@@ -5,6 +5,9 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
+
 /**
  * Core Email Template Filter Model
  *
@@ -64,7 +67,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * @var array
@@ -89,7 +92,7 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * Core store config
@@ -214,7 +217,6 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Setter whether SID is allowed in store directive
-     * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
      * @return $this
@@ -788,7 +790,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $css = $this->getCssFilesContent([$params['file']]);
 
-        if (strpos($css, \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX) !== false) {
+        if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
             // Return compilation error wrapped in CSS comment
             return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
         } elseif (!empty($css)) {
@@ -884,10 +886,15 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         $css = '';
-        foreach ($files as $file) {
-            $asset = $this->_assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
+        try {
+            foreach ($files as $file) {
+                $asset = $this->_assetRepo->createAsset($file, $designParams);
+                $css .= $asset->getContent();
+            }
+        } catch (ContentProcessorException $exception) {
+            $css = $exception->getMessage();
         }
+
         return $css;
     }
 
@@ -909,7 +916,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if ($html && $cssToInline) {
             try {
                 // Don't try to compile CSS that has compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX)
+                if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(

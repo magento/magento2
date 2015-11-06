@@ -39,7 +39,7 @@ class Content extends Tab
     protected $addVariableButton = ".add-variable";
 
     /**
-     * Insert Frontend App button selector.
+     * Insert Widget button selector.
      *
      * @var string
      */
@@ -62,24 +62,28 @@ class Content extends Tab
     /**
      * Clicking in content tab 'Insert Variable' button.
      *
+     * @param SimpleElement $element [optional]
      * @return void
      */
-    public function clickInsertVariable()
+    public function clickInsertVariable(SimpleElement $element = null)
     {
-        $addVariableButton = $this->_rootElement->find($this->addVariableButton);
+        $context = $element === null ? $this->_rootElement : $element;
+        $addVariableButton = $context->find($this->addVariableButton);
         if ($addVariableButton->isVisible()) {
             $addVariableButton->click();
         }
     }
 
     /**
-     * Clicking in content tab 'Insert Frontend App' button.
+     * Clicking in content tab 'Insert Widget' button.
      *
+     * @param SimpleElement $element [optional]
      * @return void
      */
-    public function clickInsertWidget()
+    public function clickInsertWidget(SimpleElement $element = null)
     {
-        $addWidgetButton = $this->_rootElement->find($this->addWidgetButton);
+        $context = $element === null ? $this->_rootElement : $element;
+        $addWidgetButton = $context->find($this->addWidgetButton);
         if ($addWidgetButton->isVisible()) {
             $addWidgetButton->click();
         }

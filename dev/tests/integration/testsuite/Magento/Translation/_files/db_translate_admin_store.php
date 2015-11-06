@@ -11,8 +11,8 @@
 )->load(
     \Magento\Framework\App\Area::PART_CONFIG
 );
-/** @var \Magento\Translation\Model\Resource\StringUtils $translateString */
+/** @var \Magento\Translation\Model\ResourceModel\StringUtils $translateString */
 $translateString = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Translation\Model\Resource\StringUtils'
+    'Magento\Translation\Model\ResourceModel\StringUtils'
 );
 $translateString->saveTranslate('string to translate', 'predefined string translation', null);

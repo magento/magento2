@@ -177,7 +177,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function get($sku, $imageId)
+    public function get($sku, $entryId)
     {
         try {
             $product = $this->productRepository->get($sku);
@@ -187,7 +187,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         foreach ($mediaGalleryEntries as $entry) {
-            if ($entry->getId() == $imageId) {
+            if ($entry->getId() == $entryId) {
                 return $entry;
             }
         }

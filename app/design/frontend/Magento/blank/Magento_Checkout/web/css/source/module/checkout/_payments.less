@@ -37,9 +37,16 @@
                     display: block;
                 }
             }
-            .action {
-                &.primary {
-                    &:extend(.abs-button-l all);
+        }
+
+        .payment-method-content {
+            > .actions-toolbar {
+                > .primary {
+                    .action {
+                        &.primary {
+                            &:extend(.abs-button-l all);
+                        }
+                    }
                 }
             }
         }
@@ -66,9 +73,6 @@
             .lib-css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
             .fieldset {
                 &:not(:last-child) {
-                    margin: 0 0 @indent__base;
-                }
-                > .field {
                     margin: 0 0 @indent__base;
                 }
             }
@@ -125,12 +129,9 @@
         .no-payments-block {
             margin: @indent__base 0;
         }
-        .ccard {
+        .payments {
             .legend {
                 &:extend(.abs-visually-hidden all);
-            }
-            .year {
-                padding-left: @indent__l;
             }
         }
     }
@@ -181,6 +182,23 @@
                 > .control {
                     float: none;
                     width: 100%;
+                }
+            }
+        }
+        .payment-method-content {
+            .fieldset {
+                > .field {
+                    margin: 0 0 @indent__base;
+                    &.type {
+                        .control {
+                            margin-left: 25.8%;
+                        }
+                        &.no-detection {
+                            .control {
+                                margin-left: 0;
+                            }
+                        }
+                    }
                 }
             }
         }

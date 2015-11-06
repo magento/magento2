@@ -11,20 +11,20 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_directoriesFactory;
 
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $directoriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $directoriesFactory,
         array $data = []
     ) {
         $this->_directoriesFactory = $directoriesFactory;

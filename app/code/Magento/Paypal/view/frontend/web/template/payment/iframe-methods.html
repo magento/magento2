@@ -41,7 +41,7 @@
                 <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
             <!-- ko if: isPaymentReady() -->
-            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}"
+            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}, event: {load: iframeLoaded}"
                     data-container="paypal-iframe"
                     class="paypal iframe"
                     scrolling="no"

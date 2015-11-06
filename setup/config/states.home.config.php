@@ -16,6 +16,7 @@ return [
         [
             'id'          => 'root.home',
             'url'         => 'home',
+            'title'       => 'Setup Wizard',
             'templateUrl' => "$base/home",
             'header'      => 'Home',
             'nav'         => false,
@@ -27,7 +28,7 @@ return [
             'id'          => 'root.update',
             'url'         => 'component-grid',
             'templateUrl' => "$base/component-grid",
-            'title'       => "Component Manager",
+            'title'       => 'Component Manager',
             'controller'  => 'componentGridController',
             'nav'         => false,
             'noMenu'      => true,
@@ -35,10 +36,22 @@ return [
             'type'        => 'update'
         ],
         [
+            'id'          => 'root.install',
+            'url'         => 'install-extension-grid',
+            'templateUrl' => "$base/install-extension-grid",
+            'title'       => "Extensions Grid",
+            'controller'  => 'installExtensionGridController',
+            'nav'         => false,
+            'noMenu'      => true,
+            'order'       => 1,
+            'type'        => 'install',
+            'wrapper'     => 1
+        ],
+        [
             'id'          => 'root.upgrade',
             'url'         => 'select-version',
             'templateUrl' => "$base/select-version",
-            'title'       => 'Select Version',
+            'title'       => 'System Upgrade',
             'controller'  => 'selectVersionController',
             'header'      => 'Step 1: Select Version',
             'order'       => 1,

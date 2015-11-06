@@ -44,14 +44,14 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Downloadable\Helper\File $fileHelper
      * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Downloadable\Helper\File $fileHelper,
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Filesystem $filesystem
     ) {
         parent::__construct($context);

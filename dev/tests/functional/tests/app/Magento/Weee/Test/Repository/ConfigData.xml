@@ -92,19 +92,19 @@
             <field name="tax/weee/display_list" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display_sales" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/apply_vat" xsi:type="array">
@@ -242,19 +242,19 @@
             <field name="tax/weee/display_list" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display_sales" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/apply_vat" xsi:type="array">
@@ -392,19 +392,19 @@
             <field name="tax/weee/display_list" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display_sales" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/apply_vat" xsi:type="array">
@@ -467,19 +467,19 @@
             <field name="tax/weee/display_list" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display_sales" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/apply_vat" xsi:type="array">
@@ -542,19 +542,19 @@
             <field name="tax/weee/display_list" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/display_sales" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Excluding FPT, FPT description, final price</item>
+                <item name="label" xsi:type="string">Excluding FPT. Including FPT description and final price</item>
                 <item name="value" xsi:type="number">2</item>
             </field>
             <field name="tax/weee/apply_vat" xsi:type="array">

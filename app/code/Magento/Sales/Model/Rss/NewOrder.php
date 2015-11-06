@@ -104,7 +104,7 @@ class NewOrder implements DataProviderInterface
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = $this->orderFactory->create();
-        /** @var $collection \Magento\Sales\Model\Resource\Order\Collection */
+        /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
         $collection = $order->getResourceCollection();
         $collection->addAttributeToFilter('created_at', ['date' => true, 'from' => $passDate])
             ->addAttributeToSort('created_at', 'desc');

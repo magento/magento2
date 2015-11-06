@@ -7,7 +7,7 @@
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Set getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -41,7 +41,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Resource instance
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
      */
     protected $_resource;
 
@@ -68,7 +68,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $_resourceAttribute;
 
@@ -80,8 +80,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceAttribute
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -95,8 +95,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceAttribute,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -123,7 +123,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute\Set');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set');
     }
 
     /**
@@ -348,7 +348,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getResource()
     {

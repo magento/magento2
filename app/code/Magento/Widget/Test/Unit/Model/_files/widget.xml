@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../../../app/code/Magento/Widget/etc/widget.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="sales_widget_guestform" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true">
         <label translate="true">Orders and Returns</label>
         <description translate="true">Orders and Returns Search Form</description>
@@ -43,7 +43,7 @@
                 <block class="Magento\Backend\Block\Catalog\Product\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Product...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Product...</item>
                         </item>
                     </data>
                 </block>

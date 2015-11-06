@@ -6,11 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="checkout_index" xsi:type="string">/checkout</item>
+            </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="checkout_sidebar" xsi:type="string">/checkout/sidebar</item>
             </argument>
         </arguments>
     </type>

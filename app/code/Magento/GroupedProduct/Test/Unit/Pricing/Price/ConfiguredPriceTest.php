@@ -18,7 +18,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 
@@ -51,7 +51,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
         $this->priceInfo = $this->getMockBuilder('Magento\Framework\Pricing\PriceInfoInterface')
             ->getMock();
 
-        $this->saleableItem = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')
+        $this->saleableItem = $this->getMockBuilder('Magento\Framework\Pricing\SaleableInterface')
             ->setMethods([
                 'getTypeId',
                 'getId',

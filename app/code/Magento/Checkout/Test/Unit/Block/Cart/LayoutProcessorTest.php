@@ -31,14 +31,14 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->merger = $this->getMock('\Magento\Checkout\Block\Checkout\AttributeMerger', [], [], '', false);
         $this->countryCollection = $this->getMock(
-            '\Magento\Directory\Model\Resource\Country\Collection',
+            '\Magento\Directory\Model\ResourceModel\Country\Collection',
             [],
             [],
             '',
             false
         );
         $this->regionCollection = $this->getMock(
-            '\Magento\Directory\Model\Resource\Region\Collection',
+            '\Magento\Directory\Model\ResourceModel\Region\Collection',
             [],
             [],
             '',

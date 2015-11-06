@@ -7,15 +7,13 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ForgotPasswordPost extends Action implements AccountInterface
+class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;

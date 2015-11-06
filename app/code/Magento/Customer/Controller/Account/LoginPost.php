@@ -5,9 +5,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -19,7 +17,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends Action implements AccountInterface
+class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
@@ -92,15 +90,12 @@ class LoginPost extends Action implements AccountInterface
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
-                }
-                catch (AuthenticationException $e) {
+                } catch (AuthenticationException $e) {
                     $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
-                        __('Something went wrong while validating the login and password.')
-                    );
+                    $this->messageManager->addError(__('Invalid login or password.'));
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));
