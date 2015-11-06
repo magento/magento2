@@ -13,7 +13,7 @@ class StockAll extends UnsubscribeController
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_objectManager->create('Magento\ProductAlert\Model\Stock')

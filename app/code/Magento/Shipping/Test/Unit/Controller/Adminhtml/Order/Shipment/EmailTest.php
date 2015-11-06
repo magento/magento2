@@ -235,7 +235,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $arguments = ['shipment_id' => $shipmentId];
         $this->prepareRedirect($path, $arguments, 0);
 
-        $this->shipmentEmail->executeInternal();
+        $this->shipmentEmail->execute();
         $this->assertEquals($this->response, $this->shipmentEmail->getResponse());
     }
 

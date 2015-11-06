@@ -26,7 +26,6 @@
             <defaults>
                 <country>US</country>
                 <region>0</region>
-                <postcode>*</postcode>
             </defaults>
             <display>
                 <type>1</type>

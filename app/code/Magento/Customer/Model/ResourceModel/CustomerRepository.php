@@ -192,8 +192,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-
-        $this->customerResourceModel->save($customerModel);
+        $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
 

@@ -13,7 +13,7 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getParam('_unsubscribe')) {
             $problems = (array)$this->getRequest()->getParam('problem', []);

@@ -120,7 +120,17 @@ class Install extends AbstractActionController
     {
         $percent = 0;
         $success = false;
+        $contents = [];
         $json = new JsonModel();
+
+        // Depending upon the install environment and network latency, there is a possibility that
+        // "progress" check request may arrive before the Install POST request. In that case
+        // "install.log" file may not be created yet. Check the "install.log" is created before
+        // trying to read from it.
+        if (!$this->log->logfileExists()) {
+            return $json->setVariables(['progress' => $percent, 'success' => true, 'console' => $contents]);
+        }
+
         try {
             $progress = $this->progressFactory->createFromLog($this->log);
             $percent = sprintf('%d', $progress->getRatio() * 100);

@@ -86,12 +86,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter = new Adapter(
             $this->eventManager,
             $this->valueHandlerPool,
-            $this->validatorPool,
-            $this->commandPool,
             $this->paymentDataObjectFactory,
             $this->code,
             $this->formBlockType,
-            $this->infoBlockType
+            $this->infoBlockType,
+            $this->commandPool,
+            $this->validatorPool
         );
     }
 

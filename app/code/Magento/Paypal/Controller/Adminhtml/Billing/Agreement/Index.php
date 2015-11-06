@@ -13,7 +13,7 @@ class Index extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Paypal::paypal_billing_agreement');

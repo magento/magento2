@@ -30,7 +30,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_setTypeId();
 
