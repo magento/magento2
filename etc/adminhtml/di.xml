@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Elasticsearch\Controller\Adminhtml\Search\System\Config\TestConnection\Ping">
+        <arguments>
+            <argument name="clientHelper" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Model\Client\ElasticsearchFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Elasticsearch</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

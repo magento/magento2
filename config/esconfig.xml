@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <synonyms_file>
+        <default>synonyms.txt</default>
+        <en_US>synonyms_en_US.txt</en_US>
+    </synonyms_file>
+    <stopwords_file>
+        <default>stopwords.txt</default>
+        <en_US>stopwords_en_US.txt</en_US>
+    </stopwords_file>
+    <stemmer>
+        <default>english</default>
+        <en_US>english</en_US>
+    </stemmer>
+    <protwords_file>
+        <default>stopwords.txt</default>
+        <en_US>stopwords_en_US.txt</en_US>
+    </protwords_file>
+</config>
