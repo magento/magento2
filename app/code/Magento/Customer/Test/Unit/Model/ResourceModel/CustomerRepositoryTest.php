@@ -268,6 +268,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setRpTokenCreatedAt',
                 'getDataModel',
                 'setPasswordHash',
+                'save',
             ],
             [],
             '',
@@ -402,9 +403,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerResourceModel->expects($this->once())
-            ->method('save')
-            ->with($customerModel);
+        $customerModel->expects($this->once())
+            ->method('save');
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
@@ -486,6 +486,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setRpTokenCreatedAt',
                 'getDataModel',
                 'setPasswordHash',
+                'save',
             ],
             [],
             '',
@@ -579,9 +580,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerResourceModel->expects($this->once())
-            ->method('save')
-            ->with($customerModel);
+        $customerModel->expects($this->once())
+            ->method('save');
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);

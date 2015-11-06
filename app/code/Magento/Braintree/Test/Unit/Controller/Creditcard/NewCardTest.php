@@ -94,7 +94,7 @@ class NewCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecuteInternal()
+    public function testExecute()
     {
         $objectManager = new ObjectManagerHelper($this);
         $customerId = 1;
@@ -103,8 +103,7 @@ class NewCardTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        /** @var \Magento\Braintree\Controller\Creditcard\NewCard $controller */
-        $controller = $objectManager->getObject(
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\NewCard',
             [
                 'resultPageFactory' => $this->resultPageFactory,
@@ -112,6 +111,6 @@ class NewCardTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultPage, $controller->executeInternal());
+        $this->assertSame($this->resultPage, $notification->execute());
     }
 }
