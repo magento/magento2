@@ -80,6 +80,11 @@ class EavAttribute
         $this->convertSwatchToDropdown($attribute);
     }
 
+    /**
+     * @param Attribute $attribute
+     * @return bool
+     * @throws InputException
+     */
     protected function validateOptions(Attribute $attribute)
     {
         $attributeSavedOptions = $attribute->getSource()->getAllOptions(false);
