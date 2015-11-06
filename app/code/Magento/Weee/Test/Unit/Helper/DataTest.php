@@ -41,6 +41,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $weeeConfig = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
         $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
         $this->weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
         $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
         $arguments = [
@@ -56,7 +57,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('hasData')->will($this->returnValue(false));
         $this->product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
 
-        $this->assertEquals('11.26', $this->helperData->getAmount($this->product));
+        $this->assertEquals('11.26', $this->helperData->getAmountExclTax($this->product));
     }
 
     /**
@@ -284,12 +285,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
 
-    public function testGetAppliedAmountSimple()
+    public function testGetRecursiveAmountSimple()
     {
-        $testResult = 2;
+        $testAmountUnit = 2;
+        $testAmountRow = 34;
+
         $itemProductSimple=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
@@ -300,28 +303,35 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testResult)));
+            ->will($this->returnValue($testAmountUnit));
+        $itemProductSimple->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow));
 
-        $this->assertEquals($testResult, $this->helperData->getAppliedAmount($itemProductSimple));
+        $this->assertEquals($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
+        $this->assertEquals($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
     }
 
-    public function getAppliedAmountBundle()
+    public function testGetRecursiveAmountBundle()
     {
-        $testAmount1 = 1;
-        $testAmount2 = 2;
+        $testAmountUnit1 = 1;
+        $testAmountUnit2 = 2;
+        $testTotalUnit = $testAmountUnit1 + $testAmountUnit2;
 
-        $testArray = $testAmount1 + $testAmount2;
+        $testAmountRow1 = 33;
+        $testAmountRow2 = 444;
+        $testTotalRow = $testAmountRow1 + $testAmountRow2;
 
         $itemProductSimple1=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
         );
         $itemProductSimple2=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
-            ['getWeeeTaxAppliedAmount'],
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
@@ -329,11 +339,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testAmount1)));
+            ->will($this->returnValue($testAmountUnit1));
+        $itemProductSimple1->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow1));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue(\Zend_Json::encode($testAmount2)));
+            ->will($this->returnValue($testAmountUnit2));
+        $itemProductSimple2->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->will($this->returnValue($testAmountRow2));
 
         $itemProductBundle=$this->getMock(
             '\Magento\Quote\Model\Quote\Item',
@@ -352,6 +368,31 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getChildren')
             ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
 
-        $this->assertEquals($testArray, $this->helperData->getAppliedAmount($itemProductBundle));
+        $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
+        $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
+    }
+
+    public function testGetProductWeeeAttributesForDisplay()
+    {
+        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->product->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
+        $this->helperData->getProductWeeeAttributesForDisplay($this->product);
+    }
+
+    public function testGetTaxDisplayConfig()
+    {
+        $expected = 1;
+        $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
+        $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
+        $arguments = [
+            'taxData' => $taxData,
+        ];
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
+
+        $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
 }

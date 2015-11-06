@@ -5,11 +5,12 @@
  */
 namespace Magento\BundleImportExport\Model\Export;
 
-use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
-use Magento\Bundle\Model\Resource\Selection\Collection as SelectionCollection;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\ImportExport\Controller\Adminhtml\Import;
+use Magento\ImportExport\Model\Import as ImportModel;
 
 /**
  * Class RowCustomizer
@@ -89,13 +90,14 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Prepare data for export
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @param int $productIds
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param int[] $productIds
      * @return $this
      */
     public function prepareData($collection, $productIds)
     {
-        $collection->addAttributeToFilter(
+        $productCollection = clone $collection;
+        $productCollection->addAttributeToFilter(
             'entity_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
@@ -103,7 +105,7 @@ class RowCustomizer implements RowCustomizerInterface
             ['eq' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE]
         );
 
-        return $this->populateBundleData($collection);
+        return $this->populateBundleData($productCollection);
     }
 
     /**
@@ -151,7 +153,7 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Populate bundle product data
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
      */
     protected function populateBundleData($collection)
@@ -176,7 +178,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getFormattedBundleOptionValues($product)
     {
-        /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+        /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
         $optionsCollection = $product->getTypeInstance()
             ->getOptionsCollection($product)
             ->setOrder('position', Collection::SORT_ORDER_ASC);
@@ -214,9 +216,9 @@ class RowCustomizer implements RowCustomizerInterface
                 'price_type' => $this->getPriceTypeValue($selection->getSelectionPriceType())
             ];
             $bundleData .= $optionValues
-                . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                 . implode(
-                    ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                    ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                     array_map(
                         function ($value, $key) {
                             return $key . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
@@ -240,9 +242,9 @@ class RowCustomizer implements RowCustomizerInterface
     protected function getFormattedOptionValues($option)
     {
         return 'name' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-        . $option->getTitle() . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+        . $option->getTitle() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
         . 'type' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-        . $option->getType() . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+        . $option->getType() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
         . 'required' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
         . $option->getRequired();
     }
@@ -290,7 +292,7 @@ class RowCustomizer implements RowCustomizerInterface
     {
         if (!empty($dataRow['additional_attributes'])) {
             $additionalAttributes = explode(
-                ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 $dataRow['additional_attributes']
             );
             $dataRow['additional_attributes'] = $this->getNotBundleAttributes($additionalAttributes);
@@ -314,10 +316,10 @@ class RowCustomizer implements RowCustomizerInterface
                 $cleanedAdditionalAttributes .= $attributeCode
                     . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
                     . $attributeValue
-                    . ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                    . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
             }
         }
 
-        return rtrim($cleanedAdditionalAttributes, ImportProductModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR);
+        return rtrim($cleanedAdditionalAttributes, ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR);
     }
 }

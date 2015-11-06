@@ -164,7 +164,10 @@ class Application
 
         $customDirs = $this->getCustomDirs();
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
-        \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
+        \Magento\Framework\Autoload\Populator::populateMappings(
+            $autoloadWrapper,
+            $this->dirList
+        );
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
@@ -187,7 +190,8 @@ class Application
         if (null === $this->_db) {
             if ($this->isInstalled()) {
                 $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
-                $reader = new Reader($this->dirList, $configPool);
+                $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+                $reader = new Reader($this->dirList, $driverPool, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
                 $host = $deploymentConfig->get(
                     ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
@@ -364,7 +368,6 @@ class Application
                 'core_app_init_current_store_after' => [
                     'integration_tests' => [
                         'instance' => 'Magento\TestFramework\Event\Magento',
-                        'method' => 'initStoreAfter',
                         'name' => 'integration_tests'
                     ]
                 ]
@@ -439,6 +442,7 @@ class Application
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
         $this->_ensureDirExists($this->_configDir);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::PUB][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::MEDIA][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::STATIC_VIEW][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
@@ -494,7 +498,9 @@ class Application
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
-            copy($file, $targetFile);
+            if ($file !== $targetFile) {
+                copy($file, $targetFile);
+            }
         }
     }
 
@@ -622,15 +628,15 @@ class Application
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
-            DirectoryList::MEDIA => [$path => "{$this->installDir}/media"],
-            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub_static"],
+            DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
+            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::GENERATION => [$path => "{$var}/generation"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
-            DirectoryList::THEMES => [$path => BP . '/app/design'],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
+            DirectoryList::PUB => [$path => "{$this->installDir}/pub"],
         ];
         return $customDirs;
     }

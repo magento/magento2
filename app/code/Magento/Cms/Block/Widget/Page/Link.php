@@ -32,7 +32,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     protected $_anchorText;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page
+     * @var \Magento\Cms\Model\ResourceModel\Page
      */
     protected $_resourcePage;
 
@@ -45,13 +45,13 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\Resource\Page $resourcePage
+     * @param \Magento\Cms\Model\ResourceModel\Page $resourcePage
      * @param \Magento\Cms\Helper\Page $cmsPage
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Cms\Model\Resource\Page $resourcePage,
+        \Magento\Cms\Model\ResourceModel\Page $resourcePage,
         \Magento\Cms\Helper\Page $cmsPage,
         array $data = []
     ) {

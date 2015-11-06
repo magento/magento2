@@ -10,7 +10,7 @@
              module="Magento_Customer"
              type="eav"
              entity_type="customer"
-             collection="Magento\Customer\Model\Resource\Customer\Collection"
+             collection="Magento\Customer\Model\ResourceModel\Customer\Collection"
              identifier="email"
              repository_class="Magento\Customer\Test\Repository\Customer"
              handler_interface="Magento\Customer\Test\Handler\Customer\CustomerInterface"

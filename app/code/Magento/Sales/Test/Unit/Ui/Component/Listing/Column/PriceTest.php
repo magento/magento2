@@ -27,10 +27,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->priceFormatterMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\PriceCurrencyInterface');
         $this->model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\Price',
-            ['priceFormatter' => $this->priceFormatterMock]
+            ['priceFormatter' => $this->priceFormatterMock, 'context' => $contextMock]
         );
     }
 
@@ -53,7 +59,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($newItemValue);
 
         $this->model->setData('name', $itemName);
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

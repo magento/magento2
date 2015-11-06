@@ -34,12 +34,16 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_converter = $this->getMock('Magento\Framework\Indexer\Config\Converter', ['convert']);
         $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $validationState->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
         $this->_model = new \Magento\Framework\Indexer\Config\Reader(
             $this->_fileResolverMock,
             $this->_converter,
-            new \Magento\Framework\Indexer\Config\SchemaLocator(),
+            new \Magento\Framework\Indexer\Config\SchemaLocator(
+                new \Magento\Framework\Config\Dom\UrnResolver()
+            ),
             $validationState
         );
     }

@@ -7,11 +7,9 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\Updater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -105,6 +103,12 @@ class StartUpdater extends AbstractActionController
                 $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
 
                 $errorMessage .= $this->updater->createUpdaterTask(
+                    [],
+                    \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                    ['enable' => true]
+                );
+
+                $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
                     $cronTaskType,
                     $additionalOptions
@@ -117,6 +121,12 @@ class StartUpdater extends AbstractActionController
                         [],
                         \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
                         []
+                    );
+                } elseif ($jobType == 'disable') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                        ['enable' => false]
                     );
                 }
             }
@@ -254,6 +264,7 @@ class StartUpdater extends AbstractActionController
 
             case 'upgrade':
             case 'update':
+            case 'install':
                 $cronTaskType = \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE;
                 break;
 

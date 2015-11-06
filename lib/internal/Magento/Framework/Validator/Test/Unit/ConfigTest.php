@@ -19,9 +19,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
     /**
@@ -51,12 +58,37 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\ObjectManager\Relations\Runtime()
         );
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config);
-        $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
-        $factory->setObjectManager($realObjectManager);
-        $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        $appObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
+        $factory->setObjectManager($appObjectManager);
+        /** @var \Magento\Framework\Validator\UniversalFactory $universalFactory */
+        $universalFactory = $appObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock->expects($this->any())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Validator/etc/validation.xsd')
+            ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'));
+        $appObjectManager->configure(
+            [
+                'preferences' => [
+                    'Magento\Framework\Config\ValidationStateInterface' =>
+                        'Magento\Framework\App\Arguments\ValidationState',
+                ],
+                'Magento\Framework\App\Arguments\ValidationState' => [
+                    'arguments' => [
+                        'appMode' => 'developer',
+                    ]
+                ]
+            ]
+        );
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
-            ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]
+            [
+                'configFiles' => $configFiles,
+                'builderFactory' => $universalFactory,
+                'domFactory' => new \Magento\Framework\Config\DomFactory($appObjectManager),
+                'urnResolver' => $urnResolverMock
+            ]
         );
     }
 
@@ -295,6 +327,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'),
+            $this->_config->getSchemaFile()
+        );
         $this->assertFileExists($this->_config->getSchemaFile());
     }
 }

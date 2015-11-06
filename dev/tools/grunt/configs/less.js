@@ -25,23 +25,14 @@ var lessOptions = {
         dumpLineNumbers: false, // use 'comments' instead false to output line comments for source
         ieCompat: false
     },
-    backend: {
-        files: combo.lessFiles('backend')
-    },
-    blank: {
-        files: combo.lessFiles('blank')
-    },
-    luma: {
-        files: combo.lessFiles('luma')
-    },
     setup: {
         files: {
-            '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/setup.less'
+            '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/_setup.less'
         }
     },
     updater: {
         files: {
-            '<%= path.css.updater %>/updater.css': '<%= path.less.setup %>/setup.less'
+            '<%= path.css.updater %>/updater.css': '<%= path.less.setup %>/_setup.less'
         }
     },
     documentation: {

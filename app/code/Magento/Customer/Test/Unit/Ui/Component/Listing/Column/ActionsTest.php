@@ -23,12 +23,12 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
-            [],
-            '',
-            false
-        );
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             [],
@@ -90,7 +90,7 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn('http://magento.com/customer/index/edit');
 
-        $this->component->prepareDataSource($dataSource);
+        $dataSource = $this->component->prepareDataSource($dataSource);
 
         $this->assertEquals($expectedDataSource, $dataSource);
     }

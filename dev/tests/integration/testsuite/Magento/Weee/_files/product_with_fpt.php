@@ -12,7 +12,7 @@ $entityTypeId = $entityModel->setType(\Magento\Catalog\Model\Product::ENTITY)->g
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setAttributeCode(
     'fpt_for_all'
@@ -40,7 +40,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product FPT'
 )->setSku(
     'simple'
 )->setPrice(

@@ -36,7 +36,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollection;
 
@@ -63,7 +63,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +108,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
         $data = $this->getTestData();
         $this->config->expects($this->once())
-            ->method('getImages')
+            ->method('getMediaEntities')
             ->with('Magento_Catalog')
             ->willReturn($data);
 

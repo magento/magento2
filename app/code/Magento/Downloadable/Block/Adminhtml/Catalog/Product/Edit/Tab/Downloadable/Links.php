@@ -23,7 +23,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Purchased Separately Attribute cache
      *
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected $_purchasedSeparatelyAttribute = null;
 
@@ -140,7 +140,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Retrieve Purchased Separately Attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getPurchasedSeparatelyAttribute()
     {
@@ -157,27 +157,13 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve Purchased Separately HTML select
+     * Get Links can be purchased separately value for current product
      *
-     * @return string
+     * @return bool
      */
-    public function getPurchasedSeparatelySelect()
+    public function isProductLinksCanBePurchasedSeparately()
     {
-        $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
-        )->setName(
-            'product[links_purchased_separately]'
-        )->setId(
-            'downloadable_link_purchase_type'
-        )->setOptions(
-            $this->_sourceModel->toOptionArray()
-        )->setValue(
-            $this->getProduct()->getLinksPurchasedSeparately()
-        )->setClass(
-            'admin__control-select'
-        );
-
-        return $select->getHtml();
+        return (bool) $this->getProduct()->getData('links_purchased_separately');
     }
 
     /**
@@ -191,9 +177,9 @@ class Links extends \Magento\Backend\Block\Template
             'Magento\Backend\Block\Widget\Button'
         )->setData(
             [
-                'label' => __('Add New Row'),
+                'label' => __('Add New Link'),
                 'id' => 'add_link_item',
-                'class' => 'add',
+                'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-link'],
             ]
         );
@@ -462,5 +448,14 @@ class Links extends \Magento\Backend\Block\Template
     public function getBaseCurrencyCode($storeId)
     {
         return $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+    }
+
+    /**
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
+     * @return string
+     */
+    public function getBaseCurrencySymbol($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getBaseCurrency()->getCurrencySymbol();
     }
 }

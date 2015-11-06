@@ -31,4 +31,16 @@ class Additional extends Block
     {
         $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)->click();
     }
+
+    /**
+     * Check if button is visible in 'Additional Cache Management'.
+     *
+     * @param string $flushButtonName
+     * @return bool
+     */
+    public function isFlushCacheButtonVisible($flushButtonName)
+    {
+        return $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)
+            ->isVisible();
+    }
 }

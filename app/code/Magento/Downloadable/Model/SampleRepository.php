@@ -153,7 +153,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     public function save(
         $sku,
         SampleInterface $sample,
-        $isGlobalScopeContent = false
+        $isGlobalScopeContent = true
     ) {
         $product = $this->productRepository->get($sku, true);
 

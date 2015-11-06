@@ -8,6 +8,7 @@
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\ImportExport\Model\Import;
 
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -29,16 +30,16 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $links;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param Grouped\Links $links
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         Grouped\Links $links
     ) {
@@ -76,7 +77,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSkusQty)) {
                     continue;
                 }
-                $associatedSkusAndQtyPairs = explode(Product::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
+                $associatedSkusAndQtyPairs = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
                 $position = 0;
                 foreach ($associatedSkusAndQtyPairs as $associatedSkuAndQty) {
                     ++$position;

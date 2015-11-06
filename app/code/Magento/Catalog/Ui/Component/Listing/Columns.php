@@ -12,17 +12,31 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
+    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    protected $attributeRepository;
+
+    /**
+     * @var array
+     */
+    protected $filterMap = [
+        'default' => 'text',
+        'select' => 'select',
+        'boolean' => 'select',
+        'multiselect' => 'select',
+        'date' => 'dateRange',
+    ];
+
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
-     * @param AttributeRepository $attributeRepository
+     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory,
-        \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository,
+        \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
         array $components = [],
         array $data = []
     ) {
@@ -38,13 +52,28 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $columnSortOrder = self::DEFAULT_COLUMNS_MAX_ORDER;
         foreach ($this->attributeRepository->getList() as $attribute) {
+            $config = [];
             if (!isset($this->components[$attribute->getAttributeCode()])) {
                 $config['sortOrder'] = ++$columnSortOrder;
+                if ($attribute->getIsFilterableInGrid()) {
+                    $config['filter'] = $this->getFilterType($attribute->getFrontendInput());
+                }
                 $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
                 $column->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $column);
             }
         }
         parent::prepare();
+    }
+
+    /**
+     * Retrieve filter type by $frontendInput
+     *
+     * @param string $frontendInput
+     * @return string
+     */
+    protected function getFilterType($frontendInput)
+    {
+        return isset($this->filterMap[$frontendInput]) ? $this->filterMap[$frontendInput] : $this->filterMap['default'];
     }
 }

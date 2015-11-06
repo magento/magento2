@@ -12,15 +12,7 @@
                 <xs:element name="vars" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="var" maxOccurs="unbounded">
-                                <xs:complexType>
-                                    <xs:simpleContent>
-                                        <xs:extension base="xs:string">
-                                            <xs:attribute name="name" type="xs:string" use="required"/>
-                                        </xs:extension>
-                                    </xs:simpleContent>
-                                </xs:complexType>
-                            </xs:element>
+                            <xs:element name="var" type="varType" maxOccurs="unbounded"/>
                         </xs:sequence>
                         <xs:attribute name="module" type="xs:string" use="required"/>
                     </xs:complexType>
@@ -29,8 +21,8 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-                <xs:element name="images" minOccurs="0" type="imagesType"/>
                 <xs:element name="exclude" minOccurs="0" type="excludeType"/>
+                <xs:element name="media" minOccurs="0" type="mediaType"/>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
@@ -38,9 +30,23 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
-    <xs:complexType name="imagesType">
+    <xs:complexType name="varType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="var" type="varType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="mediaType" mixed="true">
+        <xs:all>
+            <xs:element name="images" type="imageType" minOccurs="0"/>
+            <xs:element name="videos" type="videoType" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="imageType">
         <xs:sequence>
-            <xs:element name="image" maxOccurs="unbounded">
+            <xs:element name="image" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="width" type="xs:positiveInteger" minOccurs="0"/>
@@ -58,7 +64,7 @@
                         </xs:element>
                     </xs:sequence>
                     <xs:attribute name="id" type="xs:string" use="required"/>
-                    <xs:attribute name="type" use="required">
+                    <xs:attribute name="type">
                         <xs:simpleType>
                             <xs:restriction base="xs:string">
                                 <xs:enumeration value="thumbnail"/>
@@ -74,6 +80,32 @@
         </xs:sequence>
         <xs:attribute name="module" type="xs:string" use="required"/>
     </xs:complexType>
+
+    <xs:complexType name="videoType">
+        <xs:sequence>
+            <xs:element name="video" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="play_if_base" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="show_related" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="video_auto_restart" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="type" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="play_if_base"/>
+                                <xs:enumeration value="show_related"/>
+                                <xs:enumeration value="video_auto_restart"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="excludeType">
         <xs:sequence>
             <xs:element name="item" type="itemType" maxOccurs="unbounded"/>

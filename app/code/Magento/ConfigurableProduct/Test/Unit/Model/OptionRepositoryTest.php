@@ -40,12 +40,12 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
         $this->configurableTypeResource = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionResource = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute'
         )
             ->disableOriginalConstructor()
             ->getMock();

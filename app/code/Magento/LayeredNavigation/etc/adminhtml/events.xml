@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="product_attribute_form_build_front_tab">
-        <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Edit\Tab\Front\Observer" method="observe" />
+        <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserver" />
     </event>
     <event name="product_attribute_grid_build">
-        <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Grid\Observer" method="observe" />
+        <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Observer\Grid\ProductAttributeGridBuildObserver" />
     </event>
 </config>

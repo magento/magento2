@@ -92,7 +92,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $_requestFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -127,12 +127,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param HandlerInterface $errorHandler
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param Payflow\RequestFactory $requestFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param OrderSender $orderSender
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -153,12 +153,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         HandlerInterface $errorHandler,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         OrderSender $orderSender,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -413,38 +413,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected function _buildTokenRequest(\Magento\Sales\Model\Order\Payment $payment)
     {
         $request = $this->buildBasicRequest();
-        $request->setCreatesecuretoken(
-            'Y'
-        )->setSecuretokenid(
-            $this->mathRandom->getUniqueHash()
-        )->setTrxtype(
-            $this->_getTrxTokenType()
-        )->setAmt(
-            sprintf('%.2F', $payment->getOrder()->getBaseTotalDue())
-        )->setCurrency(
-            $payment->getOrder()->getBaseCurrencyCode()
-        )->setInvnum(
-            $payment->getOrder()->getIncrementId()
-        )->setCustref(
-            $payment->getOrder()->getIncrementId()
-        )->setPonum(
-            $payment->getOrder()->getId()
-        );
+        $request->setCreatesecuretoken('Y')
+            ->setSecuretokenid($this->mathRandom->getUniqueHash())
+            ->setTrxtype($this->_getTrxTokenType());
 
         $order = $payment->getOrder();
-        if (empty($order)) {
-            return $request;
-        }
+        $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
+            ->setCurrency($order->getBaseCurrencyCode());
+        $this->addRequestOrderInfo($request, $order);
 
-        $billing = $order->getBillingAddress();
-        if (!empty($billing)) {
-            $request = $this->setBilling($request, $billing);
-            $request->setEmail($order->getCustomerEmail());
-        }
-        $shipping = $order->getShippingAddress();
-        if (!empty($shipping)) {
-            $request = $this->setShipping($request, $shipping);
-        }
+        $request = $this->fillCustomerContacts($order, $request);
         //pass store Id to request
         $request->setData('USER1', $order->getStoreId());
         $request->setData('USER2', $this->_getSecureSilentPostHash($payment));

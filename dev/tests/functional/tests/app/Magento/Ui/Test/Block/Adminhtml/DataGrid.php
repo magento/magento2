@@ -88,11 +88,11 @@ class DataGrid extends Grid
     protected $actionButton = '.modal-inner-wrap .action-secondary';
 
     /**
-     * Column header locator
+     * Column header locator.
      *
      * @var string
      */
-    protected $columnHeader = "//th/span[.='%s']";
+    protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
 
     /**
      * @var string
@@ -122,6 +122,27 @@ class DataGrid extends Grid
     protected $noRecords = '[class$=no-data]';
 
     /**
+     * Selector for alert.
+     *
+     * @var string
+     */
+    protected $alertModal = '._show[data-role=modal]';
+
+    /**
+     * Locator for 'Sort' link.
+     *
+     * @var string
+     */
+    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+
+    /**
+     * Current page input.
+     *
+     * @var string
+     */
+    protected $currentPage = '#pageCurrent';
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -132,6 +153,7 @@ class DataGrid extends Grid
         if ($chipsHolder->isVisible()) {
             parent::resetFilter();
         }
+        $this->waitLoader();
     }
 
     /**
@@ -232,25 +254,76 @@ class DataGrid extends Grid
         if ($this->_rootElement->find($this->noRecords)->isVisible()) {
             return;
         }
-        if (!is_array($action)) {
-            $action = [$action => '-'];
-        }
-        foreach ($items as $item) {
-            $this->searchAndSelect($item);
-        }
+        $this->selectItems($items);
         if ($massActionSelection) {
             $this->_rootElement->find($this->massActionToggleButton)->click();
             $this->_rootElement
                 ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
                 ->click();
         }
-        $actionType = key($action);
+        $actionType = is_array($action) ? key($action) : $action;
         $this->_rootElement->find($this->massActionButton)->click();
         $this->_rootElement
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
+        if (is_array($action)) {
+            $this->_rootElement
+                ->find(sprintf($this->massActionToggleList, end($action)), Locator::SELECTOR_XPATH)
+                ->click();
+        }
         if ($acceptAlert) {
-            $this->browser->find($this->actionButton)->click();
+            $element = $this->browser->find($this->alertModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
+        }
+    }
+
+    /**
+     * Select items without using grid search.
+     *
+     * @param array $items
+     * @param bool $isSortable
+     * @return void
+     * @throws \Exception
+     */
+    public function selectItems(array $items, $isSortable = true)
+    {
+        if ($isSortable) {
+            $this->sortGridByField('ID');
+        }
+        foreach ($items as $item) {
+            $this->_rootElement->find($this->currentPage)->setValue('');
+            $this->waitLoader();
+            $selectItem = $this->getRow($item)->find($this->selectItem);
+            do {
+                if ($selectItem->isVisible()) {
+                    if (!$selectItem->isSelected()) {
+                        $selectItem->click();
+                    }
+                    break;
+                }
+            } while ($this->nextPage());
+            if (!$selectItem->isVisible()) {
+                throw new \Exception('Searched item was not found.');
+            }
+        }
+    }
+
+    /**
+     * Sort grid by field.
+     *
+     * @param string $field
+     * @param string $sort
+     * @return void
+     */
+    public function sortGridByField($field, $sort = "desc")
+    {
+        $reverseSort = $sort == 'desc' ? 'asc' : 'desc';
+        $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $reverseSort, $field), Locator::SELECTOR_XPATH);
+        if ($sortBlock->isVisible()) {
+            $sortBlock->click();
+            $this->waitLoader();
         }
     }
 

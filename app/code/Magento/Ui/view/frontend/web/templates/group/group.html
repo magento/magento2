@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="field" data-bind="css: additionalClasses">
-    <label class="label">
+<fieldset class="field" data-bind="css: additionalClasses">
+    <legend class="label">
         <span data-bind="text: element.label"></span>
-    </label>
+    </legend>
     <div class="control">
         <!-- ko foreach: { data: elems, as: 'element' } -->
 
@@ -33,4 +33,4 @@
         <!-- /ko -->
         <!-- /ko -->
     </div>
-</div>
+</fieldset>

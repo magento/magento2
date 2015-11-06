@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Product\Compare;
 
 use \Magento\Catalog\Controller\Product\Compare\Index;
 
-use Magento\Catalog\Model\Resource\Product\Compare\Item;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -99,7 +99,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory',
             ['create'],
             [],
             '',

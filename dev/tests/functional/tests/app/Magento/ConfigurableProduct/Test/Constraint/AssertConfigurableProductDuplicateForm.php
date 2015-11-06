@@ -28,6 +28,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
         CatalogProductIndex $productGrid,
         CatalogProductEdit $productPage
     ) {
+        $product = $this->processFixture($product);
         $duplicateProductSku = $product->getSku() . '-1';
         $filter = ['sku' => $duplicateProductSku];
         $productGrid->open();

@@ -27,10 +27,29 @@ angular.module('select-version', ['ngStorage'])
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
                 if (data.responseType != 'error') {
-                    $scope.versions = data.package.versions;
-                    $scope.packages[0].name = data.package.package;
-                    $scope.packages[0].version = $scope.versions[0].id;
-                    $scope.selectedOption = $scope.versions[0].id;
+                    $scope.selectedOption = [];
+                    $scope.versions = [];
+                    for (var i = 0; i < data.packages.length; i++) {
+                        angular.forEach(data.packages[i].versions, function (value, key) {
+                            $scope.versions.push({
+                                'versionInfo': angular.toJson({
+                                    'package': data.packages[i].package,
+                                    'version': value
+                                }), 'version': value
+                            });
+                        });
+                    }
+
+                    $scope.versions = $scope.versions.sort(function (a, b) {
+                        if (a.version.id < b.version.id) {
+                            return 1;
+                        }
+                        if (a.version.id > b.version.id) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                    $scope.selectedOption = $scope.versions[0].versionInfo;
                     $scope.upgradeReadyForNext = true;
 
                 } else {
@@ -135,7 +154,9 @@ angular.module('select-version', ['ngStorage'])
         };
 
         $scope.update = function() {
-            $scope.packages[0].version = $scope.selectedOption;
+            var selectedVersionInfo = angular.fromJson($scope.selectedOption);
+            $scope.packages[0]['name'] = selectedVersionInfo.package;
+            $scope.packages[0].version = selectedVersionInfo.version.id;
             if (angular.equals($scope.updateComponents.no, true)) {
                 if ($scope.totalForGrid > 0) {
                     $scope.packages.splice(1, $scope.totalForGrid);

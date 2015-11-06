@@ -25,7 +25,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionFactory;
 
@@ -45,7 +45,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     protected $httpContext;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollection;
 
@@ -69,7 +69,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->httpContext = $this->getMock('Magento\Framework\App\Http\Context', ['getValue'], [], '', false);
         $this->orderCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
             ['create'],
             [],
             '',
@@ -90,7 +90,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->orderCollection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Collection',
             [
                 'addAttributeToFilter',
                 'addAttributeToSort',
@@ -175,7 +175,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$websiteId]));
 
         $item = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item',
+            'Magento\Sales\Model\ResourceModel\Order\Item',
             ['__wakeup', 'getProduct'],
             [],
             '',

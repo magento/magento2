@@ -11,25 +11,25 @@
 <script>
 require([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "jquery/editableMultiselect/js/jquery.multiselect",
-    "mage/mage"
-], function($){
+    "mage/mage",
+    'Magento_Ui/js/modal/modal'
+], function($, alert){
 
-    $.widget("adminhtml.dialogRates", $.ui.dialog, {
+    $.widget("adminhtml.dialogRates", $.mage.modal, {
         options: {
             itemRate: {},
             itemRateDefault: {}
         },
         _create: function() {
-            $.ui.dialog.prototype._create.apply(this);
+            this._super();
             this._getFormData(this.options.itemRateDefault);
         },
-        open: function() {
-            var zipIsRange = this.uiDialog.find('#zip_is_range');
-            if (this._trigger('beforeOpen', null, this) === false) {
-                return;
-            }
+        openModal: function() {
+            var zipIsRange = this.modal.find('#zip_is_range');
+
             this._applyItem(this.options.itemRateDefault);
             if (this.options.itemRate && !$.isEmptyObject(this.options.itemRate)) {
                 this._applyItem(this.options.itemRate);
@@ -37,13 +37,14 @@ require([
             zipIsRange.attr('checked', zipIsRange.val() == 1);
             zipIsRange.trigger('change');
             updater.update();
-            $.ui.dialog.prototype.open.apply(this);
+            this._super();
         },
-        close: function() {
-            $.ui.dialog.prototype.close.apply(this);
+        closeModal: function() {
+            this._super();
         },
         _applyItem: function(rate) {
-            var dialogElement = this.uiDialog;
+            var dialogElement = this.modal;
+
             $.each(rate, function(key, value) {
                 if (!value) {
                     value = '';
@@ -55,7 +56,7 @@ require([
             this._getFormData(this.options.itemRate);
         },
         _getFormData: function(data) {
-            $.each(this.uiDialog.find(':input'), function() {
+            $.each(this.modal.find(':input'), function() {
                 if (this.name) {
                     data[this.name] = this.value
                 }
@@ -87,18 +88,24 @@ require([
                         item.itemElement = that.prev();
                         $('#tax-rate-form')
                             .dialogRates({itemRate: item})
-                            .dialogRates('open');
+                            .dialogRates('openModal');
 
                     } else {
                         if (result.error_message)
-                            alert(result.error_message);
+                            alert({
+                                content: result.error_message
+                            });
                         else
-                            alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                            alert({
+                                content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                            });
                     }
                 },
                 error: function () {
                     $('body').trigger('processStop');
-                    alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                    alert({
+                        content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                    });
                 },
                 dataType: "json"
             });
@@ -177,14 +184,20 @@ require([
                                     select.find('option').eq(index).remove();
                                 } else {
                                     if (result.error_message)
-                                        alert(result.error_message);
+                                        alert({
+                                            content: result.error_message
+                                        });
                                     else
-                                        alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                        alert({
+                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                        });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
-                                alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                alert({
+                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                });
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -193,7 +206,7 @@ require([
                     .on('click.mselectAdd', '.mselect-button-add', function () {
                         taxRateForm
                                 .dialogRates({itemRate: {}})
-                                .dialogRates('open');
+                                .dialogRates('openModal');
                     })
                     .on('click.mselect-checked', '.mselect-list-item input', function (event) {
                         var el = $(this),
@@ -205,42 +218,20 @@ require([
 
             taxRateForm.dialogRates({
                 title: '<?php /* @escapeNotVerified */ echo __('Tax Rate'); ?>',
-                autoOpen: false,
+                type: 'slide',
                 id: '<?php /* @escapeNotVerified */ echo $block->getJsId() ?>',
-                minWidth: 560,
-                modal: true,
-                dialogClass: 'tax-rate-popup',
-                resizable: false,
-                width: '75%',
-                position: {
-                    my: 'left top',
-                    at: 'center top',
-                    of: 'body'
-                },
-                open: function () {
-                    var topMargin;
-
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-                    topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 80;
-                    $(this).closest('.ui-dialog').css({
-                        top: '1%',
-                        position: 'absolute',
-                        left: '10%'
-                    });
-                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
-                    $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                },
-                close: function() {
-                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                modalClass: 'tax-rate-popup',
+                closed: function () {
+                    taxRateFormElement.data('validation').clearError();
                 },
                 buttons: [{
                     text: '<?php /* @escapeNotVerified */ echo __('Save'); ?>',
-                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('apply-button') ?>',
                     'class': 'action-save action-primary',
                     click: function() {
-                        $(this).dialogRates('updateItemRate');
-                        var itemRate = $(this).dialogRates('option').itemRate,
+                        this.updateItemRate();
+                        var itemRate = this.option('itemRate'),
                             itemRateData = $.extend({}, itemRate);
+
                         if (itemRateData.itemElement) {
                             delete itemRateData.itemElement;
                         }
@@ -272,28 +263,26 @@ require([
                                         taxRateField.find('option[value=""]:last')
                                             .val(itemRate.tax_calculation_rate_id);
                                     }
-                                    taxRateForm.dialogRates("close");
+                                    taxRateForm.dialogRates('closeModal');
                                 } else {
                                     if (result.error_message)
-                                        alert(result.error_message);
+                                        alert({
+                                            content: result.error_message
+                                        });
                                     else
-                                        alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                        alert({
+                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                        });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
-                                alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                alert({
+                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                });
                             }
                         };
                         $.ajax(ajaxOptions);
-                    }
-                }, {
-                    text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
-                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
-                    'class': 'action-close',
-                    click: function() {
-                        $(this).dialogRates("close");
-                        taxRateFormElement.data('validation').clearError();
                     }
                 }]
             });

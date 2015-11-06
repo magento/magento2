@@ -81,7 +81,6 @@ class Curl extends ProductCurl implements DownloadableProductInterface
                 $data['downloadable']['link'][$key]['price'] = $link['price'];
                 $data['downloadable']['link'][$key]['number_of_downloads'] = $link['number_of_downloads'];
                 $data['downloadable']['link'][$key]['is_shareable'] = $link['is_shareable'];
-                $data['downloadable']['link'][$key]['sort_order'] = $link['sort_order'];
                 $data['downloadable']['link'][$key]['sample']['type'] = 'url';
                 $data['downloadable']['link'][$key]['sample']['url'] = $link['sample']['sample_url'];
             }

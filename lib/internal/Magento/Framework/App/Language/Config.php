@@ -13,6 +13,14 @@ use Magento\Framework\Config\Dom;
  */
 class Config
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    /**
+     * @var \Magento\Framework\Config\DomFactory
+     */
+    protected $domFactory;
+
     /**
      * Data extracted from the configuration file
      *
@@ -24,19 +32,19 @@ class Config
      * Constructor
      *
      * @param string $source
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function __construct($source)
-    {
-        $config = new \DOMDocument();
-        $config->loadXML($source);
-        $errors = Dom::validateDomDocument($config, $this->getSchemaFile());
-        if (!empty($errors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Invalid Document: \n%1", [implode("\n", $errors)])
-            );
-        }
-        $this->_data = $this->_extractData($config);
+    public function __construct(
+        $source,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        \Magento\Framework\Config\DomFactory $domFactory
+    ) {
+        $this->urnResolver = $urnResolver;
+        $this->domFactory = $domFactory;
+        $dom = $this->domFactory->createDom(['xml' => $source, 'schemaFile' => $this->getSchemaFile()]);
+        $this->_data = $this->_extractData($dom->getDom());
     }
 
     /**
@@ -46,7 +54,7 @@ class Config
      */
     protected function getSchemaFile()
     {
-        return __DIR__ . '/package.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd');
     }
 
     /**

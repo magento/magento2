@@ -7,7 +7,7 @@ namespace Magento\ImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Import entity abstract model
@@ -69,7 +69,7 @@ abstract class AbstractEntity
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
         self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
         self::ERROR_INVALID_ATTRIBUTE_TYPE =>
-            'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+            'Value for \'%s\' attribute contains incorrect value',
         self::ERROR_INVALID_ATTRIBUTE_OPTION =>
             "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
     ];
@@ -107,7 +107,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     protected $_dataSourceModel;
 
@@ -275,8 +275,8 @@ abstract class AbstractEntity
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -285,8 +285,8 @@ abstract class AbstractEntity
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
@@ -792,7 +792,7 @@ abstract class AbstractEntity
                         $emptyHeaderColumns[] = $columnNumber;
                     } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                         $invalidColumns[] = $columnName;
-                    } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                    } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                         $invalidAttributes[] = $columnName;
                     }
                 }
@@ -853,5 +853,15 @@ abstract class AbstractEntity
         $this->countItemsUpdated = count($updated);
         $this->countItemsDeleted = count($deleted);
         return $this;
+    }
+
+    /**
+     * Retrieve valid column names
+     *
+     * @return array
+     */
+    public function getValidColumnNames()
+    {
+        return $this->validColumnNames;
     }
 }

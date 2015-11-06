@@ -102,19 +102,15 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
             }
         }
         $this->_event->setContainer($shortcutButtonsMock);
-        $this->_model->invoke($this->_observer);
+        $this->_model->execute($this->_observer);
     }
 
     public function addAvailabilityOfMethodsDataProvider()
     {
         $blocks = [
-            'Magento\Paypal\Block\Express\ShortcutContainer' =>
-                ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS],
             'Magento\Paypal\Block\Express\Shortcut' =>
                 ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS],
             'Magento\Paypal\Block\PayflowExpress\Shortcut' =>
-                ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS],
-            'Magento\Paypal\Block\PayflowExpress\ShortcutContainer' =>
                 ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS],
             'Magento\Paypal\Block\Bml\Shortcut' =>
                 ['Magento\Paypal\Block\Bml\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS],

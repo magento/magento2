@@ -57,14 +57,22 @@ class RepositoryGenerator implements OperationInterface
      */
     public function doOperation()
     {
-        if (array_diff(array_keys($this->data), ['filePatterns', 'path'])
-            !== array_diff(['filePatterns', 'path'], array_keys($this->data))) {
+        if (array_diff(array_keys($this->data), ['filePatterns', 'paths', 'excludePatterns'])
+            !== array_diff(['filePatterns', 'paths', 'excludePatterns'], array_keys($this->data))) {
             return;
         }
 
-        $this->classesScanner->getList($this->data['path']);
+        foreach ($this->data['paths'] as $path) {
+            $this->classesScanner->getList($path);
+        }
         $this->repositoryScanner->setUseAutoload(false);
-        $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
+        $files = [];
+        foreach ($this->data['paths'] as $path) {
+            $files = array_merge_recursive(
+                $files,
+                $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns'])
+            );
+        }
         $repositories = $this->repositoryScanner->collectEntities($files['di']);
         foreach ($repositories as $entityName) {
             class_exists($entityName);

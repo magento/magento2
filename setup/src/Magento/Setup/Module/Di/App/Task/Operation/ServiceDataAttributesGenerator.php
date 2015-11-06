@@ -53,12 +53,14 @@ class ServiceDataAttributesGenerator implements OperationInterface
      */
     public function doOperation()
     {
-        if (array_diff(array_keys($this->data), ['filePatterns', 'path'])
-            !== array_diff(['filePatterns', 'path'], array_keys($this->data))) {
+        if (array_diff(array_keys($this->data), ['filePatterns', 'paths'])
+            !== array_diff(['filePatterns', 'paths'], array_keys($this->data))) {
             return;
         }
-
-        $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
+        $files = [];
+        foreach ($this->data['paths'] as $path) {
+            $files = array_merge_recursive($files, $this->directoryScanner->scan($path, $this->data['filePatterns']));
+        }
         $repositories = $this->serviceDataAttributesScanner->collectEntities($files['extension_attributes']);
         foreach ($repositories as $entityName) {
             class_exists($entityName);

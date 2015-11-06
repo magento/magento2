@@ -4,19 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<td class="data-grid-checkbox-cell">
-    <label class="data-grid-checkbox-cell-inner">
-        <input
-            class="admin__control-checkbox"
-            type="checkbox"
-            data-action="select-row"
-            data-bind="
-                checked: selected,
-                value: row[indexField],
-                attr: {
-                    id: 'check' + row[indexField]
-                }">
-        <label data-bind="attr: {for: 'check' + row[indexField]}"></label>
-    </label>
-</td>
+<label class="data-grid-checkbox-cell-inner">
+    <input
+        class="admin__control-checkbox"
+        type="checkbox"
+        data-action="select-row"
+        data-bind="
+            staticChecked: $col.selected,
+            checkedValue: $row()[$col.indexField],
+            attr: {
+                id: 'check' + $row()[$col.indexField]
+            }">
+    <label data-bind="attr: {for: 'check' + $row()[$col.indexField]}"></label>
+</label>

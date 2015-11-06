@@ -19,8 +19,8 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 /**
  * Order payment information
  *
- * @method \Magento\Sales\Model\Resource\Order\Payment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Payment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -117,7 +117,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Transaction\BuilderInterface $transactionBuilder
      * @param Payment\Processor $paymentProcessor
      * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -136,7 +136,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -167,7 +167,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Payment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
     }
 
     /**
@@ -188,8 +188,6 @@ class Payment extends Info implements OrderPaymentInterface
      * Retrieve order model object
      *
      * @codeCoverageIgnore
-     * @deprecated
-     *
      * @return Order
      */
     public function getOrder()
@@ -631,7 +629,7 @@ class Payment extends Info implements OrderPaymentInterface
                     $this->getOrder()->getId()
                 );
                 if ($captureTxn) {
-                    $this->setParentTransactionId($captureTxn->getTxnId());
+                    $this->setTransactionIdsForRefund($captureTxn);
                 }
                 $this->setShouldCloseParentTransaction(true);
                 // TODO: implement multiple refunds per capture
@@ -640,10 +638,7 @@ class Payment extends Info implements OrderPaymentInterface
                         $this->getOrder()->getStoreId()
                     );
                     $this->setRefundTransactionId($invoice->getTransactionId());
-                    $gateway->refund(
-                        $this,
-                        $baseAmountToRefund
-                    );
+                    $gateway->refund($this, $baseAmountToRefund);
 
                     $creditmemo->setTransactionId($this->getLastTransId());
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1265,16 +1260,8 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $amountPaid = $this->formatAmount($this->getBaseAmountPaid(), true);
-        $amountToCapture = $this->formatAmount($amountToCapture, true);
-        $orderGrandTotal = $this->formatAmount($this->getOrder()->getBaseGrandTotal(), true);
-        if ($orderGrandTotal == $amountPaid + $amountToCapture) {
-            if (false !== $this->getShouldCloseParentTransaction()) {
-                $this->setShouldCloseParentTransaction(true);
-            }
-            return true;
-        }
-        return false;
+        $total = $this->getOrder()->getTotalDue();
+        return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
     /**
@@ -2414,6 +2401,25 @@ class Payment extends Info implements OrderPaymentInterface
     public function getShouldCloseParentTransaction()
     {
         return (bool)$this->getData('should_close_parent_transaction');
+    }
+
+    /**
+     * Set payment parent transaction id and current transaction id if it not set
+     * @param Transaction $transaction
+     * @return void
+     */
+    private function setTransactionIdsForRefund(Transaction $transaction)
+    {
+        if (!$this->getTransactionId()) {
+            $this->setTransactionId(
+                $this->transactionManager->generateTransactionId(
+                    $this,
+                    Transaction::TYPE_REFUND,
+                    $transaction
+                )
+            );
+        }
+        $this->setParentTransactionId($transaction->getTxnId());
     }
 
     //@codeCoverageIgnoreEnd

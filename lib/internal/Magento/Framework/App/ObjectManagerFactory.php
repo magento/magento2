@@ -202,7 +202,7 @@ class ObjectManagerFactory
         $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
             : [];
-        $reader = new DeploymentConfig\Reader($directoryList, $configFilePool, $customFile);
+        $reader = new DeploymentConfig\Reader($directoryList, $this->driverPool, $configFilePool, $customFile);
         return new DeploymentConfig($reader, $customData);
     }
 
@@ -253,7 +253,9 @@ class ObjectManagerFactory
                     new \Magento\Framework\Filesystem\Directory\ReadFactory($driverPool),
                     new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool)
                 ),
-                new \Magento\Framework\Config\FileIteratorFactory()
+                new \Magento\Framework\Config\FileIteratorFactory(
+                    new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
+                )
             );
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();
             $validationState = new \Magento\Framework\App\Arguments\ValidationState($appMode);

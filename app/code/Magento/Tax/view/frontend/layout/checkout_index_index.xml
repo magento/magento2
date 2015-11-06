@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.root">
             <arguments>
@@ -40,16 +40,16 @@
                                                         <item name="subtotal" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
-                                                                <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
+                                                                <item name="excludingTaxMessage" xsi:type="string" translate="true">Excl. Tax</item>
+                                                                <item name="includingTaxMessage" xsi:type="string" translate="true">Incl. Tax</item>
                                                             </item>
                                                         </item>
                                                         <item name="shipping" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
                                                             <item name="sortOrder" xsi:type="string">20</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
-                                                                <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
+                                                                <item name="excludingTaxMessage" xsi:type="string" translate="true">Excl. Tax</item>
+                                                                <item name="includingTaxMessage" xsi:type="string" translate="true">Incl. Tax</item>
                                                             </item>
                                                         </item>
                                                         <item name="before_grandtotal" xsi:type="array">
@@ -62,16 +62,16 @@
                                                         <item name="tax" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="title" xsi:type="string">Tax</item>
+                                                                <item name="title" xsi:type="string" translate="true">Tax</item>
                                                             </item>
                                                         </item>
                                                         <item name="grand-total" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand-total</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="exclTaxLabel" xsi:type="string">Order Total Excl. Tax</item>
-                                                                <item name="inclTaxLabel" xsi:type="string">Order Total Incl. Tax</item>
-                                                                <item name="basicCurrencyMessage" xsi:type="string">Your credit card will be charged for</item>
-                                                                <item name="title" xsi:type="string">Order Total</item>
+                                                                <item name="exclTaxLabel" xsi:type="string" translate="true">Order Total Excl. Tax</item>
+                                                                <item name="inclTaxLabel" xsi:type="string" translate="true">Order Total Incl. Tax</item>
+                                                                <item name="basicCurrencyMessage" xsi:type="string" translate="true">Your credit card will be charged for</item>
+                                                                <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                             </item>
                                                         </item>
                                                     </item>

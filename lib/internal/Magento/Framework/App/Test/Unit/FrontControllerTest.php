@@ -80,7 +80,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
+        $controllerInstance = $this->getMockBuilder('Magento\Framework\App\Action\Action')
+            ->disableOriginalConstructor()
+            ->getMock();
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
@@ -112,7 +114,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
+        $controllerInstance = $this->getMockBuilder('Magento\Framework\App\Action\Action')
+            ->disableOriginalConstructor()
+            ->getMock();
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)

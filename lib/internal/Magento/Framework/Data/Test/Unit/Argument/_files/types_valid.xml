@@ -7,7 +7,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<arguments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="types_schema.xsd">
+<arguments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Data/Test/Unit/Argument/_files/types_schema.xsd">
     <argument name="string " xsi:type="string">String</argument>
     <argument name="string with translate" xsi:type="string" translate="true">String with translate</argument>
     <argument name="string with translate false (for overriding)" xsi:type="string" translate="false">String with translate false</argument>

@@ -14,13 +14,21 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected $_xsdSchema;
 
     /**
-     * @var \Magento\TestFramework\Utility\XsdValidator
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
+    protected $urnResolver;
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
     protected $_xsdValidator;
 
     protected function setUp()
     {
-        $this->_xsdSchema = BP . '/lib/internal/Magento/Framework/Indexer/etc/indexer.xsd';
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_xsdSchema = $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
@@ -32,7 +40,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate(
-            BP . '/lib/internal/Magento/Framework/Indexer/etc/indexer_merged.xsd',
+            $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
             $xmlString
         );
         $this->assertEquals($expectedError, $actualError);

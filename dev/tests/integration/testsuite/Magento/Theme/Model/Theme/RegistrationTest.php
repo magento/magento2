@@ -5,8 +5,7 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class RegistrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,20 +19,20 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $_theme;
 
+    public static function setUpBeforeClass()
+    {
+        ComponentRegistrar::register(
+            ComponentRegistrar::THEME,
+            'frontend/Test/test_theme',
+            dirname(__DIR__) . '/_files/design/frontend/Test/test_theme'
+        );
+    }
+
     /**
      * Initialize base models
      */
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(__DIR__) . '/_files/design',
-                    ],
-                ],
-            ]
-        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\App\AreaList')
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
@@ -48,15 +47,14 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Register themes by pattern
+     * Register themes
      * Use this method only with database isolation
      *
      * @return \Magento\Theme\Model\Theme\RegistrationTest
      */
     protected function registerThemes()
     {
-        $pathPattern = 'frontend/*/*/theme.xml';
-        $this->_model->register($pathPattern);
+        $this->_model->register();
         return $this;
     }
 

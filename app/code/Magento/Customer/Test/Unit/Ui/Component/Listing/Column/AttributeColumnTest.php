@@ -27,12 +27,12 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
-            [],
-            '',
-            false
-        );
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             [],
@@ -60,19 +60,6 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
             $this->attributeRepository
         );
         $this->component->setData('name', 'gender');
-    }
-
-    public function testPrepareDataSourceWithoutItems()
-    {
-        $dataSource = [
-            'data' => [
-
-            ]
-        ];
-        $this->attributeRepository->expects($this->never())
-            ->method('getMetadataByCode');
-
-        $this->assertNull($this->component->prepareDataSource($dataSource));
     }
 
     public function testPrepareDataSource()
@@ -125,7 +112,7 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
                 'is_searchable_in_grid' => true,
             ]);
 
-        $this->component->prepareDataSource($dataSource);
+        $dataSource = $this->component->prepareDataSource($dataSource);
 
         $this->assertEquals($expectedSource, $dataSource);
     }

@@ -9,65 +9,56 @@
  */
 namespace Magento\Framework\Config;
 
-class View extends \Magento\Framework\Config\AbstractXml
+use Magento\Framework\Config\Dom\UrnResolver;
+
+class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
-     * Path to view.xsd
-     *
-     * @return string
+     * @var array
      */
-    public function getSchemaFile()
-    {
-        return __DIR__ . '/etc/view.xsd';
-    }
+    protected $xpath;
 
     /**
-     * Extract configuration data from the DOM structure
+     * View config data
      *
-     * @param \DOMDocument $dom
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @var array
      */
-    protected function _extractData(\DOMDocument $dom)
-    {
-        $result = [];
-        /** @var $varsNode \DOMElement */
-        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $childNode) {
-            switch ($childNode->tagName) {
-                case 'vars':
-                    $moduleName = $childNode->getAttribute('module');
-                    /** @var $varNode \DOMElement */
-                    foreach ($childNode->getElementsByTagName('var') as $varNode) {
-                        $varName = $varNode->getAttribute('name');
-                        $varValue = $varNode->nodeValue;
-                        $result[$childNode->tagName][$moduleName][$varName] = $varValue;
-                    }
-                    break;
-                case 'images':
-                    $moduleName = $childNode->getAttribute('module');
-                    /** @var \DOMElement $node */
-                    foreach ($childNode->getElementsByTagName('image') as $node) {
-                        $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName][$imageId]['type'] = $node->getAttribute('type');
-                        foreach ($node->childNodes as $attribute) {
-                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
-                                continue;
-                            }
-                            $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName][$imageId][$attribute->tagName] = $nodeValue;
-                        }
-                    }
-                    break;
-                case 'exclude':
-                    /** @var $itemNode \DOMElement */
-                    foreach ($childNode->getElementsByTagName('item') as $itemNode) {
-                        $itemType = $itemNode->getAttribute('type');
-                        $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
-                    }
-                    break;
-            }
-        }
-        return $result;
+    protected $data;
+
+    /**
+     * @param FileResolverInterface $fileResolver
+     * @param ConverterInterface $converter
+     * @param SchemaLocatorInterface $schemaLocator
+     * @param ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
+     * @param array $xpath
+     */
+    public function __construct(
+        FileResolverInterface $fileResolver,
+        ConverterInterface $converter,
+        SchemaLocatorInterface $schemaLocator,
+        ValidationStateInterface $validationState,
+        $fileName,
+        $idAttributes = [],
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $defaultScope = 'global',
+        $xpath = []
+    ) {
+        $this->xpath = $xpath;
+        $idAttributes = $this->getIdAttributes();
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
+        );
     }
 
     /**
@@ -80,7 +71,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVars($module)
     {
-        return isset($this->_data['vars'][$module]) ? $this->_data['vars'][$module] : [];
+        $this->initData();
+        return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
     }
 
     /**
@@ -88,35 +80,53 @@ class View extends \Magento\Framework\Config\AbstractXml
      *
      * @param string $module
      * @param string $var
-     * @return string|false
+     * @return string|false|array
      */
     public function getVarValue($module, $var)
     {
-        return isset($this->_data['vars'][$module][$var]) ? $this->_data['vars'][$module][$var] : false;
+        $this->initData();
+        if (!isset($this->data['vars'][$module])) {
+            return false;
+        }
+
+        $value = $this->data['vars'][$module];
+        foreach (explode('/', $var) as $node) {
+            if (is_array($value) && isset($value[$node])) {
+                $value = $value[$node];
+            } else {
+                return false;
+            }
+        }
+
+        return $value;
     }
 
     /**
-     * Retrieve a list images attributes in scope of specified module
+     * Retrieve a list media attributes in scope of specified module
      *
      * @param string $module
+     * @param string $mediaType
      * @return array
      */
-    public function getImages($module)
+    public function getMediaEntities($module, $mediaType)
     {
-        return isset($this->_data['images'][$module]) ? $this->_data['images'][$module] : [];
+        $this->initData();
+        return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
     }
 
     /**
-     * Retrieve array of image attributes
+     * Retrieve array of media attributes
      *
      * @param string $module
-     * @param string $imageId
+     * @param string $mediaType
+     * @param string $mediaId
      * @return array
      */
-    public function getImageAttributes($module, $imageId)
+    public function getMediaAttributes($module, $mediaType, $mediaId)
     {
-        return isset($this->_data['images'][$module][$imageId])
-            ? $this->_data['images'][$module][$imageId]
+        $this->initData();
+        return isset($this->data['media'][$module][$mediaType][$mediaId])
+            ? $this->data['media'][$module][$mediaType][$mediaId]
             : [];
     }
 
@@ -131,30 +141,29 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
-     * Getter for initial view.xml contents
-     *
-     * @return string
-     */
-    protected function _getInitialXml()
-    {
-        return '<?xml version="1.0" encoding="UTF-8"?>' .
-               '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
-    }
-
-    /**
      * Variables are identified by module and name
      *
      * @return array
      */
-    protected function _getIdAttributes()
+    protected function getIdAttributes()
     {
-        return [
+        $idAttributes = [
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
-            '/view/images' => 'modulle',
-            '/view/images/image' => ['id', 'type'],
         ];
+        foreach ($this->xpath as $attribute) {
+            if (is_array($attribute)) {
+                foreach ($attribute as $key => $id) {
+                    if (count($id) > 1) {
+                        $idAttributes[$key] = array_values($id);
+                    } else {
+                        $idAttributes[$key] = array_shift($id);
+                    }
+                }
+            }
+        }
+        return $idAttributes;
     }
 
     /**
@@ -186,6 +195,19 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function getItems()
     {
-        return isset($this->_data['exclude']) ? $this->_data['exclude'] : [];
+        $this->initData();
+        return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+    }
+
+    /**
+     * Initialize data array
+     *
+     * @return void
+     */
+    protected function initData()
+    {
+        if ($this->data === null) {
+            $this->data = $this->read();
+        }
     }
 }
