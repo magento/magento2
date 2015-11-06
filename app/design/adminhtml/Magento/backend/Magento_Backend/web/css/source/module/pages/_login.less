@@ -25,9 +25,10 @@
 
 //  Login box
 .page-layout-admin-login {
-    align-items: center;
     .lib-vendor-prefix-display(flex);
+    align-items: center;
     background-color: @login-page__background-color;
+    min-width: 50rem;
     padding: 2rem 0 20rem;
     .page-wrapper {
         .lib-vendor-prefix-flex-shrink(0);
@@ -92,20 +93,18 @@
 
 // Footer
 .login-footer {
+    color: @color-heathered-grey;
+    font-size: @font-size__xs;
+    font-weight: @font-weight__regular;
     left: 0;
+    margin: 5rem 0 2rem;
     position: absolute;
+    text-align: center;
     top: 100%;
     width: 100%;
-    .copyright {
-        color: @color-heathered-grey;
-        font-size: @font-size__xs;
-        font-weight: @font-weight__regular;
-        margin: 5rem 0 2rem;
-        text-align: center;
-        .link-copyright {
-            &:before {
-                display: none;
-            }
+    .link-copyright {
+        &:before {
+            display: none;
         }
     }
 }
