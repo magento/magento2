@@ -123,8 +123,10 @@ class DbValidator
                 return true;
             }
         }
-        throw new \Magento\Setup\Exception("Database '{$dbName}' does not exist "
-            ."or specified database server user does not have privileges to access this database.");
+        throw new \Magento\Setup\Exception(
+            "Database '{$dbName}' does not exist "
+            ."or specified database server user does not have privileges to access this database."
+        );
     }
 
     /**
