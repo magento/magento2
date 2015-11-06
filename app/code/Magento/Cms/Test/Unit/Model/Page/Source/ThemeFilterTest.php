@@ -23,13 +23,18 @@ class ThemeFilterTest extends ThemeTest
         return [
             [
                 [],
-                [['label' => '', 'value' => '']],
+                [
+                    ['label' => '', 'value' => ''],
+                    ['label' => 'Default', 'value' => ''],
+                ],
             ],
             [
                 [['label' => 'testValue', 'value' => 'testStatus']],
-                [['label' => '', 'value' => ''], ['label' => 'testValue', 'value' => 'testStatus']],
+                [
+                    ['label' => '', 'value' => ''],
+                    ['label' => 'Default', 'value' => ''],
+                    ['label' => 'testValue', 'value' => 'testStatus']],
             ],
-
         ];
     }
 }
