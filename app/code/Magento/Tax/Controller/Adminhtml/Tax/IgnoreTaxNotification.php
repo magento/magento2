@@ -37,7 +37,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $section = $this->getRequest()->getParam('section');
         if ($section) {

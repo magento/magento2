@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="page-main-actions" ng-show="!$root.isConnectAuthorized">
+<div class="page-main-actions" ng-show="!$root.isMarketplaceAuthorized">
     <div class="page-actions">
         <div class="page-actions-inner">
             <div class="page-actions-buttons">
@@ -39,15 +39,15 @@
             <ul class="admin__page-nav-items">
                 <li class="admin__page-nav-item item _active">
                     <a href="javascript:void(0);" class="admin__page-nav-link">
-                        <span>Magento Connect</span>
+                        <span>Magento Marketplace</span>
                     </a>
                 </li>
             </ul>
         </div>
     </div>
     <div class="page-inner-content">
-        <h2 class="page-sub-title">Magento Connect</h2>
-        <p>Sign in to sync your Magento Connect purchases.</p>
+        <h2 class="page-sub-title">Magento Marketplace</h2>
+        <p>Sign in to sync your Magento Marketplace purchases.</p>
         <fieldset class="form-fieldset">
             <form  ng-submit="saveAuthJson();" name="auth" role="form">
                 <div class="row form-row">
@@ -55,7 +55,7 @@
                         <label class="form-label required" for="username">Public Access Key</label>
                     </div>
                     <div class="col-m-4">
-                        <div ng-show="!$root.isConnectAuthorized" class="form-row">
+                        <div ng-show="!$root.isMarketplaceAuthorized" class="form-row">
                             <input id="username"
                                    class="form-el-input"
                                    type="text"
@@ -71,7 +71,7 @@
                                 This is a required field.
                             </div>
                         </div>
-                        <div ng-show="$root.isConnectAuthorized" class="form-row form-row-text">
+                        <div ng-show="$root.isMarketplaceAuthorized" class="form-row form-row-text">
                             <span>{{user.username}}</span>
                             <a href="" class="action-sign-out" ng-click="reset()">Reset</a>
                         </div>
@@ -82,7 +82,7 @@
                         <label class="form-label required" for="password">Private Access Key</label>
                     </div>
                     <div  class="col-m-4">
-                        <div ng-show="!$root.isConnectAuthorized" class="form-row">
+                        <div ng-show="!$root.isMarketplaceAuthorized" class="form-row">
                             <input id="password"
                                    class="form-el-input"
                                    type="password"
@@ -98,7 +98,7 @@
                             </div>
                         </div>
 
-                        <div  ng-show="$root.isConnectAuthorized" class="form-row form-row-text">
+                        <div  ng-show="$root.isMarketplaceAuthorized" class="form-row form-row-text">
                             <span>******</span>
                         </div>
                     </div>

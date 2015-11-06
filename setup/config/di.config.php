@@ -35,9 +35,10 @@ return [
             'Magento\Setup\Controller\Maintenance',
             'Magento\Setup\Controller\OtherComponentsGrid',
             'Magento\Setup\Controller\DataOption',
-            'Magento\Setup\Controller\Connect',
+            'Magento\Setup\Controller\Marketplace',
             'Magento\Setup\Controller\SystemConfig',
             'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\Session'
         ],
         'instance' => [
             'preference' => [
