@@ -66,6 +66,6 @@ class GridToXmlTest extends \PHPUnit_Framework_TestCase
             ->with('export.xml', $content, 'var')
             ->willReturn($content);
 
-        $this->assertEquals($content, $this->controller->executeInternal());
+        $this->assertEquals($content, $this->controller->execute());
     }
 }

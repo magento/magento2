@@ -39,7 +39,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Products'));
 

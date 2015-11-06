@@ -16,7 +16,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

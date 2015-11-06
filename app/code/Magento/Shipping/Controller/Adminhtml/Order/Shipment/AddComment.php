@@ -58,7 +58,7 @@ class AddComment extends \Magento\Backend\App\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));

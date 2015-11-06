@@ -89,6 +89,11 @@ foreach ($testCases as $index => $testCase) {
             'simple-' . $productId
         )->setPrice(
             $price
+        )->setStockData(
+            [
+                'qty' => 100,
+                'is_in_stock' => 1,
+            ]
         )->setWeight(
             18
         )->setCategoryIds(
