@@ -297,8 +297,10 @@ class DataGrid extends Grid
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
             do {
-                if ($selectItem->isVisible() && !$selectItem->isSelected()) {
-                    $selectItem->click();
+                if ($selectItem->isVisible()) {
+                    if (!$selectItem->isSelected()) {
+                        $selectItem->click();
+                    }
                     break;
                 }
             } while ($this->nextPage());

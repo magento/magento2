@@ -133,7 +133,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         // check if data sent
         $data = $this->getRequest()->getPostValue();

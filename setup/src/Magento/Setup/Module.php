@@ -72,7 +72,7 @@ class Module implements
             include __DIR__ . '/../../../config/states.enable.config.php',
             include __DIR__ . '/../../../config/states.disable.config.php',
             include __DIR__ . '/../../../config/languages.config.php',
-            include __DIR__ . '/../../../config/connect.config.php'
+            include __DIR__ . '/../../../config/marketplace.config.php'
         );
         return $result;
     }

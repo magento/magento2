@@ -327,6 +327,9 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('width', this._width)
                     .attr('height', this._height)
                     .attr('src', src)
+                    .attr('webkitallowfullscreen', '')
+                    .attr('mozallowfullscreen', '')
+                    .attr('allowfullscreen', '')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

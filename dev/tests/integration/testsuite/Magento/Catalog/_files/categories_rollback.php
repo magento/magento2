@@ -11,17 +11,21 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-$collection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
-$collection->addAttributeToSelect('id')->load()->delete();
-
-/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-$collection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
-$collection
-    ->addAttributeToFilter('level', 2)
-    ->load()
-    ->delete();
-
-
+foreach (range(1, 4, 1) as $productId) {
+    /** @var $product \Magento\Catalog\Model\Product */
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $product->load($productId);
+    if ($product->getId()) {
+        $product->delete();
+    }
+}
+foreach (range(12, 3, -1) as $categoryId) {
+    /** @var $category \Magento\Catalog\Model\Category */
+    $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+    $category->load($categoryId);
+    if ($category->getId()) {
+        $category->delete();
+    }
+}
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

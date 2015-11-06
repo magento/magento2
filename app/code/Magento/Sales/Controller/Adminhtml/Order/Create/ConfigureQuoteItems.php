@@ -12,7 +12,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         // Prepare data
         $configureResult = new \Magento\Framework\DataObject();
