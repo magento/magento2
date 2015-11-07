@@ -250,8 +250,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
+     * @throws LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);
         $infoInstance = $this->getInfoInstance();
@@ -409,6 +410,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         if ($token) {
             $transactionParams['paymentMethodToken'] = $token;
             $transactionParams['customerId'] = $customerId;
+            $transactionParams['billing']  = $this->toBraintreeAddress($billing);
+            $transactionParams['shipping'] = $this->toBraintreeAddress($shipping);
         } elseif ($this->getInfoInstance()->getAdditionalInformation('payment_method_nonce')) {
             $transactionParams['paymentMethodNonce'] =
                 $this->getInfoInstance()->getAdditionalInformation('payment_method_nonce');

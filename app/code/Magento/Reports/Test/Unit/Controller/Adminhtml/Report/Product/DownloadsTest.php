@@ -86,6 +86,6 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
             ->with('Magento\Reports\Block\Adminhtml\Product\Downloads')
             ->willReturn($this->abstractBlockMock);
 
-        $this->downloads->executeInternal();
+        $this->downloads->execute();
     }
 }

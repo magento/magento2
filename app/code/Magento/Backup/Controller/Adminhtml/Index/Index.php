@@ -13,7 +13,7 @@ class Index extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');

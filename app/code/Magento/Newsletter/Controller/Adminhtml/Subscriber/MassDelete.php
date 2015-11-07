@@ -13,7 +13,7 @@ class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {

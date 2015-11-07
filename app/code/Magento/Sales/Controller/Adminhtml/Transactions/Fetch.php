@@ -17,7 +17,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
      *
      * @return Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $txn = $this->_initTransaction();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

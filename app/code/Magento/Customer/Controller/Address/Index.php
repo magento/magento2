@@ -68,7 +68,7 @@ class Index extends \Magento\Customer\Controller\Address
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {

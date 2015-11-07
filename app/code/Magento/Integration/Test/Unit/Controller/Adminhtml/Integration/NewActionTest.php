@@ -25,6 +25,6 @@ class NewActionTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\
                 $this->returnValue($this->_requestMock)
             );
         $integrationContr = $this->_createIntegrationController('NewAction');
-        $integrationContr->executeInternal();
+        $integrationContr->execute();
     }
 }
