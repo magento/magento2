@@ -97,7 +97,7 @@ class NewOrder implements DataProviderInterface
      */
     public function getRssData()
     {
-        $dateTime = new \DateTime('now', new \DateTimeZone('GMT'));
+        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $interval = new \DateInterval('P7D');
         $dateTime->sub($interval);
         $fromDate = $this->dateTime->formatDate($dateTime->getTimestamp());

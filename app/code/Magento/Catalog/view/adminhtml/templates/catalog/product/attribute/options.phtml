@@ -20,7 +20,7 @@
                     $storelist = $block->getStores();
                     foreach ($storelist as $_store):
                         ?>
-                        <th><?php /* @escapeNotVerified */ echo $_store->getName() ?></th>
+                        <th><?php /* @escapeNotVerified */ echo __($_store->getName()) ?></th>
                     <?php endforeach;
                     $storetotal = count($storelist) + 3;
                     ?>

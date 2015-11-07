@@ -208,3 +208,9 @@
         order allow,deny
         deny from all
     </Files>
+
+<IfModule mod_headers.c>
+    ############################################
+    ## prevent clickjacking
+    Header set X-Frame-Options SAMEORIGIN
+</IfModule>

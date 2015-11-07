@@ -802,6 +802,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $error = false;
         $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
         $skus = [];
+        $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {

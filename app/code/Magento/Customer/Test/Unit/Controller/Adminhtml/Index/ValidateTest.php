@@ -64,6 +64,9 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->customer = $this->getMockForAbstractClass(
             'Magento\Customer\Api\Data\CustomerInterface',
             [],
@@ -186,7 +189,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithoutAddresses()
@@ -225,7 +228,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithException()
@@ -271,6 +274,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

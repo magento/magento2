@@ -100,7 +100,7 @@ class ShippingSavedTest extends \PHPUnit_Framework_TestCase
 
         // check that checkout is reset
         $this->checkoutMock->expects($this->once())->method('reset');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteDoesNotResetCheckoutIfCustomerHasMoreThanOneAddress()
@@ -120,7 +120,7 @@ class ShippingSavedTest extends \PHPUnit_Framework_TestCase
 
         // check that checkout is not reset
         $this->checkoutMock->expects($this->never())->method('reset');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     /**

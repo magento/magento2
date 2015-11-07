@@ -23,7 +23,7 @@ class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_products_lowstock'

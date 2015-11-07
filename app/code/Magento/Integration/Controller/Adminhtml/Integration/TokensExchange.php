@@ -34,7 +34,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);

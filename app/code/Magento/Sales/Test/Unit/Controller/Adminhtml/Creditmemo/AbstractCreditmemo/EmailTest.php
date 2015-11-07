@@ -163,7 +163,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->creditmemoEmail->executeInternal()
+            $this->creditmemoEmail->execute()
         );
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
     }
@@ -175,7 +175,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('creditmemo_id')
             ->will($this->returnValue(null));
 
-        $this->assertNull($this->creditmemoEmail->executeInternal());
+        $this->assertNull($this->creditmemoEmail->execute());
     }
 
     /**
