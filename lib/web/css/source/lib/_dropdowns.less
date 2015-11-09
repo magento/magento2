@@ -55,6 +55,7 @@
     .lib-clearfix();
     display: inline-block;
     position: relative;
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-actions-padding);
         cursor: pointer;
@@ -159,9 +160,11 @@
         @_dropdown-split-toggle-position,
         @_dropdown-split-button-border-radius-fix
     );
+
     @{_button-selector} {
         .lib-css(padding, @_dropdown-split-button-actions-padding);
     }
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-split-toggle-actions-padding);
         ._lib-dropdown-split-icon(

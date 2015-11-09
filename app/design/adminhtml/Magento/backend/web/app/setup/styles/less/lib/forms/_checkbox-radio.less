@@ -23,7 +23,6 @@
     .lib-visually-hidden();
 
     //  Disabled state
-
     &[disabled],
     &.disabled {
         + .form-label,
@@ -53,6 +52,7 @@
         position: relative;
         text-align: left;
         transition: border-color .1s linear;
+
         &:before {
             border: 1px solid;
             content: '';
@@ -128,7 +128,6 @@
     }
 
     //  Checked radio state
-
     &:checked {
         + .form-label {
             cursor: default;
