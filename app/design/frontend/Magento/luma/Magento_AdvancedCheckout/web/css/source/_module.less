@@ -12,13 +12,16 @@
         .block-addbysku {
             .fieldset {
                 margin: 0;
+
                 .fields {
                     position: relative;
+
                     .field {
                         display: inline-block;
                         margin-bottom: @indent__s;
                         vertical-align: top;
                     }
+
                     .actions-toolbar {
                         position: absolute;
                         right: 0;
@@ -26,12 +29,14 @@
                     }
                 }
             }
+
             .sku {
                 &:extend(.abs-add-box-sizing all);
                 margin-right: -155px;
                 padding-right: 160px;
                 width: 100%;
             }
+
             .qty {
                 .qty {
                     &:extend(.abs-input-qty all);
@@ -40,11 +45,14 @@
                     }
                 }
             }
+
             .block-content {
                 &:extend(.abs-add-clearfix-desktop all);
+
                 .box {
                     &:extend(.abs-blocks-2columns all);
                 }
+
                 .actions-toolbar {
                     clear: both;
                     .lib-actions-toolbar(
@@ -52,11 +60,13 @@
                     @_actions-toolbar-margin: 0 0 @indent__base
                     );
                     .lib-actions-toolbar-clear-floats();
+
                     > .secondary {
                         text-align: left;
                     }
                 }
             }
+
             .action {
                 &.add {
                     .lib-button-icon(
@@ -69,9 +79,11 @@
                     width: auto;
                 }
             }
+
             .reset {
                 margin: 7px 0;
             }
+
             .note {
                 display: block;
                 margin: 0 0 @indent__base;
@@ -83,14 +95,18 @@
     .block-cart-failed {
         margin: @indent__xl 0;
         &:extend(.abs-shopping-cart-items all);
+
         .block-title {
             .lib-font-size(@h2__font-size);
+
             strong {
                 font-weight: @h2__font-weight;
             }
         }
+
         .actions.secondary {
             text-align: center;
+
             .action {
                 display: block;
                 margin: 0 auto @indent__s;
@@ -110,6 +126,7 @@
                 margin-right: -85px;
                 padding-right: 90px;
             }
+
             .action {
                 &.remove {
                     .lib-button-icon(
@@ -156,6 +173,7 @@
         &:extend(.abs-shopping-cart-items-desktop all);
         .actions.secondary {
             text-align: right;
+
             .action {
                 display: inline-block;
                 margin: 0 0 0 @indent__s;

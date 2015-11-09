@@ -17,59 +17,72 @@
     &:last-child {
         margin-bottom: 0;
     }
+
     > .field,
     > .fields > .field {
         .lib-form-field();
+
         &.no-label {
             > .label {
                 &:extend(.abs-visually-hidden all);
             }
         }
+
         &.choice {
             .label {
                 display: inline;
                 font-weight: normal;
             }
         }
+
         .label {
             .column:not(.main) & {
                 font-weight: normal;
             }
         }
+
         .field.choice {
             margin-bottom: @indent__s;
+
             &:last-child {
                 margin-bottom: 0;
             }
         }
+
         input[type=file] {
             margin: @indent__xs 0;
         }
     }
 }
+
 .legend + .fieldset,
 .legend + div {
     clear: both;
 }
+
 .legend {
     strong {
         margin-left: @indent__xs;
     }
 }
+
 fieldset.field {
     border: 0;
     padding: 0;
 }
 
+
 .field {
     &.date {
         &:extend(.abs-field-date all);
+
         .time-picker {
             display: inline-block;
             margin-top: @indent__s;
             white-space: nowrap;
         }
     }
+
     .message {
         &.warning {
             margin-top: @indent__s;
@@ -107,6 +120,7 @@ select:focus ~ .tooltip .tooltip-content {
         );
         display: inline-block;
         vertical-align: middle;
+
         &:focus {
             box-shadow: none;
             outline: 0;
@@ -125,12 +139,14 @@ select:focus ~ .tooltip .tooltip-content {
             &:not(:last-child) {
                 margin: 0 0 @form-field__vertical-indent;
             }
+
             .label {
                 margin: 0 0 4px;
                 padding: 0 0 @indent__xs;
                 text-align: left;
                 width: 100%;
             }
+
             .control {
                 width: 100%;
             }
@@ -148,6 +164,7 @@ select:focus ~ .tooltip .tooltip-content {
         .legend {
             &:extend(.abs-margin-for-forms-desktop all);
         }
+
         > .field {
             .lib-form-field-type-revert();
             margin: 0 0 @form-field__vertical-indent__desktop;

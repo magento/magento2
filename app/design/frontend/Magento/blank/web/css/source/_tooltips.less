@@ -15,25 +15,30 @@
         @_tooltip-selector-content: ~".tooltip.content",
         @_tooltip-selector-toggle: ~".tooltip.toggle"
     );
+
     .tooltip.content {
         dl {
             margin-bottom: 0;
         }
+
         dd {
             white-space: normal;
         }
+
         .subtitle {
             display: inline-block;
             margin-bottom: 15px;
             font-size: 16px;
             font-weight: 500;
         }
+
         .label {
             margin-top: @indent__s;
             &:first-child {
                 margin-top: 0;
             }
         }
+
         .values {
             margin: 0;
         }
