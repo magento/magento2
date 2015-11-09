@@ -21,13 +21,16 @@
     overflow: visible;
     vertical-align: top;
     width:0;
+
     &:hover {
         position: relative;
         z-index: @field-tooltip__z-index;
     }
+
     .admin__field-option & {
         margin-top: 10px
     }
+
     .admin__field-tooltip-action {
         margin-left: 20px;
         display: inline-block;
@@ -38,19 +41,23 @@
             @_icon-font-line-height: 1,
             @_icon-font-color: @field-tooltip-icon__color
         );
+
         span {
             &:extend(.abs-visually-hidden);
         }
     }
+
     .admin__control-text:focus + .admin__field-tooltip-content,
     &:hover .admin__field-tooltip-content {
         display: block;
     }
+
     .admin__field-tooltip-content {
         &:extend(.abs-admin__field-tooltip-content all);
         bottom: 42px;
         display: none;
         right: -70px;
+
         &:after,
         &:before {
             .lib-arrow(
@@ -65,6 +72,7 @@
             top: 100%;
             z-index: 3;
         }
+
         &:after {
             border-top-color: @field-tooltip-content__background-color;
             margin-top: -1px;

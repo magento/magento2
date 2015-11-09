@@ -59,6 +59,7 @@
 .nav-bar-outer-actions {
     float: right;
     margin-bottom: @nav-bar-items__indent-bottom;
+
     .action-wrap {
         float: right;
         margin-left: .5rem;
@@ -236,12 +237,14 @@
         padding-left: 1.5rem;
         text-align: center;
     }
+
     .nav-bar {
         display: inline-block;
         float: none;
         margin-right: 0;
         vertical-align: top;
     }
+
     .nav .btn-group,
     .nav-bar-outer-actions {
         display: inline-block;
@@ -251,8 +254,10 @@
         vertical-align: top;
         width: 100%;
     }
+
     .nav-bar-outer-actions {
         padding-right: 0;
+
         .outer-actions-inner-wrap {
             display: inline-block;
         }
@@ -269,9 +274,11 @@
         padding-left: 0;
         padding-right: 0;
     }
+
     .nav-bar-outer-actions {
         margin-top: 0;
     }
+
     .nav-bar {
         &:extend(.abs-clearfix all);
         display: block;
@@ -279,19 +286,24 @@
         margin-left: auto;
         margin-right: auto;
         width: @nav-bar-step__width * 3;
+
         &:before {
             display: none;
         }
+
         > li {
             float: left;
             min-height: 9rem;
+
             &:after {
                 display: none;
             }
+
             &:nth-child(4n) {
                 clear: both;
             }
         }
+
         a {
             line-height: 1.4;
         }
@@ -301,10 +313,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     .nav-bar {
         width: @nav-bar-step__width * .75 * 3;
+
         > li {
             width: @nav-bar-step__width * .75;
         }
     }
+
     .nav .btn-group,
     .nav-bar-outer-actions {
         .btn-wrap-try-again {
@@ -322,13 +336,16 @@
 .steps-wizard {
     .nav-bar {
         margin: @indent__xs 0 0;
+
         > li {
             width: 12rem;
         }
+
         a {
             text-overflow: initial;
             white-space: normal;
         }
+
         :after,
         :before {
             box-sizing: content-box;

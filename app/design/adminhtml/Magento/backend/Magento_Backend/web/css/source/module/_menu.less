@@ -66,9 +66,11 @@
     transition: background-color .1s linear;
     word-wrap: break-word;
     z-index: @menu__z-index;
+
     &:focus {
         box-shadow: none;
     }
+
     &:before {
         &:extend(.abs-icon all);
         content: @icon-menu-item__content;
@@ -88,6 +90,7 @@
     position: relative;
     width: @menu__width;
     z-index: @menu__z-index;
+
     &:before {
         background-color: @menu__background-color;
         bottom: 0;
@@ -98,10 +101,12 @@
         width: @menu__width;
         z-index: @menu-wrapper__z-index;
     }
+
     &._fixed {
         left: 0;
         position: fixed;
         top: 0;
+
         ~ .page-wrapper {
             margin-left: @menu__width;
         }
@@ -114,15 +119,18 @@
         position: relative;
         text-align: center;
         z-index: @menu__z-index;
+
         ._keyfocus & {
             &:focus {
                 background-color: @menu-item__active__background-color;
                 box-shadow: none;
+
                 + .admin__menu {
                     .level-0 {
                         &:first-child {
                             > a {
                                 background-color: @menu__background-color;
+
                                 &:after {
                                     display: none;
                                 }
@@ -132,17 +140,20 @@
                 }
             }
         }
+
         &:hover {
             .logo-img {
                 -webkit-filter: brightness(1.1);
                 filter: brightness(1.1);
             }
         }
+
         &:active {
             .logo-img {
                 transform: scale(.95);
             }
         }
+
         .logo-img {
             height: @menu-logo-img__height;
             transition: -webkit-filter .2s linear,
@@ -175,10 +186,12 @@
     li {
         display: block;
     }
+
     .level-0 {
         &:first-child {
             > a {
                 position: relative;
+
                 //  Separator between logo and menu
                 &:after {
                     &:extend(.abs-menu-separator);
@@ -192,6 +205,7 @@
                 }
             }
         }
+
         //  Hover & active state for menu level 0 item
         &._active,
         &:hover {
@@ -199,16 +213,19 @@
                 color: @menu-item__active__color;
             }
         }
+
         &._active {
             > a {
                 background-color: @menu-item__hover__background-color;
             }
         }
+
         &:hover {
             > a {
                 background-color: @menu-item__active__background-color;
             }
         }
+
         > a {
             .admin__menu-link();
         }
@@ -234,6 +251,7 @@
             visibility: hidden;
             z-index: @submenu__z-index - 1;
         }
+
         &._show  {
             > .submenu {
                 transform: translateX(0);
@@ -253,9 +271,11 @@
             a {
                 display: block;
                 padding: @submenu-link__padding-vertical @submenu__padding-horizontal;
+
                 &:hover {
                     background-color: @submenu-link__focus__background-color;
                 }
+
                 &:active {
                     padding-top: @submenu-link__padding-vertical + .1rem;
                     padding-bottom: @submenu-link__padding-vertical - .1rem;
@@ -269,18 +289,22 @@
         li {
             min-width: @submenu-column__width;
         }
+
         a {
             color: @submenu-link__color;
             transition: background-color .1s linear;
+
             &:hover,
             &:focus {
                 box-shadow: none;
                 text-decoration: none;
             }
+
             ._keyfocus & {
                 &:focus {
                     background-color: @submenu-link__focus__background-color;
                 }
+
                 &:active {
                     background-color: @submenu-link__active__background-color;
                 }
@@ -288,6 +312,7 @@
         }
         .parent {
             margin-bottom: 4.5rem;
+
             //  Section title
             > a, // ToDo UI: Should be deleted after template changes a -> strong.submenu-group-title
             .submenu-group-title {
@@ -300,6 +325,7 @@
                 pointer-events: none;
             }
         }
+
         .column {
             display: table-cell;
         }
@@ -327,10 +353,12 @@
         position: absolute;
         right: 0;
         top: 0;
+
         &:before {
             color: @submenu-section-label__color;
             font-size: 1.7rem;
         }
+
         &:hover {
             &:before {
                 color: @color-white;
