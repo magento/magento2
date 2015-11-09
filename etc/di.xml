@@ -14,4 +14,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\AdvancedSearch\Block\Suggestions">
+        <arguments>
+            <argument name="searchDataProvider" xsi:type="object">Magento\Elasticsearch\Model\DataProvider\Suggestions</argument>
+        </arguments>
+    </type>
 </config>
