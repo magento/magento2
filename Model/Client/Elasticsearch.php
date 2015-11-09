@@ -42,8 +42,9 @@ class Elasticsearch
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
         }
-        $config = $this->buildConfig($options);
+
         if (!($elasticsearchClient instanceof \Elasticsearch\Client)) {
+            $config = $this->buildConfig($options);
             $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config);
         }
         $this->client = $elasticsearchClient;
@@ -57,12 +58,12 @@ class Elasticsearch
      */
     public function ping()
     {
+        $pingStatus = false;
         try {
             if ($this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]])) {
                 $pingStatus = ['status' => 'OK'];
             }
         } catch (NoNodesAvailableException $e) {
-            $pingStatus = false;
         }
         return $pingStatus;
     }
@@ -73,7 +74,7 @@ class Elasticsearch
      */
     public function buildConfig($options = [])
     {
-        $host = preg_replace('/[http|https]:\/\//i', '', $options['hostname']);
+        $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
         if (!$protocol) {
             $protocol = 'http';
