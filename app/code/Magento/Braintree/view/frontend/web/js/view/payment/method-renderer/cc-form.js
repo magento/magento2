@@ -141,7 +141,7 @@ define(
                 this.isCcFormShown = ko.computed(function () {
 
                     return !this.useVault() ||
-                        this.selectedCardToken() === 'undefined' ||
+                        this.selectedCardToken() === undefined ||
                         this.selectedCardToken() === '';
                 }, this);
 
