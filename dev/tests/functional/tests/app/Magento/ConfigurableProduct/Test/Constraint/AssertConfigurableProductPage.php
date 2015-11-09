@@ -42,12 +42,11 @@ class AssertConfigurableProductPage extends AssertProductPage
     {
         $priceBlock = $this->productView->getPriceBlock();
         $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
-        $priceData = $this->product->getDataFieldConfig('price')['source']->getPriceData();
-        $fixturePrice = number_format($priceData['category_price'], 2, '.', '');
+        $fixturePrice = $this->getLowestConfigurablePrice();
 
         if ($fixturePrice != $formPrice) {
             return "Displayed product price on product page(front-end) not equals passed from fixture. "
-            . "Actual: {$fixturePrice}, expected: {$formPrice}.";
+            . "Actual: {$formPrice}, expected: {$fixturePrice}.";
         }
         return null;
     }
@@ -96,5 +95,25 @@ class AssertConfigurableProductPage extends AssertProductPage
 
         $errors = $this->verifyData($configurableOptions, $formOptions, true, false);
         return empty($errors) ? null : $this->prepareErrors($errors, 'Error configurable options:');
+    }
+
+    /**
+     * Returns lowest possible price of configurable product.
+     *
+     * @return string
+     */
+    protected function getLowestConfigurablePrice()
+    {
+        $price = null;
+        $configurableOptions = $this->product->getConfigurableAttributesData();
+
+        foreach ($configurableOptions['matrix'] as $option) {
+            $price = $price === null ? $option['price'] : $price;
+            if ($price > $option['price']) {
+                $price = $option['price'];
+            }
+        }
+
+        return $price;
     }
 }

@@ -68,7 +68,7 @@ class BundleSelectionPrice extends AbstractPrice
      * @param ManagerInterface $eventManager
      * @param DiscountCalculator $discountCalculator
      * @param bool $useRegularPrice
-     * @param string $excludeAdjustment
+     * @param array $excludeAdjustment
      */
     public function __construct(
         Product $saleableItem,

@@ -11,7 +11,9 @@ define([
     'mage/template',
     'uiRegistry',
     'jquery/ui',
-    'prototype'
+    'prototype',
+    'form',
+    'validation'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
@@ -38,6 +40,10 @@ define([
 
                     if (!data.intype) {
                         data.intype = optionDefaultInputType;
+                    }
+
+                    if (!this.totalItems) {
+                        data.checked = 'checked';
                     }
                     element = this.template({
                         data: data

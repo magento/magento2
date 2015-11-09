@@ -36,9 +36,6 @@ class StockItemTest extends WebapiAbstract
      */
     const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection */
-    protected $productCollection;
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
@@ -48,25 +45,6 @@ class StockItemTest extends WebapiAbstract
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
-    }
-
-    /**
-     * Execute per test cleanup
-     */
-    public function tearDown()
-    {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
-
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-
-        $this->productCollection->addFieldToFilter('entity_id', ['in' => [10, 11, 12]])->delete();
-        unset($this->productCollection);
-
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
     }
 
     /**
@@ -121,10 +99,12 @@ class StockItemTest extends WebapiAbstract
             ],
         ];
 
-        $stockItemDetailsDo = $this->objectManager->get(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
-        )->create();
-        $dataObjectHelper = $this->objectManager->get('\Magento\Framework\Api\DataObjectHelper');
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemDetailsDo */
+        $stockItemDetailsDo = $this->objectManager
+            ->get('Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory')
+            ->create();
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = $this->objectManager->get('Magento\Framework\Api\DataObjectHelper');
         $dataObjectHelper->populateWithArray(
             $stockItemDetailsDo,
             $newData,
@@ -135,8 +115,10 @@ class StockItemTest extends WebapiAbstract
         $arguments = ['productSku' => $productSku, 'stockItem' => $data];
         $this->assertEquals($stockItemOld['item_id'], $this->_webApiCall($serviceInfo, $arguments));
 
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory */
         $stockItemFactory = $this->objectManager->get('Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory');
         $stockItem = $stockItemFactory->create();
+        /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItemResource */
         $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
         $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();

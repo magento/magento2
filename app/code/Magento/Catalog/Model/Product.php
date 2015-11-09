@@ -25,7 +25,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
- * @method int getPriceType
+ * @method int getPriceType()
  * @method \Magento\Catalog\Model\ResourceModel\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
@@ -118,11 +118,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_errors = [];
 
     /**
+     * Product option factory
+     *
+     * @var Product\OptionFactory
+     */
+    protected $optionFactory;
+
+    /**
      * Product option
      *
      * @var Product\Option
      */
-    protected $_optionInstance;
+    protected $optionInstance;
 
     /**
      * @var array
@@ -337,7 +344,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
-     * @param Product\Option $catalogProductOption
+     * @param Product\OptionFactory $catalogProductOptionFactory
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
@@ -376,7 +383,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \Magento\Catalog\Model\Product\Option $catalogProductOption,
+        \Magento\Catalog\Model\Product\OptionFactory $catalogProductOptionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
@@ -405,7 +412,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_stockItemFactory = $stockItemFactory;
-        $this->_optionInstance = $catalogProductOption;
+        $this->optionFactory = $catalogProductOptionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -961,9 +968,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function eavReindexCallback()
     {
-        if ($this->isObjectNew() || $this->hasDataChanges()) {
+        if ($this->isObjectNew() || $this->isDataChanged($this)) {
             $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
+    }
+
+    /**
+     * Check if data was changed
+     *
+     * @return bool
+     */
+    public function isDataChanged()
+    {
+        foreach (array_keys($this->getData()) as $field) {
+            if ($this->dataHasChangedFor($field)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1889,7 +1911,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionInstance()
     {
-        return $this->_optionInstance;
+        if (!isset($this->optionInstance)) {
+            $this->optionInstance = $this->optionFactory->create();
+            $this->optionInstance->setProduct($this);
+        }
+        return $this->optionInstance;
     }
 
     /**

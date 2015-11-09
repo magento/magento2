@@ -19,6 +19,7 @@ return [
             'Magento\Setup\Controller\ReadinessCheckInstaller',
             'Magento\Setup\Controller\ReadinessCheckUpdater',
             'Magento\Setup\Controller\Environment',
+            'Magento\Setup\Controller\DependencyCheck',
             'Magento\Setup\Controller\DatabaseCheck',
             'Magento\Setup\Controller\AddDatabase',
             'Magento\Setup\Controller\WebConfiguration',
@@ -34,9 +35,10 @@ return [
             'Magento\Setup\Controller\Maintenance',
             'Magento\Setup\Controller\OtherComponentsGrid',
             'Magento\Setup\Controller\DataOption',
-            'Magento\Setup\Controller\Connect',
+            'Magento\Setup\Controller\Marketplace',
             'Magento\Setup\Controller\SystemConfig',
             'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\Session'
         ],
         'instance' => [
             'preference' => [

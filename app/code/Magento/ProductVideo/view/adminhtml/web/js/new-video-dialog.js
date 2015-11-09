@@ -4,14 +4,13 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
     'Magento_ProductVideo/js/get-video-information'
-], function ($, alert) {
+], function ($) {
     'use strict';
 
     $.widget('mage.createVideoPlayer', {
@@ -62,11 +61,9 @@ define([
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
-            } else
-            if (checkVideoID && checkVideoID === this.options.videoId) {
+            } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
-            } else
-            if (!checkVideoID) {
+            } else if (!checkVideoID) {
                 this._doUpdate();
             }
 
@@ -97,8 +94,7 @@ define([
                     this.options.metaData.data.uploader +
                     '</a>'
                 );
-            } else
-            if (this.options.videoProvider === 'vimeo') {
+            } else if (this.options.videoProvider === 'vimeo') {
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
@@ -425,7 +421,9 @@ define([
          */
         _replaceImage: function (oldFile, newFile, imageData) {
             var tmpNewFile = newFile,
+                tmpOldImage,
                 newImageId,
+                oldNewFilePosition,
                 fc,
                 suff,
                 searchsuff,
@@ -434,6 +432,7 @@ define([
 
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
+            tmpOldImage = this._images[oldFile];
 
             if (newFile === oldFile) {
                 this._images[newFile] = imageData;
@@ -445,26 +444,36 @@ define([
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
 
-            if (oldFile && imageData.oldFile) {
-                newImageId = this.findElementId(tmpNewFile);
-                fc = $(this._itemIdSelector).val();
-
-                suff = 'product[media_gallery][images]' + fc;
-
-                searchsuff = 'input[name="' + suff + '[value_id]"]';
-                key = $(searchsuff).val();
-
-                if (!key) {
-                    return null;
-                }
-
-                oldValIdElem = document.createElement('input');
-                $('form[data-form="edit-product"]').append(oldValIdElem);
-                $(oldValIdElem).attr({
-                    type: 'hidden',
-                    name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
-                }).val(key);
+            if (!oldFile || !imageData.oldFile) {
+                return null;
             }
+
+            newImageId = this.findElementId(tmpNewFile);
+            fc = $(this._itemIdSelector).val();
+
+            suff = 'product[media_gallery][images]' + fc;
+
+            searchsuff = 'input[name="' + suff + '[value_id]"]';
+            key = $(searchsuff).val();
+
+            if (!key) {
+                return null;
+            }
+
+            oldValIdElem = document.createElement('input');
+            $('form[data-form="edit-product"]').append(oldValIdElem);
+            $(oldValIdElem).attr({
+                type: 'hidden',
+                name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
+            }).val(key);
+
+            oldNewFilePosition = parseInt(tmpOldImage.position, 10);
+            imageData.position = oldNewFilePosition;
+
+            $(this._imageWidgetSelector).trigger('setPosition', {
+                imageData: imageData,
+                position: oldNewFilePosition
+            });
         },
 
         /**
@@ -527,10 +536,13 @@ define([
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
+            if ($('#video_url').parent().find('.image-upload-error').length > 0) {
+                $('.image-upload-error').remove();
+            }
+
             if (data.errorcode || data.error) {
-                alert({
-                    content: data.error
-                });
+                $('#video_url').parent().append('<div class="image-upload-error">' +
+                '<div class="image-upload-error-cross"></div><span>' + data.error + '</span></div>');
 
                 return;
             }
@@ -647,7 +659,7 @@ define([
                     roles.prop('disabled', false);
                     file = $('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = $('.modal-title');
+                    modalTitleElement = $('.mage-new-video-dialog .modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);
@@ -717,6 +729,8 @@ define([
             $productGalleryWrapper.parent().addClass('video-item');
             $imageWidget.removeClass('video-item');
             $productGalleryWrapper.removeClass('video-item');
+            $('.video-item .action-delete').attr('title',  $.mage.__('Delete video'));
+            $('.video-item .action-delete span').html($.mage.__('Delete video'));
         },
 
         /**
@@ -870,9 +884,8 @@ define([
             if (
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext.toLowerCase()) === -1 ||
-                !file.files  ||
+                !file.files ||
                 !file.files.length
-
             ) {
                 prev.remove();
                 this._previewImage = null;
@@ -968,7 +981,9 @@ define([
 
             try {
                 newVideoForm.validation('clearError');
-            } catch (e) {}
+            } catch (e) {
+
+            }
             newVideoForm.trigger('reset');
         },
 
@@ -1138,7 +1153,7 @@ define([
         }
     });
 
-    $('#group-fields-image-management > legend > span').text('Images and Videos');
+    $('#group-fields-image-management > legend > span').text($.mage.__('Images and Videos'));
 
     return $.mage.newVideoDialog;
 });

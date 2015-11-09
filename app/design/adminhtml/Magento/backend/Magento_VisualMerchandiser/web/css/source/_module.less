@@ -1,0 +1,346 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.merchandiser-app {
+    &:extend(.abs-clearfix all);
+
+    ul.tabs {
+        float: right;
+    }
+
+    #catalog_category_merchandiser {
+        div.grid {
+            padding: 0;
+        }
+        div.grid-actions {
+            padding: 10px 0;
+            float: right;
+        }
+    }
+
+    .merchandiser-tab {
+        padding: 0;
+    }
+
+    .tabs {
+        &:extend(.abs-clearfix all);
+        list-style: none;
+        overflow: hidden;
+        li {
+            background-color: #f0f0f0;
+            float: left;
+            > a {
+                border: 1px solid #cccccc;
+                padding: 7px 10px;
+                text-decoration: none;
+                display: block;
+                color: #7d7d7d;
+            }
+        }
+        li:last-child > a {
+            border-left: 0;
+        }
+        li.ui-tabs-active {
+            background-color: #dedede;
+        }
+    }
+
+    #catalog_category_merchandiser_list {
+        overflow: hidden;
+        > li {
+            list-style: none;
+            width: 190px;
+            height: 340px;
+            float: left;
+            border: 1px solid #7d7d7d;
+            margin: 0 25px 20px 0;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .image-holder {
+            text-align: center;
+            img {
+                max-height: 130px;
+            }
+        }
+        .controlbar-top {
+            overflow: hidden;
+            a {
+                text-decoration: none;
+                color: #7d7d7d;
+                float: left;
+                display: inline-block;
+            }
+            a:last-child {
+                float: right;
+            }
+        }
+        .info-block {
+            height: 100px;
+        }
+        .controlbar-bottom {
+            .position {
+                border-top: 1px solid #7d7d7d;
+                margin-top: 6px;
+                padding-top: 4px;
+                input {
+                    width: 50px;
+                    height: 25px;
+                    float: left;
+                    margin-right: 5px;
+                }
+                a {
+                    text-decoration: none;
+                    color: #7d7d7d;
+                    margin-right: 5px;
+                    margin-top: -2px;
+                    float: left;
+                    display: block;
+                }
+            }
+        }
+        .selected {
+            background-color: #f5d6c7;
+        }
+    }
+
+    .draggable-handle {
+        &:extend(.abs-draggable-handle all);
+    }
+
+    table.data-grid {
+        th.col-draggable-position {
+            width: 10px;
+            margin: 0 auto 0 auto;
+        }
+        td.col-position {
+            > * {
+                float: left;
+                margin-right: 5px;
+            }
+            .position input {
+                width: 40px;
+                text-align: center;
+            }
+            a {
+                text-decoration: none;
+                color: #7d7d7d;
+            }
+        }
+        .selected td {
+            background-color: #f5d6c7;
+        }
+
+        tr.on-mouse td {
+            background-color: #e5f7fe;
+        }
+    }
+
+    .mode-tile:before, .mode-grid:before, .icon-gripper:before, .icon-close-mage:before,
+    .icon-backward:before, .icon-forward:before, .block-search .label:before {
+        font-family: 'Admin Icons';
+        -webkit-font-smoothing: antialiased;
+        font-size: 17px;
+        speak: none;
+    }
+    .mode-grid > span,
+    .mode-tile > span,
+    .icon-backward > span,
+    .icon-forward > span,
+    .icon-close-mage > span,
+    .icon-gripper > span {
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .mode-tile:before {
+        content: "\e63d";
+    }
+
+    .mode-grid:before {
+        content: "\e63e";
+    }
+
+    .icon-gripper:before {
+        content: "\e617";
+    }
+
+    .icon-close-mage:before {
+        content: "\e62f";
+    }
+
+    .icon-backward:before {
+        content: "\e619";
+    }
+
+    .icon-forward:before {
+        content: "\e618";
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .smart_category {
+        display: block;
+        clear: both;
+        margin-bottom: 5px;
+    }
+
+    .mode_select {
+        float: right;
+    }
+
+    .add_product_sku {
+        float: left;
+        display: block;
+        margin: 5px;
+    }
+
+    .add_product_sku_buttons {
+        display: block;
+        margin: 5px;
+    }
+
+    .automatic_sorting {
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+}
+
+#catalog_category_add_product_tabs_content {
+    .admin__data-grid-header {
+        .admin__data-grid-pager-wrap {
+            float: right;
+        }
+    }
+    .data-grid-search-control-wrap {
+        .massassign_textarea, .massassign_buttons, .massassign_messages {
+            display: block;
+            margin: 5px;
+        }
+    }
+}
+
+.visual_merchandiser_draggable_container {
+    > li {
+        list-style: none;
+        width: 190px;
+        height: 340px;
+        float: left;
+        border: 1px solid #7d7d7d;
+        margin: 0 15px 15px 0;
+        padding: 10px;
+    }
+}
+
+//
+//  Merchandiser manage rools
+//  ---------------------------------------------
+
+.manage-rules-panel {
+    box-sizing: border-box;
+    margin: @indent__base 0 0;
+    .message {
+        margin: 0 0 @indent__base;
+    }
+    .admin__data-grid-wrap {
+        padding-bottom: 0;
+    }
+    .smart-category-table {
+        .action-delete {
+            .action-icon();
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-delete__content;
+            }
+            > span {
+                display: none;
+            }
+        }
+    }
+    .hidden {
+        + .action-secondary {
+            margin-top: @indent__base;
+        }
+    }
+}
+
+//
+//  Merchandiser toolbar
+//  ---------------------------------------------
+
+.regular-category-settings {
+    &:extend(.abs-clearfix all);
+    margin: 0 0 @indent__base;
+    .actions {
+        float: right;
+    }
+}
+
+.merchandiser-toolbar {
+    float: left;
+    width: 80%;
+    .admin__field {
+        display: inline-block;
+        margin-right: @indent__s;
+    }
+}
+
+.merchandiser-toolbar,
+.manage-rules-sorting {
+    .admin__field {
+        > .admin__field-label {
+            margin-right: @indent__xs;
+            text-align: left;
+            span {
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+//
+//  Match products by rule switcher
+//  ---------------------------------------------
+
+//  ToDo UI: refactor when refactoring yes/no switcher
+.smart-category-switcher {
+    &:extend(.abs-clearfix all);
+    margin: 0 0 @indent__base;
+    .actions-switch {
+        display: inline-block;
+        margin-left: @indent__xs;
+        vertical-align: top;
+        .actions-switch-label {
+            width: 35px;
+        }
+        .actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
+    }
+}
+
+//
+//  Merchandiser tabs
+//  ---------------------------------------------
+
+//  ToDo UI: refactor merchant tabs
+.merchandiser-tabs {
+    &:extend(.abs-clearfix all);
+    border-top: 1px solid @color-gray80;
+    padding: @indent__base 0 0;
+    .merchandiser-tab {
+        border-top: 0 !important;
+        clear: both;
+    }
+}

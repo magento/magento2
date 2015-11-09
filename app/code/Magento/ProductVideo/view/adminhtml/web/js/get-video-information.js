@@ -63,8 +63,8 @@ require([
                         break;
                     default:
                         throw {
-                            name: 'Video Error',
-                            message: 'Unknown video type',
+                            name: $.mage.__('Video Error'),
+                            message: $.mage.__('Unknown video type'),
 
                             /**
                              * Return string
@@ -303,7 +303,7 @@ require([
                     additionalParams += '&autoplay=1';
                 }
 
-                src = 'http://player.vimeo.com/video/' +
+                src = window.location.protocol + '//player.vimeo.com/video/' +
                     this._code + '?api=1&player_id=vimeo' +
                     this._code +
                     timestamp +
@@ -323,8 +323,6 @@ require([
         $.widget('mage.videoData', {
             options: {
                 youtubeKey: '',
-                noKeyErrorTxt: 'You have not entered youtube API key. ' +
-                'No information about youtube video will be retrieved.',
                 eventSource: '' //where is data going from - focus out or click on button
             },
 
@@ -340,11 +338,6 @@ require([
              * @private
              */
             _init: function () {
-                if (!this.options.youtubeKey && this.options.eventSource === 'click') {
-                    alert({
-                        content: this.options.noKeyErrorTxt
-                    });
-                }
                 this._onRequestHandler();
             },
 
@@ -367,7 +360,7 @@ require([
                 videoInfo = this._validateURL(url);
 
                 if (!videoInfo) {
-                    this._onRequestError('Invalid video url');
+                    this._onRequestError($.mage.__('Invalid video url'));
 
                     return;
                 }
@@ -402,7 +395,7 @@ require([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push('Youtube API key is an invalid');
+                                errorsMessage.push($.mage.__('Youtube API key is invalid'));
 
                                 break;
                             }
@@ -410,7 +403,8 @@ require([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return 'Video can\'t be shown by reason: ' + $.unique(errorsMessage).join(', ');
+                        return $.mage.__('Video cant be shown due to the following reason: ') +
+                            $.unique(errorsMessage).join(', ');
                     };
 
                     if (data.error && data.error.code === 400) {
@@ -420,7 +414,7 @@ require([
                     }
 
                     if (!data.items || data.items.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return;
                     }
@@ -450,7 +444,7 @@ require([
                         respData;
 
                     if (data.length < 1) {
-                        this._onRequestError('Video not found');
+                        this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
@@ -489,7 +483,7 @@ require([
                         }
                     );
                 } else if (type === 'vimeo') {
-                    $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
+                    $.getJSON(window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
                         {
                             format: 'json'
                         },
@@ -576,8 +570,8 @@ require([
                     type = 'youtube';
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
-                    vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
-                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|)(\\d+)(?:$|\\/|\\?)'
+                    vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
+                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
                     ].join(''));
                     id = href.href.match(vimeoRegex)[3];
                 }

@@ -35,7 +35,11 @@ class PropertyMapper extends PropertyMapperAbstract
             'default_value' => $this->_getValue($input, 'default'),
             'is_unique' => $this->_getValue($input, 'unique', 0),
             'note' => $this->_getValue($input, 'note'),
-            'is_global' => $this->_getValue($input, 'global', Attribute::SCOPE_GLOBAL)
+            'is_global' => $this->_getValue(
+                $input,
+                'global',
+                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+            )
         ];
     }
 }

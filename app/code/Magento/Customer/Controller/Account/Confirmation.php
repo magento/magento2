@@ -6,8 +6,6 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
@@ -15,7 +13,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-class Confirmation extends Action implements AccountInterface
+class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var StoreManagerInterface */
     protected $storeManager;

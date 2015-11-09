@@ -5,8 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
+use Magento\ImportExport\Model\Import;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +48,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
-        $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('');
+        $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
 
         $this->validatorOne = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
@@ -72,23 +74,131 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->init($this->context);
     }
 
-    public function testIsBooleanAttributeValid()
+    /**
+     * @param string $behavior
+     * @param array $attrParams
+     * @param array $rowData
+     * @param bool $isValid
+     * @param string $attrCode
+     * @dataProvider attributeValidationProvider
+     */
+    public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
     {
-        $this->context->expects($this->any())->method('getBehavior')
-            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE);
+        $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
-            'boolean_attribute',
+            $attrCode,
+            $attrParams,
+            $rowData
+        );
+        $this->assertEquals($isValid, $result);
+        if (!$isValid) {
+            $this->assertTrue($this->validator->hasMessages());
+        }
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function attributeValidationProvider()
+    {
+        return [
             [
-                'type' => 'boolean',
-                'apply_to' => ['simple'],
-                'is_required' => false
+                'any_behavior',
+                ['apply_to' => ['expected_product_type']],
+                ['product_type' => 'not_expected_product_type'],
+                true, //validation skipped in such case, so it means attribute is valid
+                'any_attibute_code',
             ],
             [
-                'product_type' => 'simple',
-                'boolean_attribute' => 'Yes'
+                'any_behavior',
+                [],
+                ['product_type' => 'any'],
+                false,
+                Product::COL_SKU
+            ],
+            [
+                'any_behavior',
+                ['type' => 'varchar'],
+                ['product_type' => 'any', 'sku' => 'sku_value'],
+                true,
+                Product::COL_SKU
+            ],
+            [
+                'any_behavior',
+                ['is_required' => true, 'type' => 'varchar'],
+                ['product_type' => 'any', 'attribute_code' => 'value'],
+                true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'varchar'],
+                ['product_type' => 'any', 'attribute_code' => ''],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'int'],
+                ['product_type' => 'any', 'attribute_code' => 'not-int'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'int'],
+                ['product_type' => 'any', 'attribute_code' => '1'],
+                true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'decimal'],
+                ['product_type' => 'any', 'price' => ''],
+                true,
+                'price'
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'boolean', 'options' => ['yes' => 0, 'no' => 1]],
+                ['product_type' => 'any', 'attribute_code' => 'some-value'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'boolean', 'options' => ['yes' => 0, 'no' => 1]],
+                ['product_type' => 'any', 'attribute_code' => 'Yes'],
+                true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 3'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2'],
+                true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'datetime'],
+                ['product_type' => 'any', 'attribute_code' => '1/1/15 12am'],
+                true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'datetime'],
+                ['product_type' => 'any', 'attribute_code' => '1/1/15 13am'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'varchar', 'is_unique' => true],
+                ['product_type' => 'any', 'unique_attribute' => 'unique-value', Product::COL_SKU => 'sku-0'],
+                true,
+                'unique_attribute'
             ]
-        );
-        $this->assertTrue($result);
+        ];
     }
 
     public function testIsValidCorrect()

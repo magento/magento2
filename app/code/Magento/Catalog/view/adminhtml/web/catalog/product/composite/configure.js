@@ -7,7 +7,7 @@ define([
     "jquery/ui",
     "mage/translate",
     "prototype",
-    'Magento_Ui/js/modal/modal'
+    "Magento_Ui/js/modal/modal"
 ], function(jQuery){
 
     window.ProductConfigure = Class.create();
@@ -703,7 +703,9 @@ define([
                             mageData.scripts.map(function(script) {
                                 return eval(script);
                             });
-                        } catch (e) {}
+                        } catch (e) {
+
+                        }
                         this.restorePhase = false;
                     }
                     break;

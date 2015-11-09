@@ -7,8 +7,6 @@ namespace Magento\Catalog\Block\Product\View;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\View\Options.
- *
- * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,6 +37,9 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testSetGetProduct()
     {
         $this->assertSame($this->_product, $this->_block->getProduct());
@@ -50,11 +51,17 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($product, $this->_block->getProduct());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testGetGroupOfOption()
     {
         $this->assertEquals('default', $this->_block->getGroupOfOption('test'));
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testGetOptions()
     {
         $options = $this->_block->getOptions();
@@ -64,15 +71,52 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testHasOptions()
     {
         $this->assertTrue($this->_block->hasOptions());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_with_dropdown_option.php
+     */
     public function testGetJsonConfig()
     {
-        $config = json_decode($this->_block->getJsonConfig());
-        $this->assertNotNull($config);
-        $this->assertNotEmpty($config);
+        $config = json_decode($this->_block->getJsonConfig(), true);
+        $configValues = array_values($config);
+        $this->assertEquals($this->getExpectedJsonConfig(), array_values($configValues[0]));
+    }
+
+    /**
+     * Expected data for testGetJsonConfig
+     *
+     * @return array
+     */
+    private function getExpectedJsonConfig()
+    {
+        return [
+            0 =>
+                ['prices' =>
+                    ['oldPrice' =>
+                        ['amount' => 10, 'adjustments' => []],
+                        'basePrice' => ['amount' => 10],
+                        'finalPrice' => ['amount' => 10]
+                    ],
+                    'type' => 'fixed',
+                    'name' => 'drop_down option 1',
+                ],
+            1 =>
+                ['prices' =>
+                    ['oldPrice' =>
+                        ['amount' => 40, 'adjustments' => []],
+                        'basePrice' => ['amount' => 40],
+                        'finalPrice' => ['amount' => 40],
+                    ],
+                    'type' => 'percent',
+                    'name' => 'drop_down option 2',
+                ],
+        ];
     }
 }

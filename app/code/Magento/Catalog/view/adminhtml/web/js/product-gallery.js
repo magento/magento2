@@ -6,7 +6,8 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'baseImage'
 ], function ($, mageTemplate) {
     'use strict';
 
@@ -301,7 +302,7 @@ define([
          * @private
          */
         _onOpenDialog: function(e, imageData) {
-            if(imageData.media_type && imageData.media_type != 'image') {
+            if (imageData.media_type && imageData.media_type != 'image') {
                 return;
             }
             this._showDialog(imageData);
@@ -315,7 +316,7 @@ define([
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
             var dialogElement = $imageContainer.data('dialog');
-            if(!this.dialogTmpl) {
+            if (!this.dialogTmpl) {
                 alert('System problem!');
                 return;
             }
@@ -373,7 +374,7 @@ define([
                     selectedClass = 'selected';
                 parent.toggleClass(selectedClass, $(this).prop('checked'));
             });
-            dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._changeType, this));
+            dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._notifyType, this));
             dialogElement.on('change', '[data-role=visibility-trigger]', $.proxy(function(e) {
                 this._changeVisibility(e, imageData);
             }, this));
@@ -401,7 +402,7 @@ define([
          * @param event
          * @private
          */
-        _changeType: function (event) {
+        _notifyType: function (event) {
             var $checkbox = $(event.currentTarget);
             var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             this.element.trigger('setImageType', {

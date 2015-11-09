@@ -8,30 +8,30 @@ angular.module('auth-dialog', ['ngStorage', 'ngDialog'])
     .controller('authDialogController', ['$rootScope', '$scope', '$state', '$http', 'ngDialog', '$localStorage',
         function ($rootScope, $scope, $state, $http, ngDialog, $localStorage) {
         $scope.user = {
-            username : $localStorage.connectUsername ? $localStorage.connectUsername : '',
+            username : $localStorage.marketplaceUsername ? $localStorage.marketplaceUsername : '',
             password : '',
             submitted : ''
         };
         $scope.errors = false;
         if (!$rootScope.authRequest) {
             $rootScope.isAuthLoadingComplete = false;
-            $http.post('index.php/connect/check-auth', [])
+            $http.post('index.php/marketplace/check-auth', [])
                 .success(function (response) {
                     if (response.success) {
-                        $localStorage.connectUsername = $scope.user.username = response.data.username;
-                        $localStorage.isConnectAuthorized = true;
+                        $localStorage.marketplaceUsername = $scope.user.username = response.data.username;
+                        $localStorage.isMarketplaceAuthorized = true;
                     } else {
-                        $localStorage.isConnectAuthorized = false;
+                        $localStorage.isMarketplaceAuthorized = false;
                     }
                     $rootScope.isAuthLoadingComplete = true;
                     $rootScope.authRequest = true;
-                    $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
+                    $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                 })
                 .error(function (data) {
                     $rootScope.isAuthLoadingComplete = true;
                 });
         } else {
-            $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
+            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
             $rootScope.isAuthLoadingComplete = true;
         }
 
@@ -42,7 +42,7 @@ angular.module('auth-dialog', ['ngStorage', 'ngDialog'])
         $scope.saveAuthJson = function () {
             if ($scope.auth.$valid) {
                 $rootScope.saveAuthProccessed = true;
-                $http.post('index.php/connect/save-auth-json', $scope.user)
+                $http.post('index.php/marketplace/save-auth-json', $scope.user)
                     .success(function (data) {
                         $scope.saveAuthJson.result = data;
                         if ($scope.saveAuthJson.result.success) {
@@ -53,14 +53,14 @@ angular.module('auth-dialog', ['ngStorage', 'ngDialog'])
                             ngDialog.close();
                             $scope.errors = false;
                             $scope.logout = false;
-                            $localStorage.isConnectAuthorized = true;
+                            $localStorage.isMarketplaceAuthorized = true;
                         } else {
                             $scope.errors = true;
-                            $localStorage.isConnectAuthorized = false;
+                            $localStorage.isMarketplaceAuthorized = false;
                         }
-                        $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                         $rootScope.saveAuthProccessed = false;
-                        $localStorage.connectUsername = $scope.user.username;
+                        $localStorage.marketplaceUsername = $scope.user.username;
                     })
                     .error(function (data) {
                         $scope.saveAuthJson.failed = data;
@@ -72,11 +72,11 @@ angular.module('auth-dialog', ['ngStorage', 'ngDialog'])
         };
 
         $scope.reset = function () {
-            $http.post('index.php/connect/remove-credentials', [])
+            $http.post('index.php/marketplace/remove-credentials', [])
                 .success(function (response) {
                     if (response.success) {
                         $scope.logout = true;
-                        $localStorage.isConnectAuthorized = $rootScope.isConnectAuthorized = false;
+                        $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
                     }
                 })
                 .error(function (data) {
