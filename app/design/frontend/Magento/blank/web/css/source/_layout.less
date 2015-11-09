@@ -14,6 +14,7 @@
 
 .columns {
     #lib-layout-columns();
+
     .column.main {
         &:extend(.abs-add-box-sizing all);
         .lib-vendor-prefix-flex-grow(1);
@@ -21,12 +22,14 @@
         .lib-css(padding-bottom, @indent__xl);
         .lib-vendor-prefix-order(1);
     }
+
     .sidebar-main {
         &:extend(.abs-add-box-sizing all);
         .lib-vendor-prefix-flex-grow(1);
         .lib-vendor-prefix-flex-basis(100%);
         .lib-vendor-prefix-order(1);
     }
+
     .sidebar-additional {
         &:extend(.abs-add-box-sizing all);
         .lib-vendor-prefix-flex-grow(1);
@@ -54,6 +57,7 @@
         padding-left: @layout__width-xs-indent;
         padding-right: @layout__width-xs-indent;
     }
+
     .page-main {
         .account &,
         .cms-privacy-policy & {
@@ -85,8 +89,10 @@
         max-width: @layout__max-width;
         box-sizing: border-box;
     }
+
     .page-main {
         width: 100%;
+
         .lib-vendor-prefix-flex-grow(1);
         .lib-vendor-prefix-flex-shrink(0);
         .lib-vendor-prefix-flex-basis(auto);

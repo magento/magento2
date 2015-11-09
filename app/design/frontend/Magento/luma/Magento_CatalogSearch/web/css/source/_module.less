@@ -17,14 +17,17 @@
 
 .block-search {
     margin-bottom: 0;
+
     .block {
         &-title {
             display: none;
         }
     }
+
     .block-content {
         margin-bottom: 0;
     }
+
     .label {
         .lib-icon-font(
             @_icon-font-content: @icon-search,
@@ -38,6 +41,7 @@
         );
         display: inline-block;
         float: right;
+
         &.active {
             + .control {
                 input {
@@ -46,9 +50,11 @@
             }
         }
     }
+
     .action.search {
         display: none;
     }
+
     .control {
         border-top: 1px solid @border-color__base;
         clear: both;
@@ -61,6 +67,7 @@
         position: absolute;
         margin: 15px 0;
     }
+
     .nested {
         display: none;
     }
@@ -73,6 +80,7 @@
     overflow: hidden;
     margin-top: -15px;
     &:extend(.abs-add-box-sizing all);
+
     ul {
         .lib-list-reset-styles();
         &:not(:empty) {
@@ -80,6 +88,7 @@
             .lib-css(border, @autocomplete-border);
             border-top: 0;
         }
+
         li {
             .lib-css(border-top, @autocomplete-item-border);
             cursor: pointer;
@@ -88,13 +97,16 @@
             position: relative;
             text-align: left;
             white-space: normal;
+
             &:first-child {
                 border-top: none;
             }
+
             &:hover,
             &.selected {
                 .lib-css(background, @autocomplete-item-hover);
             }
+
             .amount {
                 .lib-css(color, @autocomplete-item-amount-color);
                 position: absolute;
@@ -111,8 +123,10 @@
         .field {
             &:first-child {
                 position: relative;
+
                 .control {
                     padding-right: 25px;
+
                     &:after {
                         content: ' \2013 ';
                         display: inline-block;
@@ -124,24 +138,29 @@
                     }
                 }
             }
+
             &:last-child {
                 position: relative;
+
                 div.mage-error[generated] {
                     position: absolute;
                     top: 32px;
                     left: 0;
                 }
             }
+
             &.with-addon {
                 .control {
                     padding-right: 45px;
                 }
             }
+
             &.date {
                 &:extend(.abs-field-date all);
             }
         }
     }
+
     .group.price {
         .addon {
             .addafter {
@@ -159,6 +178,7 @@
 .search-terms {
    &:extend(.abs-reset-list all);
    line-height: 2em;
+
    > li {
         display: inline-block;
         margin-right: @indent__s;
@@ -186,20 +206,24 @@
         padding-left: 15px;
         width: 250px;
         z-index: 4;
+
         .label {
             &:extend(.abs-visually-hidden-desktop all);
         }
+
         .control {
             border-top: 0;
             margin: 0;
             padding: 0;
         }
+
         input {
             position: static;
             padding-right: 35px;
             margin: 0;
             .lib-input-placeholder(@form-element-input-placeholder__color);
         }
+
         .action.search {
             position: absolute;
             display: inline-block;
@@ -215,6 +239,7 @@
                 @_icon-font-line-height: 32px
             );
             .lib-button-reset();
+
             &:focus {
                 &:before {
                     .lib-css(color, @color-gray20);
@@ -222,6 +247,7 @@
             }
         }
     }
+
     .search-autocomplete {
         margin-top: 0;
     }

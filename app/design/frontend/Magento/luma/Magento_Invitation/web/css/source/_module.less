@@ -11,19 +11,23 @@
 
 .form-add-invitations {
     &:extend(.abs-add-fields all);
+
     .fields {
         .label {
             &:extend(.abs-visually-hidden all);
         }
     }
+
     .additional,
     .field.message {
         .lib-css(margin-top, @form-field__vertical-indent);
     }
+
     .action {
         &.remove {
             top: 4px;
         }
+
         &.add {
             .lib-button-icon(
                 @_icon-font-content: @icon-expand,
