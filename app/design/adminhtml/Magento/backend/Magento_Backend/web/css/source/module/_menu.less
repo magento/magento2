@@ -289,7 +289,6 @@
         .parent {
             margin-bottom: 4.5rem;
             //  Section title
-            > a, // ToDo UI: Should be deleted after template changes a -> strong.submenu-group-title
             .submenu-group-title {
                 color: @submenu-section-label__color;
                 display: block;
@@ -299,7 +298,15 @@
                 padding: 1.25rem @submenu__padding-horizontal;
                 pointer-events: none;
             }
+
+            &.item-sales-operation,
+            &.item-inventory {
+                .submenu-group-title {
+                    display: none;
+                }
+            }
         }
+
         .column {
             display: table-cell;
         }
