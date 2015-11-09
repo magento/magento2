@@ -44,10 +44,11 @@ define([
                 if ($(element).is('input[type=text]')
                     || $(element).is('input[type=email]')
                     || $(element).is('input[type=number]')
+                    || $(element).is('input[type=hidden]')
                     || $(element).is('input[type=checkbox]:checked')
                     || $(element).is('input[type=radio]:checked')
-                    || $('#' + element.id + ' option:selected').length
                     || $(element).is('textarea')
+                    || $('#' + element.id + ' option:selected').length
                 ) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                     return;
