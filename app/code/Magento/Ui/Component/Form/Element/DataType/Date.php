@@ -97,7 +97,9 @@ class Date extends AbstractDataType
     public function convertDate($date)
     {
         try {
-            $dateObj = $this->localeDate->date(new \DateTime($date), $this->getLocale());
+            $dateObj = $this->localeDate->date(
+                new \DateTime($date, $this->localeDate->getConfigTimezone()), $this->getLocale()
+            );
             $dateObj->setTime(0, 0, 0);
             //convert store date to default date in UTC timezone without DST
             $dateObj->setTimezone(new \DateTimeZone('UTC'));
