@@ -5,7 +5,6 @@
  */
 namespace Magento\Elasticsearch\Model\DataProvider;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
@@ -14,31 +13,14 @@ use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
  */
 class Suggestions implements SuggestedQueriesInterface
 {
-    const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->scopeConfig = $scopeConfig;
-    }
-
     /**
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getItems(QueryInterface $query, $limit = null, $additionalFilters = null)
+    public function getItems(QueryInterface $query)
     {
-        $result = [];
-        return $result;
+        return [];
     }
 
     /**
@@ -46,9 +28,6 @@ class Suggestions implements SuggestedQueriesInterface
      */
     public function isResultsCountEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
-            self::CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED,
-            ScopeInterface::SCOPE_STORE
-        );
+        return false;
     }
 }
