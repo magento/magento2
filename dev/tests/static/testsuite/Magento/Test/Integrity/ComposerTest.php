@@ -141,7 +141,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('version', $json);
-        $this->assertVersionInSync($json->name, $json->version);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
@@ -261,22 +260,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             'magento/framework',
             $json,
             'This component is expected to depend on magento/framework'
-        );
-    }
-
-    /**
-     * Assert that versions in root composer.json and Magento component's composer.json are not out of sync
-     *
-     * @param string $name
-     * @param string $version
-     */
-    private function assertVersionInSync($name, $version)
-    {
-        $this->assertEquals(
-            self::$rootJson['version'],
-            $version,
-            "Version {$version} in component {$name} is inconsistent with version "
-            . self::$rootJson['version'] . ' in root composer.json'
         );
     }
 
