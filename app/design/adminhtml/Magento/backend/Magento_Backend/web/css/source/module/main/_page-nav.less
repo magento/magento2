@@ -53,21 +53,27 @@
         &:first-child {
             border-bottom: none;
         }
+
         &._show {
             border-bottom: 1px solid @admin__page-nav__border-color;
+
             ._collapsible {
                 background: @admin__page-nav-title__collapsible__active__background-color;
+
                 &:after {
                     content: @admin__page-nav-icon-up__content;
                 }
+
                 + .admin__page-nav-items {
                     display: block;
                 }
             }
         }
+
         &._hide {
             .admin__page-nav-title-messages {
                 display: inline-block;
+
                 ._active {
                     display: inline-block;
                 }
@@ -122,9 +128,11 @@
             margin: 0 0 -1px;
         }
     }
+
     strong {
         font-weight: @font-weight__bold;
     }
+
     .admin__page-nav-title-messages {
         display: none;
     }
@@ -145,6 +153,7 @@
 
     &:hover {
         border-color: @admin__page-nav-item__hover__background-color;
+
         .admin__page-nav-link {
             background: @admin__page-nav-item__hover__background-color;
             color: @admin__page-nav-link__hover__color;
@@ -155,6 +164,7 @@
     &._active,
     &.ui-state-active {
         border-color: @admin__page-nav-item__active__color;
+
         .admin__page-nav-link {
             background: @admin__page-nav-title__collapsible__background-color;
             border-color: @admin__page-nav-item__border-color;
@@ -219,8 +229,10 @@
 
     .admin__page-nav-item-message {
         position: relative;
+
         &:hover {
             z-index: @admin__page-nav-tooltip__z-index;
+
             .admin__page-nav-item-message-tooltip {
                 display: block;
             }
@@ -229,12 +241,14 @@
         &._error,
         &._changed {
             display: none;
+
             .admin__page-nav-item-message-icon {
                 &:extend(.abs-icon all);
                 display: inline-block;
                 font-size: @admin__page-nav-title__font-size;
                 padding-left: .8em;
                 vertical-align: top;
+
                 &:after {
                     color: @admin__page-nav-link__changed__color;
                     content: @admin__page-nav-icon-changed__content;
@@ -258,6 +272,7 @@
         position: absolute;
         right: 0;
         top: 50%;
+
         .spinner {
             font-size: @admin__page-nav-item-message-loader__font-size;
             margin-right: 1.5rem;
@@ -280,6 +295,7 @@
         width: 27rem;
         word-break: normal;
         z-index: 2;
+
         &:after,
         &:before {
             .lib-arrow(
@@ -294,11 +310,13 @@
             top: 100%;
             z-index: 3;
         }
+
         &:after {
             border-top-color: @admin__page-nav-tooltip__background;
             margin-top: -1px;
             z-index: 4;
         }
+
         &:before {
             border-top-color: @admin__page-nav-tooltip__border-color;
         }

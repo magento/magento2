@@ -39,14 +39,17 @@
 .form-legend-expand {
     cursor: pointer;
     transition: opacity .2s linear;
+
     &:hover {
         opacity: .85;
     }
+
     &.expanded {
         &:after {
             content: @icon-expand-close__content;
         }
     }
+
     &:after {
         margin-left: .5em;
         font-weight: @font-weight__regular;

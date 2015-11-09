@@ -23,6 +23,7 @@
     margin: 0;
     min-width: 0;
     padding: 0;
+
     > .admin__field {
         border: 0;
         margin: 0;
@@ -32,6 +33,7 @@
         &.admin__field-wide {
             &:extend(.abs-field-rows all);
         }
+
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
         }
@@ -158,6 +160,7 @@
                 width: @_length;
             }
         }
+
         .admin__field-control &:nth-child(n+2):before {
             content: '';
         }
@@ -214,11 +217,13 @@
         &:nth-child(1):nth-last-child(2),
         &:nth-child(2):nth-last-child(1) {
             display: inline-block;
+
             + .admin__field-option {
                 display: inline-block;
                 margin-left: 41px;
                 margin-top: 0;
             }
+
             + .admin__field-option:before {
                 background: @field-divider__background-color;
                 content: '';
@@ -245,6 +250,7 @@
 .admin__control-fields {
     & > .admin__field:first-child {
         position: static;
+
         & > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
             cursor: pointer;
@@ -261,6 +267,7 @@
     .admin__field-label ~ .admin__field-control {
         width: 100%;
     }
+
     .admin__field:nth-child(n+2):not(.admin__field-option) {
         > .admin__field-label {
             .extend__visually-hidden();
@@ -274,16 +281,20 @@
     display: table;
     table-layout: fixed;
     width: 100%;
+
     & > .admin__field {
         display: table-cell;
         vertical-align: top;
         width: 50%;
+
         > .admin__field-control {
             float: none;
             width: 100%;
         }
+
         &:nth-child(n+2) {
             padding-left: 20px;
+
             &:not(.admin__field-option) .admin__field-label {
                 .lib-visually-hidden();
             }
@@ -294,6 +305,7 @@
 //  Group of checkboxes or radiobuttons
 .admin__field-control-group {
     margin-top: .8rem;
+
     & > .admin__field {
         padding: 0;
     }
@@ -308,6 +320,7 @@
     float: left;
     position: static;
     width: 100%;
+
     &:extend(.abs-fieldset-legend);
     & + br {
         display: block;

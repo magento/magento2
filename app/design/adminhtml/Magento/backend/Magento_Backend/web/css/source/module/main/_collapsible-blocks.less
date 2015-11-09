@@ -54,22 +54,26 @@
     position: relative;
     text-decoration: none;
     transition: color .15s linear;
+
     &:hover,
     &:visited,
     &:focus {
         color: @collapsible-title__hover__color;
         text-decoration: none;
     }
+
     &:active {
         &:before {
             .scale();
         }
     }
+
     &._disabled,
     &.disabled {
         color: @collapsible-title__disabled__color;
         cursor: default;
     }
+
     &:before {
         &:extend(.abs-icon all);
         content: @icon-expand-open__content;
@@ -83,6 +87,7 @@
 .admin__collapsible-sub-title() {
     padding-left: (@collapsible-title-icon__size + 1rem);
     padding-right: 0;
+
     &:before {
         left: 0;
         right: auto;
@@ -101,6 +106,7 @@
     .admin__collapsible-title {
         .admin__collapsible-title();
     }
+
     &.opened,
     &._show {
         > .fieldset-wrapper-title {
@@ -110,6 +116,7 @@
                 }
             }
         }
+
         &.fieldset-wrapper {
             .fieldset-wrapper-title {
                 .actions {
@@ -118,18 +125,22 @@
             }
         }
     }
+
     &.fieldset-wrapper {
         border-bottom: 1px solid @collapsible__border-color;
         padding: 0;
+
         .fieldset-wrapper-title {
             border: 0;
             margin: 0;
             padding: 0;
         }
+
         .fieldset-wrapper-content {
             padding-bottom: @collapsible-title__padding-bottom;
         }
     }
+
     &.collapsible-block-wrapper-last {
         border-bottom: 0;
     }
@@ -143,13 +154,16 @@
                 right: 1.3rem;
                 top: 1.4rem;
             }
+
             .draggable-handle {
                 top: 2.4rem;
             }
         }
+
         .admin__collapsible-title {
             font-size: 1.6rem;
             padding-left: (@collapsible-title-icon__size + 1rem);
+
             &:before {
                 left: 0;
                 right: auto;
@@ -168,15 +182,18 @@
         // ToDo UI: rename to .collapsible-text
         .admin__collapsible-text();
     }
+
     //  Second level
     .admin__collapsible-block {
         border: 0;
+
         .entry-edit-head {
             > a {
                 .admin__collapsible-sub-title();
             }
         }
     }
+
     ~ .admin__collapsible-block {
         // ToDo UI: rename to .collapsible-content
         .admin__collapsible-content();
@@ -187,6 +204,7 @@
 .accordion > dt a,
 .accordion .admin__collapsible-block > a {
     .admin__collapsible-title();
+
     > i {
         // ToDo UI: change to .collapsible-sub-title
         display: block;
@@ -223,15 +241,19 @@
 .accordion {
     margin: 0 0 .8rem;
     padding: 0;
+
     dt {
         border-bottom: 1px solid @collapsible__border-color;
+
         &.open {
             border-bottom: none;
         }
     }
+
     dd {
         border-bottom: 1px solid @collapsible__border-color;
         display: none;
+
         &.open {
             &:empty {
                 background: #fff url(../../../../../../web/mui/images/ajax-loader-big.gif) no-repeat center;
@@ -239,85 +261,105 @@
             }
         }
     }
+
     dt,
     dd {
         &:last-of-type {
             border-bottom: none;
         }
     }
+
     .form-inline {
         .config {
             td {
                 padding: 2.2rem 1.5rem 0 0;
             }
+
             .scope-label {
                 padding: 31px 1.5rem 0 0;
             }
+
             .use-default {
                 padding: 29px 1.5rem 0 0;
             }
+
             .value {
                 padding-right: 4rem;
             }
         }
+
         > .section-config {
             &:last-child {
                 border-bottom: 0;
             }
         }
     }
+
     .config {
         .comment a,
         .link-more {
             color: #007dbd;
             font-size: @font-size__base;
             font-weight: 400;
+
             &:focus,
             &:hover {
                 text-decoration: underline;
             }
         }
+
         legend {
             display: none;
         }
+
         table {
             width: 100%;
         }
+
         td {
             padding: 2.2rem 1.5rem 0 0;
             vertical-align: top;
         }
+
         td[colspan] {
             padding: 0;
         }
+
         .admin__control-table {
             margin: 0 0 @indent__xs;
+
             td {
                 padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
+
                 &:first-child {
                     padding-left: 1.5rem;
                 }
             }
+
             .cc-type-select {
                 min-width: 20rem;
             }
         }
+
         input[type='text'],
         input[type='password'],
         select,
         textarea {
             width: 100%;
         }
+
         input {
             &.input-file {
                 margin-top: 4px;
             }
         }
+
         select {
             &.select-date {
                 width: 27%;
             }
         }
+
         .label {
             color: #303030;
             float: none;
@@ -326,37 +368,45 @@
             padding-right: 30px;
             text-align: right;
             width: 33%;
+
             label {
                 padding-top: 7px;
             }
         }
+
         .scope-label {
             color: #999;
             font-size: @font-size__s;
             letter-spacing: .05em;
             padding: 31px 1.5rem 0 0;
         }
+
         .note {
             color: #303030;
             font-size: 12px;
             margin: 5px 0;
+
             a {
                 color: #007dbd;
                 font-size: 12px;
                 font-weight: 400;
+
                 &:focus,
                 &:hover {
                     text-decoration: underline;
                 }
             }
         }
+
         .system-tooltip-box {
             position: absolute;
         }
+
         .value {
             padding-right: 40px;
             vertical-align: middle;
             width: 44%;
+
             &.with-tooltip {
                 .tooltip {
                     bottom: 0;
@@ -367,6 +417,7 @@
                     right: 0;
                     top: 0;
                 }
+
                 .tooltip-content {
                     background: #31302b;
                     background: rgba(49, 48, 43, .8);
@@ -379,6 +430,7 @@
                     padding: 18px;
                     right: 0;
                     width: 239px;
+
                     &:before {
                         border-bottom: 0;
                         border-left: 5px solid transparent;
@@ -395,27 +447,33 @@
                         width: 0;
                     }
                 }
+
                 .help {
                     margin: 0;
                     position: relative;
                     width: auto;
                 }
             }
+
             .checkboxes {
                 list-style: none;
                 margin: -3px 0 0;
                 padding: 0;
+
                 li {
                     margin: 7px 0;
                 }
+
                 input,
                 label {
                     vertical-align: middle;
                 }
+
                 label {
                     margin-left: 5px;
                 }
             }
+
             .label {
                 padding: 6px 5px 0 1.5rem;
                 vertical-align: top;
@@ -426,23 +484,29 @@
             }
         }
     }
+
     .paypal-selection-simplified {
         padding-left: 30px;
     }
+
     .paypal-selection {
         border-bottom: 2px solid #c0bbaf;
         margin: 10px;
         width: 98%;
+
         th {
             padding: 6px 10px 7px;
         }
+
         input[type='checkbox'] {
             margin: -4px 7px 0 0;
         }
     }
+
     .paypal-payment-notice {
         margin: 10px;
     }
+
     .custom-options {
         border: 1px solid #999;
         margin: 0 0 20px;
