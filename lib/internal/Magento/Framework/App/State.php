@@ -144,6 +144,16 @@ class State
     }
 
     /**
+     * Check is area code set
+     * 
+     * @return bool
+     */
+    public function isAreaCodeSet()
+    {
+        return !empty($this->_areaCode);
+    }
+    
+    /**
      * Checks whether area code is being emulated
      *
      * @return bool
