@@ -176,7 +176,7 @@ class FormPost extends \Magento\Customer\Controller\Address
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $redirectUrl = null;
         if (!$this->_formKeyValidator->validate($this->getRequest())) {

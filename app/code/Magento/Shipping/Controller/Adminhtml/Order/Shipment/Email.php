@@ -48,7 +48,7 @@ class Email extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));

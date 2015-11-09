@@ -35,7 +35,7 @@ class ExportSearchExcel extends TermController
      *
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);

@@ -43,7 +43,7 @@ class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

@@ -30,9 +30,7 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">We're making sure your server environment is ready for
-        {{typeOf(moduleName) !== 'undefined' ? moduleName : title[$state.current.type]}}
-            to be {{$state.current.type}}{{endsWith($state.current.type, 'e') ? 'd' : 'ed'}}.</span>
+        <span class="message-text">{{wordingOfReadinessCheckAction()}}.</span>
     </div>
 
 </div>
@@ -426,7 +424,7 @@
 
             <div class="readiness-check-side">
                 <p class="side-title">Need Help?</p>
-                <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a>
+                <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a>
             </div>
 
             <span class="readiness-check-icon icon-failed-round"></span>
@@ -450,7 +448,7 @@
                         directories and their sub-directories. The exact fix depends on your server, your host,
                         and other system variables.
                         <br>
-                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/trouble/cman/tshoot_install_perms.html" target="_blank">File Permission Help</a> can get you started.
+                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> can get you started.
                     </p>
                     <p>
                         If you need more help, please call your hosting provider.
