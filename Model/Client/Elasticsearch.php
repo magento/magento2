@@ -13,6 +13,13 @@ use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
  */
 class Elasticsearch
 {
+    /**#@+
+     * Text flags for Elasticsearch ping statuses
+     */
+    const ELASTICSEARCH_PING_STATUS_OK      = 'OK';
+    const ELASTICSEARCH_PING_STATUS_ERROR   = 'ERROR';
+    /**#@-*/
+
     /**
      * Elasticsearch Client instance
      *
@@ -54,14 +61,14 @@ class Elasticsearch
     /**
      * Ping the elasticseach client
      *
-     * @return bool|array
+     * @return array
      */
     public function ping()
     {
-        $pingStatus = false;
+        $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_ERROR];
         try {
             if ($this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]])) {
-                $pingStatus = ['status' => 'OK'];
+                $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_OK];
             }
         } catch (NoNodesAvailableException $e) {
         }
@@ -72,7 +79,7 @@ class Elasticsearch
      * @param array $options
      * @return array
      */
-    public function buildConfig($options = [])
+    private function buildConfig($options = [])
     {
         $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);

@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
 
 class ElasticsearchFactory implements FactoryInterface
 {

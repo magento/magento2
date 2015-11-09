@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Controller\Adminhtml\Search\System\Config\TestCo
 
 use Magento\Backend\App\Action;
 use Magento\AdvancedSearch\Model\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
+use Magento\Elasticsearch\Model\Client\FactoryInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 
 class Ping extends \Magento\Backend\App\Action

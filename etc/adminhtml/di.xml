@@ -9,7 +9,6 @@
     <type name="Magento\Elasticsearch\Controller\Adminhtml\Search\System\Config\TestConnection\Ping">
         <arguments>
             <argument name="clientHelper" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Model\Client\ElasticsearchFactory</argument>
         </arguments>
     </type>
 </config>

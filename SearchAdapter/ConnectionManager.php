@@ -6,7 +6,7 @@
 namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
+use Magento\Elasticsearch\Model\Client\FactoryInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch;
 
