@@ -5,7 +5,7 @@
  */
 ?>
 <div ng-include="'index.php/navigation/side-menu'" style="display: inline-block"></div>
-<div class="{{$state.current.type == 'installer' ? 'container' : 'page-wrapper'}}">
+<div class="{{$state.current.type == 'install' && !$state.current.wrapper ?  'container' : 'page-wrapper'}}">
     <div ng-include="'index.php/navigation/header-bar'"></div>
     <main id="anchor-content" class="page-content">
         <?php echo $this->render('navigation/menu.phtml');?>

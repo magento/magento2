@@ -41,7 +41,7 @@ abstract class Reorder extends Action\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $result = $this->orderLoader->load($this->_request);
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {

@@ -55,7 +55,7 @@ class PrintAction extends \Magento\Backend\App\Action
     /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @see \Magento\Sales\Controller\Adminhtml\Order\Invoice */
         $creditmemoId = $this->getRequest()->getParam('creditmemo_id');

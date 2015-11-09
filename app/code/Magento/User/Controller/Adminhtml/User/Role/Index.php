@@ -13,7 +13,7 @@ class Index extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction();
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Roles'));

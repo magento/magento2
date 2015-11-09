@@ -60,7 +60,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionWithConsumer()
@@ -89,7 +89,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionConfigSetUp()
@@ -117,7 +117,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         // verify success message
         $this->_messageManager->expects($this->never())->method('addSuccess');
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionMissingId()
@@ -131,7 +131,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addError')
             ->with(__('Integration ID is not specified or is invalid.'));
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionForServiceIntegrationException()
@@ -153,7 +153,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willThrowException($invalidIdException);
         $this->_messageManager->expects($this->once())->method('addError');
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionForServiceGenericException()
@@ -175,6 +175,6 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willThrowException($invalidIdException);
         $this->_messageManager->expects($this->never())->method('addError');
 
-        $this->integrationController->executeInternal();
+        $this->integrationController->execute();
     }
 }
