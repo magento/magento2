@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="esconfig.xsd">
     <synonyms_file>
         <default>synonyms.txt</default>
         <en_US>synonyms_en_US.txt</en_US>

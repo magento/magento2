@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This schema must be used to validate esconfig.xml files
+ *
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config" type="configType" />
+    <xs:complexType name="configType" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="synonyms_file" type="mixedDataType" />
+            <xs:element name="stopwords_file" type="mixedDataType" />
+            <xs:element name="stemmer" type="mixedDataType" />
+            <xs:element name="protwords_file" type="mixedDataType" />
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="mixedDataType">
+        <xs:choice>
+            <xs:any minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>
