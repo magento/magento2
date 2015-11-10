@@ -170,11 +170,21 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->setParentId($product->getId());
 
         $optionId = $option->getOptionId();
-        $linksToAdd = [];
         if (!$optionId) {
+            $linksToAdd = [];
             $option->setDefaultTitle($option->getTitle());
             if (is_array($option->getProductLinks())) {
                 $linksToAdd = $option->getProductLinks();
+            }
+            try {
+                $this->optionResource->save($option);
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('Could not save option'), $e);
+            }
+
+            /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
+            foreach ($linksToAdd as $linkedProduct) {
+                $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
             }
         } else {
             $optionCollection = $this->type->getOptionsCollection($product);
@@ -189,18 +199,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
             $this->updateOptionSelection($product, $option);
         }
-
-        try {
-            $this->optionResource->save($option);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save option'), $e);
-        }
-
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
-        foreach ($linksToAdd as $linkedProduct) {
-            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
-        }
-
+        $product->setIsRelationsChanged(true);
         return $option->getOptionId();
     }
 
