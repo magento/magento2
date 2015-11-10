@@ -10,7 +10,6 @@ use Magento\Framework\Composer\ComposerInformation;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
@@ -57,19 +56,19 @@ class UpdatePackagesCache
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param ComposerInformation $composerInformation
+     * @param ObjectManagerProvider
      * @throws \Exception
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
         Filesystem $filesystem,
-        DateTime $dateTime,
-        ComposerInformation $composerInformation
+        ComposerInformation $composerInformation,
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->dateTime = $dateTime;
+        $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
         $this->composerInformation = $composerInformation;
     }
 
