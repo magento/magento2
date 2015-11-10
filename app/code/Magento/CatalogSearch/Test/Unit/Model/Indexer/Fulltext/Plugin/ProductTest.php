@@ -70,12 +70,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSaveNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
@@ -84,12 +78,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSaveScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
@@ -98,12 +86,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterDeleteNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
@@ -112,12 +94,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterDeleteScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
