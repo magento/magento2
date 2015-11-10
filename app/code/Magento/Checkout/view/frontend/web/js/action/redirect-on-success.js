@@ -10,7 +10,7 @@ define(
         'use strict';
 
         return {
-            redirectUrl: 'checkout/onepage/success/',
+            redirectUrl: window.checkoutConfig.defaultSuccessPageUrl,
 
             /**
              * Provide redirect to page
