@@ -8,7 +8,6 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\ObjectManagerProvider;
 
 class Session extends AbstractActionController
 {
@@ -28,7 +27,7 @@ class Session extends AbstractActionController
      */
     public function __construct(
         \Zend\ServiceManager\ServiceManager $serviceManager,
-        ObjectManagerProvider $objectManagerProvider
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
     ) {
         $this->serviceManager = $serviceManager;
         $this->objectManagerProvider = $objectManagerProvider;
