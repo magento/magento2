@@ -55,6 +55,7 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $parentId
      * @param int[] $childIds
+     * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addRelations($parentId, $childIds)
@@ -66,6 +67,7 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $this->getConnection()->insertMultiple($this->getMainTable(), $insertData);
         }
+        return $this;
     }
 
     /**
@@ -73,6 +75,7 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $parentId
      * @param int[] $childIds
+     * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function removeRelations($parentId, $childIds)
@@ -87,5 +90,6 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
             $this->getConnection()->delete($this->getMainTable(), $where);
         }
+        return $this;
     }
 }
