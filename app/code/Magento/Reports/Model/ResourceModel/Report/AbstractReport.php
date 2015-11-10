@@ -41,6 +41,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
     protected $_reportsFlagFactory;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -48,7 +53,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param string $connectionName
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -56,6 +62,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
@@ -63,6 +70,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         $this->_localeDate = $localeDate;
         $this->_reportsFlagFactory = $reportsFlagFactory;
         $this->timezoneValidator = $timezoneValidator;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -92,6 +100,9 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         if ($value !== null) {
             $this->_getFlag()->setFlagData($value);
         }
+
+        // touch last_update
+        $this->_getFlag()->setLastUpdate($this->dateTime->gmtDate());
 
         $this->_getFlag()->save();
 
