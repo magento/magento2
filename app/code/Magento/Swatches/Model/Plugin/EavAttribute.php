@@ -378,7 +378,11 @@ class EavAttribute
         if (!empty($defaultValue)) {
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
-            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE) {
+            // created and removed on frontend option not exists in dependency array
+            if (
+                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+                isset($this->dependencyArray[$defaultValue])
+            ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
             }
             $swatch->getResource()->saveDefaultSwatchOption($attribute->getId(), $defaultValue);
