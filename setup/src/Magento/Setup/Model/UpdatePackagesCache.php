@@ -57,7 +57,7 @@ class UpdatePackagesCache
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComposerInformation $composerInformation
-     * @param ObjectManagerProvider
+     * @param ObjectManagerProvider $objectManagerProvider
      * @throws \Exception
      */
     public function __construct(
