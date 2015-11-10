@@ -9,7 +9,6 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Rolesedit Tab Display Block.
  *
- * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -60,9 +59,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
-        \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever,
         \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = []
