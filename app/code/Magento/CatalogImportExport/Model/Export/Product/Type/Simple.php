@@ -33,5 +33,9 @@ class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\Abst
         'old_id',
         'tier_price',
         'category_ids',
+        'has_options',
+        'is_returnable',
+        'required_options',
+        'quantity_and_stock_status'
     ];
 }
