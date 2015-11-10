@@ -320,12 +320,9 @@
         padding-right: @layout__width-xs-indent;
     }
 
-    .cart-tax-info + .cart-tax-total {
-        display: block;
-    }
-
-    .cart {
-        .cart-tax-info + .cart-tax-total {
+    .cart-tax-info,
+    .cart .cart-tax-info {
+        + .cart-tax-total {
             display: block;
         }
     }
