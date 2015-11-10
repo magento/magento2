@@ -511,6 +511,7 @@ define([
                     $('.fotorama__arr--next').hide();
                     $('.fotorama__arr--prev').hide();
 
+                    $(this).find('img').hide();
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
 
@@ -592,10 +593,15 @@ define([
                     cloneVideoDiv,
                     iframeElement = $(this).find('iframe'),
                     currentIndex,
-                    itemIndex;
+                    itemIndex,
+                    videoPreview = $item.find('img');
 
                 if (iframeElement.length === 0) {
                     return;
+                }
+
+                if (!videoPreview.is(':visible')) {
+                    videoPreview.show();
                 }
 
                 currentIndex = current.activeFrame.$stageFrame.index();
@@ -619,6 +625,7 @@ define([
                 self._hideCloseVideo();
 
             });
+
             $('.' + this.FTAR).removeClass('hidden-video');
         }
     });
