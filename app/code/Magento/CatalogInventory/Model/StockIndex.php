@@ -120,8 +120,8 @@ class StockIndex implements StockIndexInterface
             $status = $item->getIsInStock();
             $qty = $item->getQty();
         }
-        $this->processChildren($productId, $websiteId, $qty, $status);
-        $this->processParents($productId, $websiteId);
+        $this->processChildren($productId, $item->getWebsiteId(), $qty, $status);
+        $this->processParents($productId, $item->getWebsiteId());
     }
 
     /**
