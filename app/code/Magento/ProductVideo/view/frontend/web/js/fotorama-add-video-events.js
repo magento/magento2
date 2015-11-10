@@ -607,6 +607,7 @@ define([
                 if (iframeElement.length === 0) {
                     return;
                 }
+
                 if (!videoPreview.is(':visible') && !self.inFullscreen) {
                     videoPreview.show();
                 }
