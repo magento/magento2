@@ -5,6 +5,10 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Hostedpro;
 
+use Magento\Framework\DataObject;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,30 +48,37 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $billing
+     * @param $shipping
+     * @param $billingState
+     * @param $state
+     * @param $countryId
      * @dataProvider addressesDataProvider
      */
-    public function testSetOrderAddresses($billing, $shipping, $billingState, $state)
+    public function testSetOrderAddresses($billing, $shipping, $billingState, $state, $countryId)
     {
-        $payment = $this->getMock('Magento\Sales\Model\Order\Payment', ['__wakeup'], [], '', false);
-        $order = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'],
-            [],
-            '',
-            false
-        );
-        $order->expects($this->any())
+        $payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__wakeup'])
+            ->getMock();
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
+            ->getMock();
+        $order->expects(static::any())
             ->method('getPayment')
             ->will($this->returnValue($payment));
-        $order->expects($this->any())
+        $order->expects(static::any())
             ->method('getBillingAddress')
             ->will($this->returnValue($billing));
-        $order->expects($this->any())
+        $order->expects(static::any())
             ->method('getShippingAddress')
             ->will($this->returnValue($shipping));
         $this->_model->setOrder($order);
-        $this->assertEquals($billingState, $this->_model->getData('billing_state'));
-        $this->assertEquals($state, $this->_model->getData('state'));
+        static::assertEquals($billingState, $this->_model->getData('billing_state'));
+        static::assertEquals($state, $this->_model->getData('state'));
+        static::assertEquals($countryId, $this->_model->getData('billing_country'));
+        static::assertEquals($countryId, $this->_model->getData('country'));
     }
 
     /**
@@ -75,44 +86,44 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function addressesDataProvider()
     {
-        $billing = new \Magento\Framework\DataObject([
+        $billing = new DataObject([
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'city' => 'City',
             'region_code' => 'CA',
             'postcode' => '12346',
-            'country' => 'United States',
-            'Street' => '1 Ln Ave',
+            'country_id' => 'US',
+            'street' => '1 Ln Ave',
         ]);
-        $shipping = new \Magento\Framework\DataObject([
+        $shipping = new DataObject([
             'firstname' => 'ShipFirstname',
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',
             'region' => 'olala',
             'postcode' => '12346',
-            'country' => 'United States',
-            'Street' => '1 Ln Ave',
+            'country_id' => 'US',
+            'street' => '1 Ln Ave',
         ]);
-        $billing2 = new \Magento\Framework\DataObject([
+        $billing2 = new DataObject([
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
-            'city' => 'City',
-            'region_code' => 'muuuu',
+            'city' => 'Culver City',
+            'region_code' => 'CA',
             'postcode' => '12346',
-            'country' => 'United States',
-            'Street' => '1 Ln Ave',
+            'country_id' => 'US',
+            'street' => '1 Ln Ave',
         ]);
-        $shipping2 = new \Magento\Framework\DataObject([
+        $shipping2 = new DataObject([
             'firstname' => 'ShipFirstname',
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',
             'postcode' => '12346',
-            'country' => 'United States',
-            'Street' => '1 Ln Ave',
+            'country_id' => 'US',
+            'street' => '1 Ln Ave',
         ]);
         return [
-            [$billing, $shipping, 'CA', 'olala'],
-            [$billing2, $shipping2, 'muuuu', 'ShipCity']
+            [$billing, $shipping, 'CA', 'olala', 'US'],
+            [$billing2, $shipping2, 'CA', 'ShipCity', 'US']
         ];
     }
 
