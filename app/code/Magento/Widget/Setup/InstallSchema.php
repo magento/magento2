@@ -323,7 +323,7 @@ class InstallSchema implements InstallSchemaInterface
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => true],
+            ['nullable' => true, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
             'Last Update Timestamp'
         )->addIndex(
             $installer->getIdxName('layout_update', ['handle']),

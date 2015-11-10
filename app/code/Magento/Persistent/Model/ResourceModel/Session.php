@@ -51,15 +51,6 @@ class Session extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $object->setUpdatedAt(gmdate('Y-m-d H:i:s'));
-        return parent::save($object);
-    }
-
-    /**
      * Add expiration date filter to select
      *
      * @param string $field

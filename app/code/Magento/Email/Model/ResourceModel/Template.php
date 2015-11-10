@@ -82,12 +82,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        if ($object->isObjectNew()) {
-            $object->setAddedAt($this->dateTime->formatDate(true));
-        }
-        $object->setModifiedAt($this->dateTime->formatDate(true));
         $object->setTemplateType((int)$object->getTemplateType());
-
         return parent::_beforeSave($object);
     }
 

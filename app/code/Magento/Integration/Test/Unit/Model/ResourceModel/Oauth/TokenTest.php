@@ -27,6 +27,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
         $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
@@ -35,9 +36,9 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->tokenResource = new \Magento\Integration\Model\ResourceModel\Oauth\Token(
-            $contextMock,
-            new \Magento\Framework\Stdlib\DateTime()
+        $this->tokenResource = $objectManager->getObject(
+            'Magento\Integration\Model\ResourceModel\Oauth\Token',
+            ['context' => $contextMock]
         );
     }
 

@@ -88,9 +88,13 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTimezone()
+    public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
-        return $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType);
+        return $this->_scopeConfig->getValue(
+            $this->getDefaultTimezonePath(),
+            $scopeType ?: $this->_scopeType,
+            $scopeCode
+        );
     }
 
     /**
@@ -248,8 +252,10 @@ class Timezone implements TimezoneInterface
         $pattern = null
     ) {
         if ($timezone === null) {
-            if ($date->getTimezone() === null || $date->getTimezone()->getName() === '+00:00') {
-                $timezone = new \DateTimeZone('UTC');
+            if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
+                || $date->getTimezone()->getName() == '+00:00'
+            ) {
+                $timezone = $this->getConfigTimezone();
             } else {
                 $timezone = $date->getTimezone();
             }

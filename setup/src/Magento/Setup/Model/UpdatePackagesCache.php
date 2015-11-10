@@ -10,7 +10,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
@@ -43,7 +43,7 @@ class UpdatePackagesCache
     private $directory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     private $dateTime;
 
@@ -57,7 +57,7 @@ class UpdatePackagesCache
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param ComposerInformation $composerInformation
      * @throws \Exception
      */
@@ -173,7 +173,7 @@ class UpdatePackagesCache
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = str_replace('-', '/', $this->dateTime->formatDate(true));
+        $syncInfo['lastSyncDate'] = $this->dateTime->gmtTimestamp();
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {
