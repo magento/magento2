@@ -198,6 +198,11 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
             $this->updateOptionSelection($product, $option);
+            try {
+                $this->optionResource->save($option);
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('Could not save option'), $e);
+            }
         }
         $product->setIsRelationsChanged(true);
         return $option->getOptionId();
