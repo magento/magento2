@@ -95,13 +95,14 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     public function authPreDispatch($event)
     {
         $controller = $event->getTarget();
+        /** @var Application $application */
+        $application = $event->getApplication();
         if (
+            !($application->getRequest() instanceof Request) &&
             !$controller instanceof \Magento\Setup\Controller\Session &&
             !$controller instanceof \Magento\Setup\Controller\Install &&
             !$controller instanceof \Magento\Setup\Controller\Success
         ) {
-            /** @var Application $application */
-            $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
             $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
             /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
@@ -112,17 +113,17 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
                 if (!$adminAppState->isAreaCodeSet()) {
                     $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
-                }
-                $objectManager->create(
-                    'Magento\Backend\Model\Auth\Session',
-                    [
-                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
-                        'appState' => $adminAppState
-                    ]
-                );
+                    $objectManager->create(
+                        'Magento\Backend\Model\Auth\Session',
+                        [
+                            'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                            'appState' => $adminAppState
+                        ]
+                    );
 
-                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                    $controller->plugin('redirect')->toUrl('index.php/session/unlogin');
+                    if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                        $controller->plugin('redirect')->toUrl('index.php/session/unlogin');
+                    }
                 }
             }
         }
