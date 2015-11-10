@@ -363,7 +363,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var string[]
      */
-    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail'];
+    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail', 'swatch_image'];
 
     /**
      * Permanent entity columns.
@@ -2110,7 +2110,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $rowScope = $this->getRowScope($rowData);
 
-        // BEHAVIOR_DELETE use specific validation logic
+        // BEHAVIOR_DELETE and BEHAVIOR_REPLACE use specific validation logic
+        if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
+            if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$rowData[self::COL_SKU]])) {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                return false;
+            }
+        }
         if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$rowData[self::COL_SKU]])) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
