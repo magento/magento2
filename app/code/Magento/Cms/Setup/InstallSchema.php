@@ -59,13 +59,13 @@ class InstallSchema implements InstallSchemaInterface
             'creation_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Block Creation Time'
         )->addColumn(
             'update_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Block Modification Time'
         )->addColumn(
             'is_active',
@@ -180,13 +180,13 @@ class InstallSchema implements InstallSchemaInterface
             'creation_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Page Creation Time'
         )->addColumn(
             'update_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Page Modification Time'
         )->addColumn(
             'is_active',
