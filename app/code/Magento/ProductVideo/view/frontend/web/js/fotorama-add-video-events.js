@@ -363,7 +363,9 @@ define([
                 thumbsParent,
                 thumbs,
                 t,
-                tmpVideoData;
+                tmpVideoData,
+                currentItem,
+                iconClass = 'video-thumb-icon';
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -375,14 +377,19 @@ define([
                 return null;
             }
 
-            thumbsParent = fotorama.activeFrame.$navThumbFrame.parent(),
-                thumbs = thumbsParent.find('.fotorama__nav__frame');
+            thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
+            thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
             for (t = 0; t < thumbs.length; t++) {
                 tmpVideoData = this.options.VideoData[t];
+                currentItem = thumbs.eq(t);
 
-                if (tmpVideoData.mediaType === this.VID) {
-                    thumbsParent.find('.fotorama__nav__frame:eq(' + t + ')').addClass('video-thumb-icon');
+                if (fotorama.options.nav === 'dots' && currentItem.hasClass(iconClass)) {
+                    currentItem.removeCLass(iconClass)
+                }
+
+                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs') {
+                    currentItem.addClass(iconClass);
                 }
             }
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -594,7 +601,7 @@ define([
                     iframeElement = $(this).find('iframe'),
                     currentIndex,
                     itemIndex,
-                    videoPreview = $item.find('img');
+                    videoPreview = $item.find('img').not('.fotorama__img--full');
 
                 if (iframeElement.length === 0) {
                     return;
