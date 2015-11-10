@@ -386,7 +386,7 @@ define([
                 currentItem = thumbs.eq(t);
 
                 if (fotorama.options.nav === 'dots' && currentItem.hasClass(iconClass)) {
-                    currentItem.removeCLass(iconClass)
+                    currentItem.removeClass(iconClass);
                 }
 
                 if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs') {
