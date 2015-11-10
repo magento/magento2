@@ -161,17 +161,11 @@ class Request extends \Magento\Framework\Object
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
         $request = [
-            'subtotal' => $this->_formatPrice(
-                $this->_formatPrice(
-                    $order->getPayment()->getBaseAmountAuthorized()
-                ) - $this->_formatPrice(
-                    $order->getBaseTaxAmount()
-                ) - $this->_formatPrice(
-                    $order->getBaseShippingAmount()
-                )
-            ),
+            'subtotal' => $this->_formatPrice($order->getBaseSubtotal()),
+            'total' => $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+            'discount' => $this->_formatPrice(abs($order->getBaseDiscountAmount())),
             'invoice' => $order->getIncrementId(),
             'address_override' => 'true',
             'currency_code' => $order->getBaseCurrencyCode(),
