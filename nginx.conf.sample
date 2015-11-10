@@ -141,10 +141,6 @@ location /media/import/ {
     deny all;
 }
 
-location ~ cron\.php {
-    deny all;
-}
-
 location ~ (index|get|static|report|404|503)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
@@ -158,4 +154,8 @@ location ~ (index|get|static|report|404|503)\.php$ {
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
     include        fastcgi_params;
+}
+
+location ~ \.php$ {
+    deny all;
 }
