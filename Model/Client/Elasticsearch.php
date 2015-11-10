@@ -45,7 +45,7 @@ class Elasticsearch implements ClientInterface
         $elasticsearchClient = null
     ) {
         if (empty($options['hostname']) || ((!empty($options['enable_auth']) &&
-            ($options['enable_auth'] == 1)) && empty($options['username']))) {
+            ($options['enable_auth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
             throw new LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );

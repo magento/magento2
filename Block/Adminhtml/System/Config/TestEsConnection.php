@@ -10,6 +10,7 @@ use Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection;
 
 /**
  * Elasticsearch test connection block
+ * @codeCoverageIgnore
  */
 class TestEsConnection extends TestConnection
 {

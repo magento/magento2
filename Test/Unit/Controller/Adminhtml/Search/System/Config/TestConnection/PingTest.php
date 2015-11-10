@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Elasticsearch\Test\Unit\Controller\Adminhtml\Search\System\Config\TestConnection;
 
 use Magento\AdvancedSearch\Model\ClientOptionsInterface;
@@ -62,9 +61,9 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
 
         $this->client = $this->getMockBuilder('\Magento\Elasticsearch\Model\Client\Elasticsearch')
-        ->disableOriginalConstructor()
-        ->setMethods(['ping'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['ping'])
+            ->getMock();
 
         $clientFactory = $this->getMockBuilder('\Magento\AdvancedSearch\Model\Client\FactoryInterface')
             ->disableOriginalConstructor()
@@ -92,6 +91,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
         $resultJsonFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -102,23 +102,28 @@ class PingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider emptyParamDataProvider
      *
-     * @param string $host
-     * @param string $port
-     * @param string $auth
+     * @param string $hostname
+     * @param string $enable_auth
      * @param string $username
-     * @param string $pass
+     * @param string $password
      * @return void
      */
-    public function testExecuteEmptyParam($host, $port, $auth, $username, $pass)
+    public function testExecuteEmptyParam($hostname, $enable_auth, $username, $password)
     {
-        $expected = [
-            'success' => false,
-            'error_message' => __('Please check your credentials.')
+        $options = [
+            'hostname' => $hostname,
+            'enable_auth' => $enable_auth,
+            'username' => $username,
+            'password' => $password,
+            'timeout' => 0,
         ];
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls($host, $port, $auth, $username, $pass);
-        $this->resultJson->expects($this->once())->method('setData')->with($expected);
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($options);
+        $this->clientHelper->expects($this->once())
+            ->method('prepareClientOptions')
+            ->with($options)
+            ->willReturnArgument(0);
         $this->controller->execute();
     }
 
@@ -128,13 +133,10 @@ class PingTest extends \PHPUnit_Framework_TestCase
     public function emptyParamDataProvider()
     {
         return [
-            ['', '', '0', '', ''],
-            ['localhost', '', '0', '', ''],
-            ['', '9200', '0', '', ''],
-            ['', '9200', '1', '', ''],
-            ['localhost', '', '1', '', ''],
-            ['localhost', '9200', '1', '', ''],
-            ['localhost', '9200', '1', 'user', ''],
+            ['', '0', '', ''],
+            ['localhost', '1', '', ''],
+            ['localhost', '1', 'user', ''],
+            ['localhost', '1', '', 'password'],
         ];
     }
 
@@ -145,15 +147,15 @@ class PingTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [
             'success' => true,
-            'error_message' => ''
+            'errorMessage' => '',
         ];
         $params = [
             'hostname' => 'localhost',
-            'port' => '8983',
-            'auth' => '1',
+            'port' => '9200',
+            'enable_auth' => '1',
             'username' => 'user',
-            'pass' => 'pass',
-            'timeout' => 0
+            'password' => 'pass',
+            'timeout' => 0,
         ];
         $this->clientHelper->expects($this->once())
             ->method('prepareClientOptions')
@@ -162,15 +164,9 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->once())
             ->method('ping')
             ->willReturn(['status' => 'OK']);
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls(
-                $params['hostname'],
-                $params['port'],
-                $params['auth'],
-                $params['username'],
-                $params['pass']
-            );
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($params);
         $this->resultJson->expects($this->once())->method('setData')->with($expected);
         $this->controller->execute();
     }
@@ -182,15 +178,15 @@ class PingTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [
             'success' => false,
-            'error_message' => ''
+            'errorMessage' => '',
         ];
         $params = [
             'hostname' => 'localhost',
-            'port' => '8983',
-            'auth' => '1',
+            'port' => '9201',
+            'enable_auth' => '1',
             'username' => 'user',
-            'pass' => 'pass',
-            'timeout' => 0
+            'password' => 'pass',
+            'timeout' => 0,
         ];
         $this->clientHelper->expects($this->once())
             ->method('prepareClientOptions')
@@ -198,16 +194,10 @@ class PingTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
         $this->client->expects($this->once())
             ->method('ping')
-            ->willReturn(['status' => 'notOK']);
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls(
-                $params['hostname'],
-                $params['port'],
-                $params['auth'],
-                $params['username'],
-                $params['pass']
-            );
+            ->willReturn(['status' => 'ERROR']);
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($params);
         $this->resultJson->expects($this->once())->method('setData')->with($expected);
         $this->controller->execute();
     }
@@ -219,15 +209,15 @@ class PingTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [
             'success' => false,
-            'error_message' => __('Something went wrong')
+            'errorMessage' => __('Something went wrong'),
         ];
         $params = [
             'hostname' => 'localhost',
-            'port' => '8983',
-            'auth' => '1',
+            'port' => '9200',
+            'enable_auth' => '1',
             'username' => 'user',
-            'pass' => 'pass',
-            'timeout' => 0
+            'password' => 'pass',
+            'timeout' => 0,
         ];
         $this->clientHelper->expects($this->once())
             ->method('prepareClientOptions')
@@ -236,15 +226,9 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->once())
             ->method('ping')
             ->willThrowException(new \Exception('<p>Something went wrong<\p>'));
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls(
-                $params['hostname'],
-                $params['port'],
-                $params['auth'],
-                $params['username'],
-                $params['pass']
-            );
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($params);
         $this->resultJson->expects($this->once())->method('setData')->with($expected);
         $this->controller->execute();
     }
