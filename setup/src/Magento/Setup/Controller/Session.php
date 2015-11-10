@@ -6,23 +6,32 @@
 namespace Magento\Setup\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 class Session extends AbstractActionController
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Zend\ServiceManager\ServiceManager
      */
-    private $objectManager;
+    private $serviceManager;
 
     /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
+        \Zend\ServiceManager\ServiceManager $serviceManager,
         ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->objectManager = $objectManagerProvider->get();
+        $this->serviceManager = $serviceManager;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -33,15 +42,16 @@ class Session extends AbstractActionController
     public function prolongAction()
     {
         try {
-            if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            if ($this->serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                $objectManager = $this->objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
-                $adminAppState = $this->objectManager->get('Magento\Framework\App\State');
+                $adminAppState = $objectManager->get('Magento\Framework\App\State');
                 $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
 
                 /* @var \Magento\Backend\Model\Auth\Session $session */
-                $sessionConfig = $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig');
+                $sessionConfig = $objectManager->get('Magento\Backend\Model\Session\AdminConfig');
                 $sessionConfig->setCookiePath('/setup');
-                $session = $this->objectManager->create(
+                $session = $objectManager->create(
                     'Magento\Backend\Model\Auth\Session',
                     [
                         'sessionConfig' => $sessionConfig,
@@ -49,11 +59,11 @@ class Session extends AbstractActionController
                     ]
                 );
                 $session->prolong();
-                return \Zend_Json::encode(['success' => true]);
+                return new JsonModel(['success' => true]);
             }
         } catch (\Exception $e) {
         }
-        return \Zend_Json::encode(['success' => false]);
+        return new JsonModel(['success' => false]);
     }
 
     /**
