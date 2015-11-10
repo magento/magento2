@@ -27,6 +27,7 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory $createdAtFactory
      * @param \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory $updatedAtFactory
      * @param string $connectionName
@@ -37,6 +38,7 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Tax\Model\ResourceModel\Report\Tax\CreatedatFactory $createdAtFactory,
         \Magento\Tax\Model\ResourceModel\Report\Tax\UpdatedatFactory $updatedAtFactory,
         $connectionName = null
@@ -49,6 +51,7 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
     }
