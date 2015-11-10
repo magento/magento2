@@ -148,7 +148,7 @@ class State
      * 
      * @return bool
      */
-    public function isAreaCodeSet()
+    public function hasAreaCode()
     {
         return !empty($this->_areaCode);
     }

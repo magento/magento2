@@ -22,7 +22,7 @@ class Session extends AbstractActionController
     private $objectManagerProvider;
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(

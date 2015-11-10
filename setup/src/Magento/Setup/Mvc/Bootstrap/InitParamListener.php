@@ -86,7 +86,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         }
     }
 
-
     /**
      * Check if user login
      * 
@@ -112,7 +111,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
-                if (!$adminAppState->isAreaCodeSet()) {
+                if (!$adminAppState->hasAreaCode()) {
                     $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
                     $objectManager->create(
                         'Magento\Backend\Model\Auth\Session',
