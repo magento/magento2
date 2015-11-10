@@ -23,7 +23,10 @@ class Product extends AbstractPlugin
         \Magento\Framework\Model\AbstractModel $product
     ) {
         $result = $proceed($product);
-        $this->reindexRow($product->getId());
+        $productResource->addCommitCallback(function () use ($product) {
+            $this->reindexRow($product->getId());
+        });
+
         return $result;
     }
 
@@ -42,7 +45,9 @@ class Product extends AbstractPlugin
         \Magento\Framework\Model\AbstractModel $product
     ) {
         $result = $proceed($product);
-        $this->reindexRow($product->getId());
+        $productResource->addCommitCallback(function () use ($product) {
+            $this->reindexRow($product->getId());
+        });
         return $result;
     }
 }
