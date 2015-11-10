@@ -21,10 +21,10 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     {
         $format = $this->getColumn()->getFormat();
         if ($data = $this->_getValue($row)) {
-            return $this->_localeDate->formatDateTime(
-                $data instanceof \DateTimeInterface ? $data : new \DateTime($data),
+            return $this->_localeDate->formatDate(
+                $data,
                 $format ?: \IntlDateFormatter::MEDIUM,
-                $format ?: \IntlDateFormatter::MEDIUM
+                true
             );
         }
         return $this->getColumn()->getDefault();

@@ -50,6 +50,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
@@ -60,6 +61,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Reports\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
@@ -70,6 +72,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_productResource = $productResource;
