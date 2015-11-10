@@ -56,18 +56,18 @@ class Ping extends \Magento\Backend\App\Action
     {
         $result = [
             'success' => false,
-            'error_message' => __('Please check server credentials')
+            'errorMessage' => __('Please check server credentials'),
         ];
         $options = $this->getRequest()->getParams();
 
-        $result['error_message'] = '';
+        $result['errorMessage'] = '';
         try {
             $response = $this->clientFactory->create($this->clientHelper->prepareClientOptions($options))->ping();
             if (isset($response['status']) && strcasecmp($response['status'], 'ok') == 0) {
                 $result['success'] = true;
             }
         } catch (\Exception $e) {
-            $result['error_message'] = strip_tags($e->getMessage());
+            $result['errorMessage'] = strip_tags($e->getMessage());
         }
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

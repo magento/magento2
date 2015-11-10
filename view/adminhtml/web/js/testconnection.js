@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
+    'jquery',
     'Magento_Ui/js/modal/alert',
-    "jquery/ui"
-], function($, alert){
-    "use strict";
+    'jquery/ui'
+], function ($, alert) {
+    'use strict';
 
     $.widget('mage.testConnection', {
         options: {
@@ -21,41 +21,46 @@ define([
         /**
          * Bind handlers to events
          */
-        _create: function() {
-            this._on({'click': $.proxy(this._connect, this)});
+        _create: function () {
+            this._on({
+                'click': $.proxy(this._connect, this)
+            });
         },
 
         /**
          * Method triggers an AJAX request to check search engine connection
          * @private
          */
-        _connect: function() {
+        _connect: function () {
             var result = this.options.failedText;
-            var element =  $("#" + this.options.elementId)
-            element.removeClass('success').addClass('fail')
+            var element =  $('#' + this.options.elementId);
             var self = this;
             var params = {};
-            $.each($.parseJSON(this.options.fieldMapping), function(key, element) {
-                params[key]= $("#" + element).val();
+            var msg = '';
+
+            element.removeClass('success').addClass('fail');
+            $.each($.parseJSON(this.options.fieldMapping), function (key, element) {
+                params[key]= $('#' + element).val();
             });
             $.ajax({
                 url: this.options.url,
                 showLoader: true,
-                data : params
-            }).done(function(response) {
+                data: params
+            }).done(function (response) {
                 if (response.success) {
-                    element.removeClass('fail').addClass('success')
+                    element.removeClass('fail').addClass('success');
                     result = self.options.successText;
                 } else {
-                    var msg = response.error_message;
+                    msg = response.errorMessage;
+
                     if (msg) {
                         alert({
                             content: $.mage.__(msg)
                         });
                     }
                 }
-            }).always(function() {
-                $("#" + self.options.elementId + "_result").text(result);
+            }).always(function () {
+                $('#' + self.options.elementId + '_result').text(result);
             });
         }
     });
