@@ -207,7 +207,7 @@ class Request extends \Magento\Framework\Object
             'city' => $address->getCity(),
             'state' => $region ? $region : $address->getCity(),
             'zip' => $address->getPostcode(),
-            'country' => $address->getCountry(),
+            'country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
@@ -235,7 +235,7 @@ class Request extends \Magento\Framework\Object
             'billing_city' => $address->getCity(),
             'billing_state' => $region ? $region : $address->getCity(),
             'billing_zip' => $address->getPostcode(),
-            'billing_country' => $address->getCountry(),
+            'billing_country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
