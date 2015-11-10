@@ -142,7 +142,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     ' name="options[' .
                     $_option->getId() .
                     ']' .
-                    (!empty($arraySign) ? '[' . $htmlValue . ']' : '') .
+                    $arraySign .
                     '" id="options_' .
                     $_option->getId() .
                     '_' .
