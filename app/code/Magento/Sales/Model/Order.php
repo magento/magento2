@@ -1832,14 +1832,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCreatedAtFormatted($format)
     {
-        return $this->timezone->formatDate(
-            $this->timezone->scopeDate(
-                $this->getStore(),
-                $this->getCreatedAt(),
-                true
-            ),
+        return $this->timezone->formatDateTime(
+            new \DateTime($this->getCreatedAt()),
             $format,
-            true
+            $format,
+            null,
+            $this->timezone->getConfigTimezone('store', $this->getStore())
         );
     }
 
