@@ -25,6 +25,11 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     const AREA_CODE = 'adminhtml';
 
     /**
+     * @var array
+     */
+    protected $standardPorts = ['http' => '80', 'https' => '443'];
+
+    /**
      * @var string
      */
     protected $defaultFrontName;
@@ -42,21 +47,21 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     protected $deploymentConfig;
 
     /** @var ScopeConfigInterface */
-    private $configInterface;
+    private $scopeConfig;
 
     /**
      * @param \Magento\Backend\App\Config $config
      * @param DeploymentConfig $deploymentConfig
-     * @param ScopeConfigInterface $configInterface
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Backend\App\Config $config,
         DeploymentConfig $deploymentConfig,
-        ScopeConfigInterface $configInterface
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
-        $this->configInterface = $configInterface;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -79,13 +84,30 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
 
     /**
      * Return whether the host from request is the backend host
+     *
      * @return bool
      */
     public function isHostBackend()
     {
-        $backendUrl = $this->configInterface->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
-        $backendHost = parse_url(trim($backendUrl), PHP_URL_HOST);
+        $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        return (strcasecmp($backendHost, $host) === 0);
+        return stripos($this->getHostWithPort($backendUrl), $host) !== false;
+    }
+
+    /**
+     * Get host with port
+     *
+     * @param string $url
+     * @return mixed|string
+     */
+    private function getHostWithPort($url)
+    {
+        $scheme = parse_url(trim($url), PHP_URL_SCHEME);
+        $host = parse_url(trim($url), PHP_URL_HOST);
+        $port = parse_url(trim($url), PHP_URL_PORT);
+        if (!$port) {
+            $port = isset($this->standardPorts[$scheme]) ? $this->standardPorts[$scheme] : null;
+        }
+        return isset($port) ? $host . ':' . $port : $host;
     }
 }
