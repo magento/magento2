@@ -112,7 +112,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                 [
                     'id' => 'reset',
                     'label' => __('Reset'),
-                    'onclick' => "categoryReset('" . $this->getUrl($resetPath, $this->getDefaultUrlParams()) . "',true)",
+                    'onclick' => "categoryReset('"
+                        . $this->getUrl($resetPath, $this->getDefaultUrlParams())
+                        . "',true)",
                     'class' => 'reset'
                 ]
             );
