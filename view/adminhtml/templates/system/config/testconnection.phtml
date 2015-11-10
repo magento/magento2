@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+?>
+<button class="scalable" type="button" id="<?php echo $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
+    "url": "<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>",
+    "elementId": "<?php echo $block->getHtmlId() ?>",
+    "successText": "<?php /* @escapeNotVerified */ echo __('Successful! Test again?') ?>",
+    "failedText": "<?php /* @escapeNotVerified */ echo __('Connection failed! Test again?') ?>",
+    "fieldMapping": "<?php echo $block->prepareFieldMapping($block->getFieldMapping()) ?>"}, "validation": {}}'>
+    <span><span><span id="<?php echo $block->getHtmlId() ?>_result"><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
+</button>
