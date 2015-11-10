@@ -142,6 +142,7 @@ define([
             }, this));
             $(this.element).on('fotorama:fullscreenexit', $.proxy(function () {
                 this.inFullscreen = false;
+                $(this.element).find('.' + this.PV).parent().find('img:not(".fotorama__img--full")').show();
             }, this));
         },
 
@@ -518,9 +519,9 @@ define([
                     $('.fotorama__arr--next').hide();
                     $('.fotorama__arr--prev').hide();
 
-                    $(this).find('img').hide();
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
+                    $(this).find('img').hide();
 
                     if (!self.isFullscreen) {
                         self._showCloseVideo();
@@ -606,8 +607,7 @@ define([
                 if (iframeElement.length === 0) {
                     return;
                 }
-
-                if (!videoPreview.is(':visible')) {
+                if (!videoPreview.is(':visible') && !self.inFullscreen) {
                     videoPreview.show();
                 }
 
