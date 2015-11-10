@@ -196,7 +196,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseUnitDisplayPriceExclTax()
     {
-        $basePriceExclTax = $this->getItem()->getBasePrice();
+        $basePriceExclTax = $this->getItem()->getBasePrice() - $this->getItem()->getBaseTaxAmount();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
@@ -338,7 +338,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseFinalUnitDisplayPriceExclTax()
     {
-        $basePriceExclTax = $this->getItem()->getBasePrice();
+        $basePriceExclTax = $this->getItem()->getBasePrice() - $this->getItem()->getBaseTaxAmount();;
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
