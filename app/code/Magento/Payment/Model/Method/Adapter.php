@@ -10,7 +10,6 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Payment\Gateway\Config\ValueHandlerPool;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
@@ -355,39 +354,11 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * Return value without applying custom handlers
-     *
-     * @param string $field
-     * @param null $storeId
-     * @return mixed
-     */
-    private function getDefaultConfiguredValue($field, $storeId = null) {
-        $handler = $this->valueHandlerPool->get(ValueHandlerPool::DEFAULT_HANDLER);
-        $subject = [
-            'field' => $field
-        ];
-
-        return $handler->handle($subject, $storeId ?: $this->getStore());
-    }
-
-    /**
      * {inheritdoc}
      */
     public function getConfigData($field, $storeId = null)
     {
         return $this->getConfiguredValue($field, $storeId);
-    }
-
-    /**
-     * Retrieve default information from payment configuration
-     *
-     * @param string $field
-     * @param int|string|null|\Magento\Store\Model\Store $storeId
-     *
-     * @return mixed
-     */
-    public function getDefaultConfigData($field, $storeId = null) {
-        return $this->getDefaultConfiguredValue($field, $storeId);
     }
 
     /**
