@@ -7,7 +7,7 @@
 /**
  * Product variations matrix block
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;

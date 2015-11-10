@@ -143,21 +143,27 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      */
     public function syncAction()
     {
-        $this->updatePackagesCache->syncPackagesForUpdate();
-        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
+        $error = '';
+        try {
+            $this->updatePackagesCache->syncPackagesForUpdate();
+            $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
 
-        $this->marketplaceManager->syncPackagesForInstall();
-        $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+            $this->marketplaceManager->syncPackagesForInstall();
+            $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+        }
+
 
         $lastSyncData['countOfInstall'] =
             isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
         $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
 
-
         return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
-                'lastSyncData' => $lastSyncData
+                'lastSyncData' => $lastSyncData,
+                'error' => $error
             ]
         );
     }

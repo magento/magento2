@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super;
+namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations;
 
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Tab;
@@ -153,12 +153,12 @@ class Config extends Tab
     /**
      * Get block of attributes.
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute
      */
     public function getAttributeBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute',
             ['element' => $this->_rootElement]
         );
     }
@@ -166,12 +166,12 @@ class Config extends Tab
     /**
      * Get block of variations.
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix
      */
     public function getVariationsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix',
             ['element' => $this->_rootElement->find($this->variationsMatrix)]
         );
     }
