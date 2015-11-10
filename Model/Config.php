@@ -20,6 +20,11 @@ class Config implements ClientOptionsInterface
     const ELASTICSEARCH = 'elasticsearch';
 
     /**
+     * Default Elasticsearch server timeout
+     */
+    const ELASTICSEARCH_DEFAULT_TIMEOUT = 15;
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -53,9 +58,9 @@ class Config implements ClientOptionsInterface
             'port' => $this->getElasticsearchConfigData('server_port'),
             'index' => $this->getElasticsearchConfigData('index_name'),
             'enable_auth' => $this->getElasticsearchConfigData('enable_auth'),
-            'login' => $this->getElasticsearchConfigData('username'),
+            'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
-            'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : 15,
+            'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
         return $options;

@@ -7,12 +7,20 @@ namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
  */
-class Elasticsearch
+class Elasticsearch implements ClientInterface
 {
+    /**#@+
+     * Text flags for Elasticsearch ping statuses
+     */
+    const ELASTICSEARCH_PING_STATUS_OK      = 'OK';
+    const ELASTICSEARCH_PING_STATUS_ERROR   = 'ERROR';
+    /**#@-*/
+
     /**
      * Elasticsearch Client instance
      *
@@ -37,13 +45,14 @@ class Elasticsearch
         $elasticsearchClient = null
     ) {
         if (empty($options['hostname']) || ((!empty($options['enable_auth']) &&
-            ($options['enable_auth'] == 1)) && empty($options['username']))) {
+            ($options['enable_auth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
             throw new LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
         }
-        $config = $this->buildConfig($options);
+
         if (!($elasticsearchClient instanceof \Elasticsearch\Client)) {
+            $config = $this->buildConfig($options);
             $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config);
         }
         $this->client = $elasticsearchClient;
@@ -53,16 +62,16 @@ class Elasticsearch
     /**
      * Ping the elasticseach client
      *
-     * @return bool|array
+     * @return array
      */
     public function ping()
     {
+        $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_ERROR];
         try {
             if ($this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]])) {
-                $pingStatus = ['status' => 'OK'];
+                $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_OK];
             }
         } catch (NoNodesAvailableException $e) {
-            $pingStatus = false;
         }
         return $pingStatus;
     }
@@ -71,9 +80,9 @@ class Elasticsearch
      * @param array $options
      * @return array
      */
-    public function buildConfig($options = [])
+    private function buildConfig($options = [])
     {
-        $host = preg_replace('/[http|https]:\/\//i', '', $options['hostname']);
+        $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
         if (!$protocol) {
             $protocol = 'http';

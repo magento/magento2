@@ -42,6 +42,14 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test client creation from the list of options
+     */
+    public function testConstructorWithOptions()
+    {
+        new ElasticsearchClient($this->getOptions());
+    }
+
+    /**
      * Test ping functionality
      */
     public function testPing()
@@ -60,7 +68,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         return [
             'hostname' => 'localhost',
             'port' => '9200',
-            'timeout' => '15',
+            'timeout' => 15,
+            'enable_auth' => 1,
+            'username' => 'user',
+            'password' => 'passwd',
         ];
     }
 }
