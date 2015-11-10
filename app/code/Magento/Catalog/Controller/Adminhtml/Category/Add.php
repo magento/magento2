@@ -30,7 +30,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->unsActiveTabId();
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */

@@ -158,6 +158,14 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 [],
                 null
             ],
+            [
+                'Magento_Module',
+                null,
+                'adminhtml_product',
+                'index',
+                'magento\module\controller\adminhtml\product\index' => '$mockClassName',
+                null
+            ],
         ];
     }
 }

@@ -61,7 +61,7 @@ class Save extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPost('creditmemo');
