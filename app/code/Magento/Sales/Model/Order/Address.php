@@ -419,16 +419,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Returns quote_address_id
-     *
-     * @return int
-     */
-    public function getQuoteAddressId()
-    {
-        return $this->getData(OrderAddressInterface::QUOTE_ADDRESS_ID);
-    }
-
-    /**
      * Returns region
      *
      * @return string
@@ -532,14 +522,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setCustomerAddressId($id)
     {
         return $this->setData(OrderAddressInterface::CUSTOMER_ADDRESS_ID, $id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setQuoteAddressId($id)
-    {
-        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $id);
     }
 
     /**

@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Quote\Api\Data\AddressInterface;
 
 /**
  * Sales Quote address model
@@ -26,7 +27,6 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setFreeShipping(int $value)
  * @method int getCollectShippingRates()
  * @method Address setCollectShippingRates(int $value)
- * @method string getShippingMethod()
  * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
  * @method Address setShippingDescription(string $value)
@@ -1562,7 +1562,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function getEmail()
     {
         $email = $this->getData(self::KEY_EMAIL);
-        if (!$email) {
+        if (!$email && $this->getQuote()) {
             $email = $this->getQuote()->getCustomerEmail();
             $this->setEmail($email);
         }
@@ -1674,6 +1674,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function setExtensionAttributes(\Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Shipping method
+     *
+     * @return string
+     */
+    public function getShippingMethod()
+    {
+        return $this->getData('shipping_method');
     }
 
     /**

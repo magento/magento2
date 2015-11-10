@@ -61,7 +61,9 @@ $isElementReadonly = $block->getElement()
                     && !$block->getProduct()->isObjectNew())) { ?>
                 $('<?= /* @escapeNotVerified */ $switchAttributeCode?>').observe('change', <?= /* @escapeNotVerified */ $switchAttributeCode?>_change);
             <?php } ?>
-            <?= /* @escapeNotVerified */ $switchAttributeCode?>_change();
+            Event.observe(window, 'load', function(){
+                <?= /* @escapeNotVerified */ $switchAttributeCode?>_change();
+            });
         });
     </script>
 <?php } ?>

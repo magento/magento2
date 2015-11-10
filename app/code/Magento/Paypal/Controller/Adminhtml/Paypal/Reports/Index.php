@@ -13,7 +13,7 @@ class Index extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction();
         $this->_view->renderLayout();
