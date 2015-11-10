@@ -47,6 +47,9 @@ class Date extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$this->getData('name')])) {
                     $date = $this->timezone->date(new \DateTime($item[$this->getData('name')]));
+                    if (isset($this->getConfiguration()['timezone']) && !$this->getConfiguration()['timezone']) {
+                        $date = new \DateTime($item[$this->getData('name')], new \DateTimeZone('UTC'));
+                    }
                     $item[$this->getData('name')] = $date->format('Y-m-d H:i:s');
                 }
             }
