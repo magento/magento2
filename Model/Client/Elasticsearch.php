@@ -7,11 +7,12 @@ namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
  */
-class Elasticsearch
+class Elasticsearch implements ClientInterface
 {
     /**#@+
      * Text flags for Elasticsearch ping statuses

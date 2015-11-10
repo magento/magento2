@@ -66,7 +66,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
         ->setMethods(['ping'])
         ->getMock();
 
-        $clientFactory = $this->getMockBuilder('\Magento\Elasticsearch\Model\Client\FactoryInterface')
+        $clientFactory = $this->getMockBuilder('\Magento\AdvancedSearch\Model\Client\FactoryInterface')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

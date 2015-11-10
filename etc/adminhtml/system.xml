@@ -57,7 +57,7 @@
                 <field id="elasticsearch_test_connect_wizard" translate="button_label" sortOrder="68" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label></label>
                     <button_label>Test Connection</button_label>
-                    <frontend_model>Magento\Elasticsearch\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <frontend_model>Magento\Elasticsearch\Block\Adminhtml\System\Config\TestEsConnection</frontend_model>
                     <depends>
                         <field id="engine">elasticsearch</field>
                     </depends>
