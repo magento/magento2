@@ -76,7 +76,9 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             return $this->dateTimeFormatter->formatObject(
-                $this->_localeDate->date(new \DateTime($data)),
+                $this->_localeDate->date(
+                    new \DateTime($data, new \DateTimeZone($this->_localeDate->getConfigTimezone()))
+                ),
                 $this->_getFormat()
             );
         }

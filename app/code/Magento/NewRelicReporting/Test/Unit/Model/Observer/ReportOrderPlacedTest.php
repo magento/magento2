@@ -33,11 +33,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
     protected $ordersModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * Setup
      *
      * @return void
@@ -55,18 +50,13 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
         $this->ordersModel = $this->getMockBuilder('Magento\NewRelicReporting\Model\Orders')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
-            ->getMock();
         $this->ordersFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->ordersModel);
 
         $this->model = new ReportOrderPlaced(
             $this->config,
-            $this->ordersFactory,
-            $this->dateTime
+            $this->ordersFactory
         );
     }
 
@@ -101,7 +91,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
         $testBaseTotal = '1.00';
         $testItemCount = null;
         $testTotalQtyOrderedCount = 1;
-        $testUpdated = '1970-01-01 00:00:00';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -110,9 +99,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->dateTime->expects($this->once())
-            ->method('formatDate')
-            ->willReturn($testUpdated);
         $event = $this->getMockBuilder('Magento\Framework\Event')
             ->setMethods(['getOrder'])
             ->disableOriginalConstructor()
@@ -147,7 +133,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
                     'total' => $testTotal,
                     'total_base' => $testBaseTotal,
                     'item_count' => $testTotalQtyOrderedCount,
-                    'updated_at' => $testUpdated
                 ]
             )
             ->willReturnSelf();

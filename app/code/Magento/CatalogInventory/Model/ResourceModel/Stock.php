@@ -69,7 +69,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $dateTime;
 
@@ -81,7 +81,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
      * @param string $connectionName
@@ -89,7 +89,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,
         StoreManagerInterface $storeManager,
         $connectionName = null
@@ -267,7 +267,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
             '(use_config_notify_stock_qty = 1 AND qty < ?)',
             $this->_configNotifyStockQty
         ) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
-        $currentDbTime = $connection->quoteInto('?', $this->dateTime->formatDate(true));
+        $currentDbTime = $connection->quoteInto('?', $this->dateTime->gmtDate());
         $conditionalDate = $connection->getCheckSql($condition, $currentDbTime, 'NULL');
 
         $value = ['low_stock_date' => new \Zend_Db_Expr($conditionalDate)];

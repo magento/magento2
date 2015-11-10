@@ -40,11 +40,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     protected $flagFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
      * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
@@ -155,8 +150,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
         $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getMock();
         $this->timezoneMock->expects($this->any())->method('scopeDate')->willReturn($dateTime);
 
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')->getMock();
-
         $this->flagMock = $this->getMockBuilder('Magento\Reports\Model\Flag')
             ->disableOriginalConstructor()
             ->setMethods(['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'setLastUpdate', 'save'])
@@ -195,7 +188,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             $this->loggerMock,
             $this->timezoneMock,
             $this->flagFactoryMock,
-            $this->dateTimeMock,
             $this->validatorMock,
             $this->productMock,
             $this->helperMock
@@ -252,7 +244,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
         $this->flagMock->expects($this->once())->method('unsetData')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('loadSelf')->willReturnSelf();
         $this->flagMock->expects($this->never())->method('setFlagData')->willReturnSelf();
-        $this->flagMock->expects($this->once())->method('setLastUpdate')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('save')->willReturnSelf();
         $this->flagMock
             ->expects($this->once())

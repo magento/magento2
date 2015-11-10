@@ -395,16 +395,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBeforeSave()
-    {
-        $this->userMock->expects($this->once())->method('isObjectNew')->willReturn(true);
-
-        $this->assertInstanceOf(
-            '\Magento\User\Model\ResourceModel\User',
-            $this->invokeMethod($this->model, '_beforeSave', [$this->userMock])
-        );
-    }
-
     public function testAfterSave()
     {
         $roleId = 123;
