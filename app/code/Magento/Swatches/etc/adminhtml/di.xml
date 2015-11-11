@@ -19,4 +19,9 @@
             <argument name="instanceName" xsi:type="string">Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\GetAttributes">
+        <arguments>
+            <argument name="attributesList" xsi:type="object">Magento\Swatches\Model\AttributesList</argument>
+        </arguments>
+    </type>
 </config>
