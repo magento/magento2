@@ -251,6 +251,10 @@ class Timezone implements TimezoneInterface
         $timezone = null,
         $pattern = null
     ) {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
+        }
+
         if ($timezone === null) {
             if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
                 || $date->getTimezone()->getName() == '+00:00'
