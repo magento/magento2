@@ -24,6 +24,7 @@ define([
                 type: 'slide',
                 buttons: [],
                 opened: function () {
+                    $(this).parent().addClass('modal-content-new-attribute');
                     self.iframe = $('<iframe id="create_new_attribute_container">').attr({
                         src: self._prepareUrl(),
                         frameborder: 0
