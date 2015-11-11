@@ -227,6 +227,8 @@ class MetadataProvider
     }
 
     /**
+     * Convert document date(UTC) fields to default scope specified
+     *
      * @param \Magento\Framework\Api\Search\DocumentInterface $document
      * @param string $componentName
      * @return void
