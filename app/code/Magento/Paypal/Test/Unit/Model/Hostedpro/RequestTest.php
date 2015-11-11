@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Hostedpro;
 
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -181,48 +184,65 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount
+     * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount()
+     * @param $subtotal
+     * @param $total
+     * @param $tax
+     * @param $shipping
+     * @param $discount
+     * @dataProvider amountWithoutTaxDataProvider
      */
-    public function testSetAmountWithoutTax()
+    public function testSetAmountWithoutTax($total, $subtotal, $tax, $shipping, $discount)
     {
         $expectation = [
-            'subtotal' => 12.04,
-            'tax' => 2.03,
-            'shipping' => 5.05
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'tax' => $tax,
+            'shipping' => $shipping,
+            'discount' => abs($discount)
         ];
-        $amount = array_sum($expectation);
 
         static::assertFalse($this->taxData->priceIncludesTax());
 
-        $payment = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+        $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $payment->expects(static::once())
             ->method('getBaseAmountAuthorized')
-            ->willReturn($amount);
+            ->willReturn($total);
 
         $order->expects(static::once())
             ->method('getPayment')
             ->willReturn($payment);
 
-        $order->expects(static::atLeastOnce())
+        $order->expects(static::once())
+            ->method('getBaseDiscountAmount')
+            ->willReturn($discount);
+
+        $order->expects(static::once())
             ->method('getBaseTaxAmount')
-            ->willReturn($expectation['tax']);
+            ->willReturn($tax);
 
-        $order->expects(static::atLeastOnce())
+        $order->expects(static::once())
             ->method('getBaseShippingAmount')
-            ->willReturn($expectation['shipping']);
+            ->willReturn($shipping);
 
+        $order->expects(static::once())
+            ->method('getBaseSubtotal')
+            ->willReturn($subtotal);
         $this->_model->setAmount($order);
 
         static::assertEquals($expectation, $this->_model->getData());
     }
 
+    /**
+     * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount()
+     */
     public function testSetAmountWithIncludedTax()
     {
         /** @var \Magento\Tax\Model\Config  $config */
@@ -272,5 +292,17 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->_model->setAmount($order);
 
         static::assertEquals($expectation, $this->_model->getData());
+    }
+
+    /**
+     * Get data for amount with tax tests
+     * @return array
+     */
+    public function amountWithoutTaxDataProvider()
+    {
+        return [
+            ['total' => 31.00, 'subtotal' => 10.00, 'tax' => 1.00, 'shipping' => 20.00, 'discount' => 0.00],
+            ['total' => 5.00, 'subtotal' => 10.00, 'tax' => 0.00, 'shipping' => 20.00, 'discount' => -25.00],
+        ];
     }
 }
