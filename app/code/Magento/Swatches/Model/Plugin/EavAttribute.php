@@ -7,6 +7,7 @@ namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -72,11 +73,27 @@ class EavAttribute
      */
     public function beforeSave(Attribute $attribute)
     {
-        if ($this->swatchHelper->isSwatchAttribute($attribute)) {
+        if ($this->swatchHelper->isSwatchAttribute($attribute) && $this->validateOptions($attribute)) {
             $this->setProperOptionsArray($attribute);
             $this->swatchHelper->assembleAdditionalDataEavAttribute($attribute);
         }
         $this->convertSwatchToDropdown($attribute);
+    }
+
+    /**
+     * Validate that attribute options exist
+     *
+     * @param Attribute $attribute
+     * @return bool
+     * @throws InputException
+     */
+    protected function validateOptions(Attribute $attribute)
+    {
+        $attributeSavedOptions = $attribute->getSource()->getAllOptions(false);
+        if (!count($attributeSavedOptions)) {
+            throw new InputException(__('Admin is a required field in the each row'));
+        }
+        return true;
     }
 
     /**
