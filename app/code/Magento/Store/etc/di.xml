@@ -9,6 +9,8 @@
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <preference for="Magento\Store\Api\StoreManagementInterface" type="Magento\Store\Model\StoreManagement"/>
+    <preference for="Magento\Store\Api\WebsiteManagementInterface" type="Magento\Store\Model\WebsiteManagement"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
     </type>
