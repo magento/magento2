@@ -26,7 +26,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setPostValue('form_key', $formKey->getFormKey());
         $this->getRequest()->setPostValue('entity', 'catalog_product');
-        $this->getRequest()->setPostValue('behavior', 'replace');
+        $this->getRequest()->setPostValue('behavior', 'append');
         $this->getRequest()->setPostValue('_import_field_separator', ',');
 
 
