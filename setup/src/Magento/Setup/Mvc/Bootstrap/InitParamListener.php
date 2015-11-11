@@ -132,7 +132,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                     $response->setStatusCode(302);
                     $response->sendHeaders();
 
-                    $stopCallBack = function($event) use ($response){
+                    $stopCallBack = function($event) use ($response) {
                         $event->stopPropagation();
                         return $response;
                     };
