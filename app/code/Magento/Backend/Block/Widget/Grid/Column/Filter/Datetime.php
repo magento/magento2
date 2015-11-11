@@ -68,12 +68,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $adminTimeZone = new \DateTimeZone(
-                    $this->_scopeConfig->getValue(
+                $timezone = $this->getColumn()->getIgnoreTimezone()
+                    ? 'UTC'
+                    : $this->_scopeConfig->getValue(
                         $this->_localeDate->getDefaultTimezonePath(),
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                );
+                    );
+                $adminTimeZone = new \DateTimeZone($timezone);
                 $simpleRes = new \DateTime($date, $adminTimeZone);
                 $simpleRes->setTimezone(new \DateTimeZone('UTC'));
                 return $simpleRes;
