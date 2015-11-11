@@ -433,7 +433,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
         $this->_scheduleFactory->expects($this->once())->method('create')->will($this->returnValue($scheduleMock));
 
-        $testCronJob = $this->getMockBuilder('CronJob')->setMethods(['execute'])->getMock();;
+        $testCronJob = $this->getMockBuilder('CronJob')->setMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
         $this->_objectManager->expects(
