@@ -13,4 +13,25 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Model\Export\MetadataProvider">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="sales_order_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                </item>
+                <item name="sales_order_creditmemo_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
+                <item name="sales_order_invoice_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
+                <item name="sales_order_shipment_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

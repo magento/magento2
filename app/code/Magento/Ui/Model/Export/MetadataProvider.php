@@ -11,6 +11,8 @@ use Magento\Ui\Component\Filters;
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class MetadataProvider
 {
@@ -25,12 +27,44 @@ class MetadataProvider
     protected $columns;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $localeDate;
+
+    /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
+     * @var string
+     */
+    protected $dateFormat;
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param Filter $filter
+     * @param TimezoneInterface $localeDate
+     * @param ResolverInterface $localeResolver
+     * @param string $dateFormat
+     * @param array $data
      */
     public function __construct(
-        Filter $filter
+        Filter $filter,
+        TimezoneInterface $localeDate,
+        ResolverInterface $localeResolver,
+        $dateFormat = 'M j, Y H:i:s A',
+        array $data = []
     ) {
         $this->filter = $filter;
+        $this->localeDate = $localeDate;
+        $this->locale = $localeResolver->getLocale();
+        $this->dateFormat = $dateFormat;
+        $this->data = $data;
     }
 
     /**
@@ -190,5 +224,29 @@ class MetadataProvider
             }
         }
         return $options;
+    }
+
+    /**
+     * @param \Magento\Framework\Api\Search\DocumentInterface $document
+     * @param string $componentName
+     * @return bool
+     */
+    public function convertDate($document, $componentName)
+    {
+        if (!isset($this->data[$componentName])) {
+            return;
+        }
+        foreach ($this->data[$componentName] as $field) {
+            $fieldValue = $document->getData($field);
+            if (!$fieldValue) {
+                continue;
+            }
+            $convertedDate = $this->localeDate->date(
+                new \DateTime($fieldValue, new \DateTimeZone('UTC')),
+                $this->locale,
+                true
+            );
+            $document->setData($field, $convertedDate->format($this->dateFormat));
+        }
     }
 }
