@@ -5,14 +5,19 @@
 define([
     'jquery',
     'underscore',
-    'uiElement'
-], function ($, _, Element) {
+    'uiElement',
+    'Magento_Ui/js/modal/alert',
+    'mage/translate'
+], function ($, _, Element, alert) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'ui/grid/exportButton',
             checked: '',
+            title: $.mage.__('Attention'),
+            message: $.mage.__('You haven\'t selected any items!'),
+
             modules: {
                 selections: '${ $.selectProvider }'
             }
@@ -36,23 +41,28 @@ define([
                     this.options[0].value
                 );
             }
+
             return this;
         },
 
         getParams: function () {
             var selections = this.selections(),
-                data = selections.getSelections(),
+                data = selections ? selections.getSelections() : {},
                 itemsType = data.excludeMode ? 'excluded' : 'selected',
+                result;
+
+            if (selections) {
                 result = {};
+                result.filters = data.params.filters;
+                result.search = data.params.search;
+                result.namespace = data.params.namespace;
+                result[itemsType] = data[itemsType];
 
-            result['filters'] = data.params.filters;
-            result['search'] = data.params.search;
-            result['namespace'] = data.params.namespace;
-            result[itemsType] = data[itemsType];
-
-            if (!result[itemsType].length) {
-                result[itemsType] = false;
+                if (!result[itemsType].length) {
+                    result[itemsType] = false;
+                }
             }
+
             return result;
         },
 
@@ -63,16 +73,21 @@ define([
         },
 
         buildOptionUrl: function (option) {
-            var url = option.url + '?';
-
-            return url + $.param(this.getParams());
+            return this.getParams() ? option.url + '?' + $.param(this.getParams()) : '';
         },
 
         applyOption: function () {
             var option = this.getActiveOption(),
                 url = this.buildOptionUrl(option);
 
-            location.href = url;
+            if (url) {
+                location.href = url;
+            } else {
+                alert({
+                    title: this.title,
+                    content: this.message
+                });
+            }
         }
     });
 });
