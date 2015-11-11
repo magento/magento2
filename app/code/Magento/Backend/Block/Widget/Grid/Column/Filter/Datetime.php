@@ -68,7 +68,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $timezone = $this->getColumn()->getIgnoreTimezone()
+                $timezone = $this->getColumn()->getTimezone() === false
                     ? 'UTC'
                     : $this->_scopeConfig->getValue(
                         $this->_localeDate->getDefaultTimezonePath(),
