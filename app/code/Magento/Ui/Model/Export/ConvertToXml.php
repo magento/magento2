@@ -159,6 +159,7 @@ class ConvertToXml
     /**
      * @param string $componentName
      * @param array $items
+     * @return void
      */
     protected function prepareItems($componentName, array $items = [])
     {
