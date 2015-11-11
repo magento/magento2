@@ -73,7 +73,9 @@ define([
         },
 
         buildOptionUrl: function (option) {
-            return this.getParams() ? option.url + '?' + $.param(this.getParams()) : '';
+            var params = this.getParams();
+
+            return params ? option.url + '?' + $.param(params) : '';
         },
 
         applyOption: function () {
