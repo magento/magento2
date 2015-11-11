@@ -164,5 +164,4 @@ class BackupCommand extends AbstractSetupCommand
         $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
         $this->objectManager->configure($configLoader->load($areaCode));
     }
-
 }
