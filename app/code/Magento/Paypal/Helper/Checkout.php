@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Helper;
+
 use Magento\Sales\Model\Order;
 
 /**
