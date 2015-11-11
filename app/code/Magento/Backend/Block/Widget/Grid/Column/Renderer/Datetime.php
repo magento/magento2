@@ -24,7 +24,9 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             return $this->_localeDate->formatDateTime(
                 $data instanceof \DateTimeInterface ? $data : new \DateTime($data),
                 $format ?: \IntlDateFormatter::MEDIUM,
-                $format ?: \IntlDateFormatter::MEDIUM
+                $format ?: \IntlDateFormatter::MEDIUM,
+                null,
+                $this->getColumn()->getTimezone() !== false ? null : 'UTC'
             );
         }
         return $this->getColumn()->getDefault();
