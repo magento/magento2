@@ -199,12 +199,13 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      */
     protected function _convertDate($date)
     {
-        $adminTimeZone = new \DateTimeZone(
-            $this->_scopeConfig->getValue(
+        $timezone = $this->getColumn()->getIgnoreTimezone()
+            ? 'UTC'
+            : $this->_scopeConfig->getValue(
                 $this->_localeDate->getDefaultTimezonePath(),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
+            );
+        $adminTimeZone = new \DateTimeZone($timezone);
         $formatter = new \IntlDateFormatter(
             $this->localeResolver->getLocale(),
             \IntlDateFormatter::SHORT,

@@ -51,6 +51,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="ignore_timezone" xsi:type="boolean">true</argument>
                             <argument name="index" xsi:type="string">date_from</argument>
                         </arguments>
                     </block>
@@ -60,6 +61,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="ignore_timezone" xsi:type="boolean">true</argument>
                             <argument name="index" xsi:type="string">date_to</argument>
                         </arguments>
                     </block>
