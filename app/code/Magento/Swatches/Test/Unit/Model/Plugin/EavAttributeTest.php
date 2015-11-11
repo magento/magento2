@@ -264,7 +264,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 )
             );
          $this->eavAttribute->beforeSave($this->attribute);
-     }
+    }
 
     public function testBeforeSaveNotSwatch()
     {
