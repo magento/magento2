@@ -56,7 +56,6 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
