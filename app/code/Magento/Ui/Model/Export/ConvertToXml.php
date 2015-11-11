@@ -128,6 +128,8 @@ class ConvertToXml
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 
+        $this->prepareItems($component->getName(), $searchResult->getItems());
+
         /** @var SearchResultIterator $searchResultIterator */
         $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResult->getItems()]);
 
@@ -152,5 +154,16 @@ class ConvertToXml
             'value' => $file,
             'rm' => true  // can delete file after use
         ];
+    }
+
+    /**
+     * @param string $componentName
+     * @param array $items
+     */
+    protected function prepareItems($componentName, array $items = [])
+    {
+        foreach ($items as $document) {
+            $this->metadataProvider->convertDate($document, $componentName);
+        }
     }
 }
