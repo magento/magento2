@@ -32,9 +32,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
 
-        $this->serviceManager = $this->getMock(
-            'Zend\ServiceManager\ServiceManager', ['get'], [], '', false
-        );
+        $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager', ['get'], [], '', false);
     }
 
     /**
