@@ -414,6 +414,7 @@ class EavAttribute
 
     /**
      * Check if attribute options are valid
+     *
      * @param array $options
      * @param Attribute $attribute
      * @return bool
