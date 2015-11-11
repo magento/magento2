@@ -217,6 +217,10 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->model->initializeQuoteForReview($paymentMethodNonce, $details);
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function initializeQuoteForReviewDataProvider()
     {
         return [
