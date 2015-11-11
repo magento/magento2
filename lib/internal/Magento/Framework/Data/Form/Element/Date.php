@@ -31,6 +31,7 @@ class Date extends AbstractElement
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
+     * @param TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
@@ -88,7 +89,7 @@ class Date extends AbstractElement
         }
 
         try {
-            $this->_value = new \DateTime($value);
+            $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
         } catch (\Exception $e) {
             $this->_value = '';
         }
