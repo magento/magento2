@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 
 /**
  * Controller for component grid tasks
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
 {
@@ -55,6 +56,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -127,13 +129,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         }
 
         $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
-
-        $lastSyncData['countOfInstall'] =
-            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
-        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
-        if (isset($lastSyncData['lastSyncDate'])) {
-            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
-        }
+        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -163,13 +159,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $error = $e->getMessage();
         }
 
-
-        $lastSyncData['countOfInstall'] =
-            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
-        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
-        if (isset($lastSyncData['lastSyncDate'])) {
-            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
-        }
+        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -199,6 +189,24 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     }
 
     /**
+     * Format the lastSyncData for use on frontend
+     *
+     * @param $packagesForInstall
+     * @param $lastSyncData
+     * @return mixed
+     */
+    private function formatLastSyncData($packagesForInstall, $lastSyncData)
+    {
+        $lastSyncData['countOfInstall']
+            = isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+        if (isset($lastSyncData['lastSyncDate'])) {
+            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
+        }
+        return $lastSyncData;
+    }
+
+    /**
      * Format a UTC timestamp (seconds since epoch) to structure expected by frontend
      * @param string $syncDate seconds since epoch
      * @return array
@@ -209,11 +217,13 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             'date' => $this->timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::MEDIUM,
-                \IntlDateFormatter::NONE),
+                \IntlDateFormatter::NONE
+            ),
             'time' => $this->timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::NONE,
-                \IntlDateFormatter::MEDIUM),
+                \IntlDateFormatter::MEDIUM
+            ),
         ];
     }
 }
