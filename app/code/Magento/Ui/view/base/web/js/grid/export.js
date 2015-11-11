@@ -42,12 +42,12 @@ define([
 
         getParams: function () {
             var selections = this.selections(),
-                data = selections ? selections.getSelections() : {},
-                itemsType = data.excludeMode ? 'excluded' : 'selected',
-                result;
-
-            if (selections) {
+                data = selections ? selections.getSelections() : null,
+                itemsType,
                 result = {};
+
+            if (data) {
+                itemsType = data.excludeMode ? 'excluded' : 'selected';
                 result.filters = data.params.filters;
                 result.search = data.params.search;
                 result.namespace = data.params.namespace;
