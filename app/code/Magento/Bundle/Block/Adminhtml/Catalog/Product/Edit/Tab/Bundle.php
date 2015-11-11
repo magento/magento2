@@ -66,6 +66,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     protected function _prepareLayout()
     {
+        $this->setData('opened', true);
         $this->addChild(
             'add_button',
             'Magento\Backend\Block\Widget\Button',

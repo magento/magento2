@@ -62,7 +62,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
-            'Magento\CatalogRule\Model\Resource\RuleFactory',
+            'Magento\CatalogRule\Model\ResourceModel\RuleFactory',
             ['create'],
             [],
             '',
@@ -77,13 +77,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
             ->getMockForAbstractClass();
-        $gpFactory = $this->getMock(
-            'Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $tpFactory = $this->getMock(
             'Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory',
             ['create'],
@@ -104,7 +97,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $this->eventManagerMock,
                 'priceCurrency' => $this->priceCurrency,
                 'groupManagement' => $this->groupManagement,
-                'groupPriceFactory' => $gpFactory,
                 'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
                 'catalogData' => $this->catalogHelperMock
@@ -153,5 +145,122 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [0, 50, 1, true, 0],
             [10, 100, 1, true, 10],
         ];
+    }
+
+    public function testGetTotalBundleItemsPriceWithNoCustomOptions()
+    {
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())
+            ->method('hasCustomOptions')
+            ->willReturn(false);
+
+        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
+    }
+
+    /**
+     * @param string|null $value
+     * @dataProvider dataProviderWithEmptyOptions
+     */
+    public function testGetTotalBundleItemsPriceWithEmptyOptions($value)
+    {
+        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())
+            ->method('hasCustomOptions')
+            ->willReturn(true);
+        $productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('bundle_selection_ids')
+            ->willReturn($dataObjectMock);
+
+        $dataObjectMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
+
+        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderWithEmptyOptions()
+    {
+        return [
+            ['a:0:{}'],
+            [''],
+            [null],
+        ];
+    }
+
+    public function testGetTotalBundleItemsPriceWithNoItems()
+    {
+        $storeId = 1;
+
+        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productTypeMock = $this->getMockBuilder('Magento\Bundle\Model\Product\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())
+            ->method('hasCustomOptions')
+            ->willReturn(true);
+        $productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('bundle_selection_ids')
+            ->willReturn($dataObjectMock);
+        $productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($productTypeMock);
+        $productMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $dataObjectMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn('a:1:{i:0;s:1:"1";}');
+
+        $productTypeMock->expects($this->once())
+            ->method('getSelectionsByIds')
+            ->with([1], $productMock)
+            ->willReturn($selectionsMock);
+
+        $selectionsMock->expects($this->once())
+            ->method('addTierPriceData')
+            ->willReturnSelf();
+        $selectionsMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([]);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'prepare_catalog_product_collection_prices',
+                ['collection' => $selectionsMock, 'store_id' => $storeId]
+            )
+            ->willReturnSelf();
+
+        $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 }

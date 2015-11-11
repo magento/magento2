@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use Magento\Wishlist\Model\Resource\Item\Collection;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -146,7 +146,7 @@ class ItemCarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn($wishlistId);
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -319,7 +319,7 @@ class ItemCarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn($isOwner);
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -516,7 +516,7 @@ class ItemCarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn($wishlistId);
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

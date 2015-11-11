@@ -4,11 +4,14 @@
  */
 
 define([
-    'ko'
-], function (ko) {
+    'ko',
+    'mageUtils'
+    ], function (ko, utils) {
     'use strict';
 
     var captionPlaceholder = {},
+        optgroupTmpl = '<optgroup label="${ $.label }"></optgroup>',
+        nbspRe = /&nbsp;/g,
         optionsText,
         optionsValue,
         optionTitle;
@@ -67,8 +70,13 @@ define([
                 if (typeof unwrappedArray.length === 'undefined') { // Coerce single value into array
                     unwrappedArray = [unwrappedArray];
                 }
+
                 // Filter out any entries marked as destroyed
                 filteredArray = ko.utils.arrayFilter(unwrappedArray, function (item) {
+                    if (item && !item.label) {
+                        return false;
+                    }
+
                     return includeDestroyed || item === undefined || item === null || !ko.utils.unwrapObservable(item._destroy);
                 });
                 filteredArray.map(recursivePathBuilder, null);
@@ -185,19 +193,22 @@ define([
                     itemUpdate = true;
                 }
 
-                if (arrayEntry === captionPlaceholder) {// empty value, label === caption
+                if (arrayEntry === captionPlaceholder) { // empty value, label === caption
                     option = element.ownerDocument.createElement('option');
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    option = element.ownerDocument.createElement('optgroup');
-                    option.setAttribute('label', arrayEntry[optionsText]);
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option = utils.template(optgroupTmpl, {
+                        label: arrayEntry[optionsText],
+                        title: arrayEntry[optionsText + 'title']
+                    });
+                    option = ko.utils.parseHtmlFragment(option)[0];
+
                 } else {
                     option = element.ownerDocument.createElement('option');
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option.setAttribute('data-title', arrayEntry[optionsText + 'title']);
                     ko.selectExtensions.writeValue(option, arrayEntry[optionsValue]);
-                    ko.utils.setTextContent(option, arrayEntry[optionsText].replace(/^\s+/g, ''));
+                    ko.utils.setTextContent(option, arrayEntry[optionsText]);
                 }
 
                 return [option];
@@ -211,14 +222,23 @@ define([
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
                 if (previousSelectedValues.length) {
-                    var isSelected = ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions[0])) >= 0;
-                    ko.utils.setOptionNodeSelectionState(newOptions[0], isSelected);
+                    var isSelected = ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions.value)) >= 0;
+                    ko.utils.setOptionNodeSelectionState(newOptions.value, isSelected);
 
                     // If this option was changed from being selected during a single-item update, notify the change
                     if (itemUpdate && !isSelected) {
                         ko.dependencyDetection.ignore(ko.utils.triggerEvent, null, [element, 'change']);
                     }
                 }
+            }
+
+            /**
+             *
+             * @param {*} string, times
+             * @returns {Array}
+             */
+            function strPad(string, times) {
+                return  (new Array(times + 1)).join(string);
             }
 
             /**
@@ -240,20 +260,24 @@ define([
                         }
                     }
                 }
-                ko.utils.arrayForEach(options, function (option) {
-                    var label, title, value, obj = {};
 
-                    value = applyToObject(option, optionsValue, option);
-                    label = applyToObject(option, optionsText, value);
+                ko.utils.arrayForEach(options, function (option) {
+                    var value = applyToObject(option, optionsValue, option),
+                        label = applyToObject(option, optionsText, value) || '',
+                        title = applyToObject(option, optionsText, value) || '',
+                        obj = {},
+                        space = '\u2007\u2007\u2007';
+
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
+                    label = label.replace(nbspRe, '').trim();
+
                     if (Array.isArray(value)) {
-                        obj[optionsText] = label;
-                        obj[optionsValue] = undefined;
+                        obj[optionsText] = strPad('&nbsp;', nestedOptionsLevel * 4) + label;
                         res.push(obj);
                         res = res.concat(formatOptions(value));
                     } else {
-                        obj[optionsText] = label;
+                        obj[optionsText] = strPad(space, nestedOptionsLevel * 2) + label;
                         obj[optionsValue] = value;
                         res.push(obj);
                     }

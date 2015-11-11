@@ -134,13 +134,14 @@ class Inventory extends \Magento\Backend\Block\Widget
     public function getFieldValue($field)
     {
         $stockItem = $this->getStockItem();
+        $value = null;
         if ($stockItem->getItemId()) {
             $method = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field);
-            if (method_exists($stockItem, $method)) {
-                return $stockItem->{$method}();
+            if (is_callable([$stockItem, $method])) {
+                $value = $stockItem->{$method}();
             }
         }
-        return $this->stockConfiguration->getDefaultConfigValue($field);
+        return $value === null ? $this->stockConfiguration->getDefaultConfigValue($field) : $value;
     }
 
     /**

@@ -5,13 +5,11 @@
 define([
     'jquery',
     'underscore',
-    'ko',
-    'Magento_Ui/js/lib/collapsible'
-], function ($, _, ko, Collapsible) {
+    'uiElement'
+], function ($, _, Element) {
     'use strict';
 
-    return Collapsible.extend({
-
+    return Element.extend({
         defaults: {
             template: 'ui/grid/exportButton',
             checked: '',

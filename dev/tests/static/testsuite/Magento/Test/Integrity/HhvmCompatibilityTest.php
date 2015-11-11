@@ -37,6 +37,7 @@ class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
         'display_errors',
         'default_socket_timeout',
         'pcre.recursion_limit',
+        'default_charset'
     ];
 
     public function testAllowedIniGetSetDirectives()
@@ -62,7 +63,14 @@ class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
     protected function getFiles()
     {
         return \array_merge(
-            Files::init()->getPhpFiles(true, true, true, false),
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::INCLUDE_NON_CLASSES
+            ),
             Files::init()->getPhtmlFiles(false, false),
             Files::init()->getFiles([Files::init()->getPathToSource() . '/dev/'], '*.php')
         );

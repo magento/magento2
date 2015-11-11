@@ -107,7 +107,7 @@ class Sidebar extends AbstractCart
      */
     public function getUpdateItemQtyUrl()
     {
-        return $this->getUrl('checkout/sidebar/updateItemQty');
+        return $this->getUrl('checkout/sidebar/updateItemQty', ['_secure' => $this->getRequest()->isSecure()]);
     }
 
     /**
@@ -118,7 +118,7 @@ class Sidebar extends AbstractCart
      */
     public function getRemoveItemUrl()
     {
-        return $this->getUrl('checkout/sidebar/removeItem');
+        return $this->getUrl('checkout/sidebar/removeItem', ['_secure' => $this->getRequest()->isSecure()]);
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -170,7 +171,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'required' => true,
                     'disabled' => true,
                     'class' => $behaviorCode,
-                    'value' => ',',
+                    'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
         }

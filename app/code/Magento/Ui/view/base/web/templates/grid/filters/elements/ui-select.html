@@ -20,7 +20,7 @@
                     focusout: onFocusOut,
                     keydown: keydownSwitcher
                 },
-                outerClick: outerClick">
+                outerClick: outerClick.bind($data)">
     <!-- ko ifnot: chipsEnabled -->
     <div
         class="action-select admin__action-multiselect"
@@ -88,7 +88,12 @@
             </label>
         </div>
         <!-- /ko -->
-        <ul class="admin__action-multiselect-menu-inner">
+        <ul class="admin__action-multiselect-menu-inner"
+            data-bind="
+                event: {
+                    mousemove: function(){onMousemove($data, $index(), event)}
+                }
+            ">
             <!-- ko foreach: { data: options, as: 'option'}  -->
             <li
                 class="action-menu-item"
@@ -96,10 +101,6 @@
                             css: {
                                 _selected: $parent.isSelected(option.value),
                                 _hover: $parent.isHovered($index(), $element)
-                            },
-                            event: {
-                                mouseenter: function(){$parent.onHoveredIn($data, $index())},
-                                mouseleave: function(){$parent.onHoveredOut($data, $index())},
                             },
                             click: $parent.toggleOptionSelected.bind($parent, $data, $index())">
                 <input

@@ -54,26 +54,33 @@ if ($product->isSaleable()) {
         $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
         $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
         $data = ['addToCart' => [
+            'origin'=> 'msrp',
             'popupId' => '#' . $popupId,
             'productName' => $product->getName(),
+            'productId' => $productId,
+            'productIdInput' => 'input[type="hidden"][name="product"]',
             'realPrice' => $block->getRealPriceHtml(),
+            'isSaleable' => $product->isSaleable(),
             'msrpPrice' => $msrpPrice,
             'priceElementId' => $priceElementId,
             'closeButtonId' => '#map-popup-close',
-            'popupCartButtonId' => '#map-popup-button',
             'addToCartUrl' => $addToCartUrl,
+            'paymentButtons' => '[data-label=or]'
         ]];
         if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
             $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
         } else {
-            $data['addToCart']['cartForm'] = '#product_addtocart_form_from_popup';
+            $data['addToCart']['addToCartButton'] = sprintf(
+                'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
+                (int) $productId
+            );
         }
     ?>
     <span id="<?php /* @escapeNotVerified */ echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
-    <a href="#"
+    <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo($popupId);?>"
        class="action map-show-info"
-       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>"><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
+       data-mage-init='<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">
@@ -83,10 +90,11 @@ if ($product->isSaleable()) {
 
 <?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
-    <a href="#"
+    <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo $helpLinkId;?>"
        class="action map-show-info"
-       data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo $helpLinkId;?>",
+       data-mage-init='{"addToCart":{"origin": "info",
+                                     "helpLinkId": "#<?php /* @escapeNotVerified */ echo $helpLinkId;?>",
                                      "productName": "<?php /* @escapeNotVerified */ echo $product->getName() ?>",
                                      "closeButtonId": "#map-popup-close"}}'><span><?php /* @escapeNotVerified */ echo __("What's this?"); ?></span>
     </a>

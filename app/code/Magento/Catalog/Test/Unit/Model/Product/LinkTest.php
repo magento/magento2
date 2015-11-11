@@ -15,43 +15,53 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
+
+    /**
+     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productCollection;
 
     protected function setUp()
     {
         $linkCollection = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Link\Collection'
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Collection'
         )->disableOriginalConstructor()->setMethods(
             ['setLinkModel']
         )->getMock();
         $linkCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
         $linkCollectionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Link\CollectionFactory'
+            'Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
         $linkCollectionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($linkCollection));
-        $productCollection = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection'
+        $this->productCollection = $this->getMockBuilder(
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection'
         )->disableOriginalConstructor()->setMethods(
             ['setLinkModel']
         )->getMock();
-        $productCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
+        $this->productCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
         $productCollectionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory'
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
         $productCollectionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($productCollection));
+            ->will($this->returnValue($this->productCollection));
 
         $this->resource = $this->getMock(
-            'Magento\Framework\Model\Resource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 'saveProductLinks',
                 'getAttributeTypeTable',
@@ -63,11 +73,19 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->stockHelperMock = $this->getMockBuilder('Magento\CatalogInventory\Helper\Stock')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Catalog\Model\Product\Link',
-            ['linkCollectionFactory' => $linkCollectionFactory, 'productCollectionFactory' => $productCollectionFactory,
-                'resource' => $this->resource]
+            [
+                'linkCollectionFactory' => $linkCollectionFactory,
+                'productCollectionFactory' => $productCollectionFactory,
+                'resource' => $this->resource,
+                'stockHelper' => $this->stockHelperMock
+            ]
         );
     }
 
@@ -109,8 +127,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductCollection()
     {
+        $this->stockHelperMock
+            ->expects($this->once())
+            ->method('addInStockFilterToCollection')
+            ->with($this->productCollection);
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             $this->model->getProductCollection()
         );
     }
@@ -118,7 +140,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     public function testGetLinkCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Link\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Collection',
             $this->model->getLinkCollection()
         );
     }

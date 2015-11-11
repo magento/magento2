@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Class QuoteManagement
@@ -80,7 +81,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $userContext;
 
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -93,6 +94,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $customerModelFactory;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\AddressFactory
+     */
+    protected $quoteAddressFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
@@ -120,6 +126,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $accountManagement;
 
     /**
+     * @var QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -130,14 +141,16 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param ToOrderItemConverter $quoteItemToOrderItem
      * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
      * @param UserContextInterface $userContext
-     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param QuoteFactory $quoteFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,14 +164,16 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         ToOrderItemConverter $quoteItemToOrderItem,
         ToOrderPaymentConverter $quotePaymentToOrderPayment,
         UserContextInterface $userContext,
-        QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -173,11 +188,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->quoteRepository = $quoteRepository;
         $this->customerRepository = $customerRepository;
         $this->customerModelFactory = $customerModelFactory;
+        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->storeManager = $storeManager;
         $this->checkoutSession = $checkoutSession;
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
+        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -187,6 +204,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
         $quote = $this->createAnonymousCart($storeId);
+
+        $quote->setBillingAddress($this->quoteAddressFactory->create());
+        $quote->setShippingAddress($this->quoteAddressFactory->create());
 
         try {
             $this->quoteRepository->save($quote);
@@ -256,7 +276,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function createAnonymousCart($storeId)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->create();
+        $quote = $this->quoteFactory->create();
         $quote->setStoreId($storeId);
         return $quote;
     }
@@ -277,7 +297,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             /** @var \Magento\Quote\Model\Quote $quote */
-            $quote = $this->quoteRepository->create();
+            $quote = $this->quoteFactory->create();
             $quote->setStoreId($storeId);
             $quote->setCustomer($customer);
             $quote->setCustomerIsGuest(0);
@@ -343,7 +363,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * Delete quote item
+     * Submit quote
      *
      * @param Quote $quote
      * @param array $orderData
@@ -369,7 +389,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quoteItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
             $quoteItems[$quoteItem->getId()] = $quoteItem;
         }
         $orderItems = [];
@@ -424,6 +444,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
             $addresses[] = $shippingAddress;
             $order->setShippingAddress($shippingAddress);
+            $order->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
         }
         $billingAddress = $this->quoteAddressToOrderAddress->convert(
             $quote->getBillingAddress(),
@@ -435,7 +456,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $addresses[] = $billingAddress;
         $order->setBillingAddress($billingAddress);
         $order->setAddresses($addresses);
-        $order->setPayments([$this->quotePaymentToOrderPayment->convert($quote->getPayment())]);
+        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
         $order->setItems($this->resolveItems($quote));
         if ($quote->getCustomer()) {
             $order->setCustomerId($quote->getCustomer()->getId());
@@ -445,6 +466,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
+        
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
             [
@@ -467,8 +489,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $this->eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
                 [
-                    'order' => $order,
-                    'quote' => $quote
+                    'order'     => $order,
+                    'quote'     => $quote,
+                    'exception' => $e
                 ]
             );
             throw $e;

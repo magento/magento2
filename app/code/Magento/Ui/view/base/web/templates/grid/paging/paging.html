@@ -4,16 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="col-xs-3">
-    <div class="admin__control-support-text">
-        <span data-bind="text: totalRecords"></span> records found
-        <!-- ko if: totalSelected -->
-        (<span data-bind="text: totalSelected"></span> selected)
-        <!-- /ko -->
-    </div>
-</div>
-
-<div class="col-xs-7 admin__data-grid-pager-wrap">
+<div class="admin__data-grid-pager-wrap" data-role="toolbar-menu-item">
     <!-- ko scope: sizes -->
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
@@ -22,9 +13,14 @@
         <button
             class="action-previous"
             type="button"
-            data-bind="css: { disabled: isFirst() },
-                   click: prev">
-            <span>Previous page</span>
+            data-bind="
+                attr: {
+                    title: $t('Previous Page')
+                },
+                css: {
+                    disabled: isFirst()
+                },
+                click: prev">
         </button>
         <input
             id="pageCurrent"
@@ -36,10 +32,14 @@
         </label>
         <button
             class="action-next"
-            data-bind="css: { disabled: isLast() },
-                       click: next">
-            <span>Next page</span>
+            data-bind="
+                attr: {
+                    title: $t('Next Page')
+                },
+                css: {
+                    disabled: isLast()
+                },
+                click: next">
         </button>
     </div>
-
 </div>

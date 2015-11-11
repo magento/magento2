@@ -12,15 +12,7 @@ namespace Magento\Cron\Test\Unit\Model;
 
 class CronJob
 {
-    protected $_param;
-
-    public function execute($param)
+    public function execute()
     {
-        $this->_param = $param;
-    }
-
-    public function getParam()
-    {
-        return $this->_param;
     }
 }

@@ -167,4 +167,14 @@ abstract class Order extends \Magento\Backend\App\Action
     {
         return $this->_authorization->isAllowed('Magento_Sales::sales_order');
     }
+
+    /**
+     * @return bool
+     */
+    protected function isValidPostRequest()
+    {
+        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
+        $isPost = $this->getRequest()->isPost();
+        return ($formKeyIsValid && $isPost);
+    }
 }

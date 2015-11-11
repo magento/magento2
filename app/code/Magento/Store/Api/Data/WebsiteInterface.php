@@ -35,6 +35,21 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setCode($code);
 
     /**
+     * Rethreive website name
+     * 
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Set website name
+     * 
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * @return int
      */
     public function getDefaultGroupId();

@@ -5,33 +5,36 @@
 
 'use strict';
 angular.module('component-grid', ['ngStorage'])
-    .controller('componentGridController', ['$scope', '$http', '$localStorage', '$state',
-        function ($scope, $http, $localStorage, $state) {
-            $scope.componentsProcessed = false;
+    .controller('componentGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state',
+        function ($rootScope, $scope, $http, $localStorage, $state) {
+            $rootScope.componentsProcessed = false;
+            $scope.syncError = false;
             $http.get('index.php/componentGrid/components').success(function(data) {
                 $scope.components = data.components;
-                $scope.displayComponents = data.components;
                 $scope.total = data.total;
                 if(typeof data.lastSyncData.lastSyncDate === "undefined") {
                     $scope.isOutOfSync = true;
+                    $scope.countOfUpdate = 0;
+                    $scope.countOfInstall = 0;
                 } else {
                     $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    $scope.countOfUpdate = data.lastSyncData.countOfUpdate;
+                    $scope.countOfInstall = data.lastSyncData.countOfInstall;
+                    $scope.enabledInstall = data.lastSyncData.countOfInstall ? true : false;
                     $scope.isOutOfSync = false;
                 }
                 $scope.availableUpdatePackages = data.lastSyncData.packages;
                 $scope.currentPage = 1;
                 $scope.rowLimit = 20;
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
-                $scope.componentsProcessed = true;
+
+                $rootScope.componentsProcessed = true;
             });
 
             $scope.$watch('currentPage + rowLimit', function() {
                 var begin = (($scope.currentPage - 1) * $scope.rowLimit);
                 var end = parseInt(begin) + parseInt(($scope.rowLimit));
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
-                if ($scope.components !== undefined) {
-                    $scope.displayComponents = $scope.components.slice(begin, end);
-                }
                 if ($scope.currentPage > $scope.numberOfPages) {
                     $scope.currentPage = $scope.numberOfPages;
                 }
@@ -53,19 +56,37 @@ angular.module('component-grid', ['ngStorage'])
                 $scope.toggleActiveActionsCell(component);
             };
 
+            $scope.predicate = 'name';
+            $scope.reverse = false;
+            $scope.order = function(predicate) {
+                $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+                $scope.predicate = predicate;
+            };
+
             $scope.sync = function() {
                 $scope.isHiddenSpinner = false;
                 $http.get('index.php/componentGrid/sync').success(function(data) {
-                    $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    if(typeof data.lastSyncData.lastSyncDate !== "undefined") {
+                        $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    }
+                    if (data.error !== '') {
+                        $scope.syncError = true;
+                        $scope.ErrorMessage = data.error;
+                    }
                     $scope.availableUpdatePackages = data.lastSyncData.packages;
+                    $scope.countOfUpdate = data.lastSyncData.countOfUpdate;
+                    $scope.countOfInstall = data.lastSyncData.countOfInstall;
+                    $scope.enabledInstall = data.lastSyncData.countOfInstall ? true : false;
                     $scope.isHiddenSpinner = true;
                     $scope.isOutOfSync = false;
                 });
             };
-
             $scope.isAvailableUpdatePackage = function(packageName) {
-                return typeof $scope.availableUpdatePackages !== 'undefined'
+                $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
+                var isAvailable = typeof $scope.availableUpdatePackages !== 'undefined'
+                    && $localStorage.isMarketplaceAuthorized
                     && packageName in $scope.availableUpdatePackages;
+                return isAvailable;
             };
 
             $scope.getIndicatorInfo = function(component, type) {
@@ -83,7 +104,7 @@ angular.module('component-grid', ['ngStorage'])
 
                 if ($scope.isAvailableUpdatePackage(component.name)) {
                     return indicators.info[type];
-                } else if(component.disable === true) {
+                } else if (component.disable === true) {
                     return indicators.off[type];
                 }
                 return indicators.on[type];
@@ -96,10 +117,15 @@ angular.module('component-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[component.name]['latestVersion']
                     }
                 ];
-                if ($localStorage.titles['update'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['update'] = 'Update ' + component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
                 }
-                $localStorage.moduleName = component.moduleName;
+                if ($localStorage.titles['update'].indexOf($localStorage.moduleName) < 0 ) {
+                    $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
+                }
+                $rootScope.titles = $localStorage.titles;
                 $scope.nextState();
             };
 
@@ -109,11 +135,16 @@ angular.module('component-grid', ['ngStorage'])
                         name: component.name
                     }
                 ];
-                if ($localStorage.titles['uninstall'].indexOf(component.moduleName) < 0 ) {
-                    $localStorage.titles['uninstall'] = 'Uninstall ' + component.moduleName;
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
                 }
+                if ($localStorage.titles['uninstall'].indexOf($localStorage.moduleName) < 0 ) {
+                    $localStorage.titles['uninstall'] = 'Uninstall ' + $localStorage.moduleName;
+                }
+                $rootScope.titles = $localStorage.titles;
                 $localStorage.componentType = component.type;
-                $localStorage.moduleName = component.moduleName;
                 $state.go('root.readiness-check-uninstall');
             };
 
@@ -124,17 +155,30 @@ angular.module('component-grid', ['ngStorage'])
                             name: component.moduleName
                         }
                     ];
-                    if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
-                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                            + component.moduleName;
+                    if (component.moduleName) {
+                        $localStorage.moduleName = component.moduleName;
+                    } else {
+                        $localStorage.moduleName = component.name;
                     }
+                    if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
+                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                            + $localStorage.moduleName;
+                    }
+                    $rootScope.titles = $localStorage.titles;
                     $localStorage.componentType = component.type;
-                    $localStorage.moduleName = component.moduleName;
                     $state.go('root.readiness-check-'+type);
                 }
             };
-
             $scope.convertDate = function(date) {
-                return new Date(date);
+                return new Date(date.replace(/-/g, '/'))
             }
-        }]);
+        }
+    ])
+    .filter('startFrom', function() {
+        return function(input, start) {
+            if(input !== undefined && start !== 'NaN') {
+                start = parseInt(start, 10);
+                return input.slice(start);
+            }
+        }
+    });

@@ -23,8 +23,14 @@ class Application implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => \Magento\PageCache\Model\Config::BUILT_IN, 'label' => __('Built-in Application')],
-            ['value' => \Magento\PageCache\Model\Config::VARNISH, 'label' => __('Varnish Caching')]
+            [
+                'value' => \Magento\PageCache\Model\Config::BUILT_IN,
+                'label' => __('Built-in Application (Not Recommended for Production Use)')
+            ],
+            [
+                'value' => \Magento\PageCache\Model\Config::VARNISH,
+                'label' => __('Varnish Caching')
+            ]
         ];
     }
 
@@ -36,7 +42,8 @@ class Application implements \Magento\Framework\Option\ArrayInterface
     public function toArray()
     {
         return [
-            \Magento\PageCache\Model\Config::BUILT_IN => __('Built-in Application'),
+            \Magento\PageCache\Model\Config::BUILT_IN =>
+                __('Built-in Application (Not Recommended for Production Use)'),
             \Magento\PageCache\Model\Config::VARNISH => __('Varnish Caching')
         ];
     }

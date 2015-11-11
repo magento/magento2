@@ -21,7 +21,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->resourceJobMock = $this->getMockBuilder('Magento\Cron\Model\Resource\Schedule')
+        $this->resourceJobMock = $this->getMockBuilder('Magento\Cron\Model\ResourceModel\Schedule')
             ->disableOriginalConstructor()
             ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName'])
             ->getMockForAbstractClass();

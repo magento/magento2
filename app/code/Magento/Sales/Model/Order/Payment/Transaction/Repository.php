@@ -18,9 +18,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\EntityStorage;
 use Magento\Sales\Model\EntityStorageFactory;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction as TransactionResource;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionResource;
 
 /**
  * Repository class for \Magento\Sales\Model\Order\Payment\Transaction
@@ -95,9 +95,7 @@ class Repository implements TransactionRepositoryInterface
             throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!$this->entityStorage->has($id)) {
-            $entity = $this->metaData->getNewInstance();
-            /** @var \Magento\Sales\Api\Data\TransactionInterface $entity */
-            $this->metaData->getMapper()->load($entity, $id);
+            $entity = $this->metaData->getNewInstance()->load($id);
             if (!$entity->getTransactionId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -185,18 +183,18 @@ class Repository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         /** @var TransactionResource\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
         $collection->addPaymentInformation(['method']);
         $collection->addOrderInformation(['increment_id']);
         return $collection;

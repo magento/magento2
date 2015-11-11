@@ -38,7 +38,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_entityTypeCode;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -48,18 +48,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_passTierPrice = 0;
 
     /**
-     * @var int
-     */
-    protected $_passGroupPrice = 0;
-
-    /**
      * List of items websites
      *
      * @var array
      */
     protected $_priceWebsite = [
         ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE,
-        ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE,
     ];
 
     /**
@@ -69,7 +63,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_priceCustomerGroup = [
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
-        ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP,
     ];
 
     /**
@@ -79,9 +72,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $templateExportData = [
         ImportAdvancedPricing::COL_SKU => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE => '',
         ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => '',
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => '',
         ImportAdvancedPricing::COL_TIER_PRICE_QTY => '',
@@ -91,17 +81,17 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
-     * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
@@ -113,17 +103,17 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
-        \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
-        \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory,
-        \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
+        \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $itemFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
@@ -228,10 +218,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Clean up attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $collection->load();
 
@@ -245,14 +235,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         )
                     ) {
                         $this->_passTierPrice = 1;
-                    }
-                    if ($attribute->getAttributeCode() == ImportAdvancedPricing::COL_GROUP_PRICE
-                        && in_array(
-                            $attribute->getId(),
-                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]
-                        )
-                    ) {
-                        $this->_passGroupPrice = 1;
                     }
                 }
                 $collection->removeItemByKey($attribute->getId());
@@ -277,16 +259,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $rawData = $this->collectRawData();
             $productIds = array_keys($rawData);
             if (isset($productIds)) {
-                if (!$this->_passGroupPrice) {
-                    $exportData = array_merge(
-                        $exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_GROUPED_PRICE)
-                    );
-                }
                 if (!$this->_passTierPrice) {
                     $exportData = array_merge(
                         $exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
+                        $this->getTierPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
                     );
                 }
             }
@@ -347,22 +323,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function getTierAndGroupPrices(array $listSku, $table)
+    protected function getTierPrices(array $listSku, $table)
     {
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
-        if ($table == ImportAdvancedPricing::TABLE_GROUPED_PRICE) {
-            $selectFields = [
-                ImportAdvancedPricing::COL_SKU => 'cpe.sku',
-                ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'ap.website_id',
-                ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'ap.customer_group_id',
-                ImportAdvancedPricing::COL_GROUP_PRICE => 'ap.value'
-            ];
-            if (isset($exportFilter) && !empty($exportFilter)) {
-                $price = $exportFilter['group_price'];
-            }
-        } elseif ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
+        if ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
             $selectFields = [
                 ImportAdvancedPricing::COL_SKU => 'cpe.sku',
                 ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => 'ap.website_id',

@@ -12,6 +12,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -195,7 +196,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   mixed $website
      * @return  float
      */
-    public function getAmount($product, $website = null)
+    public function getAmountExclTax($product, $website = null)
     {
         if (!$product->hasData($this->cacheProductWeeeAmount)) {
             /** @var \Magento\Store\Model\Store $store */
@@ -207,7 +208,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
             $amount = 0;
             if ($this->isEnabled($store)) {
-                $amount = $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+                $amount = $this->_weeeTax->getWeeeAmountExclTax($product, null, null, $website);
             }
 
             $product->setData($this->cacheProductWeeeAmount, $amount);
@@ -269,11 +270,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\DataObject     $shipping
-     * @param null|false|\Magento\Framework\DataObject     $billing
-     * @param Website                        $website
-     * @param bool                           $calculateTaxes
+     * @param \Magento\Catalog\Model\Product                $product
+     * @param null|false|\Magento\Framework\DataObject      $shipping
+     * @param null|false|\Magento\Framework\DataObject      $billing
+     * @param Website                                       $website
+     * @param bool                                          $calculateTaxes
+     * @param bool                                          $round
      * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
@@ -281,14 +283,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shipping = null,
         $billing = null,
         $website = null,
-        $calculateTaxes = false
+        $calculateTaxes = false,
+        $round = true
     ) {
         return $this->_weeeTax->getProductWeeeAttributes(
             $product,
             $shipping,
             $billing,
             $website,
-            $calculateTaxes
+            $calculateTaxes,
+            $round
         );
     }
 
@@ -296,15 +300,38 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns applied weee tax amount
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return array
+     * @return float
      */
-    public function getAppliedAmount($item)
+    public function getWeeeTaxAppliedAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedAmount');
+    }
+
+    /**
+     * Returns applied weee tax amount for the row
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @return float
+     */
+    public function getWeeeTaxAppliedRowAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedRowAmount');
+    }
+
+    /**
+     * Returns accumulated amounts for the item
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param string $functionName
+     * @return float
+     */
+    protected function getRecursiveNumericAmount($item, $functionName)
     {
         if ($item instanceof \Magento\Quote\Model\Quote\Item\AbstractItem) {
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 $result = 0;
                 foreach ($item->getChildren() as $child) {
-                    $childData = $this->getAppliedAmount($child);
+                    $childData = $this->getRecursiveNumericAmount($child, $functionName);
                     if (!empty($childData)) {
                         $result += $childData;
                     }
@@ -313,8 +340,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
-        // if order item data is old enough then weee_tax_applied might not be valid
-        $data = $item->getWeeeTaxAppliedAmount();
+        $data = $item->$functionName();
         if (empty($data)) {
             return 0;
         }
@@ -375,7 +401,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $store = $product->getStore();
 
         if ($this->isEnabled($store)) {
-            return $this->getProductWeeeAttributes($product, null, null, null, $this->typeOfDisplay(1));
+            $calculateTax = ($this->typeOfDisplay(1) || $this->typeOfDisplay(2)) ? 1 : 0;
+            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax, false);
         }
         return [];
     }
@@ -414,45 +441,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         return [];
-    }
-
-    /**
-     * Returns amount to display
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return int
-     */
-    public function getAmountForDisplay($product)
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $product->getStore();
-
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, null, $this->typeOfDisplay(1));
-        }
-        return 0;
-    }
-
-    /**
-     * Returns all summed WEEE taxes with all local taxes applied
-     *
-     * @param \Magento\Framework\DataObject[] $attributes Result from getProductWeeeAttributes()
-     * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getAmountInclTaxes($attributes)
-    {
-        if (!is_array($attributes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('$attributes must be an array'));
-        }
-
-        $amount = 0;
-        foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Framework\DataObject */
-            $amount += $attribute->getAmountInclTax();
-        }
-
-        return (float) $amount;
     }
 
     /**
@@ -717,12 +705,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_INCL setting
+     * Get FPT DISPLAY_INCL setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayIncl($storeId = null)
+    public function isDisplayIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_INCL,
@@ -732,12 +720,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_EXCL_DESCR_INCL setting
+     * Get FPT DISPLAY_INCL_DESCR setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayExlDescIncl($storeId = null)
+    public function isDisplayInclDesc($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL_DESCR,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get FPT DISPLAY_EXCL_DESCR_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayExclDescIncl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
@@ -747,18 +750,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get FPT DISPLAY_EXCL setting
+     * Get FPT DISPLAY_EXCL setting
      *
      * @param  int|null $storeId
      * @return bool
      */
-    public function geDisplayExcl($storeId = null)
+    public function isDisplayExcl($storeId = null)
     {
         return $this->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL,
             \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
             $storeId
         );
+    }
+
+    /**
+     * Get tax price display settings
+     *
+     * @param  null|string|bool|int|Store $store
+     * @return int
+     */
+    public function getTaxDisplayConfig($store = null)
+    {
+        return $this->_taxData->getPriceDisplayType($store);
     }
 
     /**

@@ -363,8 +363,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'getInfoUrl',
                 Config::XML_PATH_TAX_NOTIFICATION_INFO_URL,
-                true,
-                true
+                'http:\\kiwis.rule.com',
+                'http:\\kiwis.rule.com'
             ]
         ];
     }

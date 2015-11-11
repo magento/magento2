@@ -4,36 +4,38 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.block.filter {
-    margin-bottom: 40px;
-    .title {
-        margin-bottom: 20px;
-        strong {
-            font-size: 18px;
+    .block.filter {
+        margin-bottom: @indent__xl ;
+        .filter-title {
+            margin-bottom: @indent__base;
+            strong {
+                font-size: 18px;
+            }
         }
     }
-    .subtitle {
+    .filter-subtitle {
         display: none;
     }
+    
     .filter-options-content {
         .filter-count-label {
             &:extend(.abs-visually-hidden all);
         }
     }
-    .options {
+    .filter-options {
         margin: 0;
-        > dt {
+        .filter-options-title {
             .lib-heading(h4);
-            margin: 0 0 10px;
+            margin: 0 0 @indent__s;
+            word-break: break-all;
         }
-        > dd {
-            margin: 0 0 25px;
-
+        .filter-options-content {
+            margin: 0 0 @indent__m;
             .item {
                 margin-bottom: 3px;
             }
@@ -75,4 +77,16 @@
     }
 }
 
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .page-with-filter {
+        .columns {
+            .sidebar-main {
+                .lib-vendor-prefix-order(0);
+            }
+        }
+    }
 }

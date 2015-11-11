@@ -5,17 +5,17 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="admin_user_authenticate_after">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="adminAuthenticate" />
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\AuthObserver" />
     </event>
     <event name="controller_action_predispatch">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="forceAdminPasswordChange" />
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver" />
     </event>
     <event name="admin_user_save_before">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="checkAdminPasswordChange" />
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver" />
     </event>
     <event name="admin_user_save_after">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="trackAdminNewPassword" />
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\TrackAdminNewPasswordObserver" />
     </event>
 </config>

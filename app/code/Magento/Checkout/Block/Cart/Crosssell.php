@@ -185,11 +185,11 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get crosssell products collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     protected function _getCollection()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection */
         $collection = $this->_productLinkFactory->create()->useCrossSellLinks()->getProductCollection()->setStoreId(
             $this->_storeManager->getStore()->getId()
         )->addStoreFilter()->setPageSize(
@@ -198,8 +198,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->_productVisibility->getVisibleInCatalogIds()
         );
         $this->_addProductAttributesAndPrices($collection);
-
-        $this->stockHelper->addInStockFilterToCollection($collection);
 
         return $collection;
     }

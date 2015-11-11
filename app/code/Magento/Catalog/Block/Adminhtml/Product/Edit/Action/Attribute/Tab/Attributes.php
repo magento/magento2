@@ -70,7 +70,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
             [
                 'category_ids',
                 'gallery',
-                'group_price',
                 'image',
                 'media_gallery',
                 'quantity_and_stock_status',
@@ -145,8 +144,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 HTML;
         if ($elementId === 'weight') {
             $html .= <<<HTML
-<script>require(["jquery"],function($) {
-    $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
+<script>require(['Magento_Catalog/js/product/weight-handler'], function (weightHandle) {
+    weightHandle.hideWeightSwitcher();
 });</script>
 HTML;
         }

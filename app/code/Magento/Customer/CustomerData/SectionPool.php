@@ -28,23 +28,35 @@ class SectionPool implements SectionPoolInterface
     protected $sectionSourceMap;
 
     /**
+     * @var \Magento\Customer\CustomerData\Section\Identifier
+     */
+    protected $identifier;
+
+    /**
      * Construct
      *
      * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Customer\CustomerData\Section\Identifier $identifier
      * @param array $sectionSourceMap
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $sectionSourceMap = [])
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        \Magento\Customer\CustomerData\Section\Identifier $identifier,
+        array $sectionSourceMap = []
+    ) {
         $this->objectManager = $objectManager;
+        $this->identifier = $identifier;
         $this->sectionSourceMap = $sectionSourceMap;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSectionsData(array $sectionNames = null)
+    public function getSectionsData(array $sectionNames = null, $updateIds = false)
     {
-        return $sectionNames ? $this->getSectionDataByNames($sectionNames) : $this->getAllSectionData();
+        $sectionsData = $sectionNames ? $this->getSectionDataByNames($sectionNames) : $this->getAllSectionData();
+        $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $updateIds);
+        return $sectionsData;
     }
 
     /**

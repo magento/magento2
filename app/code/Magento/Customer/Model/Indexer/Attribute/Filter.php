@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Indexer\Attribute;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -23,12 +23,12 @@ class Filter
     protected $indexerRegistry;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param FlatScopeResolver $flatScopeResolver
      * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         FlatScopeResolver $flatScopeResolver,
         IndexerRegistry $indexerRegistry
     ) {
