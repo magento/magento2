@@ -67,7 +67,7 @@
     <div data-action="scroll" class="minicart-items-wrapper">
         <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: cart().items, as: 'item' }">
             <!-- ko foreach: $parent.getRegion($parent.getItemRenderer(item.product_type)) -->
-                <!-- ko template: {name: getTemplate(), data: item, afterRender: $parents[1].initSidebar()} --><!-- /ko -->
+                <!-- ko template: {name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}} --><!-- /ko -->
             <!-- /ko -->
         </ol>
     </div>
