@@ -214,4 +214,14 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+    }
 }
