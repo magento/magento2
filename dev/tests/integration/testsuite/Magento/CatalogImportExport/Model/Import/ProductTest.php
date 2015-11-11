@@ -552,6 +552,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
         $gallery = $product->getMediaGalleryImages();
         $this->assertInstanceOf('Magento\Framework\Data\Collection', $gallery);
         $items = $gallery->getItems();
