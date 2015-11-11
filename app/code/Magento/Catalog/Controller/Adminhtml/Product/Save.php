@@ -27,22 +27,30 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productTypeManager;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
+        $this->productRepository = $productRepository;
         parent::__construct($context, $productBuilder);
     }
 
@@ -74,6 +82,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 $originalSku = $product->getSku();
                 $product->save();
+                $this->handleImageRemoveError($data, $product->getId());
                 $productId = $product->getId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
@@ -146,5 +155,34 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
         }
         return $resultRedirect;
+    }
+
+    /**
+     * Notify customer when image was not deleted in specific case.
+     * TODO: temporary workaround must be eliminated in MAGETWO-45306
+     *
+     * @param array $postData
+     * @param int $productId
+     * @return void
+     */
+    private function handleImageRemoveError($postData, $productId)
+    {
+        if (isset($postData['product']['media_gallery']['images'])) {
+            $removedImagesAmount = 0;
+            foreach ($postData['product']['media_gallery']['images'] as $image) {
+                if (!empty($image['removed'])) {
+                    $removedImagesAmount++;
+                }
+            }
+            if ($removedImagesAmount) {
+                $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
+                $product = $this->productRepository->getById($productId);
+                if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
+                    $this->messageManager->addNotice(
+                        __('The image cannot be removed as it has been assigned to the other image role')
+                    );
+                }
+            }
+        }
     }
 }
