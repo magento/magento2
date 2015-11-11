@@ -130,7 +130,7 @@ $orderStoreDate = $block->formatDate(
                     </tr>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Email') ?></th>
-                        <td><a href="mailto:<?php /* @escapeNotVerified */ echo $_order->getCustomerEmail() ?>"><?php /* @escapeNotVerified */ echo $_order->getCustomerEmail() ?></a></td>
+                        <td><a href="mailto:<?php echo $block->escapeHtml($_order->getCustomerEmail()) ?>"><?php echo $block->escapeHtml($_order->getCustomerEmail()) ?></a></td>
                     </tr>
                     <?php if ($_groupName = $block->getCustomerGroupName()) : ?>
                         <tr>
