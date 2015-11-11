@@ -31,7 +31,6 @@ class Date extends AbstractElement
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
-     * @param TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
@@ -89,7 +88,7 @@ class Date extends AbstractElement
         }
 
         try {
-            $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            $this->_value = new \DateTime($value);
         } catch (\Exception $e) {
             $this->_value = '';
         }
@@ -113,7 +112,14 @@ class Date extends AbstractElement
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }
-        return $this->localeDate->formatDateTime($this->_value, null, null, null, null, $format);
+        return $this->localeDate->formatDateTime(
+            $this->_value,
+            null,
+            null,
+            null,
+            $this->_value->getTimezone(),
+            $format
+        );
     }
 
     /**
