@@ -44,8 +44,8 @@ class Elasticsearch implements ClientInterface
         $options = [],
         $elasticsearchClient = null
     ) {
-        if (empty($options['hostname']) || ((!empty($options['enable_auth']) &&
-            ($options['enable_auth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
+        if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
+            ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
             throw new LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
@@ -90,7 +90,7 @@ class Elasticsearch implements ClientInterface
         if (!empty($options['port'])) {
             $host .= ':' . $options['port'];
         }
-        if (!empty($options['enable_auth']) && ($options['enable_auth'] == 1)) {
+        if (!empty($options['enableAuth']) && ($options['enableAuth'] == 1)) {
             $host = sprintf('%s://%s:%s@%s', $protocol, $options['username'], $options['password'], $host);
         }
         $config = [

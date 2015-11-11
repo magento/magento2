@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Dataprovider;
+namespace Magento\Elasticsearch\Test\Unit\Model\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

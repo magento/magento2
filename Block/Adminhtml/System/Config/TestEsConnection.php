@@ -32,7 +32,7 @@ class TestEsConnection extends TestConnection
                     'hostname' => 'catalog_search_elasticsearch_server_hostname',
                     'port' => 'catalog_search_elasticsearch_server_port',
                     'index' => 'catalog_search_elasticsearch_index_name',
-                    'enable_auth' => 'catalog_search_elasticsearch_enable_auth',
+                    'enableAuth' => 'catalog_search_elasticsearch_enable_auth',
                     'username' => 'catalog_search_elasticsearch_username',
                     'password' => 'catalog_search_elasticsearch_password',
                     'timeout' => 'catalog_search_elasticsearch_server_timeout',

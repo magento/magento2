@@ -60,7 +60,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'hostname' => 'localhost',
             'port' => '9200',
             'index' => 'magento2',
-            'enable_auth' => '1',
+            'enableAuth' => '1',
             'username' => 'user',
             'password' => 'pass',
             'timeout' => 1,

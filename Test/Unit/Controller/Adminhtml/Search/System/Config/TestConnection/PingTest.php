@@ -103,16 +103,16 @@ class PingTest extends \PHPUnit_Framework_TestCase
      * @dataProvider emptyParamDataProvider
      *
      * @param string $hostname
-     * @param string $enable_auth
+     * @param string $enableAuth
      * @param string $username
      * @param string $password
      * @return void
      */
-    public function testExecuteEmptyParam($hostname, $enable_auth, $username, $password)
+    public function testExecuteEmptyParam($hostname, $enableAuth, $username, $password)
     {
         $options = [
             'hostname' => $hostname,
-            'enable_auth' => $enable_auth,
+            'enableAuth' => $enableAuth,
             'username' => $username,
             'password' => $password,
             'timeout' => 0,
@@ -152,7 +152,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $params = [
             'hostname' => 'localhost',
             'port' => '9200',
-            'enable_auth' => '1',
+            'enableAuth' => '1',
             'username' => 'user',
             'password' => 'pass',
             'timeout' => 0,
@@ -183,7 +183,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $params = [
             'hostname' => 'localhost',
             'port' => '9201',
-            'enable_auth' => '1',
+            'enableAuth' => '1',
             'username' => 'user',
             'password' => 'pass',
             'timeout' => 0,
@@ -214,7 +214,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
         $params = [
             'hostname' => 'localhost',
             'port' => '9200',
-            'enable_auth' => '1',
+            'enableAuth' => '1',
             'username' => 'user',
             'password' => 'pass',
             'timeout' => 0,

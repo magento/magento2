@@ -57,7 +57,7 @@ class Config implements ClientOptionsInterface
             'hostname' => $this->getElasticsearchConfigData('server_hostname'),
             'port' => $this->getElasticsearchConfigData('server_port'),
             'index' => $this->getElasticsearchConfigData('index_name'),
-            'enable_auth' => $this->getElasticsearchConfigData('enable_auth'),
+            'enableAuth' => $this->getElasticsearchConfigData('enable_auth'),
             'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
             'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
