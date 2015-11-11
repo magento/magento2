@@ -42,6 +42,7 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
@@ -54,6 +55,7 @@ class Bestsellers extends AbstractReport
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper,
         $connectionName = null,
@@ -65,6 +67,7 @@ class Bestsellers extends AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_productResource = $productResource;
