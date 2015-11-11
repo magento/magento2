@@ -229,7 +229,7 @@ class MetadataProvider
     /**
      * @param \Magento\Framework\Api\Search\DocumentInterface $document
      * @param string $componentName
-     * @return bool
+     * @return void
      */
     public function convertDate($document, $componentName)
     {
