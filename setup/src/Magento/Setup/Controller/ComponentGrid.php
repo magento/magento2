@@ -46,6 +46,11 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private $updatePackagesCache;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private $timezone;
+
+    /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
@@ -64,6 +69,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
+        $this->timezone = $objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
     }
 
     /**
@@ -125,6 +131,9 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $lastSyncData['countOfInstall'] =
             isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
         $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+        if (isset($lastSyncData['lastSyncDate'])) {
+            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
+        }
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -158,6 +167,9 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $lastSyncData['countOfInstall'] =
             isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
         $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+        if (isset($lastSyncData['lastSyncDate'])) {
+            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
+        }
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -184,5 +196,24 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $modules[$moduleName]['version'] = $this->packageInfo->getVersion($module);
         }
         return $modules;
+    }
+
+    /**
+     * Format a UTC timestamp (seconds since epoch) to structure expected by frontend
+     * @param string $syncDate seconds since epoch
+     * @return array
+     */
+    private function formatSyncDate($syncDate)
+    {
+        return [
+            'date' => $this->timezone->formatDateTime(
+                new \DateTime('@'.$syncDate),
+                \IntlDateFormatter::MEDIUM,
+                \IntlDateFormatter::NONE),
+            'time' => $this->timezone->formatDateTime(
+                new \DateTime('@'.$syncDate),
+                \IntlDateFormatter::NONE,
+                \IntlDateFormatter::MEDIUM),
+        ];
     }
 }
