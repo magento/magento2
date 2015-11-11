@@ -16,6 +16,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
@@ -38,6 +39,13 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
+
+    private $controllersToSkip = [
+        'Magento\Setup\Controller\Session',
+        'Magento\Setup\Controller\Install',
+        'Magento\Setup\Controller\Success'
+
+    ];
 
     /**
      * {@inheritdoc}
@@ -82,7 +90,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
         if (!($application->getRequest() instanceof Request)) {
             $eventManager = $application->getEventManager();
-            $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 1);
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
         }
     }
 
@@ -95,12 +103,11 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      */
     public function authPreDispatch($event)
     {
-        $controller = $event->getTarget();
-        if (
-            !$controller instanceof \Magento\Setup\Controller\Session &&
-            !$controller instanceof \Magento\Setup\Controller\Install &&
-            !$controller instanceof \Magento\Setup\Controller\Success
-        ) {
+        /** @var RouteMatch $routeMatch */
+        $routeMatch = $event->getRouteMatch();
+        $controller = $routeMatch->getParam('controller');
+
+        if (!in_array($controller, $this->controllersToSkip)) {
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
@@ -110,19 +117,28 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
-                if (!$adminAppState->hasAreaCode()) {
-                    $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
-                    $objectManager->create(
-                        'Magento\Backend\Model\Auth\Session',
-                        [
-                            'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
-                            'appState' => $adminAppState
-                        ]
-                    );
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+                $objectManager->create(
+                    'Magento\Backend\Model\Auth\Session',
+                    [
+                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                        'appState' => $adminAppState
+                    ]
+                );
 
-                    if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                        $controller->plugin('redirect')->toUrl('index.php/session/unlogin');
-                    }
+                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                    $response=$event->getResponse();
+                    $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
+                    $response->setStatusCode(302);
+                    $response->sendHeaders();
+
+                    $stopCallBack = function($event) use ($response){
+                        $event->stopPropagation();
+                        return $response;
+                    };
+
+                    $application->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
+                    return $response;
                 }
             }
         }
