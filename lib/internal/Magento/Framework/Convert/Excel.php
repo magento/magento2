@@ -121,6 +121,8 @@ class Excel
      * @param array $row
      * @param boolean $useCallback
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getXmlRow($row, $useCallback)
     {
