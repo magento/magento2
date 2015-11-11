@@ -191,8 +191,8 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * Format the lastSyncData for use on frontend
      *
-     * @param $packagesForInstall
-     * @param $lastSyncData
+     * @param array $packagesForInstall
+     * @param array $lastSyncData
      * @return mixed
      */
     private function formatLastSyncData($packagesForInstall, $lastSyncData)
