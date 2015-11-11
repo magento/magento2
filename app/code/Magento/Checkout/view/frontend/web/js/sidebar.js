@@ -10,10 +10,9 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
-    'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData, alert, confirm, customerData){
+], function($, authenticationPopup, customerData, alert, confirm){
 
     $.widget('mage.sidebar', {
         options: {
@@ -27,14 +26,16 @@ define([
          * @private
          */
         _create: function () {
-            var self = this;
-
             this._initContent();
-            customerData.get('cart').subscribe(function () {
-                $(self.options.targetElement).trigger('contentUpdated');
-                self._calcHeight();
-                self._isOverflowed();
-            });
+        },
+
+        /**
+         * Update sidebar block.
+         */
+        update: function () {
+            $(this.options.targetElement).trigger('contentUpdated');
+            this._calcHeight();
+            this._isOverflowed();
         },
 
         _initContent: function() {
@@ -219,6 +220,7 @@ define([
                     console.log(JSON.stringify(error));
                 });
         },
+
         /**
          * Calculate height of minicart list
          *
@@ -228,22 +230,18 @@ define([
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
-                target = $(this.options.minicart.list)
-                    .clone()
-                    .attr('style', 'position: absolute !important; top: -10000 !important;')
-                    .appendTo('body');
+                target = $(this.options.minicart.list);
 
-            this.scrollHeight = 0;
-            target.children().each(function() {
+            target.children().each(function () {
+                var outerHeight = $(this).outerHeight();
+
                 if (counter-- > 0) {
-                    height += $(this).height();
+                    height += outerHeight;
                 }
-                self.scrollHeight += $(this).height();
+                self.scrollHeight += outerHeight;
             });
 
-            target.remove();
-
-            $(this.options.minicart.list).css('height', height);
+            target.height(height);
         }
     });
 
