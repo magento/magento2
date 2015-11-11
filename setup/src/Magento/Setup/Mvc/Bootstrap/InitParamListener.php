@@ -40,6 +40,11 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      */
     private $listeners = [];
 
+    /**
+     * List of controllers which should be skipped
+     *
+     * @var array
+     */
     private $controllersToSkip = [
         'Magento\Setup\Controller\Session',
         'Magento\Setup\Controller\Install',
@@ -127,7 +132,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 );
 
                 if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                    $response=$event->getResponse();
+                    $response = $event->getResponse();
                     $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
                     $response->setStatusCode(302);
                     $response->sendHeaders();
