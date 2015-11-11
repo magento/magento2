@@ -41,13 +41,13 @@ class Date extends AbstractElement
         TimezoneInterface $localeDate,
         $data = []
     ) {
+        $this->localeDate = $localeDate;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('text');
         $this->setExtType('textfield');
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         }
-        $this->localeDate = $localeDate;
     }
 
     /**
