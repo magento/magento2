@@ -10,6 +10,6 @@
     "elementId": "<?php echo $block->getHtmlId() ?>",
     "successText": "<?php /* @escapeNotVerified */ echo __('Successful! Test again?') ?>",
     "failedText": "<?php /* @escapeNotVerified */ echo __('Connection failed! Test again?') ?>",
-    "fieldMapping": "<?php echo $block->prepareFieldMapping($block->getFieldMapping()) ?>"}, "validation": {}}'>
+    "fieldMapping": "<?php /* @escapeNotVerified */ echo $block->prepareFieldMapping($block->getFieldMapping()) ?>"}, "validation": {}}'>
     <span><span><span id="<?php echo $block->getHtmlId() ?>_result"><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
 </button>

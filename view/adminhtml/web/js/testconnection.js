@@ -32,15 +32,15 @@ define([
          * @private
          */
         _connect: function () {
-            var result = this.options.failedText;
-            var element =  $('#' + this.options.elementId);
-            var self = this;
-            var params = {};
-            var msg = '';
+            var result = this.options.failedText,
+                element =  $('#' + this.options.elementId),
+                self = this,
+                params = {},
+                msg = '';
 
             element.removeClass('success').addClass('fail');
-            $.each($.parseJSON(this.options.fieldMapping), function (key, element) {
-                params[key]= $('#' + element).val();
+            $.each($.parseJSON(this.options.fieldMapping), function (key, el) {
+                params[key] = $('#' + el).val();
             });
             $.ajax({
                 url: this.options.url,
