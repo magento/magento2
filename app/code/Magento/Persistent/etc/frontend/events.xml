@@ -38,9 +38,6 @@
         <observer name="persistent_customer" instance="Magento\Persistent\Observer\EmulateCustomerObserver" />
         <observer name="persistent_checkout" instance="Magento\Persistent\Observer\PreventExpressCheckoutObserver" />
     </event>
-    <event name="checkout_allow_guest">
-        <observer name="persistent" instance="Magento\Persistent\Observer\DisableGuestCheckoutObserver" />
-    </event>
     <event name="customer_customer_authenticated">
         <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
     </event>
