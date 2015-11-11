@@ -31,6 +31,18 @@
                     <item name="created_at" xsi:type="string">created_at</item>
                     <item name="order_created_at" xsi:type="string">order_created_at</item>
                 </item>
+                <item name="sales_order_view_creditmemo_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
+                <item name="sales_order_view_invoice_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
+                <item name="sales_order_view_shipment_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="order_created_at" xsi:type="string">order_created_at</item>
+                </item>
             </argument>
         </arguments>
     </type>
