@@ -283,6 +283,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'small_image_label',
         'thumbnail_image',
         'thumbnail_image_label',
+        'swatch_image',
+        'swatch_image_label',
         'created_at',
         'updated_at',
         'new_from_date',
