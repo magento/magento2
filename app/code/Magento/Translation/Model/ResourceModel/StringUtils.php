@@ -210,6 +210,7 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $table = $this->getMainTable();
+        $translate = htmlspecialchars($translate, ENT_QUOTES);
 
         if ($locale === null) {
             $locale = $this->_localeResolver->getLocale();
