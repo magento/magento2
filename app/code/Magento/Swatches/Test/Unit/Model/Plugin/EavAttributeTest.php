@@ -54,6 +54,9 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     private $dependencyArray = [];
 
+    /** @var \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+    protected $source;
+
     public function setUp()
     {
         $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
@@ -87,6 +90,13 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 'swatchHelper' => $this->swatchHelper,
             ]
         );
+        $this->source = $this->getMockForAbstractClass(
+            'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            [],
+            '',
+            false
+        );
+
 
         $this->optionIds = [
             'value' => ['option 89' => 'test 1', 'option 114' => 'test 2', 'option 170' => 'test 3'],
@@ -116,6 +126,19 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 ['default', self::ATTRIBUTE_DEFAULT_VALUE],
                 ['swatch', self::ATTRIBUTE_SWATCH_VALUE]
             );
+
+        $this->attribute->expects($this->once())
+            ->method('getSource')
+            ->willReturn($this->source);
+        $this->source->expects($this->once())
+            ->method('getAllOptions')
+            ->with(false)
+            ->willReturn([
+                [
+                    'value' => 'value',
+                    'label' => 'label'
+                ]
+            ]);
 
         $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
             ->with($this->attribute);
@@ -153,6 +176,19 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 ['swatch', self::ATTRIBUTE_SWATCH_VALUE]
             );
 
+        $this->attribute->expects($this->once())
+            ->method('getSource')
+            ->willReturn($this->source);
+        $this->source->expects($this->once())
+            ->method('getAllOptions')
+            ->with(false)
+            ->willReturn([
+                [
+                    'value' => 'value',
+                    'label' => 'label'
+                ]
+            ]);
+
         $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
             ->with($this->attribute);
         $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
@@ -164,6 +200,27 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
         $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
             ->with($this->attribute)
             ->willReturn(true);
+
+        $this->eavAttribute->beforeSave($this->attribute);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Admin is a required field in the each row
+     */
+    public function testBeforeSaveWithFailedValidation()
+    {
+        $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
+            ->with($this->attribute)
+            ->willReturn(true);
+
+        $this->attribute->expects($this->once())
+            ->method('getSource')
+            ->willReturn($this->source);
+        $this->source->expects($this->once())
+            ->method('getAllOptions')
+            ->with(false)
+            ->willReturn([]);
 
         $this->eavAttribute->beforeSave($this->attribute);
     }
