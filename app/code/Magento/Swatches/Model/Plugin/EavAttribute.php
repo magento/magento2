@@ -414,11 +414,11 @@ class EavAttribute
 
     /**
      * Check if attribute options are valid
-     * @param $options
+     * @param array $options
      * @param Attribute $attribute
      * @return bool
      */
-    protected function isOptionsValid($options, Attribute $attribute)
+    protected function isOptionsValid(array $options, Attribute $attribute)
     {
         if (!isset($options['value'])) {
             return false;
