@@ -199,7 +199,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      */
     protected function _convertDate($date)
     {
-        $timezone = $this->getColumn()->getIgnoreTimezone()
+        $timezone = $this->getColumn()->getTimezone() === false
             ? 'UTC'
             : $this->_scopeConfig->getValue(
                 $this->_localeDate->getDefaultTimezonePath(),
