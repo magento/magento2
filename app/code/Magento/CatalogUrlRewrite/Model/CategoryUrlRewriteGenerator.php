@@ -103,8 +103,7 @@ class CategoryUrlRewriteGenerator
      */
     protected function isOverrideUrlsForStore($storeId, $categoryId)
     {
-        return $this->overrideStoreUrls
-            || !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+        return $this->overrideStoreUrls || !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
             $storeId,
             $categoryId,
             Category::ENTITY
