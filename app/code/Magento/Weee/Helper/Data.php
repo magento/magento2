@@ -705,6 +705,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     *
+     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
+     * @param  null|string|bool|int|Store $store
+     * @return float
+     */
+    public function getBaseTotalAmounts($items, $store = null)
+    {
+        $baseWeeeTotal = 0;
+        $displayTotalsInclTax = $this->displayTotalsInclTax($store);
+        foreach ($items as $item) {
+            if ($displayTotalsInclTax) {
+                $baseWeeeTotal += $this->getBaseRowWeeeTaxInclTax($item);
+            } else {
+                $baseWeeeTotal += $item->getBaseWeeeTaxAppliedRowAmount();
+            }
+        }
+        return $baseWeeeTotal;
+    }
+
+    /**
      * Get FPT DISPLAY_INCL setting
      *
      * @param  int|null $storeId
