@@ -6,15 +6,15 @@
 namespace Magento\Cms\Model\Page\Source;
 
 /**
- * Theme filter source
+ * Custom layout source
  */
-class ThemeFilter extends Theme
+class CustomLayout extends PageLayout
 {
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
-        return array_merge([['label' => '', 'value' => '']], parent::toOptionArray());
+        return array_merge([['label' => 'Default', 'value' => '']], parent::toOptionArray());
     }
 }
