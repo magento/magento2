@@ -5,8 +5,7 @@
 define([
     'jquery',
     'underscore',
-    'uiElement',
-    'mage/translate'
+    'uiElement'
 ], function ($, _, Element) {
     'use strict';
 
@@ -14,9 +13,6 @@ define([
         defaults: {
             template: 'ui/grid/exportButton',
             checked: '',
-            title: $.mage.__('Attention'),
-            message: $.mage.__('You haven\'t selected any items!'),
-
             modules: {
                 selections: '${ $.selectProvider }'
             }
@@ -72,7 +68,14 @@ define([
         },
 
         buildOptionUrl: function (option) {
-            return option.url + '?' + $.param(this.getParams());
+            var params = this.getParams();
+
+            if (!params) {
+                return 'javascript:void(0);';
+            }
+
+            return option.url + '?' + $.param(params);
+            //TODO: MAGETWO-40250
         },
 
         applyOption: function () {
