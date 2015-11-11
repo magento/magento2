@@ -13,9 +13,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\AdvancedSearch\Block\Suggestions">
+    <type name="Magento\AdvancedSearch\Model\Client\ClientPool">
         <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\Elasticsearch\Model\DataProvider\Suggestions</argument>
+            <argument name="clientFactories" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">\Magento\Elasticsearch\Model\Client\ElasticsearchFactory</item>
+            </argument>
+            <argument name="clientOptions" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
+            </argument>
         </arguments>
     </type>
 </config>

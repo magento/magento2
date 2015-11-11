@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\AdvancedSearch\Model\ClientOptionsInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 
 /**
  * Elasticsearch config model
