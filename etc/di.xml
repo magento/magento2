@@ -18,4 +18,11 @@
             <argument name="title" xsi:type="string">Did you mean</argument>
         </arguments>
     </type>
+    <type name="Magento\AdvancedSearch\Model\ClientPool">
+        <arguments>
+            <argument name="clients" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Adapter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -8,9 +8,9 @@ namespace Magento\AdvancedSearch\Model\Client;
 interface ClientInterface
 {
     /**
-     * Ping search engine
+     * Validate connection params for search engine
      * 
-     * @return array
+     * @return bool
      */
-    public function ping();
+    public function validateConnectionParameters();
 }

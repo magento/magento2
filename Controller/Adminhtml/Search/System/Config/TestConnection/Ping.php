@@ -7,21 +7,15 @@
 namespace Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
 
 use Magento\Backend\App\Action;
-use Magento\AdvancedSearch\Model\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
+use Magento\AdvancedSearch\Model\Client\ClientPool;
 use Magento\Framework\Controller\Result\JsonFactory;
 
 class Ping extends \Magento\Backend\App\Action
 {
     /**
-     * @var FactoryInterface
+     * @var ClientPool
      */
-    private $clientFactory;
-
-    /**
-     * @var ClientInterface
-     */
-    private $clientHelper;
+    private $clientPool;
 
     /**
      * @var JsonFactory
@@ -29,20 +23,17 @@ class Ping extends \Magento\Backend\App\Action
     private $resultJsonFactory;
 
     /**
-     * @param Action\Context $context
-     * @param FactoryInterface $clientFactory
-     * @param ClientOptionsInterface $clientHelper
-     * @param JsonFactory $resultJsonFactory
+     * @param Action\Context    $context
+     * @param ClientPool        $clientPool
+     * @param JsonFactory       $resultJsonFactory
      */
     public function __construct(
         Action\Context $context,
-        FactoryInterface $clientFactory,
-        ClientOptionsInterface $clientHelper,
+        ClientPool $clientPool,
         JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
-        $this->clientFactory = $clientFactory;
-        $this->clientHelper = $clientHelper;
+        $this->clientPool = $clientPool;
         $this->resultJsonFactory = $resultJsonFactory;
     }
 
@@ -50,24 +41,30 @@ class Ping extends \Magento\Backend\App\Action
      * Check for connection to server
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         $result = [
             'success' => false,
-            'errorMessage' => __('Please check server credentials'),
+            'errorMessage' => '',
         ];
         $options = $this->getRequest()->getParams();
 
-        $result['errorMessage'] = '';
         try {
-            $response = $this->clientFactory->create($this->clientHelper->prepareClientOptions($options))->ping();
-            if (isset($response['status']) && strcasecmp($response['status'], 'ok') == 0) {
+            if (empty($options['engine'])) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Missing search engine parameter.')
+                );
+            }
+            $response = $this->clientPool->create($options['engine'], $options)->validateConnectionParameters();
+            if ($response) {
                 $result['success'] = true;
             }
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $result['errorMessage'] = $e->getMessage();
         } catch (\Exception $e) {
-            $result['errorMessage'] = strip_tags($e->getMessage());
+            $message = strip_tags($e->getMessage());
+            $result['errorMessage'] = __($message);
         }
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
