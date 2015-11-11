@@ -156,10 +156,10 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $designFieldset->addField(
-            'custom_page_layout',
+            'custom_root_template',
             'select',
             [
-                'name' => 'custom_page_layout',
+                'name' => 'custom_root_template',
                 'label' => __('Custom Layout'),
                 'values' => $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray(true),
                 'disabled' => $isElementDisabled
