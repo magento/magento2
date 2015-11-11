@@ -6,9 +6,8 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'Magento_Ui/js/modal/alert',
     'mage/translate'
-], function ($, _, Element, alert) {
+], function ($, _, Element) {
     'use strict';
 
     return Element.extend({
@@ -73,23 +72,15 @@ define([
         },
 
         buildOptionUrl: function (option) {
-            var params = this.getParams();
-
-            return params ? option.url + '?' + $.param(params) : '';
+            return option.url + '?' + $.param(this.getParams());
         },
 
         applyOption: function () {
             var option = this.getActiveOption(),
                 url = this.buildOptionUrl(option);
 
-            if (url) {
-                location.href = url;
-            } else {
-                alert({
-                    title: this.title,
-                    content: this.message
-                });
-            }
+            location.href = url;
+
         }
     });
 });
