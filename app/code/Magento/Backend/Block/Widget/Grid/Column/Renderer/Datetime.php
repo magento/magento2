@@ -20,11 +20,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     public function render(\Magento\Framework\DataObject $row)
     {
         $format = $this->getColumn()->getFormat();
-        if ($data = $this->_getValue($row)) {
-            return $this->_localeDate->formatDate(
-                $data,
+        if ($date = $this->_getValue($row)) {
+            return $this->_localeDate->formatDateTime(
+                $date instanceof \DateTimeInterface ? $date : new \DateTime($date),
                 $format ?: \IntlDateFormatter::MEDIUM,
-                true
+                $format ?: \IntlDateFormatter::MEDIUM,
+                null,
+                $this->getColumn()->getTimezone() !== false ? null : 'UTC'
             );
         }
         return $this->getColumn()->getDefault();
