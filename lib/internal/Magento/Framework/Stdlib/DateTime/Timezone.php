@@ -235,7 +235,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
