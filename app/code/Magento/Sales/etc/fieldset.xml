@@ -484,9 +484,11 @@
             </field>
             <field name="discount_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="shipping_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="shipping_incl_tax">
                 <aspect name="to_quote_address_shipping" />
@@ -502,12 +504,15 @@
             </field>
             <field name="base_discount_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="base_shipping_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="base_shipping_incl_tax">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="base_custbalance_amount">
                 <aspect name="to_quote_address_shipping" />
