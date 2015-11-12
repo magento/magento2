@@ -69,7 +69,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             'hostname' => 'localhost',
             'port' => '9200',
             'timeout' => 15,
-            'enable_auth' => 1,
+            'enableAuth' => 1,
             'username' => 'user',
             'password' => 'passwd',
         ];
