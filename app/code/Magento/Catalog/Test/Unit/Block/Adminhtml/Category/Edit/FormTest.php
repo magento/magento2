@@ -51,6 +51,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlBuilderMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -103,9 +108,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ['getParam']
         );
 
+        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
+        $this->contextMock->expects($this->any())
+            ->method('getUrlBuilder')
+            ->will($this->returnValue($this->urlBuilderMock));
 
         $this->form = $this->objectManager->getObject(
             'Magento\Catalog\Block\Adminhtml\Category\Edit\Form',
@@ -147,5 +159,29 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(789));
 
         $this->assertEquals(789, $this->form->getCategoryId());
+    }
+
+    public function testGetDeleteUrl()
+    {
+        $url = 'some/magento/delete/url';
+        $params = ['property' => 'value'];
+        $this->urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->with('catalog/*/delete', ['_current' => true, '_query' => ['isAjax' => null], 'property' => 'value'])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->form->getDeleteUrl($params));
+    }
+
+    public function testGetRefreshPathUrl()
+    {
+        $url = 'some/magento/refresh/path/url';
+        $params = ['argument' => 'value'];
+        $this->urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->with('catalog/*/refreshPath', ['_current' => true, '_query' => ['isAjax' => null], 'argument' => 'value'])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->form->getRefreshPathUrl($params));
     }
 }
