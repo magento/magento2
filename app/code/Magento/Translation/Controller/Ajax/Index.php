@@ -31,7 +31,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $translate = (array)$this->getRequest()->getPost('translate');
 

@@ -52,7 +52,7 @@ class UpdateItemQty extends Action
     /**
      * @return $this
      */
-    public function executeInternal()
+    public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
         $itemQty = (int)$this->getRequest()->getParam('item_qty');

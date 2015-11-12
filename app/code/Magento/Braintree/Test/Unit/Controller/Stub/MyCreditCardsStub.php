@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Controller\Stub;
 
 class MyCreditCardsStub extends \Magento\Braintree\Controller\MyCreditCards
 {
-    protected function executeInternal()
+    public function execute()
     {
         // Empty method stub for test
     }

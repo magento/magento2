@@ -259,7 +259,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customerData);
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithoutItems()
@@ -283,7 +283,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'error' => true,
             ])
             ->willReturnSelf();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteLocalizedException()
@@ -305,7 +305,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with($exception);
 
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteException()
@@ -327,6 +327,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with($exception);
 
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 }

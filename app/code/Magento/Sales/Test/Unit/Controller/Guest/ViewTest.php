@@ -103,7 +103,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getBreadcrumbs')
             ->with($this->resultPageMock);
 
-        $this->assertSame($this->resultPageMock, $this->viewController->executeInternal());
+        $this->assertSame($this->resultPageMock, $this->viewController->execute());
     }
 
     /**
@@ -116,6 +116,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock)
             ->willReturn($this->resultRedirectMock);
 
-        $this->assertSame($this->resultRedirectMock, $this->viewController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->viewController->execute());
     }
 }

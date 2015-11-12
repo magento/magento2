@@ -13,7 +13,7 @@ class Grid extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();

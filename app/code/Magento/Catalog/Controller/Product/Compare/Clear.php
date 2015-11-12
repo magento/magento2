@@ -15,7 +15,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection $items */
         $items = $this->_itemCollectionFactory->create();

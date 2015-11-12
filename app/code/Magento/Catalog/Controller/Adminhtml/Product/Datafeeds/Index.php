@@ -11,7 +11,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
     }
 }

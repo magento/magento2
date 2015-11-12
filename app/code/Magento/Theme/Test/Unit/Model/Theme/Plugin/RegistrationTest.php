@@ -35,30 +35,30 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
     }
 
-    public function testBeforeExecute()
+    public function testBeforeDispatch()
     {
         $this->appState->expects($this->once())->method('getMode')->willReturn('default');
         $this->themeRegistration->expects($this->once())->method('register');
         $this->logger->expects($this->never())->method('critical');
         $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeExecute($this->abstractAction, $this->request);
+        $object->beforeDispatch($this->abstractAction, $this->request);
     }
 
-    public function testBeforeExecuteWithProductionMode()
+    public function testBeforeDispatchWithProductionMode()
     {
         $this->appState->expects($this->once())->method('getMode')->willReturn('production');
         $this->themeRegistration->expects($this->never())->method('register');
         $this->logger->expects($this->never())->method('critical');
         $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeExecute($this->abstractAction, $this->request);
+        $object->beforeDispatch($this->abstractAction, $this->request);
     }
 
-    public function testBeforeExecuteWithException()
+    public function testBeforeDispatchWithException()
     {
         $exception = new LocalizedException(new Phrase('Phrase'));
         $this->themeRegistration->expects($this->once())->method('register')->willThrowException($exception);
         $this->logger->expects($this->once())->method('critical');
         $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeExecute($this->abstractAction, $this->request);
+        $object->beforeDispatch($this->abstractAction, $this->request);
     }
 }

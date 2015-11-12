@@ -45,6 +45,6 @@ class ExportOrdersCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
             ->expects($this->once())
             ->method('create')
             ->with('customers_orders.csv', ['export'], \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->exportOrdersCsv->executeInternal();
+        $this->exportOrdersCsv->execute();
     }
 }

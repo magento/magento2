@@ -40,7 +40,7 @@ class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $isAnchorOnly = $this->getRequest()->getParam('is_anchor_only', 0);

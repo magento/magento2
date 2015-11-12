@@ -128,7 +128,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->refreshStatisticsController->executeInternal()
+            $this->refreshStatisticsController->execute()
         );
     }
 }

@@ -8,12 +8,11 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
-class Allcart extends Action\Action implements IndexInterface
+class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
@@ -53,7 +52,7 @@ class Allcart extends Action\Action implements IndexInterface
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);

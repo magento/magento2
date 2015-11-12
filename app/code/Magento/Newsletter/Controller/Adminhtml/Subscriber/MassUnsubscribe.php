@@ -13,7 +13,7 @@ class MassUnsubscribe extends \Magento\Newsletter\Controller\Adminhtml\Subscribe
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {

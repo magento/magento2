@@ -13,7 +13,7 @@ class CancelWizard extends \Magento\Paypal\Controller\Billing\Agreement
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_redirect('*/*/index');
     }

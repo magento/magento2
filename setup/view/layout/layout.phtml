@@ -13,6 +13,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{$state.current.title}}</title>
     <?php echo $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
@@ -67,6 +68,11 @@
         href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
         sizes="16x16">
     <?php echo $this->inlineScript() ?>
+    <style>
+        a.white-space-pre-line {
+            white-space: pre-line;
+        }
+    </style>
 </head>
 <body>
 <?php echo $this->content; ?>

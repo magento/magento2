@@ -167,7 +167,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::executeInternal
+     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
      */
     public function testExecute()
     {
@@ -197,12 +197,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Page',
-            $this->viewAction->executeInternal()
+            $this->viewAction->execute()
         );
     }
 
     /**
-     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::executeInternal
+     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
      */
     public function testExecuteNoOrder()
     {
@@ -224,12 +224,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->viewAction->executeInternal()
+            $this->viewAction->execute()
         );
     }
 
     /**
-     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::executeInternal
+     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
      */
     public function testGlobalException()
     {
@@ -253,7 +253,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->viewAction->executeInternal()
+            $this->viewAction->execute()
         );
     }
 

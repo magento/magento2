@@ -16,7 +16,7 @@ class ExportInvoicedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sal
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'invoiced.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid');

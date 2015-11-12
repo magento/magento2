@@ -81,19 +81,22 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     *
      */
     public function testCategoryMove()
     {
-        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(2);
 
         /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
+        foreach ($products as $product) {
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product->setCategoryIds([$categoryFourth->getId()]);
+            $product->save();
+        }
 
         /** @var Category $categorySecond */
         $categorySecond = $categories[1];
@@ -102,6 +105,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categoryThird */
         $categoryThird = $categories[2];
+        $categoryThird->setIsAnchor(true);
+        $categoryThird->save();
+
+        $this->clearIndex();
+        $this->indexer->reindexAll();
 
         /**
          * Move category from $categoryThird to $categorySecond
@@ -149,9 +157,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     *
-     */
     public function testCategoryCreate()
     {
         $this->testReindexAll();
@@ -226,7 +231,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product'
         );
 
-        $result = $product->getCollection()->getItems();
+        $result[] = $product->load(1);
+        $result[] = $product->load(2);
+        $result[] = $product->load(3);
 
         return array_slice($result, 0, $count);
     }

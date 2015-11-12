@@ -254,6 +254,6 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with($html);
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 }

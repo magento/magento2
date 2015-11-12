@@ -26,7 +26,7 @@ class ExportLowstockExcel extends \Magento\Reports\Controller\Adminhtml\Report\P
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $fileName = 'products_lowstock.xml';

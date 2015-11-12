@@ -40,7 +40,7 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setData(

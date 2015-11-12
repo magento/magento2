@@ -40,7 +40,7 @@ class View extends Action\Action
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $result = $this->guestHelper->loadValidOrder($this->getRequest());
         if ($result instanceof ResultInterface) {

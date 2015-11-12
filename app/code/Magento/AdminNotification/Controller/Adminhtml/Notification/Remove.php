@@ -11,7 +11,7 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($id = $this->getRequest()->getParam('id')) {
             $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);

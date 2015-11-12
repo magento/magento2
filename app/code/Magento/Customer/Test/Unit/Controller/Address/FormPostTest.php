@@ -342,7 +342,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     public function testExecuteNoPostData()
@@ -389,7 +389,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -575,7 +575,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     public function dataProviderTestExecute()
@@ -668,7 +668,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     public function testExecuteException()
@@ -731,6 +731,6 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 }

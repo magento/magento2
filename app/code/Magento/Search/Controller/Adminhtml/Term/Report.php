@@ -15,7 +15,7 @@ class Report extends ReportsIndexController
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_eventManager->dispatch('on_view_report', ['report' => 'search']);
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

@@ -35,7 +35,7 @@ class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $layout = false;
         if ($this->_session->hasCompositeProductResult()

@@ -13,7 +13,7 @@ class MassDelete extends TermController
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $searchIds = $this->getRequest()->getParam('search');
         if (!is_array($searchIds)) {

@@ -303,7 +303,7 @@ require([
                     additionalParams += '&autoplay=1';
                 }
 
-                src = 'http://player.vimeo.com/video/' +
+                src = window.location.protocol + '//player.vimeo.com/video/' +
                     this._code + '?api=1&player_id=vimeo' +
                     this._code +
                     timestamp +
@@ -483,7 +483,7 @@ require([
                         }
                     );
                 } else if (type === 'vimeo') {
-                    $.getJSON('http://www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
+                    $.getJSON(window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
                         {
                             format: 'json'
                         },

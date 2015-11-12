@@ -11,7 +11,7 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $state = $this->getRequest()->getParam('state');
         $status = $this->_initStatus();

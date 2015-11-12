@@ -202,7 +202,7 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->with('goto_success_page', true)
             ->will($this->returnSelf());
 
-        $this->returnUrl->executeInternal();
+        $this->returnUrl->execute();
     }
 
     /**
@@ -272,6 +272,6 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->with('error_msg', __('Your payment has been declined. Please try again.'))
             ->will($this->returnSelf());
 
-        $this->returnUrl->executeInternal();
+        $this->returnUrl->execute();
     }
 }

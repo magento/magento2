@@ -51,7 +51,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->getRequest()->getParam('set')) {
             return $this->resultForwardFactory->create()->forward('noroute');

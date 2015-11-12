@@ -70,6 +70,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote\Address\Total',
             [
                 'setShippingAmount',
+                'setBaseShippingAmount',
                 'setBaseTotalAmount',
                 'setTotalAmount',
                 'setShippingDescription',
@@ -229,9 +230,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency->expects($this->once())
             ->method('convert')
             ->with(5, $this->store)
-            ->willReturn(5);
+            ->willReturn(10);
         $this->total->expects($this->once())
             ->method('setShippingAmount')
+            ->with(10);
+        $this->total->expects($this->once())
+            ->method('setBaseShippingAmount')
             ->with(5);
         $this->rate->expects($this->once())
             ->method('getCarrierTitle')

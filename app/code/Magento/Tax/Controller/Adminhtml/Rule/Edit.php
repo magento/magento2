@@ -13,7 +13,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
     /**
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $taxRuleId = $this->getRequest()->getParam('rule');
         $this->_coreRegistry->register('tax_rule_id', $taxRuleId);

@@ -14,7 +14,7 @@ class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Stati
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $collectionsNames = $this->_getCollectionNames();

@@ -65,7 +65,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         /* @var $helper \Magento\SendFriend\Helper\Data */
         $helper = $this->_objectManager->get('Magento\SendFriend\Helper\Data');
@@ -84,7 +84,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
                     ->setSendfriendFormData($request->getPostValue());
             }
         }
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**

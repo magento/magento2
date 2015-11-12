@@ -58,7 +58,7 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $creditmemoId = (int)$this->getRequest()->getParam('creditmemo_id');
         if ($creditmemoId) {

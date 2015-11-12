@@ -19,7 +19,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->_objectManager->get('Magento\Backup\Helper\Data')->isRollbackAllowed()) {
             $this->_forward('denied');

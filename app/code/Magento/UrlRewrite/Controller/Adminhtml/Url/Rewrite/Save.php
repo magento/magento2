@@ -136,7 +136,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {

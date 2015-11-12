@@ -77,7 +77,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $linkId = $this->getRequest()->getParam('id', 0);
         $type = $this->getRequest()->getParam('type', 0);

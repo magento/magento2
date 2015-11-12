@@ -13,7 +13,7 @@ class ProductsViewed extends AjaxBlock
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $output = $this->layoutFactory->create()
             ->createBlock('Magento\Backend\Block\Dashboard\Tab\Products\Viewed')

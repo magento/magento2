@@ -67,6 +67,9 @@ class JobUpgrade extends AbstractJob
             $this->queue->addJobs(
                 [['name' => JobFactory::JOB_STATIC_REGENERATE, 'params' => []]]
             );
+            $this->queue->addJobs(
+                [['name' => \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE, 'params' => ['enable' => false]]]
+            );
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));

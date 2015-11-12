@@ -21,7 +21,7 @@ class Delete extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('page_id');

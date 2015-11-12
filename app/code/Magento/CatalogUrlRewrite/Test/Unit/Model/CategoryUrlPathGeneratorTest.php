@@ -152,7 +152,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $parentCategory->expects($this->any())->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
 
-        $this->categoryRepository->expects($this->once())->method('get')->with('parent_id')
+        $this->categoryRepository->expects($this->any())->method('get')->with('parent_id')
             ->will($this->returnValue($parentCategory));
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
