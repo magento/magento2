@@ -78,7 +78,7 @@
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="bundleSaveOptions" type="\Magento\Bundle\Model\Plugin\BundleSaveOptions"/>
+        <plugin name="bundleSaveOptions" type="\Magento\Bundle\Model\Plugin\BundleSaveOptions" sortOrder="100"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="bundleLoadOptions" type="\Magento\Bundle\Model\Plugin\BundleLoadOptions"/>
