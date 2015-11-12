@@ -13,7 +13,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\AdvancedSearch\Model\Client\ClientPool">
+    <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">\Magento\Elasticsearch\Model\Client\ElasticsearchFactory</item>

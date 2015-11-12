@@ -27,7 +27,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->elasticsearchClientMock = $this->getMockBuilder('\Elasticsearch\Client')
-            ->setMethods(['ping'])
+            ->setMethods(['ping', 'indices'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new ElasticsearchClient($this->getOptions(), $this->elasticsearchClientMock);
@@ -54,8 +54,19 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPing()
     {
-        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(['status' => 'OK']);
-        $this->assertEquals(['status' => 'OK'], $this->model->ping());
+        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
+        $this->assertEquals(true, $this->model->ping());
+    }
+
+    /**
+     * Test validation of connection parameters
+     */
+    public function testTestConnection()
+    {
+        $indicesMock = $this->getMock('\Elasticsearch\Namespaces\IndicesNamespace', ['exists'], [], '', false);
+        $this->elasticsearchClientMock->expects($this->once())->method('indices')->willReturn($indicesMock);
+        $indicesMock->expects($this->once())->method('exists')->willReturn(true);
+        $this->assertEquals(true, $this->model->validateConnectionParameters());
     }
 
     /**
@@ -69,6 +80,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             'hostname' => 'localhost',
             'port' => '9200',
             'timeout' => 15,
+            'index' => 'magento2',
             'enableAuth' => 1,
             'username' => 'user',
             'password' => 'passwd',

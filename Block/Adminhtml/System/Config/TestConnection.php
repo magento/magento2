@@ -14,7 +14,7 @@ class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Conf
     /**
      * {@inheritdoc}
      */
-    public function getFieldMapping()
+    protected function _getFieldMapping()
     {
         $fields = [
             'engine' => 'catalog_search_engine',
@@ -26,6 +26,6 @@ class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Conf
             'password' => 'catalog_search_elasticsearch_password',
             'timeout' => 'catalog_search_elasticsearch_server_timeout',
         ];
-        return $this->escapeJsQuote(json_encode($fields), '"');
+        return array_merge(parent::_getFieldMapping(), $fields);
     }
 }

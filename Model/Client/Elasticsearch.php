@@ -31,7 +31,6 @@ class Elasticsearch implements ClientInterface
      *
      * @param array $options
      * @param \Elasticsearch\Client|null $elasticsearchClient
-     * @param \Psr\Log\LoggerInterface $logger
      * @throws LocalizedException
      */
     public function __construct(
@@ -68,7 +67,7 @@ class Elasticsearch implements ClientInterface
      *
      * @return bool
      */
-    public function validateConnectionParameters()
+    public function testConnection()
     {
         if (!empty($this->clientOptions['index'])) {
             return $this->client->indices()->exists(['index' => $this->clientOptions['index']]);
