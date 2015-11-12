@@ -70,7 +70,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
-        $this->timezone = $objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $this->timezone = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
     }
 
     /**
@@ -207,6 +207,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
 
     /**
      * Format a UTC timestamp (seconds since epoch) to structure expected by frontend
+     *
      * @param string $syncDate seconds since epoch
      * @return array
      */
