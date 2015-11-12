@@ -84,18 +84,37 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $url
-     * @param $host
+     * @param string $url
+     * @param string $host
+     * @param string $useCustomAdminUrl
+     * @param string $customAdminUrl
+     * @param string $expectedValue
      * @dataProvider hostsDataProvider
      */
-    public function testIsHostBackend($url, $host, $expectedValue)
+    public function testIsHostBackend($url, $host, $useCustomAdminUrl, $customAdminUrl, $expectedValue)
     {
-        $backendUrl = $url;
         $_SERVER['HTTP_HOST'] = $host;
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->with(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE)
-            ->willReturn($backendUrl);
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
+                        [
+                            FrontNameResolver::XML_URL_USE_CUSTOM_ADMIN,
+                            ScopeInterface::SCOPE_STORE,
+                            null,
+                            $useCustomAdminUrl
+                        ],
+                        [
+                            FrontNameResolver::XML_URL_CUSTOM_ADMIN,
+                            ScopeInterface::SCOPE_STORE,
+                            null,
+                            $customAdminUrl
+                        ],
+                    ]
+                )
+            );
         $this->assertEquals($this->model->isHostBackend(), $expectedValue);
     }
 
@@ -105,31 +124,57 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
             'withoutPort' => [
                 'url' => 'http://magento2.loc/',
                 'host' => 'magento2.loc',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => true
             ],
             'withPort' => [
                 'url' => 'http://magento2.loc:8080/',
                 'host' => 'magento2.loc:8080',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => true
             ],
             'withStandartPortInUrlWithoutPortInHost' => [
                 'url' => 'http://magento2.loc:80/',
                 'host' => 'magento2.loc',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => true
             ],
             'withoutStandartPortInUrlWithPortInHost' => [
                 'url' => 'https://magento2.loc/',
                 'host' => 'magento2.loc:443',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => true
             ],
             'differentHosts' => [
                 'url' => 'http://m2.loc/',
                 'host' => 'magento2.loc',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => false
             ],
             'differentPortsOnOneHost' => [
                 'url' => 'http://magento2.loc/',
                 'host' => 'magento2.loc:8080',
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
+                'expectedValue' => false
+            ],
+            'differentPortsOnOneHost1' => [
+                'url' => 'http://magento2.loc/',
+                'host' => 'myhost.loc',
+                'useCustomAdminUrl' => '1',
+                'customAdminUrl' => 'https://myhost.loc/',
+                'expectedValue' => true
+            ],
+            'differentPortsOnOneHost1' => [
+                'url' => 'http://magento2.loc/',
+                'host' => 'SomeOtherHost.loc',
+                'useCustomAdminUrl' => '1',
+                'customAdminUrl' => 'https://myhost.loc/',
                 'expectedValue' => false
             ]
         ];
