@@ -1,3 +1,19 @@
+1.0.0-beta7
+=============
+* Fixed bugs:
+    * Fixed an issue where RequireJS fails while loading via CDN
+    * Fixed an issue where a guest user subscribes, the storeview is not saved/displayed in the admin panel
+    * Fixed an issue where product export and re-import with different store view level data causes data corruption
+    * Fixed an issue where ./bin/magento cache:clean doesn't clear varnish
+    * Fixed an issue where every call to non-cached page generates errors in the exception logs because of layout errors
+    * Fixed an issue with values for custom product attribute of type text area when product is updated via import
+    * Fixed an issue where Paypal doesn't work correctly if discount brings the subtotal to negative but the grand total is positive
+    * Fixed an issue with no proper indication about why an image is not deleted when it is in use in one of the storeviews
+    * Fixed an issue where shipping and billing country are missing from the information transmitted to paypal
+    * Fixed an issue with impossibility to complete Braintree PayPal Checkout if street line 2 is empty
+* Various improvements:
+    * Added integration with NewRelic
+
 1.0.0-beta6
 =============
 * Fixed bugs:
