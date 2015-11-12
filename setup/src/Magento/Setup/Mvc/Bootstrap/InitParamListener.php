@@ -41,7 +41,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     private $listeners = [];
 
     /**
-     * List of controllers which should be skipped
+     * List of controllers which should be skipped from auth check
      *
      * @var array
      */
@@ -135,14 +135,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                     $response = $event->getResponse();
                     $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
                     $response->setStatusCode(302);
-                    $response->sendHeaders();
 
-                    $stopCallBack = function($event) use ($response) {
-                        $event->stopPropagation();
-                        return $response;
-                    };
-
-                    $application->getEventManager()->attach(MvcEvent::EVENT_ROUTE, $stopCallBack, -10000);
+                    $event->stopPropagation();
                     return $response;
                 }
             }
