@@ -161,7 +161,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         $websiteId = $this->getData(static::WEBSITE_ID);
         if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
         }
         return (int) $websiteId;
     }
