@@ -208,6 +208,8 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveTranslate($string, $translate, $locale = null, $storeId = null)
     {
+        $string = htmlspecialchars_decode($string);
+        $translate = htmlspecialchars_decode($translate);
         $connection = $this->getConnection();
         $table = $this->getMainTable();
         $translate = htmlspecialchars($translate, ENT_QUOTES);
