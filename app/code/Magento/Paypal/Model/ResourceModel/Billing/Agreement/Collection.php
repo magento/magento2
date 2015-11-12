@@ -5,8 +5,6 @@
  */
 namespace Magento\Paypal\Model\ResourceModel\Billing\Agreement;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
-
 /**
  * Billing agreements resource collection
  */
@@ -92,17 +90,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Add field filter to collection
-     *
-     * @param array|string $field
-     * @param null|string|array $condition
-     * @return $this
+     * @inheritdoc
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if (in_array($field , ['created_at', 'updated_at'])) {
-            $field = 'main_table.' .$field;
+        if (in_array($field, ['created_at', 'updated_at'], true)) {
+            $field = 'main_table.' . $field;
         }
+
         return parent::addFieldToFilter($field, $condition);
     }
 }
