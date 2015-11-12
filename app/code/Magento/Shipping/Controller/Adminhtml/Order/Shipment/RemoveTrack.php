@@ -40,7 +40,7 @@ class RemoveTrack extends \Magento\Backend\App\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $trackId = $this->getRequest()->getParam('track_id');
         /** @var \Magento\Sales\Model\Order\Shipment\Track $track */

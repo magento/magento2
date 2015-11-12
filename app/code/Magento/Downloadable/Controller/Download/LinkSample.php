@@ -17,7 +17,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function executeInternal()
+    public function execute()
     {
         $linkId = $this->getRequest()->getParam('link_id', 0);
         /** @var \Magento\Downloadable\Model\Link $link */

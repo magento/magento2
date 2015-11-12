@@ -17,7 +17,7 @@ class ExportOrdersExcel extends \Magento\Reports\Controller\Adminhtml\Report\Cus
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'customers_orders.xml';

@@ -156,7 +156,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageFactory->expects($this->once())
             ->method('create')
             ->willReturn($page);
-        $result = $this->controller->executeInternal();
+        $result = $this->controller->execute();
         $this->assertInstanceOf('Magento\Framework\View\Result\Page', $result);
     }
 }

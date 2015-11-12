@@ -50,7 +50,7 @@ class Media extends \Magento\Framework\App\Action\Action
      *
      * @return string
      */
-    public function executeInternal()
+    public function execute()
     {
         $productMedia = [];
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {

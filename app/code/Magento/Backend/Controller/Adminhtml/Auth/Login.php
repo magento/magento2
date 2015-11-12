@@ -32,7 +32,7 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->_auth->isLoggedIn()) {
             if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {

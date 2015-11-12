@@ -20,7 +20,7 @@ class Index extends \Magento\Rss\Controller\Adminhtml\Feed
      * @return void
      * @throws NotFoundException
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->scopeConfig->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             throw new NotFoundException(__('Page not found.'));

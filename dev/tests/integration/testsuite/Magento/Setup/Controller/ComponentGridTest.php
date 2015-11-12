@@ -12,7 +12,7 @@ use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Model\UpdatePackagesCache;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
-use Magento\Setup\Model\ConnectManager;
+use Magento\Setup\Model\MarketplaceManager;
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,9 +56,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var ConnectManager
+     * @var MarketplaceManager
      */
-    private $connectManagerMock;
+    private $marketplaceManagerMock;
 
     /**
      * @var array
@@ -126,13 +126,13 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $this->updatePackagesCacheMock = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
-        $this->connectManagerMock = $this->getMock('Magento\Setup\Model\ConnectManager', [], [], '', false);
+        $this->marketplaceManagerMock = $this->getMock('Magento\Setup\Model\MarketplaceManager', [], [], '', false);
         $this->packageInfoFactoryMock->expects($this->once())->method('create')->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
             $objectManagerProvider,
             $this->updatePackagesCacheMock,
-            $this->connectManagerMock
+            $this->marketplaceManagerMock
         );
     }
 

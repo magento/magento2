@@ -16,7 +16,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $data = $this->getRequest()->getParam('rate');
         if (is_array($data)) {

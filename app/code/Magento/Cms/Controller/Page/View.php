@@ -30,7 +30,7 @@ class View extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $pageId = $this->getRequest()->getParam('page_id', $this->getRequest()->getParam('id', false));
         $resultPage = $this->_objectManager->get('Magento\Cms\Helper\Page')->prepareResultPage($this, $pageId);

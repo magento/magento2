@@ -50,7 +50,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $key = null;

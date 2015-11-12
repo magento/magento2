@@ -13,7 +13,7 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_getState()->setActiveStep(
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_SELECT_ADDRESSES

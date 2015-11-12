@@ -112,6 +112,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
         $block->expects($this->once())->method('toHtml')->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

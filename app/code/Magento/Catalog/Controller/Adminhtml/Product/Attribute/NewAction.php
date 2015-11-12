@@ -34,7 +34,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     /**
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultForwardFactory->create()->forward('edit');
     }

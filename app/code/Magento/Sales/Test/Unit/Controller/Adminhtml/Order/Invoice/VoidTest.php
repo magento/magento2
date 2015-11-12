@@ -255,7 +255,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 
     /**
@@ -297,7 +297,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultForward));
 
-        $this->assertSame($resultForward, $this->controller->executeInternal());
+        $this->assertSame($resultForward, $this->controller->execute());
     }
 
     /**
@@ -354,6 +354,6 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resultRedirect));
 
-        $this->assertSame($resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 }

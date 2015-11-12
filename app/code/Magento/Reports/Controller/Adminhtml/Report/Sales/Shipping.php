@@ -15,7 +15,7 @@ class Shipping extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_showLastExecutionTime(Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
 

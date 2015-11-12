@@ -36,7 +36,7 @@ class Save extends TermController
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         if ($this->getRequest()->isPost() && $data) {

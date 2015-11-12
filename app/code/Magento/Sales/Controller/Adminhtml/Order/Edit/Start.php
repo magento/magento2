@@ -22,7 +22,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');

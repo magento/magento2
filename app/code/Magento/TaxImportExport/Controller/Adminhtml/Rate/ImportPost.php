@@ -14,7 +14,7 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->isPost() && !empty($_FILES['import_rates_file']['tmp_name'])) {
             try {

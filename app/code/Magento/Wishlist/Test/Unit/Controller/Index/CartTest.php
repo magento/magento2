@@ -259,7 +259,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with('*/*', [])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     public function testExecuteWithNoWishlist()
@@ -300,7 +300,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with('*/*', [])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     public function testExecuteWithQuantityArray()
@@ -312,7 +312,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with($refererUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     public function testExecuteWithQuantityArrayAjax()
@@ -324,7 +324,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with(['backUrl' => $refererUrl])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJsonMock, $this->model->executeInternal());
+        $this->assertSame($this->resultJsonMock, $this->model->execute());
     }
 
     /**
@@ -698,7 +698,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with($indexUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     /**
@@ -859,6 +859,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with($configureUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 }

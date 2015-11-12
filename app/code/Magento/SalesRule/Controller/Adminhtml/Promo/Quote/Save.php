@@ -15,7 +15,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getPostValue()) {
             try {

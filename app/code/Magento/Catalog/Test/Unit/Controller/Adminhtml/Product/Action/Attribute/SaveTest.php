@@ -274,6 +274,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->never())->method('addError');
         $this->messageManager->expects($this->never())->method('addException');
 
-        $this->object->executeInternal();
+        $this->object->execute();
     }
 }

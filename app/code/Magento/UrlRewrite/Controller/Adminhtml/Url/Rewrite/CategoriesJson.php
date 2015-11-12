@@ -13,7 +13,7 @@ class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrit
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $categoryId = $this->getRequest()->getParam('id', null);
         $this->getResponse()->setBody(

@@ -19,7 +19,7 @@ class MassactionKey
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function aroundDispatch(
         \Magento\Backend\App\AbstractAction $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request

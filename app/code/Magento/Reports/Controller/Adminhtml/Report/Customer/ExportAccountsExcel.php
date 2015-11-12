@@ -17,7 +17,7 @@ class ExportAccountsExcel extends \Magento\Reports\Controller\Adminhtml\Report\C
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'new_accounts.xml';

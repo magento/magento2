@@ -8,22 +8,22 @@ angular.module('system-config', ['ngStorage'])
     .controller('systemConfigController', ['$scope', '$state', '$http','ngDialog', '$localStorage', '$rootScope',
         function ($scope, $state, $http, ngDialog, $localStorage, $rootScope) {
         $scope.user = {
-            username : $localStorage.connectUsername ? $localStorage.connectUsername : '',
+            username : $localStorage.marketplaceUsername ? $localStorage.marketplaceUsername : '',
             password : '',
             submitted : false
         };
 
         if (!$rootScope.authRequest) {
             $scope.isAuthLoadingComplete = false;
-            $http.post('index.php/connect/check-auth', [])
+            $http.post('index.php/marketplace/check-auth', [])
                 .success(function (response) {
                     if (response.success) {
-                        $localStorage.connectUsername = $scope.user.username = response.data.username;
-                        $localStorage.isConnectAuthorized = true;
+                        $localStorage.marketplaceUsername = $scope.user.username = response.data.username;
+                        $localStorage.isMarketplaceAuthorized = true;
                     } else {
-                        $localStorage.isConnectAuthorized = false;
+                        $localStorage.isMarketplaceAuthorized = false;
                     }
-                    $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
+                    $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                     $rootScope.authRequest = true;
                     $scope.isAuthLoadingComplete = true;
                 })
@@ -31,30 +31,30 @@ angular.module('system-config', ['ngStorage'])
                     $scope.isAuthLoadingComplete = true;
                 });
         } else {
-            $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
+            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
             $rootScope.isAuthLoadingComplete = true;
         }
 
         $scope.saveAuthJson = function () {
             if ($scope.auth.$valid) {
                 $scope.isAuthLoadingComplete = false;
-                $http.post('index.php/connect/save-auth-json', $scope.user)
+                $http.post('index.php/marketplace/save-auth-json', $scope.user)
                     .success(function (data) {
                         $scope.saveAuthJson.result = data;
                         if ($scope.saveAuthJson.result.success) {
                             $scope.logout = false;
-                            $localStorage.isConnectAuthorized = true;
+                            $localStorage.isMarketplaceAuthorized = true;
                             $scope.isAuthLoadingComplete = true;
                         } else {
-                            $localStorage.isConnectAuthorized = false;
+                            $localStorage.isMarketplaceAuthorized = false;
                             $scope.isAuthLoadingComplete = true;
                         }
-                        $rootScope.isConnectAuthorized = $localStorage.isConnectAuthorized;
-                        $localStorage.connectUsername = $scope.user.username;
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
+                        $localStorage.marketplaceUsername = $scope.user.username;
                     })
                     .error(function (data) {
                         $scope.saveAuthJson.failed = data;
-                        $localStorage.isConnectAuthorized = false;
+                        $localStorage.isMarketplaceAuthorized = false;
 
                     });
             } else {
@@ -62,12 +62,12 @@ angular.module('system-config', ['ngStorage'])
             }
         };
         $scope.reset = function () {
-            $http.post('index.php/connect/remove-credentials', [])
+            $http.post('index.php/marketplace/remove-credentials', [])
                 .success(function (response) {
                     if (response.success) {
                         $scope.logout = true;
                     }
-                    $localStorage.isConnectAuthorized = $rootScope.isConnectAuthorized = false;
+                    $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
                 })
                 .error(function (data) {
                 });

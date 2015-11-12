@@ -53,7 +53,7 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $quoteId = $this->getRequest()->getParam('quote_id');

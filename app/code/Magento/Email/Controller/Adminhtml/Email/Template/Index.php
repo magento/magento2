@@ -13,7 +13,7 @@ class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getQuery('ajax')) {
             $this->_forward('grid');

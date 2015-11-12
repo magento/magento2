@@ -13,7 +13,7 @@ class NewAction extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('edit');
     }

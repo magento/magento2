@@ -16,7 +16,7 @@ class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\R
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_customer.xml';

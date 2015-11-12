@@ -56,7 +56,7 @@ class ShippingSaved extends Address
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $filter = $this->filterBuilder->setField('parent_id')->setValue($this->_getCheckout()->getCustomer()->getId())
             ->setConditionType('eq')->create();

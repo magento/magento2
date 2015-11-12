@@ -163,7 +163,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithRuntimeException()
@@ -184,7 +184,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithException()
@@ -205,7 +205,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithoutData()
@@ -231,7 +231,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testSetCmsPageData()

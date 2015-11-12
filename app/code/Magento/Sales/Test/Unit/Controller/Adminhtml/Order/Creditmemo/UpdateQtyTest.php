@@ -221,7 +221,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Json',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -252,7 +252,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Json',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 
@@ -300,7 +300,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\Controller\Result\Raw',
-            $this->controller->executeInternal()
+            $this->controller->execute()
         );
     }
 }

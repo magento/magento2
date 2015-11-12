@@ -16,7 +16,7 @@ class Index extends \Magento\Rss\Controller\Index
      * @return void
      * @throws NotFoundException
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->_scopeConfig->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->_view->loadLayout();

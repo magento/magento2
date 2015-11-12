@@ -13,7 +13,7 @@ class SilentPost extends \Magento\Paypal\Controller\Payflow
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         if (isset($data['INVNUM'])) {

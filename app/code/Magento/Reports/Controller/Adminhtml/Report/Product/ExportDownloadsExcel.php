@@ -25,7 +25,7 @@ class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'products_downloads.xml';
         $content = $this->_view->getLayout()->createBlock(

@@ -12,7 +12,6 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
@@ -20,7 +19,7 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Fromcart extends Action\Action implements IndexInterface
+class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
@@ -78,7 +77,7 @@ class Fromcart extends Action\Action implements IndexInterface
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function executeInternal()
+    public function execute()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {

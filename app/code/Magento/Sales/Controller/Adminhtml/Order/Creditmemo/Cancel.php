@@ -40,7 +40,7 @@ class Cancel extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         $creditmemoId = $this->getRequest()->getParam('creditmemo_id');
         if ($creditmemoId) {

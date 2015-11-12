@@ -135,7 +135,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     {
         $this->_request->expects($this->once())->method('getPostValue')->will($this->returnValue([]));
         $this->_redirect->expects($this->once())->method('redirect');
-        $this->_controller->executeInternal();
+        $this->_controller->execute();
     }
 
     /**
@@ -157,7 +157,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_inlineTranslation->expects($this->once())
             ->method('suspend');
 
-        $this->_controller->executeInternal();
+        $this->_controller->execute();
     }
 
     public function testPostDataProvider()
@@ -224,6 +224,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_inlineTranslation->expects($this->once())
             ->method('suspend');
 
-        $this->_controller->executeInternal();
+        $this->_controller->execute();
     }
 }

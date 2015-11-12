@@ -13,7 +13,7 @@ class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         // set active menu and breadcrumbs
         $this->_view->loadLayout();

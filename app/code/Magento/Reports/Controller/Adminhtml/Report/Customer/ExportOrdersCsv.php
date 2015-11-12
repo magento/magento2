@@ -17,7 +17,7 @@ class ExportOrdersCsv extends \Magento\Reports\Controller\Adminhtml\Report\Custo
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'customers_orders.csv';

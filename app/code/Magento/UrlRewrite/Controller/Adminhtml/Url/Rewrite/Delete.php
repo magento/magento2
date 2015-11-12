@@ -13,7 +13,7 @@ class Delete extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->_getUrlRewrite()->getId()) {
             try {
