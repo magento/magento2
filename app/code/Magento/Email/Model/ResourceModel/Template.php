@@ -15,21 +15,13 @@ use Magento\Framework\Model\AbstractModel;
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
