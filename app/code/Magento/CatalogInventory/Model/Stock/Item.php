@@ -34,6 +34,8 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected $eventPrefix = 'cataloginventory_stock_item';
 
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Parameter name in event
      *
