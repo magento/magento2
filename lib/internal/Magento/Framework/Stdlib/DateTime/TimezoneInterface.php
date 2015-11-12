@@ -121,7 +121,7 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -130,7 +130,7 @@ interface TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
