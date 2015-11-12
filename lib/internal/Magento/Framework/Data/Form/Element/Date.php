@@ -113,7 +113,14 @@ class Date extends AbstractElement
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }
-        return $this->localeDate->formatDateTime($this->_value, null, null, null, null, $format);
+        return $this->localeDate->formatDateTime(
+            $this->_value,
+            null,
+            null,
+            null,
+            $this->_value->getTimezone(),
+            $format
+        );
     }
 
     /**
