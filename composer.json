@@ -1,21 +1,23 @@
 {
-  "name": "magento/module-amqp",
-  "description": "N/A",
-  "require": {
-    "php": "~5.5.0|~5.6.0|~7.0.0",
-    "magento/framework": "100.0.0",
-    "magento/framework-message-queue": "100.0.0",
-    "videlalvaro/php-amqplib": "2.5.*"
-  },
-  "type": "magento2-module",
-  "version": "100.0.0",
-  "license": [
-    "proprietary"
-  ],
-  "autoload": {
-    "files": [ "registration.php" ],
-    "psr-4": {
-      "Magento\\Amqp\\": ""
+    "name": "magento/module-amqp",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/framework": "100.0.*",
+        "magento/framework-message-queue": "100.0.*",
+        "videlalvaro/php-amqplib": "2.5.*"
+    },
+    "type": "magento2-module",
+    "version": "100.0.1",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Amqp\\": ""
+        }
     }
-  }
 }
