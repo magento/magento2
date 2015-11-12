@@ -408,7 +408,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getProductLinks')
             ->willReturn([$productLinkUpdate, $productLinkNew]);
 
-        $this->optionResourceMock->expects($this->once())->method('save')->with($optionMock)->willReturnSelf();
         $this->linkManagementMock->expects($this->once())
             ->method('addChild')
             ->with($productMock, $optionId, $productLinkNew);
