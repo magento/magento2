@@ -354,7 +354,7 @@
         </column>
         <column name="custom_root_template">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\PageLayout</item>
+                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\CustomLayout</item>
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
