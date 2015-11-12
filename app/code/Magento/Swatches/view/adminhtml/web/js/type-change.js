@@ -12,10 +12,10 @@ require([
             var $select = $(this),
                 value = $select.find('option:selected').val(),
                 enabledTypes = ['select', 'swatch_visual', 'swatch_text'],
-                message = 'This changes affect all related products';
+                message = $.mage.__('This changes affect all related products');
 
             // Check current type (allow only: select, swatch_visual, swatch_text)
-            if (enabledTypes.indexOf(value) < 0) {
+            if (!!~enabledTypes.indexOf(value)) {
                 return;
             }
 
