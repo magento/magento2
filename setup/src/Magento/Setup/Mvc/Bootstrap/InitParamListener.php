@@ -16,6 +16,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
@@ -38,6 +39,18 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
+
+    /**
+     * List of controllers which should be skipped from auth check
+     *
+     * @var array
+     */
+    private $controllersToSkip = [
+        'Magento\Setup\Controller\Session',
+        'Magento\Setup\Controller\Install',
+        'Magento\Setup\Controller\Success'
+
+    ];
 
     /**
      * {@inheritdoc}
@@ -80,10 +93,11 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $serviceManager->setService('Magento\Framework\App\Filesystem\DirectoryList', $directoryList);
         $serviceManager->setService('Magento\Framework\Filesystem', $this->createFilesystem($directoryList));
 
-        $eventManager = $application->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 1);
+        if (!($application->getRequest() instanceof Request)) {
+            $eventManager = $application->getEventManager();
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
+        }
     }
-
 
     /**
      * Check if user login
@@ -94,12 +108,11 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      */
     public function authPreDispatch($event)
     {
-        $controller = $event->getTarget();
-        if (
-            !$controller instanceof \Magento\Setup\Controller\Session &&
-            !$controller instanceof \Magento\Setup\Controller\Install &&
-            !$controller instanceof \Magento\Setup\Controller\Success
-        ) {
+        /** @var RouteMatch $routeMatch */
+        $routeMatch = $event->getRouteMatch();
+        $controller = $routeMatch->getParam('controller');
+
+        if (!in_array($controller, $this->controllersToSkip)) {
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
@@ -119,7 +132,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 );
 
                 if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                    $controller->plugin('redirect')->toUrl('index.php/session/unlogin');
+                    $response = $event->getResponse();
+                    $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
+                    $response->setStatusCode(302);
+
+                    $event->stopPropagation();
+                    return $response;
                 }
             }
         }
