@@ -9,9 +9,9 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
  * Class DateTimeTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
  *
  */
-class DateTimeTest extends \PHPUnit_Framework_TestCase
+class DatetimeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\DateTime */
+    /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime */
     protected $model;
 
     /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
@@ -59,7 +59,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Backend\Block\Widget\Grid\Column\Filter\DateTime',
+            'Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime',
             [
                 'mathRandom' => $this->mathRandomMock,
                 'localeResolver' => $this->localeResolverMock,
