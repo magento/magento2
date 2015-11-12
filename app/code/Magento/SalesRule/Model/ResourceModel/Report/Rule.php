@@ -28,6 +28,7 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory $createdatFactory
      * @param \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory $updatedatFactory
      * @param string $connectionName
@@ -38,6 +39,7 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory $createdatFactory,
         \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory $updatedatFactory,
         $connectionName = null
@@ -48,6 +50,7 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_createdatFactory = $createdatFactory;

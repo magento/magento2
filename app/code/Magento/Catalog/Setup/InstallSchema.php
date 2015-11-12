@@ -76,14 +76,14 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Creation Time'
             )
             ->addColumn(
                 'updated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Update Time'
             )
             ->addIndex(
@@ -686,14 +686,14 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Creation Time'
             )
             ->addColumn(
                 'updated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Update Time'
             )
             ->addColumn(
