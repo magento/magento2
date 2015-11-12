@@ -91,7 +91,8 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
                             'label' => 'Label',
                             'value' => 'Value'
                         ]
-                    ]
+                    ],
+                    'component' => 'Magento_Ui/js/grid/columns/column',
                 ],
             ],
             'context' => $this->context,
