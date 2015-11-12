@@ -54,6 +54,11 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Initialize repository
      */
     public function setUp()
@@ -80,6 +85,14 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getId')->willReturn(0);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->block = $this->getMockBuilder('Magento\Cms\Model\Block')->disableOriginalConstructor()->getMock();
         $this->blockData = $this->getMockBuilder('Magento\Cms\Api\Data\BlockInterface')
@@ -121,7 +134,8 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             $collectionFactory,
             $blockSearchResultFactory,
             $this->dataHelper,
-            $this->dataObjectProcessor
+            $this->dataObjectProcessor,
+            $this->storeManager
         );
     }
 

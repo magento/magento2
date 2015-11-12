@@ -174,17 +174,11 @@ class Request extends \Magento\Framework\DataObject
     private function getNonTaxableAmount(Order $order)
     {
         return [
-            'subtotal' => $this->_formatPrice(
-                $this->_formatPrice(
-                    $order->getPayment()->getBaseAmountAuthorized()
-                ) - $this->_formatPrice(
-                    $order->getBaseTaxAmount()
-                ) - $this->_formatPrice(
-                    $order->getBaseShippingAmount()
-                )
-            ),
+            'subtotal' => $this->_formatPrice($order->getBaseSubtotal()),
+            'total' => $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+            'discount' => $this->_formatPrice(abs($order->getBaseDiscountAmount()))
         ];
     }
 
@@ -273,7 +267,7 @@ class Request extends \Magento\Framework\DataObject
             'city' => $address->getCity(),
             'state' => $region ? $region : $address->getCity(),
             'zip' => $address->getPostcode(),
-            'country' => $address->getCountry(),
+            'country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
@@ -301,7 +295,7 @@ class Request extends \Magento\Framework\DataObject
             'billing_city' => $address->getCity(),
             'billing_state' => $region ? $region : $address->getCity(),
             'billing_zip' => $address->getPostcode(),
-            'billing_country' => $address->getCountry(),
+            'billing_country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
