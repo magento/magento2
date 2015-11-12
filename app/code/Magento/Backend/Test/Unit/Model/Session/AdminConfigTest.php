@@ -105,12 +105,13 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for setting session name for admin
-     *
+     * Test for setting session name and secure_cookie for admin
      */
-    public function testSetSessionNameByConstructor()
+    public function testSetSessionSettingsByConstructor()
     {
         $sessionName = 'admin';
+        $secureRequest = true;
+        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($secureRequest);
 
         $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()
@@ -136,5 +137,6 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertSame($sessionName, $adminConfig->getName());
+        $this->assertSame($secureRequest, $adminConfig->getCookieSecure());
     }
 }
