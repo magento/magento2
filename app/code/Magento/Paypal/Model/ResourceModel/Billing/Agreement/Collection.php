@@ -92,6 +92,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add field filter to collection
+     *
      * @param array|string $field
      * @param null|string|array $condition
      * @return $this
