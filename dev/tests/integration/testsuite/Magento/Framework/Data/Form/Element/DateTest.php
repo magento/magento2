@@ -42,9 +42,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $testTimestamp = strtotime('2014-05-18 12:08:16');
         $date = new \DateTime('@' . $testTimestamp);
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $timezone = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $date->setTimezone(new \DateTimeZone($timezone->getConfigTimezone()));
         return [
             [
                 [
