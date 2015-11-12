@@ -49,7 +49,8 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
             [
                 'button_label' => __($originalData['button_label']),
                 'html_id' => $element->getHtmlId(),
-                'ajax_url' => $this->_urlBuilder->getUrl('catalog/search_system_config_testconnection/ping')
+                'ajax_url' => $this->_urlBuilder->getUrl('catalog/search_system_config/testconnection'),
+                'field_mapping' => $this->escapeJsQuote(json_encode($this->_getFieldMapping()), '"')
             ]
         );
 
@@ -57,12 +58,12 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * Returns configuration fields in escaped JSON format required to perform the ping request
+     * Returns configuration fields required to perform the ping request
      *
-     * @return string
+     * @return array
      */
-    public function getFieldMapping()
+    protected function _getFieldMapping()
     {
-        return $this->escapeJsQuote(json_encode(['engine' => 'catalog_search_engine']), '"');
+        return ['engine' => 'catalog_search_engine'];
     }
 }

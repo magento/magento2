@@ -12,5 +12,5 @@ interface ClientInterface
      * 
      * @return bool
      */
-    public function validateConnectionParameters();
+    public function testConnection();
 }

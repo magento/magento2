@@ -4,18 +4,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
+namespace Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config;
 
 use Magento\Backend\App\Action;
-use Magento\AdvancedSearch\Model\Client\ClientPool;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\Controller\Result\JsonFactory;
 
-class Ping extends \Magento\Backend\App\Action
+class TestConnection extends Action
 {
     /**
-     * @var ClientPool
+     * @var ClientResolver
      */
-    private $clientPool;
+    private $clientResolver;
 
     /**
      * @var JsonFactory
@@ -24,16 +24,16 @@ class Ping extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context    $context
-     * @param ClientPool        $clientPool
+     * @param ClientResolver    $clientResolver
      * @param JsonFactory       $resultJsonFactory
      */
     public function __construct(
         Action\Context $context,
-        ClientPool $clientPool,
+        ClientResolver $clientResolver,
         JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
-        $this->clientPool = $clientPool;
+        $this->clientResolver = $clientResolver;
         $this->resultJsonFactory = $resultJsonFactory;
     }
 
@@ -56,7 +56,7 @@ class Ping extends \Magento\Backend\App\Action
                     __('Missing search engine parameter.')
                 );
             }
-            $response = $this->clientPool->create($options['engine'], $options)->validateConnectionParameters();
+            $response = $this->clientResolver->create($options['engine'], $options)->testConnection();
             if ($response) {
                 $result['success'] = true;
             }
