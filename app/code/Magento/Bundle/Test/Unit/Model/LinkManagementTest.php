@@ -868,7 +868,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
 
         $bundle->expects($this->once())->method('dropAllUnneededSelections')->with(3, []);
-        $bundle->expects($this->once())->method('saveProductRelations')->with(3, []);
+        $bundle->expects($this->once())->method('removeProductRelations')->with(3, []);
         //Params come in lowercase to method
         $this->assertTrue($this->model->removeChild($productSku, $optionId, $childSku));
     }
