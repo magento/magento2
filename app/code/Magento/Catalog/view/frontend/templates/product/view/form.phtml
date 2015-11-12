@@ -21,6 +21,7 @@
         <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
         <input type="hidden" name="selected_configurable_option" value="" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
+        <?php echo $block->getBlockHtml('formkey')?>
         <?php echo $block->getChildHtml('form_top'); ?>
         <?php if (!$block->hasOptions()):?>
             <?php echo $block->getChildHtml('product_info_form_content'); ?>
