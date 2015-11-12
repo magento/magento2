@@ -103,6 +103,8 @@ class Webapi extends ProductWebapi implements ConfigurableProductInterface
         $configurableAttributesData->generateProducts();
         foreach ($configurableAttributesData->getProducts() as $product) {
             $associatedProductIds[] = $product->getId();
+            $this->fields['product']['attribute_set_id'] = $product->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()->getAttributeSetId();
         }
 
         return $associatedProductIds;
