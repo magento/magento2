@@ -365,10 +365,10 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         while (preg_match($regexp, $text, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $trArr[] = json_encode(
                 [
-                    'shown' => htmlspecialchars($matches[1][0]),
-                    'translated' => htmlspecialchars($matches[2][0]),
-                    'original' => $matches[3][0],
-                    'location' => htmlspecialchars(call_user_func($locationCallback, $matches, $options)),
+                    'shown' => htmlspecialchars_decode($matches[1][0]),
+                    'translated' => htmlspecialchars_decode($matches[2][0]),
+                    'original' => htmlspecialchars_decode($matches[3][0]),
+                    'location' => htmlspecialchars_decode(call_user_func($locationCallback, $matches, $options)),
                 ]
             );
             $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
