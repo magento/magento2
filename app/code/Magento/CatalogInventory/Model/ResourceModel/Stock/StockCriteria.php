@@ -27,7 +27,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
      */
     public function setScopeFilter($scope)
     {
-        $this->data['scope_filter'] = $scope;
+        $this->data['website_filter'] = $scope;
         return true;
     }
 
