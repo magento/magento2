@@ -83,6 +83,8 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getTotals()
     {
+        $this->getQuote()->setTotalsCollectedFlag(false);
+        $this->getQuote()->collectTotals();
         return $this->getQuote()->getTotals();
     }
 
