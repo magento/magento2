@@ -105,6 +105,7 @@ class EavAttribute
      */
     protected function setProperOptionsArray(Attribute $attribute)
     {
+        $canReplace = false;
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $canReplace = true;
             $defaultValue = $attribute->getData('defaultvisual');
