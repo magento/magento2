@@ -235,7 +235,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -244,13 +244,17 @@ class Timezone implements TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
         $timezone = null,
         $pattern = null
     ) {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
+        }
+
         if ($timezone === null) {
             if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
                 || $date->getTimezone()->getName() == '+00:00'
