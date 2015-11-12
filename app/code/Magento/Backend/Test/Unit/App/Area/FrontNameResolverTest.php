@@ -101,13 +101,13 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
                     [
                         [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                         [
-                            FrontNameResolver::XML_URL_USE_CUSTOM_ADMIN,
+                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
                             ScopeInterface::SCOPE_STORE,
                             null,
                             $useCustomAdminUrl
                         ],
                         [
-                            FrontNameResolver::XML_URL_CUSTOM_ADMIN,
+                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
                             ScopeInterface::SCOPE_STORE,
                             null,
                             $customAdminUrl
