@@ -37,6 +37,8 @@
                 type="Magento\Customer\Model\Metadata\CustomerCachedMetadata" />
     <preference for="Magento\Customer\Api\AddressMetadataInterface"
                 type="Magento\Customer\Model\Metadata\AddressCachedMetadata" />
+    <preference for="Magento\Customer\Api\CustomerManagementInterface"
+                type="Magento\Customer\Model\CustomerManagement" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>

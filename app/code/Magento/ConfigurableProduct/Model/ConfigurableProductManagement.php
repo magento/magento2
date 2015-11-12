@@ -4,8 +4,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Model;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory;
 
 class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface
 {
@@ -20,25 +24,51 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     private $productVariationBuilder;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $productsFactory;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param ProductVariationsBuilder $productVariationBuilder
+     * @param CollectionFactory $productsFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        ProductVariationsBuilder $productVariationBuilder
+        ProductVariationsBuilder $productVariationBuilder,
+        CollectionFactory $productsFactory
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->productVariationBuilder = $productVariationBuilder;
+        $this->productsFactory = $productsFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateVariation(\Magento\Catalog\Api\Data\ProductInterface $product, $options)
+    public function generateVariation(ProductInterface $product, $options)
     {
         $attributes = $this->getAttributesForMatrix($options);
         $products = $this->productVariationBuilder->create($product, $attributes);
         return $products;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCount($status = null)
+    {
+        $products = $this->productsFactory->create();
+        /** @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection $products */
+        switch ($status) {
+            case Status::STATUS_ENABLED:
+                $products->addAttributeToFilter('status', Status::STATUS_ENABLED);
+                break;
+            case Status::STATUS_DISABLED:
+                $products->addAttributeToFilter('status', Status::STATUS_DISABLED);
+                break;
+        }
+        return $products->getSize();
     }
 
     /**

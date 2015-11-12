@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="adminhtml_cache_flush_system">
+        <observer name="newrelicreporting_observer_report_system_cache_flush" instance="Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlush" method="execute" />
+        <observer name="newrelicreporting_newrelic_report_system_cache_flush" instance="Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlushToNewRelic" method="execute" />
+    </event>
+    <event name="controller_action_predispatch_adminhtml">
+        <observer name="newrelicreporting_observer_report_concurrent_admins" instance="Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdmins" method="execute" />
+        <observer name="newrelicreporting_newrelic_report_oncurrent_admins" instance="Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdminsToNewRelic" method="execute" />
+    </event>
+    <event name="catalog_product_save_before">
+        <observer name="newrelicreporting_observer_report_product_save" instance="Magento\NewRelicReporting\Model\Observer\ReportProductSaved" method="execute" />
+        <observer name="newrelicreporting_newrelic_report_product_save" instance="Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic" method="execute" />
+    </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="newrelicreporting_observer_report_product_delete" instance="Magento\NewRelicReporting\Model\Observer\ReportProductDeleted" method="execute" />
+        <observer name="newrelicreporting_newrelic_report_product_delete" instance="Magento\NewRelicReporting\Model\Observer\ReportProductDeletedToNewRelic" method="execute" />
+    </event>
+    <event name="admin_system_config_changed_section_newrelicreporting">
+        <observer name="newrelicreporting_observer_check_config" instance="Magento\NewRelicReporting\Model\Observer\CheckConfig" method="execute"/>
+    </event>
+</config>

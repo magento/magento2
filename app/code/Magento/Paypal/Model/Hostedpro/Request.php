@@ -161,17 +161,11 @@ class Request extends \Magento\Framework\Object
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
         $request = [
-            'subtotal' => $this->_formatPrice(
-                $this->_formatPrice(
-                    $order->getPayment()->getBaseAmountAuthorized()
-                ) - $this->_formatPrice(
-                    $order->getBaseTaxAmount()
-                ) - $this->_formatPrice(
-                    $order->getBaseShippingAmount()
-                )
-            ),
+            'subtotal' => $this->_formatPrice($order->getBaseSubtotal()),
+            'total' => $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+            'discount' => $this->_formatPrice(abs($order->getBaseDiscountAmount())),
             'invoice' => $order->getIncrementId(),
             'address_override' => 'true',
             'currency_code' => $order->getBaseCurrencyCode(),
@@ -207,7 +201,7 @@ class Request extends \Magento\Framework\Object
             'city' => $address->getCity(),
             'state' => $region ? $region : $address->getCity(),
             'zip' => $address->getPostcode(),
-            'country' => $address->getCountry(),
+            'country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
@@ -235,7 +229,7 @@ class Request extends \Magento\Framework\Object
             'billing_city' => $address->getCity(),
             'billing_state' => $region ? $region : $address->getCity(),
             'billing_zip' => $address->getPostcode(),
-            'billing_country' => $address->getCountry(),
+            'billing_country' => $address->getCountryId(),
         ];
 
         // convert streets to tow lines format
