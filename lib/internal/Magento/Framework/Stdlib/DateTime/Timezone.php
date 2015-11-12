@@ -244,7 +244,7 @@ class Timezone implements TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
