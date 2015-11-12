@@ -199,9 +199,8 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      */
     protected function _convertDate($date)
     {
-        $adminTimeZone = new \DateTimeZone(
-            $this->_localeDate->getConfigTimezone()
-        );
+        $timezone = $this->getColumn()->getTimezone() !== false ? $this->_localeDate->getConfigTimezone() : 'UTC';
+        $adminTimeZone = new \DateTimeZone($timezone);
         $formatter = new \IntlDateFormatter(
             $this->localeResolver->getLocale(),
             \IntlDateFormatter::SHORT,
