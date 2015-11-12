@@ -86,7 +86,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                 if (empty($customerGroupCode)) {
                     $customerGroupCode = null;
                 }
-                $customerGroup->setCode($customerGroupCode);
+                if (!is_null($customerGroupCode)) {
+                    $customerGroup->setCode($customerGroupCode);
+                }
                 $customerGroup->setTaxClassId($taxClass);
 
                 $this->groupRepository->save($customerGroup);
