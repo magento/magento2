@@ -114,7 +114,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
         } else {
             $this->setUserValue(null);
-            return $this;
         }
 
         return $this;
@@ -342,6 +341,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         $requestOptions = $this->getRequest()->getOptions();
         if (!isset($requestOptions[$this->getOption()->getId()])) {
+            $requestOptions[$this->getOption()->getId()] = [];
+        }
+        if (!is_array($requestOptions[$this->getOption()->getId()])) {
             $requestOptions[$this->getOption()->getId()] = [];
         }
         $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;
