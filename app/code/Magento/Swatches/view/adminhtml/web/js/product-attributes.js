@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
+    'jquery',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/prompt',
-    "uiRegistry",
-    "collapsable"
+    'uiRegistry',
+    'collapsable'
 ], function ($, alert, prompt, rg) {
     'use strict';
 
@@ -37,19 +37,26 @@ define([
                     $('#product_attribute_tabs_front').closest('li') : $('#front_fieldset-wrapper'),
                 selectFields: ['select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
 
-                toggleApplyVisibility: function(select) {
-                    if ($(select).val() == 1) {
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                toggleApplyVisibility: function (select) {
+                    if ($(select).val() === 1) {
                         $(select).next('select').removeClass('no-display');
                         $(select).next('select').removeClass('ignore-validate');
                     } else {
                         $(select).next('select').addClass('no-display');
                         $(select).next('select').addClass('ignore-validate');
-                        $(select).next('select option:selected').each(function(){
+                        $(select).next('select option:selected').each(function () {
                             this.selected = false;
                         });
                     }
                 },
-                checkOptionsPanelVisibility: function() {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                checkOptionsPanelVisibility: function () {
                     var selectOptionsPanel = $('#manage-options-panel'),
                         visualOptionsPanel = $('#swatch-visual-options-panel'),
                         textOptionsPanel = $('#swatch-text-options-panel');
@@ -62,18 +69,25 @@ define([
                         case 'swatch_visual':
                             this._showPanel(visualOptionsPanel);
                             break;
+
                         case 'swatch_text':
                             this._showPanel(textOptionsPanel);
                             break;
+
                         case 'select':
                         case 'multiselect':
                             this._showPanel(selectOptionsPanel);
                             break;
                     }
                 },
-                bindAttributeInputType: function() {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                bindAttributeInputType: function () {
                     this.checkOptionsPanelVisibility();
                     this.switchDefaultValueField();
+
                     if ($.inArray(this.frontendInput.val(), this.selectFields) >= 0) {
                         this._enable(this.isFilterable);
                         this._enable(this.isFilterableInSearch);
@@ -84,24 +98,24 @@ define([
                         this._disable(this.isFilterableInSearch);
                     }
 
-                    if (this.frontendInput.is(":visible")
-                        && (this.frontendInput.val() == 'swatch_text' || this.frontendInput.val() == 'swatch_visual')
+                    if (this.frontendInput.is(':visible') &&
+                        (this.frontendInput.val() === 'swatch_text' || this.frontendInput.val() === 'swatch_visual')
                     ) {
                         this.usedInProductListing.val(1);
                         this.isVisibleOnFront.val(1);
                         this.updateProductPreviewImage.val(1);
                     }
 
-                    if (this.frontendInput.val() == 'multiselect'
-                        || this.frontendInput.val() == 'gallery'
-                        || this.frontendInput.val() == 'textarea'
+                    if (this.frontendInput.val() === 'multiselect' ||
+                        this.frontendInput.val() === 'gallery' ||
+                        this.frontendInput.val() === 'textarea'
                     ) {
                         this._disable(this.usedForSortBy);
                     } else {
                         this._enable(this.usedForSortBy);
                     }
 
-                    if (this.frontendInput.val() == 'swatch_text') {
+                    if (this.frontendInput.val() === 'swatch_text') {
                         $('.swatch-text-field-0').addClass('required-option');
                     } else {
                         $('.swatch-text-field-0').removeClass('required-option');
@@ -113,16 +127,19 @@ define([
                     switch (this.frontendInput.val()) {
                         case 'textarea':
                             this.setRowVisibility(this.isWysiwygEnabled, true);
-                            if (this.isWysiwygEnabled.val() == '0') {
+
+                            if (this.isWysiwygEnabled.val() === '0') {
                                 this._enable(this.isHtmlAllowedOnFront);
                             }
                             this.frontendClass.val('');
                             this._disable(this.frontendClass);
                             break;
+
                         case 'text':
                             this.setRowVisibility(this.isHtmlAllowedOnFront, true);
                             this._enable(this.frontendClass);
                             break;
+
                         case 'select':
                         case 'multiselect':
                             this.setRowVisibility(this.isHtmlAllowedOnFront, true);
@@ -136,21 +153,28 @@ define([
 
                     this.switchIsFilterable();
                 },
-                switchIsFilterable: function() {
-                    if (this.isFilterable.selectedIndex == 0) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                switchIsFilterable: function () {
+                    if (this.isFilterable.selectedIndex === 0) {
                         this._disable(this.position);
                     } else {
                         this._enable(this.position);
                     }
                 },
-                switchDefaultValueField: function() {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                switchDefaultValueField: function () {
                     var currentValue = this.frontendInput.val(),
                         defaultValueTextVisibility = false,
                         defaultValueTextareaVisibility = false,
                         defaultValueDateVisibility = false,
                         defaultValueYesnoVisibility = false,
                         scopeVisibility = true,
-                        /* swatch attributes */
                         useProductImageForSwatch = false,
                         defaultValueUpdateImage = false,
                         optionDefaultInputType = '',
@@ -164,29 +188,37 @@ define([
                         case 'select':
                             optionDefaultInputType = 'radio';
                             break;
+
                         case 'multiselect':
                             optionDefaultInputType = 'checkbox';
                             break;
+
                         case 'date':
                             defaultValueDateVisibility = true;
                             break;
+
                         case 'boolean':
                             defaultValueYesnoVisibility = true;
                             break;
+
                         case 'textarea':
                             defaultValueTextareaVisibility = true;
                             break;
+
                         case 'media_image':
                             defaultValueTextVisibility = false;
                             break;
+
                         case 'price':
                             scopeVisibility = false;
                             break;
+
                         case 'swatch_visual':
                             useProductImageForSwatch = true;
                             defaultValueUpdateImage = true;
                             defaultValueTextVisibility = false;
                             break;
+
                         case 'swatch_text':
                             useProductImageForSwatch = false;
                             defaultValueUpdateImage = true;
@@ -200,23 +232,25 @@ define([
                     delete(optionConfig.hiddenFields['swatch_visual']);
                     delete(optionConfig.hiddenFields['swatch_text']);
 
-                    if (currentValue == 'media_image') {
+                    if (currentValue === 'media_image') {
                         this.tabsFront.hide();
                         this.setRowVisibility(this.isRequired, false);
                         this.setRowVisibility(this.isUnique, false);
                         this.setRowVisibility(this.frontendClass, false);
                     } else if (optionConfig.hiddenFields[currentValue]) {
-                        $.each(optionConfig.hiddenFields[currentValue], function(key, option) {
+                        $.each(optionConfig.hiddenFields[currentValue], function (key, option) {
                             switch (option) {
                                 case '_front_fieldset':
                                     thing.tabsFront.hide();
                                     break;
+
                                 case '_default_value':
                                     defaultValueTextVisibility = false;
                                     defaultValueTextareaVisibility = false;
                                     defaultValueDateVisibility = false;
                                     defaultValueYesnoVisibility = false;
                                     break;
+
                                 case '_scope':
                                     scopeVisibility = false;
                                     break;
@@ -239,16 +273,24 @@ define([
                     this.setRowVisibility(this.useProductImageForSwatch, useProductImageForSwatch);
                     this.setRowVisibility(this.updateProductPreviewImage, defaultValueUpdateImage);
 
-                    $("input[name='default[]']").each(function() {
+                    $('input[name=\'default[]\']').each(function () {
                         $(this).attr('type', optionDefaultInputType);
                     });
                 },
-                showDefaultRows: function() {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                showDefaultRows: function () {
                     this.setRowVisibility(this.isRequired, true);
                     this.setRowVisibility(this.isUnique, true);
                     this.setRowVisibility(this.frontendClass, true);
                 },
-                setRowVisibility: function(el, isVisible) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                setRowVisibility: function (el, isVisible) {
                     if (isVisible) {
                         el.show();
                         el.closest('.field').show();
@@ -257,32 +299,60 @@ define([
                         el.closest('.field').hide();
                     }
                 },
-                _disable: function(el) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                _disable: function (el) {
                     el.attr('disabled', 'disabled');
                 },
-                _enable: function(el) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                _enable: function (el) {
                     if (!el.attr('readonly')) {
                         el.removeAttr('disabled');
                     }
                 },
-                _showPanel: function(el) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                _showPanel: function (el) {
                     el.closest('.fieldset').show();
                     this._render(el.attr('id'));
                 },
-                _hidePanel: function(el) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                _hidePanel: function (el) {
                     el.closest('.fieldset').hide();
                 },
-                _render: function(id) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                _render: function (id) {
                     rg.get(id, function () {
                         $('#' + id).trigger('render');
                     });
                 },
-                saveAttributeInNewSet: function(promptMessage) {
+
+                /**
+                 * @this {swatchProductAttributes}
+                 */
+                saveAttributeInNewSet: function (promptMessage) {
                     var newAttributeSetName;
 
                     prompt({
                         content: promptMessage,
                         actions: {
+
+                            /**
+                             * @this {actions}
+                             */
                             confirm: function (val) {
                                 newAttributeSetName = val;
 
@@ -291,6 +361,7 @@ define([
                                 }
 
                                 var rules = ['required-entry', 'validate-no-html-tags'];
+
                                 for (var i = 0; i < rules.length; i++) {
                                     if (!$.validator.methods[rules[i]](newAttributeSetName)) {
                                         alert({
@@ -302,6 +373,7 @@ define([
                                 }
 
                                 var newAttributeSetNameInputId = $('#new_attribute_set_name');
+
                                 if (newAttributeSetNameInputId.length) {
                                     newAttributeSetNameInputId.val(newAttributeSetName);
                                 } else {
@@ -321,11 +393,11 @@ define([
                 }
             };
 
-        $(function() {
-            $('#frontend_input').bind('change', function() {
+        $(function () {
+            $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
             });
-            $('#is_filterable').bind('change', function() {
+            $('#is_filterable').bind('change', function () {
                 swatchProductAttributes.switchIsFilterable();
             });
 
@@ -339,5 +411,5 @@ define([
 
         window.saveAttributeInNewSet = swatchProductAttributes.saveAttributeInNewSet;
         window.toggleApplyVisibility = swatchProductAttributes.toggleApplyVisibility;
-    }
+    };
 });
