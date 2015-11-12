@@ -106,7 +106,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        if (!isset($this->instances[$categoryId])) {
+        $cacheKey = null !== $storeId ? $storeId : 'all';
+        if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
             if (null !== $storeId) {
@@ -116,9 +117,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             if (!$category->getId()) {
                 throw NoSuchEntityException::singleField('id', $categoryId);
             }
-            $this->instances[$categoryId] = $category;
+            $this->instances[$categoryId][$cacheKey] = $category;
         }
-        return $this->instances[$categoryId];
+        return $this->instances[$categoryId][$cacheKey];
     }
 
     /**

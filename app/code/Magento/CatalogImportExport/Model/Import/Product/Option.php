@@ -300,7 +300,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_colIteratorFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $dateTime;
 
@@ -314,7 +314,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -331,7 +331,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
@@ -1432,7 +1432,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             'entity_id' => $productId,
             'has_options' => 1,
             'required_options' => 0,
-            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => $this->dateTime->date(null, null, false)->format('Y-m-d H:i:s'),
         ];
 
         if (!empty($rowData[self::COLUMN_IS_REQUIRED])) {
