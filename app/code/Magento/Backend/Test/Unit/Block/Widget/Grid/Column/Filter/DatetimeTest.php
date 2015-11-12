@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
+
 /**
  * Class DateTimeTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
  *
@@ -95,6 +96,6 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
 
         $output = $this->model->getHtml();
         $this->assertContains('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
-        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp() , $output);
+        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
     }
 }

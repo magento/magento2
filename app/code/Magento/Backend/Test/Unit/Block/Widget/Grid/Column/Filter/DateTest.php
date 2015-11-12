@@ -96,6 +96,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         $output = $this->model->getHtml();
         $this->assertContains('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
-        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp() , $output);
+        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
     }
 }
