@@ -121,8 +121,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $bogusProductId = $this->getDifferent($originalProductId);
         $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_PRODUCT_ID] = $bogusProductId;
 
-        $bogusWebsiteId = $this->getDifferent($originalWebsiteId);
-
         $response = $this->saveProduct($response);
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
@@ -131,8 +129,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $returnedProductId = $stockItemData[self::KEY_PRODUCT_ID];
         $this->assertEquals($originalProductId, $returnedProductId);
-
-        $this->assertEquals($originalWebsiteId, $returnedWebsiteId);
 
         // delete the product; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
