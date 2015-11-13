@@ -5,19 +5,22 @@
  */
 namespace Magento\AdvancedSearch\Model\Client;
 
+use \Magento\Framework\ObjectManagerInterface;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
+
 class ClientResolver
 {
     /**
      * Scope configuration
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -49,15 +52,16 @@ class ClientResolver
 
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
+     * @param ScopeConfigInterface $scopeConfig,
      * @param array $clientFactories
      * @param array $clientOptions
      * @param string $path
      * @param string scope
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ObjectManagerInterface $objectManager,
+        ScopeConfigInterface $scopeConfig,
         array $clientFactories,
         array $clientOptions,
         $path,
@@ -81,7 +85,7 @@ class ClientResolver
      *
      * @param string $engine
      * @param array $data
-     * @return \Magento\AdvancedSearch\Model\Client\ClientInterface
+     * @return ClientInterface
      */
     public function create($engine = '', array $data = [])
     {
