@@ -283,6 +283,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'small_image_label',
         'thumbnail_image',
         'thumbnail_image_label',
+        'swatch_image',
+        'swatch_image_label',
         'created_at',
         'updated_at',
         'new_from_date',
@@ -872,6 +874,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $attrValue = $this->_attributeValues[$code][$attrValue];
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
+
+                    if ($this->_attributeTypes[$code] === 'datetime') {
+                        $attrValue = $this->_localeDate->formatDateTime(
+                            new \DateTime($attrValue),
+                            \IntlDateFormatter::SHORT,
+                            \IntlDateFormatter::SHORT
+                        );
+                    }
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])

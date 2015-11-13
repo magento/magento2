@@ -287,11 +287,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
-            } elseif (isset($productData['store_id'])
-                && !empty($productData['store_id'])
-                && $this->storeManager->getStore($productData['store_id'])
-            ) {
-                $product->setWebsiteIds([$this->storeManager->getStore($productData['store_id'])->getWebsiteId()]);
             }
         } else {
             unset($this->instances[$productData['sku']]);
@@ -301,8 +296,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
+        $this->assignProductToWebsites($product);
 
         return $product;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
+    {
+        if (!$this->storeManager->hasSingleStore()) {
+
+            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+                $websiteIds = array_keys($this->storeManager->getWebsites());
+            } else {
+                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
+            }
+
+            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        }
     }
 
     /**
@@ -563,6 +577,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productLinks = $product->getProductLinks();
         }
 
+        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
         if (isset($productDataArray['options'])) {

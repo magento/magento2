@@ -82,6 +82,12 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->setupDirectory('testSkeleton');
 
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManagerProvider
+            ->expects($this->any())
+            ->method('get')
+            ->willReturn($this->objectManager);
+
         /** @var \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache */
         $updatePackagesCache = $this->objectManager->create(
             'Magento\Setup\Model\UpdatePackagesCache',
@@ -91,8 +97,8 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
                     $this->directoryList
                 ),
                 'filesystem' => $this->filesystem,
-                'dateTime' => $this->objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime'),
-                'composerInformation' => $this->composerInformation
+                'composerInformation' => $this->composerInformation,
+                'objectManagerProvider' => $objectManagerProvider,
             ]
         );
 

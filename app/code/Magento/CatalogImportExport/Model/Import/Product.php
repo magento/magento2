@@ -363,7 +363,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var string[]
      */
-    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail'];
+    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail', 'swatch_image'];
 
     /**
      * Permanent entity columns.
@@ -1566,8 +1566,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $storeIds = [0];
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = (new \DateTime())->setTimestamp(strtotime($attrValue));
-                        $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
+                        $attrValue = $this->dateTime->gmDate(
+                            'Y-m-d H:i:s',
+                            $this->_localeDate->date($attrValue)->getTimestamp()
+                        );
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());
@@ -1943,7 +1945,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $row['product_id'] = $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['entity_id'];
                 $productIdsToReindex[] = $row['product_id'];
 
-                $row['website_id'] = $this->stockConfiguration->getDefaultWebsiteId();
+                $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
                 $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
                 $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
@@ -1962,8 +1964,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $stockItemDo->setData($row);
                     $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                     if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->_localeDate->date(null, null, false)
-                            ->format('Y-m-d H:i:s');
+                        $row['low_stock_date'] = $this->dateTime->gmDate(
+                            'Y-m-d H:i:s',
+                            (new \DateTime())->getTimestamp()
+                        );
                     }
                     $row['stock_status_changed_auto'] =
                         (int) !$this->stockStateProvider->verifyStock($stockItemDo);
@@ -2110,7 +2114,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $rowScope = $this->getRowScope($rowData);
 
-        // BEHAVIOR_DELETE use specific validation logic
+        // BEHAVIOR_DELETE and BEHAVIOR_REPLACE use specific validation logic
+        if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
+            if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$rowData[self::COL_SKU]])) {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                return false;
+            }
+        }
         if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$rowData[self::COL_SKU]])) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
