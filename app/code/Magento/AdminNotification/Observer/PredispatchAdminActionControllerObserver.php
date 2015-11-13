@@ -12,7 +12,7 @@ use Magento\Framework\Event\ObserverInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class PredispathAdminActionControllerObserver implements ObserverInterface
+class PredispatchAdminActionControllerObserver implements ObserverInterface
 {
     /**
      * @var \Magento\AdminNotification\Model\FeedFactory
