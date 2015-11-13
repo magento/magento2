@@ -55,16 +55,42 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeDispatch()
     {
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme = $this->getMock(
+            'Magento\Theme\Model\Theme',
+            [
+                'setParentId',
+                'getArea',
+                'getThemePath',
+                'getParentTheme',
+                'getId',
+                'getFullPath',
+                'toArray',
+                'addData',
+                'save',
+            ],
+            [],
+            '',
+            false
+        );
         $this->appState->expects($this->once())->method('getMode')->willReturn('default');
         $this->themeRegistration->expects($this->once())->method('register');
         $this->themeCollection->expects($this->once())->method('loadData')->willReturn([$theme]);
         $theme->expects($this->once())->method('getArea')->willReturn('frontend');
         $theme->expects($this->once())->method('getThemePath')->willReturn('Magento/luma');
-        $this->themeLoader->expects($this->once())
+        $theme->expects($this->exactly(2))->method('getParentTheme')->willReturnSelf();
+        $theme->expects($this->once())->method('getId')->willReturn(1);
+        $theme->expects($this->once())->method('getFullPath')->willReturn('frontend/Magento/blank');
+        $theme->expects($this->once())->method('setParentId')->with(1);
+        $this->themeLoader->expects($this->exactly(2))
             ->method('getThemeByFullPath')
-            ->with('frontend/Magento/luma')
-            ->willReturn($theme);
+            ->withConsecutive(
+                ['frontend/Magento/blank'],
+                ['frontend/Magento/luma']
+            )
+            ->will($this->onConsecutiveCalls(
+                $theme,
+                $theme
+            ));
         $theme->expects($this->once())
             ->method('toArray')
             ->willReturn([

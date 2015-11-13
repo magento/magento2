@@ -89,6 +89,13 @@ class Registration
         $themesData = $this->themeCollection->loadData();
         /** @var \Magento\Theme\Model\Theme $themeData */
         foreach ($themesData as $themeData) {
+            if ($themeData->getParentTheme()) {
+                $parentTheme = $this->themeLoader->getThemeByFullPath(
+                    $themeData->getParentTheme()->getFullPath()
+                );
+                $themeData->setParentId($parentTheme->getId());
+            }
+
             /** @var \Magento\Theme\Model\Theme $theme */
             $theme = $this->themeLoader->getThemeByFullPath(
                 $themeData->getArea()
