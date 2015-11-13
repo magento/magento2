@@ -76,7 +76,8 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->willreturn($this->shippingAddressMock);
         $this->sessionQuoteMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->totals = $this->helperManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Totals', ['sessionQuote' => $this->sessionQuoteMock]
+            'Magento\Sales\Block\Adminhtml\Order\Create\Totals',
+            ['sessionQuote' => $this->sessionQuoteMock]
         );
     }
 
