@@ -10,7 +10,13 @@ define([
 
     return {
 
-        $weight: $('#weight'),
+        /**
+         * Get weight
+         * @returns {*|jQuery|HTMLElement}
+         */
+        $weight: function () {
+            return $('#weight');
+        },
 
         /**
          * Weight Switcher
@@ -25,21 +31,21 @@ define([
          * @returns {*}
          */
         isLocked: function () {
-            return this.$weight.is('[data-locked]');
+            return this.$weight().is('[data-locked]');
         },
 
         /**
          * Disabled
          */
         disabled: function () {
-            this.$weight.addClass('ignore-validate').prop('disabled', true);
+            this.$weight().addClass('ignore-validate').prop('disabled', true);
         },
 
         /**
          * Enabled
          */
         enabled: function () {
-            this.$weight.removeClass('ignore-validate').prop('disabled', false);
+            this.$weight().removeClass('ignore-validate').prop('disabled', false);
         },
 
         /**
@@ -54,7 +60,7 @@ define([
          * Hide weight switcher
          */
         hideWeightSwitcher: function () {
-            this.$weightSwitcher.hide();
+            this.$weightSwitcher().hide();
         },
 
         /**
@@ -62,7 +68,7 @@ define([
          * @returns {*}
          */
         hasWeightSwither: function () {
-            return this.$weightSwitcher.is(':visible');
+            return this.$weightSwitcher().is(':visible');
         },
 
         /**
@@ -70,7 +76,7 @@ define([
          * @returns {Bool}
          */
         productHasWeightBySwitcher: function () {
-            return $('input:checked', this.$weightSwitcher).val() === '1';
+            return $('input:checked', this.$weightSwitcher()).val() === '1';
         },
 
         /**
@@ -80,7 +86,7 @@ define([
         change: function (data) {
             var value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
 
-            $('input[value=' + value + ']', this.$weightSwitcher).prop('checked', true);
+            $('input[value=' + value + ']', this.$weightSwitcher()).prop('checked', true);
         },
 
         /**
@@ -98,7 +104,7 @@ define([
          * Bind all
          */
         bindAll: function () {
-            this.$weightSwitcher.find('input').on('change', this.switchWeight.bind(this));
+            this.$weightSwitcher().find('input').on('change', this.switchWeight.bind(this));
         }
     };
 });
