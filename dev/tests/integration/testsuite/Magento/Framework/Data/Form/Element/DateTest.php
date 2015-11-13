@@ -41,6 +41,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         $testTimestamp = strtotime('2014-05-18 12:08:16');
+        $date = new \DateTime('@' . $testTimestamp);
         return [
             [
                 [
@@ -48,21 +49,21 @@ class DateTest extends \PHPUnit_Framework_TestCase
                     'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                date('m/j/y g:i A', $testTimestamp),
+                $date->format('m/j/y g:i A'),
             ],
             [
                 [
                     'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                date('g:i A', $testTimestamp)
+                $date->format('g:i A')
             ],
             [
                 [
                     'date_format' => 'MM/d/yy',
                     'value' => $testTimestamp,
                 ],
-                date('m/j/y', $testTimestamp)
+                $date->format('m/j/y')
             ]
         ];
     }
