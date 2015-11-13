@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
@@ -14,13 +13,6 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
  */
 class Elasticsearch implements ClientInterface
 {
-    /**#@+
-     * Text flags for Elasticsearch ping statuses
-     */
-    const ELASTICSEARCH_PING_STATUS_OK      = 'OK';
-    const ELASTICSEARCH_PING_STATUS_ERROR   = 'ERROR';
-    /**#@-*/
-
     /**
      * Elasticsearch Client instance
      *
@@ -32,6 +24,7 @@ class Elasticsearch implements ClientInterface
      * @var array
      */
     protected $clientOptions;
+
 
     /**
      * Initialize Elasticsearch Client
@@ -60,20 +53,29 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Ping the elasticseach client
+     * Ping the Elasticsearch client
      *
-     * @return array
+     * @return bool
      */
     public function ping()
     {
-        $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_ERROR];
-        try {
-            if ($this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]])) {
-                $pingStatus = ['status' => self::ELASTICSEARCH_PING_STATUS_OK];
-            }
-        } catch (NoNodesAvailableException $e) {
+        return $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
+    }
+
+    /**
+     * Validate connection params
+     *
+     * @return bool
+     */
+    public function testConnection()
+    {
+        if (!empty($this->clientOptions['index'])) {
+            return $this->client->indices()->exists(['index' => $this->clientOptions['index']]);
+        } else {
+            // if no index is given simply perform a ping
+            $this->ping();
         }
-        return $pingStatus;
+        return true;
     }
 
     /**
