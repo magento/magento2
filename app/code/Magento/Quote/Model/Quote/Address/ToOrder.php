@@ -63,7 +63,7 @@ class ToOrder
     public function convert(Address $object, $data = [])
     {
         $orderData = $this->objectCopyService->getDataFromFieldset(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order',
             $object
         );
