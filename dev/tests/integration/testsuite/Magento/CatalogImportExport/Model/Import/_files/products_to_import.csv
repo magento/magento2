@@ -1,5 +1,4 @@
-sku,store_view_code,name,price
-simple1,,"simple 1",25
-simple1,German,"simple 1 German",
-simple2,,"simple 2",34
-simple3,,"simple 3",58
+sku,product_type,store_view_code,name,price,attribute_set_code
+simple1,simple,,"simple 1",25,Default
+simple2,simple,,"simple 2",34,Default
+simple3,simple,,"simple 3",58,Default
