@@ -335,6 +335,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         /** @link http://bugs.mysql.com/bug.php?id=18551 */
         $this->_connection->query("SET SQL_MODE=''");
 
+        // As we use default value CURRENT_TIMESTAMP for TIMESTAMP type columns we need to set GMT timezone
+        $this->_connection->query("SET time_zone = '+00:00'");
+
         if (isset($this->_config['initStatements'])) {
             $this->query($this->_config['initStatements']);
         }
