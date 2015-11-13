@@ -76,6 +76,11 @@ class Registration
         }
     }
 
+    /**
+     * Update theme data
+     *
+     * @return void
+     */
     protected function updateThemeData()
     {
         $themesData = $this->themeCollection->loadData();
