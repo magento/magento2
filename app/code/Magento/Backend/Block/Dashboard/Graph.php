@@ -387,7 +387,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                      */
                     foreach ($this->_axisLabels[$idx] as $_index => $_label) {
                         if ($_label != '') {
-                            $period = new \DateTime($_label);
+                            $period = new \DateTime($_label, new \DateTimeZone($timezoneLocal));
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
                                     $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
