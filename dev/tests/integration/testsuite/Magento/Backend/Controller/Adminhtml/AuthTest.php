@@ -96,12 +96,15 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testNotLoggedLoginActionWithRedirect()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setPostValue(
             [
                 'login' => [
                     'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
                     'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
                 ],
+                'form_key' => $formKey->getFormKey(),
             ]
         );
 
@@ -184,6 +187,9 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testIncorrectLogin($params)
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $params['form_key'] = $formKey->getFormKey();
         $this->getRequest()->setPostValue($params);
         $this->dispatch('backend/admin/auth/login');
         $this->assertContains(
