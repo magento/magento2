@@ -60,7 +60,6 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                 'sku' => 'test-',
                 'price' => 10.0,
                 'name' => '-',
-                'store_id' => 1,
                 'status' => 1,
                 'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE,
                 'options' => [],
