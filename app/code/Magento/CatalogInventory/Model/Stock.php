@@ -44,6 +44,8 @@ class Stock extends AbstractExtensibleModel implements StockInterface
 
     const STOCK_IN_STOCK = 1;
 
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Default stock id
      */

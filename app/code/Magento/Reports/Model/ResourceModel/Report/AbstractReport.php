@@ -388,6 +388,10 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         if (null === $from) {
             $selectOldest = $connection->select()->from($table, ["MIN({$column})"]);
             $from = $connection->fetchOne($selectOldest);
+            if (null === $from) {
+                $date = new \DateTime();
+                $from = $date->format('Y-m-d H:i:s');
+            }
         }
 
         $periods = $this->_getTZOffsetTransitions(
