@@ -54,7 +54,7 @@ class Registration
     }
 
     /**
-     * Add new theme from filesystem and update exists
+     * Add new theme from filesystem and update existing
      *
      * @param AbstractAction $subject
      * @param RequestInterface $request
