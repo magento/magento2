@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
  * To aid in security, the cookie manager will make it possible for the application to indicate if the cookie contains
  * sensitive data so that extra protection can be added to the contents of the cookie as well as how the browser
  * stores the cookie.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PhpCookieManager implements CookieManagerInterface
 {
