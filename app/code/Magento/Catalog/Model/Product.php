@@ -60,6 +60,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
 
     /**
+     * Product Store Id
+     */
+    const STORE_ID = 'store_id';
+
+    /**
      * @var string
      */
     protected $_cacheTag = self::CACHE_TAG;
@@ -316,7 +321,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         ProductInterface::TYPE_ID,
         ProductInterface::CREATED_AT,
         ProductInterface::UPDATED_AT,
-        ProductInterface::STORE_ID,
         'media_gallery',
         'tier_price',
     ];
