@@ -120,7 +120,7 @@ class StockItemTest extends WebapiAbstract
         $stockItem = $stockItemFactory->create();
         /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItemResource */
         $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
-        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
+        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['stock_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
         $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
