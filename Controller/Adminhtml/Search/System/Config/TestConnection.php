@@ -28,6 +28,7 @@ class TestConnection extends Action
      */
     private $tagFilter;
 
+
     /**
      * @param Action\Context    $context
      * @param ClientResolver    $clientResolver

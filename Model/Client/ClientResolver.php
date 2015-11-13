@@ -98,9 +98,9 @@ class ClientResolver
         }
         $factoryClass = $this->clientFactoryPool[$engine];
         $factory = $this->objectManager->create($factoryClass);
-        if (!($factory instanceof FactoryInterface)) {
+        if (!($factory instanceof ClientFactoryInterface)) {
             throw new \InvalidArgumentException(
-                'Client factory must implement \Magento\AdvancedSearch\Model\Client\FactoryInterface'
+                'Client factory must implement \Magento\AdvancedSearch\Model\Client\ClientFactoryInterface'
             );
         }
 

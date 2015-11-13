@@ -59,7 +59,7 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('engineName'));
 
-        $factoryMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\FactoryInterface');
+        $factoryMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface');
 
         $clientMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\ClientInterface');
 
