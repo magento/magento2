@@ -13,4 +13,14 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Backend\Model\Session" />
+    <type name="Magento\Ui\Model\Export\MetadataProvider">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="customer_listing" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="last_visit_at" xsi:type="string">last_visit_at</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
