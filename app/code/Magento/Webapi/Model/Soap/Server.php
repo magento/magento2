@@ -9,6 +9,11 @@ namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\Webapi\Request;
 
+/**
+ * SOAP Server
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Server
 {
     const SOAP_DEFAULT_ENCODING = 'UTF-8';
