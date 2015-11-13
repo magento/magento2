@@ -16,9 +16,10 @@ $orderAdminDate = $block->formatDate(
     true
 );
 $orderStoreDate = $block->formatDate(
-    $block->getCreatedAtStoreDate($_order->getStore(), $_order->getCreatedAt()),
+    $_order->getCreatedAt(),
     \IntlDateFormatter::MEDIUM,
-    true
+    true,
+    $block->getTimezoneForStore($_order->getStore())
 );
 ?>
 
@@ -54,10 +55,7 @@ $orderStoreDate = $block->formatDate(
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __(
                                 'Order Date (%1)',
-                                $block->getTimezoneForStore(
-                                    $_order->getStore(),
-                                    $_order->getCreatedAt()
-                                )
+                                $block->getTimezoneForStore($_order->getStore())
                             ) ?></th>
                         <td><?php /* @escapeNotVerified */ echo $orderStoreDate ?></td>
                     </tr>
