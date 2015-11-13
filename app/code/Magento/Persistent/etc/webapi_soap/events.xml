@@ -15,9 +15,6 @@
     <event name="layout_generate_blocks_after">
         <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
     </event>
-    <event name="checkout_allow_guest">
-        <observer name="persistent" instance="Magento\Persistent\Observer\DisableGuestCheckoutObserver" />
-    </event>
     <event name="customer_customer_authenticated">
         <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
     </event>
