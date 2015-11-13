@@ -53,8 +53,7 @@ class PathProcessor
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-        } else if ($storeCode === self::ALL_STORE_CODE || $storeCode === \Magento\Store\Model\Store::ADMIN_CODE) {
-            //TODO: eliminate "admin" check after MAGETWO-45544
+        } else if ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {

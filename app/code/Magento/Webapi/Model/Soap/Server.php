@@ -148,9 +148,12 @@ class Server
      */
     public function getEndpointUri()
     {
+        $storeCode = $this->_storeManager->getStore()->getCode() === \Magento\Store\Model\Store::ADMIN_CODE
+            ? \Magento\Webapi\Controller\PathProcessor::ALL_STORE_CODE
+            : $this->_storeManager->getStore()->getCode();
         return $this->_storeManager->getStore()->getBaseUrl()
             . $this->_areaList->getFrontName($this->_configScope->getCurrentScope())
-            . '/' . $this->_storeManager->getStore()->getCode();
+            . '/' . $storeCode;
     }
 
     /**
