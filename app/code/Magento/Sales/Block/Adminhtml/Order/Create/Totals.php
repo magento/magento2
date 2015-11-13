@@ -83,9 +83,12 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getTotals()
     {
-        $this->getQuote()->setTotalsCollectedFlag(false);
-        $this->getQuote()->collectTotals();
-        return $this->getQuote()->getTotals();
+        if ($this->getQuote()->isVirtual()) {
+            $totals = $this->getQuote()->getBillingAddress()->getTotals();
+        } else {
+            $totals = $this->getQuote()->getShippingAddress()->getTotals();
+        }
+        return $totals;
     }
 
     /**
