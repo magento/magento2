@@ -298,13 +298,6 @@
                 padding: 1.25rem @submenu__padding-horizontal;
                 pointer-events: none;
             }
-
-            &.item-sales-operation,
-            &.item-inventory {
-                .submenu-group-title {
-                    display: none;
-                }
-            }
         }
 
         .column {
@@ -454,6 +447,12 @@
             }
         }
     }
+
+    // This part hides Submenu Group Titles only for menus with single groups.
+    .submenu .column:only-of-type .submenu-group-title,
+    .level-0 > .submenu > ul > .level-1:only-of-type > .submenu-group-title {
+        display: none;
+    }
 }
 
 .admin__menu-overlay {
@@ -478,3 +477,4 @@
         }
     }
 }
+
