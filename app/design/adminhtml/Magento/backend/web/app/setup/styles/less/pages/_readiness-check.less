@@ -46,9 +46,9 @@
 }
 
 .readiness-check-side {
+    left: 100%;
     padding-left: 2.4rem;
     position: absolute;
-    right: 0;
     top: 0;
     width: @readiness-check-side__width;
 
@@ -70,5 +70,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .readiness-check-content {
         margin-right: 2rem;
+    }
+
+    .readiness-check-side {
+        padding: 2rem 0;
+        position: static;
     }
 }
