@@ -233,8 +233,6 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 case '1y':
                 case '2y':
                     $d = $dateStart->format('Y-m');
-                    //modify('+1 month') could skip the month, e.g.: Jan 31 -> Mar 3, Mar 1 -> May 1
-                    //$dateStart->add(new \DateInterval('P1M'));
                     $dateStart->modify('+1 month');
                     break;
                 default:
