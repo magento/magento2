@@ -589,7 +589,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             );
 
             $spanHtml = $this->_getDataTranslateSpan(
-                '[' . $translateProperties . ']',
+                '[' . htmlspecialchars($translateProperties) . ']',
                 $matches[1][0]
             );
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));
