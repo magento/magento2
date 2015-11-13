@@ -66,7 +66,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $indicesMock = $this->getMock('\Elasticsearch\Namespaces\IndicesNamespace', ['exists'], [], '', false);
         $this->elasticsearchClientMock->expects($this->once())->method('indices')->willReturn($indicesMock);
         $indicesMock->expects($this->once())->method('exists')->willReturn(true);
-        $this->assertEquals(true, $this->model->validateConnectionParameters());
+        $this->assertEquals(true, $this->model->testConnection());
     }
 
     /**
