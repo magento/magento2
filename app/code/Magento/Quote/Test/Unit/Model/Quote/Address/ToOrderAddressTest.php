@@ -69,7 +69,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
          */
         $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order_address',
             $object
         )->willReturn($orderData);
