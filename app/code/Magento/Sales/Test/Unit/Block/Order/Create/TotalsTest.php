@@ -12,6 +12,16 @@ namespace Magento\Sales\Test\Unit\Block\Order\Create;
 class TotalsTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $shippingAddressMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $billingAddressMock;
+
+    /**
      * @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals
      */
     protected $totals;
@@ -45,21 +55,50 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->setMethods([
                 'setTotalsCollectedFlag',
                 'collectTotals',
-                'getTotals'
+                'getTotals',
+                'isVirtual',
+                'getBillingAddress',
+                'getShippingAddress'
             ])
             ->getMock();
+        $this->shippingAddressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->billingAddressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->quoteMock->expects($this->any())->method('getBillingAddress')->willreturn($this->billingAddressMock);
+        $this->quoteMock->expects($this->any())->method('getShippingAddress')->willreturn($this->shippingAddressMock);
         $this->sessionQuoteMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->totals = $this->helperManager->getObject(
             'Magento\Sales\Block\Adminhtml\Order\Create\Totals', ['sessionQuote' => $this->sessionQuoteMock]
         );
     }
 
-    public function testGetTotals()
+    /**
+     * @dataProvider totalsDataProvider
+     */
+    public function testGetTotals($isVirtual)
     {
         $expected = 'expected';
-        $this->quoteMock->expects($this->at(0))->method('setTotalsCollectedFlag')->with(false);
-        $this->quoteMock->expects($this->at(1))->method('collectTotals');
-        $this->quoteMock->expects($this->at(2))->method('getTotals')->willReturn($expected);
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willreturn($isVirtual);
+        if ($isVirtual) {
+            $this->billingAddressMock->expects($this->once())->method('getTotals')->willReturn($expected);
+        } else {
+            $this->shippingAddressMock->expects($this->once())->method('getTotals')->willReturn($expected);
+        }
         $this->assertEquals($expected, $this->totals->getTotals());
+    }
+
+    /**
+     * @return array
+     */
+    public function totalsDataProvider()
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }
