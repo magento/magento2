@@ -68,8 +68,12 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quoteMock->expects($this->any())->method('getBillingAddress')->willreturn($this->billingAddressMock);
-        $this->quoteMock->expects($this->any())->method('getShippingAddress')->willreturn($this->shippingAddressMock);
+        $this->quoteMock->expects($this->any())
+            ->method('getBillingAddress')
+            ->willreturn($this->billingAddressMock);
+        $this->quoteMock->expects($this->any())
+            ->method('getShippingAddress')
+            ->willreturn($this->shippingAddressMock);
         $this->sessionQuoteMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->totals = $this->helperManager->getObject(
             'Magento\Sales\Block\Adminhtml\Order\Create\Totals', ['sessionQuote' => $this->sessionQuoteMock]
