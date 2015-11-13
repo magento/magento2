@@ -11,11 +11,20 @@ use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State as AppState;
+use Magento\Theme\Model\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeLoader;
+use Magento\Framework\Config\Theme;
 
 class Registration
 {
     /** @var ThemeRegistration */
     protected $themeRegistration;
+
+    /** @var ThemeCollection */
+    protected $themeCollection;
+
+    /** @var ThemeLoader */
+    protected $themeLoader;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -25,21 +34,27 @@ class Registration
 
     /**
      * @param ThemeRegistration $themeRegistration
+     * @param ThemeCollection $themeCollection
+     * @param ThemeLoader $themeLoader
      * @param LoggerInterface $logger
      * @param AppState $appState
      */
     public function __construct(
         ThemeRegistration $themeRegistration,
+        ThemeCollection $themeCollection,
+        ThemeLoader $themeLoader,
         LoggerInterface $logger,
         AppState $appState
     ) {
         $this->themeRegistration = $themeRegistration;
+        $this->themeCollection = $themeCollection;
+        $this->themeLoader = $themeLoader;
         $this->logger = $logger;
         $this->appState = $appState;
     }
 
     /**
-     * Add new theme from filesystem
+     * Add new theme from filesystem and update exists
      *
      * @param AbstractAction $subject
      * @param RequestInterface $request
@@ -54,9 +69,25 @@ class Registration
         try {
             if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
                 $this->themeRegistration->register();
+                $this->updateThemeData();
             }
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
+        }
+    }
+
+    protected function updateThemeData()
+    {
+        $themesData = $this->themeCollection->loadData();
+        /** @var \Magento\Theme\Model\Theme $themeData */
+        foreach ($themesData as $themeData) {
+            /** @var \Magento\Theme\Model\Theme $theme */
+            $theme = $this->themeLoader->getThemeByFullPath(
+                $themeData->getArea()
+                . Theme::THEME_PATH_SEPARATOR
+                . $themeData->getThemePath()
+            );
+            $theme->addData($themeData->toArray())->save();
         }
     }
 }
