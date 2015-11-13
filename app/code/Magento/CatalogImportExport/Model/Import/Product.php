@@ -1566,8 +1566,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $storeIds = [0];
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = (new \DateTime())->setTimestamp(strtotime($attrValue));
-                        $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
+                        $attrValue = $this->dateTime->gmDate(
+                            'Y-m-d H:i:s',
+                            $this->_localeDate->date($attrValue)->getTimestamp()
+                        );
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());
@@ -1962,8 +1964,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $stockItemDo->setData($row);
                     $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                     if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->_localeDate->date(null, null, false)
-                            ->format('Y-m-d H:i:s');
+                        $row['low_stock_date'] = $this->dateTime->gmDate(
+                            'Y-m-d H:i:s',
+                            (new \DateTime())->getTimestamp()
+                        );
                     }
                     $row['stock_status_changed_auto'] =
                         (int) !$this->stockStateProvider->verifyStock($stockItemDo);

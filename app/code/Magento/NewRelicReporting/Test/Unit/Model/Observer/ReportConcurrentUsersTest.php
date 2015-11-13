@@ -53,11 +53,6 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * Setup
      *
      * @return void
@@ -85,10 +80,6 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
-            ->getMock();
 
         $this->usersFactory->expects($this->any())
             ->method('create')
@@ -100,8 +91,7 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
             $this->customerRepository,
             $this->storeManager,
             $this->usersFactory,
-            $this->jsonEncoder,
-            $this->dateTime
+            $this->jsonEncoder
         );
     }
 
@@ -155,7 +145,6 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
     {
         $testCustomerId = 1;
         $testAction = 'JSON string';
-        $testUpdated = '1970-01-01 00:00:00';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -186,12 +175,9 @@ class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($testAction);
-        $this->dateTime->expects($this->once())
-            ->method('formatDate')
-            ->willReturn($testUpdated);
         $this->usersModel->expects($this->once())
             ->method('setData')
-            ->with(['type' => 'user_action', 'action' => $testAction, 'updated_at' => $testUpdated])
+            ->with(['type' => 'user_action', 'action' => $testAction])
             ->willReturnSelf();
         $this->usersModel->expects($this->once())
             ->method('save');
