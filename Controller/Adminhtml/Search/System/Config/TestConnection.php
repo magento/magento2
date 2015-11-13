@@ -9,6 +9,7 @@ namespace Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config;
 use Magento\Backend\App\Action;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Filter\StripTags;
 
 class TestConnection extends Action
 {
@@ -23,18 +24,26 @@ class TestConnection extends Action
     private $resultJsonFactory;
 
     /**
+     * @var StripTags
+     */
+    private $tagFilter;
+
+    /**
      * @param Action\Context    $context
      * @param ClientResolver    $clientResolver
      * @param JsonFactory       $resultJsonFactory
+     * @param StripTags         $tagFilter
      */
     public function __construct(
         Action\Context $context,
         ClientResolver $clientResolver,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        StripTags $tagFilter
     ) {
         parent::__construct($context);
         $this->clientResolver = $clientResolver;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->tagFilter = $tagFilter;
     }
 
     /**
@@ -63,10 +72,8 @@ class TestConnection extends Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result['errorMessage'] = $e->getMessage();
         } catch (\Exception $e) {
-            $filter = $this->_objectManager->create('Magento\Framework\Filter\StripTags');
-            /* @var $filter \Magento\Framework\Filter\StripTags */
-            $message = $filter->filter($e->getMessage());
-            $result['errorMessage'] = __($message);
+            $message = __($e->getMessage());
+            $result['errorMessage'] = $this->tagFilter->filter($message);
         }
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

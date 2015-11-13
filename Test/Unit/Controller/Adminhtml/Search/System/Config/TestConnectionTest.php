@@ -37,6 +37,11 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
     private $resultJsonFactory;
 
     /**
+     * @var \Magento\Framework\Filter\StripTags|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tagFilterMock;
+
+    /**
      * @var TestConnection
      */
     private $controller;
@@ -81,7 +86,12 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->controller = new TestConnection($context, $this->clientResolverMock, $this->resultJsonFactory);
+        $this->tagFilterMock = $this->getMockBuilder('Magento\Framework\Filter\StripTags')
+            ->disableOriginalConstructor()
+            ->setMethods(['filter'])
+            ->getMock();
+
+        $this->controller = new TestConnection($context, $this->clientResolverMock, $this->resultJsonFactory, $this->tagFilterMock);
     }
 
     public function testExecuteEmptyEngine()
