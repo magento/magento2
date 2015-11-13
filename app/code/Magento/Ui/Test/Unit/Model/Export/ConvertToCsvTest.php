@@ -131,6 +131,9 @@ class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
             ->method('getRowData')
             ->with($document, [], [])
             ->willReturn($data);
+        $this->metadataProvider->expects($this->once())
+            ->method('convertDate')
+            ->with($document, $componentName);
 
         $result = $this->model->getCsvFile();
         $this->assertTrue(is_array($result));
