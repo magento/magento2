@@ -10,8 +10,15 @@ define([
 
     return {
 
-        $weightSwitcher: $('[data-role=weight-switcher]'),
         $weight: $('#weight'),
+
+        /**
+         * Weight Switcher
+         * @returns {*|jQuery|HTMLElement}
+         */
+        $weightSwitcher: function () {
+            return $('[data-role=weight-switcher]');
+        },
 
         /**
          * Is locked
