@@ -15,6 +15,9 @@ use Magento\Theme\Model\Theme\Collection as ThemeCollection;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeLoader;
 use Magento\Framework\Config\Theme;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Registration
 {
     /** @var ThemeRegistration */
