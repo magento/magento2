@@ -107,7 +107,7 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
                             $useCustomAdminUrl
                         ],
                         [
-                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
+                            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
                             ScopeInterface::SCOPE_STORE,
                             null,
                             $customAdminUrl
@@ -163,14 +163,14 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
                 'customAdminUrl' => '',
                 'expectedValue' => false
             ],
-            'differentPortsOnOneHost1' => [
+            'withCustomAdminUrl' => [
                 'url' => 'http://magento2.loc/',
                 'host' => 'myhost.loc',
                 'useCustomAdminUrl' => '1',
                 'customAdminUrl' => 'https://myhost.loc/',
                 'expectedValue' => true
             ],
-            'differentPortsOnOneHost1' => [
+            'withCustomAdminUrlWrongHost' => [
                 'url' => 'http://magento2.loc/',
                 'host' => 'SomeOtherHost.loc',
                 'useCustomAdminUrl' => '1',
