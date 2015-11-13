@@ -46,11 +46,14 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
          */
         $this->_auth->logout();
 
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $postLogin = [
             'login' => [
                 'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
                 'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
             ],
+            'form_key' => $formKey->getFormKey(),
         ];
 
         $this->getRequest()->setPostValue($postLogin);
