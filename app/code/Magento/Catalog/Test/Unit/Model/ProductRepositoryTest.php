@@ -146,6 +146,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             [
+                'getWebsiteIds',
                 'setProductOptions',
                 'load',
                 'getOptions',
@@ -444,6 +445,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
@@ -462,6 +465,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
@@ -484,6 +489,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
         $this->model->save($this->productMock);
     }
 
@@ -507,6 +514,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
         $this->model->save($this->productMock);
     }
 
@@ -528,6 +537,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
         $this->model->save($this->productMock);
     }
 
@@ -731,6 +742,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->expects($this->once())
             ->method('setProductOptions')
             ->with($expectedData);
+
+        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->assertEquals($this->initializedProductMock, $this->model->save($this->productMock));
     }
@@ -963,6 +976,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 $outputLinks[] = $outputLink;
             }
         }
+        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $results = $this->model->save($this->initializedProductMock);
         $this->assertEquals($this->initializedProductMock, $results);
@@ -1131,6 +1145,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     'media_type' => 'media_type',
                 ]
             );
+        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
     }
@@ -1206,6 +1221,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $galleryAttributeBackendMock->expects($this->once())
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
+        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
