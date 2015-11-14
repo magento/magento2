@@ -25,7 +25,7 @@ class Discount extends AbstractTotal
          * Calculate how much shipping discount should be applied
          * basing on how much shipping should be refunded.
          */
-        $baseShippingAmount = $creditmemo->getBaseShippingAmount();
+        $baseShippingAmount = (float)$creditmemo->getBaseShippingAmount();
         if ($baseShippingAmount) {
             $baseShippingDiscount = $baseShippingAmount *
                 $order->getBaseShippingDiscountAmount() /
