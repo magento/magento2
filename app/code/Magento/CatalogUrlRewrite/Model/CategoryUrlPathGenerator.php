@@ -61,7 +61,7 @@ class CategoryUrlPathGenerator
      */
     public function getUrlPath($category)
     {
-        if (in_array($category->getParentId(), [Category::ROOT_CATEGORY_ID, Category::TREE_ROOT_ID], true)) {
+        if (in_array($category->getParentId(), [Category::ROOT_CATEGORY_ID, Category::TREE_ROOT_ID])) {
             return '';
         }
         $path = $category->getUrlPath();
