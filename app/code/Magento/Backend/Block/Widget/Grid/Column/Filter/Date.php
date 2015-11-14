@@ -14,11 +14,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * Value of DATE_TYPE means that date value don't need to convert back to UTC
-     */
-    const DATE_TYPE = 'static';
-
-    /**
      * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
@@ -215,9 +210,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         $simpleRes = new \DateTime(null, $adminTimeZone);
         $simpleRes->setTimestamp($formatter->parse($date));
         $simpleRes->setTime(0, 0, 0);
-        if ($this->getColumn()->getData('date_type') !== static::DATE_TYPE) {
-            $simpleRes->setTimezone(new \DateTimeZone('UTC'));
-        }
+        $simpleRes->setTimezone(new \DateTimeZone('UTC'));
         return $simpleRes;
     }
 }
