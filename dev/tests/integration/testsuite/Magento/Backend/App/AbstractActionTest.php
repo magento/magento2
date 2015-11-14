@@ -6,7 +6,7 @@
 namespace Magento\Backend\App;
 
 /**
- * Test class for \Magento\Backend\Controller\AbstractAction.
+ * Test class for \Magento\Backend\App\AbstractAction.
  * @magentoAppArea adminhtml
  */
 class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
