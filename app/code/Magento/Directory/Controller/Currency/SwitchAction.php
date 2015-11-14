@@ -11,7 +11,7 @@ class SwitchAction extends \Magento\Framework\App\Action\Action
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');

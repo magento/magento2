@@ -76,7 +76,7 @@ class Login extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $credentials = null;
         $httpBadRequestCode = 400;

@@ -121,7 +121,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->willReturn(null);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteNoCartItem()
@@ -169,7 +169,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($cartUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
     public function testExecute()
@@ -235,7 +235,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($cartUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
     public function testExecuteWithException()
@@ -271,7 +271,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($cartUrl)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirect, $this->controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
     protected function prepareContext()

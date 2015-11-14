@@ -192,7 +192,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         //Expected outcomes
         $this->sessionMock->expects($this->once())->method('regenerateId');
-        $this->assertSame($this->resultPageMock, $this->model->executeInternal());
+        $this->assertSame($this->resultPageMock, $this->model->execute());
     }
 
     public function testOnepageCheckoutNotAvailable()
@@ -205,7 +205,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->with($expectedPath)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     public function testInvalidQuote()
@@ -218,7 +218,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->with($expectedPath)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->model->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
     /**

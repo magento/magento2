@@ -173,7 +173,7 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
             ->with($fileName, ['type' => 'filename', 'value' => $fullPath], DirectoryList::ROOT)
             ->willReturn($this->getMockBuilder('Magento\Framework\App\ResponseInterface')->getMock());
 
-        $this->assertInstanceOf('Magento\Framework\App\ResponseInterface', $this->controller->executeInternal());
+        $this->assertInstanceOf('Magento\Framework\App\ResponseInterface', $this->controller->execute());
     }
 
     public function testExecuteInvalidArgument()
@@ -213,6 +213,6 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
             ->method('setRedirect')
             ->with($refererUrl);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

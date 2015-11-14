@@ -11,7 +11,7 @@ class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction()->_addContent(
             $this->_view->getLayout()->createBlock('Magento\CheckoutAgreements\Block\Adminhtml\Agreement')

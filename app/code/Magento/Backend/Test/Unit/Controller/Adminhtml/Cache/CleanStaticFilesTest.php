@@ -94,6 +94,6 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         // Run
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

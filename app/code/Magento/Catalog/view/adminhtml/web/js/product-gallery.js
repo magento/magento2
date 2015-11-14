@@ -6,7 +6,8 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'baseImage'
 ], function ($, mageTemplate) {
     'use strict';
 

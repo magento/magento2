@@ -13,7 +13,7 @@ class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $variable = $this->_initVariable();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

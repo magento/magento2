@@ -196,7 +196,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->orderEmail->executeInternal()
+            $this->orderEmail->execute()
         );
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
     }
@@ -228,7 +228,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',
-            $this->orderEmail->executeInternal()
+            $this->orderEmail->execute()
         );
     }
 }

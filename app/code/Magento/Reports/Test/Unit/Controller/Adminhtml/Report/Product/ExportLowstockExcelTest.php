@@ -65,6 +65,6 @@ class ExportLowstockExcelTest extends \Magento\Reports\Test\Unit\Controller\Admi
             ->method('create')
             ->with('products_lowstock.xml', $content, \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
 
-        $this->exportLowstockExcel->executeInternal();
+        $this->exportLowstockExcel->execute();
     }
 }

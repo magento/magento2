@@ -69,7 +69,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $type = $this->getRequest()->getParam('type');
         $tmpPath = '';

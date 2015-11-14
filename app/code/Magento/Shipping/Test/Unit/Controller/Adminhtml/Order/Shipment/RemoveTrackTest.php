@@ -255,7 +255,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->method('setBody')
             ->with($response);
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -275,7 +275,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($trackId));
         $this->representJson($errors);
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -294,7 +294,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
         $this->representJson($errors);
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 
     /**
@@ -313,6 +313,6 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Exception()));
         $this->representJson($errors);
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 }

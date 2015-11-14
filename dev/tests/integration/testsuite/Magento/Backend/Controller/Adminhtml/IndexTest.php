@@ -12,22 +12,24 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 {
     /**
      * Check not logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::execute
      */
     public function testNotLoggedIndexAction()
     {
         $this->_auth->logout();
         $this->dispatch('backend/admin/index/index');
-        $this->assertFalse($this->getResponse()->isRedirect());
-
-        $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('form#login-form input#username[type=text]', true, $body);
-        $this->assertSelectCount('form#login-form input#login[type=password]', true, $body);
+        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('admin');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 
     /**
      * Check logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::execute
      * @magentoDbIsolation enabled
      */
     public function testLoggedIndexAction()
@@ -37,7 +39,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Index\GlobalSearch::executeInternal
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\GlobalSearch::execute
      */
     public function testGlobalSearchAction()
     {

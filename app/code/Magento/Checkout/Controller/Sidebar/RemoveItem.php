@@ -61,7 +61,7 @@ class RemoveItem extends Action
     /**
      * @return $this
      */
-    public function executeInternal()
+    public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
         try {

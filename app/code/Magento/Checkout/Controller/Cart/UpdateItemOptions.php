@@ -15,7 +15,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
         $params = $this->getRequest()->getParams();

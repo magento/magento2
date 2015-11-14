@@ -13,7 +13,7 @@ class CmsPageGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock('Magento\UrlRewrite\Block\Cms\Page\Grid')->toHtml()

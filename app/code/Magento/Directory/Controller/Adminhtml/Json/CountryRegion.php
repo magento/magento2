@@ -13,7 +13,7 @@ class CountryRegion extends \Magento\Backend\App\Action
      *
      * @return string
      */
-    public function executeInternal()
+    public function execute()
     {
         $arrRes = [];
 

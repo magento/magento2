@@ -13,7 +13,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sal
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('index', 'report_statistics');
     }

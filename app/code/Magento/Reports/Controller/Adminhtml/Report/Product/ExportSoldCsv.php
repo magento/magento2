@@ -27,7 +27,7 @@ class ExportSoldCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'products_ordered.csv';

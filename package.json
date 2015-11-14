@@ -1,8 +1,8 @@
 {
     "name": "Magento2",
-    "author": "Magento, an eBay Inc. company",
+    "author": "Magento Inc.",
     "description": "Magento2 node modules dependencies for local development",
-    "version": "1.0.0-beta",
+    "version": "2.0.0-rc2",
     "license": "(OSL-3.0 OR AFL-3.0)",
     "repository": {
         "type": "git",

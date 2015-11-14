@@ -32,7 +32,7 @@ class Categories extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->productBuilder->build($this->getRequest());
         return $this->resultPageFactory->create();

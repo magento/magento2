@@ -1,0 +1,106 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Rule tree component
+//  _____________________________________________
+
+.rule-tree-wrapper {
+    line-height: 28px;
+}
+
+.rule-tree {
+    .admin__field-control & {
+        padding-top: .3rem;
+    }
+    ul {
+        list-style: none;
+        padding-left: 16px;
+        border-left: dotted 1px #888;
+    }
+    li {
+        margin: 0 0 10px;
+    }
+    .x-tree ul {
+        padding-left: 0 !important;
+        border-left: none !important;
+    }
+}
+
+.rule-tree .fieldset {
+    min-width: 0; // Fixed Chrome fieldset issue
+}
+
+@-moz-document url-prefix() { // Fixed Firefox fieldset issue
+    .rule-tree .fieldset {
+        display: table-cell;
+    }
+}
+
+.rule-param .label {
+    color: #000;
+    float: none;
+    text-align: left;
+    padding: 0;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.rule-param .label-disabled {
+    color: #eee;
+    cursor: default;
+    text-decoration: none;
+}
+
+.rule-chooser,
+.rule-param .element,
+.rule-param-edit .label {
+    display: none;
+}
+
+.rule-chooser .field-row {
+    .lib-clearfix();
+    display: block;
+    margin-bottom: 17px;
+    .input-text {
+        margin-top: 5px;
+    }
+    .ui-datepicker-trigger {
+        margin-left: 5px;
+        margin-top:-2px;
+    }
+}
+
+.rule-param input,
+.rule-param select {
+    width: auto !important;
+    margin: 0;
+    min-width: 170px;
+}
+
+.rule-param-edit .element {
+    display: inline;
+}
+
+.rule-param-edit .element .addafter {
+    padding-left: 5px;
+}
+
+[class^="rule-param-"] img,
+.rule-chooser-trigger img {
+    vertical-align: middle;
+}
+
+.rule-chooser {
+    border: solid 1px #CCC;
+    margin: 20px;
+    padding: 15px 10px 5px;
+    overflow: auto;
+}
+
+.rule-param-wait {
+    background: url(../mui/images/ajax-loader-small.gif) no-repeat left center;
+    padding-left: 20px;
+}

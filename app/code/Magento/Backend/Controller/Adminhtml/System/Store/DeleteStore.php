@@ -11,7 +11,7 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {

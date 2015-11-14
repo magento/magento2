@@ -53,7 +53,7 @@ class ShareTest extends \PHPUnit_Framework_TestCase
         $this->resultFactoryMock->expects($this->once())->method('create')->with(ResultFactory::TYPE_PAGE)
             ->willReturn($resultMock);
 
-        $this->assertEquals($resultMock, $this->model->executeInternal());
+        $this->assertEquals($resultMock, $this->model->execute());
     }
 
     public function testExecuteAuthenticationFail()
@@ -61,6 +61,6 @@ class ShareTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(false);
 
-        $this->assertEmpty($this->model->executeInternal());
+        $this->assertEmpty($this->model->execute());
     }
 }

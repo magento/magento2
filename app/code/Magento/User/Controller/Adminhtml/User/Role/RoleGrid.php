@@ -13,7 +13,7 @@ class RoleGrid extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();

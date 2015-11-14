@@ -13,7 +13,7 @@ class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_CurrencySymbol::system_currency_rates');

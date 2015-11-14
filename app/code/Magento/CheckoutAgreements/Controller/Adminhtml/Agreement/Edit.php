@@ -12,7 +12,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $agreementModel = $this->_objectManager->create('Magento\CheckoutAgreements\Model\Agreement');

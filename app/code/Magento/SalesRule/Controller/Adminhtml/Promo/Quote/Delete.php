@@ -13,7 +13,7 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {

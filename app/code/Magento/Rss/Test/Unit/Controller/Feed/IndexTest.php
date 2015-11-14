@@ -81,7 +81,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
 
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithException()
@@ -98,6 +98,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
 
         $this->setExpectedException('\Zend_Feed_Builder_Exception');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

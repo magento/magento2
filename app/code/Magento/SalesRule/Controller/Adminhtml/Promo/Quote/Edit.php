@@ -14,7 +14,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');

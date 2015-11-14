@@ -31,7 +31,7 @@ class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\Sy
      * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $result = [];
         $flag = $this->_getSyncFlag();

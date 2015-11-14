@@ -96,7 +96,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->will($this->throwException(new \Exception));
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     /**
@@ -132,7 +132,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
 
         $this->responseMock->expects($this->once())->method('setBody')->willReturn(json_encode($expectedResult));
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function dataForExecute()

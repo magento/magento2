@@ -70,6 +70,6 @@ class ExportDownloadsCsvTest extends \Magento\Reports\Test\Unit\Controller\Admin
             ->method('create')
             ->with('products_downloads.csv', $content);
 
-        $this->exportDownloadsCsv->executeInternal();
+        $this->exportDownloadsCsv->execute();
     }
 }

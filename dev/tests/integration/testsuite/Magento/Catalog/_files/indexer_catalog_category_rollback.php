@@ -13,11 +13,11 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\Product $product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
-/** @var \Magento\Catalog\Model\Product[] $products */
-$products = $product->getCollection()->getItems();
-foreach ($products as $product) {
+foreach ([1, 2, 3] as $productId) {
+    /** @var \Magento\Catalog\Model\Product $product */
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $product->load($productId);
+
     if ($product->getId()) {
         $product->delete();
     }

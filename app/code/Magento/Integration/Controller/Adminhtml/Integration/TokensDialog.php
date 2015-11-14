@@ -35,7 +35,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);

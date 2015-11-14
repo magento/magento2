@@ -13,7 +13,7 @@ class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variab
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         $customVariables = $this->_objectManager->create('Magento\Variable\Model\Variable')
             ->getVariablesOptionArray(true);

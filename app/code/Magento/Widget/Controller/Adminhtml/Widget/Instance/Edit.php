@@ -13,7 +13,7 @@ class Edit extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $widgetInstance = $this->_initWidgetInstance();
         if (!$widgetInstance) {

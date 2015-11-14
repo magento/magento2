@@ -13,7 +13,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $template = $this->_initTemplate('id');
         if ($template->getId()) {

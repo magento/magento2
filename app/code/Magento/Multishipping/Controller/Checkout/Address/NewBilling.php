@@ -11,7 +11,7 @@ class NewBilling extends \Magento\Multishipping\Controller\Checkout\Address
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {

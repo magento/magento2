@@ -49,7 +49,7 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

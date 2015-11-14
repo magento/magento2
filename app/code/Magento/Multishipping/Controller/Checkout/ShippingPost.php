@@ -13,7 +13,7 @@ class ShippingPost extends \Magento\Multishipping\Controller\Checkout
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $shippingMethods = $this->getRequest()->getPost('shipping_method');
         try {

@@ -32,7 +32,7 @@ class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();

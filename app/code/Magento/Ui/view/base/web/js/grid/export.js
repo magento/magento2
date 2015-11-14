@@ -36,23 +36,28 @@ define([
                     this.options[0].value
                 );
             }
+
             return this;
         },
 
         getParams: function () {
             var selections = this.selections(),
-                data = selections.getSelections(),
-                itemsType = data.excludeMode ? 'excluded' : 'selected',
+                data = selections ? selections.getSelections() : null,
+                itemsType,
                 result = {};
 
-            result['filters'] = data.params.filters;
-            result['search'] = data.params.search;
-            result['namespace'] = data.params.namespace;
-            result[itemsType] = data[itemsType];
+            if (data) {
+                itemsType = data.excludeMode ? 'excluded' : 'selected';
+                result.filters = data.params.filters;
+                result.search = data.params.search;
+                result.namespace = data.params.namespace;
+                result[itemsType] = data[itemsType];
 
-            if (!result[itemsType].length) {
-                result[itemsType] = false;
+                if (!result[itemsType].length) {
+                    result[itemsType] = false;
+                }
             }
+
             return result;
         },
 
@@ -63,9 +68,14 @@ define([
         },
 
         buildOptionUrl: function (option) {
-            var url = option.url + '?';
+            var params = this.getParams();
 
-            return url + $.param(this.getParams());
+            if (!params) {
+                return 'javascript:void(0);';
+            }
+
+            return option.url + '?' + $.param(params);
+            //TODO: MAGETWO-40250
         },
 
         applyOption: function () {
@@ -73,6 +83,7 @@ define([
                 url = this.buildOptionUrl(option);
 
             location.href = url;
+
         }
     });
 });

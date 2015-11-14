@@ -17,7 +17,7 @@ class ExportTotalsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Custo
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'customer_totals.csv';

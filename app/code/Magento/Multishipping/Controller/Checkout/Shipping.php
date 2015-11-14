@@ -16,7 +16,7 @@ class Shipping extends \Magento\Multishipping\Controller\Checkout
      *
      * @return  ResponseInterface|void
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->_validateMinimumAmount()) {
             return;

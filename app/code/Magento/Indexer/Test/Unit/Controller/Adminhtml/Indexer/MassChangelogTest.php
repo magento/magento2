@@ -243,7 +243,7 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
         $this->helper->expects($this->any())->method("getUrl")->willReturn("magento.com");
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
 
-        $this->model->executeInternal();
+        $this->model->execute();
     }
 
     /**

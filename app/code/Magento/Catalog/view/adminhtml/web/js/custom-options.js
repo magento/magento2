@@ -386,9 +386,12 @@ define([
                 var priceType = $('#' + this.options.fieldId + '_' + data.id + '_select_' + data.select_id + '_price_type');
                 priceType.val(data.price_type).attr('data-store-label', data.price_type);
             }
+
             this._bindUseDefault(this.options.fieldId + '_' + data.id + '_select_' + data.select_id, data);
             this.refreshSortableElements();
             this.options.selectionItemCount[data.id] = parseInt(this.options.selectionItemCount[data.id], 10) + 1;
+
+            $('#' + this.options.fieldId + '_' + data.id + '_select_' + data.select_id + '_title').focus();
         },
 
         /**

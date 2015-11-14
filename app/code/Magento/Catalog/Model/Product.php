@@ -60,6 +60,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
 
     /**
+     * Product Store Id
+     */
+    const STORE_ID = 'store_id';
+
+    /**
      * @var string
      */
     protected $_cacheTag = self::CACHE_TAG;
@@ -316,7 +321,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         ProductInterface::TYPE_ID,
         ProductInterface::CREATED_AT,
         ProductInterface::UPDATED_AT,
-        ProductInterface::STORE_ID,
         'media_gallery',
         'tier_price',
     ];
@@ -968,9 +972,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function eavReindexCallback()
     {
-        if ($this->isObjectNew() || $this->hasDataChanges()) {
+        if ($this->isObjectNew() || $this->isDataChanged($this)) {
             $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
+    }
+
+    /**
+     * Check if data was changed
+     *
+     * @return bool
+     */
+    public function isDataChanged()
+    {
+        foreach (array_keys($this->getData()) as $field) {
+            if ($this->dataHasChangedFor($field)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1490,11 +1509,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasData('media_gallery_images') && is_array($this->getMediaGallery('images'))) {
             $images = $this->_collectionFactory->create();
             foreach ($this->getMediaGallery('images') as $image) {
-                if (isset($image['disabled']) && $image['disabled']) {
+                if ((isset($image['disabled']) && $image['disabled']) || empty($image['value_id'])) {
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
-                $image['id'] = !empty($image['value_id']) ? $image['value_id'] : null;
+                $image['id'] = $image['value_id'];
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
                 $images->addItem(new \Magento\Framework\DataObject($image));
             }

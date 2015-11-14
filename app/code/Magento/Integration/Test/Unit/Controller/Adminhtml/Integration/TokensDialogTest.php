@@ -48,7 +48,7 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
         $this->_viewMock->expects($this->any())->method('loadLayout');
         $this->_viewMock->expects($this->any())->method('renderLayout');
 
-        $controller->executeInternal();
+        $controller->execute();
     }
 
     public function testTokensExchangeReauthorize()
@@ -95,6 +95,6 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
         $this->_responseMock->expects($this->once())->method('getBody');
         $this->_responseMock->expects($this->once())->method('representJson');
 
-        $controller->executeInternal();
+        $controller->execute();
     }
 }

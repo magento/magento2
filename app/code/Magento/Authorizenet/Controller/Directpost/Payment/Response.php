@@ -14,7 +14,7 @@ class Response extends \Magento\Authorizenet\Controller\Directpost\Payment
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_responseAction('frontend');
     }

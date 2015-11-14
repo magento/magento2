@@ -20,7 +20,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product One'
 )->setSku(
     'simple_one'
 )->setPrice(

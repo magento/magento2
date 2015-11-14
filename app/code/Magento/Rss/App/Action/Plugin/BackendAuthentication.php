@@ -48,6 +48,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -63,6 +64,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\BackendAppList $backendAppList,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\AuthorizationInterface $authorization,
@@ -80,7 +82,8 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             $messageManager,
             $backendUrl,
             $resultRedirectFactory,
-            $backendAppList
+            $backendAppList,
+            $formKeyValidator
         );
     }
 
@@ -95,7 +98,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function aroundExecute(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
+    public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {
         $resource = isset($this->aclResources[$request->getControllerName()])
             ? isset($this->aclResources[$request->getControllerName()][$request->getActionName()])
@@ -107,7 +110,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         $resourceType = isset($this->aclResources[$type]) ? $this->aclResources[$type] : null;
 
         if (!$resource || !$resourceType) {
-            return parent::aroundExecute($subject, $proceed, $request);
+            return parent::aroundDispatch($subject, $proceed, $request);
         }
 
         $session = $this->_auth->getAuthStorage();
@@ -129,6 +132,6 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             return $this->_response;
         }
 
-        return parent::aroundExecute($subject, $proceed, $request);
+        return parent::aroundDispatch($subject, $proceed, $request);
     }
 }

@@ -36,7 +36,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $status = $this->_initStatus();
         if ($status) {
