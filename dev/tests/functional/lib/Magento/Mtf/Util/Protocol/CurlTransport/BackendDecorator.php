@@ -74,6 +74,7 @@ class BackendDecorator implements CurlInterface
         $data = [
             'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
             'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
+            'form_key' => $this->formKey,
         ];
         $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $this->read();
