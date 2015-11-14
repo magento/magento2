@@ -189,14 +189,10 @@ class ErrorProcessor
      */
     protected function _critical(\Exception $exception)
     {
-        $exceptionClass = get_class($exception);
         $reportId = uniqid("webapi-");
-        $exceptionForLog = new $exceptionClass(
-            /** Trace is added separately by critical. */
-            "Report ID: {$reportId}; Message: {$exception->getMessage()}",
-            $exception->getCode()
-        );
-        $this->_logger->critical($exceptionForLog);
+
+        $this->_logger->critical(new WebapiException\WebapiExceptionReport($reportId, $exception));
+
         return $reportId;
     }
 
