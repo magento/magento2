@@ -5,8 +5,8 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
-use Magento\AdvancedSearch\Model\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch;
 
@@ -23,7 +23,7 @@ class ConnectionManager
     private $logger;
 
     /**
-     * @var FactoryInterface
+     * @var ClientFactoryInterface
      */
     private $clientFactory;
 
@@ -33,12 +33,12 @@ class ConnectionManager
     private $clientConfig;
 
     /**
-     * @param FactoryInterface $clientFactory
+     * @param ClientFactoryInterface $clientFactory
      * @param ClientOptionsInterface $clientConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
-        FactoryInterface $clientFactory,
+        ClientFactoryInterface $clientFactory,
         ClientOptionsInterface $clientConfig,
         LoggerInterface $logger
     ) {

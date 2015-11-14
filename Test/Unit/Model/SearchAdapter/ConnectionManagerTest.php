@@ -5,8 +5,8 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\SearchAdapter;
 
-use Magento\AdvancedSearch\Model\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Client\FactoryInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 
@@ -26,7 +26,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var FactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $clientFactory;
 
@@ -45,7 +45,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientFactory = $this->getMockBuilder('\Magento\AdvancedSearch\Model\Client\FactoryInterface')
+        $this->clientFactory = $this->getMockBuilder('\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -70,7 +70,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getConnection() method without errors
      */
-    public function testGetConnectionSuccessfull()
+    public function testGetConnectionSuccessful()
     {
         $client = $this->getMockBuilder('\Magento\Elasticsearch\Model\Client\Elasticsearch')
             ->disableOriginalConstructor()
