@@ -18,12 +18,15 @@ class CaseCaptchaIsRequiredAfterFailedLoginAttemptsTest extends \Magento\TestFra
             'Magento\Backend\Model\UrlInterface'
         )->turnOffSecretKey();
 
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $post = [
             'login' => [
                 'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
                 'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
             ],
             'captcha' => ['backend_login' => 'some_unrealistic_captcha_value'],
+            'form_key' => $formKey->getFormKey(),
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin');
