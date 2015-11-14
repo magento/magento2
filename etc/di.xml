@@ -23,4 +23,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Elasticsearch\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
+        <arguments>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>
+        </arguments>
+    </virtualType>
 </config>
