@@ -6,8 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-use Magento\Backend\App\Area\FrontNameResolver;
-
 class Login extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
@@ -16,22 +14,16 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
     protected $resultPageFactory;
 
     /**
-     * @var FrontNameResolver
-     */
-    protected $frontNameResolver;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param FrontNameResolver $frontNameResolver
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        FrontNameResolver $frontNameResolver
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->frontNameResolver = $frontNameResolver;
         parent::__construct($context);
     }
 
