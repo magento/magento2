@@ -21,10 +21,9 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
     protected $frontNameResolver;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param FrontNameResolver $frontNameResolver
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
