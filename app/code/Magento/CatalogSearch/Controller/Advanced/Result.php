@@ -47,7 +47,7 @@ class Result extends \Magento\Framework\App\Action\Action
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());

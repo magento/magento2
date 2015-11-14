@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 
 /**
  * Controller for component grid tasks
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
 {
@@ -24,9 +25,9 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private $packageInfo;
 
     /**
-     * @var \Magento\Setup\Model\ConnectManager
+     * @var \Magento\Setup\Model\MarketplaceManager
      */
-    private $connectManager;
+    private $marketplaceManager;
 
     /**
      * @var \Magento\Framework\Module\ModuleList
@@ -46,24 +47,30 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private $updatePackagesCache;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private $timezone;
+
+    /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\ConnectManager $connectManager
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache,
-        \Magento\Setup\Model\ConnectManager $connectManager
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
         $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
-        $this->connectManager = $connectManager;
+        $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
+        $this->timezone = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
     }
 
     /**
@@ -120,11 +127,8 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $components[$component['name']]['vendor'] = $componentNameParts[0];
         }
 
-        $packagesForInstall = $this->connectManager->getPackagesForInstall();
-
-        $lastSyncData['countOfInstall'] =
-            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
-        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+        $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -143,21 +147,24 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      */
     public function syncAction()
     {
-        $this->updatePackagesCache->syncPackagesForUpdate();
-        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
+        $error = '';
+        try {
+            $this->updatePackagesCache->syncPackagesForUpdate();
+            $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
 
-        $this->connectManager->syncPackagesForInstall();
-        $packagesForInstall = $this->connectManager->getPackagesForInstall();
+            $this->marketplaceManager->syncPackagesForInstall();
+            $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+        }
 
-        $lastSyncData['countOfInstall'] =
-            isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
-        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
-
+        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
 
         return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
-                'lastSyncData' => $lastSyncData
+                'lastSyncData' => $lastSyncData,
+                'error' => $error
             ]
         );
     }
@@ -178,5 +185,45 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
             $modules[$moduleName]['version'] = $this->packageInfo->getVersion($module);
         }
         return $modules;
+    }
+
+    /**
+     * Format the lastSyncData for use on frontend
+     *
+     * @param array $packagesForInstall
+     * @param array $lastSyncData
+     * @return mixed
+     */
+    private function formatLastSyncData($packagesForInstall, $lastSyncData)
+    {
+        $lastSyncData['countOfInstall']
+            = isset($packagesForInstall['packages']) ? count($packagesForInstall['packages']) : 0;
+        $lastSyncData['countOfUpdate'] = isset($lastSyncData['packages']) ? count($lastSyncData['packages']) : 0;
+        if (isset($lastSyncData['lastSyncDate'])) {
+            $lastSyncData['lastSyncDate'] = $this->formatSyncDate($lastSyncData['lastSyncDate']);
+        }
+        return $lastSyncData;
+    }
+
+    /**
+     * Format a UTC timestamp (seconds since epoch) to structure expected by frontend
+     *
+     * @param string $syncDate seconds since epoch
+     * @return array
+     */
+    private function formatSyncDate($syncDate)
+    {
+        return [
+            'date' => $this->timezone->formatDateTime(
+                new \DateTime('@'.$syncDate),
+                \IntlDateFormatter::MEDIUM,
+                \IntlDateFormatter::NONE
+            ),
+            'time' => $this->timezone->formatDateTime(
+                new \DateTime('@'.$syncDate),
+                \IntlDateFormatter::NONE,
+                \IntlDateFormatter::MEDIUM
+            ),
+        ];
     }
 }

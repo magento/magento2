@@ -13,7 +13,7 @@ class Success extends \Magento\Checkout\Controller\Onepage
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $session = $this->getOnepage()->getCheckout();
         if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {

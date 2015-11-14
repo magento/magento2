@@ -13,7 +13,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         /**
          * Clear old values for invoice qty's

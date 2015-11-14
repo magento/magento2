@@ -82,7 +82,7 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundExecuteInternal()
+    public function testAroundExecute()
     {
         $username = 'name';
         $captchaString = 'string';
@@ -102,10 +102,10 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $closure = function () {
             return 'result';
         };
-        $this->assertEquals('result', $this->model->aroundExecuteInternal($this->loginControllerMock, $closure));
+        $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
-    public function testAroundExecuteInternalIncorrectCaptcha()
+    public function testAroundExecuteIncorrectCaptcha()
     {
         $username = 'name';
         $captchaString = 'string';
@@ -131,15 +131,15 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
 
         $closure = function () {
         };
-        $this->assertEquals('response', $this->model->aroundExecuteInternal($this->loginControllerMock, $closure));
+        $this->assertEquals('response', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
-     * @dataProvider aroundExecuteInternalCaptchaIsNotRequired
+     * @dataProvider aroundExecuteCaptchaIsNotRequired
      * @param string $username
      * @param array $requestContent
      */
-    public function testAroundExecuteInternalCaptchaIsNotRequired($username, $requestContent)
+    public function testAroundExecuteCaptchaIsNotRequired($username, $requestContent)
     {
         $this->requestMock->expects($this->once())->method('getContent')->will($this->returnValue($requestContent));
 
@@ -151,13 +151,13 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $closure = function () {
             return 'result';
         };
-        $this->assertEquals('result', $this->model->aroundExecuteInternal($this->loginControllerMock, $closure));
+        $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
      * @return array
      */
-    public function aroundExecuteInternalCaptchaIsNotRequired()
+    public function aroundExecuteCaptchaIsNotRequired()
     {
         return [
             [

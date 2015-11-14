@@ -15,7 +15,7 @@ class Addresses extends \Magento\Multishipping\Controller\Checkout
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         // If customer do not have addresses
         if (!$this->_getCheckout()->getCustomerDefaultShippingAddress()) {

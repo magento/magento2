@@ -13,7 +13,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * Test requestToAuthorizenetData returning
      */
-    public function testExecuteInternalAuthorizenetDataReturning()
+    public function testExecuteAuthorizenetDataReturning()
     {
         $requestToAuthorizenetData = ['Authorizenet' => 'data'];
 
@@ -56,12 +56,11 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             ]
         );
 
-        /** @var \Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\PlaceTesting $controller */
         $controller = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\PlaceTesting',
             ['context' => $context]
         );
-        $controller->executeInternal();
+        $controller->execute();
         $this->assertContains(json_encode($requestToAuthorizenetData), $this->getResponse()->getBody());
     }
 

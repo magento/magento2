@@ -390,7 +390,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('log')
             ->with('No database connection defined - skipping database cleanup');
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
@@ -400,7 +400,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Framework\App\Cache\Manager')
             ->willReturn($cacheManager);
-        $this->logger->expects($this->at(2))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
         $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
         $this->logger
             ->expects($this->at(4))
@@ -494,7 +494,7 @@ namespace Magento\Setup\Model;
 
 /**
  * Mocking autoload function
- * 
+ *
  * @returns array
  */
 function spl_autoload_functions()

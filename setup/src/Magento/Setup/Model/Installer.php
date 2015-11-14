@@ -956,8 +956,8 @@ class Installer
     {
         $this->log->log('Starting Magento uninstallation:');
 
-        $this->cleanupDb();
         $this->cleanCaches();
+        $this->cleanupDb();
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();

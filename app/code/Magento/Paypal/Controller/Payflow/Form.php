@@ -17,7 +17,7 @@ class Form extends Payflow
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->getResponse()->setHeader('P3P', 'CP="CAO PSA OUR"');
         $this->_view->loadLayout(false)->renderLayout();

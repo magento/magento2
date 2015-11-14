@@ -12,7 +12,7 @@ class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $customerId = $this->initCurrentCustomer();
         /** @var  \Magento\Newsletter\Model\Subscriber $subscriber */

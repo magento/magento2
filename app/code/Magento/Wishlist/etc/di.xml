@@ -18,7 +18,7 @@
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Wishlist\Controller\IndexInterface">
+    <type name="Magento\Wishlist\Controller\AbstractIndex">
         <plugin name="authentication" type="\Magento\Wishlist\Controller\Index\Plugin" sortOrder="10"/>
     </type>
     <virtualType name="Magento\Wishlist\Block\Context" type="Magento\Catalog\Block\Product\Context">

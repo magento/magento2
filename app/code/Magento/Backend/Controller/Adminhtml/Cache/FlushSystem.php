@@ -13,7 +13,7 @@ class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {

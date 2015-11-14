@@ -85,6 +85,6 @@ class SaveTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->with('Magento\Theme\Model\Theme\SingleFile')
             ->will($this->returnValue(null));
 
-        $this->_model->executeInternal();
+        $this->_model->execute();
     }
 }

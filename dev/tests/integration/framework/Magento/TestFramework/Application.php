@@ -498,7 +498,9 @@ class Application
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
-            copy($file, $targetFile);
+            if ($file !== $targetFile) {
+                copy($file, $targetFile);
+            }
         }
     }
 

@@ -12,7 +12,7 @@ class Grid extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultLayout = $this->resultLayoutFactory->create();
         return $resultLayout;

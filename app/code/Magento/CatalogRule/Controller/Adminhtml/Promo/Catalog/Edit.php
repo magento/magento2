@@ -11,7 +11,7 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');

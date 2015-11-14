@@ -46,7 +46,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         /**
          * New parent category identifier

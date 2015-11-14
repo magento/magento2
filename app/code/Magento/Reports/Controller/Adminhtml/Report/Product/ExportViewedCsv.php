@@ -26,7 +26,7 @@ class ExportViewedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Produ
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'products_mostviewed.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Product\Viewed\Grid');

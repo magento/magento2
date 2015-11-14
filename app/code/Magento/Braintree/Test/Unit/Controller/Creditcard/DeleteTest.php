@@ -106,7 +106,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecuteInternal()
+    public function testExecute()
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -138,8 +138,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->willReturn($this->pageConfig);
 
-        /** @var \Magento\Braintree\Controller\Creditcard\Delete $controller */
-        $controller = $objectManager->getObject(
+
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Delete',
             [
                 'request' => $this->request,
@@ -148,13 +148,13 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultPage, $controller->executeInternal());
+        $this->assertSame($this->resultPage, $notification->execute());
     }
 
     /**
      * Executes the controller action and asserts with redirect for non valid token param
      */
-    public function testExecuteInternalNoTokenRedirect()
+    public function testExecuteNoTokenRedirect()
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -176,8 +176,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->willReturnSelf();
 
-        /** @var \Magento\Braintree\Controller\Creditcard\Delete $controller */
-        $controller = $objectManager->getObject(
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Delete',
             [
                 'request' => $this->request,
@@ -187,13 +186,13 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $notification->execute());
     }
 
     /**
      * Executes the controller action and asserts with redirects for non existing logic
      */
-    public function testExecuteInternalNonExistingTokenRedirect()
+    public function testExecuteNonExistingTokenRedirect()
     {
         $objectManager = new ObjectManagerHelper($this);
         $phrase = new \Magento\Framework\Phrase('Credit card does not exist');
@@ -225,8 +224,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($phrase);
 
-        /** @var \Magento\Braintree\Controller\Creditcard\Delete $controller */
-        $controller = $objectManager->getObject(
+
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Delete',
             [
                 'request' => $this->request,
@@ -237,6 +236,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $notification->execute());
     }
 }

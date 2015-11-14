@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Zend\Json\Json;
 
 class Maintenance extends AbstractActionController
 {
@@ -36,7 +37,9 @@ class Maintenance extends AbstractActionController
     public function indexAction()
     {
         try {
-            $this->maintenanceMode->set(true);
+            $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+            $action = isset($params['disable']) && $params['disable'] ? false : true;
+            $this->maintenanceMode->set($action);
             return new JsonModel(['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]);
         } catch (\Exception $e) {
             return new JsonModel(

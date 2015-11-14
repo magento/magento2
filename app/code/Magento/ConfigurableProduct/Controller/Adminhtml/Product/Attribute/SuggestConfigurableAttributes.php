@@ -61,7 +61,7 @@ class SuggestConfigurableAttributes extends Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
 

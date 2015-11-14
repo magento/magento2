@@ -41,7 +41,7 @@ class GetShippingItemsGrid extends \Magento\Backend\App\Action
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));

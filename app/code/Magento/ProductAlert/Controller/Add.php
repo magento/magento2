@@ -35,7 +35,7 @@ abstract class Add extends Action
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
@@ -43,6 +43,6 @@ abstract class Add extends Action
                 $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
             }
         }
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 }

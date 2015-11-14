@@ -213,7 +213,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($backendConfigMock)
         );
 
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveState()
@@ -234,7 +234,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($data)
         );
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionGetGroupForSave()
@@ -285,7 +285,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $backendConfigMock->expects($this->once())->method('save');
 
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveAdvanced()
@@ -311,6 +311,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $backendConfigMock->expects($this->once())->method('save');
 
         $this->_cacheMock->expects($this->once())->method('clean')->with(\Zend_Cache::CLEANING_MODE_ALL);
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 }

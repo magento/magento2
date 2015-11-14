@@ -100,6 +100,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('getActionName')
             ->willReturn('index');
 
-        $this->assertEquals($this->response, $this->controller->execute($this->request));
+        $this->assertEquals($this->response, $this->controller->dispatch($this->request));
     }
 }

@@ -16,7 +16,7 @@ class View extends \Magento\Sales\Controller\Adminhtml\Transactions
      *
      * @return Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $txn = $this->_initTransaction();
         if (!$txn) {

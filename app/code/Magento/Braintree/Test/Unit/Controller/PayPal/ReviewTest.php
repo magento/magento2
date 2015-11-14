@@ -253,7 +253,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->with($paymentMethodNonce, ['email' => $email]);
         $resultPageMock = $this->setupReviewPage($quoteMock);
 
-        $this->assertEquals($resultPageMock, $this->controller->executeInternal());
+        $this->assertEquals($resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteWithBillingAddress()
@@ -285,7 +285,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->with($paymentMethodNonce, $details);
         $resultPageMock = $this->setupReviewPage($quoteMock);
 
-        $this->assertEquals($resultPageMock, $this->controller->executeInternal());
+        $this->assertEquals($resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteRefresh()
@@ -296,7 +296,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Magento\Braintree\Model\PaymentMethod\PayPal::METHOD_CODE);
         $resultPageMock = $this->setupReviewPage($quoteMock);
 
-        $this->assertEquals($resultPageMock, $this->controller->executeInternal());
+        $this->assertEquals($resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteNoPayment()
@@ -328,7 +328,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
-        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
+        $this->assertEquals($resultRedirect, $this->controller->execute());
     }
 
     public function testExecuteIncorrectPaymentMathod()
@@ -352,7 +352,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
-        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
+        $this->assertEquals($resultRedirect, $this->controller->execute());
     }
 
     public function testExecuteValidationFailure()
@@ -400,7 +400,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
-        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
+        $this->assertEquals($resultRedirect, $this->controller->execute());
     }
 
     public function testExecuteException()
@@ -447,6 +447,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
-        $this->assertEquals($resultRedirect, $this->controller->executeInternal());
+        $this->assertEquals($resultRedirect, $this->controller->execute());
     }
 }

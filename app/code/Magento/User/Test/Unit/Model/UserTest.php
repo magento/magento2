@@ -372,7 +372,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock->expects($this->any())->method('dispatch');
         $this->model->setIsActive(1);
         $actualData = $this->model->beforeSave()->getData();
-        $this->assertArrayHasKey('modified', $actualData);
         $this->assertArrayHasKey('extra', $actualData);
         $this->assertArrayHasKey('password', $actualData);
         $this->assertArrayHasKey('is_active', $actualData);

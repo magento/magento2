@@ -191,7 +191,7 @@ class LinkSampleTest extends \PHPUnit_Framework_TestCase
         $this->redirect->expects($this->once())->method('getRedirectUrl')->willReturn('redirect_url');
         $this->response->expects($this->once())->method('setRedirect')->with('redirect_url')->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->linkSample->executeInternal());
+        $this->assertEquals($this->response, $this->linkSample->execute());
     }
 
     public function testExecuteLinkTypeFile()
@@ -238,6 +238,6 @@ class LinkSampleTest extends \PHPUnit_Framework_TestCase
         $this->redirect->expects($this->once())->method('getRedirectUrl')->willReturn('redirect_url');
         $this->response->expects($this->once())->method('setRedirect')->with('redirect_url')->willReturnSelf();
 
-        $this->assertEquals($this->response, $this->linkSample->executeInternal());
+        $this->assertEquals($this->response, $this->linkSample->execute());
     }
 }

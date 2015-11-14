@@ -6,12 +6,10 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class LogoutSuccess extends Action implements AccountInterface
+class LogoutSuccess extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var PageFactory
@@ -35,7 +33,7 @@ class LogoutSuccess extends Action implements AccountInterface
      *
      * @return \Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultPageFactory->create();
     }

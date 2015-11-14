@@ -44,24 +44,52 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $insert = array_diff($new, $old);
         $delete = array_diff($old, $new);
 
-        if (!empty($insert)) {
+        $this->addRelations($parentId, $insert);
+        $this->removeRelations($parentId, $delete);
+
+        return $this;
+    }
+
+    /**
+     * Add Relations
+     *
+     * @param int $parentId
+     * @param int[] $childIds
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function addRelations($parentId, $childIds)
+    {
+        if (!empty($childIds)) {
             $insertData = [];
-            foreach ($insert as $childId) {
+            foreach ($childIds as $childId) {
                 $insertData[] = ['parent_id' => $parentId, 'child_id' => $childId];
             }
             $this->getConnection()->insertMultiple($this->getMainTable(), $insertData);
         }
-        if (!empty($delete)) {
+        return $this;
+    }
+
+    /**
+     * Remove Relations
+     *
+     * @param int $parentId
+     * @param int[] $childIds
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function removeRelations($parentId, $childIds)
+    {
+        if (!empty($childIds)) {
             $where = join(
                 ' AND ',
                 [
                     $this->getConnection()->quoteInto('parent_id = ?', $parentId),
-                    $this->getConnection()->quoteInto('child_id IN(?)', $delete)
+                    $this->getConnection()->quoteInto('child_id IN(?)', $childIds)
                 ]
             );
             $this->getConnection()->delete($this->getMainTable(), $where);
         }
-
         return $this;
     }
 }

@@ -7,10 +7,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends Action\Action implements IndexInterface
+class Index extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -35,7 +34,7 @@ class Index extends Action\Action implements IndexInterface
      * @return \Magento\Framework\View\Result\Page
      * @throws NotFoundException
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->wishlistProvider->getWishlist()) {
             throw new NotFoundException(__('Page not found.'));

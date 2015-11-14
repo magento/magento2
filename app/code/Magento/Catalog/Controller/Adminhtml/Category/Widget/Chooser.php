@@ -32,7 +32,7 @@ class Chooser extends \Magento\Catalog\Controller\Adminhtml\Category\Widget
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

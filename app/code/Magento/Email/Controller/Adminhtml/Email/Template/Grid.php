@@ -13,7 +13,7 @@ class Grid extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();

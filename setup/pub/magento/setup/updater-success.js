@@ -18,4 +18,5 @@ angular.module('updater-success', ['ngStorage'])
         $scope.back = function () {
             $window.location.href = '';
         }
+        $localStorage.$reset();
     }]);

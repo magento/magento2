@@ -106,6 +106,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->atLeastOnce())->method('getLayout')->willReturn($this->layoutMock);
         $this->viewMock->expects($this->atLeastOnce())->method('getPage')->willReturn($this->pageMock);
 
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 }

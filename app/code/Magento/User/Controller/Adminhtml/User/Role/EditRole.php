@@ -13,7 +13,7 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $role = $this->_initRole();
         $this->_initAction();

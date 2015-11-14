@@ -20,6 +20,9 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->_xsdSchema = $urnResolver->getRealPath(
             'urn:magento:module:Magento_Catalog:etc/product_types_merged.xsd'

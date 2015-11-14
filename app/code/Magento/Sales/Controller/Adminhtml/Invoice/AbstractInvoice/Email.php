@@ -45,7 +45,7 @@ abstract class Email extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $invoiceId = $this->getRequest()->getParam('invoice_id');
         if (!$invoiceId) {

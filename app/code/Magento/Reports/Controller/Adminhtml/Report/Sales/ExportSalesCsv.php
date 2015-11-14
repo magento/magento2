@@ -16,7 +16,7 @@ class ExportSalesCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'sales.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');

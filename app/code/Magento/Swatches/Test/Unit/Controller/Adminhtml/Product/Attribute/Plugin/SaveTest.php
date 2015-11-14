@@ -11,7 +11,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataRequest
      */
-    public function testBeforeExecute($dataRequest, $runTimes)
+    public function testBeforeDispatch($dataRequest, $runTimes)
     {
         $subject = $this->getMock('\Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save', [], [], '', false);
         $request = $this->getMock(
@@ -40,7 +40,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->once())->method('getPostValue')->willReturn($dataRequest);
         $request->expects($this->exactly($runTimes))->method('setPostValue')->willReturn($this->returnSelf());
 
-        $controller->beforeExecute($subject, $request);
+        $controller->beforeDispatch($subject, $request);
     }
 
     public function dataRequest()

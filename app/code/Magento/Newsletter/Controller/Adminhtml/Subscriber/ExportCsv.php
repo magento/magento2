@@ -16,7 +16,7 @@ class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'subscribers.csv';

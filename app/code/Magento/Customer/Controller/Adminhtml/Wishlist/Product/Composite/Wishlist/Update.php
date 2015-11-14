@@ -15,7 +15,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Com
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         // Update wishlist item
         $updateResult = new \Magento\Framework\DataObject();

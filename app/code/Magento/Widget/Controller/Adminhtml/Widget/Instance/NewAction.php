@@ -13,7 +13,7 @@ class NewAction extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('edit');
     }

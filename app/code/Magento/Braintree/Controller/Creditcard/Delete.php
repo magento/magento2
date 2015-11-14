@@ -12,7 +12,7 @@ class Delete extends \Magento\Braintree\Controller\MyCreditCards
      *
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->hasToken()) {
             if (!$this->vault->storedCard($this->hasToken())) {

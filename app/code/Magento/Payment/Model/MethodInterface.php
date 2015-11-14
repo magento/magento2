@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
@@ -237,7 +238,7 @@ interface MethodInterface
     /**
      * Order payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -247,7 +248,7 @@ interface MethodInterface
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -257,7 +258,7 @@ interface MethodInterface
     /**
      * Capture payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -267,7 +268,7 @@ interface MethodInterface
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @param float $amount
      * @return $this
      * @api
@@ -277,7 +278,7 @@ interface MethodInterface
     /**
      * Cancel payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @return $this
      * @api
      */
@@ -286,7 +287,7 @@ interface MethodInterface
     /**
      * Void payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param InfoInterface $payment
      * @return $this
      * @api
      */
@@ -332,12 +333,11 @@ interface MethodInterface
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\DataObject $data
+     * @param DataObject $data
      * @return $this
      * @api
-     * @deprecated
      */
-    public function assignData($data);
+    public function assignData(DataObject $data);
 
     /**
      * Check whether payment method can be used

@@ -475,7 +475,7 @@
     <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="transactionWrapper" type="\Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
+        <plugin name="transactionWrapper" type="Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>

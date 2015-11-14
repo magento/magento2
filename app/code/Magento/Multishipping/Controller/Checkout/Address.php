@@ -13,12 +13,12 @@ abstract class Address extends \Magento\Framework\App\Action\Action
     /**
      * {@inheritdoc}
      */
-    public function execute(\Magento\Framework\App\RequestInterface $request)
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         if (!$this->_getCheckout()->getCustomer()->getId()) {
             return $this->_redirect('customer/account/login');
         }
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**

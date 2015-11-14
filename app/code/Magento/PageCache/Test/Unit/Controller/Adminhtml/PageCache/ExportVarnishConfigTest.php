@@ -102,7 +102,7 @@ class ExportVarnishConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($responseMock)
         );
 
-        $result = $this->action->executeInternal();
+        $result = $this->action->execute();
         $this->assertInstanceOf('Magento\Framework\App\ResponseInterface', $result);
     }
 }
