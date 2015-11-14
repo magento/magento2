@@ -7,6 +7,7 @@
 namespace Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Filter\StripTags;
@@ -28,14 +29,15 @@ class TestConnection extends Action
      */
     private $tagFilter;
 
+
     /**
-     * @param Action\Context    $context
+     * @param Context           $context
      * @param ClientResolver    $clientResolver
      * @param JsonFactory       $resultJsonFactory
      * @param StripTags         $tagFilter
      */
     public function __construct(
-        Action\Context $context,
+        Context $context,
         ClientResolver $clientResolver,
         JsonFactory $resultJsonFactory,
         StripTags $tagFilter

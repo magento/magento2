@@ -5,8 +5,6 @@
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-
 /**
  * Catalog search recommendations resource model
  *

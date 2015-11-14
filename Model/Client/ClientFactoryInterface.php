@@ -5,7 +5,7 @@
  */
 namespace Magento\AdvancedSearch\Model\Client;
 
-interface FactoryInterface
+interface ClientFactoryInterface
 {
     /**
      * Return search client
