@@ -64,7 +64,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->linkRepositoryMock = $this->getMock('Magento\Downloadable\Api\LinkRepositoryInterface');
         $this->sampleRepositoryMock = $this->getMock('Magento\Downloadable\Api\SampleRepositoryInterface');
         $this->productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
-        $this->savedProductMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
+        $this->savedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->closureMock = function () {
             return $this->savedProductMock;
         };
