@@ -214,13 +214,16 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             true
         );
 
-        $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
-        $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
+        if ($this->getDataHelper()->getParam('period') == '24h') {
+            $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
+            $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
+            $dateEnd->modify('-1 hour');
+        }
 
         $dates = [];
         $datas = [];
 
-        while ($dateStart < $dateEnd) {
+        while ($dateStart <= $dateEnd) {
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
@@ -398,7 +401,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                                     break;
                                 case '7d':
                                 case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime($period);
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period,
+                                        \IntlDateFormatter::SHORT,
+                                        \IntlDateFormatter::NONE
+                                    );
                                     break;
                                 case '1y':
                                 case '2y':
