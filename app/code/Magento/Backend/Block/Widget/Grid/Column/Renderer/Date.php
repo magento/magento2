@@ -18,55 +18,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     protected $_defaultWidth = 160;
 
     /**
-     * Date format string
-     *
-     * @var string
-     */
-    protected static $_format = null;
-
-    /**
-     * @var DateTimeFormatterInterface
-     */
-    protected $dateTimeFormatter;
-
-    /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param DateTimeFormatterInterface $dateTimeFormatter
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        DateTimeFormatterInterface $dateTimeFormatter,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->dateTimeFormatter = $dateTimeFormatter;
-    }
-
-    /**
-     * Retrieve date format
-     *
-     * @return string
-     */
-    protected function _getFormat()
-    {
-        $format = $this->getColumn()->getFormat();
-        if (!$format) {
-            if (self::$_format === null) {
-                try {
-                    self::$_format = $this->_localeDate->getDateFormat(
-                        \IntlDateFormatter::MEDIUM
-                    );
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
-                }
-            }
-            $format = self::$_format;
-        }
-        return $format;
-    }
-
-    /**
      * Renders grid column
      *
      * @param   \Magento\Framework\DataObject $row
@@ -74,16 +25,14 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        if ($data = $row->getData($this->getColumn()->getIndex())) {
-            $timezone = $this->getColumn()->getTimezone() !== false ? $this->_localeDate->getConfigTimezone() : 'UTC';
-            return $this->dateTimeFormatter->formatObject(
-                $this->_localeDate->date(
-                    new \DateTime(
-                        $data,
-                        new \DateTimeZone($timezone)
-                    )
-                ),
-                $this->_getFormat()
+        $format = $this->getColumn()->getFormat();
+        if ($date = $this->_getValue($row)) {
+            return $this->_localeDate->formatDateTime(
+                $date instanceof \DateTimeInterface ? $date : new \DateTime($date),
+                $format ?: \IntlDateFormatter::MEDIUM,
+                \IntlDateFormatter::NONE,
+                null,
+                $this->getColumn()->getTimezone() !== false ? null : 'UTC'
             );
         }
         return $this->getColumn()->getDefault();
