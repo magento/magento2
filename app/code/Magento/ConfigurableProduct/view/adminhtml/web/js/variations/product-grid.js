@@ -135,7 +135,7 @@ define([
          */
         close: function (rowIndex) {
             try {
-                if (this.productsMassAction().selected.length) {
+                if (this.productsMassAction().selected.getLength()) {
                     this.variationsComponent()[this.callbackName](this.productsMassAction()
                         .selected.map(this.getProductById.bind(this)));
                     this.productsMassAction().deselectAll();
