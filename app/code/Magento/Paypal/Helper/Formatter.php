@@ -13,6 +13,7 @@ trait Formatter
 {
     /**
      * Format price to 0.00 format
+     *
      * @param $price
      * @return string
      */

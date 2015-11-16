@@ -261,6 +261,7 @@ class Request extends DataObject
 
     /**
      * Export address data to request
+     *
      * @param DataObject $address
      * @param string $type
      * @return array
@@ -268,20 +269,51 @@ class Request extends DataObject
     protected function getAddress(DataObject $address, $type = '')
     {
         $type = !empty($type) ? $type . '_' : '';
-        $region = $address->getRegionCode() ?: $address->getRegion();
         $request = [
             $type . 'first_name' => $address->getFirstname(),
             $type . 'last_name' => $address->getLastname(),
             $type . 'city' => $address->getCity(),
-            $type . 'state' => $region ?: $address->getCity(),
+            $type . 'state' => $this->getRegion($address),
             $type . 'zip' => $address->getPostcode(),
             $type . 'country' => $address->getCountryId(),
         ];
 
-        $street = $this->customerAddress->convertStreetLines($address->getStreet(), 2);
-        $request[$type . 'address1'] = isset($street[0]) ? $street[0] : '';
-        $request[$type . 'address2'] = isset($street[1]) ? $street[1] : '';
+        $streets = $this->getAddressStreets($address);
+        $request[$type . 'address1'] = $streets[0];
+        $request[$type . 'address2'] = $streets[1];
 
         return $request;
+    }
+
+    /**
+     * Export region code from address data
+     *
+     * @param DataObject $address
+     * @return string
+     */
+    protected function getRegion(DataObject $address)
+    {
+        // get region code, otherwise - region, otherwise - city
+        return $address->getRegionCode() ?: ($address->getRegion() ?: $address->getCity());
+    }
+
+    /**
+     * Export streets from address data
+     *
+     * @param DataObject $address
+     * @return array
+     */
+    protected function getAddressStreets(DataObject $address)
+    {
+        $street1 = '';
+        $street2 = '';
+        $data = $this->customerAddress->convertStreetLines($address->getStreet(), 2);
+        if (!empty($data[0])) {
+            $street1 = $data[0];
+        }
+        if (!empty($data[1])) {
+            $street2 = $data[1];
+        }
+        return [$street1, $street2];
     }
 }
