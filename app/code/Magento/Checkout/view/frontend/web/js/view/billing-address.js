@@ -212,6 +212,9 @@ define(
              */
             onAddressChange: function (address) {
                 this.isAddressFormVisible(address == newAddressOption);
+                if (address == newAddressOption) {
+                    this.saveInAddressBook(true);
+                }
             },
 
             /**
