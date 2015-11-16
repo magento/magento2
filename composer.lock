@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ba7080adc37186d3bced58cb66116f9a",
+    "hash": "51716bb5c737bb74f0af2e29e1e8b228",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -190,7 +190,7 @@
             "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.magento.com/_packages/composer-1.0.2.zip",
+                "url": "https://repo.magento.com/_packages/composer-1.0.2.zip",
                 "reference": null,
                 "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
             },

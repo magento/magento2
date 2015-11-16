@@ -10,7 +10,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packages.magento.com/"
+            "url": "http://repo.magento.com/"
         }
     ],
     "require": {
