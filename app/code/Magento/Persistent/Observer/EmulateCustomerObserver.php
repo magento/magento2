@@ -41,23 +41,32 @@ class EmulateCustomerObserver implements ObserverInterface
     protected $customerRepository;
 
     /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
      * Constructor
      *
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+
     ) {
         $this->_persistentSession = $persistentSession;
         $this->_persistentData = $persistentData;
         $this->_customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -73,25 +82,32 @@ class EmulateCustomerObserver implements ObserverInterface
         }
 
         if ($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn()) {
-            /** @var  \Magento\Customer\Model\Customer $customer */
+            /** @var  \Magento\Customer\Api\Data\CustomerInterface $customer */
             $customer = $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId());
-            $defaultShippingAddress = $customer->getDefaultShippingAddress();
-            if ($defaultShippingAddress) {
-                $this->_customerSession->setDefaultTaxShippingAddress(
-                    [
-                        'country_id' => $defaultShippingAddress->getCountryId(),
-                        'region_id'  => $defaultShippingAddress->getRegion() ? $defaultShippingAddress->getRegionId() : null,
-                        'postcode'   => $defaultShippingAddress->getPostcode(),
-                    ]);
+            if ($defaultShipping = $customer->getDefaultShipping()) {
+                /** @var  \Magento\Customer\Model\Data\Address $address */
+                $address = $this->addressRepository->getById($defaultShipping);
+                if ($address) {
+                    $this->_customerSession->setDefaultTaxShippingAddress(
+                        [
+                            'country_id' => $address->getCountryId(),
+                            'region_id' => $address->getRegion()
+                                ? $address->getRegionId()
+                                : null,
+                            'postcode' => $address->getPostcode(),
+                        ]);
+                }
             }
 
-            $defaultBillingAddress = $customer->getDefaultBillingAddress();
-            if ($defaultBillingAddress){
-                $this->_customerSession->setDefaultTaxBillingAddress([
-                    'country_id' => $defaultBillingAddress->getCountryId(),
-                    'region_id'  => $defaultBillingAddress->getRegion() ? $defaultBillingAddress->getRegionId() : null,
-                    'postcode'   => $defaultBillingAddress->getPostcode(),
-                ]);
+            if ($defaultBilling = $customer->getDefaultBilling()) {
+                $address = $this->addressRepository->getById($defaultBilling);
+                if ($address) {
+                    $this->_customerSession->setDefaultTaxBillingAddress([
+                        'country_id' => $address->getCountryId(),
+                        'region_id' => $address->getRegion() ? $address->getRegionId() : null,
+                        'postcode' => $address->getPostcode(),
+                    ]);
+                }
             }
            $this->_customerSession
                 ->setCustomerId($customer->getId())

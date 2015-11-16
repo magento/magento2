@@ -39,6 +39,11 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $observerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRepositoryMock;
+
     protected function setUp()
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
@@ -58,11 +63,13 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
         $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->addressRepositoryMock = $this->getMock('Magento\Customer\Api\AddressRepositoryInterface');
         $this->model = new \Magento\Persistent\Observer\EmulateCustomerObserver(
             $this->sessionHelperMock,
             $this->helperMock,
             $this->customerSessionMock,
-            $this->customerRepositoryMock
+            $this->customerRepositoryMock,
+            $this->addressRepositoryMock
         );
     }
 
@@ -107,15 +114,20 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
         $methods = ['getCountryId', 'getRegion', 'getRegionId', 'getPostcode'];
         $defaultShippingAddressMock = $this->getMock('Magento\Customer\Model\Address', $methods, [], '', false);
         $defaultBillingAddressMock = $this->getMock('Magento\Customer\Model\Address', $methods, [], '', false);
-        $customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
+        $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface');
         $customerMock
             ->expects($this->once())
-            ->method('getDefaultShippingAddress')
-            ->willReturn($defaultShippingAddressMock);
+            ->method('getDefaultShipping')
+            ->willReturn('shippingId');
         $customerMock
             ->expects($this->once())
-            ->method('getDefaultBillingAddress')
-            ->willReturn($defaultBillingAddressMock);
+            ->method('getDefaultBilling')
+            ->willReturn('billingId');
+        $valueMap = [
+            ['shippingId', $defaultShippingAddressMock],
+            ['billingId', $defaultBillingAddressMock]
+        ];
+        $this->addressRepositoryMock->expects($this->any())->method('getById')->willReturnMap($valueMap);
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setDefaultTaxShippingAddress')
