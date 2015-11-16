@@ -7,7 +7,7 @@ var config = {
     map: {
         '*': {
             swatchesProductAttributes: 'Magento_Swatches/js/product-attributes',
-            swatchesTypeChange: 'Magento_Swatches/js/type-change',
+            swatchesTypeChange: 'Magento_Swatches/js/type-change'
         }
     }
 };

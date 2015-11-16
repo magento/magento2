@@ -229,8 +229,8 @@ define([
                             break;
                     }
 
-                    delete(optionConfig.hiddenFields['swatch_visual']);
-                    delete(optionConfig.hiddenFields['swatch_text']);
+                    delete optionConfig.hiddenFields['swatch_visual'];
+                    delete optionConfig.hiddenFields['swatch_text'];
 
                     if (currentValue === 'media_image') {
                         this.tabsFront.hide();
@@ -288,6 +288,8 @@ define([
                 },
 
                 /**
+                 * @param {Object} el
+                 * @param {Boolean} isVisible
                  * @this {swatchProductAttributes}
                  */
                 setRowVisibility: function (el, isVisible) {
@@ -301,6 +303,7 @@ define([
                 },
 
                 /**
+                 * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
                 _disable: function (el) {
@@ -308,6 +311,7 @@ define([
                 },
 
                 /**
+                 * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
                 _enable: function (el) {
@@ -317,6 +321,7 @@ define([
                 },
 
                 /**
+                 * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
                 _showPanel: function (el) {
@@ -325,6 +330,7 @@ define([
                 },
 
                 /**
+                 * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
                 _hidePanel: function (el) {
@@ -332,6 +338,7 @@ define([
                 },
 
                 /**
+                 * @param {String} id
                  * @this {swatchProductAttributes}
                  */
                 _render: function (id) {
@@ -341,28 +348,31 @@ define([
                 },
 
                 /**
+                 * @param {String} promptMessage
                  * @this {swatchProductAttributes}
                  */
                 saveAttributeInNewSet: function (promptMessage) {
-                    var newAttributeSetName;
 
                     prompt({
                         content: promptMessage,
                         actions: {
 
                             /**
+                             * @param {String} val
                              * @this {actions}
                              */
                             confirm: function (val) {
-                                newAttributeSetName = val;
+                                var rules = ['required-entry', 'validate-no-html-tags'],
+                                    newAttributeSetNameInputId = $('#new_attribute_set_name'),
+                                    editForm = $('#edit_form'),
+                                    newAttributeSetName = val,
+                                    i;
 
                                 if (!newAttributeSetName) {
                                     return;
                                 }
 
-                                var rules = ['required-entry', 'validate-no-html-tags'];
-
-                                for (var i = 0; i < rules.length; i++) {
+                                for (i = 0; i < rules.length; i++) {
                                     if (!$.validator.methods[rules[i]](newAttributeSetName)) {
                                         alert({
                                             content: $.validator.messages[rules[i]]
@@ -372,12 +382,10 @@ define([
                                     }
                                 }
 
-                                var newAttributeSetNameInputId = $('#new_attribute_set_name');
-
                                 if (newAttributeSetNameInputId.length) {
                                     newAttributeSetNameInputId.val(newAttributeSetName);
                                 } else {
-                                    $('#edit_form').append(new Element('input', {
+                                    editForm.append(new Element('input', {
                                             type: 'hidden',
                                             id: newAttributeSetNameInputId,
                                             name: 'new_attribute_set_name',
@@ -386,7 +394,7 @@ define([
                                     );
                                 }
                                 // Temporary solution will replaced after refactoring of attributes functionality
-                                $('#edit_form').triggerHandler('save');
+                                editForm.triggerHandler('save');
                             }
                         }
                     });
