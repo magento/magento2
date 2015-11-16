@@ -175,14 +175,13 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_exportToRequestFilters = [
-        'AMT' => '_filterAmount',
-        'ITEMAMT' => '_filterAmount',
-        'TRIALAMT' => '_filterAmount',
-        'SHIPPINGAMT' => '_filterAmount',
-        'TAXAMT' => '_filterAmount',
-        'INITAMT' => '_filterAmount',
+        'AMT' => 'formatPrice',
+        'ITEMAMT' => 'formatPrice',
+        'TRIALAMT' => 'formatPrice',
+        'SHIPPINGAMT' => 'formatPrice',
+        'TAXAMT' => 'formatPrice',
+        'INITAMT' => 'formatPrice',
         'CREDITCARDTYPE' => '_filterCcType',
-        //        'PROFILESTARTDATE' => '_filterToPaypalDate',
         'AUTOBILLAMT' => '_filterBillFailedLater',
         'BILLINGPERIOD' => '_filterPeriodUnit',
         'TRIALBILLINGPERIOD' => '_filterPeriodUnit',
