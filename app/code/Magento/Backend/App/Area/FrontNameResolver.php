@@ -19,6 +19,10 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
 
     const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
 
+    const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+
+    const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+
     /**
      * Backend area code
      */
@@ -89,7 +93,11 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     public function isHostBackend()
     {
-        $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
+            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
+        } else {
+            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+        }
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
         return stripos($this->getHostWithPort($backendUrl), $host) !== false;
     }

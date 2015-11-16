@@ -220,7 +220,7 @@ class AfterImportDataObserver implements ObserverInterface
             && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
         ) {
             $product->setStoreId($storeId);
-        } elseif (!$product->hasData(\Magento\Catalog\Api\Data\ProductInterface::STORE_ID)) {
+        } elseif (!$product->hasData(\Magento\Catalog\Model\Product::STORE_ID)) {
             $product->setStoreId(Store::DEFAULT_STORE_ID);
         }
     }
