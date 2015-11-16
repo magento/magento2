@@ -373,7 +373,9 @@ abstract class AbstractType
                     if ('multiselect' == $attrParams['type']) {
                         $resultAttrs[$attrCode] = [];
                         foreach (explode('|', $rowData[$attrCode]) as $value) {
-                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                            if (isset($attrParams['options'][strtolower($value)])) {
+                                $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                            }
                         }
                         $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
                     }
