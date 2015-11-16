@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1f73362bac96ceeaf31da9da350967fc",
-    "content-hash": "fa5292993d9c94f5d6831eaf5a670bf2",
+    "hash": "ba7080adc37186d3bced58cb66116f9a",
     "packages": [
         {
             "name": "braintree/braintree_php",
