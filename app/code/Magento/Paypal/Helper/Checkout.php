@@ -42,9 +42,9 @@ class Checkout
         return false;
     }
 
-    /*
+    /**
      * Restores quote
-     * 
+     *
      * @return bool
      */
     public function restoreQuote()
