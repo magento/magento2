@@ -368,18 +368,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomFilterableAttribute()
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get('Magento\Catalog\Model\Resource\Eav\Attribute')
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $selectOptions */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection')
+            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
             ->setAttributeFilter($attribute->getId());
 
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $multiselectOptions */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection')
+            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());

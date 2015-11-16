@@ -105,6 +105,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
      *
      * @param array|string $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function restoreValue($value)
     {

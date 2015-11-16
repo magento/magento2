@@ -6,8 +6,9 @@
 define([
     "jquery",
     "mage/template",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui"
-], function($, mageTemplate){
+], function($, mageTemplate, alert){
     "use strict";
 
     $.widget('mage.transparent', {
@@ -157,10 +158,14 @@ define([
         _processErrors: function (response) {
             var msg = response.error_messages;
             if (typeof (msg) === 'object') {
-                alert(msg.join("\n"));
+                alert({
+                    content: msg.join("\n")
+                });
             }
             if (msg) {
-                alert(msg);
+                alert({
+                    content: msg
+                });
             }
         }
     });

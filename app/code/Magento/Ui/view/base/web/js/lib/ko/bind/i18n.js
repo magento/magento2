@@ -82,13 +82,11 @@ define([
          */
         setTranslateProp = function (el, original) {
             var location = $(el).prop('tagName').toLowerCase(),
-                translationArray = $.mage.translate.parsedTranslate(original),
-                translationData = translationArray.length > 3 ?
-                {
-                    shown: translationArray[1], translated: translationArray[2], original: translationArray[3]
-                } :
-                {
-                    shown: original, translated: original, original: original
+                translated = $.mage.__(original),
+                translationData = {
+                    shown: translated,
+                    translated: translated,
+                    original: original
                 },
                 translateAttr = composeTranslateAttr(translationData, location);
 

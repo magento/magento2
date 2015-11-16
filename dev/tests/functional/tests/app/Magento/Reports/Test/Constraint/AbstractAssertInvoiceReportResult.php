@@ -10,22 +10,22 @@ use Magento\Reports\Test\Page\Adminhtml\SalesInvoiceReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
- * Class AbstractAssertInvoiceReportResult
- * Abstract assert for search in invoice report grid
+ * Abstract assert for search in invoice report grid.
  */
 abstract class AbstractAssertInvoiceReportResult extends AbstractConstraint
 {
     /**
-     * Invoice report page
+     * Invoice report page.
      *
      * @var SalesInvoiceReport
      */
     protected $salesInvoiceReport;
 
     /**
-     * Order
+     * Order.
      *
      * @var OrderInjectable
      */
@@ -34,16 +34,20 @@ abstract class AbstractAssertInvoiceReportResult extends AbstractConstraint
     /**
      * @constructor
      * @param ObjectManager $objectManager
+     * @param EventManagerInterface $eventManager
      * @param SalesInvoiceReport $salesInvoiceReport
      */
-    public function __construct(ObjectManager $objectManager, SalesInvoiceReport $salesInvoiceReport)
-    {
-        parent::__construct($objectManager);
+    public function __construct(
+        ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
+        SalesInvoiceReport $salesInvoiceReport
+    ) {
+        parent::__construct($objectManager, $eventManager);
         $this->salesInvoiceReport = $salesInvoiceReport;
     }
 
     /**
-     * Search in invoice report grid
+     * Search in invoice report grid.
      *
      * @param array $invoiceReport
      * @return void
@@ -51,13 +55,13 @@ abstract class AbstractAssertInvoiceReportResult extends AbstractConstraint
     protected function searchInInvoiceReportGrid(array $invoiceReport)
     {
         $this->salesInvoiceReport->open();
-        $this->salesInvoiceReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->salesInvoiceReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->salesInvoiceReport->getFilterForm()->viewsReport($invoiceReport);
         $this->salesInvoiceReport->getActionBlock()->showReport();
     }
 
     /**
-     * Prepare expected result
+     * Prepare expected result.
      *
      * @param array $expectedInvoiceData
      * @return array

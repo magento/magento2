@@ -14,7 +14,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sampleResource;
 
@@ -35,11 +35,11 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->sampleResource = $this->getMockBuilder('\Magento\Downloadable\Model\Resource\Sample')
+        $this->sampleResource = $this->getMockBuilder('\Magento\Downloadable\Model\ResourceModel\Sample')
             ->disableOriginalConstructor()
             ->setMethods(['deleteItems'])
             ->getMock();
-        $sampleResourceFactory = $this->getMockBuilder('\Magento\Downloadable\Model\Resource\SampleFactory')
+        $sampleResourceFactory = $this->getMockBuilder('\Magento\Downloadable\Model\ResourceModel\SampleFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -28,7 +28,7 @@ class AssertProductCompareSuccessRemoveMessage extends AbstractConstraint
     public function processAssert(CatalogProductCompare $catalogProductCompare, FixtureInterface $product)
     {
         $successMessage = sprintf(self::SUCCESS_MESSAGE, $product->getName());
-        $actualMessage = $catalogProductCompare->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $catalogProductCompare->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals($successMessage, $actualMessage, 'Wrong success message is displayed.');
     }
 

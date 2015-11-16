@@ -85,7 +85,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMockForAbstractClass();
         $this->_typeConfigurableFactory = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory',
             ['create', 'saveProducts'],
             [],
             '',
@@ -99,14 +99,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_productCollectionFactory = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_attributeCollectionFactory = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory',
             ['create'],
             [],
             '',
@@ -192,7 +192,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($attribute));
 
         $attributeCollection = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )->setMethods(['setProductFilter', 'addFieldToFilter', 'walk'])->disableOriginalConstructor()
             ->getMock();
         $this->_attributeCollectionFactory->expects($this->any())->method('create')
@@ -217,7 +217,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testCanUseAttribute()
     {
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             [
                 'getIsGlobal',
                 'getIsVisible',
@@ -249,7 +249,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetUsedProducts()
     {
         $attributeCollection = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )->setMethods(['setProductFilter', 'addFieldToFilter', 'walk'])->disableOriginalConstructor()
             ->getMock();
         $attributeCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
@@ -288,7 +288,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getData')
             ->will($this->returnValue(1));
         $productCollection = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection'
         )->setMethods(
             [
                 'setFlag',
@@ -341,7 +341,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attributeFrontend->expects($this->any())->method('getLabel')->will($this->returnValue('Label'));
 
         $eavAttribute = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getFrontend', 'getSource', 'getStoreLabel', '__wakeup', 'setStoreId', '__sleep'],
             [],
             '',
@@ -410,7 +410,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())->method('getData')->with($configurableAttributes)->willReturn($expectedData);
 
         $attributeCollection = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )
             ->setMethods(['setProductFilter', 'orderByPosition', 'load'])
             ->disableOriginalConstructor()
@@ -423,7 +423,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('process')
             ->with(
                 $this->isInstanceOf(
-                    'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+                    'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
                 )
             );
 
@@ -533,7 +533,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getProductAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->setMethods(['getStoreLabel', 'getSourceModel'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -620,7 +620,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productCollection = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection'
         )
             ->setMethods(
                 [
@@ -677,7 +677,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productCollection = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection'
         )
             ->setMethods(
                 [

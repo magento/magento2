@@ -131,7 +131,7 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
         $order->expects($this->once())->method('getIncrementId')->will($this->returnValue('100000001'));
         $order->expects($this->once())->method('getCreatedAt')->will($this->returnValue(time()));
 
-        $collection = $this->getMockBuilder('\Magento\Sales\Model\Resource\Order\Collection')
+        $collection = $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Collection')
             ->setMethods(['addAttributeToFilter', 'addAttributeToSort', 'getIterator'])
             ->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());

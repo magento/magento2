@@ -77,8 +77,9 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
             ->method('date')
             ->will($this->returnValue($dateObject));
 
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
-        $productCollection = $this->getMock('Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        $productCollection =
+            $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $this->product->expects($this->once())->method('getResourceCollection')->will(
             $this->returnValue($productCollection)
         );

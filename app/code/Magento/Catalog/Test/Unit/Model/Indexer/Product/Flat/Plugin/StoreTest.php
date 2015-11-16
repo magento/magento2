@@ -32,7 +32,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->subjectMock = $this->getMock('\Magento\Store\Model\Resource\Store', [], [], '', false);
+        $this->subjectMock = $this->getMock('\Magento\Store\Model\ResourceModel\Store', [], [], '', false);
         $this->storeMock = $this->getMock(
             'Magento\Store\Model\Store',
             ['getId', '__wakeup', 'dataHasChangedFor'],

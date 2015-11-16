@@ -80,5 +80,6 @@ class DeleteCustomerGroupEntityTest extends Injectable
         $this->customerGroupIndex->open();
         $this->customerGroupIndex->getCustomerGroupGrid()->searchAndOpen($filter);
         $this->customerGroupNew->getPageMainActions()->delete();
+        $this->customerGroupNew->getModalBlock()->acceptAlert();
     }
 }

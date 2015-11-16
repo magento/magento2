@@ -19,7 +19,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 class AssertCategoryPage extends AbstractConstraint
 {
     /**
-     * CMS Block display mode
+     * CMS Block display mode.
      *
      * @var array
      */
@@ -29,14 +29,14 @@ class AssertCategoryPage extends AbstractConstraint
     ];
 
     /**
-     * Category view page
+     * Category view page.
      *
      * @var CatalogCategoryView
      */
     protected $categoryViewPage;
 
     /**
-     * Browser instance
+     * Browser instance.
      *
      * @var BrowserInterface
      */
@@ -68,6 +68,8 @@ class AssertCategoryPage extends AbstractConstraint
     }
 
     /**
+     * Prepare comparison data.
+     *
      * @param FixtureFactory $fixtureFactory
      * @param Category $category
      * @param Category $initialCategory
@@ -92,21 +94,30 @@ class AssertCategoryPage extends AbstractConstraint
     }
 
     /**
-     * Get category url to open
+     * Get category url to open.
      *
      * @param Category $category
      * @return string
      */
     protected function getCategoryUrl(Category $category)
     {
-        $categoryUrlKey = $category->hasData('url_key')
-            ? strtolower($category->getUrlKey())
-            : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
-        return $_ENV['app_frontend_url'] . $categoryUrlKey . '.html';
+        $categoryUrlKey = [];
+        while ($category) {
+            $categoryUrlKey[] = $category->hasData('url_key')
+                ? strtolower($category->getUrlKey())
+                : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
+
+            $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+            if (1 == $category->getParentId()) {
+                $category = null;
+            }
+        }
+
+        return $_ENV['app_frontend_url'] . implode('/', array_reverse($categoryUrlKey)) . '.html';
     }
 
     /**
-     * Assert category general information
+     * Assert category general information.
      *
      * @param Category $category
      * @param array $categoryData
@@ -147,7 +158,7 @@ class AssertCategoryPage extends AbstractConstraint
     }
 
     /**
-     * Assert category display settings
+     * Assert category display settings.
      *
      * @param Category $category
      * @param array $categoryData

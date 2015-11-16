@@ -32,6 +32,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,

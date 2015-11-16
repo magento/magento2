@@ -29,15 +29,15 @@ class Attribute extends AbstractPlugin
     /**
      * Invalidate indexer on attribute save (searchable flag change)
      *
-     * @param \Magento\Catalog\Model\Resource\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Catalog\Model\Resource\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Attribute $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {
@@ -62,15 +62,15 @@ class Attribute extends AbstractPlugin
     /**
      * Invalidate indexer on searchable attribute delete
      *
-     * @param \Magento\Catalog\Model\Resource\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Catalog\Model\Resource\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Attribute $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {

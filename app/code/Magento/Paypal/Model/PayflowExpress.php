@@ -66,7 +66,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param Transaction\BuilderInterface $transactionBuilder
      * @param InfoFactory $paypalInfoFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -88,7 +88,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         InfoFactory $paypalInfoFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

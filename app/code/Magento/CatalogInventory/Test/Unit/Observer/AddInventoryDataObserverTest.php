@@ -77,6 +77,6 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
             ->with($product, $stockStatus)
             ->will($this->returnSelf());
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }

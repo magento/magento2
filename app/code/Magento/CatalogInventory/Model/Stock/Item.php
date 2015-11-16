@@ -99,7 +99,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -114,7 +114,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
         StockItemRepositoryInterface $stockItemRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -141,7 +141,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock\Item');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
     }
 
     /**

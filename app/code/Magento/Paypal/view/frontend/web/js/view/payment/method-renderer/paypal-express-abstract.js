@@ -73,7 +73,7 @@ define(
                 if (additionalValidators.validate()) {
                     //update payment method information if additional data was changed
                     this.selectPaymentMethod();
-                    setPaymentMethodAction();
+                    setPaymentMethodAction(this.messageContainer);
                     return false;
                 }
             }

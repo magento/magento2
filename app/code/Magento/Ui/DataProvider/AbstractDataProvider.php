@@ -6,7 +6,7 @@
 namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 abstract class AbstractDataProvider implements DataProviderInterface
 {

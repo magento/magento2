@@ -1,0 +1,100 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//    Common
+//--------------------------------------
+
+& when (@media-common = true) {
+
+.table-wrapper.grouped {
+    width: auto;
+}
+
+.table.grouped {
+    .row-tier-price {
+        > td {
+            border-top: 0;
+        }
+    }
+    .col.item {
+        width: 90%;
+    }
+    .col.qty {
+        width: 10%;
+        .control.qty {
+            .qty {
+                &:extend(.abs-input-qty all);
+            }
+        }
+    }
+    .product-item-name {
+        font-weight: @font-weight__regular;
+        margin-bottom: @indent__s;
+        display: inline-block;
+    }
+    .price-box {
+        p {
+            margin: 0;
+        }
+        .price {
+            font-weight: @font-weight__bold;
+        }
+        .old-price {
+            .price {
+                font-weight: normal;
+            }
+        }
+    }
+    .stock.unavailable {
+        margin: 0;
+        white-space: nowrap;
+        text-transform: none;
+        font-weight: normal;
+    }
+    .row-tier-price {
+    }
+}
+
+.page-product-grouped .product-info-price {
+    float: right;
+    display: block;
+    width: auto;
+    border: 0;
+}
+
+}
+
+//
+//    Mobile
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .table.grouped {
+        > thead > tr > th {
+            display: table-cell;
+            border-bottom: @table__border-width @table__border-style @table__border-color;
+        }
+        > tbody {
+            border-bottom: @table__border-width @table__border-style @table__border-color;
+            > tr > td {
+                &:extend(.abs-col-no-prefix all);
+                border: 0;
+                display: table-cell;
+                padding: @table-cell__padding-vertical @table-cell__padding-horizontal;
+                &:last-child {
+                    border: 0;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .table-wrapper.grouped {
+        margin-left: -@layout__width-xs-indent;
+        margin-right: -@layout__width-xs-indent;
+    }
+}
+

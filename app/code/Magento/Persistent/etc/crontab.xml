@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="persistent_clear_expired" instance="Magento\Persistent\Model\Observer\ClearExpiredCronJob" method="execute">
+        <job name="persistent_clear_expired" instance="Magento\Persistent\Observer\ClearExpiredCronJobObserver" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>

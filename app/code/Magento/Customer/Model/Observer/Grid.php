@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Observer;
 
-use Magento\Customer\Model\Resource\Customer\Grid as CustomerGrid;
+use Magento\Customer\Model\ResourceModel\Customer\Grid as CustomerGrid;
 
 class Grid
 {

@@ -6,9 +6,6 @@
 
 namespace Magento\CatalogInventory\Observer;
 
-/**
- * Catalog observer share data
- */
 class ItemsForReindex
 {
     /**

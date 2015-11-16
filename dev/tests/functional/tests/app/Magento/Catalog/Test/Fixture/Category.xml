@@ -10,7 +10,7 @@
              module="Magento_Catalog"
              type="eav"
              entity_type="catalog_category_entity"
-             collection="Magento\Catalog\Model\Resource\Category\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Category\Collection"
              repository_class="Magento\Catalog\Test\Repository\Category"
              handler_interface="Magento\Catalog\Test\Handler\Category\CategoryInterface"
              class="Magento\Catalog\Test\Fixture\Category">
@@ -30,6 +30,8 @@
         <field name="default_product_listing_config" is_required="0" group="display_setting" />
         <field name="default_sort_by" is_required="0" group="display_setting" />
         <field name="meta_title" is_required="" group="general_information" />
+        <field name="meta_keywords" is_required="" group="general_information" />
+        <field name="meta_description" is_required="" group="general_information" />
         <field name="id" group="null" />
         <field name="name" group="general_information" />
         <field name="is_active" group="general_information" />
@@ -39,5 +41,6 @@
         <field name="landing_page" group="display_setting" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
         <field name="display_mode" group="display_setting" />
         <field name="category_products" group="category_products" source="Magento\Catalog\Test\Fixture\Category\CategoryProducts" />
+        <field name="store_id" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
     </fixture>
 </config>

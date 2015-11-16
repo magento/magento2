@@ -31,9 +31,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $quoteRepositoryMock = $this->getMockBuilder('Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $sessionTransparentMock = $this->getMockBuilder('Magento\Framework\Session\Generic')
             ->setMethods(['getQuoteId'])
             ->disableOriginalConstructor()

@@ -35,7 +35,7 @@ class AssertIntegrationSuccessSaveMessage extends AbstractConstraint
             ? $initialIntegration->getName()
             : $integration->getName();
         $expectedMessage = sprintf(self::SUCCESS_SAVE_MESSAGE, $name);
-        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,

@@ -21,7 +21,7 @@ class Search extends \Magento\Backend\Block\Widget
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -33,14 +33,14 @@ class Search extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
@@ -81,7 +81,7 @@ class Search extends \Magento\Backend\Block\Widget
      *
      * @param string $labelPart
      * @param int $templateId
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {
@@ -89,7 +89,7 @@ class Search extends \Magento\Backend\Block\Widget
             $labelPart,
             ['position' => 'any']
         );
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
         $collection = $this->_collectionFactory->create()->addFieldToFilter(
             'frontend_label',
             ['like' => $escapedLabelPart]
@@ -99,7 +99,7 @@ class Search extends \Magento\Backend\Block\Widget
 
         $result = [];
         foreach ($collection->getItems() as $attribute) {
-            /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             $result[] = [
                 'id' => $attribute->getId(),
                 'label' => $attribute->getFrontendLabel(),

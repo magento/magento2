@@ -5,9 +5,6 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Store\Model\StoreManager;
-
 /**
  * @magentoAppArea adminhtml
  */

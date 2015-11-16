@@ -44,25 +44,7 @@ class Columns extends AbstractComponent
                 }
             }
         }
-        $this->buildUrlsForInlineEditing();
-        parent::prepare();
-    }
 
-    /**
-     * Build urls for inline editing
-     *
-     * @return void
-     */
-    protected function buildUrlsForInlineEditing()
-    {
-        $config = $this->getConfiguration();
-        if (isset($config['editorConfig']) && isset($config['editorConfig']['clientConfig'])) {
-            foreach ($config['editorConfig']['clientConfig'] as $key => &$value) {
-                if (in_array($key, ['saveUrl', 'validateUrl'])) {
-                    $value = $this->getContext()->getUrl($value);
-                }
-            }
-        }
-        $this->setData('config', $config);
+        parent::prepare();
     }
 }

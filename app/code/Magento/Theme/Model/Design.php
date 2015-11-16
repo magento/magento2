@@ -7,7 +7,7 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\DesignInterface;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -85,7 +85,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Resource\Design');
+        $this->_init('Magento\Theme\Model\ResourceModel\Design');
     }
 
     /**

@@ -20,9 +20,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
              * @param string $configFile
              */
             function ($configFile) {
-                $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getXsd();
-                $fileSchema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
-                $this->_validateFileExpectSuccess($configFile, $schema, $fileSchema);
+                $this->_validateFileExpectSuccess($configFile, $this->_getXsd(), $this->_getFileXsd());
             },
             \Magento\Framework\App\Utility\Files::init()->getConfigFiles($this->_getXmlName())
         );
@@ -31,47 +29,59 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingValidXml()
     {
         $xmlFile = $this->_getKnownValidXml();
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = $this->_getXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = $this->_getKnownInvalidXml();
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 
     public function testFileSchemaUsingPartialXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = $this->_getKnownValidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+        $schema = $this->_getFileXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = $this->_getKnownInvalidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+        $schema = $this->_getFileXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = $this->_getKnownValidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 

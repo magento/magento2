@@ -2,7 +2,7 @@
  * Ext JS Library 1.0 Beta 2
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
- * 
+ *
  * http://www.extjs.com/license
  */
 
@@ -31,8 +31,8 @@
     border:1px solid #ccc;
 }
 
-/* 
- Tree 
+/*
+ Tree
  */
  .x-tree-node { font-weight:normal; font-size:12px; list-style-type:none;}
 .x-tree-node-collapsed .x-tree-node-icon{
@@ -134,7 +134,7 @@
 .x-grid-viewport { /*font:11px verdana, helvetica, sans-serif;*/ }
 .x-grid-header{
     background:none;
-    background:#e4ddc5; 
+    background:#e4ddc5;
     overflow:hidden;
     position:relative;
     cursor:default;
@@ -157,7 +157,7 @@
 .x-grid-split {
     top:1px;
     width:6px;
-    height:22px; 
+    height:22px;
     background:url(../images/magento/grid/grid-split.gif) no-repeat 2px 0;
 }
 
@@ -165,7 +165,7 @@
     border-right: 1px solid #d7d7d7;
     border-bottom: 1px solid #d7d7d7;
 }
-.x-grid-hd-row td, .x-grid-row td { outline:none; ./* font:11px verdana, helvetica, sans-serif; */ }
+.x-grid-hd-row td, .x-grid-row td { outline:none; /* font:11px verdana, helvetica, sans-serif; */ }
 .x-grid-hd-row td { font-weight:bold; }
 .x-grid-row { background:#f4f1e7; }
 .x-grid-row-alt { background:#fbfaf7; }
@@ -216,7 +216,7 @@
 }
 
 /**
-* Basic-Dialog 
+* Basic-Dialog
 */
 .x-dlg-proxy {
     background-image: url(../images/gray/layout/gradient-bg.gif);
@@ -252,8 +252,8 @@
     border:1px solid #b3b6b0;
     border-bottom:0 none;
 }
-.x-layout-panel-center, .x-layout-panel-east, .x-layout-panel-south, .x-layout-panel-west { 
-    border:1px solid #c2b483; 
+.x-layout-panel-center, .x-layout-panel-east, .x-layout-panel-south, .x-layout-panel-west {
+    border:1px solid #c2b483;
     border-top:0;
     }
 
@@ -301,7 +301,7 @@
     border:0 none;
 }
 
-/** 
+/**
 * Tabs
 */
 .x-tabs-wrap {
@@ -309,7 +309,7 @@
 }
 .x-tabs-strip td { padding-left:6px; }
 .x-tabs-strip .x-tabs-inner { padding:5px 15px 6px 15px;}
-.x-tabs-strip .x-tabs-text { 
+.x-tabs-strip .x-tabs-text {
     color:#4a8d94;
     /* font:bold 11px verdana, helvetica, sans-serif;  */
     }
@@ -424,9 +424,9 @@
         color:#dc4509;
         font-size:12px;
         font-weight:bold;
-        line-height:1em; 
+        line-height:1em;
 }
-.x-layout-panel-hd-text, .x-layout-panel-hd-text strong { 
+.x-layout-panel-hd-text, .x-layout-panel-hd-text strong {
     /* font:bold 12px verdana, helvetica, sans-serif; */ }
 
 /* section specific header icons */
@@ -526,7 +526,7 @@
 }
 
 /** Toolbar */
-.x-toolbar { 
+.x-toolbar {
     background:url(../images/magento/toolbar/toolbar-bg.gif) repeat-x #dbeff3;
     border:none;
     border-top:1px solid #b3d6dc;
@@ -566,13 +566,13 @@
 }
 
 /* For top menu only*/
-.left-menu-toolbar .x-toolbar, .right-menu-toolbar .x-toolbar { 
+.left-menu-toolbar .x-toolbar, .right-menu-toolbar .x-toolbar {
     border:0 none;
     background:#2E4D53;
     padding:5px 3px 0 3px;
     color:#fbfaf7;
     }
-    
+
 .left-menu-toolbar .x-toolbar td { padding:0 2px; background:none; }
 .left-menu-toolbar .x-btn { border-bottom:5px solid #2E4D53;}
 .left-menu-toolbar .x-btn-over { border-bottom:5px solid #dc4509;}

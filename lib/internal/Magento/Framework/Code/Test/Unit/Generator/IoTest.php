@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Phrase;
+
 class IoTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -15,8 +19,6 @@ class IoTest extends \PHPUnit_Framework_TestCase
     const CLASS_NAME = 'class_name';
 
     const CLASS_FILE_NAME = 'class/file/name';
-
-    const FILE_NAME = 'test_file';
 
     const FILE_CONTENT = "content";
 
@@ -29,15 +31,17 @@ class IoTest extends \PHPUnit_Framework_TestCase
      */
     protected $_generationDirectory;
 
-    /**
-     * @var \Magento\Framework\Code\Generator\Io
-     */
+    /** @var \Magento\Framework\Code\Generator\Io */
     protected $_object;
 
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $_filesystemDriverMock;
+
+    /** @var string */
+    protected $existingFile = '/Magento/Class/Exists.php';
+
+    /** @var string */
+    protected $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
 
     protected function setUp()
     {
@@ -68,26 +72,68 @@ class IoTest extends \PHPUnit_Framework_TestCase
     public function testGetResultFileName()
     {
         $expectedFileName = self::GENERATION_DIRECTORY . '/class/name.php';
-        $this->assertEquals($expectedFileName, $this->_object->getResultFileName(self::CLASS_NAME));
+        $this->assertEquals($expectedFileName, $this->_object->generateResultFileName(self::CLASS_NAME));
     }
 
-    public function testWriteResultFile()
+    /**
+     * @dataProvider testWriteResultFileAlreadyExistsDataProvider
+     */
+    public function testWriteResultFileAlreadyExists($resultFileName, $fileExists, $exceptionDuringRename, $success)
     {
         $this->_filesystemDriverMock->expects($this->once())
             ->method('filePutContents')
             ->with(
-                $this->stringContains(self::FILE_NAME),
+                $this->stringContains($resultFileName),
                 "<?php\n" . self::FILE_CONTENT
             )->willReturn(true);
+        $isExistsInvocationCount = $exceptionDuringRename ? 1 : 0;
+        $this->_filesystemDriverMock->expects($this->exactly($isExistsInvocationCount))
+            ->method('isExists')
+            ->willReturn($fileExists);
+
+        if (!$exceptionDuringRename) {
+            $renameMockEvent = $this->returnValue(true);
+        } else if ($fileExists) {
+            $renameMockEvent = $this->throwException(new FileSystemException(new Phrase('File already exists')));
+        } else {
+            $exceptionMessage = 'Some error renaming file';
+            $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
+            $this->setExpectedException('\Magento\Framework\Exception\FileSystemException', $exceptionMessage);
+        }
 
         $this->_filesystemDriverMock->expects($this->once())
             ->method('rename')
             ->with(
-                $this->stringContains(self::FILE_NAME),
-                self::FILE_NAME
-            )->willReturn(true);
+                $this->stringContains($resultFileName),
+                $resultFileName
+            )->will($renameMockEvent); //Throw exception or return true
 
-        $this->assertTrue($this->_object->writeResultFile(self::FILE_NAME, self::FILE_CONTENT));
+        $this->assertSame($success, $this->_object->writeResultFile($resultFileName, self::FILE_CONTENT));
+    }
+
+    public function testWriteResultFileAlreadyExistsDataProvider()
+    {
+        return [
+            'Writing file succeeds: writeResultFile succeeds' => [
+                'resultFileName' => $this->nonExistingFile,
+                'fileExists' => false,
+                'exceptionDuringRename' => false,
+                'success' => true
+
+            ],
+            'Writing file fails because class already exists on disc: writeResultFile succeeds' => [
+                'resultFileName' => $this->existingFile,
+                'fileExists' => true,
+                'exceptionDuringRename' => true,
+                'success' => true
+            ],
+            'Error renaming file, btu class does not exist on disc: writeResultFile throws exception and fails' => [
+                'resultFileName' => $this->nonExistingFile,
+                'fileExists' => false,
+                'exceptionDuringRename' => true,
+                'success' => false
+            ]
+        ];
     }
 
     public function testMakeGenerationDirectoryWritable()
@@ -136,18 +182,31 @@ class IoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_generationDirectory, $this->_object->getGenerationDirectory());
     }
 
-    public function testFileExists()
+    /**
+     * @dataProvider fileExistsDataProvider
+     * @param $fileName
+     * @param $exists
+     */
+    public function testFileExists($fileName, $exists)
     {
         $this->_filesystemDriverMock->expects(
             $this->once()
         )->method(
             'isExists'
         )->with(
-            $this->equalTo(self::FILE_NAME)
+            $this->equalTo($fileName)
         )->will(
-            $this->returnValue(false)
+            $this->returnValue($exists)
         );
 
-        $this->assertFalse($this->_object->fileExists(self::FILE_NAME));
+        $this->assertSame($exists, $this->_object->fileExists($fileName));
+    }
+
+    public function fileExistsDataProvider()
+    {
+        return [
+            ['fileName' => $this->existingFile, 'exists' => true],
+            ['fileName' => $this->nonExistingFile, 'exists' => false]
+        ];
     }
 }

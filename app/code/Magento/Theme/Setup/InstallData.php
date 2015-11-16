@@ -18,7 +18,7 @@ class InstallData implements InstallDataInterface
     /**
      * Theme resource factory
      *
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     private $themeResourceFactory;
 
@@ -32,11 +32,11 @@ class InstallData implements InstallDataInterface
     /**
      * Init
      *
-     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
      */
     public function __construct(
-        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
     ) {
         $this->themeResourceFactory = $themeResourceFactory;
@@ -48,8 +48,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-
         /*
          * Register themes
          */
@@ -59,7 +57,6 @@ class InstallData implements InstallDataInterface
          * Update theme's data
          */
         $fileCollection = $this->createTheme();
-        $fileCollection->addDefaultPattern('*');
         $fileCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
 
         $resourceCollection = $this->createThemeResource();
@@ -74,7 +71,6 @@ class InstallData implements InstallDataInterface
         }
 
         $fileCollection = $this->createTheme();
-        $fileCollection->addDefaultPattern('*');
         $fileCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
 
         $themeDbCollection = $this->createThemeResource();
@@ -95,12 +91,10 @@ class InstallData implements InstallDataInterface
             ['area' => 'frontend'],
             ['area = ?' => '']
         );
-
-        $setup->endSetup();
     }
 
     /**
-     * @return \Magento\Theme\Model\Resource\Theme\Collection
+     * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     public function createThemeResource()
     {

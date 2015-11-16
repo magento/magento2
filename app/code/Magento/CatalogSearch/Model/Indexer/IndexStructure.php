@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
@@ -25,11 +25,11 @@ class IndexStructure implements IndexStructureInterface
     private $indexScopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param IndexScopeResolver $indexScopeResolver
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         IndexScopeResolver $indexScopeResolver
     ) {
         $this->resource = $resource;

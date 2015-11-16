@@ -17,13 +17,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Links extends Form
 {
     /**
-     * 'Show Links block' button
-     *
-     * @var string
-     */
-    protected $showLinks = '//*[@id="dt-links"]/a';
-
-    /**
      * 'Add New Row for links' button
      *
      * @var string
@@ -49,7 +42,7 @@ class Links extends Form
      *
      * @var string
      */
-    protected $addLinkButtonBlock = '#dd-links .col-actions-add:last-child';
+    protected $addLinkButtonBlock = '[data-ui-id=downloadable-links] .col-actions-add:last-child';
 
     /**
      * Get Downloadable link item block
@@ -77,9 +70,6 @@ class Links extends Form
     public function fillLinks(array $fields, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
-        if (!$element->find($this->title, Locator::SELECTOR_XPATH)->isVisible()) {
-            $element->find($this->showLinks, Locator::SELECTOR_XPATH)->click();
-        }
         $mapping = $this->dataMapping(
             ['title' => $fields['title'], 'links_purchased_separately' => $fields['links_purchased_separately']]
         );
@@ -87,7 +77,6 @@ class Links extends Form
         foreach ($fields['downloadable']['link'] as $index => $link) {
             $rowBlock = $this->getRowBlock($index, $element);
             if (!$rowBlock->isVisible()) {
-                $element->find($this->addLinkButtonBlock)->click();
                 $element->find($this->addNewLinkRow, Locator::SELECTOR_XPATH)->click();
             }
             $rowBlock->fillLinkRow($link);
@@ -104,9 +93,6 @@ class Links extends Form
     public function getDataLinks(array $fields = null, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
-        if (!$element->find($this->title, Locator::SELECTOR_XPATH)->isVisible()) {
-            $element->find($this->showLinks, Locator::SELECTOR_XPATH)->click();
-        }
         $mapping = $this->dataMapping(
             ['title' => $fields['title'], 'links_purchased_separately' => $fields['links_purchased_separately']]
         );

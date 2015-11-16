@@ -44,6 +44,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         $delimiter = ',',
         $enclosure = '"'
     ) {
+        register_shutdown_function([$this, 'destruct']);
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
@@ -58,8 +59,10 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 
     /**
      * Close file handle
+     *
+     * @return void
      */
-    public function __destruct()
+    public function destruct()
     {
         if (is_object($this->_file)) {
             $this->_file->close();

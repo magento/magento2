@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Perform all assertions
  *
  * @group Terms_and_Conditions_(CS)
- * @ZephyrId MAGETWO-29586
+ * @ZephyrId MAGETWO-29586, MAGETWO-32499
  */
 class CreateTermEntityTest extends Scenario
 {

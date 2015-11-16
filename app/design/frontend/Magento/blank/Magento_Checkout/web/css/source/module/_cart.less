@@ -189,8 +189,12 @@
             text-align: center;
             .action.primary {
                 &:extend(.abs-button-l all);
-                margin-bottom: @indent__s;
                 width: 100%;
+            }
+            .item {
+                & + .item {
+                    margin-top: @indent__base;
+                }
             }
         }
     }

@@ -305,7 +305,7 @@ class InstallData implements InstallDataInterface
             \Magento\Catalog\Model\Category::ENTITY,
             'custom_design_from',
             'attribute_model',
-            'Magento\Catalog\Model\Resource\Eav\Attribute'
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
         );
         $categorySetup->updateAttribute(
             \Magento\Catalog\Model\Category::ENTITY,

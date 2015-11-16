@@ -30,7 +30,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
-                $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
+                $objectManager->get('Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory')
             ]
         );
     }
@@ -80,7 +80,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     public function testFilterAttributeCollection()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
         );
         $collection = $this->_model->filterAttributeCollection($collection);
         /**
@@ -111,7 +111,7 @@ abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = []
     ) {
         parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);

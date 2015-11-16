@@ -43,9 +43,9 @@ class AdminAuthLogin extends Page
     /**
      * Constructor.
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_backend_url'] . self::MCA;
+        $this->url = $_ENV['app_backend_url'] . self::MCA;
     }
 
     /**
@@ -56,7 +56,7 @@ class AdminAuthLogin extends Page
     public function getLoginBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendAdminLogin(
-            $this->_browser->find($this->loginBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->loginBlock, Locator::SELECTOR_CSS)
         );
     }
 
@@ -68,7 +68,7 @@ class AdminAuthLogin extends Page
     public function getHeaderBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendPageHeader(
-            $this->_browser->find($this->headerBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->headerBlock, Locator::SELECTOR_CSS)
         );
     }
 
@@ -79,7 +79,7 @@ class AdminAuthLogin extends Page
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoBackendMessages($this->_browser->find($this->messagesBlock));
+        return Factory::getBlockFactory()->getMagentoBackendMessages($this->browser->find($this->messagesBlock));
     }
 
     /**
@@ -89,7 +89,7 @@ class AdminAuthLogin extends Page
      */
     public function waitForHeaderBlock()
     {
-        $browser = $this->_browser;
+        $browser = $this->browser;
         $selector = $this->headerBlock;
         $browser->waitUntil(
             function () use ($browser, $selector) {

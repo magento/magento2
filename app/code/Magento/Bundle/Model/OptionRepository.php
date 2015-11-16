@@ -31,7 +31,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $optionFactory;
 
     /**
-     * @var Resource\Option
+     * @var \Magento\Bundle\Model\ResourceModel\Option
      */
     protected $optionResource;
 
@@ -64,7 +64,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
-     * @param Resource\Option $optionResource
+     * @param \Magento\Bundle\Model\ResourceModel\Option $optionResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
@@ -75,7 +75,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
-        \Magento\Bundle\Model\Resource\Option $optionResource,
+        \Magento\Bundle\Model\ResourceModel\Option $optionResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
@@ -170,11 +170,21 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->setParentId($product->getId());
 
         $optionId = $option->getOptionId();
-        $linksToAdd = [];
         if (!$optionId) {
+            $linksToAdd = [];
             $option->setDefaultTitle($option->getTitle());
             if (is_array($option->getProductLinks())) {
                 $linksToAdd = $option->getProductLinks();
+            }
+            try {
+                $this->optionResource->save($option);
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('Could not save option'), $e);
+            }
+
+            /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
+            foreach ($linksToAdd as $linkedProduct) {
+                $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
             }
         } else {
             $optionCollection = $this->type->getOptionsCollection($product);
@@ -188,19 +198,13 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
             $this->updateOptionSelection($product, $option);
+            try {
+                $this->optionResource->save($option);
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('Could not save option'), $e);
+            }
         }
-
-        try {
-            $this->optionResource->save($option);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save option'), $e);
-        }
-
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
-        foreach ($linksToAdd as $linkedProduct) {
-            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
-        }
-
+        $product->setIsRelationsChanged(true);
         return $option->getOptionId();
     }
 

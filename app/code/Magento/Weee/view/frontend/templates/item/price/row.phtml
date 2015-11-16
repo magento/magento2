@@ -18,7 +18,7 @@ $item = $block->getItem();
         <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
-                <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getRowDisplayPriceInclTax()); ?>
+            <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getRowDisplayPriceInclTax()); ?>
             </span>
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($item)): ?>
@@ -65,7 +65,7 @@ $item = $block->getItem();
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                    data-tax-toggle='{"itemTaxId" : "#esubtotal-item-tax-details<?php /* @escapeNotVerified */ echo $item->getId(); ?>"}'>
+                      data-mage-init='{"taxToggle": {"itemTaxId" : "#esubtotal-item-tax-details<?php /* @escapeNotVerified */ echo $item->getId(); ?>"}}'>
                     <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total')); ?>">
                         <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalRowDisplayPriceExclTax()); ?>
                     </span>

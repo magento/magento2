@@ -10,7 +10,7 @@
              module="Magento_Customer"
              type="flat"
              entity_type="customer_group"
-             collection="Magento\Customer\Model\Resource\Group\Collection"
+             collection="Magento\Customer\Model\ResourceModel\Group\Collection"
              repository_class="Magento\Customer\Test\Repository\CustomerGroup"
              handler_interface="Magento\Customer\Test\Handler\CustomerGroup\CustomerGroupInterface"
              class="Magento\Customer\Test\Fixture\CustomerGroup">

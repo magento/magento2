@@ -42,6 +42,7 @@ class RemoveItem extends Action
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
      * @param PageFactory $resultPageFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,

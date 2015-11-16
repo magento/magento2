@@ -23,7 +23,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     protected $productsList;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactory;
 
@@ -74,7 +74,8 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\CollectionFactory')
+        $this->collectionFactory =
+            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->visibility = $this->getMockBuilder('Magento\Catalog\Model\Product\Visibility')
@@ -172,7 +173,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPagerHtml()
     {
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Collection')
+        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->setMethods(['getSize'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -220,7 +221,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Collection')
+        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->setMethods([
                 'setVisibility',
                 'addMinimalPrice',

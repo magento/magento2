@@ -43,11 +43,17 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
-        $sampleResFactory = $this->getMock('Magento\Downloadable\Model\Resource\SampleFactory', [], [], '', false);
-        $linkResource = $this->getMock('Magento\Downloadable\Model\Resource\Link', [], [], '', false);
-        $linksFactory = $this->getMock('Magento\Downloadable\Model\Resource\Link\CollectionFactory', [], [], '', false);
+        $sampleResFactory = $this->getMock('Magento\Downloadable\Model\ResourceModel\SampleFactory', [], [], '', false);
+        $linkResource = $this->getMock('Magento\Downloadable\Model\ResourceModel\Link', [], [], '', false);
+        $linksFactory = $this->getMock(
+            'Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $samplesFactory = $this->getMock(
-            'Magento\Downloadable\Model\Resource\Sample\CollectionFactory',
+            'Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory',
             [],
             [],
             '',
@@ -58,7 +64,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $resourceProductMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product',
+            'Magento\Catalog\Model\ResourceModel\Product',
             ['getEntityType'],
             [],
             '',

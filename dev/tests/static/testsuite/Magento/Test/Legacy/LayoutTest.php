@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -129,12 +131,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->assertContains('::', $action->getAttribute('helper'));
                 }
 
+                $componentRegistrar = new ComponentRegistrar();
                 if (false !== strpos(
                     $layoutFile,
-                    'app/code/Magento/Sales/view/adminhtml/layout/sales_order'
+                    $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Sales')
+                    . '/view/adminhtml/layout/sales_order'
                 ) || false !== strpos(
                     $layoutFile,
-                    'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order'
+                    $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Shipping')
+                    . '/view/adminhtml/layout/adminhtml_order'
                 )
                 ) {
                     $this->markTestIncomplete(

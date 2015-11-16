@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+/**
+ * @magentoAppArea frontend
+ */
 class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
 {
     /**

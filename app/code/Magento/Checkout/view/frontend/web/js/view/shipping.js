@@ -201,7 +201,7 @@ define(
                 }
             },
 
-            validateShippingInformation: function() {
+            validateShippingInformation: function () {
                 var shippingAddress,
                     addressData,
                     loginFormSelector = 'form[data-role=email-with-possible-login]',
@@ -224,6 +224,9 @@ define(
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
+                    if (this.source.get('shippingAddress.custom_attributes')) {
+                        this.source.trigger('shippingAddress.custom_attributes.data.validate');
+                    };
                     if (this.source.get('params.invalid')
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code

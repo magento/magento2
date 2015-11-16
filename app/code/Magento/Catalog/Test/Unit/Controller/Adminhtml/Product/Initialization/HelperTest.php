@@ -145,8 +145,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'options' => ['option1', 'option2']
         ];
 
-        $attributeNonDate = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
-        $attributeDate = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeNonDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $attributeDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
 
         $attributeNonDateBackEnd =
             $this->getMock('Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend', [], [], '', false);

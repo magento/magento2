@@ -33,7 +33,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleable;
 
@@ -73,7 +73,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));
 
-        $this->saleable = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $this->saleable = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
 
         $this->price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
 

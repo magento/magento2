@@ -40,6 +40,9 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         /* name */
         $this->assertContains('product\/1\/', $html);
         /* part of url */
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Product\Collection', $block->getItems());
+        $this->assertInstanceOf(
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
+            $block->getItems()
+        );
     }
 }

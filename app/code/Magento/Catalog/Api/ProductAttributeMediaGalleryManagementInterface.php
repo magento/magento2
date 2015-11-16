@@ -62,11 +62,11 @@ interface ProductAttributeMediaGalleryManagementInterface
      * Return information about gallery entry
      *
      * @param string $sku
-     * @param int $imageId
+     * @param int $entryId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
      */
-    public function get($sku, $imageId);
+    public function get($sku, $entryId);
 
     /**
      * Retrieve the list of gallery entries associated with given product

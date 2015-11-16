@@ -5,7 +5,7 @@
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage\Directory;
 
-use Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database;
+use Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database;
 
 /**
  * Class DatabaseTest
@@ -103,7 +103,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceDirectoryDatabaseMock = $this->getMock(
-            'Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database',
+            'Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database',
             [],
             [],
             '',

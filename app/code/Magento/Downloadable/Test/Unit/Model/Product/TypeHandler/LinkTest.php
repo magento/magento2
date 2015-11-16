@@ -14,7 +14,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
      */
     private $linkResource;
 
@@ -35,7 +35,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->linkResource = $this->getMockBuilder('\Magento\Downloadable\Model\Resource\Link')
+        $this->linkResource = $this->getMockBuilder('\Magento\Downloadable\Model\ResourceModel\Link')
             ->disableOriginalConstructor()
             ->setMethods(['deleteItems'])
             ->getMock();

@@ -17,11 +17,11 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $sampleData = $this->getMock('Magento\Setup\Model\SampleData', ['isInstallationError'], [], '', false);
-        $objectManager->expects($this->once())->method('get')->willReturn($sampleData);
+        $sampleDataState = $this->getMock('Magento\Framework\Setup\SampleData\State', ['hasError'], [], '', false);
+        $objectManager->expects($this->once())->method('get')->willReturn($sampleDataState);
         /** @var $controller Success */
         $controller = new Success($moduleList, $objectManagerProvider);
-        $sampleData->expects($this->once())->method('isInstallationError');
+        $sampleDataState->expects($this->once())->method('hasError');
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());

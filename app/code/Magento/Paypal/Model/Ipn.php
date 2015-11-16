@@ -11,6 +11,7 @@ namespace Magento\Paypal\Model;
 use Exception;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Paypal\Model\Info;
 
 /**
  * PayPal Instant Payment Notification processor model
@@ -577,15 +578,15 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
          * TODO: implement logic in one place
          * @see \Magento\Paypal\Model\Pro::importPaymentInfo()
          */
-        if ($this->_paypalInfo->isPaymentReviewRequired($payment)) {
+        if (Info::isPaymentReviewRequired($payment)) {
             $payment->setIsTransactionPending(true);
             if ($fraudFilters) {
                 $payment->setIsFraudDetected(true);
             }
         }
-        if ($this->_paypalInfo->isPaymentSuccessful($payment)) {
+        if (Info::isPaymentSuccessful($payment)) {
             $payment->setIsTransactionApproved(true);
-        } elseif ($this->_paypalInfo->isPaymentFailed($payment)) {
+        } elseif (Info::isPaymentFailed($payment)) {
             $payment->setIsTransactionDenied(true);
         }
 

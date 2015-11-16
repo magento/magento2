@@ -13,12 +13,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{$state.current.title}}</title>
     <?php echo $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
     <?php echo $this->headScript()
         ->appendFile('pub/angular/angular.min.js')
         ->appendFile('pub/angular-ng-storage/angular-ng-storage.min.js')
+        ->appendFile('pub/angular-ng-dialog/angular-ng-dialog.min.js')
+        ->appendFile('pub/angular-clickout/angular-clickout.min.js')
         ->appendFile('pub/angular-ui-router/angular-ui-router.min.js')
         ->appendFile('pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
         ->appendFile('pub/angular-sanitize/angular-sanitize.min.js')
@@ -38,7 +41,11 @@
         ->appendFile('pub/magento/setup/data-option.js')
         ->appendFile('pub/magento/setup/start-updater.js')
         ->appendFile('pub/magento/setup/updater-success.js')
-        ->appendFile('pub/magento/setup/select-version.js');
+        ->appendFile('pub/magento/setup/select-version.js')
+        ->appendFile('pub/magento/setup/home.js')
+        ->appendFile('pub/magento/setup/auth-dialog.js')
+        ->appendFile('pub/magento/setup/system-config.js')
+        ->appendFile('pub/magento/setup/install-extension-grid.js');
     ?>
     <link
         rel="icon"
@@ -61,6 +68,11 @@
         href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
         sizes="16x16">
     <?php echo $this->inlineScript() ?>
+    <style>
+        a.white-space-pre-line {
+            white-space: pre-line;
+        }
+    </style>
 </head>
 <body>
 <?php echo $this->content; ?>

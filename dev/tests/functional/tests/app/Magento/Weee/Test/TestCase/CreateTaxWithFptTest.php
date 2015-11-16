@@ -24,15 +24,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Go to Stores > Attributes > Product and add new attribute.
  * 8. Select Fixed Product Tax type and fill attribute label.
  * 9. Save attribute.
- * 10. Go to Stores > Attributes > Product Template.
- * 11. Add new product template based on default.
+ * 10. Go to Stores > Attributes > Attribute Set.
+ * 11. Add new attribute set based on default.
  * 12. Add created FPT attribute to Product Details group and fill set name.
  * 13. Save attribute set.
  *
  * Steps:
  * 1. Go to Products > Catalog.
  * 2. Add new product.
- * 3. Select created product template.
+ * 3. Select created attribute set.
  * 4. Fill data according to dataset.
  * 5. Save product.
  * 6. Go to Stores > Configuration.
@@ -69,12 +69,12 @@ class CreateTaxWithFptTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
         $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_with_addresses']);
         $customer->persist();
-        $productTemplate = $this->fixtureFactory
+        $attributeSet = $this->fixtureFactory
             ->createByCode('catalogAttributeSet', ['dataset' => 'custom_attribute_set_with_fpt']);
-        $productTemplate->persist();
+        $attributeSet->persist();
         return [
             'customer' => $customer,
-            'productTemplate' => $productTemplate
+            'attributeSet' => $attributeSet
         ];
     }
 
@@ -97,7 +97,7 @@ class CreateTaxWithFptTest extends Injectable
      *
      * @param string $configData
      * @param Customer $customer
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param array $productData
      * @return array
      */
@@ -105,12 +105,12 @@ class CreateTaxWithFptTest extends Injectable
         $productData,
         $configData,
         Customer $customer,
-        CatalogAttributeSet $productTemplate
+        CatalogAttributeSet $attributeSet
     ) {
         $this->fixtureFactory->createByCode('taxRule', ['dataset' => 'tax_rule_default'])->persist();
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataset' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $productTemplate]]]
+            ['dataset' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]]
         );
         $product->persist();
         $this->objectManager->create(

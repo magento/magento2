@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Entity attribute option label model
  *
+ * @codeCoverageIgnore
  */
 class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
 {

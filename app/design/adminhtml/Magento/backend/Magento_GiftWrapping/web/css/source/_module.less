@@ -1,0 +1,64 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Create Order -> Gift wrapping
+//  _____________________________________________
+
+.order-create-gift-wrapping {
+    float: left;
+    #mix-grid .width(6, 12);
+    .admin__field {
+        margin: 1.5rem 0;
+    }
+}
+
+.giftmessage-order-create {
+    & + .order-create-gift-wrapping {
+        float: right;
+    }
+}
+
+.order-create-gift-wrapping,
+.gift_options-popup {
+    .gift-wrapping-design {
+        &:extend(.abs-clearfix all);
+        display: none;
+        &._active {
+            display: block;
+        }
+        .image-box {
+            float: left;
+            margin-right: 1.5rem;
+        }
+    }
+}
+
+.gift_options-popup {
+    .admin__legend {
+        &:extend(.abs-fieldset-legend all);
+    }
+    .admin__field {
+        &:extend(.abs-field-rows all);
+        margin-bottom: 1.5rem;
+    }
+    .price {
+        font-weight: @font-weight__bold;
+    }
+    .image-box {
+        display: none;
+        &._active {
+            display: block;
+        }
+    }
+}
+
+.ui-dialog {
+    .gift-wrapping-form {
+        .admin__legend {
+            margin: 0;
+        }
+    }
+}

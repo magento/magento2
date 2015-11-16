@@ -20,7 +20,7 @@ class AttributesGrid extends DataGrid
      */
     protected $filters = [
         'frontend_label' => [
-            'selector' => '[name="filters[frontend_label]"]',
+            'selector' => '[name="frontend_label"]',
         ],
     ];
 }

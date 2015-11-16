@@ -71,12 +71,12 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionFactoryMock;
 
@@ -108,11 +108,11 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
+        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resourceCollection = 'Magento\Sales\Model\Resource\Order\CollectionFactory';
+        $resourceCollection = 'Magento\Sales\Model\ResourceModel\Order\CollectionFactory';
         $this->orderCollectionFactoryMock = $this->getMockBuilder($resourceCollection)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

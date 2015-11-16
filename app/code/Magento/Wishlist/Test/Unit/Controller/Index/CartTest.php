@@ -428,7 +428,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($optionMock);
 
-        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\Collection')
+        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock->expects($this->once())
@@ -637,7 +637,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($optionMock);
 
-        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\Collection')
+        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock->expects($this->once())
@@ -798,7 +798,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($optionMock);
 
-        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\Collection')
+        $optionsMock = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock->expects($this->once())

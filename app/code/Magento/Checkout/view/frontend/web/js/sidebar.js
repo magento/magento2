@@ -8,9 +8,11 @@ define([
     "jquery",
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData){
+], function($, authenticationPopup, customerData, alert, confirm){
 
     $.widget('mage.sidebar', {
         options: {
@@ -19,8 +21,21 @@ define([
         },
         scrollHeight: 0,
 
-        _create: function() {
+        /**
+         * Create sidebar.
+         * @private
+         */
+        _create: function () {
             this._initContent();
+        },
+
+        /**
+         * Update sidebar block.
+         */
+        update: function () {
+            $(this.options.targetElement).trigger('contentUpdated');
+            this._calcHeight();
+            this._isOverflowed();
         },
 
         _initContent: function() {
@@ -37,8 +52,12 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (customer() == false && !cart().isGuestCheckoutAllowed) {
-                    authenticationPopup.showModal();
+                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                    if (this.options.url.isRedirectRequired) {
+                        location.href = this.options.url.loginUrl;
+                    } else {
+                        authenticationPopup.showModal();
+                    }
 
                     return false;
                 }
@@ -46,9 +65,17 @@ define([
             }, this);
             events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
-                if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(event.target));
-                }
+                confirm({
+                    content: self.options.confirmMessage,
+                    actions: {
+                        confirm: function () {
+                            self._removeItem($(event.currentTarget));
+                        },
+                        always: function (event) {
+                            event.stopImmediatePropagation();
+                        }
+                    }
+                });
             };
             events['keyup ' + this.options.item.qty] = function(event) {
                 self._showItemButton($(event.target));
@@ -56,6 +83,9 @@ define([
             events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
+            };
+            events['focusout ' + this.options.item.qty] = function(event) {
+                self._validateQty($(event.currentTarget));
             };
 
             this._on(this.element, events);
@@ -85,7 +115,6 @@ define([
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
-                elem.val(itemQty);
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -103,6 +132,18 @@ define([
                 && (changed.length > 0)
                 && (changed - 0 == changed)
                 && (changed - 0 > 0);
+        },
+
+        /**
+         * @param {Object} elem
+         * @private
+         */
+        _validateQty: function(elem) {
+            var itemQty = elem.data('item-qty');
+
+            if (!this._isValidQty(itemQty, elem.val())) {
+                elem.val(itemQty);
+            }
         },
 
         _hideItemButton: function(elem) {
@@ -169,7 +210,9 @@ define([
                     } else {
                         var msg = response.error_message;
                         if (msg) {
-                            window.alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                         }
                     }
                 })
@@ -177,6 +220,7 @@ define([
                     console.log(JSON.stringify(error));
                 });
         },
+
         /**
          * Calculate height of minicart list
          *
@@ -186,22 +230,18 @@ define([
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
-                target = $(this.options.minicart.list)
-                    .clone()
-                    .attr('style', 'position: absolute !important; top: -10000 !important;')
-                    .appendTo('body');
+                target = $(this.options.minicart.list);
 
-            this.scrollHeight = 0;
-            target.children().each(function() {
+            target.children().each(function () {
+                var outerHeight = $(this).outerHeight();
+
                 if (counter-- > 0) {
-                    height += $(this).height();
+                    height += outerHeight;
                 }
-                self.scrollHeight += $(this).height();
+                self.scrollHeight += outerHeight;
             });
 
-            target.remove();
-
-            $(this.options.minicart.list).css('height', height);
+            target.height(height);
         }
     });
 

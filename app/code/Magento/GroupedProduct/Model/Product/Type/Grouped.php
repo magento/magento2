@@ -68,7 +68,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Catalog product link
      *
-     * @var \Magento\GroupedProduct\Model\Resource\Product\Link
+     * @var \Magento\GroupedProduct\Model\ResourceModel\Product\Link
      */
     protected $productLinks;
 
@@ -90,7 +90,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
+     * @param \Magento\GroupedProduct\Model\ResourceModel\Product\Link $catalogProductLink
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
@@ -108,7 +108,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
+        \Magento\GroupedProduct\Model\ResourceModel\Product\Link $catalogProductLink,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
@@ -147,7 +147,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setChildFieldName(
             'linked_product_id'
         )->setWhere(
-            'link_type_id=' . \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            'link_type_id=' . \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
         return $info;
     }
@@ -168,7 +168,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         return $this->productLinks->getChildrenIds(
             $parentId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
     }
 
@@ -182,7 +182,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         return $this->productLinks->getParentIdsByChild(
             $childId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
     }
 
@@ -291,13 +291,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve collection of associated products
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     public function getAssociatedProductCollection($product)
     {
         /** @var \Magento\Catalog\Model\Product\Link  $links */
         $links = $product->getLinkInstance();
-        $links->setLinkTypeId(\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED);
+        $links->setLinkTypeId(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
         $collection = $links->getProductCollection()->setFlag(
             'require_stock_items',
             true

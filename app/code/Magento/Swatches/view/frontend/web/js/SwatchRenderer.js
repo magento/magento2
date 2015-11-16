@@ -2,24 +2,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-Number.prototype.formatMoney = function (c, d, t) { //this function helps format price
-    var n = this,
-        c = isNaN(c = Math.abs(c)) ? 2 : c,
-        d = d == undefined ? "." : d,
-        t = t == undefined ? "," : t,
-        s = n < 0 ? "-" : "",
-        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-        j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-};
 
-Array.prototype.intersection = function (a) {
-    return this.filter(function (i) {
-        return a.indexOf(i) >= 0;
-    });
-};
+define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
+    'use strict';
 
-define(["jquery", "jquery/ui"], function ($) {
+    /**
+     * Parse params
+     * @param {String} query
+     * @returns {{}}
+     */
     $.parseParams = function (query) {
         var re = /([^&=]+)=?([^&]*)/g,
             decodeRE = /\+/g,  // Regex for replacing addition symbol with a space
@@ -173,15 +164,16 @@ define(["jquery", "jquery/ui"], function ($) {
                 moreButton: 'swatch-more',
                 loader: 'swatch-option-loading'
             },
-            jsonConfig: {},                                 // option's json config
-            jsonSwatchConfig: {},                           // swatch's json config
-            selectorProduct: '.product-info-main',          // selector of parental block of prices and swatches (need to know where to seek for price block)
-            selectorProductPrice: '.price',                 // selector of price wrapper (need to know where set price)
-            numberToShow: false,                            // number of controls to show (false or zero = show all)
-            onlySwatches: false,                            // show only swatch controls
-            enableControlLabel: true,                       // enable label for control
-            moreButtonText: 'More',                         // text for more button
-            mediaCallback: ''                               // Callback url for media
+            jsonConfig: {},                                    // option's json config
+            jsonSwatchConfig: {},                              // swatch's json config
+            selectorProduct: '.product-info-main',             // selector of parental block of prices and swatches (need to know where to seek for price block)
+            selectorProductPrice: '[data-role=priceBox]',      // selector of price wrapper (need to know where set price)
+            numberToShow: false,                               // number of controls to show (false or zero = show all)
+            onlySwatches: false,                               // show only swatch controls
+            enableControlLabel: true,                          // enable label for control
+            moreButtonText: 'More',                            // text for more button
+            mediaCallback: '',                                 // Callback url for media
+            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
         },
 
         /**
@@ -201,6 +193,30 @@ define(["jquery", "jquery/ui"], function ($) {
                 this._RenderControls();
             } else {
                 console.log('SwatchRenderer: No input data received');
+            }
+        },
+
+        /**
+         * @private
+         */
+        _create: function () {
+            var options = this.options,
+                gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
+                isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist ?
+                    this.element.parents('.column.main') :
+                    this.element.parents('.product-item-info');
+
+            if (isProductViewExist) {
+                gallery.on('gallery:loaded', function () {
+                    var galleryObject = gallery.data('gallery');
+
+                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+                });
+            } else {
+                options.mediaGalleryInitial = [{
+                    'img': $main.find('.product-image-photo').attr('src')
+                }];
             }
         },
 
@@ -245,10 +261,12 @@ define(["jquery", "jquery/ui"], function ($) {
 
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
-                    $widget.optionsMap[item.id][this.id] = {
-                        price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
-                        products: this.products
-                    };
+                    if (this.products.length > 0) {
+                        $widget.optionsMap[item.id][this.id] = {
+                            price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
+                            products: this.products
+                        };
+                    }
                 });
             });
 
@@ -324,13 +342,13 @@ define(["jquery", "jquery/ui"], function ($) {
                 // Color
                 else if (type == 1) {
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                    '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Image
                 else if (type == 2) {
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                    '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
+                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
                 }
 
                 // Clear
@@ -449,7 +467,13 @@ define(["jquery", "jquery/ui"], function ($) {
             }
 
             $widget._Rebuild();
-            $widget._UpdatePrice();
+
+            if ($widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
+            ) {
+                $widget._UpdatePrice();
+            }
+
             $widget._LoadProductMedia();
         },
 
@@ -537,7 +561,7 @@ define(["jquery", "jquery/ui"], function ($) {
                         return;
                     }
 
-                    if (products.intersection($widget.optionsMap[id][option].products).length <= 0) {
+                    if (_.intersection(products, $widget.optionsMap[id][option].products).length <= 0) {
                         $this.attr('disabled', true).addClass('disabled');
                     }
                 });
@@ -570,7 +594,7 @@ define(["jquery", "jquery/ui"], function ($) {
                 if (products.length == 0) {
                     products = $widget.optionsMap[id][option].products;
                 } else {
-                    products = products.intersection($widget.optionsMap[id][option].products);
+                    products = _.intersection(products, $widget.optionsMap[id][option].products);
                 }
             });
 
@@ -585,21 +609,48 @@ define(["jquery", "jquery/ui"], function ($) {
         _UpdatePrice: function () {
             var $widget = this,
                 $product = $widget.element.parents($widget.options.selectorProduct),
-                price = $product.find('[data-price-amount]').data('price-amount');
+                $productPrice = $product.find(this.options.selectorProductPrice),
+                options = _.object(_.keys($widget.optionsMap), {}),
+                result;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var id = $(this).attr('attribute-id');
-                var option = $(this).attr('option-selected');
+                var attributeId = $(this).attr('attribute-id'),
+                    selectedOptionId = $(this).attr('option-selected');
 
-                price = $widget.optionsMap[id][option].price;
+                options[attributeId] = selectedOptionId;
             });
 
-            $product
-                .find($widget.options.selectorProductPrice)
-                .text($widget.options.jsonConfig.template.replace(
-                    '<%- data.price %>',
-                    price.formatMoney(2)
-                ));
+            result = $widget.options.jsonConfig.optionPrices[_.findKey($widget.options.jsonConfig.index, options)];
+
+            $productPrice.trigger(
+                'updatePrice',
+                {
+                    'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
+                }
+            );
+
+        },
+
+        /**
+         * Get prices
+         * @param {Object} newPrices
+         * @returns {Object}
+         * @private
+         */
+        _getPrices: function (newPrices, displayPrices) {
+            var $widget = this;
+
+            if (_.isEmpty(newPrices)) {
+                newPrices = $widget.options.jsonConfig.prices;
+            }
+
+            _.each(displayPrices, function (price, code) {
+                if (newPrices[code]) {
+                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
+                }
+            });
+
+            return displayPrices;
         },
 
         /**
@@ -694,7 +745,8 @@ define(["jquery", "jquery/ui"], function ($) {
          * @private
          */
         _ProductMediaCallback: function ($this, response) {
-            var $main = ($('body.catalog-product-view').size() > 0)
+            var isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist
                     ? $this.parents('.column.main')
                     : $this.parents('.product-item-info'),
                 $widget = this,
@@ -703,24 +755,52 @@ define(["jquery", "jquery/ui"], function ($) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) > 0) {
-                if (support(response)) {
-                    images.push({large: response.large, medium: response.medium, small: response.small});
-                    if (response.hasOwnProperty('gallery')) {
-                        $.each(response.gallery, function () {
-                            if (!support(this) || response.large == this.large) {
-                                return;
-                            }
-                            images.push({large: this.large, medium: this.medium, small: this.small});
-                        });
-                    }
-                }
+            if ($widget._ObjectLength(response) < 1) {
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
-                if ($('body.catalog-product-view').size() > 0) {
-                    $main.find('[data-role=media-gallery]').gallery('option', 'images', images);
-                } else {
-                    $main.find('.product-image-photo').attr('src', images.shift().medium);
+                return;
+            }
+
+            if (support(response)) {
+                images.push({
+                    full: response.large,
+                    img: response.medium,
+                    thumb: response.small
+                });
+
+                if (response.hasOwnProperty('gallery')) {
+                    $.each(response.gallery, function () {
+                        if (!support(this) || response.large === this.large) {
+                            return;
+                        }
+                        images.push({
+                            full: this.large,
+                            img: this.medium,
+                            thumb: this.small
+                        });
+                    });
                 }
+            }
+
+            this.updateBaseImage(images, $main, isProductViewExist);
+        },
+
+        /**
+         * Update [gallery-placeholder] or [product-image-photo]
+         * @param {Array} images
+         * @param {jQuery} context
+         * @param {Boolean} isProductViewExist
+         */
+        updateBaseImage: function (images, context, isProductViewExist) {
+            var justAnImage = images[0];
+
+            if (isProductViewExist) {
+                context
+                    .find('[data-gallery-role=gallery-placeholder]')
+                    .data('gallery')
+                    .updateData(images);
+            } else if (justAnImage && justAnImage.img) {
+                context.find('.product-image-photo').attr('src', justAnImage.img);
             }
         },
 
@@ -732,10 +812,7 @@ define(["jquery", "jquery/ui"], function ($) {
         _XhrKiller: function () {
             var $widget = this;
 
-            if (
-                $widget.xhr != undefined
-                || $widget.xhr != null
-            ) {
+            if ($widget.xhr !== undefined && $widget.xhr !== null) {
                 $widget.xhr.abort();
                 $widget.xhr = null;
             }
@@ -748,12 +825,12 @@ define(["jquery", "jquery/ui"], function ($) {
          */
         _EmulateSelected: function () {
             var $widget = this,
-                $this = $widget.element;
-            var request = $.parseParams(window.location.search.substring(1));
+                $this = $widget.element,
+                request = $.parseParams(window.location.search.substring(1));
 
             $.each(request, function (key, value) {
                 $this.find('.' + $widget.options.classes.attributeClass
-                + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
+                    + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
             });
         },
 
@@ -763,11 +840,14 @@ define(["jquery", "jquery/ui"], function ($) {
          * @returns {number}
          * @private
          */
-        _ObjectLength: function(obj) {
-            var size = 0, key;
+        _ObjectLength: function (obj) {
+            var size = 0,
+                key;
+
             for (key in obj) {
                 if (obj.hasOwnProperty(key)) size++;
             }
+
             return size;
         }
     });

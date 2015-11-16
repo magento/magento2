@@ -15,7 +15,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $resourceModel = $this->getMock(
-            'Magento\Widget\Model\Resource\Layout\Update',
+            'Magento\Widget\Model\ResourceModel\Layout\Update',
             [
                 '__wakeup',
                 'formatDate',

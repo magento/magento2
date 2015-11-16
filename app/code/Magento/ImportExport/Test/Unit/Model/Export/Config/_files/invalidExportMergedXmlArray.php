@@ -8,9 +8,9 @@ return [
         '<?xml version="1.0"?><config><fileFormat label="name_one" model="model"/><fileFormat name="name_one" ' .
         'model="model"/><fileFormat name="name" label="model"/></config>',
         [
-            "Element 'fileFormat': The attribute 'name' is required but missing.",
-            "Element 'fileFormat': The " . "attribute 'label' is required but missing.",
-            "Element 'fileFormat': The attribute 'model' is required but " . "missing."
+            "Element 'fileFormat': The attribute 'name' is required but missing.\nLine: 1\n",
+            "Element 'fileFormat': The " . "attribute 'label' is required but missing.\nLine: 1\n",
+            "Element 'fileFormat': The attribute 'model' is required but " . "missing.\nLine: 1\n"
         ],
     ],
     'entity_node_with_required_attribute' => [
@@ -19,10 +19,10 @@ return [
         '<entity label="name" name="model" entityAttributeFilterType="name_three"/>' .
         '<entity label="name" name="model_two" model="model"/></config>',
         [
-            "Element 'entity': The attribute 'name' is required but missing.",
-            "Element 'entity': The attribute " . "'label' is required but missing.",
-            "Element 'entity': The attribute 'model' is required but missing.",
-            "Element 'entity': The attribute 'entityAttributeFilterType' is required but missing."
+            "Element 'entity': The attribute 'name' is required but missing.\nLine: 1\n",
+            "Element 'entity': The attribute " . "'label' is required but missing.\nLine: 1\n",
+            "Element 'entity': The attribute 'model' is required but missing.\nLine: 1\n",
+            "Element 'entity': The attribute 'entityAttributeFilterType' is required but missing.\nLine: 1\n"
         ],
     ]
 ];

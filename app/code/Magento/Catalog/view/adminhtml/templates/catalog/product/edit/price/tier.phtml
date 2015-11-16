@@ -66,11 +66,13 @@ var tierPriceRowTemplate = '<tr>'
     + '<option value="<?php /* @escapeNotVerified */ echo $_groupId ?>"><?php /* @escapeNotVerified */ echo $block->escapeJsQuote($block->escapeHtml($_groupName)) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
-    + '<td class="col-qty"><small class="nobr" title="<?php /* @escapeNotVerified */ echo __("and above")?>"><?php /* @escapeNotVerified */ echo __("and above")?></small><input class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][price_qty]" value="<%- data.qty %>" id="tier_price_row_<%- data.index %>_qty" />'
+    + '<td class="col-qty">'
+        + '<input class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][price_qty]" value="<%- data.qty %>" id="tier_price_row_<%- data.index %>_qty" />'
+        + '<span><?php /* @escapeNotVerified */ echo __("and above") ?></span>'
     + '</td>'
     + '<td class="col-price"><input class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> required-entry <?php /* @escapeNotVerified */ echo $_priceValueValidation ?>" type="text" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
     + '<td class="col-delete"><input type="hidden" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
-    + '<button title="<?php /* @escapeNotVerified */ echo __("Delete Tier") ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<button title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Delete Tier')); ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
     + '<span><?php /* @escapeNotVerified */ echo __("Delete") ?></span></button></td>'
     + '</tr>';
 

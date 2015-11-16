@@ -88,15 +88,13 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-paypal-review-items {
-        tfoot {
-            > tr {
-                &:first-child {
-                    th,
-                    td {
-                        border: 0;
-                    }
-                }
+        .col {
+            &.subtotal {
+                text-align: left;
             }
+        }
+        .product-item-name {
+            display: inline-block;
         }
     }
 }
@@ -130,6 +128,18 @@
         .column.main & {
             .actions-toolbar {
                 &:extend(.abs-reset-left-margin-desktop all);
+            }
+        }
+
+        .table-paypal-review-items {
+            .col {
+                &.price,
+                &.qty {
+                    text-align: center;
+                }
+                &.item {
+                    width: 60%;
+                }
             }
         }
 

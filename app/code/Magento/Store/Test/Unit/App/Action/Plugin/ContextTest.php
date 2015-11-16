@@ -19,6 +19,10 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
+    const CURRENCY_SESSION = 'CNY';
+    const CURRENCY_DEFAULT = 'USD';
+    const CURRENCY_CURRENT_STORE = 'UAH';
+
     /**
      * @var \Magento\Store\App\Action\Plugin\Context
      */
@@ -55,9 +59,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $storeMock;
 
     /**
-     * @var \Magento\Directory\Model\Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $currencyMock;
+    protected $currentStoreMock;
 
     /**
      * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
@@ -114,9 +118,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->currencyMock = $this->getMock(
-            'Magento\Directory\Model\Currency',
-            ['getCode', '__wakeup'],
+        $this->currentStoreMock = $this->getMock(
+            'Magento\Store\Model\Store',
+            [],
             [],
             '',
             false
@@ -150,33 +154,25 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 'storeCookieManager' => $this->storeCookieManager,
             ]
         );
-    }
-
-    /**
-     * Test aroundDispatch
-     */
-    public function testAroundDispatch()
-    {
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->will($this->returnValue($this->websiteMock));
         $this->storeManager->method('getDefaultStoreView')
             ->willReturn($this->storeMock);
+        $this->storeManager->method('getStore')
+            ->willReturn($this->currentStoreMock);
         $this->websiteMock->expects($this->once())
             ->method('getDefaultStore')
             ->will($this->returnValue($this->storeMock));
         $this->storeMock->expects($this->once())
-            ->method('getDefaultCurrency')
-            ->will($this->returnValue($this->currencyMock));
+            ->method('getDefaultCurrencyCode')
+            ->will($this->returnValue(self::CURRENCY_DEFAULT));
         $this->storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn('default');
-        $this->currencyMock->expects($this->once())
+        $this->currentStoreMock->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('UAH'));
-        $this->sessionMock->expects($this->once())
-            ->method('getCurrencyCode')
-            ->will($this->returnValue('UAH'));
+            ->willReturn('custom_store');
         $this->storeCookieManager->expects($this->once())
             ->method('getStoreCodeFromCookie')
             ->will($this->returnValue('storeCookie'));
@@ -184,16 +180,41 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue('default'));
-        $this->httpContextMock->expects($this->atLeastOnce())
+        $this->currentStoreMock->expects($this->any())
+            ->method('getDefaultCurrencyCode')
+            ->will($this->returnValue(self::CURRENCY_CURRENT_STORE));
+    }
+
+    public function testAroundDispatchCurrencyFromSession()
+    {
+        $this->sessionMock->expects($this->any())
+            ->method('getCurrencyCode')
+            ->will($this->returnValue(self::CURRENCY_SESSION));
+
+        $this->httpContextMock->expects($this->at(0))
             ->method('setValue')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [Context::CONTEXT_CURRENCY, 'UAH', 'UAH', $this->httpContextMock],
-                        [StoreManagerInterface::CONTEXT_STORE, 'default', 'default', $this->httpContextMock],
-                    ]
-                )
-            );
+            ->with(StoreManagerInterface::CONTEXT_STORE, 'custom_store', 'default');
+        /** Make sure that current currency is taken from session if available */
+        $this->httpContextMock->expects($this->at(1))
+            ->method('setValue')
+            ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_SESSION, self::CURRENCY_DEFAULT);
+
+        $this->assertEquals(
+            'ExpectedValue',
+            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
+    }
+
+    public function testDispatchCurrentStoreCurrency()
+    {
+        $this->httpContextMock->expects($this->at(0))
+            ->method('setValue')
+            ->with(StoreManagerInterface::CONTEXT_STORE, 'custom_store', 'default');
+        /** Make sure that current currency is taken from current store if no value is provided in session */
+        $this->httpContextMock->expects($this->at(1))
+            ->method('setValue')
+            ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
+
         $this->assertEquals(
             'ExpectedValue',
             $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)

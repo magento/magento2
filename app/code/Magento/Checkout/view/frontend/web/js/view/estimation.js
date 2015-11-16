@@ -13,6 +13,7 @@ define(
     function (Component, quote, priceUtils, totals, sidebarModel) {
         'use strict';
         return Component.extend({
+            isLoading: totals.isLoading,
             getQuantity: function() {
                 if (totals.totals()) {
                     return parseFloat(totals.totals().items_qty);
@@ -34,7 +35,6 @@ define(
             getValue: function () {
                 return this.getFormattedPrice(this.getPureValue());
             }
-
         });
     }
 );

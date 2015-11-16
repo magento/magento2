@@ -13,11 +13,13 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
-use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -27,7 +29,7 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractEntity extends \Magento\Framework\Model\Resource\AbstractResource implements EntityInterface
+abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
     /**
      * Connection name
@@ -157,7 +159,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     protected static $_attributeBackendTables = [];
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -177,7 +179,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -222,9 +224,9 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     /**
      * Set connections for entity operations
      *
-     * @deprecated
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConnection($connection)
     {
@@ -245,6 +247,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @codeCoverageIgnore
      */
     public function getConnection()
     {
@@ -255,6 +258,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * For compatibility with AbstractModel
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getIdFieldName()
     {
@@ -266,6 +270,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param string $alias
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTable($alias)
     {
@@ -1291,11 +1296,11 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                 } elseif (!is_numeric($v) && $v !== $origData[$k] || is_numeric($v) && $v != $origData[$k]) {
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
-                        'value' => $v,
+                        'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
                     ];
                 }
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
-                $insert[$attrId] = $v;
+                $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
             }
         }
 
@@ -1508,7 +1513,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             'value' => $this->_prepareValueForSave($value, $attribute),
         ];
 
-        if (!$this->getEntityTable()) {
+        if (!$this->getEntityTable() || $this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
             $data['entity_type_id'] = $object->getEntityTypeId();
         }
 

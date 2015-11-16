@@ -9,14 +9,28 @@ namespace Magento\Framework\Config;
 class FileIteratorFactory
 {
     /**
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
+     */
+    private $fileReadFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
+     */
+    public function __construct(\Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory)
+    {
+        $this->fileReadFactory = $fileReadFactory;
+    }
+
+    /**
      * Create file iterator
      *
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $readDirectory
-     * @param array $paths
+     * @param array $paths List of absolute paths
      * @return FileIterator
      */
-    public function create(\Magento\Framework\Filesystem\Directory\ReadInterface $readDirectory, $paths)
+    public function create($paths)
     {
-        return new \Magento\Framework\Config\FileIterator($readDirectory, $paths);
+        return new FileIterator($this->fileReadFactory, $paths);
     }
 }

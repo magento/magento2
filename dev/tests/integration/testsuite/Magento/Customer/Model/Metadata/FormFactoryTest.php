@@ -22,7 +22,6 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
             'default_shipping' => true,
             'default_billing' => false,
             'company' => 'eBay Inc.',
-            'fax' => '(444) 444-4444',
             'middlename' => 'MiddleName',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',

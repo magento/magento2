@@ -48,6 +48,6 @@ class CalendarTest extends \PHPUnit_Framework_TestCase
     public function testGetYearRange()
     {
         $testCurrentYear = (new \DateTime())->format('Y');
-        $this->assertEquals((int)$testCurrentYear - 100 . ':' . $testCurrentYear, $this->block->getYearRange());
+        $this->assertEquals((int)$testCurrentYear - 100 . ':' . ($testCurrentYear + 100), $this->block->getYearRange());
     }
 }

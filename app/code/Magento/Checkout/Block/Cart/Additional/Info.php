@@ -16,6 +16,7 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -25,6 +26,7 @@ class Info extends \Magento\Framework\View\Element\Template
 
     /**
      * @return \Magento\Quote\Model\Quote\Item\AbstractItem
+     * @codeCoverageIgnore
      */
     public function getItem()
     {

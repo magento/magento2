@@ -40,14 +40,14 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory,
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
@@ -98,10 +98,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                 [
                     'id' => 'delete',
                     'label' => __('Delete Category'),
-                    'onclick' => "categoryDelete('" . $this->getUrl(
-                        'catalog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
+                    'onclick' => "categoryDelete('" . $this->getDeleteUrl() . "')",
                     'class' => 'delete'
                 ]
             );
@@ -115,7 +112,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                 [
                     'id' => 'reset',
                     'label' => __('Reset'),
-                    'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',true)",
+                    'onclick' => "categoryReset('"
+                        . $this->getUrl($resetPath, $this->getDefaultUrlParams())
+                        . "',true)",
                     'class' => 'reset'
                 ]
             );
@@ -142,7 +141,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getDeleteButtonHtml()
     {
@@ -151,7 +149,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getSaveButtonHtml()
     {
@@ -163,7 +160,6 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return string
-     * @deprecated (MAGETWO-31464)
      */
     public function getResetButtonHtml()
     {
@@ -262,8 +258,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getDeleteUrl(array $args = [])
     {
-        $params = ['_current' => true];
-        $params = array_merge($params, $args);
+        $params = array_merge($this->getDefaultUrlParams(), $args);
         return $this->getUrl('catalog/*/delete', $params);
     }
 
@@ -275,8 +270,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getRefreshPathUrl(array $args = [])
     {
-        $params = ['_current' => true];
-        $params = array_merge($params, $args);
+        $params = array_merge($this->getDefaultUrlParams(), $args);
         return $this->getUrl('catalog/*/refreshPath', $params);
     }
 
@@ -361,5 +355,13 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $blockClassName = 'Magento\Backend\Block\Widget\Button';
         }
         return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultUrlParams()
+    {
+        return ['_current' => true, '_query' => ['isAjax' => null]];
     }
 }

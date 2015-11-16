@@ -5,8 +5,9 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -21,7 +22,7 @@ class EavAttribute
     const BASE_OPTION_TITLE = 'option';
 
     /**
-     * @var \Magento\Swatches\Model\Resource\Swatch\CollectionFactory
+     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
      */
     protected $swatchCollectionFactory;
 
@@ -50,12 +51,12 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
-     * @param \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $collectionFactory
+     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      */
     public function __construct(
-        \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $collectionFactory,
+        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper
     ) {
@@ -74,6 +75,7 @@ class EavAttribute
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);
+            $this->validateOptions($attribute);
             $this->swatchHelper->assembleAdditionalDataEavAttribute($attribute);
         }
         $this->convertSwatchToDropdown($attribute);
@@ -103,6 +105,7 @@ class EavAttribute
      */
     protected function setProperOptionsArray(Attribute $attribute)
     {
+        $canReplace = false;
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $canReplace = true;
             $defaultValue = $attribute->getData('defaultvisual');
@@ -378,10 +381,59 @@ class EavAttribute
         if (!empty($defaultValue)) {
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
-            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE) {
+            // created and removed on frontend option not exists in dependency array
+            if (
+                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+                isset($this->dependencyArray[$defaultValue])
+            ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
             }
             $swatch->getResource()->saveDefaultSwatchOption($attribute->getId(), $defaultValue);
         }
+    }
+
+    /**
+     * Validate that attribute options exist
+     *
+     * @param Attribute $attribute
+     * @return bool
+     * @throws InputException
+     */
+    protected function validateOptions(Attribute $attribute)
+    {
+        $options = null;
+        if ($this->swatchHelper->isVisualSwatch($attribute)) {
+            $options = $attribute->getData('optionvisual');
+        } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
+            $options = $attribute->getData('optiontext');
+        }
+        if ($options && !$this->isOptionsValid($options, $attribute)) {
+            throw new InputException(__('Admin is a required field in the each row'));
+        }
+        return true;
+    }
+
+    /**
+     * Check if attribute options are valid
+     *
+     * @param array $options
+     * @param Attribute $attribute
+     * @return bool
+     */
+    protected function isOptionsValid(array $options, Attribute $attribute)
+    {
+        if (!isset($options['value'])) {
+            return false;
+        }
+        foreach ($options['value'] as $optionId => $option) {
+            // do not validate options marked as deleted
+            if ($this->isOptionForDelete($attribute, $optionId)) {
+                continue;
+            }
+            if (empty($option[0])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

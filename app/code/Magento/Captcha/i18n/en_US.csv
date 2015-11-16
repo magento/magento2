@@ -25,3 +25,4 @@ Forms,Forms
 "Case Sensitive","Case Sensitive"
 "Enable CAPTCHA on Frontend","Enable CAPTCHA on Frontend"
 "CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen."
+"Enable CAPTCHA on Storefront","Enable CAPTCHA on Storefront"

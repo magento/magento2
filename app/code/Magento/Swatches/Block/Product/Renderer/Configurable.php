@@ -253,11 +253,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
         if ($result['type'] == Swatch::SWATCH_TYPE_VISUAL_IMAGE && !empty($swatchDataArray['value'])) {
             $result['value'] = $this->swatchMediaHelper->getSwatchAttributeImage(
-                'swatch_image',
+                Swatch::SWATCH_IMAGE_NAME,
                 $swatchDataArray['value']
             );
             $result['thumb'] = $this->swatchMediaHelper->getSwatchAttributeImage(
-                'swatch_thumb',
+                Swatch::SWATCH_THUMBNAIL_NAME,
                 $swatchDataArray['value']
             );
         } else {
@@ -284,8 +284,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         $variationMediaArray = [];
         if ($variationProduct) {
             $variationMediaArray = [
-                'value' => $this->getSwatchProductImage($variationProduct, 'swatch_image'),
-                'thumb' => $this->getSwatchProductImage($variationProduct, 'swatch_thumb'),
+                'value' => $this->getSwatchProductImage($variationProduct, Swatch::SWATCH_IMAGE_NAME),
+                'thumb' => $this->getSwatchProductImage($variationProduct, Swatch::SWATCH_THUMBNAIL_NAME),
             ];
         }
 
@@ -299,20 +299,26 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
-        if (
-            $childProduct->getData('swatch_image') !== null
-            && $childProduct->getData('swatch_image') != self::EMPTY_IMAGE_VALUE
-        ) {
-            $swatchImageId = $imageType == 'swatch_image' ? 'swatch_image' : 'swatch_thumb';
-        } elseif (
-            $childProduct->getData('image') !== null
-            && $childProduct->getData('image') != self::EMPTY_IMAGE_VALUE
-        ) {
-            $swatchImageId = $imageType == 'swatch_image' ? 'swatch_image_base' : 'swatch_thumb_base';
+        if ($this->isProductHasImage($childProduct, Swatch::SWATCH_IMAGE_NAME)) {
+            $swatchImageId = $imageType;
+            $imageAttributes = ['type' => Swatch::SWATCH_IMAGE_NAME];
+        } elseif ($this->isProductHasImage($childProduct, 'image')) {
+            $swatchImageId = $imageType == Swatch::SWATCH_IMAGE_NAME ? 'swatch_image_base' : 'swatch_thumb_base';
+            $imageAttributes = ['type' => 'image'];
         }
         if (isset($swatchImageId)) {
-            return $this->_imageHelper->init($childProduct, $swatchImageId)->getUrl();
+            return $this->_imageHelper->init($childProduct, $swatchImageId, $imageAttributes)->getUrl();
         }
+    }
+
+    /**
+     * @param Product $product
+     * @param string $imageType
+     * @return bool
+     */
+    protected function isProductHasImage(Product $product, $imageType)
+    {
+        return $product->getData($imageType) !== null && $product->getData($imageType) != self::EMPTY_IMAGE_VALUE;
     }
 
     /**

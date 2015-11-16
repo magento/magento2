@@ -5,24 +5,24 @@
  */
 namespace Magento\Authorization\Model\Acl\Loader;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class Rule implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
     public function __construct(
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $data = []
     ) {
         $this->_resource = $resource;

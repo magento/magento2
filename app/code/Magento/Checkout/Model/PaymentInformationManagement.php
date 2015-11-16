@@ -42,6 +42,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,

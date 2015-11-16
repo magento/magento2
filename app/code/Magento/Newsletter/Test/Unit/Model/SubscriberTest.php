@@ -48,7 +48,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     protected $inlineTranslation;
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -96,7 +96,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagement = $this->getMock('Magento\Customer\Api\AccountManagementInterface');
         $this->inlineTranslation = $this->getMock('Magento\Framework\Translate\Inline\StateInterface');
         $this->resource = $this->getMock(
-            'Magento\Newsletter\Model\Resource\Subscriber',
+            'Magento\Newsletter\Model\ResourceModel\Subscriber',
             [
                 'loadByEmail',
                 'getIdFieldName',
@@ -279,8 +279,8 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubscriberFullName()
     {
-        $this->subscriber->setCustomerFirstname('John');
-        $this->subscriber->setCustomerLastname('Doe');
+        $this->subscriber->setFirstname('John');
+        $this->subscriber->setLastname('Doe');
 
         $this->assertEquals('John Doe', $this->subscriber->getSubscriberFullName());
     }

@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTreeTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,14 +44,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetTreeModel()
     {
         $model = $this->_model->getTreeModel();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Tree', $model);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Tree', $model);
         $this->assertNotSame($model, $this->_model->getTreeModel());
     }
 
     public function testGetTreeModelInstance()
     {
         $model = $this->_model->getTreeModelInstance();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Tree', $model);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Tree', $model);
         $this->assertSame($model, $this->_model->getTreeModelInstance());
     }
 
@@ -63,7 +64,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetProductCollection()
     {
         $collection = $this->_model->getProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $this->assertEquals($this->_model->getStoreId(), $collection->getStoreId());
     }
 

@@ -18,20 +18,26 @@ use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
     /**
      * Generate config data for individual segments
      *
-     * @var ConfigGenerator
+     * @var  ConfigGenerator
      */
     private $configGenerator;
 
-    /**
-     * @var DbValidator
-     */
+    /** @var  DbValidator */
     private $dbValidator;
+
+    /** @var  array */
+    private $validSaveHandlers = [
+        ConfigOptionsListConstants::SESSION_SAVE_FILES,
+        ConfigOptionsListConstants::SESSION_SAVE_DB,
+    ];
 
     /**
      * Constructor
@@ -61,9 +67,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new SelectConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                [ConfigOptionsListConstants::SESSION_SAVE_FILES, ConfigOptionsListConstants::SESSION_SAVE_DB],
+                $this->validSaveHandlers,
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
-                'Session save location',
+                'Session save handler',
                 ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
@@ -260,15 +266,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateSessionSave(array $options)
     {
         $errors = [];
-
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_FILES
-                && $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_DB
-            ) {
-                $errors[] = 'Invalid session save location.';
-            }
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
+            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $this->validSaveHandlers)
+        ) {
+            $errors[] = "Invalid session handler '{$options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]}'";
         }
 
         return $errors;
@@ -286,7 +287,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
             && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key.';
+            $errors[] = 'Invalid encryption key';
         }
 
         return $errors;

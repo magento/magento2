@@ -62,7 +62,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Group', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
 
         $this->groupMock = $this->getMock(
             'Magento\Store\Model\Group',

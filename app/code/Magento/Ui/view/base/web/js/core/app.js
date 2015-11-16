@@ -4,7 +4,8 @@
  */
 define([
     './renderer/types',
-    './renderer/layout'
+    './renderer/layout',
+    'Magento_Ui/js/lib/ko/initialize'
 ], function (types, layout) {
     'use strict';
 

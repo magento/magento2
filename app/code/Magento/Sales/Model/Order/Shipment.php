@@ -13,8 +13,8 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Sales order shipment model
  *
- * @method \Magento\Sales\Model\Resource\Order\Shipment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -69,12 +69,12 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $_eventObject = 'shipment';
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory
      */
     protected $_shipmentItemCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
      */
     protected $_trackCollectionFactory;
 
@@ -84,7 +84,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $_commentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory
      */
     protected $_commentCollectionFactory;
 
@@ -98,12 +98,12 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param Shipment\CommentFactory $commentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -113,12 +113,12 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -145,7 +145,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment');
     }
 
     /**
@@ -329,7 +329,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Retrieve tracks collection.
      *
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Track\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection
      */
     public function getTracksCollection()
     {
@@ -433,7 +433,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * Retrieve comments collection.
      *
      * @param bool $reload
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Comment\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection
      */
     public function getCommentsCollection($reload = false)
     {

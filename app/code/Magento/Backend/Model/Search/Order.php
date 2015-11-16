@@ -20,16 +20,16 @@ class Order extends \Magento\Framework\DataObject
     protected $_adminhtmlData = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      */
     public function __construct(
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Data $adminhtmlData
     ) {
         $this->_collectionFactory = $collectionFactory;

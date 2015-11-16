@@ -21,16 +21,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const APP = 'app';
 
     /**
-     * Modules
-     */
-    const MODULES = 'code';
-
-    /**
-     * Themes
-     */
-    const THEMES = 'design';
-
-    /**
      * Initial configuration of the application
      */
     const CONFIG = 'etc';
@@ -44,11 +34,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
      * Libraries/components that need to be accessible publicly through web-server (such as various DHTML components)
      */
     const LIB_WEB = 'lib_web';
-
-    /**
-     * Language packages
-     */
-    const LOCALE = 'i18n';
 
     /**
      * \Directory within document root of a web-server to access static view files publicly
@@ -130,7 +115,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
         $result = [
             self::ROOT => [parent::PATH => ''],
             self::APP => [parent::PATH => 'app'],
-            self::MODULES => [parent::PATH => 'app/code'],
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],
@@ -138,14 +122,12 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'var/di'],
             self::GENERATION => [parent::PATH => 'var/generation'],
-            self::LOCALE => [parent::PATH => 'app/i18n'],
             self::SESSION => [parent::PATH => 'var/session'],
             self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'pub/media'],
             self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'pub/static'],
             self::PUB => [parent::PATH => 'pub', parent::URL_PATH => 'pub'],
             self::LIB_WEB => [parent::PATH => 'lib/web'],
             self::TMP => [parent::PATH => 'var/tmp'],
-            self::THEMES => [parent::PATH => 'app/design'],
             self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
             self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],

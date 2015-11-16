@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Model\Resource\Order\Creditmemo as Resource;
-use Magento\Sales\Model\Resource\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo as Resource;
+use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
@@ -64,8 +64,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\CreditmemoInterface $entity */
-            $entity = $this->metadata->getNewInstance();
-            $this->metadata->getMapper()->load($entity, $id);
+            $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -87,21 +86,21 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
     /**
      * Lists credit memos that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoSearchResultInterface Credit memo search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         /** @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $searchResult->setCurPage($criteria->getCurrentPage());
-        $searchResult->setPageSize($criteria->getPageSize());
+        $searchResult->setCurPage($searchCriteria->getCurrentPage());
+        $searchResult->setPageSize($searchCriteria->getPageSize());
         return $searchResult;
     }
 

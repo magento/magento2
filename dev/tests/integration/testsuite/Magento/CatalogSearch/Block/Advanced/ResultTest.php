@@ -79,7 +79,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($childBlock->getCollection());
         $this->_block->setListCollection();
         $this->assertInstanceOf(
-            'Magento\CatalogSearch\Model\Resource\Advanced\Collection',
+            'Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection',
             $childBlock->getCollection()
         );
     }

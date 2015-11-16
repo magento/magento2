@@ -25,7 +25,7 @@ class TaxClassProcessor
     /**
      * Instance of tax class collection factory.
      *
-     * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -37,11 +37,11 @@ class TaxClassProcessor
     protected $classModelFactory;
 
     /**
-     * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $collectionFactory
+     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
      */
     public function __construct(
-        \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $collectionFactory,
+        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory,
         \Magento\Tax\Model\ClassModelFactory $classModelFactory
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -59,7 +59,7 @@ class TaxClassProcessor
         if (empty($this->taxClasses)) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter('class_type', ClassModel::TAX_CLASS_TYPE_PRODUCT);
-            /* @var $collection \Magento\Tax\Model\Resource\TaxClass\Collection */
+            /* @var $collection \Magento\Tax\Model\ResourceModel\TaxClass\Collection */
             foreach ($collection as $taxClass) {
                 $this->taxClasses[$taxClass->getClassName()] = $taxClass->getId();
             }

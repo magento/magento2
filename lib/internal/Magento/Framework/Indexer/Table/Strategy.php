@@ -14,17 +14,17 @@ class Strategy implements StrategyInterface
     /**
      * Application resource
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->resource = $resource;
     }

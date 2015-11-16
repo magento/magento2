@@ -55,4 +55,12 @@ interface AutoloaderInterface
      * @return bool
      */
     public function loadClass($className);
+
+    /**
+     * Get filepath of class on system or false if it does not exist
+     *
+     * @param string $className
+     * @return string|bool
+     */
+    public function findFile($className);
 }

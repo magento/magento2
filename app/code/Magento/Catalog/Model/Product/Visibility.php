@@ -27,25 +27,25 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Reference to the attribute instance
      *
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected $_attribute;
 
     /**
      * Eav entity attribute
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $_eavEntityAttribute;
 
     /**
      * Construct
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute
      * @param array $data
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute,
         array $data = []
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;
@@ -180,7 +180,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Set attribute instance
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setAttribute($attribute)
@@ -192,7 +192,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Get attribute instance
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttribute()
     {

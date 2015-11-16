@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Model;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\SalesRule\Model\Resource\Rule\Collection;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 
 /**
  * Sales rule CRUD class
@@ -58,7 +58,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
      */
     protected $ruleCollectionFactory;
 
@@ -70,7 +70,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      * @param \Magento\SalesRule\Model\Converter\ToModel $toModelConverter
      * @param \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $ruleCollectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
@@ -81,7 +81,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         \Magento\SalesRule\Model\Converter\ToModel $toModelConverter,
         \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $ruleCollectionFactory,
+        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
     ) {
         $this->ruleFactory = $ruleFactory;
@@ -129,7 +129,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\SalesRule\Model\Resource\Rule\Collection $collection */
+        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
         $collection = $this->ruleCollectionFactory->create();
         $ruleInterfaceName = 'Magento\SalesRule\Api\Data\RuleInterface';
         $this->extensionAttributesJoinProcessor->process($collection, $ruleInterfaceName);

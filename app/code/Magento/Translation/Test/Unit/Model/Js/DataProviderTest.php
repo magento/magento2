@@ -8,8 +8,7 @@ namespace Magento\Translation\Test\Unit\Model\Js;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\File\ReadInterface;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Js\Config;
 use Magento\Framework\Phrase\Renderer\Translate;
@@ -42,7 +41,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rootDirectoryMock;
+    protected $fileReadMock;
 
     /**
      * @var Translate|\PHPUnit_Framework_MockObject_MockObject
@@ -57,22 +56,25 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
         $this->filesUtilityMock = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->rootDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->fileReadMock = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
         $this->translateMock = $this->getMock('Magento\Framework\Phrase\Renderer\Translate', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->rootDirectoryMock);
+        $fileReadFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->fileReadMock);
+        $dirSearch = $this->getMock('\Magento\Framework\Component\DirSearch', [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Translation\Model\Js\DataProvider',
             [
                 'appState' => $this->appStateMock,
                 'config' => $this->configMock,
-                'filesystem' => $filesystem,
+                'fileReadFactory' => $fileReadFactory,
+                'translate' => $this->translateMock,
+                'dirSearch' => $dirSearch,
                 'filesUtility' => $this->filesUtilityMock,
-                'translate' => $this->translateMock
+                'componentRegistrar' =>
+                    $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false)
             ]
         );
     }
@@ -96,13 +98,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
         ];
 
-        $relativePathMap = [
-            ['path1', 'relativePath1'],
-            ['path2', 'relativePath2'],
-            ['path3', 'relativePath3'],
-            ['path4', 'relativePath4']
-        ];
-
         $expectedResult = [
             'hello1' => 'hello1translated',
             'hello2' => 'hello2translated',
@@ -111,10 +106,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $contentsMap = [
-            ['relativePath1', null, null, 'content1$.mage.__("hello1")content1'],
-            ['relativePath2', null, null, 'content2$.mage.__("hello2")content2'],
-            ['relativePath3', null, null, 'content2$.mage.__("hello3")content3'],
-            ['relativePath4', null, null, 'content2$.mage.__("hello4")content4']
+            'content1$.mage.__("hello1")content1',
+            'content2$.mage.__("hello2")content2',
+            'content2$.mage.__("hello3")content3',
+            'content2$.mage.__("hello4")content4'
         ];
 
         $translateMap = [
@@ -136,12 +131,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getStaticHtmlFiles')
             ->willReturnMap($staticFilesMap);
 
-        $this->rootDirectoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->willReturnMap($relativePathMap);
-        $this->rootDirectoryMock->expects($this->any())
-            ->method('readFile')
-            ->willReturnMap($contentsMap);
+        foreach ($contentsMap as $index => $content) {
+            $this->fileReadMock->expects($this->at($index))
+                ->method('readAll')
+                ->willReturn($content);
+        }
+
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn($patterns);

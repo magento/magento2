@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -48,7 +48,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -76,7 +76,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -6,7 +6,7 @@
 namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Review\Model\Resource\Review\Collection as ReviewCollection;
+use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
 
 /**
  * Product Reviews Page
@@ -26,7 +26,7 @@ class View extends \Magento\Catalog\Block\Product\View
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
      */
     protected $_reviewsColFactory;
 
@@ -41,7 +41,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Customer\Model\Session $customerSession
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -56,7 +56,7 @@ class View extends \Magento\Catalog\Block\Product\View
         \Magento\Customer\Model\Session $customerSession,
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
+        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_reviewsColFactory = $collectionFactory;
@@ -95,6 +95,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,

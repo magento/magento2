@@ -152,7 +152,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $parentCategory->expects($this->any())->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
 
-        $this->categoryRepository->expects($this->once())->method('get')->with('parent_id')
+        $this->categoryRepository->expects($this->any())->method('get')->with('parent_id')
             ->will($this->returnValue($parentCategory));
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
@@ -235,7 +235,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function generateUrlKeyDataProvider()
+    public function getUrlKeyDataProvider()
     {
         return [
             ['url-key', null, 'url-key'],
@@ -244,17 +244,17 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider generateUrlKeyDataProvider
-     * @param string $urlKey
-     * @param string $name
+     * @dataProvider getUrlKeyDataProvider
+     * @param string|null|bool $urlKey
+     * @param string|null|bool $name
      * @param string $result
      */
-    public function testGenerateUrlKey($urlKey, $name, $result)
+    public function testGetUrlKey($urlKey, $name, $result)
     {
         $this->category->expects($this->once())->method('getUrlKey')->will($this->returnValue($urlKey));
         $this->category->expects($this->any())->method('getName')->will($this->returnValue($name));
         $this->category->expects($this->once())->method('formatUrlKey')->will($this->returnArgument(0));
 
-        $this->assertEquals($result, $this->categoryUrlPathGenerator->generateUrlKey($this->category));
+        $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlKey($this->category));
     }
 }

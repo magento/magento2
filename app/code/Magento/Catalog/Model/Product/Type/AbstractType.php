@@ -310,7 +310,7 @@ abstract class AbstractType
      *
      * @param  int $attributeId
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute|null
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|null
      */
     public function getAttributeById($attributeId, $product)
     {

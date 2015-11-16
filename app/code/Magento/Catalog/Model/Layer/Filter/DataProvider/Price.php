@@ -55,7 +55,7 @@ class Price
     private $rangeItemCounts = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     private $resource;
 
@@ -88,13 +88,13 @@ class Price
      * @param Layer $layer
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
      */
     public function __construct(
         Layer $layer,
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
+        \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
     ) {
         $this->layer = $layer;
         $this->coreRegistry = $coreRegistry;
@@ -355,7 +355,7 @@ class Price
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
     {

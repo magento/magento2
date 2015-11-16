@@ -51,7 +51,7 @@ class Cart extends DataObject implements CartInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Checkout\Model\Resource\Cart
+     * @var \Magento\Checkout\Model\ResourceModel\Cart
      */
     protected $_resourceCart;
 
@@ -81,7 +81,7 @@ class Cart extends DataObject implements CartInterface
     protected $stockState;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -94,28 +94,29 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Resource\Cart $resourceCart
+     * @param \Magento\Checkout\Model\ResourceModel\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Checkout\Model\Resource\Cart $resourceCart,
+        \Magento\Checkout\Model\ResourceModel\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
@@ -136,7 +137,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get shopping cart resource model
      *
-     * @return \Magento\Checkout\Model\Resource\Cart
+     * @return \Magento\Checkout\Model\ResourceModel\Cart
+     * @codeCoverageIgnore
      */
     protected function _getResource()
     {
@@ -147,6 +149,7 @@ class Cart extends DataObject implements CartInterface
      * Retrieve checkout session model
      *
      * @return Session
+     * @codeCoverageIgnore
      */
     public function getCheckoutSession()
     {
@@ -157,6 +160,7 @@ class Cart extends DataObject implements CartInterface
      * Retrieve customer session model
      *
      * @return \Magento\Customer\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCustomerSession()
     {
@@ -212,6 +216,7 @@ class Cart extends DataObject implements CartInterface
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -319,6 +324,7 @@ class Cart extends DataObject implements CartInterface
         if (!$request->hasQty()) {
             $request->setQty(1);
         }
+        !$request->hasFormKey() ?: $request->unsFormKey();
 
         return $request;
     }
@@ -534,6 +540,7 @@ class Cart extends DataObject implements CartInterface
      *
      * @param  int $itemId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function removeItem($itemId)
     {
@@ -567,6 +574,7 @@ class Cart extends DataObject implements CartInterface
      * Save cart (implement interface method)
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function saveQuote()
     {
@@ -577,6 +585,7 @@ class Cart extends DataObject implements CartInterface
      * Mark all quote items as deleted (empty shopping cart)
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function truncate()
     {
@@ -632,6 +641,7 @@ class Cart extends DataObject implements CartInterface
      * Get shopping cart items count
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getItemsCount()
     {
@@ -642,6 +652,7 @@ class Cart extends DataObject implements CartInterface
      * Get shopping cart summary qty
      *
      * @return int|float
+     * @codeCoverageIgnore
      */
     public function getItemsQty()
     {

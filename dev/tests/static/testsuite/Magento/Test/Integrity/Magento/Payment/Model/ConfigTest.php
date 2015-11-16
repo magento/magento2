@@ -9,6 +9,14 @@ namespace Magento\Test\Integrity\Magento\Payment\Model;
 
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+    }
+
     public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
         $expectedErrors = [
@@ -96,7 +104,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Payment/etc/payment.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:module:Magento_Payment:etc/payment.xsd');
     }
 
     /**
@@ -106,6 +114,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '/app/code/Magento/Payment/etc/payment_file.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:module:Magento_Payment:etc/payment_file.xsd');
     }
 }

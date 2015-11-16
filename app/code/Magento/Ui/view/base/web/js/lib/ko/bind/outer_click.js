@@ -5,38 +5,75 @@
 /** Creates outerClick binding and registers in to ko.bindingHandlers object */
 define([
     'ko',
-    'jquery'
-], function (ko, $) {
+    'jquery',
+    'underscore'
+], function (ko, $, _) {
     'use strict';
 
-    function clickWrapper(elem, callback, e) {
-        var target = e.target;
+    var defaults = {
+        onlyIfVisible: true
+    };
 
-        if (target !== elem && !elem.contains(target)) {
+    /**
+     * Document click handler which in case if event target is not
+     * a descendant of provided container element,
+     * invokes specfied in configuration callback.
+     *
+     * @param {HTMLElement} container
+     * @param {Object} config
+     * @param {EventObject} e
+     */
+    function onOuterClick(container, config, e) {
+        var target = e.target,
+            callback = config.callback;
+
+        if (container === target || container.contains(target)) {
+            return;
+        }
+
+        if (config.onlyIfVisible) {
+            if (!_.isNull(container.offsetParent)) {
+                callback();
+            }
+        } else {
             callback();
         }
+    }
+
+    /**
+     * Prepares configuration for the binding based
+     * on a default properties and provided options.
+     *
+     * @param {(Object|Function)} [options={}]
+     * @returns {Object}
+     */
+    function buildConfig(options) {
+        var config = {};
+
+        if (_.isFunction(options)) {
+            options = {
+                callback: options
+            };
+        } else if (!_.isObject(options)) {
+            options = {};
+        }
+
+        return _.extend(config, defaults, options);
     }
 
     ko.bindingHandlers.outerClick = {
 
         /**
-         * Attaches click handler to document
-         * @param {HTMLElement} el - Element, that binding is applied to
-         * @param {Function} valueAccessor - Function that returns value, passed to binding
-         * @param  {Object} allBindings - all bindings object
-         * @param  {Object} viewModel - reference to viewmodel
+         * Initializes outer click binding.
          */
-        init: function (element, valueAccessor, allBindings, viewModel) {
-            var callback = valueAccessor(),
-                wrapper;
+        init: function (element, valueAccessor) {
+            var config = buildConfig(valueAccessor()),
+                outerClick = onOuterClick.bind(null, element, config);
 
-            callback = callback.bind(viewModel);
-            wrapper = clickWrapper.bind(null, element, callback);
-
-            $(document).on('click', wrapper);
+            $(document).on('click', outerClick);
 
             ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                $(document).off('click', wrapper);
+                $(document).off('click', outerClick);
             });
         }
     };

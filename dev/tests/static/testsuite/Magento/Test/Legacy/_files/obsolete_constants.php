@@ -19,7 +19,7 @@ return [
     ['CACHE_TAG', 'Magento\Framework\AppInterface'],
     [
         'CACHE_TAG',
-        'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
+        'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG',
     ],
     ['CACHE_TAG', 'Magento\Framework\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'],
@@ -56,18 +56,18 @@ return [
     ],
     [
         'DEFAULT_READ_RESOURCE',
-        'Magento\Framework\App\Resource',
+        'Magento\Framework\App\ResourceConnection',
     ],
     [
         'DEFAULT_WRITE_RESOURCE',
-        'Magento\Framework\App\Resource',
+        'Magento\Framework\App\ResourceConnection',
     ],
     [
         'DEFAULT_SETUP_CONNECTION',
-        '\Magento\Framework\App\Resource\Config',
+        '\Magento\Framework\App\ResourceConnection\Config',
     ],
-    ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
-    ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
+    ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\ResourceConnection\Config'],
+    ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\ResourceConnection\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\PackageInterface'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
@@ -78,7 +78,7 @@ return [
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
     ['FALLBACK_MAP_DIR', 'Magento\Core\Model\Design\PackageInterface'],
-    ['GALLERY_IMAGE_TABLE', 'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media'],
+    ['GALLERY_IMAGE_TABLE', 'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media'],
     ['HASH_ALGO'],
     ['INIT_OPTION_DIRS', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_APP_DIRS'],
     ['INIT_OPTION_REQUEST', 'Magento\Core\Model\App'],
@@ -149,11 +149,6 @@ return [
     ['XML_CHARSET_SEPARATOR', 'Magento\SalesRule\Helper\Coupon'],
     ['XML_NODE_RELATED_CACHE', 'Magento\CatalogRule\Model\Rule'],
     [
-        'XML_NODE_ATTRIBUTE_NODES',
-        'Magento\Catalog\Model\Resource\Product\Flat\Indexer',
-        'XML_NODE_ATTRIBUTE_GROUPS',
-    ],
-    [
         'XML_PATH_ALLOW_DUPLICATION',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_ALLOW_DUPLICATION',
@@ -162,13 +157,12 @@ return [
     ['XML_PATH_BACKEND_FRONTNAME', 'Mage_Backend_Helper_Data'],
     ['XML_PATH_CACHE_BETA_TYPES'],
     ['XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'],
-    ['XML_PATH_CONNECTION_TYPE', 'Magento\Framework\App\Resource\Config'],
+    ['XML_PATH_CONNECTION_TYPE', 'Magento\Framework\App\ResourceConnection\Config'],
     ['XML_PATH_CONNECTION_TYPE', 'Magento\Core\Helper\Data'],
     ['XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS',
         'Magento\Framework\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS',
     ],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS',
@@ -311,8 +305,6 @@ return [
     ['XML_NODE_ADD_FILTERABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_NODE_ADD_CHILD_DATA', 'Magento\Catalog\Helper\Product\Flat'],
     ['XML_PATH_CONTENT_TEMPLATE_FILTER', 'Magento\Catalog\Helper\Data'],
-    ['XML_NODE_MAX_INDEX_COUNT', 'Magento\Catalog\Model\Resource\Product\Flat\Indexer'],
-    ['XML_NODE_ATTRIBUTE_GROUPS', 'Magento\Catalog\Model\Resource\Product\Flat\Indexer'],
     ['XML_PATH_UNASSIGNABLE_ATTRIBUTES', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION', 'Magento\Catalog\Helper\Product'],
     ['XML_PATH_PRODUCT_TYPE_SWITCHER_LABEL', 'Magento\Catalog\Helper\Product'],
@@ -528,12 +520,12 @@ return [
     [
         'LINK_TYPE_GROUPED',
         '\Magento\Catalog\Model\Product\Link',
-        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED',
+        '\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED',
     ],
     [
         'TYPE_GROUPED',
         '\Magento\Catalog\Model\Product\Type',
-        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED',
+        '\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED',
     ],
     ['PARAM_APP_URIS', 'Magento\Framework\Filesystem'],
     ['ROOT_DIR', '\Magento\Framework\App\Filesystem', '\Magento\Framework\App\Filesystem\DirectoryList::ROOT'],
@@ -936,4 +928,26 @@ return [
         'Magento\Setup\Model\ConfigOptionsList',
         'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
     ],
+    [
+        'SAMPLE_FILES_DIRECTORY',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download::SAMPLE_FILES_MODULE'
+    ],
+    [
+        'MODULES',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'LOCALE',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'THEMES',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR',
+        'Magento\CatalogImportExport\Model\Import\Product',
+        'Magento\ImportExport\Model\Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR'
+    ]
 ];

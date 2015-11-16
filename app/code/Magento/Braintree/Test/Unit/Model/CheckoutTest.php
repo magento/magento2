@@ -57,7 +57,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected $shippingAddressMock;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -73,10 +73,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->any())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $this->quoteRepositoryMock = $this->getMockBuilder('\Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $configMock = $this->getMockBuilder('\Magento\Paypal\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -217,6 +214,10 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->model->initializeQuoteForReview($paymentMethodNonce, $details);
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function initializeQuoteForReviewDataProvider()
     {
         return [
@@ -302,6 +303,48 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                     'setLastname' => self::LASTNAME,
                     'setEmail' => self::EMAIL,
                     'setStreet' => [self::SHIPPING_STREET_ADDRESS, self::SHIPPING_EXTENDED_ADDRESS],
+                    'setCity' => self::SHIPPING_LOCALITY,
+                    'setRegionCode' => self::SHIPPING_REGION,
+                    'setCountryId' => self::SHIPPING_COUNTRY_CODE,
+                    'setPostCode' => self::SHIPPING_POSTAL_CODE,
+                ],
+                'expected_payment_additional_info' => [
+                    'payment_method_nonce' => 'nonce',
+                    'payerEmail' => self::EMAIL,
+                    'payerFirstName' => self::FIRSTNAME,
+                    'payerLastName' => self::LASTNAME,
+                ]
+            ],
+            'without_shipping_extended_address' => [
+                'payment_method_nonce' => 'nonce',
+                'details' => [
+                    'email' => self::EMAIL,
+                    'firstName' => self::FIRSTNAME,
+                    'lastName' => self::LASTNAME,
+                    'shippingAddress' => [
+                        'streetAddress' => self::SHIPPING_STREET_ADDRESS,
+                        'locality' => self::SHIPPING_LOCALITY,
+                        'region' => self::SHIPPING_REGION,
+                        'countryCodeAlpha2' => self::SHIPPING_COUNTRY_CODE,
+                        'postalCode' => self::SHIPPING_POSTAL_CODE,
+                    ],
+                ],
+                'expected_shipping' => [
+                    'setFirstname' => self::FIRSTNAME,
+                    'setLastname' => self::LASTNAME,
+                    'setEmail' => self::EMAIL,
+                    'setCollectShippingRates' => true,
+                    'setStreet' => [self::SHIPPING_STREET_ADDRESS, null],
+                    'setCity' => self::SHIPPING_LOCALITY,
+                    'setRegionCode' => self::SHIPPING_REGION,
+                    'setCountryId' => self::SHIPPING_COUNTRY_CODE,
+                    'setPostCode' => self::SHIPPING_POSTAL_CODE,
+                ],
+                'expected_billing' => [
+                    'setFirstname' => self::FIRSTNAME,
+                    'setLastname' => self::LASTNAME,
+                    'setEmail' => self::EMAIL,
+                    'setStreet' => [self::SHIPPING_STREET_ADDRESS, null],
                     'setCity' => self::SHIPPING_LOCALITY,
                     'setRegionCode' => self::SHIPPING_REGION,
                     'setCountryId' => self::SHIPPING_COUNTRY_CODE,

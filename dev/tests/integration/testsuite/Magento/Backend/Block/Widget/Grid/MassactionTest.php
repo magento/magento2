@@ -8,13 +8,10 @@
 
 namespace Magento\Backend\Block\Widget\Grid;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Store\Model\StoreManager;
 /**
- * @magentoDataFixture Magento/Backend/Block/_files/backend_theme.php
- *
  * @magentoAppArea adminhtml
+ * @magentoComponentsDir Magento/Backend/Block/_files/design
+ * @magentoDbIsolation enabled
  */
 class MassactionTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,9 +31,12 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
         parent::setUp();
 
-        $this->_setFixtureTheme();
-
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get('Magento\Theme\Model\Theme\Registration');
+        $registration->register();
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('BackendTest/test_default');
+        $this->_layout = $objectManager->create(
             'Magento\Framework\View\LayoutInterface',
             ['area' => 'adminhtml']
         );
@@ -45,20 +45,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->_layout->generateElements();
 
         $this->_block = $this->_layout->getBlock('admin.test.grid.massaction');
-    }
-
-    /**
-     * Set fixture theme for admin backend area
-     */
-    protected function _setFixtureTheme()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
-            StoreManager::PARAM_RUN_CODE => 'admin',
-            StoreManager::PARAM_RUN_TYPE => 'store',
-            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                DirectoryList::THEMES => ['path' => __DIR__ . '/../../_files/design'],
-            ],
-        ]);
+        $this->assertNotFalse($this->_block, 'Could not load the block for testing');
     }
 
     /**

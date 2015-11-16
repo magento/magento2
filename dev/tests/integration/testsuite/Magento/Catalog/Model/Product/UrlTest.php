@@ -33,13 +33,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetUrlInstance()
-    {
-        $instance = $this->_model->getUrlInstance();
-        $this->assertInstanceOf('Magento\Framework\Url', $instance);
-        $this->assertSame($instance, $this->_model->getUrlInstance());
-    }
-
     public function testGetUrlInStore()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

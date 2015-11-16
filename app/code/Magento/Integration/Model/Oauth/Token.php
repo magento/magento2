@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\Oauth;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Exception as OauthException;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
-use Magento\Integration\Model\Resource\Oauth\Token\Collection as TokenCollection;
+use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenCollection;
 
 /**
  * oAuth token model
@@ -16,8 +16,8 @@ use Magento\Integration\Model\Resource\Oauth\Token\Collection as TokenCollection
  * @method string getName() Consumer name (joined from consumer table)
  * @method TokenCollection getCollection()
  * @method TokenCollection getResourceCollection()
- * @method \Magento\Integration\Model\Resource\Oauth\Token getResource()
- * @method \Magento\Integration\Model\Resource\Oauth\Token _getResource()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Token getResource()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Token _getResource()
  * @method int getConsumerId()
  * @method Token setConsumerId() setConsumerId(int $consumerId)
  * @method int getAdminId()
@@ -96,7 +96,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Helper\Oauth\Data $oauthData
      * @param OauthHelper $oauthHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -110,7 +110,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -130,7 +130,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Resource\Oauth\Token');
+        $this->_init('Magento\Integration\Model\ResourceModel\Oauth\Token');
     }
 
     /**

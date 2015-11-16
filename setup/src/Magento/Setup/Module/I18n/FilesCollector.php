@@ -42,7 +42,7 @@ class FilesCollector
         try {
             $directoryIterator = new \RecursiveDirectoryIterator(
                 $path,
-                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS
+                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS | \FilesystemIterator::FOLLOW_SYMLINKS
             );
             $iterator = new \RecursiveIteratorIterator($directoryIterator);
         } catch (\UnexpectedValueException $valueException) {

@@ -31,22 +31,22 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_filterBuilder;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_optionFactory;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
+     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory,
+        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder
@@ -138,7 +138,7 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatUpdateSelect($store)
     {
-        /** @var $option \Magento\Eav\Model\Resource\Entity\Attribute\Option */
+        /** @var $option \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option */
         $option = $this->_optionFactory->create();
         return $option->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }

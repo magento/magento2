@@ -12,12 +12,12 @@ class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $objectManager = null;
 
     /**
      * @var string
      */
-    protected $_instanceName = null;
+    protected $instanceName = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -27,17 +27,17 @@ class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\Framework\Mail\TemplateInterface'
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($identifier)
+    public function get($identifier, $namespace = null)
     {
-        return $this->_objectManager->create(
-            $this->_instanceName,
+        return $this->objectManager->create(
+            $namespace ? $namespace : $this->instanceName,
             ['data' => ['template_id' => $identifier]]
         );
     }

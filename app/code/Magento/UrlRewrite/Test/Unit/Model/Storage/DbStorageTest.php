@@ -10,7 +10,7 @@ namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use \Magento\UrlRewrite\Model\Storage\DbStorage;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -37,7 +37,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     protected $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -56,7 +56,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where', 'deleteFromSelect'], [], '',
             false);
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
 
         $this->resource->expects($this->any())
             ->method('getConnection')

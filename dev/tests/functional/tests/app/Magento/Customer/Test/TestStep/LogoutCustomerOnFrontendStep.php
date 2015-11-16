@@ -16,11 +16,6 @@ use Magento\Customer\Test\Page\CustomerAccountIndex;
 class LogoutCustomerOnFrontendStep implements TestStepInterface
 {
     /**
-     * Logout page title.
-     */
-    const LOGOUT_PAGE_TITLE = 'You are signed out.';
-
-    /**
      * Cms index page.
      *
      * @var CmsIndex
@@ -54,7 +49,7 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
     {
         $this->customerAccount->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        if ($this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
+        if ($this->cmsIndex->getTitleBlock()->getTitle() != 'Customer Login') {
             $this->cmsIndex->getLinksBlock()->openLink('Sign Out');
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();

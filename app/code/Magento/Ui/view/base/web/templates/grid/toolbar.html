@@ -5,20 +5,33 @@
  */
 -->
 
-<div class="admin__data-grid-header">
+<div class="admin__data-grid-header" data-role="data-grid-toolbar">
     <div class="admin__data-grid-header-row">
-        <div class="admin__data-grid-actions-wrap">
-            <!-- ko foreach: getRegion('dataGridActions') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
+        <div class="admin__data-grid-actions-wrap" data-bind="foreach: getRegion('dataGridActions')">
+            <!-- ko template: getTemplate() --><!-- /ko -->
         </div>
         <!-- ko foreach: getRegion('dataGridFilters') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
     </div>
     <div class="admin__data-grid-header-row row row-gutter">
-        <!-- ko foreach: getRegion('bottom') -->
+        <!-- ko if: hasChild('listing_massaction') -->
+        <div class="col-xs-2" data-bind="scope: requestChild('listing_massaction')">
             <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
         <!-- /ko -->
+        <div data-bind="css: {
+                'col-xs-10': hasChild('listing_massaction'),
+                'col-xs-12': !hasChild('listing_massaction')
+                }">
+            <div class="row">
+                <div class="col-xs-3" data-bind="scope: requestChild('listing_paging')">
+                    <!-- ko template: totalTmpl --><!-- /ko -->
+                </div>
+                <div class="col-xs-9" data-bind="scope: requestChild('listing_paging')">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -17,7 +17,6 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\Collection as MessageCollection;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,11 +37,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
      * @var Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $session;
-
-    /**
-     * @var PageFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pageFactory;
 
     /**
      * @var AccountManagementInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -101,10 +95,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
             ->getMockForAbstractClass();
 
@@ -122,7 +112,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->model = new EditPost(
             $this->context,
             $this->session,
-            $this->pageFactory,
             $this->customerAccountManagement,
             $this->customerRepository,
             $this->validator,

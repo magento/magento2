@@ -183,7 +183,7 @@ class CartRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/carts' . '?' . http_build_query($requestData),
+                'resourcePath' => '/V1/carts/search' . '?' . http_build_query($requestData),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -221,7 +221,7 @@ class CartRepositoryTest extends WebapiAbstract
                 'operation' => 'quoteCartRepositoryV1GetList',
             ],
             'rest' => [
-                'resourcePath' => '/V1/carts',
+                'resourcePath' => '/V1/carts/search',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];

@@ -6,23 +6,15 @@
 
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\Phrase\Renderer\Translate;
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\App\State;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * DataProvider for js translation
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
     /**
      * Application state
      *
-     * @var State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
@@ -36,43 +28,54 @@ class DataProvider implements DataProviderInterface
     /**
      * Files utility
      *
-     * @var Files
+     * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
 
     /**
      * Filesystem
      *
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
-    protected $rootDirectory;
+    protected $fileReadFactory;
 
     /**
      * Basic translate renderer
      *
-     * @var Translate
+     * @var \Magento\Framework\Phrase\Renderer\Translate
      */
     protected $translate;
 
     /**
-     * @param State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param Config $config
-     * @param Filesystem $filesystem
-     * @param Translate $translate
-     * @param Files $filesUtility
+     * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
+     * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Component\DirSearch $dirSearch
+     * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
+     * @param \Magento\Framework\App\Utility\Files|null $filesUtility
      */
     public function __construct(
-        State $appState,
+        \Magento\Framework\App\State $appState,
         Config $config,
-        Filesystem $filesystem,
-        Translate $translate,
-        Files $filesUtility = null
+        \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
+        \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Component\DirSearch $dirSearch,
+        \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
+        \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
         $this->config = $config;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->fileReadFactory = $fileReadFactory;
         $this->translate = $translate;
-        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(BP);
+        $this->filesUtility = (null !== $filesUtility) ?
+            $filesUtility : new \Magento\Framework\App\Utility\Files(
+                $componentRegistrar,
+                $dirSearch,
+                $themePackageList
+            );
     }
 
     /**
@@ -96,7 +99,9 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
-            $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
+            /** @var \Magento\Framework\Filesystem\File\Read $read */
+            $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
+            $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
                 $translatedPhrase = $this->translate->render([$phrase], []);
                 if ($phrase != $translatedPhrase) {
@@ -124,7 +129,7 @@ class DataProvider implements DataProviderInterface
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = $match;
+                        $phrases[] = str_replace('\\\'', '\'', $match);
                     }
                 }
             }

@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 class UtilityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\UsageFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $usageFactory;
 
@@ -75,7 +75,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->usageFactory = $this->getMock(
-            'Magento\SalesRule\Model\Resource\Coupon\UsageFactory',
+            'Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory',
             ['create'],
             [],
             '',
@@ -264,7 +264,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
         $this->objectFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($couponUsage));
-        $couponUsageModel = $this->getMock('\Magento\SalesRule\Model\Resource\Coupon\Usage', [], [], '', false);
+        $couponUsageModel = $this->getMock('\Magento\SalesRule\Model\ResourceModel\Coupon\Usage', [], [], '', false);
         $couponUsage->setData(['coupon_id' => $couponId, 'times_used' => $timesUsed]);
         $this->usageFactory->expects($this->once())
             ->method('create')

@@ -30,9 +30,7 @@ class Locale
      */
     public function __construct($locale)
     {
-        if ($locale == self::DEFAULT_SYSTEM_LOCALE) {
-            throw new \InvalidArgumentException('Target locale is system default locale.');
-        } elseif (!preg_match('/[a-z]{2}_[A-Z]{2}/', $locale)) {
+        if (!preg_match('/[a-z]{2}_[A-Z]{2}/', $locale)) {
             throw new \InvalidArgumentException('Target locale must match the following format: "aa_AA".');
         }
         $this->_locale = $locale;

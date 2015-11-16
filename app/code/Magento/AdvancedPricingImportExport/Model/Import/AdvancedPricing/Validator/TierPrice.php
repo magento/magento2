@@ -69,6 +69,19 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
+     * Get existing customers groups
+     *
+     * @return array
+     */
+    public function getCustomerGroups()
+    {
+        if (!$this->customerGroups) {
+            $this->init($this->context);
+        }
+        return $this->customerGroups;
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * Validation
      *

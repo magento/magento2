@@ -10,11 +10,11 @@
              module="Magento_SalesRule"
              type="flat"
              entity_type="salesrule"
-             collection="Magento\SalesRule\Model\Resource\Rule\Collection"
+             collection="Magento\SalesRule\Model\ResourceModel\Rule\Collection"
              repository_class="Magento\SalesRule\Test\Repository\SalesRule"
              handler_interface="Magento\SalesRule\Test\Handler\SalesRule\SalesRuleInterface"
              class="Magento\SalesRule\Test\Fixture\SalesRule">
-        <field name="rule_id" is_required="1" />
+        <field name="rule_id" is_required="0" group="null"/>
         <field name="name" group="rule_information" />
         <field name="description" group="rule_information" />
         <field name="from_date" group="rule_information" source="Magento\Backend\Test\Fixture\Source\Date" />
@@ -38,7 +38,6 @@
         <field name="use_auto_generation" group="rule_information" />
         <field name="uses_per_coupon" group="rule_information" />
         <field name="simple_free_shipping" group="actions" />
-        <field name="id" />
         <field name="website_ids" group="rule_information" />
         <field name="customer_group_ids" group="rule_information" />
         <field name="store_labels" group="labels" />

@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Status" name="sales_order_status.grid.container">
                 <block class="Magento\Backend\Block\Widget\Grid" name="sales_order_status.grid" as="grid">
                     <arguments>
                         <argument name="id" xsi:type="string">sales_order_status_grid</argument>
-                        <argument name="dataSource" xsi:type="object">Magento\Sales\Model\Resource\Status\Collection</argument>
+                        <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Status\Collection</argument>
                         <argument name="default_sort" xsi:type="string">state</argument>
                         <argument name="default_dir" xsi:type="string">desc</argument>
                         <argument name="pager_visibility" xsi:type="string">0</argument>

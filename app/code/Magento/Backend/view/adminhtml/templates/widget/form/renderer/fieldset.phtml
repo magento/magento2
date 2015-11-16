@@ -57,7 +57,7 @@ if ($isField) {
     <?php if (!$element->getNoContainer()): ?>
         <fieldset class="<?php /* @escapeNotVerified */ echo $cssClass ?>" id="<?php /* @escapeNotVerified */ echo $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label' : 'legend'?>">
+            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label admin__field-label' : 'admin__legend legend'?>">
                 <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
             </legend><br />
         <?php endif; ?>
@@ -91,11 +91,11 @@ if ($isField) {
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
             <?php echo(!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
-            <details data-mage-init='{"details": {}}' class="details" id="details<?php /* @escapeNotVerified */ echo $id ?>">
-                <summary class="details-summary" id="details-summary<?php /* @escapeNotVerified */ echo $id ?>">
+            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?php /* @escapeNotVerified */ echo $id ?>">
+                <summary class="details-summary admin__collapsible-title" id="details-summary<?php /* @escapeNotVerified */ echo $id ?>">
                     <span><?php /* @escapeNotVerified */ echo $advancedLabel ?></span>
                 </summary>
-                <div class="details-content" id="details-content<?php /* @escapeNotVerified */ echo $id ?>">
+                <div class="details-content admin__fieldset" id="details-content<?php /* @escapeNotVerified */ echo $id ?>">
                     <?php echo $element->getAdvancedChildrenHtml(); ?>
                 </div>
             </details>

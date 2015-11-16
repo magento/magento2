@@ -5,26 +5,26 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
     <body>
         <attribute name="class" value="account"/>
         <referenceContainer name="sidebar.main">
             <block class="Magento\Framework\View\Element\Html\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
                 <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">
                     <arguments>
-                        <argument name="label" xsi:type="string">Account Dashboard</argument>
+                        <argument name="label" xsi:type="string" translate="true">Account Dashboard</argument>
                         <argument name="path" xsi:type="string">customer/account</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-edit-link">
                     <arguments>
-                        <argument name="label" xsi:type="string">Account Information</argument>
+                        <argument name="label" xsi:type="string" translate="true">Account Information</argument>
                         <argument name="path" xsi:type="string">customer/account/edit</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-address-link">
                     <arguments>
-                        <argument name="label" xsi:type="string">Address Book</argument>
+                        <argument name="label" xsi:type="string" translate="true">Address Book</argument>
                         <argument name="path" xsi:type="string">customer/address</argument>
                     </arguments>
                 </block>

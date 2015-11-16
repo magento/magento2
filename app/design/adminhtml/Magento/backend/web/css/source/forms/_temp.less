@@ -373,8 +373,10 @@ label.mage-error {
     *:after {
         box-sizing: border-box;
     }
+
     .admin__data-grid-header-row {
         &:extend(.abs-cleafix);
+
         .action-select-multiselect {
             height: 38px;
             left: -1rem;
@@ -383,9 +385,15 @@ label.mage-error {
             top: -1.2rem;
             width: 52px;
         }
-        > div + div {
+
+        > div {
             margin-left: @temp_gutter;
+
+            &:first-child {
+                margin-left: 0;
+            }
         }
+
         button {
             vertical-align: top;
         }
@@ -441,6 +449,27 @@ label.mage-error {
         &._massaction {
             position: relative;
             z-index: 1;
+        }
+    }
+}
+
+//
+//  Tablets
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .admin__data-grid-toolbar {
+        .admin__data-grid-header-row {
+            .admin__filter-actions {
+                float: none;
+                margin-bottom: @indent__base;
+            }
+        }
+
+        .admin__data-grid-header-row {
+            .admin__control-support-text {
+                margin-left: 0;
+            }
         }
     }
 }

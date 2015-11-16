@@ -49,7 +49,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -59,7 +59,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
-     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      *
@@ -73,7 +73,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
@@ -83,7 +83,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -118,7 +118,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Attribute');
+        $this->_init('Magento\Customer\Model\ResourceModel\Attribute');
     }
 
     /**

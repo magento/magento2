@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
-use Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TableTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +25,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->collectionFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory',
             [
                 'create',
                 'setPositionOrder',

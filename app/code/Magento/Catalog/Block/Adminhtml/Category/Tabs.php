@@ -38,7 +38,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected $_helperCatalog = null;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -46,7 +46,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Catalog $helperCatalog
      * @param \Magento\Framework\Registry $registry
      * @param array $data
@@ -55,7 +55,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Catalog $helperCatalog,
         \Magento\Framework\Registry $registry,
         array $data = []
@@ -121,7 +121,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         }
 
         $attributeSetId = $this->getCategory()->getDefaultAttributeSetId();
-        /** @var $groupCollection \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection */
+        /** @var $groupCollection \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection */
         $groupCollection = $this->_collectionFactory->create()->setAttributeSetFilter(
             $attributeSetId
         )->setSortOrder()->load();

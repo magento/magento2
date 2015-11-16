@@ -72,4 +72,17 @@
         max-height: 45rem;
         overflow-y: auto;
     }
+    .action-menu-items {
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        > .action-menu {
+            min-width: 100%;
+            position: static;
+            .action-submenu {
+                position: absolute;
+            }
+        }
+    }
 }

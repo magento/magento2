@@ -79,8 +79,7 @@
             <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
             <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
         </variation>
-        <variation name="CreateTermEntityTestVariation5">
-            <data name="description" xsi:type="string">Create enabled term, check with multishipping</data>
+        <variation name="CreateTermEntityTestVariation5" summary="Terms and conditions on multishipping" ticketId="MAGETWO-32499">
             <data name="configData" xsi:type="string">checkout_term_condition</data>
             <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>

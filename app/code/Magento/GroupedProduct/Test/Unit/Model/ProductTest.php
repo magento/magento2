@@ -77,7 +77,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -231,7 +231,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product')
+        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->disableOriginalConstructor()
             ->getMock();
 
