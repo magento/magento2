@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <arguments>
@@ -16,19 +16,19 @@
         <arguments>
             <argument name="imageTypes" xsi:type="array">
                 <item name="small" xsi:type="array">
-                    <item name="title" xsi:type="string">Small</item>
+                    <item name="title" xsi:type="string" translate="true">Small</item>
                     <item name="attribute" xsi:type="string">small_image</item>
                 </item>
                 <item name="main" xsi:type="array">
-                    <item name="title" xsi:type="string">Main</item>
+                    <item name="title" xsi:type="string" translate="true">Main</item>
                     <item name="attribute" xsi:type="string">image</item>
                 </item>
                 <item name="cart" xsi:type="array">
-                    <item name="title" xsi:type="string">Thumbnail</item>
+                    <item name="title" xsi:type="string" translate="true">Thumbnail</item>
                     <item name="attribute" xsi:type="string">thumbnail</item>
                 </item>
                 <item name="custom" xsi:type="array">
-                    <item name="title" xsi:type="string">Custom image</item>
+                    <item name="title" xsi:type="string" translate="true">Custom image</item>
                     <item name="attribute" xsi:type="string">custom_image</item>
                 </item>
             </argument>
@@ -62,9 +62,10 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
         <plugin name="invalidate_pagecache_after_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute" />
+        <plugin name="max_heap_tablse_size_processor_on_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\MaxHeapTableSizeProcessorOnFullReindex"/>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Attribute">
-        <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\Resource\Attribute\Save" />
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute">
+        <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />
     </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
         <arguments>
@@ -79,4 +80,5 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
     </type>
+    <preference for="Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface" type="Magento\Catalog\Ui\Component\Listing\Attribute\Repository"/>
 </config>

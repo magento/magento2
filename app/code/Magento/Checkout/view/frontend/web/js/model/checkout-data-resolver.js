@@ -172,6 +172,10 @@ define([
             }
         },
         applyBillingAddress: function () {
+            if (quote.billingAddress()) {
+                selectBillingAddress(quote.billingAddress());
+                return;
+            }
             var shippingAddress = quote.shippingAddress();
             if (shippingAddress
                 && shippingAddress.canUseForBilling()

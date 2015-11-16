@@ -10,6 +10,7 @@ class NewAction extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreeme
 {
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     public function execute()
     {

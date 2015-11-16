@@ -13,17 +13,17 @@ class Observer
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Report\ShippingFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\ShippingFactory
      */
     protected $_shippingFactory;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\ShippingFactory $shippingFactory
      */
     public function __construct(
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory
+        \Magento\Sales\Model\ResourceModel\Report\ShippingFactory $shippingFactory
     ) {
         $this->_localeResolver = $localeResolver;
         $this->_shippingFactory = $shippingFactory;

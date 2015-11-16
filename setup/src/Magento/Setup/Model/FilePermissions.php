@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem;
 
 class FilePermissions
@@ -109,12 +110,43 @@ class FilePermissions
     {
         if (!$this->installationCurrentWritableDirectories) {
             foreach ($this->installationWritableDirectories as $code => $path) {
-                if ($this->isWritable($code)) {
+                if ($this->isWritable($code) && $this->checkRecursiveDirectories($path)) {
                     $this->installationCurrentWritableDirectories[] = $path;
                 }
             }
         }
         return $this->installationCurrentWritableDirectories;
+    }
+
+    /**
+     * Check all sub-directories and files except for var/generation and var/di
+     *
+     * @param string $directory
+     * @return bool
+     */
+    private function checkRecursiveDirectories($directory)
+    {
+        $directoryIterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        $noWritableFilesFolders = [
+            $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
+            $this->directoryList->getPath(DirectoryList::DI) .'/'
+        ];
+
+        $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+
+        try {
+            foreach ($directoryIterator as $subDirectory) {
+                if (!$subDirectory->isWritable()) {
+                    return false;
+                }
+            }
+        } catch (\UnexpectedValueException $e) {
+            return false;
+        }
+        return true;
     }
 
     /**

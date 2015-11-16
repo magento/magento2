@@ -22,12 +22,11 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Store model
  *
- * @method Store setGroupId(int $value)
- * @method Store setName(string $value)
+ * @method Store setGroupId($value)
  * @method int getSortOrder()
  * @method int getStoreId()
- * @method Store setSortOrder(int $value)
- * @method Store setIsActive(int $value)
+ * @method Store setSortOrder($value)
+ * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -90,14 +89,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**#@-*/
 
-    /**#@+
-     * Code constants
-     */
-    const DEFAULT_CODE = 'default';
-
     const ADMIN_CODE = 'admin';
-
-    /**#@-*/
 
     /**
      * Cache tag
@@ -246,7 +238,7 @@ class Store extends AbstractExtensibleModel implements
     protected $_request;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
@@ -311,12 +303,12 @@ class Store extends AbstractExtensibleModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Store\Model\Resource\Store $resource
+     * @param \Magento\Store\Model\ResourceModel\Store $resource
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -339,12 +331,12 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Store\Model\Resource\Store $resource,
+        \Magento\Store\Model\ResourceModel\Store $resource,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -418,7 +410,7 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Store');
+        $this->_init('Magento\Store\Model\ResourceModel\Store');
     }
 
     /**
@@ -493,6 +485,22 @@ class Store extends AbstractExtensibleModel implements
     public function setCode($code)
     {
         return $this->setData('code', $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->_getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 
     /**
@@ -1129,16 +1137,6 @@ class Store extends AbstractExtensibleModel implements
     public function isActive()
     {
         return (bool)$this->_getData('is_active');
-    }
-
-    /**
-     * Retrieve store name
-     *
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->_getData('name');
     }
 
     /**

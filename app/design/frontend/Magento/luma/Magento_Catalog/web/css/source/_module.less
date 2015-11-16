@@ -579,9 +579,12 @@
     .product-info-main {
         float: right;
     }
+
     .product.media {
         float: left;
+        margin-bottom: @indent__m;
     }
+
     .page-layout-1column {
         .product-info-main {
             width: 40%;
@@ -590,6 +593,7 @@
             width: 57%;
         }
     }
+
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
@@ -675,6 +679,8 @@ body.catalog-product-compare-index {
 
 .table-wrapper.comparison {
     clear: both;
+    max-width: 100%;
+    overflow-x: auto;
     .table-comparison > tbody > tr{
         > th,
         > td {

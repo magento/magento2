@@ -38,8 +38,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function getResourceCollectionName()
     {
         return $this->getFilterData()->getData('report_type') == 'created_at_shipment'
-            ? 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Shipment'
-            : 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Order';
+            ? 'Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment'
+            : 'Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Order';
     }
 
     /**

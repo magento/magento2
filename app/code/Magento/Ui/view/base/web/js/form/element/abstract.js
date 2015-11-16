@@ -6,25 +6,25 @@
 define([
     'underscore',
     'mageUtils',
-    'uiComponent',
+    'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Component, validator) {
+], function (_, utils, Element, validator) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             visible: true,
             preview: '',
             focused: false,
             required: false,
             disabled: false,
-            tmpPath: 'ui/form/element/',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             'input_type': 'input',
             placeholder: '',
             description: '',
             label: '',
             error: '',
+            warn: '',
             notice: '',
             customScope: '',
             additionalClasses: {},
@@ -64,7 +64,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value')
+            this.observe('error disabled focused preview visible value warn')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -77,15 +77,20 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        initProperties: function () {
-            var uid = utils.uniqueid();
+        initConfig: function () {
+            var uid = utils.uniqueid(),
+                name,
+                scope;
 
             this._super();
 
+            scope   = this.dataScope,
+            name    = scope.split('.').slice(1);
+
             _.extend(this, {
-                'uid': uid,
-                'noticeId': 'notice-' + uid,
-                'inputName': utils.serializeName(this.dataScope)
+                uid: uid,
+                noticeId: 'notice-' + uid,
+                inputName: utils.serializeName(name.join('.'))
             });
 
             return this;
@@ -126,6 +131,7 @@ define([
             _.extend(this.additionalClasses, {
                 required: this.required,
                 _error: this.error,
+                _warn: this.warn,
                 _disabled: this.disabled
             });
 

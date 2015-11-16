@@ -109,7 +109,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($html);
         $this->assertContains('New Product', $html);
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Collection',
             $this->_block->getProductCollection()
         );
     }

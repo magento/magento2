@@ -5,12 +5,11 @@
 
 define([
     'underscore',
-    'ko',
     './abstract',
     'Magento_Ui/js/lib/key-codes',
     'mage/translate',
-    'uiLayout'
-], function (_, ko, Abstract, keyCodes, $t, layout) {
+    'jquery'
+], function (_, Abstract, keyCodes, $t, $) {
     'use strict';
 
     /**
@@ -52,34 +51,11 @@ define([
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
-            optionsConfig: {
-                name: '${ $.name }_options',
-                component: 'Magento_Ui/js/form/element/helpers/options'
-            },
             hoverElIndex: null,
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
-            },
-            imports: {
-                options: '${ $.optionsConfig.name }:options'
-            },
-            modules: {
-                optionsProvider: '${ $.optionsConfig.name }'
             }
-        },
-
-        /**
-         * Extends instance with defaults, extends config with formatted values
-         *     and options, and invokes initialize method of AbstractElement class.
-         *
-         * @returns {Object} Chainable
-         */
-        initialize: function () {
-            this._super()
-                .initOptions();
-
-            return this;
         },
 
         /**
@@ -130,18 +106,6 @@ define([
                           'filterInputValue',
                           'filterOptionsFocus'
             ]);
-
-            return this;
-        },
-
-        /**
-         * Initializes optionsProvider
-         *
-         * @returns {Object} Chainable.
-         */
-        initOptions: function () {
-            this.optionsConfig.options = this.options();
-            layout([this.optionsConfig]);
 
             return this;
         },
@@ -276,9 +240,7 @@ define([
         },
 
         /**
-         * get filtered value
-         *
-         * @returns {Array} filtered array
+         * Get filtered value*
          */
         getValue: function () {
             var options = this.options(),
@@ -292,7 +254,7 @@ define([
         },
 
         /**
-         * get selected element labels
+         * Get selected element labels
          *
          * @returns {Array} array labels
          */
@@ -338,16 +300,45 @@ define([
          *
          * @param {Object} data - object with data about this element
          * @param {Number} index - element index
+         * @param {Object} event - mousemove event
          */
-        onHoveredIn: function (data, index) {
-            this.hoverElIndex(index);
+
+        onMousemove: function (data, index, event) {
+            var target = $(event.target),
+                id;
+
+            if (this.isCursorPositionChange(event)) {
+                return false;
+            }
+
+            target.is('li') ? id = target.index() : id = target.parent('li').index();
+            id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
+
+            this.setCursorPosition(event);
         },
 
         /**
-         * Remove hover to some list element and write element ID from variable
+         * Set X and Y cursor position
+         *
+         * @param {Object} event - mousemove event
          */
-        onHoveredOut: function () {
-            this.hoverElIndex(null);
+        setCursorPosition: function (event) {
+            this.cursorPosition = {
+                x: event.pageX,
+                y: event.pageY
+            };
+        },
+
+        /**
+         * Check previous and current cursor position
+         *
+         * @param {Object} event - mousemove event
+         * @returns {Boolean}
+         */
+        isCursorPositionChange: function (event) {
+            return this.cursorPosition &&
+                   this.cursorPosition.x === event.pageX &&
+                   this.cursorPosition.y === event.pageY;
         },
 
         /**
@@ -431,7 +422,7 @@ define([
             var keyName = keyCodes[event.keyCode];
 
             if (this.isTabKey(event)) {
-                if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions ) {
+                if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
                     this.cacheUiSelect.blur();
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
@@ -490,16 +481,11 @@ define([
          * @returns {String}
          */
         getPreview: function () {
-            var i = 0,
-                selected = this.getSelected(),
-                length = selected.length,
-                result = [];
+            var selected = this.getSelected();
 
-            for (i; i < length; i++) {
-                result.push(selected[i].label);
-            }
-
-            return result.join(', ');
+            return selected.map(function (option) {
+                return option.label;
+            }).join(', ');
         }
     });
 });

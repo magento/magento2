@@ -10,6 +10,11 @@ use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\PageInterface;
 
+/**
+ * Cms page grid inline edit controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InlineEdit extends \Magento\Backend\App\Action
 {
     /** @var PostDataProcessor */
@@ -61,9 +66,10 @@ class InlineEdit extends \Magento\Backend\App\Action
             /** @var \Magento\Cms\Model\Page $page */
             $page = $this->pageRepository->getById($pageId);
             try {
-                $pageData = $this->dataProcessor->filter($postItems[$pageId]);
+                $pageData = $this->filterPost($postItems[$pageId]);
                 $this->validatePost($pageData, $page, $error, $messages);
-                $page->setData(array_merge($page->getData(), $pageData));
+                $extendedPageData = $page->getData();
+                $this->setCmsPageData($page, $extendedPageData, $pageData);
                 $this->pageRepository->save($page);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
@@ -84,6 +90,22 @@ class InlineEdit extends \Magento\Backend\App\Action
             'messages' => $messages,
             'error' => $error
         ]);
+    }
+
+    /**
+     * Filtering posted data.
+     *
+     * @param array $postData
+     * @return array
+     */
+    protected function filterPost($postData = [])
+    {
+        $pageData = $this->dataProcessor->filter($postData);
+        $pageData['custom_theme'] = isset($pageData['custom_theme']) ? $pageData['custom_theme'] : null;
+        $pageData['custom_root_template'] = isset($pageData['custom_root_template'])
+            ? $pageData['custom_root_template']
+            : null;
+        return $pageData;
     }
 
     /**
@@ -115,5 +137,19 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithPageId(PageInterface $page, $errorText)
     {
         return '[Page ID: ' . $page->getId() . '] ' . $errorText;
+    }
+
+    /**
+     * Set cms page data
+     *
+     * @param \Magento\Cms\Model\Page $page
+     * @param array $extendedPageData
+     * @param array $pageData
+     * @return $this
+     */
+    public function setCmsPageData(\Magento\Cms\Model\Page $page, array $extendedPageData, array $pageData)
+    {
+        $page->setData(array_merge($page->getData(), $extendedPageData, $pageData));
+        return $this;
     }
 }

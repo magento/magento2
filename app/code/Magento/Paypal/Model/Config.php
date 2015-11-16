@@ -151,6 +151,12 @@ class Config extends AbstractConfig
 
     const EC_BA_SIGNUP_NEVER = 'never';
 
+    /**
+     * Paypal setting
+     */
+    const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
+    const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
+
     /**#@-*/
 
     /**
@@ -202,12 +208,13 @@ class Config extends AbstractConfig
         'NZD',
         'PLN',
         'GBP',
+        'RUB',
         'SGD',
         'SEK',
         'CHF',
-        'USD',
         'TWD',
         'THB',
+        'USD',
     ];
 
     /**
@@ -224,6 +231,7 @@ class Config extends AbstractConfig
         'BG',
         'BR',
         'CA',
+        'CN',
         'CH',
         'CL',
         'CR',
@@ -267,6 +275,7 @@ class Config extends AbstractConfig
         'PH',
         'PL',
         'PT',
+        'RU',
         'RE',
         'RO',
         'SE',

@@ -70,7 +70,6 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
     {
         $methodsMap = $this->model->getMethodsMap('Magento\Framework\Reflection\MethodsMap');
         $this->assertEquals(
-            $methodsMap,
             [
                 'getMethodReturnType' => [
                     'type' => 'string',
@@ -86,6 +85,12 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                         . "=> 'boolean' ] </pre>",
                     'parameterCount' => 1,
                 ],
+                'getMethodParams' => [
+                    'type' => 'array',
+                    'isRequired' => true,
+                    'description' => null,
+                    'parameterCount' => 2
+                ],
                 'isMethodValidForDataField' => [
                     'type' => 'bool',
                     'isRequired' => true,
@@ -98,7 +103,8 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                     'description' => null,
                     'parameterCount' => 2,
                 ],
-            ]
+            ],
+            $methodsMap
         );
     }
 

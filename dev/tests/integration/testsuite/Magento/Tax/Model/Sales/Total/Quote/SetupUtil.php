@@ -213,8 +213,8 @@ class SetupUtil
      */
     protected function setConfig($configData)
     {
-        /** @var \Magento\Config\Model\Resource\Config $config */
-        $config = $this->objectManager->get('Magento\Config\Model\Resource\Config');
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = $this->objectManager->get('Magento\Config\Model\ResourceModel\Config');
         foreach ($configData as $path => $value) {
             if ($path == Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS) {
                 $value = $this->productTaxClasses[$value];
@@ -464,7 +464,7 @@ class SetupUtil
         $product->isObjectNew(true);
         $product->setTypeId('simple')
             ->setAttributeSetId(4)
-            ->setName('Simple Product')
+            ->setName('Simple Product' . $sku)
             ->setSku($sku)
             ->setPrice($price)
             ->setTaxClassId($taxClassId)

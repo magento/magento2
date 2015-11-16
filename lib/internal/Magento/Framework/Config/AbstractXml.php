@@ -25,13 +25,22 @@ abstract class AbstractXml
     protected $_domConfig = null;
 
     /**
+     * @var \Magento\Framework\Config\DomFactory
+     */
+    protected $domFactory;
+
+    /**
      * Instantiate with the list of files to merge
      *
      * @param array $configFiles
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @throws \InvalidArgumentException
      */
-    public function __construct($configFiles)
-    {
+    public function __construct(
+        $configFiles,
+        \Magento\Framework\Config\DomFactory $domFactory
+    ) {
+        $this->domFactory = $domFactory;
         if (empty($configFiles)) {
             throw new \InvalidArgumentException('There must be at least one configuration file specified.');
         }
@@ -81,9 +90,7 @@ abstract class AbstractXml
                 );
             }
         }
-        if ($this->_isRuntimeValidated()) {
-            $this->_performValidate();
-        }
+        $this->_performValidate();
         return $this->_getDomConfigModel()->getDom();
     }
 
@@ -96,7 +103,9 @@ abstract class AbstractXml
      */
     protected function _performValidate($file = null)
     {
-        if (!$this->_getDomConfigModel()->validate($this->getSchemaFile(), $errors)) {
+        $errors = [];
+        $this->_getDomConfigModel()->validate($this->getSchemaFile(), $errors);
+        if (!empty($errors)) {
             $phrase = (null === $file)
                 ? new \Magento\Framework\Phrase('Invalid Document %1%2', [PHP_EOL, implode("\n", $errors)])
                 : new \Magento\Framework\Phrase('Invalid XML-file: %1%2%3', [$file, PHP_EOL, implode("\n", $errors)]);
@@ -104,16 +113,6 @@ abstract class AbstractXml
             throw new \Magento\Framework\Exception\LocalizedException($phrase);
         }
         return $this;
-    }
-
-    /**
-     * Get if xml files must be runtime validated
-     *
-     * @return boolean
-     */
-    protected function _isRuntimeValidated()
-    {
-        return true;
     }
 
     /**
@@ -125,13 +124,12 @@ abstract class AbstractXml
     protected function _getDomConfigModel()
     {
         if (null === $this->_domConfig) {
-            $schemaFile = $this->getPerFileSchemaFile() &&
-                $this->_isRuntimeValidated() ? $this->getPerFileSchemaFile() : null;
-            $this->_domConfig = new \Magento\Framework\Config\Dom(
-                $this->_getInitialXml(),
-                $this->_getIdAttributes(),
-                null,
-                $schemaFile
+            $this->_domConfig = $this->domFactory->createDom(
+                [
+                    'xml' => $this->_getInitialXml(),
+                    'idAttributes' => $this->_getIdAttributes(),
+                    'schemaFile' => $this->getPerFileSchemaFile()
+                ]
             );
         }
         return $this->_domConfig;

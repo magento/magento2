@@ -6,12 +6,13 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
  */
-class AddStockStatusToCollectionObserver
+class AddStockStatusToCollectionObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
@@ -33,7 +34,7 @@ class AddStockStatusToCollectionObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $productCollection = $observer->getEvent()->getCollection();
         $this->stockHelper->addStockStatusToProducts($productCollection);

@@ -13,6 +13,9 @@
         <span data-bind="text: getTitle()"></span>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <form id="billing-agreement-form">
             <div class="payment-method-billing-address">
                 <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->

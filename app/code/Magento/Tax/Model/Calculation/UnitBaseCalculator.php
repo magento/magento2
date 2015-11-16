@@ -12,6 +12,27 @@ class UnitBaseCalculator extends AbstractCalculator
     /**
      * {@inheritdoc}
      */
+    protected function roundAmount(
+        $amount,
+        $rate = null,
+        $direction = null,
+        $type = self::KEY_REGULAR_DELTA_ROUNDING,
+        $round = true,
+        $item = null
+    ) {
+        if ($item->getAssociatedItemCode()) {
+            // Use delta rounding of the product's instead of the weee's
+            $type = $type . $item->getAssociatedItemCode();
+        } else {
+            $type = $type . $item->getCode();
+        }
+
+        return $this->deltaRound($amount, $rate, $direction, $type, $round);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
         $taxRateRequest = $this->getAddressRateRequest()->setProductClassId(
@@ -21,18 +42,23 @@ class UnitBaseCalculator extends AbstractCalculator
         $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
         // Calculate $priceInclTax
+        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
         $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
-            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate);
+            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate, $round);
         }
-        $uniTax = $this->calculationTool->calcTaxAmount($priceInclTax, $rate, true, true);
+        $uniTax = $this->calculationTool->calcTaxAmount($priceInclTax, $rate, true, false);
+        $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;
+        if ($applyTaxAfterDiscount) {
+            $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
+        }
+        $uniTax = $this->roundAmount($uniTax, $rate, true, $deltaRoundingType, $round, $item);
         $price = $priceInclTax - $uniTax;
 
         //Handle discount
         $discountTaxCompensationAmount = 0;
-        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
         $discountAmount = $item->getDiscountAmount();
-        if ($discountAmount && $applyTaxAfterDiscount) {
+        if ($applyTaxAfterDiscount) {
             //TODO: handle originalDiscountAmount
             $unitDiscountAmount = $discountAmount / $quantity;
             $taxableAmount = max($priceInclTax - $unitDiscountAmount, 0);
@@ -40,7 +66,15 @@ class UnitBaseCalculator extends AbstractCalculator
                 $taxableAmount,
                 $rate,
                 true,
-                true
+                false
+            );
+            $unitTaxAfterDiscount = $this->roundAmount(
+                $unitTaxAfterDiscount,
+                $rate,
+                true,
+                self::KEY_REGULAR_DELTA_ROUNDING,
+                $round,
+                $item
             );
 
             // Set discount tax compensation
@@ -93,11 +127,16 @@ class UnitBaseCalculator extends AbstractCalculator
         foreach ($appliedRates as $appliedRate) {
             $taxId = $appliedRate['id'];
             $taxRate = $appliedRate['percent'];
-            $unitTaxPerRate = $this->calculationTool->calcTaxAmount($price, $taxRate, false);
+            $unitTaxPerRate = $this->calculationTool->calcTaxAmount($price, $taxRate, false, false);
+            $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;
+            if ($applyTaxAfterDiscount) {
+                $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
+            }
+            $unitTaxPerRate = $this->roundAmount($unitTaxPerRate, $taxId, false, $deltaRoundingType, $round, $item);
             $unitTaxAfterDiscount = $unitTaxPerRate;
 
             //Handle discount
-            if ($discountAmount && $applyTaxAfterDiscount) {
+            if ($applyTaxAfterDiscount) {
                 //TODO: handle originalDiscountAmount
                 $unitDiscountAmount = $discountAmount / $quantity;
                 $taxableAmount = max($price - $unitDiscountAmount, 0);
@@ -105,7 +144,15 @@ class UnitBaseCalculator extends AbstractCalculator
                     $taxableAmount,
                     $taxRate,
                     false,
-                    true
+                    false
+                );
+                $unitTaxAfterDiscount = $this->roundAmount(
+                    $unitTaxAfterDiscount,
+                    $taxId,
+                    false,
+                    self::KEY_REGULAR_DELTA_ROUNDING,
+                    $round,
+                    $item
                 );
             }
             $appliedTaxes[$taxId] = $this->getAppliedTax(

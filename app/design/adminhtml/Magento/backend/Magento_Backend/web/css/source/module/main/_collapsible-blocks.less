@@ -54,7 +54,9 @@
     position: relative;
     text-decoration: none;
     transition: color .15s linear;
-    &:hover {
+    &:hover,
+    &:visited,
+    &:focus {
         color: @collapsible-title__hover__color;
         text-decoration: none;
     }
@@ -99,7 +101,8 @@
     .admin__collapsible-title {
         .admin__collapsible-title();
     }
-    &.opened {
+    &.opened,
+    &._show {
         > .fieldset-wrapper-title {
             .admin__collapsible-title {
                 &:before {
@@ -250,6 +253,9 @@
             .scope-label {
                 padding: 31px 1.5rem 0 0;
             }
+            .use-default {
+                padding: 29px 1.5rem 0 0;
+            }
             .value {
                 padding-right: 4rem;
             }
@@ -291,6 +297,9 @@
                 &:first-child {
                     padding-left: 1.5rem;
                 }
+            }
+            .cc-type-select {
+                min-width: 20rem;
             }
         }
         input[type='text'],

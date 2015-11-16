@@ -253,8 +253,8 @@
                 margin-bottom: @indent__m;
             }
             > .primary {
-                margin-right: 0;
                 margin-bottom: @indent__m;
+                margin-right: 0;
             }
         }
     }
@@ -295,9 +295,19 @@
                 width: 25%;
             }
             .box-shipping-method {
-                padding-right: @indent__m;
                 padding-left: @indent__m;
+                padding-right: @indent__m;
                 width: 50%;
+                .fieldset {
+                    .legend {
+                        &:extend(.abs-reset-left-margin-desktop-s all);
+                    }
+                    .field {
+                        &:before {
+                            display: none;
+                        }
+                    }
+                }
             }
         }
 

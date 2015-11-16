@@ -93,6 +93,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param mixed $entity
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntity($entity)
     {
@@ -104,6 +105,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get entity
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getEntity()
     {
@@ -115,6 +117,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param string $type
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setType($type)
     {
@@ -126,6 +129,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get type
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -137,6 +141,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param $type string
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setCheckoutType($type)
     {
@@ -148,6 +153,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Return checkout type. Typical values are 'onepage_checkout' and 'multishipping_address'
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getCheckoutType()
     {

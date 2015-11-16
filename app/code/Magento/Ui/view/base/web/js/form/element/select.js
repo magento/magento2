@@ -7,7 +7,7 @@ define([
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
@@ -31,14 +31,14 @@ define([
      * @param  {Array} nodes
      * @return {Object}
      */
-    function parseOptions(nodes) {
+    function parseOptions(nodes, captionValue) {
         var caption,
             value;
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value === null || value === '') {
+            if (value === null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
@@ -131,7 +131,9 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var result = parseOptions(config.options);
+            var options = config.options,
+                captionValue = config.captionValue || '',
+                result = parseOptions(options, captionValue);
 
             if (config.caption) {
                 delete result.caption;

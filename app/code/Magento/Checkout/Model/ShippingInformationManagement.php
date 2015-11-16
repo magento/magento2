@@ -34,7 +34,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -63,24 +63,32 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -90,11 +98,13 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $this->logger = $logger;
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveAddressInformation(
         $cartId,
@@ -119,6 +129,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
+        $billingAddress = $addressInformation->getBillingAddress();
+        if ($billingAddress) {
+            $quote->setBillingAddress($billingAddress);
+        }
 
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setSameAsBilling($sameAsBilling);
@@ -131,9 +145,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $address->setShippingMethod($carrierCode . '_' . $methodCode);
 
         try {
-            /** TODO: refactor this code. Eliminate save operation */
-            $address->save();
-            $address->collectTotals();
+            $this->totalsCollector->collectAddressTotals($quote, $address);
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));

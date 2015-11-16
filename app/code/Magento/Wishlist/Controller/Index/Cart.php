@@ -6,14 +6,13 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends Action\Action implements IndexInterface
+class Cart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -148,7 +147,7 @@ class Cart extends Action\Action implements IndexInterface
         );
 
         try {
-            /** @var \Magento\Wishlist\Model\Resource\Item\Option\Collection $options */
+            /** @var \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection $options */
             $options = $this->optionFactory->create()->getCollection()->addItemFilter([$itemId]);
             $item->setOptions($options->getOptionsByItem($itemId));
 

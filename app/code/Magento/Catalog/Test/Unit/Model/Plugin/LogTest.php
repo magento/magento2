@@ -18,18 +18,18 @@ class LogTest extends \PHPUnit_Framework_TestCase
     protected $compareItemMock;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logResourceMock;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
     protected function setUp()
     {
-        $this->logResourceMock = $this->getMock('Magento\Customer\Model\Resource\Visitor', [], [], '', false);
+        $this->logResourceMock = $this->getMock('Magento\Customer\Model\ResourceModel\Visitor', [], [], '', false);
         $this->compareItemMock = $this->getMock(
             'Magento\Catalog\Model\Product\Compare\Item',
             [],
@@ -37,7 +37,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->subjectMock = $this->getMock('Magento\Customer\Model\Resource\Visitor', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Customer\Model\ResourceModel\Visitor', [], [], '', false);
         $this->model = new \Magento\Catalog\Model\Plugin\Log($this->compareItemMock);
     }
 

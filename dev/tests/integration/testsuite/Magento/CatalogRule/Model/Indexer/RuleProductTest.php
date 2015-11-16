@@ -19,7 +19,7 @@ class RuleProductTest extends \PHPUnit_Framework_TestCase
     protected $indexBuilder;
 
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule
      */
     protected $resourceRule;
 
@@ -31,7 +31,7 @@ class RuleProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexBuilder = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Indexer\IndexBuilder');
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Resource\Rule');
+        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
     }
 

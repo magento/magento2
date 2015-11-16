@@ -7,10 +7,12 @@
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/validation/validation',
+
     'mage/dataPost'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.wishlist', {
@@ -152,7 +154,9 @@ define([
                     if ($(form).find('input:checkbox:checked').length) {
                         form.submit();
                     } else {
-                        alert(this.options.checkBoxValidationMessage);
+                        alert({
+                            content: this.options.checkBoxValidationMessage
+                        });
                     }
                 }, this)
             });

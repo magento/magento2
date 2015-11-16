@@ -7,6 +7,9 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductForm;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertConfigurableProductForm
@@ -23,6 +26,7 @@ class AssertConfigurableProductForm extends AssertProductForm
         'id',
         'affected_attribute_set',
         'checkout_data',
+        'price'
     ];
 
     /**
@@ -90,7 +94,7 @@ class AssertConfigurableProductForm extends AssertProductForm
     protected function prepareFormData(array $data, array $sortFields = [])
     {
         // filter values and reset keys in variation matrix
-        $variationsMatrix = $data['configurable_attributes_data']['matrix'];
+        $variationsMatrix = $this->trimCurrencyForPriceInMatrix($data['configurable_attributes_data']['matrix']);
         foreach ($variationsMatrix as $key => $variationMatrix) {
             $variationsMatrix[$key] = array_diff_key($variationMatrix, array_flip($this->skippedVariationMatrixFields));
         }
@@ -100,5 +104,57 @@ class AssertConfigurableProductForm extends AssertProductForm
             $data = $this->sortDataByPath($data, $path);
         }
         return $data;
+    }
+
+    /**
+     * Escape currency for price in matrix
+     *
+     * @param array $variationsMatrix
+     * @param string $currency
+     * @return array
+     */
+    protected function trimCurrencyForPriceInMatrix($variationsMatrix, $currency = '$')
+    {
+        foreach ($variationsMatrix as &$variation) {
+            if (isset($variation['price'])) {
+                $variation['price'] = str_replace($currency, '', $variation['price']);
+            }
+        }
+        return $variationsMatrix;
+    }
+
+    /**
+     * Assert form data equals product configurable data.
+     *
+     * @param FixtureInterface $product
+     * @param CatalogProductIndex $productGrid
+     * @param CatalogProductEdit $productPage
+     * @return void
+     */
+    public function processAssert(
+        FixtureInterface $product,
+        CatalogProductIndex $productGrid,
+        CatalogProductEdit $productPage
+    ) {
+        $product = $this->processFixture($product);
+        parent::processAssert($product, $productGrid, $productPage);
+    }
+
+    /**
+     * Remove price field from fixture as it should not be retrieved from product page
+     *
+     * @param FixtureInterface $product
+     * @return mixed
+     */
+    protected function processFixture(FixtureInterface $product)
+    {
+        $data = $product->getData();
+        if (isset($data['price'])) {
+            unset($data['price']);
+        }
+        return $this->objectManager->create(
+            'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct',
+            ['data' => $data]
+        );
     }
 }

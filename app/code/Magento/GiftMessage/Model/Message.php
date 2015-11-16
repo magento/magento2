@@ -10,8 +10,8 @@ use Magento\Framework\Api\AttributeValueFactory;
 /**
  * Gift Message model
  *
- * @method \Magento\GiftMessage\Model\Resource\Message _getResource()
- * @method \Magento\GiftMessage\Model\Resource\Message getResource()
+ * @method \Magento\GiftMessage\Model\ResourceModel\Message _getResource()
+ * @method \Magento\GiftMessage\Model\ResourceModel\Message getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -29,7 +29,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TypeFactory $typeFactory
-     * @param Resource\Message $resource
+     * @param \Magento\GiftMessage\Model\ResourceModel\Message $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -39,7 +39,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
-        \Magento\GiftMessage\Model\Resource\Message $resource = null,
+        \Magento\GiftMessage\Model\ResourceModel\Message $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -60,7 +60,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\GiftMessage\Model\Resource\Message');
+        $this->_init('Magento\GiftMessage\Model\ResourceModel\Message');
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Magento\Test\Integrity\Library;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
@@ -43,6 +44,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
+                $componentRegistrar = new ComponentRegistrar();
                 $fileReflection = new FileReflection($file);
                 $tokens = new Tokens($fileReflection->getContents(), new ParserFactory());
                 $tokens->parseContent();
@@ -54,9 +56,15 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
                 $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
                 foreach ($dependencies as $dependency) {
-                    $filePath = BP . '/lib/internal/' . str_replace('\\', '/', $dependency) . '.php';
-                    if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
-                        $this->errors[$fileReflection->getFileName()][] = $dependency;
+                    $dependencyPaths = explode('/', $dependency);
+                    $dependencyPaths = array_slice($dependencyPaths, 2);
+                    $dependency = implode('\\', $dependencyPaths);
+                    $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+                    foreach ($libraryPaths as $libraryPath) {
+                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependency . '.php');
+                        if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
+                            $this->errors[$fileReflection->getFileName()][] = $dependency;
+                        }
                     }
                 }
 
@@ -85,7 +93,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            $files->getPhpFiles(false, true, false, true, false)
+            $files->getPhpFiles(
+                Files::INCLUDE_PUB_CODE |
+                Files::INCLUDE_LIBS |
+                Files::AS_DATA_SET |
+                Files::INCLUDE_NON_CLASSES
+            )
         );
     }
 
@@ -123,9 +136,11 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function libraryDataProvider()
     {
         // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
-        include_once BP . '/lib/internal/Magento/Framework/Option/ArrayInterface.php';
-        $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
-        $dataProvider = Files::init()->getClassFiles(false, false, false, true, true);
+        $componentRegistrar = new ComponentRegistrar();
+        include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+            . '/Option/ArrayInterface.php';
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist.txt');
+        $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {
             $file = str_replace(BP . '/', '', $data[0]);

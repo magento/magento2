@@ -29,7 +29,7 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
      */
     public function isInheritedLocalizedExceptionDataProvider()
     {
-        $files = UtilityFiles::init()->getClassFiles(true, false, false, true, false);
+        $files = UtilityFiles::init()->getPhpFiles(UtilityFiles::INCLUDE_APP_CODE | UtilityFiles::INCLUDE_LIBS);
         $blacklistExceptions = $this->getBlacklistExceptions();
 
         $data = [];
@@ -53,8 +53,48 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
      */
     protected function convertPathToClassName($filePath)
     {
-        $className = str_replace('.php', "", substr($filePath, strpos($filePath, '/Magento')));
-        $className = implode("\\", explode("/", $className));
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $foundItems = null;
+        $moduleNamespace = null;
+        $foundItems = array_filter(
+            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
+            function ($item) use ($filePath) {
+                if (strpos($filePath, $item . '/') !== false) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        );
+        if ($foundItems) {
+            $moduleNamespace = str_replace('_', '\\', array_keys($foundItems)[0]);
+            $classPath = str_replace('/', '\\', str_replace(array_shift($foundItems), '', $filePath));
+        } else {
+            $foundItems = array_filter(
+                $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::LIBRARY),
+                function ($item) use ($filePath) {
+                    if (strpos($filePath, $item . '/') !== false) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            );
+            $libName = array_keys($foundItems)[0];
+            $libName = str_replace('framework-', 'framework/', $libName);
+            $namespaceParts = explode('/', $libName);
+            $namespaceParts = array_map(
+                function ($item) {
+                    return str_replace(' ', '', ucwords(str_replace('-', ' ', $item)));
+                },
+                $namespaceParts
+            );
+            $moduleNamespace = implode('\\', $namespaceParts);
+            $classPath = str_replace('/', '\\', str_replace(array_shift($foundItems), '', $filePath));
+        }
+
+        $className = '\\' . $moduleNamespace . $classPath;
+        $className = str_replace('.php', '', $className);
         return $className;
     }
 

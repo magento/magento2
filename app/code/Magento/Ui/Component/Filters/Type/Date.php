@@ -66,16 +66,40 @@ class Date extends AbstractFilter
         if (isset($this->filterData[$this->getName()])) {
             $value = $this->filterData[$this->getName()];
 
-            if (!empty($value)) {
-                $value = $this->wrappedComponent->convertDate($value);
-
-                $filter = $this->filterBuilder->setConditionType('eq')
-                    ->setField($this->getName())
-                    ->setValue($value->format('Y-m-d H:i:s'))
-                    ->create();
-
-                $this->getContext()->getDataProvider()->addFilter($filter);
+            if (empty($value)) {
+                return;
             }
+
+            if (is_array($value)) {
+                if (isset($value['from'])) {
+                    $this->applyFilterByType('gteq', $this->wrappedComponent->convertDate($value['from']));
+                }
+
+                if (isset($value['to'])) {
+                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to']));
+                }
+            } else {
+                $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));
+            }
+        }
+    }
+
+    /**
+     * Apply filter by its type
+     *
+     * @param string $type
+     * @param string $value
+     * @return void
+     */
+    protected function applyFilterByType($type, $value)
+    {
+        if (!empty($value)) {
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value->format('Y-m-d H:i:s'))
+                ->create();
+
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
     }
 }

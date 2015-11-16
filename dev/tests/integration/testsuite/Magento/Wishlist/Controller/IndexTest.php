@@ -57,7 +57,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      * Verify wishlist view action
      *
      * The following is verified:
-     * - \Magento\Wishlist\Model\Resource\Item\Collection
+     * - \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * - \Magento\Wishlist\Block\Customer\Wishlist
      * - \Magento\Wishlist\Block\Customer\Wishlist\Items
      * - \Magento\Wishlist\Block\Customer\Wishlist\Item\Column

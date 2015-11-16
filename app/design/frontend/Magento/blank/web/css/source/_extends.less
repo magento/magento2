@@ -448,6 +448,14 @@
 }
 
 //
+//  Visually hidden reset
+//  ---------------------------------------------
+
+.abs-visually-hidden-reset {
+    .lib-visually-hidden-reset();
+}
+
+//
 //  Clearfix
 //  ---------------------------------------------
 
@@ -1120,6 +1128,7 @@
     .amount {
         padding-right: 4px;
         text-align: right;
+        white-space: nowrap;
         strong {
             font-weight: @font-weight__regular;
         }
@@ -1207,11 +1216,11 @@
         );
         margin-bottom: 0;
         overflow: hidden;
-        padding: 7px @indent__base 7px @indent__xs;
+        padding: 7px @indent__l 7px @indent__xs;
         position: relative;
         &:after {
             position: absolute;
-            right: 0;
+            right: -5px;
             top: -5px;
         }
         strong {

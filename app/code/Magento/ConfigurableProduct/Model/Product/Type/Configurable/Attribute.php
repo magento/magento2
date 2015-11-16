@@ -35,7 +35,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     protected function _construct()
     {
-        $this->_init('Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute');
+        $this->_init('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute');
     }
 
     /**
@@ -77,7 +77,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Load counfigurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
      * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)

@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+
 class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -124,22 +126,26 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for method isRowInvalid. Expected true result.
+     * @dataProvider isRowInvalidDataProvider
      */
-    public function testIsRowInvalidTrue()
+    public function testIsRowInvalid($errorLevel, $rowNumber, $isValid)
     {
-        $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
-        $result = $this->model->isRowInvalid(7);
-        $this->assertTrue($result);
+        $this->model->addError('systemException', $errorLevel, $rowNumber, 'Column name', 'Message', 'Description');
+        $result = $this->model->isRowInvalid($rowNumber);
+        $this->assertEquals($isValid, $result);
     }
 
     /**
-     * Test for method isRowInvalid. Expected false result.
+     * @return array
      */
-    public function testIsRowInvalidFalse()
+    public function isRowInvalidDataProvider()
     {
-        $this->model->addError('systemException');
-        $result = $this->model->isRowInvalid(8);
-        $this->assertFalse($result);
+        return [
+            [ProcessingError::ERROR_LEVEL_CRITICAL, 7, true],
+            [ProcessingError::ERROR_LEVEL_NOT_CRITICAL, 8, false],
+            [ProcessingError::ERROR_LEVEL_NOTICE, 9, false],
+            [ProcessingError::ERROR_LEVEL_WARNING, 10, false]
+        ];
     }
 
     /**

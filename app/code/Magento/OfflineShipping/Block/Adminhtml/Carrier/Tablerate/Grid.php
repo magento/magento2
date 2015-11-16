@@ -33,21 +33,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_tablerate;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory
+     * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory $collectionFactory
+     * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory $collectionFactory
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $tablerate
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory $collectionFactory,
+        \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory $collectionFactory,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $tablerate,
         array $data = []
     ) {
@@ -122,7 +122,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection */
+        /** @var $collection \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection */
         $collection = $this->_collectionFactory->create();
         $collection->setConditionFilter($this->getConditionName())->setWebsiteFilter($this->getWebsiteId());
 

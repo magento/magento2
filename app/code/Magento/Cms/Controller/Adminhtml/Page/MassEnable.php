@@ -8,7 +8,7 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class MassEnable

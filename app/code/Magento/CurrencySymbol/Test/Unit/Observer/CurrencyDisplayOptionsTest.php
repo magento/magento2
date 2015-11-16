@@ -85,7 +85,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
         $this->mockEvent->expects($this->once())->method('getCurrencyOptions')->willReturn($sampleCurrencyOptionObject);
         $this->mockSymbol->expects($this->never())->method('getCurrencySymbol')->with(null)->willReturn(null);
 
-        $this->observer->invoke($this->mockEventObserver);
+        $this->observer->execute($this->mockEventObserver);
 
         // Check if option set is empty
         $this->assertEquals([], $sampleCurrencyOptionObject->getData());
@@ -110,7 +110,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
             ->with($sampleCurrency)
             ->willReturn($sampleCurrencySymbol);
 
-        $this->observer->invoke($this->mockEventObserver);
+        $this->observer->execute($this->mockEventObserver);
 
         // Check if option set is empty
         $this->assertEquals($expectedCurrencyOptions, $sampleCurrencyOptionObject->getData());

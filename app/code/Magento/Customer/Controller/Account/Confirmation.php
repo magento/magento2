@@ -13,13 +13,23 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-class Confirmation extends \Magento\Customer\Controller\Account
+class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface  */
     protected $customerAccountManagement;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
@@ -35,9 +45,11 @@ class Confirmation extends \Magento\Customer\Controller\Account
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement
     ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**
@@ -47,7 +59,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        if ($this->_getSession()->isLoggedIn()) {
+        if ($this->session->isLoggedIn()) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*/');
@@ -73,7 +85,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }
-            $this->_getSession()->setUsername($email);
+            $this->session->setUsername($email);
             $resultRedirect->setPath('*/*/index', ['_secure' => true]);
             return $resultRedirect;
         }

@@ -24,20 +24,6 @@ class Samples extends Form
     protected $addNewSampleRow = '//button[@id="add_sample_item"]';
 
     /**
-     * 'Show Sample block' button
-     *
-     * @var string
-     */
-    protected $showSample = '//dt[@id="dt-samples"]/a';
-
-    /**
-     * Sample title block
-     *
-     * @var string
-     */
-    protected $samplesTitle = '//input[@name="product[samples_title]"]';
-
-    /**
      * Downloadable sample item block
      *
      * @var string
@@ -70,9 +56,6 @@ class Samples extends Form
     public function fillSamples(array $fields = null, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
-        if (!$element->find($this->samplesTitle, Locator::SELECTOR_XPATH)->isVisible()) {
-            $element->find($this->showSample, Locator::SELECTOR_XPATH)->click();
-        }
         $mapping = $this->dataMapping(['title' => $fields['title']]);
         $this->_fill($mapping);
         foreach ($fields['downloadable']['sample'] as $index => $sample) {
@@ -91,9 +74,6 @@ class Samples extends Form
     public function getDataSamples(array $fields = null, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
-        if (!$element->find($this->samplesTitle, Locator::SELECTOR_XPATH)->isVisible()) {
-            $element->find($this->showSample, Locator::SELECTOR_XPATH)->click();
-        }
         $mapping = $this->dataMapping(['title' => $fields['title']]);
         $newFields = $this->_getData($mapping);
         foreach ($fields['downloadable']['sample'] as $index => $sample) {

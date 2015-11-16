@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Form;
 /**
  * Eav Form Fieldset Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Fieldset getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Form\Fieldset getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Fieldset setTypeId(int $value)
  * @method string getCode()
@@ -36,15 +36,16 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -56,16 +57,18 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Fieldset');
+        $this->_init('Magento\Eav\Model\ResourceModel\Form\Fieldset');
     }
 
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Fieldset
+     * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset
+     * @codeCoverageIgnore
      */
     protected function _getResource()
     {
@@ -75,7 +78,8 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource collection instance wrapper
      *
-     * @return \Magento\Eav\Model\Resource\Form\Fieldset\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Fieldset\Collection
+     * @codeCoverageIgnore
      */
     public function getCollection()
     {
@@ -119,6 +123,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $labels
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setLabels(array $labels)
     {

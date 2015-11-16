@@ -63,7 +63,13 @@
         </ul>
 
         <div data-role="step-gallery-single" class="attribute-image-selector" data-bind="visible: type() == 'single'">
-            <div data-role="gallery" class="gallery" data-images="[]">
+            <div data-role="gallery"
+                 class="gallery"
+                 data-images="[]"
+                 data-types="<?php /* @noEscape */ echo $block->escapeHtml(
+                     $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
+                 ) ?>"
+                >
                 <div class="image image-placeholder">
                     <div data-role="uploader" class="uploader">
                         <div class="image-browse">
@@ -78,19 +84,6 @@
                     </div>
                     <p class="image-placeholder-text"><?= /* @escapeNotVerified */  __('Browse to find or drag image here') ?></p>
                 </div>
-
-                <input name="product[image]"
-                       class="image-image"
-                       type="hidden"
-                       value="" />
-                <input name="product[small_image]"
-                       class="image-small_image"
-                       type="hidden"
-                       value="" />
-                <input name="product[thumbnail]"
-                       class="image-thumbnail"
-                       type="hidden"
-                       value="" />
 
                 <script data-template="uploader" type="text/x-magento-template">
                     <div id="<%- data.id %>" class="file-row">
@@ -185,30 +178,25 @@
                                     </label>
                                     <div class="control">
                                         <ul class="multiselect-alt">
-                                            <li class="item">
-                                                <label>
-                                                    <input class="image-type"
-                                                           data-role="type-selector"
-                                                           type="checkbox"
-                                                           value="image"
-                                                        /><?= /* @escapeNotVerified */  __('Base Image') ?></label>
-                                            </li>
-                                            <li class="item">
-                                                <label>
-                                                    <input class="image-type"
-                                                           data-role="type-selector"
-                                                           type="checkbox"
-                                                           value="small_image"
-                                                        /><?= /* @escapeNotVerified */  __('Small Image') ?></label>
-                                            </li>
-                                            <li class="item">
-                                                <label>
-                                                    <input class="image-type"
-                                                           data-role="type-selector"
-                                                           type="checkbox"
-                                                           value="thumbnail"
-                                                        /><?= /* @escapeNotVerified */  __('Thumbnail') ?></label>
-                                            </li>
+                                            <?php
+                                            foreach ($block->getMediaAttributes() as $attribute) : ?>
+                                                <li class="item">
+                                                    <label>
+                                                        <input class="image-type"
+                                                               data-role="type-selector"
+                                                               type="checkbox"
+                                                               value="<?php /* @noEscape */ echo $block->escapeHtml(
+                                                                   $attribute->getAttributeCode()
+                                                               ) ?>"
+                                                            />
+                                                        <?php /* @noEscape */ echo $block->escapeHtml(
+                                                            $attribute->getFrontendLabel()
+                                                        ) ?>
+                                                    </label>
+                                                </li>
+                                                <?php
+                                            endforeach;
+                                            ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -225,14 +213,6 @@
                                 </div>
                             </fieldset>
                         </div>
-
-                        <button type="button"
-                                class="action-close"
-                                data-role="close-panel"
-                                title="<?= $block->escapeHtml(__('Close panel')) ?>">
-                            <span><?= /* @escapeNotVerified */  __('Close panel') ?></span>
-                        </button>
-                        <div class="image-pointer"></div>
                     </div>
                 </script>
 
@@ -266,7 +246,13 @@
                         <span data-bind="text:label"></span>
                     </label>
 
-                    <div data-role="gallery" class="gallery" data-images="[]">
+                    <div data-role="gallery"
+                         class="gallery"
+                         data-images="[]"
+                         data-types="<?php /* @noEscape */ echo $block->escapeHtml(
+                             $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
+                         ) ?>"
+                        >
                         <div class="image image-placeholder">
                             <div data-role="uploader" class="uploader">
                                 <div class="image-browse">
@@ -281,19 +267,6 @@
                                <span></span><span></span><span></span><span></span>
                             </div>
                         </div>
-                        <input name="product[image]"
-                               class="image-image"
-                               type="hidden"
-                               value=""/>
-                        <input name="product[small_image]"
-                               class="image-small_image"
-                               type="hidden"
-                               value=""/>
-                        <input name="product[thumbnail]"
-                               class="image-thumbnail"
-                               type="hidden"
-                               value=""/>
-
                         <script data-template="uploader" type="text/x-magento-template">
                             <div id="<%- data.id %>" class="file-row">
                                 <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
@@ -329,11 +302,6 @@
                                        name="product[media_gallery][images][<%- data.file_id %>][removed]"
                                        value=""
                                        class="is-removed"/>
-                                <ul class="type-labels" style="display: none">
-                                    <li class="type-image"><?= /* @escapeNotVerified */  __('Base Image') ?></li>
-                                    <li class="type-small_image"><?= /* @escapeNotVerified */  __('Small Image') ?></li>
-                                    <li class="type-thumbnail"><?= /* @escapeNotVerified */  __('Thumbnail') ?></li>
-                                </ul>
                                 <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
 
                                 <button type="button"
@@ -395,36 +363,26 @@
                                             </label>
                                             <div class="control">
                                                 <ul class="multiselect-alt">
-                                                    <li class="item">
-                                                        <label>
-                                                            <input class="image-type"
-                                                                   data-role="type-selector"
-                                                                   type="checkbox"
-                                                                   value="image"
-                                                                />
-                                                            <?= /* @escapeNotVerified */  __('Base Image') ?>
-                                                        </label>
-                                                    </li>
-                                                    <li class="item">
-                                                        <label>
-                                                            <input class="image-type"
-                                                                   data-role="type-selector"
-                                                                   type="checkbox"
-                                                                   value="small_image"
-                                                                />
-                                                            <?= /* @escapeNotVerified */  __('Small Image') ?>
-                                                        </label>
-                                                    </li>
-                                                    <li class="item">
-                                                        <label>
-                                                            <input class="image-type"
-                                                                   data-role="type-selector"
-                                                                   type="checkbox"
-                                                                   value="thumbnail"
-                                                                />
-                                                            <?= /* @escapeNotVerified */  __('Thumbnail') ?>
-                                                        </label>
-                                                    </li>
+                                                    <?php
+                                                    foreach ($block->getMediaAttributes() as $attribute) :
+                                                        ?>
+                                                        <li class="item">
+                                                            <label>
+                                                                <input class="image-type"
+                                                                       data-role="type-selector"
+                                                                       type="checkbox"
+                                                                       value="<?php /* @noEscape */ echo $block->escapeHtml(
+                                                                           $attribute->getAttributeCode()
+                                                                       ) ?>"
+                                                                    />
+                                                                <?php /* @noEscape */ echo $block->escapeHtml(
+                                                                    $attribute->getFrontendLabel()
+                                                                ) ?>
+                                                            </label>
+                                                        </li>
+                                                        <?php
+                                                    endforeach;
+                                                    ?>
                                                 </ul>
                                             </div>
                                         </div>
@@ -441,14 +399,6 @@
                                         </div>
                                     </fieldset>
                                 </div>
-
-                                <button type="button"
-                                        class="action-close"
-                                        data-role="close-panel"
-                                        title="<?= $block->escapeHtml(__('Close panel')) ?>">
-                                    <span><?= /* @escapeNotVerified */  __('Close panel') ?></span>
-                                </button>
-                                <div class="image-pointer"></div>
                             </div>
                         </script>
 
@@ -671,7 +621,6 @@
                     "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
                     "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
                     "noImage": "<?= /* @escapeNotVerified */  $block->getNoImageUrl() ?>",
-                    "currencySymbol": "<?= /* @escapeNotVerified */  $block->getCurrencySymbol() ?>",
                     "variationsComponent": "configurableVariations"
                 }
             }

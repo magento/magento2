@@ -25,17 +25,17 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     protected $allLoaded = false;
 
     /**
-     * @var \Magento\Store\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Group\CollectionFactory
      */
     protected $groupCollectionFactory;
 
     /**
      * @param GroupFactory $groupFactory
-     * @param \Magento\Store\Model\Resource\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
      */
     public function __construct(
         GroupFactory $groupFactory,
-        \Magento\Store\Model\Resource\Group\CollectionFactory $groupCollectionFactory
+        \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
     ) {
         $this->groupFactory = $groupFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
@@ -64,7 +64,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     public function getList()
     {
         if (!$this->allLoaded) {
-            /** @var \Magento\Store\Model\Resource\Group\Collection $groupCollection */
+            /** @var \Magento\Store\Model\ResourceModel\Group\Collection $groupCollection */
             $groupCollection = $this->groupCollectionFactory->create();
             $groupCollection->setLoadDefault(true);
             foreach ($groupCollection as $item) {

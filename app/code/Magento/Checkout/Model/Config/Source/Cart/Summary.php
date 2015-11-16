@@ -9,6 +9,7 @@ class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {

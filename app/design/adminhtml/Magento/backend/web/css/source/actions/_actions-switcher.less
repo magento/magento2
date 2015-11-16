@@ -1,0 +1,110 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Yes/no switcher
+//  _____________________________________________
+
+//  ToDo UI: integrate the switcher to the backend
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@actions-switcher-background-color: @color-gray89;
+@actions-switcher-border-radius: 12px;
+@actions-switcher-border: 1px solid @color-gray65-lighten;
+@actions-switcher-control-background-color: @color-white;
+@actions-switcher-height: 20px;
+@actions-switcher-width: 37px;
+
+//
+
+.actions-switch {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+    height: @actions-switcher-height;
+    margin-right: 30px;
+    position: relative;
+    width: @actions-switcher-width;
+}
+
+.actions-switch-label {
+    background: @actions-switcher-background-color;
+    border-radius: @actions-switcher-border-radius;
+    border: @actions-switcher-border;
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+}
+
+.actions-switch-inner {
+    display: block;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+    width: 200%;
+    &:before,
+    &:after {
+        border-radius: @actions-switcher-border-radius;
+        color: @color-white;
+        display: block;
+        float: left;
+        height: @actions-switcher-height;
+        line-height: 22px;
+        padding: 0;
+        width: 50%;
+    }
+    &:before {
+        background-color: @color-green-apple;
+        content: "";
+    }
+    &:after {
+        content: "";
+        text-align: right;
+    }
+}
+
+.actions-switch-indicator {
+    background: @actions-switcher-control-background-color;
+    border-radius: @actions-switcher-border-radius;
+    border: @actions-switcher-border;
+    bottom: -2px;
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    transition: all 0.3s ease-in 0s;
+    width: 22px;
+}
+
+.actions-switch-text {
+    &:after {
+        content: attr(data-label-no);
+        display: block;
+        left: 32px;
+        margin-left: 12px;
+        position: absolute;
+    }
+}
+
+.actions-switch-checkbox {
+    display: none;
+    &:checked {
+        + .actions-switch-label {
+            .actions-switch-inner {
+                margin-left: 0;
+            }
+            .actions-switch-indicator {
+                right: 0;
+            }
+            .actions-switch-text {
+                &:after {
+                    content: attr(data-label-yes);
+                }
+            }
+        }
+    }
+}

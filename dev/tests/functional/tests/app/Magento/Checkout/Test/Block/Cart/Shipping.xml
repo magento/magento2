@@ -6,7 +6,6 @@
  */
 -->
 <mapping strict="0">
-    <wrapper>shippingAddress</wrapper>
     <fields>
         <country_id>
             <input>select</input>

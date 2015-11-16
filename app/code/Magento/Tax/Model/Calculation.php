@@ -132,7 +132,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
      */
     protected $_classesFactory;
 
@@ -197,8 +197,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param Resource\TaxClass\CollectionFactory $classesFactory
-     * @param Resource\Calculation $resource
+     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory
+     * @param \Magento\Tax\Model\ResourceModel\Calculation $resource
      * @param CustomerAccountManagement $customerAccountManagement
      * @param CustomerGroupManagement $customerGroupManagement
      * @param CustomerGroupRepository $customerGroupRepository
@@ -219,8 +219,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
-        \Magento\Tax\Model\Resource\Calculation $resource,
+        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory,
+        \Magento\Tax\Model\ResourceModel\Calculation $resource,
         CustomerAccountManagement $customerAccountManagement,
         CustomerGroupManagement $customerGroupManagement,
         CustomerGroupRepository $customerGroupRepository,
@@ -254,7 +254,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\Calculation');
+        $this->_init('Magento\Tax\Model\ResourceModel\Calculation');
     }
 
     /**
@@ -528,6 +528,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 && $basedOn == 'shipping'
             ) {
                 if ($customerId) {
+                    //fallback to default address for registered customer
                     try {
                         $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
@@ -546,7 +547,14 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                         $basedOn = 'default';
                     }
                 } else {
-                    $basedOn = 'default';
+                    //fallback for guest
+                    if ($basedOn == 'billing' && is_object($shippingAddress) && $shippingAddress->getCountryId()) {
+                        $billingAddress = $shippingAddress;
+                    } elseif ($basedOn == 'shipping' && is_object($billingAddress) && $billingAddress->getCountryId()) {
+                        $shippingAddress = $billingAddress;
+                    } else {
+                        $basedOn = 'default';
+                    }
                 }
             }
         }

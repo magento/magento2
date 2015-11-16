@@ -8,7 +8,7 @@
 namespace Magento\Framework\App\Route\ConfigInterface;
 
 /**
- * Proxy class for \Magento\Framework\App\Resource
+ * Proxy class for \Magento\Framework\App\ResourceConnection
  */
 class Proxy implements \Magento\Framework\App\Route\ConfigInterface
 {
@@ -29,7 +29,7 @@ class Proxy implements \Magento\Framework\App\Route\ConfigInterface
     /**
      * Proxied instance
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_subject = null;
 

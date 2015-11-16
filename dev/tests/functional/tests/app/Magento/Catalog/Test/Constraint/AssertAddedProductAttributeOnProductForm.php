@@ -28,7 +28,7 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $productEdit
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttribute $productAttributeOriginal
      * @throws \Exception
      * @return void
@@ -38,11 +38,11 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
         CatalogProductIndex $productGrid,
         CatalogProductEdit $productEdit,
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         CatalogProductAttribute $productAttributeOriginal = null
     ) {
         if (!$product->hasData('sku')) {
-            $product = $this->createProductWithAttributeSet($productAttributeOriginal, $productTemplate);
+            $product = $this->createProductWithAttributeSet($productAttributeOriginal, $attributeSet);
         }
         $filterProduct = ['sku' => $product->getSku()];
         $productGrid->open();
@@ -62,16 +62,16 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
      * Create Product With AttributeSet.
      *
      * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @return CatalogProductSimple
      */
     protected function createProductWithAttributeSet(
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $productTemplate
+        CatalogAttributeSet $attributeSet
     ) {
         $product = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\AddAttributeToProductTemplateStep',
-            ['attribute' => $attribute, 'productTemplate' => $productTemplate]
+            'Magento\Catalog\Test\TestStep\AddAttributeToAttributeSetStep',
+            ['attribute' => $attribute, 'attributeSet' => $attributeSet]
         )->run();
         return $product['product'];
     }

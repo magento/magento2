@@ -46,6 +46,6 @@ $userIds[] = $model->getDataByKey('user_id');
 $defaultAdminUserId = 1;
 $lockLifetime = 86400;
 
-/** @var $modelLockedUsers \Magento\User\Model\Resource\User */
-$modelLockedUsers = $objectManager->create('Magento\User\Model\Resource\User');
+/** @var $modelLockedUsers \Magento\User\Model\ResourceModel\User */
+$modelLockedUsers = $objectManager->create('Magento\User\Model\ResourceModel\User');
 $modelLockedUsers->lock($userIds, $defaultAdminUserId, $lockLifetime);

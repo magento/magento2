@@ -17,8 +17,8 @@ use Magento\Sales\Model\AbstractModel;
  * Tracks transaction history, allows to build transactions hierarchy
  * By default transactions are saved as closed.
  *
- * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
 
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -155,7 +155,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -170,7 +170,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         TransactionFactory $transactionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -197,7 +197,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Payment\Transaction');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment\Transaction');
         parent::_construct();
     }
 

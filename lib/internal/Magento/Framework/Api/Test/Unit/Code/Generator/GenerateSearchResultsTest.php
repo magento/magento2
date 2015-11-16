@@ -52,7 +52,7 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
         );
         $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResults.txt');
         $this->ioObjectMock->expects($this->once())
-            ->method('getResultFileName')
+            ->method('generateResultFileName')
             ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResults')
             ->will($this->returnValue('SampleSearchResults.php'));
         $this->ioObjectMock->expects($this->once())

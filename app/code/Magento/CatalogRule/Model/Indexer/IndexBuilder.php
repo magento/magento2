@@ -7,9 +7,9 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Resource\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -29,7 +29,7 @@ class IndexBuilder
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -91,7 +91,7 @@ class IndexBuilder
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -104,7 +104,7 @@ class IndexBuilder
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Eav\Model\Config $eavConfig,
@@ -213,14 +213,16 @@ class IndexBuilder
     {
         $this->connection->deleteFromSelect(
             $this->connection
-                ->select($this->resource->getTableName('catalogrule_product'), 'product_id')
+                ->select()
+                ->from($this->resource->getTableName('catalogrule_product'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product')
         );
 
         $this->connection->deleteFromSelect(
-            $this->connection->select($this->resource->getTableName('catalogrule_product_price'), 'product_id')
+            $this->connection->select()
+                ->from($this->resource->getTableName('catalogrule_product_price'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product_price')
@@ -240,6 +242,10 @@ class IndexBuilder
         $productId = $product->getId();
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
+        if (!$rule->validate($product)) {
+            return $this;
+        }
+
         $this->connection->delete(
             $this->resource->getTableName('catalogrule_product'),
             [
@@ -247,14 +253,6 @@ class IndexBuilder
                 $this->connection->quoteInto('product_id = ?', $productId)
             ]
         );
-
-        if (!$rule->getConditions()->validate($product)) {
-            $this->connection->delete(
-                $this->resource->getTableName('catalogrule_product_price'),
-                [$this->connection->quoteInto('product_id = ?', $productId)]
-            );
-            return $this;
-        }
 
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
@@ -596,17 +594,6 @@ class IndexBuilder
         }
 
         /**
-         * Join group price to result
-         */
-        $groupPriceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'group_price');
-        $select->joinLeft(
-            ['gp' => $groupPriceAttr->getBackend()->getResource()->getMainTable()],
-            'gp.entity_id=rp.product_id AND gp.customer_group_id=rp.customer_group_id AND '
-            . $this->connection->getCheckSql('gp.website_id=0', 'TRUE', 'gp.website_id=rp.website_id'),
-            'value'
-        );
-
-        /**
          * Join default price and websites prices to result
          */
         $priceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -647,10 +634,7 @@ class IndexBuilder
             []
         );
         $select->columns([
-            'default_price' => $this->connection->getIfNullSql(
-                'gp.value',
-                $this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value')
-            ),
+            'default_price' =>$this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
         ]);
 
         return $this->connection->query($select);

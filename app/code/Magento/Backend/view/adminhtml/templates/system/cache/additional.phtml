@@ -6,31 +6,31 @@
 
 // @codingStandardsIgnoreFile
 ?>
-<div class="fieldset additional-cache-management">
-    <div class="legend">
+<div class="additional-cache-management">
+    <h2>
         <span><?php /* @escapeNotVerified */ echo __('Additional Cache Management') ?></span>
-    </div>
-    <div class="field">
+    </h2>
+    <p>
         <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanImagesUrl() ?>')" type="button">
             <?php /* @escapeNotVerified */ echo __('Flush Catalog Images Cache') ?>
         </button>
-        <label class="label"><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></label>
-    </div>
-    <div class="field">
+        <span><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></span>
+    </p>
+    <p>
         <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanMediaUrl() ?>')" type="button">
             <?php /* @escapeNotVerified */ echo __('Flush JavaScript/CSS Cache') ?>
         </button>
-        <label class="label"><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file.') ?></label>
-    </div>
+        <span><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file.') ?></span>
+    </p>
     <?php
     if (!$block->isInProductionMode()):
         ?>
-        <div class="field">
+        <p>
             <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanStaticFilesUrl() ?>')" type="button">
                 <?php /* @escapeNotVerified */ echo __('Flush Static Files Cache') ?>
             </button>
-            <label class="label"><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></label>
-        </div>
+            <span><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></span>
+        </p>
     <?php
     endif;
     ?>

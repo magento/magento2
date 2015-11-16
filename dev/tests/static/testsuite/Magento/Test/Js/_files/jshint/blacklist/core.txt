@@ -1,18 +1,16 @@
-app/code/Magento/Authorizenet/view/adminhtml/web/js/direct-post.js
-app/code/Magento/Captcha/view/frontend/web/onepage.js
-app/code/Magento/Catalog/view/adminhtml/web/catalog/category/edit.js
-app/code/Magento/Catalog/view/adminhtml/web/catalog/product.js
-app/code/Magento/Catalog/view/adminhtml/web/catalog/product/composite/configure.js
-app/code/Magento/Checkout/view/frontend/web/js/accordion.js
-app/code/Magento/Checkout/view/frontend/web/js/opcheckout.js
-app/code/Magento/Checkout/view/frontend/web/js/payment.js
-app/code/Magento/Rule/view/adminhtml/web/rules.js
-app/code/Magento/Sales/view/adminhtml/web/order/create/giftmessage.js
-app/code/Magento/Sales/view/adminhtml/web/order/create/scripts.js
-app/code/Magento/Sales/view/adminhtml/web/order/giftoptions_tooltip.js
-app/code/Magento/Shipping/view/adminhtml/web/order/packaging.js
-app/code/Magento/Theme/view/frontend/web/menu.js
-app/code/Magento/Variable/view/adminhtml/web/variables.js
+module Magento_Authorizenet view/adminhtml/web/js/direct-post.js
+module Magento_Captcha view/frontend/web/onepage.js
+module Magento_Catalog view/adminhtml/web/catalog/category/edit.js
+module Magento_Catalog view/adminhtml/web/catalog/product.js
+module Magento_Catalog view/adminhtml/web/catalog/product/composite/configure.js
+module Magento_Checkout view/frontend/web/js/opcheckout.js
+module Magento_Rule view/adminhtml/web/rules.js
+module Magento_Sales view/adminhtml/web/order/create/giftmessage.js
+module Magento_Sales view/adminhtml/web/order/create/scripts.js
+module Magento_Sales view/adminhtml/web/order/giftoptions_tooltip.js
+module Magento_Shipping view/adminhtml/web/order/packaging.js
+module Magento_Theme view/frontend/web/menu.js
+module Magento_Variable view/adminhtml/web/variables.js
 dev/tests/js/JsTestDriver/testsuite/mage/translate_inline_vde/translate-inline-vde-test.js
 dev/tests/js/JsTestDriver/framework/qunit
 lib/web/mage/adminhtml

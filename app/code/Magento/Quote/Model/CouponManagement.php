@@ -20,17 +20,17 @@ class CouponManagement implements CouponManagementInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
      * Constructs a coupon read service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
     }

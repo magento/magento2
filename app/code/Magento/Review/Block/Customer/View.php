@@ -6,7 +6,7 @@
 namespace Magento\Review\Block\Customer;
 
 use Magento\Catalog\Model\Product;
-use Magento\Review\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
+use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteCollection;
 use Magento\Review\Model\Review;
 
 /**

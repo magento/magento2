@@ -20,6 +20,7 @@ class DirectoryData implements SectionSourceInterface
 
     /**
      * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Directory\Helper\Data $directoryHelper)
     {

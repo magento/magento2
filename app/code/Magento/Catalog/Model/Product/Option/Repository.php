@@ -17,7 +17,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option
      */
     protected $optionResource;
 
@@ -28,12 +28,12 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product\Option $optionResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
      * @param Converter $converter
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product\Option $optionResource,
+        \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
         \Magento\Catalog\Model\Product\Option\Converter $converter
     ) {
         $this->productRepository = $productRepository;

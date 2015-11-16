@@ -1,0 +1,116 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+@catalog-event-background-color: @color-gray94;
+@catalog-event-color: @primary__color;
+
+//
+//    Common
+//--------------------------------------
+
+& when (@media-common = true) {
+
+//
+//     Catalog Events
+// --------------------------------------
+.block-category-event {
+    .lib-css(background, @catalog-event-background-color);
+    .lib-css(color, @catalog-event-color);
+    text-align: center;
+    padding: @indent__s 0 15px;
+    &.block:last-child {
+        margin-bottom: @indent__s;
+    }
+    .block-title {
+        margin: 0 0 @indent__s;
+        strong {
+            .lib-font-size(15);
+            font-weight: @font-weight__light;
+        }
+    }
+    .ticker {
+        .lib-list-reset-styles();
+        li {
+            display: none;
+            margin: 0 15px;
+        }
+        .value {
+            .lib-font-size(18);
+            font-weight: @font-weight__light;
+        }
+        .label {
+            display: block;
+            text-transform: lowercase;
+            .lib-font-size(10);
+        }
+    }
+    .dates {
+        .start,
+        .end {
+            display: block;
+        }
+        .date {
+            .lib-font-size(50);
+        }
+        .time {
+            display: block;
+        }
+        .start {
+            &:after {
+                content: "\2013";
+                .lib-font-size(50);
+                display: block;
+            }
+        }
+    }
+}
+
+}
+
+//
+//    Desktop
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .block-category-event {
+        &.block:last-child {
+            margin-bottom: @indent__l;
+            padding: @indent__s 0 @indent__l;
+        }
+        .block-title {
+            margin: 0;
+            strong {
+                .lib-font-size(24);
+            }
+        }
+        .ticker {
+            li {
+                display: none;
+                margin: 0 50px;
+            }
+            .value {
+                .lib-font-size(60);
+            }
+            .label {
+                .lib-font-size(14);
+                text-transform: none;
+            }
+        }
+        .dates {
+            .start,
+            .end {
+                display: inline-block;
+            }
+            .start {
+                padding-right: 50px;
+                position: relative;
+                &:after {
+                    position: absolute;
+                    right: 10px;
+                    top: 0;
+                }
+            }
+        }
+    }
+}

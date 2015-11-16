@@ -19,6 +19,7 @@ return [
             'Magento\Setup\Controller\ReadinessCheckInstaller',
             'Magento\Setup\Controller\ReadinessCheckUpdater',
             'Magento\Setup\Controller\Environment',
+            'Magento\Setup\Controller\DependencyCheck',
             'Magento\Setup\Controller\DatabaseCheck',
             'Magento\Setup\Controller\AddDatabase',
             'Magento\Setup\Controller\WebConfiguration',
@@ -34,6 +35,10 @@ return [
             'Magento\Setup\Controller\Maintenance',
             'Magento\Setup\Controller\OtherComponentsGrid',
             'Magento\Setup\Controller\DataOption',
+            'Magento\Setup\Controller\Marketplace',
+            'Magento\Setup\Controller\SystemConfig',
+            'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\Session'
         ],
         'instance' => [
             'preference' => [
@@ -41,8 +46,9 @@ return [
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
                 'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Quiet',
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
-                'Magento\Framework\Module\ModuleRegistryInterface' => 'Magento\Framework\Module\Registrar',
                 'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',
+                'Magento\Framework\Component\ComponentRegistrarInterface' =>
+                    'Magento\Framework\Component\ComponentRegistrar',
             ],
         ],
     ],

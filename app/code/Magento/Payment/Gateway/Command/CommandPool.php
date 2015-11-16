@@ -18,17 +18,17 @@ class CommandPool implements CommandPoolInterface
     private $commands;
 
     /**
-     * @param array $commands
      * @param TMapFactory $tmapFactory
+     * @param array $commands
      */
     public function __construct(
-        array $commands,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $commands = []
     ) {
         $this->commands = $tmapFactory->create(
             [
                 'array' => $commands,
-                'type' => 'Magento\Payment\Gateway\CommandInterface'
+                'type' => CommandInterface::class
             ]
         );
     }

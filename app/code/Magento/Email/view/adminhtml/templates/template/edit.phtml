@@ -59,10 +59,11 @@ use Magento\Framework\App\TemplateTypesInterface;
 require([
     "jquery",
     "tinymce",
+    "Magento_Ui/js/modal/alert",
     "mage/mage",
     "Magento_Variable/variables",
     "prototype"
-], function(jQuery, tinyMCE){
+], function(jQuery, tinyMCE, alert){
 
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
@@ -207,7 +208,9 @@ require([
                           }
                        }.bind(this));
                    } else {
-                       alert('<?php /* @escapeNotVerified */ echo __('The template did not load. Please review the log for details.') ?>');
+                       alert({
+                           content: '<?php /* @escapeNotVerified */ echo __('The template did not load. Please review the log for details.') ?>'
+                       });
                    }
                }.bind(this)
             });

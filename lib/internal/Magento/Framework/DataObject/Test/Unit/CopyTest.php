@@ -33,15 +33,23 @@ class CopyTest extends \PHPUnit_Framework_TestCase
      */
     protected $sourceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesFactoryMock;
+
     protected function setUp()
     {
         $this->fieldsetConfigMock = $this->getMock('Magento\Framework\DataObject\Copy\Config', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->sourceMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $this->targetMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $this->extensionAttributesFactoryMock =
+            $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false);
         $this->copy = new \Magento\Framework\DataObject\Copy(
             $this->eventManagerMock,
-            $this->fieldsetConfigMock
+            $this->fieldsetConfigMock,
+            $this->extensionAttributesFactoryMock
         );
     }
 
@@ -157,6 +165,107 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             $newTarget,
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $target)
         );
+    }
+
+    public function testGetCopyFieldsetToTargetWhenTargetIsExtensibleDataInterface()
+    {
+        $fields['code']['aspect'] = '*';
+        $this->fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldset')
+            ->with('fieldset', 'global')
+            ->will($this->returnValue($fields));
+
+        $sourceMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataInterface',
+            [
+                'getExtensionAttributes', 'getCode'
+            ],
+            [],
+            '',
+            false
+        );
+        $targetMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataInterface',
+            [
+                'getExtensionAttributes',
+                'setCode',
+                'setExtensionAttributes'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $sourceMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturnSelf();
+        $sourceMock
+            ->expects($this->once())
+            ->method('getCode')
+            ->willReturn('code');
+
+        $targetMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturnSelf();
+        $targetMock
+            ->expects($this->any())
+            ->method('setExtensionAttributes')
+            ->willReturnSelf();
+        $targetMock
+            ->expects($this->once())
+            ->method('setCode')
+            ->with('code');
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
+        $this->assertEquals($result, $targetMock);
+    }
+
+    public function testGetCopyFieldsetToTargetWhenTargetIsAbstractSimpleObject()
+    {
+        $fields['code']['aspect'] = '*';
+        $source['code'] = 'code';
+        $this->fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldset')
+            ->with('fieldset', 'global')
+            ->will($this->returnValue($fields));
+
+        $sourceMock = $this->getMock(
+            'Magento\Framework\Api\AbstractSimpleObject',
+            [
+                '__toArray'
+            ],
+            [],
+            '',
+            false
+        );
+        $targetMock = $this->getMock(
+            'Magento\Framework\Api\AbstractSimpleObject',
+            [
+                'setData'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $sourceMock
+            ->expects($this->once())
+            ->method('__toArray')
+            ->willReturn($source);
+
+        $targetMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with('code', 'code');
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
+        $this->assertEquals($result, $targetMock);
     }
 
     public function testGetDataFromFieldsetWhenSourceIsInvalid()

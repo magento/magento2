@@ -18,7 +18,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $entityMetadata;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -128,7 +128,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dataProviderContainer->expects($this->any())->method('get')->willReturn($this->dataProvider);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);

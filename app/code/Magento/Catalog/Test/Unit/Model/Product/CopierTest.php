@@ -51,7 +51,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
 
-        $resourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $resourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
         $this->productMock->expects($this->once())->method('getOptionInstance')->will($this->returnValue($optionMock));

@@ -109,4 +109,38 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
 
         $block->getItemRenderer('some-type');
     }
+
+    /**
+     * @param array $expectedResult
+     * @param bool $isVirtual
+     * @dataProvider getTotalsCacheDataProvider
+     */
+    public function testGetTotalsCache($expectedResult, $isVirtual)
+    {
+        $totals = $isVirtual ? ['billing_totals'] : ['shipping_totals'];
+        $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($addressMock);
+        $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
+        $addressMock->expects($this->once())->method('getTotals')->willReturn($totals);
+
+        /** @var \Magento\Checkout\Block\Cart\AbstractCart $model */
+        $model = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\AbstractCart',
+            ['checkoutSession' => $checkoutSessionMock]
+        );
+        $this->assertEquals($expectedResult, $model->getTotalsCache());
+    }
+
+    public function getTotalsCacheDataProvider()
+    {
+        return [
+            [['billing_totals'], true],
+            [['shipping_totals'], false]
+        ];
+    }
 }

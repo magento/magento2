@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App\Action;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
     /**
@@ -40,6 +43,14 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
         $this->resultRedirectFactory = $context->getResultRedirectFactory();
         $this->resultFactory = $context->getResultFactory();
     }
+
+    /**
+     * Dispatch request
+     *
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     */
+    abstract public function dispatch(RequestInterface $request);
 
     /**
      * Retrieve request object

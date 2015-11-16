@@ -20,7 +20,7 @@ class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
         $countOfSubscritions = 20;
 
         $collection = $this->_objectManager->create(
-            'Magento\Newsletter\Model\Resource\Queue\Collection'
+            'Magento\Newsletter\Model\ResourceModel\Queue\Collection'
         )->setPageSize(
             $countOfQueue
         )->setCurPage(

@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+
+namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
+
 /**
  * Encryption key changer controller
  */
-namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
-
 abstract class Key extends \Magento\Backend\App\Action
 {
     /**

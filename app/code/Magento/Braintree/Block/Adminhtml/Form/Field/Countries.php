@@ -20,7 +20,7 @@ class Countries extends \Magento\Framework\View\Element\Html\Select
     protected $countrySource;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $countryCollectionFactory;
 
@@ -29,13 +29,13 @@ class Countries extends \Magento\Framework\View\Element\Html\Select
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Braintree\Model\System\Config\Source\Country $countrySource
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Braintree\Model\System\Config\Source\Country $countrySource,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);

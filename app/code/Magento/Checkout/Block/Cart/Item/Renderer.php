@@ -102,6 +102,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -132,6 +133,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setItem(AbstractItem $item)
     {
@@ -143,6 +145,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get quote item
      *
      * @return AbstractItem
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -153,6 +156,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get item product
      *
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     public function getProduct()
     {
@@ -163,6 +167,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Identify the product from which thumbnail should be taken.
      *
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     public function getProductForThumbnail()
     {
@@ -172,6 +177,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     /**
      * @param string $productUrl
      * @return $this
+     * @codeCoverageIgnore
      */
     public function overrideProductUrl($productUrl)
     {
@@ -265,6 +271,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get list of all otions for product
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getOptionList()
     {
@@ -288,6 +295,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get checkout session
      *
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCheckoutSession()
     {
@@ -368,6 +376,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Check whether Product is visible in site
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isProductVisible()
     {
@@ -378,6 +387,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Return product additional information block
      *
      * @return AbstractBlock
+     * @codeCoverageIgnore
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -389,6 +399,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param bool $strict
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setQtyMode($strict)
     {
@@ -401,6 +412,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param bool $ignore
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIgnoreProductUrl($ignore = true)
     {
@@ -451,6 +463,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
 
     /**
      * @return \Magento\Framework\Pricing\Render
+     * @codeCoverageIgnore
      */
     protected function getPriceRender()
     {

@@ -58,7 +58,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         // load the model
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Config\Model\Resource\Config\Data\Collection'
+            'Magento\Config\Model\ResourceModel\Config\Data\Collection'
         );
         $collection->addFieldToFilter(
             'path',

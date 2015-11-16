@@ -82,5 +82,6 @@ class DeleteCategoryUrlRewriteEntityTest extends Injectable
         }
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getPageMainActions()->delete();
+        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
     }
 }

@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -13,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Download extends ImportController
 {
-    const SAMPLE_FILES_DIRECTORY = 'Magento/ImportExport/Files/Sample/';
+    const SAMPLE_FILES_MODULE = 'Magento_ImportExport';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -21,28 +22,43 @@ class Download extends ImportController
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $fileDirectory;
+    protected $readFactory;
 
     /**
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    protected $fileFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
     ) {
         parent::__construct(
             $context
         );
         $this->fileFactory = $fileFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->fileDirectory = $filesystem->getDirectoryWrite(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -53,9 +69,12 @@ class Download extends ImportController
     public function execute()
     {
         $fileName = $this->getRequest()->getParam('filename') . '.csv';
-        $filePath = self::SAMPLE_FILES_DIRECTORY . $fileName;
+        $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::SAMPLE_FILES_MODULE);
+        $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $fileName;
+        $directoryRead = $this->readFactory->create($moduleDir);
+        $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 
-        if (!$this->fileDirectory->isFile($filePath)) {
+        if (!$directoryRead->isFile($filePath)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
@@ -63,8 +82,8 @@ class Download extends ImportController
             return $resultRedirect;
         }
 
-        $fileSize = isset($this->fileDirectory->stat($filePath)['size'])
-            ? $this->fileDirectory->stat($filePath)['size'] : null;
+        $fileSize = isset($directoryRead->stat($filePath)['size'])
+            ? $directoryRead->stat($filePath)['size'] : null;
 
         $this->fileFactory->create(
             $fileName,
@@ -76,7 +95,7 @@ class Download extends ImportController
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($this->fileDirectory->readFile($filePath));
+        $resultRaw->setContents($directoryRead->readFile($filePath));
         return $resultRaw;
     }
 }

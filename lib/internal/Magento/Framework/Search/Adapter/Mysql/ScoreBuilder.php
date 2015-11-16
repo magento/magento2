@@ -82,7 +82,7 @@ class ScoreBuilder
         $this->addPlus();
         $condition = "{$score}";
         if ($useWeights) {
-            $condition .= ' * POW(2, ' . self::WEIGHT_FIELD . ')';
+            $condition = "LEAST(($condition), 1000000) * POW(2, " . self::WEIGHT_FIELD . ')';
         }
         $this->scoreCondition .= $condition;
     }

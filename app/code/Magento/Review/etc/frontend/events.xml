@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="tag_tag_product_collection_load_after">
-        <observer name="review" instance="Magento\Review\Model\Observer" method="tagProductCollectionLoadAfter" shared="false" />
+        <observer name="review" instance="Magento\Review\Observer\TagProductCollectionLoadAfterObserver" shared="false" />
     </event>
     <event name="catalog_block_product_list_collection">
-        <observer name="review" instance="Magento\Review\Model\Observer" method="catalogBlockProductCollectionBeforeToHtml" shared="false" />
+        <observer name="review" instance="Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver" shared="false" />
     </event>
 </config>

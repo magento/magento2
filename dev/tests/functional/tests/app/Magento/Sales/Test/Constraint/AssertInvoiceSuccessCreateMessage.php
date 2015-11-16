@@ -29,7 +29,7 @@ class AssertInvoiceSuccessCreateMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_CREATE_MESSAGE,
-            $salesOrderView->getMessagesBlock()->getSuccessMessages()
+            $salesOrderView->getMessagesBlock()->getSuccessMessage()
         );
     }
 

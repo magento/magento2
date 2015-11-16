@@ -160,6 +160,24 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve list of suggested extensions
+     *
+     * Collect suggests from composer.lock file and modules composer.json files
+     *
+     * @return array
+     */
+    public function getSuggestedPackages()
+    {
+        $suggests = [];
+        /** @var \Composer\Package\CompletePackage $package */
+        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            $suggests += $package->getSuggests();
+        }
+
+        return array_unique($suggests);
+    }
+
+    /**
      * Collect required packages from root composer.lock file
      *
      * @return array
@@ -234,7 +252,7 @@ class ComposerInformation
     {
         $rootPackage = $this->composer->getPackage();
 
-        return preg_match('/magento\/magento2.e/', $rootPackage->getName());
+        return preg_match('/magento\/magento2...?/', $rootPackage->getName());
     }
 
     /**
@@ -248,5 +266,24 @@ class ComposerInformation
         return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
             || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackagesTypes()
+    {
+        return self::$packageTypes;
+    }
+
+    /**
+     * @param string $name
+     * @param string $version
+     * @return array
+     */
+    public function getPackageRequirements($name, $version)
+    {
+        $package = $this->composer->getRepositoryManager()->findPackage($name, $version);
+        return $package->getRequires();
     }
 }

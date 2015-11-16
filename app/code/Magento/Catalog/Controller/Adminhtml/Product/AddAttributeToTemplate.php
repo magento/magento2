@@ -27,7 +27,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $this->resultJsonFactory = $resultJsonFactory;
     }
     /**
-     * Add attribute to product template
+     * Add attribute to attribute set
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
@@ -43,9 +43,9 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
                 ->load($request->getParam('template_id'));
 
-            /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection $attributeGroupCollection */
+            /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $attributeGroupCollection */
             $attributeGroupCollection = $this->_objectManager->get(
-                'Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection'
+                'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection'
             );
             $attributeGroupCollection->setAttributeSetFilter($attributeSet->getId());
             $attributeGroupCollection->addFilter('attribute_group_code', $request->getParam('group'));

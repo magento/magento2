@@ -26,13 +26,18 @@ class Content extends DataSource
     protected $fixtureFactory;
 
     /**
+     * Repository factory.
+     *
+     * @var RepositoryFactory
+     */
+    protected $repositoryFactory;
+
+    /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         RepositoryFactory $repositoryFactory,
@@ -41,37 +46,62 @@ class Content extends DataSource
         array $data = []
     ) {
         $this->fixtureFactory = $fixtureFactory;
+        $this->repositoryFactory = $repositoryFactory;
         $this->params = $params;
         $this->data = $data;
-        if (isset($data['widget']['dataset']) && isset($this->params['repository'])) {
-            $this->data['widget']['dataset'] = $repositoryFactory->get($this->params['repository'])->get(
-                $data['widget']['dataset']
+        $this->prepareSourceData();
+    }
+
+    /**
+     * Prepare source data.
+     *
+     * @return void
+     */
+    protected function prepareSourceData()
+    {
+        if (isset($this->data['widget']['dataset']) && isset($this->params['repository'])) {
+            $this->data['widget']['dataset'] = $this->repositoryFactory->get($this->params['repository'])->get(
+                $this->data['widget']['dataset']
             );
-            foreach ($this->data['widget']['dataset'] as $key => $widget) {
-                if (isset($widget['chosen_option']['category_path'])
-                    && !isset($widget['chosen_option']['filter_sku'])
-                ) {
-                    $category = $this->createCategory($widget);
-                    $categoryName = $category->getData('name');
-                    $this->data['widget']['dataset'][$key]['chosen_option']['category_path'] = $categoryName;
-                }
-                if (isset($widget['chosen_option']['category_path']) && isset($widget['chosen_option']['filter_sku'])) {
-                    $product = $this->createProduct($widget);
-                    $categoryName = $product->getCategoryIds()[0]['name'];
-                    $productSku = $product->getData('sku');
-                    $this->data['widget']['dataset'][$key]['chosen_option']['category_path'] = $categoryName;
-                    $this->data['widget']['dataset'][$key]['chosen_option']['filter_sku'] = $productSku;
-                }
-                if ($widget['widget_type'] == 'Catalog New Products List') {
-                    $this->createProduct();
-                }
-                if ($widget['widget_type'] == 'CMS Static Block') {
-                    $block = $this->createBlock($widget);
-                    $blockIdentifier = $block->getIdentifier();
-                    $this->data['widget']['dataset'][$key]['chosen_option']['filter_identifier'] = $blockIdentifier;
-                }
+            $this->data = array_merge($this->data, $this->prepareWidgetData($this->data['widget']));
+        }
+    }
+
+    /**
+     * Prepare widget data for the source.
+     *
+     * @param array $widgets
+     * @return array
+     */
+    protected function prepareWidgetData(array $widgets)
+    {
+        $data = [];
+        foreach ($widgets['dataset'] as $key => $widget) {
+            if (isset($widget['chosen_option']['category_path'])
+                && !isset($widget['chosen_option']['filter_sku'])
+            ) {
+                $category = $this->createCategory($widget);
+                $categoryName = $category->getData('name');
+                $data['widget']['dataset'][$key]['chosen_option']['category_path'] = $categoryName;
+            }
+            if (isset($widget['chosen_option']['category_path']) && isset($widget['chosen_option']['filter_sku'])) {
+                $product = $this->createProduct($widget);
+                $categoryName = $product->getCategoryIds()[0]['name'];
+                $productSku = $product->getData('sku');
+                $data['widget']['dataset'][$key]['chosen_option']['category_path'] = $categoryName;
+                $data['widget']['dataset'][$key]['chosen_option']['filter_sku'] = $productSku;
+            }
+            if ($widget['widget_type'] == 'Catalog New Products List') {
+                $this->createProduct();
+            }
+            if ($widget['widget_type'] == 'CMS Static Block') {
+                $block = $this->createBlock($widget);
+                $blockIdentifier = $block->getIdentifier();
+                $data['widget']['dataset'][$key]['chosen_option']['filter_identifier'] = $blockIdentifier;
             }
         }
+
+        return $data;
     }
 
     /**

@@ -6,6 +6,7 @@
 namespace Magento\Payment\Test\Unit\Gateway\Command;
 
 use Magento\Payment\Gateway\Command\CommandPool;
+use Magento\Payment\Gateway\CommandInterface;
 
 class CommandPoolTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => ['Magento\Payment\Gateway\CommandInterface'],
-                    'type' => 'Magento\Payment\Gateway\CommandInterface'
+                    'type' => CommandInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -39,7 +40,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with('command')
             ->willReturn($commandI);
 
-        $pool = new CommandPool(['Magento\Payment\Gateway\CommandInterface'], $tMapFactory);
+        $pool = new CommandPool($tMapFactory, ['Magento\Payment\Gateway\CommandInterface']);
 
         static::assertSame($commandI, $pool->get('command'));
     }
@@ -61,7 +62,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [],
-                    'type' => 'Magento\Payment\Gateway\CommandInterface'
+                    'type' => CommandInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -70,7 +71,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with('command')
             ->willReturn(false);
 
-        $pool = new CommandPool([], $tMapFactory);
+        $pool = new CommandPool($tMapFactory, []);
         $pool->get('command');
     }
 }

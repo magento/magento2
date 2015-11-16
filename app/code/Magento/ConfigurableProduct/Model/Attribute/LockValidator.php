@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class LockValidator implements LockValidatorInterface
 {
@@ -16,9 +16,9 @@ class LockValidator implements LockValidatorInterface
     protected $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->resource = $resource;
     }

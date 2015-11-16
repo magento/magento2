@@ -148,7 +148,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function save($sku, LinkInterface $link, $isGlobalScopeContent = false)
+    public function save($sku, LinkInterface $link, $isGlobalScopeContent = true)
     {
         $product = $this->productRepository->get($sku, true);
         if ($link->getId() !== null) {

@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
@@ -58,7 +58,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param IndexStructure $indexStructure
-     * @param Resource|Resource $resource
+     * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
      * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
@@ -67,7 +67,7 @@ class IndexerHandler implements IndexerInterface
      */
     public function __construct(
         IndexStructure $indexStructure,
-        Resource $resource,
+        ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,

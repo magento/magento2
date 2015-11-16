@@ -24,7 +24,7 @@
         <div class="product-item-details">
             <strong class="product-item-name">
                 <!-- ko if: product_has_url -->
-                <a data-bind="attr: {href: product_url, title: product_name}, text: product_name"></a>
+                <a data-bind="attr: {href: product_url}, text: product_name"></a>
                 <!-- /ko -->
                 <!-- ko ifnot: product_has_url -->
                     <!-- ko text: product_name --><!-- /ko -->
@@ -69,7 +69,8 @@
                 <!-- /ko -->
 
                 <div class="details-qty qty">
-                    <span class="label" data-bind="i18n: 'Qty'"></span>
+                    <label class="label" data-bind="i18n: 'Qty', attr: {
+                           for: 'cart-item-'+item_id+'-qty'}"></label>
                     <input data-bind="attr: {
                            id: 'cart-item-'+item_id+'-qty',
                            'data-cart-item': item_id,

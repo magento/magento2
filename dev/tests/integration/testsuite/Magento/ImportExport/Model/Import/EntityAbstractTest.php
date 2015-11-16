@@ -36,8 +36,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Stdlib\StringUtils'),
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
-                $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
-                $objectManager->get('Magento\Framework\App\Resource'),
+                $objectManager->get('Magento\ImportExport\Model\ResourceModel\Helper'),
+                $objectManager->get('Magento\Framework\App\ResourceConnection'),
                 $objectManager->get(
                     'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface'
                 )
@@ -58,8 +58,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
         $method->invoke($model);
 
-        /** @var $dataSourceModel \Magento\ImportExport\Model\Resource\Import\Data */
-        $dataSourceModel = $objectManager->get('Magento\ImportExport\Model\Resource\Import\Data');
+        /** @var $dataSourceModel \Magento\ImportExport\Model\ResourceModel\Import\Data */
+        $dataSourceModel = $objectManager->get('Magento\ImportExport\Model\ResourceModel\Import\Data');
         $this->assertCount(1, $dataSourceModel->getIterator());
 
         $bunch = $dataSourceModel->getNextBunch();

@@ -760,7 +760,7 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     public function getJsObjectName()
     {
-        return $this->getId() . 'JsObject';
+        return preg_replace("~[^a-z0-9_]*~i", '', $this->getId()) . 'JsObject';
     }
 
     /**

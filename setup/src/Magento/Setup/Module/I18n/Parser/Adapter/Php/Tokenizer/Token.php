@@ -167,6 +167,14 @@ class Token
     }
 
     /**
+     * @return bool
+     */
+    public function isConcatenateOperator()
+    {
+        return $this->getValue() == '.';
+    }
+
+    /**
      * Is namespace separator
      *
      * @return bool

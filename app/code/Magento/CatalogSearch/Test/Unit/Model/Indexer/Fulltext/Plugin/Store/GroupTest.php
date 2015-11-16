@@ -15,7 +15,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Resource\Group
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Group
      */
     protected $subjectMock;
 
@@ -31,7 +31,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Group', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
             'Magento\Framework\Indexer\IndexerInterface',
             [],

@@ -57,7 +57,7 @@ class Add extends \Magento\Backend\Block\Template
      */
     protected function _getHeader()
     {
-        return __('Add New Product Template');
+        return __('Add New Attribute Set');
     }
 
     /**

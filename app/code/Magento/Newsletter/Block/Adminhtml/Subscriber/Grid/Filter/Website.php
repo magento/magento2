@@ -9,7 +9,7 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
-use Magento\Store\Model\Resource\Website\Collection;
+use Magento\Store\Model\ResourceModel\Website\Collection;
 
 class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
@@ -33,14 +33,14 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     protected $_storeManager;
 
     /**
-     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory
      */
     protected $_websitesFactory;
 
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param array $data
@@ -48,7 +48,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         array $data = []

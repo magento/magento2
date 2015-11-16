@@ -32,7 +32,7 @@ class Order extends \Magento\Framework\DataObject
     protected $_invoiceItemFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
 
@@ -55,7 +55,7 @@ class Order extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
-     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
      * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory
@@ -68,7 +68,7 @@ class Order extends \Magento\Framework\DataObject
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
-        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
         \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
         \Magento\Sales\Model\Order\Creditmemo\ItemFactory $creditmemoItemFactory,

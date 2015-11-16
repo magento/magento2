@@ -35,7 +35,6 @@ class PageActions extends AbstractPageActions
     {
         $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
             ->setValue($websiteScope);
-        $this->browser->acceptAlert();
 
         return $this;
     }

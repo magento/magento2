@@ -27,7 +27,7 @@ class Builder extends RequestBuilder
         } elseif (!is_array($attributeValue)) {
             $this->bind($attributeCode, $attributeValue);
         } elseif (isset($attributeValue['like'])) {
-            $this->bind($attributeCode, trim($attributeValue['like'], '%'));
+            $this->bind($attributeCode, $attributeValue['like']);
         } elseif (isset($attributeValue['in'])) {
             $this->bind($attributeCode, $attributeValue['in']);
         } elseif (isset($attributeValue['in_set'])) {

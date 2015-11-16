@@ -33,12 +33,18 @@ class VariationHandler
     protected $stockConfiguration;
 
     /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
+     */
+    protected $variationMediaAttributes;
+
+    /**
      * @param Type\Configurable $configurableProduct
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+     * @param VariationMediaAttributes $variationMediaAttributes
      */
     public function __construct(
         Type\Configurable $configurableProduct,
@@ -46,7 +52,8 @@ class VariationHandler
         \Magento\Eav\Model\EntityFactory $entityFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media,
+        \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes
     ) {
         $this->configurableProduct = $configurableProduct;
         $this->attributeSetFactory = $attributeSetFactory;
@@ -54,6 +61,7 @@ class VariationHandler
         $this->productFactory = $productFactory;
         $this->stockConfiguration = $stockConfiguration;
         $this->media = $media;
+        $this->variationMediaAttributes = $variationMediaAttributes;
     }
 
     /**
@@ -209,11 +217,11 @@ class VariationHandler
                 $variationId = $image['variation_id'];
                 $newFile = $this->media->duplicateImageFromTmp($file);
                 $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
-                foreach (['small_image', 'thumbnail', 'image'] as $imageType) {
-                    if (isset($productsData[$variationId][$imageType])
-                        && $productsData[$variationId][$imageType] == $file
+                foreach ($this->variationMediaAttributes->getMediaAttributes() as $attribute) {
+                    if (isset($productsData[$variationId][$attribute->getAttributeCode()])
+                        && $productsData[$variationId][$attribute->getAttributeCode()] == $file
                     ) {
-                        $productsData[$variationId][$imageType] = $newFile;
+                        $productsData[$variationId][$attribute->getAttributeCode()] = $newFile;
                     }
                 }
             }

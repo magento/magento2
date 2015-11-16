@@ -20,6 +20,7 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
     /**
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\TotalsInformationManagementInterface $totalsInformationManagement
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,

@@ -1,0 +1,2 @@
+library magento/test One*
+language magento_test_lang *.php

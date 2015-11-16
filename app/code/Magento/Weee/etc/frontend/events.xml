@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_data_object_login">
-        <observer name="customer_weee_logged_in" instance="Magento\Weee\Model\Observer\Session" method="customerLoggedIn" />
+        <observer name="customer_weee_logged_in" instance="Magento\Weee\Observer\CustomerLoggedIn" />
     </event>
     <event name="customer_address_save_after">
-        <observer name="customer_weee_after_address_save" instance="Magento\Weee\Model\Observer\Session" method="afterAddressSave" />
+        <observer name="customer_weee_after_address_save" instance="Magento\Weee\Observer\AfterAddressSave" />
     </event>
 </config>

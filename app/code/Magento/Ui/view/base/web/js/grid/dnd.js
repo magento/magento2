@@ -78,6 +78,7 @@ define([
             y >= area.top && y <= area.bottom
         );
     }
+
     /*eslint-enable no-extra-parens*/
 
     /**
@@ -109,10 +110,22 @@ define([
         return ko.dataFor(elem);
     }
 
+    /**
+     * Checks whether cols are identical
+     *
+     * @param {HTMLElement} c1
+     * @param {HTMLElement} c2
+     * @returns {Boolean}
+     */
+    function compareCols(c1, c2) {
+        return c1.cellIndex === c2.cellIndex;
+    }
+
     return Class.extend({
         defaults: {
             rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
             tableSelector: '${ $.rootSelector } -> table.data-grid',
+            mainTableSelector: '[data-role="grid"]',
             columnSelector: '${ $.tableSelector } thead tr th',
             noSelectClass: '_no-select',
             hiddenClass: '_hidden',
@@ -178,7 +191,7 @@ define([
          * @returns {Dnd} Chainable.
          */
         initTable: function (table) {
-            this.table = table;
+            this.table =  $(table).is(this.mainTableSelector) ?  table : this.table;
 
             $(table).addClass('data-grid-draggable');
 
@@ -199,15 +212,19 @@ define([
                 return this;
             }
 
+            if (!ko.es5.isTracked(model, 'dragover')) {
+                model.track('dragover');
+            }
+
             this.columns.push(column);
 
             $(column).bindings({
                 css: {
                     '_dragover-left': ko.computed(function () {
-                        return model.dragover() === 'right';
+                        return model.dragover === 'right';
                     }),
                     '_dragover-right': ko.computed(function () {
-                        return model.dragover() === 'left';
+                        return model.dragover === 'left';
                     })
                 }
             });
@@ -263,12 +280,15 @@ define([
                 rect;
 
             this.coords = this.columns.map(function (column) {
-                var data;
+                var data,
+                    colIndex = _.findIndex(cells, function (cell) {
+                        return compareCols(cell, column);
+                    });
 
                 rect = column.getBoundingClientRect();
 
                 data = {
-                    index: cells.indexOf(column),
+                    index: colIndex,
                     target: column,
                     orig: rect,
                     left: rect.left - bodyRect.left,
@@ -372,7 +392,7 @@ define([
                 this.dragleave(leavedArea);
             }
 
-            if (area && area.target !== this.dragArea.target) {
+            if (area && !compareCols(area.target, this.dragArea.target)) {
                 this.dragenter(area);
             }
         },
@@ -452,7 +472,7 @@ define([
                 'left' :
                 'right';
 
-            getModel(dropArea.target).dragover(direction);
+            getModel(dropArea.target).dragover = direction;
         },
 
         /**
@@ -461,7 +481,7 @@ define([
          * @param {Object} dropArea
          */
         dragleave: function (dropArea) {
-            getModel(dropArea.target).dragover(false);
+            getModel(dropArea.target).dragover = false;
         },
 
         /**
@@ -479,7 +499,7 @@ define([
 
             getModel(dragElem).dragging(false);
 
-            if (dropArea && dropArea.target !== dragElem) {
+            if (dropArea && !compareCols(dropArea.target, dragElem)) {
                 this.drop(dropArea, dragArea);
             }
         },
@@ -495,7 +515,7 @@ define([
                 dragModel = getModel(dragArea.target);
 
             getModel(this.table).insertChild(dragModel, dropModel);
-            dropModel.dragover(false);
+            dropModel.dragover = false;
         },
 
         /**

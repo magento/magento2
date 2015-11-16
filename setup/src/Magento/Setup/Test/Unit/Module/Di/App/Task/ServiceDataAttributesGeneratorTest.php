@@ -73,7 +73,7 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testDoOperation()
     {
         $data = [
-            'path' => 'path/to/app',
+            'paths' => ['path/to/app'],
             'filePatterns' => ['di' => 'di.xml'],
         ];
         $files = ['extension_attributes' => []];
@@ -86,7 +86,7 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->directoryScannerMock->expects($this->once())
             ->method('scan')
             ->with(
-                $data['path'],
+                $data['paths'][0],
                 $data['filePatterns']
             )->willReturn($files);
         $this->serviceDataAttributesScannerMock->expects($this->once())

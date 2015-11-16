@@ -61,7 +61,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
                 $backup->getName(),
                 false
             )->setResourceModel(
-                $this->_objectManager->create('Magento\Backup\Model\Resource\Db')
+                $this->_objectManager->create('Magento\Backup\Model\ResourceModel\Db')
             );
 
             $this->_coreRegistry->register('backup_manager', $backupManager);

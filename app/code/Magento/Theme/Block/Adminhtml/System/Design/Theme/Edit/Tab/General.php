@@ -5,7 +5,9 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme\Collection;
 
 /**
  * Theme form, general tab
@@ -99,18 +101,19 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
             $themeFieldset->addField('theme_id', 'hidden', ['name' => 'theme_id']);
         }
 
-        /** @var \Magento\Theme\Model\Theme\Collection $themesCollections */
+        /** @var Collection $themesCollections */
         $themesCollections = $this->_objectManager->create('Magento\Theme\Model\Theme\Collection');
 
         /** @var \Magento\Framework\Json\Helper\Data $helper */
         $helper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
 
+        $themesCollections->addConstraint(Collection::CONSTRAINT_AREA, Area::AREA_FRONTEND);
         $onChangeScript = sprintf(
             'parentThemeOnChange(this.value, %s)',
             str_replace(
                 '"',
                 '\'',
-                $helper->jsonEncode($this->_getDefaultsInherited($themesCollections->addDefaultPattern()))
+                $helper->jsonEncode($this->_getDefaultsInherited($themesCollections))
             )
         );
 

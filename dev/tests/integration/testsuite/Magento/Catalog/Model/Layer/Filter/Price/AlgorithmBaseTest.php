@@ -29,7 +29,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
     protected $_filter;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     protected $priceResource;
 

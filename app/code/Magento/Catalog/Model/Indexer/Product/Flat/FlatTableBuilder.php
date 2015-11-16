@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class FlatTableBuilder
@@ -44,14 +44,14 @@ class FlatTableBuilder
 
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData

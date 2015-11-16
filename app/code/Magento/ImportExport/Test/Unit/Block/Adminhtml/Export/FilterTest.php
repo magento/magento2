@@ -48,7 +48,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
 
@@ -88,12 +88,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $localeResolver;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 
@@ -148,7 +148,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->resourceHelper = $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false);
+        $this->resourceHelper = $this->getMock('Magento\Eav\Model\ResourceModel\Helper', [], [], '', false);
         $this->universalFactory = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->optionDataFactory = $this->getMock(
             'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
@@ -175,7 +175,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->resourceCollection = $this->getMockForAbstractClass(
             'Magento\Framework\Data\Collection\AbstractDb',
             [],

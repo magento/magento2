@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Config/etc/system_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payflow_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
         <label>Payments Advanced (Includes Express Checkout)</label>
         <fieldset_css>pp-method-general</fieldset_css>

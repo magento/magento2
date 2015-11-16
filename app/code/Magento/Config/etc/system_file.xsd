@@ -49,7 +49,7 @@
     <xs:attributeGroup name="tabAttributeGroup">
         <xs:attribute name="id" type="typeId" use="required" />
         <xs:attribute name="translate" type="xs:string" use="optional" />
-        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:float" use="optional" />
         <xs:attribute name="class" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
@@ -57,7 +57,7 @@
         <xs:attribute name="id" type="typeId" use="required" />
         <xs:attribute name="translate" type="xs:string" use="optional" />
         <xs:attribute name="type" type="xs:string" use="optional" />
-        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:float" use="optional" />
         <xs:attribute name="showInDefault" type="xs:int" use="optional" />
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />

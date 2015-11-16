@@ -22,6 +22,13 @@ class Messages extends Block
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
+     * Last success message selector.
+     *
+     * @var string
+     */
+    protected $lastSuccessMessage = '[data-ui-id$=message-success]:last-child';
+
+    /**
      * Message link.
      *
      * @var string
@@ -62,7 +69,7 @@ class Messages extends Block
     /**
      * Get all success messages which are present on the page.
      *
-     * @return string|array
+     * @return array
      */
     public function getSuccessMessages()
     {
@@ -74,7 +81,19 @@ class Messages extends Block
             $messages[] = $element->getText();
         }
 
-        return count($messages) > 1 ? $messages : $messages[0];
+        return $messages;
+    }
+
+    /**
+     * Get last success message which is present on the page.
+     *
+     * @return string
+     */
+    public function getSuccessMessage()
+    {
+        $this->waitForElementVisible($this->successMessage);
+
+        return $this->_rootElement->find($this->lastSuccessMessage)->getText();
     }
 
     /**
@@ -96,11 +115,11 @@ class Messages extends Block
     }
 
     /**
-     * Get all error messages which are present on the page.
+     * Get all error message which is present on the page.
      *
      * @return string
      */
-    public function getErrorMessages()
+    public function getErrorMessage()
     {
         return $this->_rootElement
             ->find($this->errorMessage, Locator::SELECTOR_CSS)
@@ -108,13 +127,13 @@ class Messages extends Block
     }
 
     /**
-     * Click on link in the messages which are present on the page.
+     * Click on link in the message which is present on the page.
      *
      * @param string $messageType
      * @param string $linkText
      * @return void
      */
-    public function clickLinkInMessages($messageType, $linkText)
+    public function clickLinkInMessage($messageType, $linkText)
     {
         if ($this->isVisibleMessage($messageType)) {
             $this->_rootElement
@@ -162,7 +181,7 @@ class Messages extends Block
      *
      * @return string
      */
-    public function getNoticeMessages()
+    public function getNoticeMessage()
     {
         $this->waitForElementVisible($this->noticeMessage);
         return $this->_rootElement->find($this->noticeMessage)->getText();
@@ -173,7 +192,7 @@ class Messages extends Block
      *
      * @return string
      */
-    public function getWarningMessages()
+    public function getWarningMessage()
     {
         $this->waitForElementVisible($this->warningMessage);
         return $this->_rootElement->find($this->warningMessage)->getText();

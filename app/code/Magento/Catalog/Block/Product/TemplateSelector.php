@@ -22,29 +22,29 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
     /**
      * Set collection factory
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setColFactory;
 
     /**
      * Catalog resource helper
      *
-     * @var \Magento\Catalog\Model\Resource\Helper
+     * @var \Magento\Catalog\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         array $data = []
     ) {
         $this->_setColFactory = $setColFactory;
@@ -54,7 +54,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve list of product templates with search part contained in label
+     * Retrieve list of attribute sets with search part contained in label
      *
      * @param string $labelPart
      * @return array
@@ -64,7 +64,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
         $product = $this->_coreRegistry->registry('product');
         $entityType = $product->getResource()->getEntityType();
         $labelPart = $this->_resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
         $collection = $this->_setColFactory->create();
         $collection->setEntityTypeFilter(
             $entityType->getId()
@@ -79,7 +79,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
             'label'
         )->setOrder(
             'attribute_set_name',
-            \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
         );
         return $collection->getData();
     }

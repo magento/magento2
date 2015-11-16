@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <tax>
             <classes>
@@ -26,7 +26,6 @@
             <defaults>
                 <country>US</country>
                 <region>0</region>
-                <postcode>*</postcode>
             </defaults>
             <display>
                 <type>1</type>
@@ -51,7 +50,7 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <url>http://www.magentocommerce.com/knowledge-base/entry/magento-ce-18-ee-113-tax-calc</url>
+                <info_url>http://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
             </notification>
         </tax>
     </default>

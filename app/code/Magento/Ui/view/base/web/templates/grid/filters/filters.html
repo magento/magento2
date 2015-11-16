@@ -4,12 +4,21 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-filters-actions-wrap">
+<div class="data-grid-filters-actions-wrap" data-bind="collapsible: {openClass: false, closeOnOuter: false}">
     <div class="data-grid-filters-action-wrap">
         <button
-            class="action-default _active"
+            class="action-default"
             data-action="grid-filter-expand"
-            data-bind="click: toggleOpened, attr: { disabled: !hasVisible() }, css: { _active: isOpened() }">
+            data-bind="
+                click: $collapsible.toggle,
+                attr: {
+                    disabled: !hasVisible(),
+                    'title': $t('Filters')
+                },
+                css: {
+                    _active: hasVisible() && $collapsible.opened()
+                }"
+        >
             <span data-bind="i18n: 'Filters'"></span>
         </button>
     </div>
@@ -21,25 +30,18 @@
 
 <div
     class="admin__data-grid-filters-wrap"
-    data-bind="css: { _show: isOpened() }"
+    data-bind="css: { _show: hasVisible() && $collapsible.opened() }"
     data-part="filter-form">
 
     <fieldset class="admin__fieldset admin__data-grid-filters">
         <legend class="admin__filters-legend">
             <span data-bind="i18n: 'Advanced filter'"></span>
         </legend>
-        <!-- ko foreach: elems -->
-            <!-- ko if: $data.isGroup -->
-            <fieldset class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            </fieldset>
-            <!-- /ko -->
-
-            <!-- ko ifnot: $data.isGroup -->
-            <div class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            </div>
-            <!-- /ko -->
+        <!-- ko foreach: getRanges() -->
+            <fieldset class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data), template: getTemplate()"></fieldset>
+        <!-- /ko -->
+        <!-- ko foreach: getPlain() -->
+            <div class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data), template: getTemplate()"></div>
         <!-- /ko -->
     </fieldset>
 
@@ -49,17 +51,16 @@
                 class="action-tertiary"
                 type="button"
                 data-action="grid-filter-cancel"
-                data-bind="click: function(){ $data.close().cancel(); }">
+                data-bind="click: $data.cancel.bind($data), closeCollapsible">
                 <span data-bind="i18n: 'Cancel'"></span>
             </button>
             <button
                 class="action-secondary"
                 type="button"
                 data-action="grid-filter-apply"
-                data-bind="click: function(){ $data.close().apply(); }">
+                data-bind="click: $data.apply.bind($data), closeCollapsible">
                 <span data-bind="i18n: 'Apply Filters'"></span>
             </button>
         </div>
     </div>
-
 </div>

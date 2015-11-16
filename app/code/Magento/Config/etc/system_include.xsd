@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="system_file.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd"/>
     <xs:element name="include" type="include" />
     <xs:complexType name="include">
         <xs:group minOccurs="1" maxOccurs="unbounded" ref="insertNodes"/>

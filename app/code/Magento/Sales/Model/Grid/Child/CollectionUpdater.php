@@ -25,8 +25,8 @@ class CollectionUpdater implements \Magento\Framework\View\Layout\Argument\Updat
     /**
      * Update grid collection according to chosen transaction
      *
-     * @param \Magento\Sales\Model\Resource\Transaction\Grid\Collection $argument
-     * @return \Magento\Sales\Model\Resource\Transaction\Grid\Collection
+     * @param \Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection $argument
+     * @return \Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection
      */
     public function update($argument)
     {

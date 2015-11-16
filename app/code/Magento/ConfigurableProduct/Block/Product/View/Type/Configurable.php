@@ -184,20 +184,21 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'optionPrices' => $this->getOptionPrices(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->_registerJsPrice($this->_convertPrice($regularPrice->getAmount()->getValue())),
+                    'amount' => $this->_registerJsPrice($regularPrice->getAmount()->getValue()),
                 ],
                 'basePrice' => [
                     'amount' => $this->_registerJsPrice(
-                        $this->_convertPrice($finalPrice->getAmount()->getBaseAmount())
+                        $finalPrice->getAmount()->getBaseAmount()
                     ),
                 ],
                 'finalPrice' => [
-                    'amount' => $this->_registerJsPrice($this->_convertPrice($finalPrice->getAmount()->getValue())),
+                    'amount' => $this->_registerJsPrice($finalPrice->getAmount()->getValue()),
                 ],
             ],
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'images' => isset($options['images']) ? $options['images'] : [],
+            'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
@@ -216,25 +217,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $priceInfo = $this->getProduct()
-                ->setSelectedConfigurableOption($product)
-                ->getPriceInfo();
+            $priceInfo = $product->getPriceInfo();
 
             $prices[$product->getId()] =
                 [
                     'oldPrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('regular_price')->getAmount()->getValue())
+                            $priceInfo->getPrice('regular_price')->getAmount()->getValue()
                         ),
                     ],
                     'basePrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getBaseAmount())
+                            $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
                         ),
                     ],
                     'finalPrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getValue())
+                            $priceInfo->getPrice('final_price')->getAmount()->getValue()
                         ),
                     ]
                 ];
@@ -251,26 +250,5 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected function _registerJsPrice($price)
     {
         return str_replace(',', '.', $price);
-    }
-
-    /**
-     * Convert price from default currency to current currency
-     *
-     * @param float $price
-     * @param bool $round
-     * @return float
-     */
-    protected function _convertPrice($price, $round = false)
-    {
-        if (empty($price)) {
-            return 0;
-        }
-
-        $price = $this->priceCurrency->convert($price);
-        if ($round) {
-            $price = $this->priceCurrency->round($price);
-        }
-
-        return $price;
     }
 }

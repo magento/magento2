@@ -24,7 +24,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
     protected $flatItemEraser;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
@@ -34,7 +34,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param Eraser $flatItemEraser
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,

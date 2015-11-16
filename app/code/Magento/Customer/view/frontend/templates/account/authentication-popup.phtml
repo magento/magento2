@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 ?>
-<li id="authenticationPopup" data-bind="scope:'authenticationPopup'">
+<div id="authenticationPopup" data-bind="scope:'authenticationPopup'" style="display: none;">
     <script>
         window.authenticationPopup = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getConfig()); ?>;
     </script>
@@ -21,4 +21,4 @@
             }
         }
     </script>
-</li>
+</div>

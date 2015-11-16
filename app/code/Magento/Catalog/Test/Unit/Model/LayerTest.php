@@ -65,7 +65,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     private $collectionFilter;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collection;
 
@@ -165,7 +165,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->stateFactory->expects($this->any())->method('create')->will($this->returnValue($this->state));
 
-        $this->collection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -217,9 +217,9 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->collection));
 
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf('\Magento\Catalog\Model\Resource\Product\Collection', $result);
+        $this->assertInstanceOf('\Magento\Catalog\Model\ResourceModel\Product\Collection', $result);
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf('\Magento\Catalog\Model\Resource\Product\Collection', $result);
+        $this->assertInstanceOf('\Magento\Catalog\Model\ResourceModel\Product\Collection', $result);
     }
 
     public function testApply()

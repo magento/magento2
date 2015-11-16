@@ -8,17 +8,16 @@ define([
     'mageUtils',
     'uiLayout',
     'mage/translate',
-    'uiComponent'
-], function (_, utils, layout, $t, Component) {
+    'uiCollection'
+], function (_, utils, layout, $t, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             rowButtonsTmpl: 'ui/grid/editing/row-buttons',
             headerButtonsTmpl: 'ui/grid/editing/header-buttons',
             successMsg: $t('You have successfully saved your edits.'),
             errorsCount: 0,
-            canSave: true,
             isMultiEditing: false,
             isSingleEditing: false,
             rowsData: [],
@@ -91,14 +90,14 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe([
-                    'canSave',
+                .track([
                     'errorsCount',
                     'isMultiEditing',
                     'isSingleEditing'
                 ])
                 .observe({
-                    active: [],
+                    canSave: true,
+                    activeRecords: [],
                     messages: []
                 });
 
@@ -253,7 +252,7 @@ define([
          * @returns {Editor} Chainable.
          */
         hide: function () {
-            this.active.each('active', false);
+            this.activeRecords.each('active', false);
 
             return this;
         },
@@ -304,7 +303,7 @@ define([
          * @returns {Array} An array of records and theirs validation results.
          */
         validate: function () {
-            return this.active.map(function (record) {
+            return this.activeRecords.map(function (record) {
                 return {
                     target: record,
                     valid: record.isValid()
@@ -327,7 +326,7 @@ define([
          * @returns {Object} Collection of records data.
          */
         getData: function () {
-            var data = this.active.map('getData');
+            var data = this.activeRecords.map('getData');
 
             return _.indexBy(data, this.indexField);
         },
@@ -340,7 +339,7 @@ define([
          * @returns {Editor} Chainable.
          */
         setData: function (data, partial) {
-            this.active.each('setData', data, partial);
+            this.activeRecords.each('setData', data, partial);
 
             return this;
         },
@@ -457,7 +456,7 @@ define([
         isActive: function (id, isIndex) {
             var record = this.getRecord(id, isIndex);
 
-            return record && record.active();
+            return _.contains(this.activeRecords(), record);
         },
 
         /**
@@ -466,7 +465,7 @@ define([
          * @returns {Boolean}
          */
         hasActive: function () {
-            return !!this.active().length;
+            return !!this.activeRecords().length;
         },
 
         /**
@@ -475,7 +474,7 @@ define([
          * @returns {Number}
          */
         countActive: function () {
-            return this.active().length;
+            return this.activeRecords().length;
         },
 
         /**
@@ -486,11 +485,11 @@ define([
         countErrors: function () {
             var errorsCount = 0;
 
-            this.active.each(function (record) {
-                errorsCount += record.errorsCount();
+            this.activeRecords.each(function (record) {
+                errorsCount += record.errorsCount;
             });
 
-            this.errorsCount(errorsCount);
+            this.errorsCount = errorsCount;
 
             return errorsCount;
         },
@@ -516,10 +515,10 @@ define([
 
             columns.each('disableAction', !!activeCount);
 
-            this.isMultiEditing(activeCount > 1);
-            this.isSingleEditing(activeCount === 1);
+            this.isMultiEditing = activeCount > 1;
+            this.isSingleEditing = activeCount === 1;
 
-            this.active(active);
+            this.activeRecords(active);
 
             return this;
         },

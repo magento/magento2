@@ -70,14 +70,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $returnedQty = $stockItemData[self::KEY_QTY];
         $this->assertEquals($qty, $returnedQty, 'UPDATE 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
 
-        $customAttributeQty = $this->findCustomAttributeQty($response[self::KEY_CUSTOM_ATTRIBUTES]);
-        $this->assertTrue(!is_bool($customAttributeQty), 'Expected to find a quantity in the custom attributes');
-        $this->assertEquals(
-            $qty,
-            $customAttributeQty,
-            'UPDATE 1: Expected custom attribute qty to be updated: ' . $qty .', '. $customAttributeQty
-        );
-
         // update the product without any mention of catalog inventory; no change expected for catalog inventory
         // note: $qty expected to be the same as previously set, above
         $newPrice = $this->getDifferent($response[ProductInterface::PRICE]);
@@ -191,40 +183,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function getDifferent($original)
     {
         return 1 + $original * $original;
-    }
-
-    /**
-     * Returns the product's quantity from the array of custom attributes.
-     * If no quantity can be found, will return false.
-     *
-     * @param array $customAttributes
-     * @return int|bool
-     */
-    protected function findCustomAttributeQty($customAttributes)
-    {
-        $qty = false;
-        $qtyAndStockStatus = [];
-        foreach ($customAttributes as $customAttribute) {
-            if ($customAttribute[self::KEY_ATTRIBUTE_CODE] == self::CODE_QUANTITY_AND_STOCK_STATUS) {
-                $qtyAndStockStatus = $customAttribute['value'];
-                break;
-            }
-        }
-        if (!empty($qtyAndStockStatus) && is_array($qtyAndStockStatus)) {
-
-            if (array_key_exists('any_type', $qtyAndStockStatus)) {
-                // for SOAP, need to use the inner array
-                $qtyAndStockStatus = $qtyAndStockStatus['any_type'];
-            }
-
-            // ex: [true, 1234]
-            if (is_bool($qtyAndStockStatus[0]) || is_string($qtyAndStockStatus[0])) {
-                $qty = $qtyAndStockStatus[1];
-            } else {
-                $qty = $qtyAndStockStatus[0];
-            }
-        }
-        return $qty;
     }
 
     /**

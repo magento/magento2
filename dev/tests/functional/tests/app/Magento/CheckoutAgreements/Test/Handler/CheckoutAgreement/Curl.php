@@ -8,7 +8,6 @@ namespace Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -53,7 +52,7 @@ class Curl extends AbstractCurl implements CheckoutAgreementInterface
         $url = $_ENV['app_backend_url'] . $this->url;
         $data = $this->prepareData($fixture);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {

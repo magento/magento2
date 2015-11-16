@@ -1,7 +1,4 @@
 {
-    "plugins": [
-        "jscs-jsdoc"
-    ],
     "disallowKeywords": [
         "with",
         "continue"
@@ -62,6 +59,7 @@
         "beforeOpeningCurlyBrace": true,
         "beforeOpeningRoundBrace": true
     },
+    "disallowNewlineBeforeBlockStatements": true,
     "disallowDanglingUnderscores": null,
     "disallowEmptyBlocks": true,
     "disallowMixedSpacesAndTabs": true,
@@ -77,6 +75,7 @@
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
     "disallowYodaConditions": true,
+    "maxErrors": null,
     "requireBlocksOnNewline": true,
     "requireDotNotation": "except_snake_case",
     "requireCamelCaseOrUpperCaseIdentifiers": true,

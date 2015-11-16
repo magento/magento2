@@ -29,7 +29,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Order status collection
      *
-     * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
      */
     protected $_orderStatusCollection;
 
@@ -37,14 +37,14 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection
+     * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\View\Helper\Js $jsHelper,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection,
+        \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollection,
         array $data = []
     ) {
         $this->_orderStatusCollection = $orderStatusCollection;

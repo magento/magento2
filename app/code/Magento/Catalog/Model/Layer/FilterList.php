@@ -80,12 +80,12 @@ class FilterList
     /**
      * Create filter
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\Layer $layer
      * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function createAttributeFilter(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute,
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\Layer $layer
     ) {
         $filterClassName = $this->getAttributeFilterClass($attribute);
@@ -100,10 +100,10 @@ class FilterList
     /**
      * Get Attribute Filter Class Name
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return string
      */
-    protected function getAttributeFilterClass(\Magento\Catalog\Model\Resource\Eav\Attribute $attribute)
+    protected function getAttributeFilterClass(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
     {
         $filterClassName = $this->filterTypes[self::ATTRIBUTE_FILTER];
 

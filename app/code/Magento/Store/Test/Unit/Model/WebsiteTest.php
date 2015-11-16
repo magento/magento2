@@ -12,7 +12,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $websiteCollection = $this->getMock(
-            'Magento\Store\Model\Resource\Website\Collection',
+            'Magento\Store\Model\ResourceModel\Website\Collection',
             ['getSize'],
             [],
             '',

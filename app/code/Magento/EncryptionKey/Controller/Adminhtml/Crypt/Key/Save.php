@@ -18,7 +18,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
     protected $encryptor;
 
     /**
-     * @var \Magento\EncryptionKey\Model\Resource\Key\Change
+     * @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change
      */
     protected $change;
 
@@ -30,13 +30,13 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\EncryptionKey\Model\Resource\Key\Change $change
+     * @param \Magento\EncryptionKey\Model\ResourceModel\Key\Change $change
      * @param \Magento\Framework\App\CacheInterface $cache
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\EncryptionKey\Model\Resource\Key\Change $change,
+        \Magento\EncryptionKey\Model\ResourceModel\Key\Change $change,
         \Magento\Framework\App\CacheInterface $cache
     ) {
         $this->encryptor = $encryptor;
@@ -64,10 +64,10 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             }
 
             $newKey = $this->change->changeEncryptionKey($key);
-            $this->messageManager->addSuccess(__('The encryption key has been changed.'));
+            $this->messageManager->addSuccessMessage(__('The encryption key has been changed.'));
 
             if (!$key) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     __(
                         'This is your new encryption key: <span style="font-family:monospace;">%1</span>. ' .
                         'Be sure to write it down and take good care of it!',
@@ -77,7 +77,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             }
             $this->cache->clean();
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_session->setFormData(['crypt_key' => $key]);
         }
         $this->_redirect('adminhtml/*/');

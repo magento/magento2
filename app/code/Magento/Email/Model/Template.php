@@ -25,8 +25,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * );
  * $emailTemplate->send('some@domain.com', 'Name Of User', $variables);
  *
- * @method \Magento\Email\Model\Resource\Template _getResource()
- * @method \Magento\Email\Model\Resource\Template getResource()
+ * @method \Magento\Email\Model\ResourceModel\Template _getResource()
+ * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()
@@ -165,7 +165,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     protected function _construct()
     {
-        $this->_init('Magento\Email\Model\Resource\Template');
+        $this->_init('Magento\Email\Model\ResourceModel\Template');
     }
 
     /**
