@@ -1157,7 +1157,7 @@ define([
                 jQuery('#edit_form').trigger('processStop');
 
                 confirm({
-                    content: 'You have item changes',
+                    content: jQuery.mage.__('You have item changes'),
                     actions: {
                         confirm: function() {
                             jQuery('#edit_form').trigger('processStart');
