@@ -10,9 +10,10 @@
 require([
     'jquery',
     'Magento_Ui/js/modal/confirm',
+    'underscore',
     'mage/adminhtml/grid',
     'prototype'
-], function(jQuery, confirm){
+], function(jQuery, confirm, _){
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
@@ -90,17 +91,26 @@ require([
         }
     }
 
-    function massSelectUsers(allCheckbox)
-    {
-        if (!allCheckbox.checked && checkBoxes.size() > 0) {
-            if (!confirm("<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>") ) {
-                allCheckbox.checked = false;
-                return false;
-            }
+    function massSelectUsers(allCheckbox) {
+        if (!allCheckbox.checked && _.size(checkBoxes._object) > 0) {
+            allCheckbox.checked = true;
+            confirm({
+                content: "<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>",
+                actions: {
+                    confirm: function () {
+                        allCheckbox.checked = false;
+                        markCheckboxes(false);
+                    }
+                }
+            });
+        } else {
+            markCheckboxes(allCheckbox.checked)
         }
+    }
+    function markCheckboxes(value) {
         <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row)
         {
-            $(row).getElementsByClassName('checkbox')[0].checked = allCheckbox.checked;
+            $(row).getElementsByClassName('checkbox')[0].checked = value;
             roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row);
         });
     }
@@ -123,7 +133,7 @@ require([
             setTimeout(onLoad, 300);
         }
     }
-    onLoad()
+    onLoad();
 <?php endif; ?>
 //-->
 
