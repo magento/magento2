@@ -102,7 +102,7 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
         $this->resultJsonFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->resultJson));
 
-        $result = array('success' => false, 'errorMessage' => 'Missing search engine parameter.');
+        $result = ['success' => false, 'errorMessage' => 'Missing search engine parameter.'];
 
         $this->resultJson->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
@@ -125,7 +125,7 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
         $this->resultJsonFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->resultJson));
 
-        $result = array('success' => true, 'errorMessage' => '');
+        $result = ['success' => true, 'errorMessage' => ''];
 
         $this->resultJson->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
@@ -148,7 +148,7 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
         $this->resultJsonFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->resultJson));
 
-        $result = array('success' => false, 'errorMessage' => '');
+        $result = ['success' => false, 'errorMessage' => ''];
 
         $this->resultJson->expects($this->once())->method('setData')
             ->with($this->equalTo($result));

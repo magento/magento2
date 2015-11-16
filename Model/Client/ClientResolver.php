@@ -75,6 +75,11 @@ class ClientResolver
         $this->scope = $scopeType;
     }
 
+    /**
+     * Returns configured search engine
+     *
+     * @return string
+     */
     public function getCurrentEngine()
     {
         return $this->scopeConfig->getValue($this->path, $this->scope);
