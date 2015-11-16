@@ -223,7 +223,7 @@
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
-            "_empty_": "app/code/"
+            "": "app/code/"
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
