@@ -3,48 +3,47 @@
  * See COPYING.txt for license details.
  */
 require([
-    "jquery"
+    'jquery'
 ], function ($) {
+    'use strict';
+
     $(function () {
 
         // disabled select only
         $('select#frontend_input:disabled').each(function () {
-            var $select = $(this),
-                value = $select.find('option:selected').val(),
+            var select = $(this),
+                value = select.find('option:selected').val(),
                 enabledTypes = ['select', 'swatch_visual', 'swatch_text'],
-                message = $.mage.__('This changes affect all related products');
+                message = $.mage.__('This changes affect all related products'),
+                warning = $('<label>').hide().text(message).addClass('mage-error').attr({
+                    generated: true,
+                    for: select.attr('id')
+                });
 
             // Check current type (allow only: select, swatch_visual, swatch_text)
-            if (!!~enabledTypes.indexOf(value)) {
+            if (!~enabledTypes.indexOf(value)) {
                 return;
             }
 
             // Enable select and keep only available options (all other will be removed)
-            $select
+            select
                 .removeAttr('disabled')
                 .find('option').each(function () {
-                    var $option = $(this);
-                    if (enabledTypes.indexOf($option.val()) < 0) {
-                        $option.remove();
+                    if (!~enabledTypes.indexOf($(this).val())) {
+                        $(this).remove();
                     }
                 });
 
-            // Create warning container
-            var $warning = $('<label>').hide().text(message).addClass('mage-error').attr({
-                generated: true,
-                for: $select.attr('id')
-            });
-
             // Add warning on page and event for show/hide it
-            $select
-                .after($warning)
+            select
+                .after(warning)
                 .on('change', function () {
-                    if ($select.find('option:selected').val() == value) {
-                        $warning.hide();
+                    if (select.find('option:selected').val() === value) {
+                        warning.hide();
                     } else {
-                        $warning.show();
+                        warning.show();
                     }
-                })
+                });
         });
     });
 });
