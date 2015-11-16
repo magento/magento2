@@ -73,8 +73,29 @@ class EmulateCustomerObserver implements ObserverInterface
         }
 
         if ($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn()) {
+            /** @var  \Magento\Customer\Model\Customer $customer */
             $customer = $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId());
-            $this->_customerSession->setCustomerId($customer->getId())->setCustomerGroupId($customer->getGroupId());
+            $defaultShippingAddress = $customer->getDefaultShippingAddress();
+            if ($defaultShippingAddress) {
+                $this->_customerSession->setDefaultTaxShippingAddress(
+                    [
+                        'country_id' => $defaultShippingAddress->getCountryId(),
+                        'region_id'  => $defaultShippingAddress->getRegion() ? $defaultShippingAddress->getRegionId() : null,
+                        'postcode'   => $defaultShippingAddress->getPostcode(),
+                    ]);
+            }
+
+            $defaultBillingAddress = $customer->getDefaultBillingAddress();
+            if ($defaultBillingAddress){
+                $this->_customerSession->setDefaultTaxBillingAddress([
+                    'country_id' => $defaultBillingAddress->getCountryId(),
+                    'region_id'  => $defaultBillingAddress->getRegion() ? $defaultBillingAddress->getRegionId() : null,
+                    'postcode'   => $defaultBillingAddress->getPostcode(),
+                ]);
+            }
+           $this->_customerSession
+                ->setCustomerId($customer->getId())
+                ->setCustomerGroupId($customer->getGroupId());
         }
         return $this;
     }
