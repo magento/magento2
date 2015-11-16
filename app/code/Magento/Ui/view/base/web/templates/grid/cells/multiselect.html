@@ -11,6 +11,7 @@
         data-action="select-row"
         data-bind="
             staticChecked: $col.selected,
+            disable: $col.disabled.indexOf($row()[$col.indexField]) != -1 ,
             checkedValue: $row()[$col.indexField],
             attr: {
                 id: 'check' + $row()[$col.indexField]

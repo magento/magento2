@@ -190,16 +190,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
         if ($data['groups']) {
             foreach ($data['groups'] as $group) {
-                $modelGroup = $this->_attrGroupFactory->create();
-                $modelGroup->setId(
-                    is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
-                )->setAttributeGroupName(
-                    $group[1]
-                )->setAttributeSetId(
-                    $this->getId()
-                )->setSortOrder(
-                    $group[2]
-                );
+                $modelGroup = $this->initGroupModel($group);
 
                 if ($data['attributes']) {
                     foreach ($data['attributes'] as $attribute) {
@@ -251,6 +242,31 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $this->setAttributeSetName($data['attribute_set_name'])->setEntityTypeId($this->getEntityTypeId());
 
         return $this;
+    }
+
+    /**
+     * @param array $group
+     * @return Group
+     */
+    private function initGroupModel($group)
+    {
+        $modelGroup = $this->_attrGroupFactory->create();
+        $modelGroup->setId(
+            is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
+        )->setAttributeGroupName(
+            $group[1]
+        )->setAttributeSetId(
+            $this->getId()
+        )->setSortOrder(
+            $group[2]
+        );
+        if ($modelGroup->getId()) {
+            $group = $this->_attrGroupFactory->create()->load($modelGroup->getId());
+            if ($group->getId()) {
+                $modelGroup->setAttributeGroupCode($group->getAttributeGroupCode());
+            }
+        }
+        return $modelGroup;
     }
 
     /**
