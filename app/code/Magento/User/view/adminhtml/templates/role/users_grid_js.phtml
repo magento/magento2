@@ -5,7 +5,6 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <script>
 require([
@@ -13,7 +12,6 @@ require([
     'mage/adminhtml/grid',
     'prototype'
 ], function(jQuery){
-
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
@@ -91,14 +89,26 @@ require([
             roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row);
         });
     }
-    Event.observe(window, "load", function(){
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)});
-        $('in_role_user_old').value = $('in_role_user').value;
-    });
+    function onLoad() {
+        if (typeof <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?> !== 'undefined') {
+            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            rowClickCallback = roleUsersRowClick;
+            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            initRowCallback = roleUsersRowInit;
+            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            checkboxCheckCallback = registerUserRole;
+            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            checkCheckboxes = massSelectUsers;
+            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            rows.each(function (row) {
+                roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)
+            });
+            $('in_role_user_old').value = $('in_role_user').value;
+        } else {
+            setTimeout(onLoad, 300);
+        }
+    }
+    onLoad()
 <?php endif; ?>
 //-->
 
