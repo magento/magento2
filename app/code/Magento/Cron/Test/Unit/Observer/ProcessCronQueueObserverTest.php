@@ -378,8 +378,6 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchRunJob()
     {
-        $testCronJob = new \Magento\Cron\Test\Unit\Model\CronJob();
-
         $jobConfig = [
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
@@ -396,6 +394,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             'setFinishedAt',
             '__wakeup',
         ];
+        /** @var \Magento\Cron\Model\Schedule|\PHPUnit_Framework_MockObject_MockObject $schedule */
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
@@ -433,6 +432,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
         $this->_scheduleFactory->expects($this->once())->method('create')->will($this->returnValue($scheduleMock));
+
+        $testCronJob = $this->getMockBuilder('CronJob')->setMethods(['execute'])->getMock();
+        $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
+
         $this->_objectManager->expects(
             $this->once()
         )->method(
