@@ -372,11 +372,9 @@ class Installer
     private function createModulesConfig($request)
     {
         $all = array_keys($this->moduleLoader->load());
-        $currentModules = [];
-        if ($this->deploymentConfig->isAvailable()) {
-            $deploymentConfig = $this->deploymentConfigReader->load();
-            $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
-        }
+        $deploymentConfig = $this->deploymentConfigReader->load();
+        $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
+            ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [] ;
         $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
         $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
         $result = [];
