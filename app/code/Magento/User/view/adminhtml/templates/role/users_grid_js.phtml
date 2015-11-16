@@ -9,9 +9,10 @@
 <script>
 require([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'mage/adminhtml/grid',
     'prototype'
-], function(jQuery){
+], function(jQuery, confirm){
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
@@ -41,21 +42,35 @@ require([
             var checkbox = Element.getElementsBySelector(trElement, 'input');
             if(checkbox[0]){
                 var checked = isInput ? !checkbox[0].checked : checkbox[0].checked;
+
                 if (checked) {
-                    if ( confirm("<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
-                        checkbox[0].checked = false;
-                        checkBoxes.unset(checkbox[0].value);
-                        varienElementMethods.setHasChanges(checkbox[0]);
-                    } else {
-                        checkbox[0].checked = true;
-                    }
+                    confirm({
+                        content: "<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>",
+                        actions: {
+                            confirm: function () {
+                                checkbox[0].checked = false;
+                                checkBoxes.unset(checkbox[0].value);
+                                varienElementMethods.setHasChanges(checkbox[0]);
+                            },
+                            cancel: function () {
+                                checkbox[0].checked = true;
+                            },
+                            always: function () {
+                                $('in_role_user').value = checkBoxes.toQueryString();
+                                grid.reloadParams = {
+                                    'in_role_user[]': checkBoxes.keys()
+                                };
+                            }
+                        }
+                    });
                 } else {
                     checkbox[0].checked = true;
                     checkBoxes.set(checkbox[0].value, true);
+                    $('in_role_user').value = checkBoxes.toQueryString();
+                    grid.reloadParams = {
+                        'in_role_user[]': checkBoxes.keys()
+                    };
                 }
-
-                $('in_role_user').value = checkBoxes.toQueryString();
-                grid.reloadParams = {'in_role_user[]':checkBoxes.keys()};
             }
         }
     }
