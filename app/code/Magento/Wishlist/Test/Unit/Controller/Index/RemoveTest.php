@@ -7,6 +7,9 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
     /**
