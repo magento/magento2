@@ -1152,11 +1152,22 @@ define([
                 jQuery('#edit_form').triggerHandler('save');
             }
             if (this.orderItemChanged) {
-                if (confirm('You have item changes')) {
-                    disableAndSave();
-                } else {
-                    this.itemsUpdate();
-                }
+                var self = this;
+
+                jQuery('#edit_form').trigger('processStop');
+
+                confirm({
+                    content: 'You have item changes',
+                    actions: {
+                        confirm: function() {
+                            jQuery('#edit_form').trigger('processStart');
+                            disableAndSave();
+                        },
+                        cancel: function() {
+                            self.itemsUpdate();
+                        }
+                    }
+                });
             } else {
                 disableAndSave();
             }
