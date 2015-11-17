@@ -13,10 +13,6 @@ class Builder
     private $fields = [];
 
     /**
-     * @param string $indexName
-     * @param string $entityType
-     * @param string $action
-     *
      * @return array
      */
     public function build()
@@ -30,7 +26,6 @@ class Builder
         $this->clear();
         return $document;
     }
-
 
     /**
      * @return void

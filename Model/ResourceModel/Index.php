@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -16,13 +15,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 /**
  * Elasticsearch index resource model
  */
-class Index extends Fulltext
+class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -34,10 +28,11 @@ class Index extends Fulltext
     protected $eavConfig;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
+     * @param Config $eavConfig
      * @param string $connectionName
      */
     public function __construct(
@@ -48,114 +43,9 @@ class Index extends Fulltext
         Config $eavConfig,
         $connectionName = null
     ) {
-        $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
         $this->eavConfig = $eavConfig;
-        parent::__construct($context, $eventManager, $connectionName);
-    }
-
-    /**
-     * Return array of price data per customer and website by products
-     *
-     * @param null|array $productIds
-     * @return array
-     */
-    protected function _getCatalogProductPriceData($productIds = null)
-    {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->from(
-            $this->getTable('catalog_product_index_price'),
-            ['entity_id', 'customer_group_id', 'website_id', 'min_price']
-        );
-
-        if ($productIds) {
-            $select->where('entity_id IN (?)', $productIds);
-        }
-
-        $result = [];
-        foreach ($connection->fetchAll($select) as $row) {
-            $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] = round($row['min_price'], 2);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Retrieve price data for product
-     *
-     * @param null|array $productIds
-     * @param int $storeId
-     * @return array
-     */
-    public function getPriceIndexData($productIds, $storeId)
-    {
-        $priceProductsIndexData = $this->_getCatalogProductPriceData($productIds);
-
-        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        if (!isset($priceProductsIndexData[$websiteId])) {
-            return [];
-        }
-
-        return $priceProductsIndexData[$websiteId];
-    }
-
-    /**
-     * Prepare system index data for products.
-     *
-     * @param int $storeId
-     * @param null|array $productIds
-     * @return array
-     */
-    public function getCategoryProductIndexData($storeId = null, $productIds = null)
-    {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->from(
-            [$this->getTable('catalog_category_product_index')],
-            ['category_id', 'product_id', 'position', 'store_id']
-        )->where(
-            'store_id = ?',
-            $storeId
-        );
-
-        if ($productIds) {
-            $select->where('product_id IN (?)', $productIds);
-        }
-
-        $result = [];
-        foreach ($connection->fetchAll($select) as $row) {
-            $result[$row['product_id']][$row['category_id']] = $row['position'];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Retrieve moved categories product ids
-     *
-     * @param int $categoryId
-     * @return array
-     */
-    public function getMovedCategoryProductIds($categoryId)
-    {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->distinct()->from(
-            ['c_p' => $this->getTable('catalog_category_product')],
-            ['product_id']
-        )->join(
-            ['c_e' => $this->getTable('catalog_category_entity')],
-            'c_p.category_id = c_e.entity_id',
-            []
-        )->where(
-            $connection->quoteInto('c_e.path LIKE ?', '%/' . $categoryId . '/%')
-        )->orWhere(
-            'c_p.category_id = ?',
-            $categoryId
-        );
-
-        return $connection->fetchCol($select);
+        parent::__construct($context, $eventManager, $storeManager, $connectionName);
     }
 
     /**
@@ -184,6 +74,13 @@ class Index extends Fulltext
         return $productAttributes;
     }
 
+    /**
+     * @param array $array
+     * @param string $glue
+     * @param bool $include_keys
+     * @param bool $trim_all
+     * @return string
+     */
     private function recursiveImplode(array $array, $glue = ',', $include_keys = false, $trim_all = true)
     {
         $glued_string = '';
