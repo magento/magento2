@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Elasticsearch config model
@@ -18,6 +19,11 @@ class Config implements ClientOptionsInterface
      * Current adapter name
      */
     const ELASTICSEARCH = 'elasticsearch';
+
+    /**
+     * Elasticsearch Entity type for product
+     */
+    const ELASTICSEARCH_TYPE_PRODUCT = 'product';
 
     /**
      * Default Elasticsearch server timeout
@@ -35,17 +41,32 @@ class Config implements ClientOptionsInterface
     protected $encryptor;
 
     /**
+     * @var AdapterFactoryInterface
+     */
+    protected $adapterFactory;
+
+    /**
+     * Store result of third party search engine availability check
+     *
+     * @var bool|null
+     */
+    protected $isThirdPartyEngineAvailable = null;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
+     * @param AdapterFactoryInterface $adapterFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        AdapterFactoryInterface $adapterFactory
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->encryptor = $encryptor;
+        $this->adapterFactory = $adapterFactory;
     }
 
     /**
@@ -76,5 +97,72 @@ class Config implements ClientOptionsInterface
     {
         $path = 'catalog/search/elasticsearch_' . $field;
         return $this->scopeConfig->getValue($path);
+    }
+
+    /**
+     * Retrieve information from search engine configuration
+     *
+     * @param string $field
+     * @param int|null $storeId
+     * @return string|int
+     */
+    public function getSearchConfigData($field, $storeId = null)
+    {
+        $path = 'catalog/search/' . $field;
+        return $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Return true if third party search engine is used
+     *
+     * @return bool
+     */
+    public function isEsEnabled()
+    {
+        return $this->getSearchConfigData('engine') == self::ELASTICSEARCH;
+    }
+
+    /**
+     * Check if enterprise engine is available
+     *
+     * @return bool
+     */
+    public function isActiveEngine()
+    {
+        return $this->adapterFactory->createAdapter()->ping();
+    }
+
+    /**
+     * Get Elasticsearch index name
+     *
+     * @return string
+     */
+    public function getIndexName()
+    {
+        return $this->getElasticsearchConfigData('index_name');
+    }
+
+    /**
+     * get Elasticsearch entity type
+     *
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return self::ELASTICSEARCH_TYPE_PRODUCT;
+    }
+
+    /**
+     * Check if third party engine is selected and active
+     *
+     * @return bool
+     */
+    public function isThirdPartyEngineAvailable()
+    {
+        if ($this->isThirdPartyEngineAvailable === null) {
+            $this->isThirdPartyEngineAvailable = $this->isEsEnabled() && $this->isActiveEngine();
+        }
+
+        return $this->isThirdPartyEngineAvailable;
     }
 }

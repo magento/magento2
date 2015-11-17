@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Elasticsearch\Model\AdapterFactoryInterface;
 
 /**
  * Class ConfigTest
@@ -30,6 +31,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $encryptor;
 
     /**
+     * @var AdapterFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $adapterFactory;
+
+    /**
      * Setup
      *
      * @return void
@@ -42,12 +48,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->willReturn('');
+        $this->adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\AdapterFactoryInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['createAdapter'])
+            ->getMock();
+
         $this->model = new Config(
             $this->scopeConfig,
-            $this->encryptor
+            $this->encryptor,
+            $this->adapterFactory
         );
     }
 
@@ -56,6 +65,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareClientOptions()
     {
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturn('');
         $options = [
             'hostname' => 'localhost',
             'port' => '9200',
@@ -66,5 +78,46 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'timeout' => 1,
         ];
         $this->assertEquals($options, $this->model->prepareClientOptions($options));
+    }
+
+    /**
+     * Test getIndexName() method
+     */
+    public function testGetIndexName()
+    {
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturn('indexName');
+        $this->assertInternalType('string', $this->model->getIndexName());
+    }
+
+    /**
+     * Test getEntityType() method
+     */
+    public function testGetEntityType()
+    {
+        $this->assertInternalType('string', $this->model->getEntityType());
+    }
+
+    /**
+     * Test isThirdPartyEngineAvailable() method
+     */
+    public function testIsThirdPartyEngineAvailable()
+    {
+        $engine = 'elasticsearch';
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn($engine);
+        $adapter = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Elasticsearch')
+            ->disableOriginalConstructor()
+            ->setMethods(['ping'])
+            ->getMock();
+        $this->adapterFactory->expects($this->once())
+            ->method('createAdapter')
+            ->willReturn($adapter);
+        $adapter->expects($this->once())
+            ->method('ping')
+            ->willReturn(true);
+        $this->assertEquals(true, $this->model->isThirdPartyEngineAvailable());
     }
 }

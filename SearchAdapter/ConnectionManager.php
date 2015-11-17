@@ -7,44 +7,53 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper;
+use Psr\Log\LoggerInterface;
 
 class ConnectionManager
 {
     /**
      * @var Elasticsearch
      */
-    private $client;
+    protected $client;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var ClientFactoryInterface
      */
-    private $clientFactory;
+    protected $clientFactory;
 
     /**
      * @var ClientOptionsInterface
      */
-    private $clientConfig;
+    protected $clientConfig;
+
+    /**
+     * @var FieldMapper
+     */
+    protected $fieldMapper;
 
     /**
      * @param ClientFactoryInterface $clientFactory
      * @param ClientOptionsInterface $clientConfig
+     * @param FieldMapper $fieldMapper
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
         ClientOptionsInterface $clientConfig,
+        FieldMapper $fieldMapper,
         LoggerInterface $logger
     ) {
         $this->logger = $logger;
         $this->clientFactory = $clientFactory;
         $this->clientConfig = $clientConfig;
+        $this->fieldMapper = $fieldMapper;
     }
 
     /**
@@ -57,6 +66,7 @@ class ConnectionManager
     {
         if (!$this->client) {
             $this->connect();
+            $this->checkIndex();
         }
 
         return $this->client;
@@ -75,6 +85,24 @@ class ConnectionManager
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new \RuntimeException('Elasticsearch client is not set.');
+        }
+    }
+
+    /**
+     * Checks whether Elasticsearch index exists. If not - creates one and put mapping.
+     *
+     * @return void
+     */
+    private function checkIndex()
+    {
+        $indexName = $this->clientConfig->getIndexName();
+        $entityType = $this->clientConfig->getEntityType();
+        if ($this->client->createIndexIfNotExists($indexName)) {
+            $this->client->addFieldsMapping(
+                $this->fieldMapper->getAllAttributesTypes(),
+                $indexName,
+                $entityType
+            );
         }
     }
 }

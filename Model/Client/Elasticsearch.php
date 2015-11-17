@@ -6,6 +6,8 @@
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
@@ -13,6 +15,13 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
  */
 class Elasticsearch implements ClientInterface
 {
+    /**#@+
+     * Text flags for Elasticsearch ping statuses
+     */
+    const ELASTICSEARCH_PING_STATUS_OK = 'OK';
+    const ELASTICSEARCH_PING_STATUS_ERROR = 'ERROR';
+    /**#@-*/
+
     /**
      * Elasticsearch Client instance
      *
@@ -24,7 +33,6 @@ class Elasticsearch implements ClientInterface
      * @var array
      */
     protected $clientOptions;
-
 
     /**
      * Initialize Elasticsearch Client
@@ -97,9 +105,140 @@ class Elasticsearch implements ClientInterface
         }
         $config = [
             'hosts' => [
-                $host
-            ]
+                $host,
+            ],
         ];
         return $config;
+    }
+
+    /**
+     * Adds a collection of documents in bulk format to Elasticsearch index
+     *
+     * @param array $documents
+     * @return void
+     */
+    public function addDocuments($documents)
+    {
+        $this->client->bulk($documents);
+    }
+
+    /**
+     * Delete all documents from index
+     *
+     * @param string $index
+     * @param string $entityType
+     * @return void
+     */
+    public function deleteDocumentsFromIndex($index, $entityType)
+    {
+        $this->client->deleteByQuery([
+            'index' => $index,
+            'type' => $entityType,
+            'body' => [
+                'query' => [
+                    'match_all' => [],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Delete documents from index by ids
+     *
+     * @param array $ids
+     * @param string $index
+     * @param string $entityType
+     * @param $entityType
+     */
+    public function deleteDocumentsByIds(array $ids, $index, $entityType)
+    {
+        $this->client->deleteByQuery([
+            'index' => $index,
+            'type' => $entityType,
+            'body' => [
+                'query' => [
+                    'ids' => [
+                        'type' => $entityType,
+                        'values' => $ids,
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Creates an Elasticsearch index if not exists
+     *
+     * @param string $index
+     * @return bool
+     * @throws \Exception
+     */
+    public function createIndexIfNotExists($index)
+    {
+        $params['index'] = $index;
+        try {
+            $this->client->indices()->getSettings($params);
+        } catch (Missing404Exception $e) {
+            $this->client->indices()->create($params);
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return false;
+    }
+
+    /**
+     * Add mapping to Elasticsearch index
+     *
+     * @param array $fields
+     * @param string $index
+     * @param string $entityType
+     * @return void
+     */
+    public function addFieldsMapping(array $fields, $index, $entityType)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $entityType,
+            'body' => [
+                $entityType => [
+                    '_all' => [
+                        'enabled' => true,
+                        'type' => 'string'
+                    ],
+                    'properties' => [],
+                ],
+            ],
+        ];
+
+        foreach ($fields as $field => $fieldInfo) {
+            $params['body'][$entityType]['properties'][$field] = $fieldInfo;
+        }
+
+        try {
+            $this->client->indices()->putMapping($params);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete mapping in Elasticsearch index
+     *
+     * @param string $index
+     * @param string $entityType
+     * @return void
+     * @throws \Exception
+     */
+    public function deleteMapping($index, $entityType)
+    {
+        try {
+            $this->client->indices()->deleteMapping([
+                'index' => $index,
+                'type' => $entityType,
+            ]);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

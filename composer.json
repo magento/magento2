@@ -8,12 +8,14 @@
         "elasticsearch/elasticsearch": "~2.0"
     },
     "type": "magento2-module",
-    "version": "100.0.0",
+    "version": "100.0.1",
     "license": [
         "proprietary"
     ],
     "autoload": {
-        "files": [ "registration.php" ],
+        "files": [
+            "registration.php"
+        ],
         "psr-4": {
             "Magento\\Elasticsearch\\": ""
         }
