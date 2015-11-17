@@ -27,13 +27,13 @@ class Validation
     /**
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param \Closure $proceed
-     * @param \Magento\Framework\DataObject|\Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\Object|\Magento\Catalog\Model\Product $product
      * @return bool
      */
     public function aroundValidate(
         \Magento\CatalogRule\Model\Rule $rule,
         \Closure $proceed,
-        \Magento\Framework\DataObject $product
+        \Magento\Framework\Object $product
     ) {
         $validateResult = $proceed($product);
         if (!$validateResult && ($configurableProducts = $this->configurable->getParentIdsByChild($product->getId()))) {

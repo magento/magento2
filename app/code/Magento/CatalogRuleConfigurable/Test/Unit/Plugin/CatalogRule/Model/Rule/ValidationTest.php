@@ -29,7 +29,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject */
     private $ruleConditionsMock;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
     private $productMock;
 
     /**
@@ -48,7 +48,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
         $this->ruleConditionsMock = $this->getMock('Magento\Rule\Model\Condition\Combine', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Framework\DataObject', ['getId']);
+        $this->productMock = $this->getMock('Magento\Framework\Object', ['getId']);
 
         $this->validation = new Validation(
             $this->configurableMock
