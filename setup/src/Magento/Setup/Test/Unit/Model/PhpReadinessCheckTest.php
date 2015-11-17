@@ -216,6 +216,9 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            unset($expected['data']['always_populate_raw_post_data']);
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -254,6 +257,9 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            unset($expected['data']['always_populate_raw_post_data']);
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -280,6 +286,9 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            unset($expected['data']['always_populate_raw_post_data']);
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
