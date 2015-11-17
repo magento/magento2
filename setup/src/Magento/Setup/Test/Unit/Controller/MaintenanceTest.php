@@ -20,7 +20,7 @@ class MaintenanceTest extends \PHPUnit_Framework_TestCase
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\CompleteBackup
+     * @var \Magento\Setup\Controller\Maintenance
      */
     private $controller;
 
