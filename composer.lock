@@ -190,9 +190,9 @@
             "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/_packages/composer-1.0.2.zip",
+                "url": "https://repo.magento.com/archives/magento/composer/magento-composer-1.0.2.0.zip",
                 "reference": null,
-                "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
+                "shasum": "6bfdbff4c23aace1e6d14ab598c81c790375aba0"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -296,12 +296,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
+                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/zf1/zipball/c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
-                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
+                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
                 "shasum": ""
             },
             "require": {
@@ -335,7 +335,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-09-30 13:04:03"
+            "time": "2015-10-29 14:34:55"
         },
         {
             "name": "monolog/monolog",
