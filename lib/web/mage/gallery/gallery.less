@@ -1142,6 +1142,7 @@
             transition: @fotorama-fullscreen-zoom-time linear;
             margin: auto;
             cursor: default;
+            &:extend(.fotorama-gpu);
             &.fotorama__img--zoommable {
                 cursor: pointer;
                 max-width: none;
@@ -1259,7 +1260,7 @@
     }
 }
 
-body.fotorama__fullscreen {
+.fotorama__fullscreen {
     overflow-y: hidden;
     .magnify-fullimage {
         display: inline-block;
