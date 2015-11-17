@@ -40,7 +40,7 @@ Also it's possible to add needed sample data modules manually (via composer requ
         ....
     }
  }
-{version} - Go to packages.magento.com and write down suitable versions of magento/sample-data and magento/sample-data-media (typically, you should choose the most recent version).
+{version} - Go to repo.magento.com and write down suitable versions of magento/sample-data and magento/sample-data-media (typically, you should choose the most recent version).
 ```
 2. Run composer update from your Magento root directory
 

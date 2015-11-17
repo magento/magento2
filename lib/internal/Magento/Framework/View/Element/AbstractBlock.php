@@ -780,21 +780,25 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve formatting date
      *
-     * @param   \DateTime|string|null $date
-     * @param   int $format
-     * @param   bool $showTime
-     * @return  string
+     * @param null|string|\DateTime $date
+     * @param int $format
+     * @param bool $showTime
+     * @param null|string $timezone
+     * @return string
      */
     public function formatDate(
         $date = null,
         $format = \IntlDateFormatter::SHORT,
-        $showTime = false
+        $showTime = false,
+        $timezone = null
     ) {
         $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
-            $showTime ? $format : \IntlDateFormatter::NONE
+            $showTime ? $format : \IntlDateFormatter::NONE,
+            null,
+            $timezone
         );
     }
 
