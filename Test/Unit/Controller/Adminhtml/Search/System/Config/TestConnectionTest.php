@@ -91,7 +91,12 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['filter'])
             ->getMock();
 
-        $this->controller = new TestConnection($context, $this->clientResolverMock, $this->resultJsonFactory, $this->tagFilterMock);
+        $this->controller = new TestConnection(
+            $context,
+            $this->clientResolverMock,
+            $this->resultJsonFactory,
+            $this->tagFilterMock
+        );
     }
 
     public function testExecuteEmptyEngine()
