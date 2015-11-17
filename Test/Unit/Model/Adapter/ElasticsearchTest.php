@@ -5,12 +5,13 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
 use Magento\Elasticsearch\Model\Adapter\DocumentDataMapper;
-use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 
@@ -45,9 +46,14 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     protected $documentDataMapper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $config;
+    protected $fieldMapper;
+
+    /**
+     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $clientConfig;
 
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -92,7 +98,11 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'map',
             ])
             ->getMock();
-        $this->config = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapper')
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllAttributesTypes'])
+            ->getMock();
+        $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIndexName',
@@ -109,18 +119,32 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'addDocuments',
                 'deleteDocumentsFromIndex',
                 'deleteDocumentsByIds',
+                'createIndexIfNotExists',
+                'addFieldsMapping',
             ])
             ->getMock();
         $this->connectionManager->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->client);
+        $this->fieldMapper->expects($this->any())
+            ->method('getAllAttributesTypes')
+            ->willReturn([
+                'name' => 'string',
+            ]);
+        $this->clientConfig->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('indexName');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('product');
 
         $this->model = new ElasticsearchAdapter(
             $this->connectionManager,
             $this->resourceIndex,
             $this->attributeContainer,
             $this->documentDataMapper,
-            $this->config,
+            $this->fieldMapper,
+            $this->clientConfig,
             $this->logger
         );
     }
@@ -233,12 +257,6 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanIndex()
     {
-        $this->config->expects($this->once())
-            ->method('getIndexName')
-            ->willReturn('indexName');
-        $this->config->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn('product');
         $this->client->expects($this->once())
             ->method('deleteDocumentsFromIndex');
         $this->assertSame(
@@ -253,12 +271,6 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanIndexFailure()
     {
-        $this->config->expects($this->once())
-            ->method('getIndexName')
-            ->willReturn('indexName');
-        $this->config->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn('product');
         $this->client->expects($this->once())
             ->method('deleteDocumentsFromIndex')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -270,12 +282,6 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteDocs()
     {
-        $this->config->expects($this->once())
-            ->method('getIndexName')
-            ->willReturn('indexName');
-        $this->config->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn('product');
         $this->client->expects($this->once())
             ->method('deleteDocumentsByIds');
         $this->assertSame(
@@ -290,15 +296,23 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteDocsFailure()
     {
-        $this->config->expects($this->once())
-            ->method('getIndexName')
-            ->willReturn('indexName');
-        $this->config->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn('product');
         $this->client->expects($this->once())
             ->method('deleteDocumentsByIds')
             ->willThrowException(new \Exception('Something went wrong'));
         $this->model->deleteDocs([1, ]);
+    }
+
+    /**
+     * Test checkIndex() method
+     */
+    public function testCheckIndex()
+    {
+        $this->client->expects($this->once())
+            ->method('createIndexIfNotExists')
+            ->willReturn(true);
+        $this->client->expects($this->once())
+            ->method('addFieldsMapping');
+
+        $this->model->checkIndex();
     }
 }

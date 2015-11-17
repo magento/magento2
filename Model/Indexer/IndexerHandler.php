@@ -44,7 +44,6 @@ class IndexerHandler implements IndexerInterface
      */
     protected $batchSize;
 
-
     /**
      * @param AdapterFactoryInterface $adapterFactory
      * @param Batch $batch
@@ -70,6 +69,7 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $this->getStoreIdByDimension($dimension);
+        $this->adapter->checkIndex();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
             $this->adapter->addDocs($docs);
@@ -88,6 +88,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($documents as $entityId => $document) {
             $documentIds []= $entityId;
         }
+        $this->adapter->checkIndex();
         $this->adapter->deleteDocs($documentIds);
         return $this;
     }
@@ -98,6 +99,7 @@ class IndexerHandler implements IndexerInterface
      */
     public function cleanIndex($dimensions)
     {
+        $this->adapter->checkIndex();
         $this->adapter->cleanIndex();
         return $this;
     }

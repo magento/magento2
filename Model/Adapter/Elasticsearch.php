@@ -5,11 +5,11 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
-use Magento\Elasticsearch\Model\Config;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,9 +47,14 @@ class Elasticsearch
     protected $documentDataMapper;
 
     /**
-     * @var Config
+     * @var FieldMapper
      */
-    protected $config;
+    protected $fieldMapper;
+
+    /**
+     * @var ClientOptionsInterface
+     */
+    protected $clientConfig;
 
     /**
      * @var LoggerInterface
@@ -61,7 +66,8 @@ class Elasticsearch
      * @param Index $resourceIndex
      * @param AttributeContainer $attributeContainer
      * @param DocumentDataMapper $documentDataMapper
-     * @param Config $config
+     * @param FieldMapper $fieldMapper
+     * @param ClientOptionsInterface $clientConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -69,14 +75,16 @@ class Elasticsearch
         Index $resourceIndex,
         AttributeContainer $attributeContainer,
         DocumentDataMapper $documentDataMapper,
-        Config $config,
+        FieldMapper $fieldMapper,
+        ClientOptionsInterface $clientConfig,
         LoggerInterface $logger
     ) {
         $this->connectionManager = $connectionManager;
         $this->resourceIndex = $resourceIndex;
         $this->attributeContainer = $attributeContainer;
         $this->documentDataMapper = $documentDataMapper;
-        $this->config = $config;
+        $this->fieldMapper = $fieldMapper;
+        $this->clientConfig = $clientConfig;
         $this->logger = $logger;
     }
 
@@ -164,8 +172,8 @@ class Elasticsearch
     public function cleanIndex()
     {
         try {
-            $indexName = $this->config->getIndexName();
-            $entityType = $this->config->getEntityType();
+            $indexName = $this->clientConfig->getIndexName();
+            $entityType = $this->clientConfig->getEntityType();
             $this->connectionManager->getConnection()->deleteDocumentsFromIndex($indexName, $entityType);
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -185,8 +193,8 @@ class Elasticsearch
     public function deleteDocs(array $documentIds)
     {
         try {
-            $indexName = $this->config->getIndexName();
-            $entityType = $this->config->getEntityType();
+            $indexName = $this->clientConfig->getIndexName();
+            $entityType = $this->clientConfig->getEntityType();
             $this->connectionManager->getConnection()->deleteDocumentsByIds($documentIds, $indexName, $entityType);
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -205,8 +213,8 @@ class Elasticsearch
      */
     protected function &getDocsArrayInBulkIndexFormat(&$documents, $action = self::BULK_ACTION_INDEX)
     {
-        $indexName = $this->config->getIndexName();
-        $entityType = $this->config->getEntityType();
+        $indexName = $this->clientConfig->getIndexName();
+        $entityType = $this->clientConfig->getEntityType();
         $bulkArray = [
             'index' => $indexName,
             'type' => $entityType,
@@ -225,5 +233,23 @@ class Elasticsearch
         }
 
         return $bulkArray;
+    }
+
+    /**
+     * Checks whether Elasticsearch index exists. If not - creates one and put mapping.
+     *
+     * @return void
+     */
+    public function checkIndex()
+    {
+        $indexName = $this->clientConfig->getIndexName();
+        $entityType = $this->clientConfig->getEntityType();
+        if ($this->connectionManager->getConnection()->createIndexIfNotExists($indexName)) {
+            $this->connectionManager->getConnection()->addFieldsMapping(
+                $this->fieldMapper->getAllAttributesTypes(),
+                $indexName,
+                $entityType
+            );
+        }
     }
 }

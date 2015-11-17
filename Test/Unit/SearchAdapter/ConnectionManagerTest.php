@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -37,11 +36,6 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
     private $clientConfig;
 
     /**
-     * @var FieldMapper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fieldMapper;
-
-    /**
      * Setup
      *
      * @return void
@@ -57,16 +51,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'prepareClientOptions',
-                    'getIndexName',
-                    'getEntityType',
-                ]
-            )->getMock();
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapper')
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllAttributesTypes'])
+            ->setMethods(['prepareClientOptions'])
             ->getMock();
 
         $this->clientConfig->expects($this->any())
@@ -79,22 +64,10 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
                 'username' => 'user',
                 'password' => 'passwd',
             ]);
-        $this->clientConfig->expects($this->any())
-            ->method('getIndexName')
-            ->willReturn('indexName');
-        $this->clientConfig->expects($this->any())
-            ->method('getEntityType')
-            ->willReturn('product');
-        $this->fieldMapper->expects($this->any())
-            ->method('getAllAttributesTypes')
-            ->willReturn([
-                'name' => 'string',
-            ]);
 
         $this->model = new ConnectionManager(
             $this->clientFactory,
             $this->clientConfig,
-            $this->fieldMapper,
             $this->logger
         );
     }
@@ -106,21 +79,10 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'createIndexIfNotExists',
-                    'addFieldsMapping',
-                ]
-            )
             ->getMock();
         $this->clientFactory->expects($this->once())
             ->method('create')
             ->willReturn($client);
-        $client->expects($this->once())
-            ->method('createIndexIfNotExists')
-            ->willReturn(true);
-        $client->expects($this->once())
-            ->method('addFieldsMapping');
 
         $this->model->getConnection();
     }
