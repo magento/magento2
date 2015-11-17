@@ -1275,17 +1275,18 @@
 
 .fotorama__arr,
 .fotorama__thumb__arr {
-    &:extend(.fotorama-button-background);
+    .fotorama-button-background();
 }
 
 .fotorama__wrap:not(.fotorama__wrap--toggle-arrows) {
     .fotorama__fullscreen-icon,
     .fotorama__zoom-out,
     .fotorama__zoom-in{
-        &:extend(.fotorama-button-background);
+        .fotorama-button-background();
     }
 }
-.fotorama-button-background {
+
+.fotorama-button-background() {
     background-color: rgba(255, 255, 255, 0.3);
     transition: background-color @fotorama-duration-time ease-in-out;
     &:hover {
