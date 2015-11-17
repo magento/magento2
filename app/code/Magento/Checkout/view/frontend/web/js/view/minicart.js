@@ -20,6 +20,10 @@ define([
     });
 
     function initSidebar() {
+        if (minicart.data('mageSidebar')) {
+            minicart.sidebar('update');
+        }
+
         if (!$('[data-role=product-item]').length) {
             return false;
         }
