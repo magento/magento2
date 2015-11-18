@@ -7,6 +7,7 @@
         "magento/module-authorization": "1.0.0-beta7",
         "magento/module-backend": "1.0.0-beta7",
         "magento/module-integration": "1.0.0-beta7",
+        "magento/module-email": "1.0.0-beta7",
         "magento/framework": "1.0.0-beta7",
         "magento/magento-composer-installer": "*"
     },
