@@ -131,15 +131,19 @@ class Elasticsearch implements ClientInterface
      */
     public function deleteDocumentsFromIndex($index, $entityType)
     {
-        $this->client->deleteByQuery([
-            'index' => $index,
-            'type' => $entityType,
-            'body' => [
-                'query' => [
-                    'match_all' => [],
+        try {
+            $this->client->deleteByQuery([
+                'index' => $index,
+                'type' => $entityType,
+                'body' => [
+                    'query' => [
+                        'match_all' => [],
+                    ],
                 ],
-            ],
-        ]);
+            ]);
+        } catch (Missing404Exception $e) {
+            // Data wasn't indexer yet.
+        }
     }
 
     /**
@@ -152,18 +156,22 @@ class Elasticsearch implements ClientInterface
      */
     public function deleteDocumentsByIds(array $ids, $index, $entityType)
     {
-        $this->client->deleteByQuery([
-            'index' => $index,
-            'type' => $entityType,
-            'body' => [
-                'query' => [
-                    'ids' => [
-                        'type' => $entityType,
-                        'values' => $ids,
+        try {
+            $this->client->deleteByQuery([
+                'index' => $index,
+                'type' => $entityType,
+                'body' => [
+                    'query' => [
+                        'ids' => [
+                            'type' => $entityType,
+                            'values' => $ids,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
+        } catch (Missing404Exception $e) {
+            // Data wasn't indexer yet.
+        }
     }
 
     /**
