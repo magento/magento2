@@ -13,6 +13,10 @@ use Magento\Framework\Autoload\ClassLoaderWrapper;
  */
 define('BP', dirname(__DIR__));
 
+if (!file_exists(BP . '/app/etc/vendor_path.php')) {
+    throw new \Exception('Can not find vendor path.');
+}
+
 $vendorDir = require BP . '/app/etc/vendor_path.php';
 $vendorAutoload = BP . "/{$vendorDir}/autoload.php";
 
