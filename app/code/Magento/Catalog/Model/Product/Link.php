@@ -50,11 +50,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $_linkCollectionFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock
-     */
-    protected $stockHelper;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory
@@ -69,14 +64,12 @@ class Link extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory,
-        \Magento\CatalogInventory\Helper\Stock $stockHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_linkCollectionFactory = $linkCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->stockHelper = $stockHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -136,7 +129,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function getProductCollection()
     {
         $collection = $this->_productCollectionFactory->create()->setLinkModel($this);
-        $this->stockHelper->addInStockFilterToCollection($collection);
         return $collection;
     }
 
