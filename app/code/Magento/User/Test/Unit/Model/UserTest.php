@@ -51,7 +51,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $eventManagerMock;
 
-    /** @var \Magento\Framework\Validator\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Validator\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $validatorObjectFactoryMock;
 
     /** @var \Magento\User\Model\UserValidationRules|\PHPUnit_Framework_MockObject_MockObject */
@@ -73,7 +73,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
+        $this->resourceMock = $this->getMockBuilder('Magento\User\Model\Resource\User')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -89,7 +89,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
-        $this->validatorObjectFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\DataObjectFactory')
+        $this->validatorObjectFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\ObjectFactory')
             ->disableOriginalConstructor()->setMethods(['create'])
             ->getMock();
         $this->roleFactoryMock = $this->getMockBuilder('Magento\Authorization\Model\RoleFactory')
@@ -313,7 +313,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->setIsActive(false);
         $this->setExpectedException(
             'Magento\\Framework\\Exception\\AuthenticationException',
-            'You did not sign in correctly or your account is temporarily disabled.'
+            'This account is inactive.'
         );
         $this->model->verifyIdentity($password);
     }
@@ -381,8 +381,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateOk()
     {
-        /** @var $validatorMock \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\DataObject')
+        /** @var $validatorMock \Magento\Framework\Validator\Object|\PHPUnit_Framework_MockObject_MockObject */
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\Object')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -400,8 +400,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvalid()
     {
         $messages = ['Invalid username'];
-        /** @var $validatorMock \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\DataObject')
+        /** @var $validatorMock \Magento\Framework\Validator\Object|\PHPUnit_Framework_MockObject_MockObject */
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\Object')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
