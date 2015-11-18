@@ -94,6 +94,8 @@ define(
 
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
+                    } else {
+                        this.saveInAddressBook(true);
                     }
                     this.isAddressDetailsVisible(true);
                 }, this);
@@ -212,9 +214,6 @@ define(
              */
             onAddressChange: function (address) {
                 this.isAddressFormVisible(address == newAddressOption);
-                if (address == newAddressOption) {
-                    this.saveInAddressBook(true);
-                }
             },
 
             /**
