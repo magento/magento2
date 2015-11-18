@@ -291,24 +291,16 @@
         width: 100%/3;
     }
 
-    .page-layout-1column .products-grid .product-item {
-        width: 100%/3;
-    }
-
-    .page-layout-3columns .products-grid .product-item {
-        width: 100%/3;
-    }
-
-    .page-products .products-grid .product-item {
-        width: 100%/3;
-    }
-
-    .page-products.page-layout-1column .products-grid .product-item {
-        width: 100%/3;
-    }
-
-    .page-products.page-layout-3columns .products-grid .product-item {
-        width: 100%/3;
+    .page-products,
+    .page-layout-1column,
+    .page-layout-3columns,
+    .page-products.page-layout-1column,
+    .page-products.page-layout-3columns {
+        .products-grid {
+            .product-item {
+                width: 100%/3;
+            }
+        }
     }
 }
 
@@ -317,49 +309,95 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .page-products .products-grid .product-item {
-        width: 100%/3;
-    }
-
-    .page-products.page-layout-1column .products-grid .product-item {
-        width: 100%/4;
-    }
-
-    .page-products.page-layout-3columns .products-grid .product-item {
-        width: 100%/2;
-    }
-}
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
-    .products-grid .product-item {
-        width: 100%/5;
-    }
-
-    .page-layout-1column .products-grid .product-item {
-        width: 100%/6;
-    }
-
-    .page-layout-3columns .products-grid .product-item {
-        width: 100%/4;
-    }
-
-    .page-products .products-grid .product-items {
-        margin: 0;
-    }
-
-    .page-products .products-grid .product-item {
-        margin-left: calc(~"(100% - 4 * 23.233%) / 3");
-        padding: 0;
-        width: 23.233%;
-        &:nth-child(4n+1) {
-            margin-left: 0;
+    .page-products {
+        .products-grid {
+            .product-item {
+                width: 100%/3;
+            }
         }
     }
 
-    .page-products.page-layout-1column .products-grid .product-item {
-        width: 100%/5;
+    .page-products.page-layout-1column {
+        .products-grid {
+            .product-item {
+                width: 100%/4;
+            }
+        }
     }
 
-    .page-products.page-layout-3columns .products-grid .product-item {
-        width: 100%/4;
+    .page-products.page-layout-3columns {
+        .products-grid {
+            .product-item {
+                width: 100%/2;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .products-grid {
+        .product-item {
+            width: 100%/5;
+        }
+    }
+
+    .page-layout-1column {
+        .products-grid {
+            .product-item {
+                width: 100%/6;
+            }
+        }
+    }
+
+    .page-layout-3columns {
+        .products-grid {
+            .product-item {
+                width: 100%/4;
+            }
+        }
+    }
+
+    .page-products {
+        .products-grid {
+            .product-items {
+                margin: 0;
+            }
+            .product-item {
+                margin-left: calc(~"(100% - 4 * 23.233%) / 3");
+                padding: 0;
+                width: 23.233%;
+
+                &:nth-child(4n+1) {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    .page-products {
+        &.page-layout-1column {
+            .products-grid {
+                .product-item {
+                    margin-left: 0;
+                    width: 100%/5;
+                }
+            }
+        }
+
+        &.page-layout-3columns {
+            .products-grid {
+                .product-item {
+                    margin-left: 1%;
+                    width: 32.667%;
+
+                    &:nth-child(3n) {
+                        margin-left: 1%;
+                    }
+
+                    &:nth-child(3n+1) {
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
     }
 }
