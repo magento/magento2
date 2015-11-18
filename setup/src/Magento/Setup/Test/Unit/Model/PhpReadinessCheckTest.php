@@ -32,6 +32,9 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $this->markTestSkipped('Skipped for PHP 7');
+        }
         $this->composerInfo = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $this->phpInfo = $this->getMock('Magento\Setup\Model\PhpInformation', [], [], '', false);
         $this->versionParser = $this->getMock('Composer\Package\Version\VersionParser', [], [], '', false);
@@ -216,9 +219,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            unset($expected['data']['always_populate_raw_post_data']);
-        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -257,9 +257,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            unset($expected['data']['always_populate_raw_post_data']);
-        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -286,9 +283,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            unset($expected['data']['always_populate_raw_post_data']);
-        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
