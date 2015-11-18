@@ -46,7 +46,7 @@ class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSave()
     {
-       $this->userResourceModelMock->expects($this->once())->method('updateRoleUsersAcl')->with($this->roleMock);
+        $this->userResourceModelMock->expects($this->once())->method('updateRoleUsersAcl')->with($this->roleMock);
         $this->assertInstanceOf(
             '\Magento\Authorization\Model\Role',
             $this->model->afterSave($this->roleMock, $this->roleMock)
