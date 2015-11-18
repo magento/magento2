@@ -60,7 +60,6 @@ class EmulateCustomerObserver implements ObserverInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-
     ) {
         $this->_persistentSession = $persistentSession;
         $this->_persistentData = $persistentData;
@@ -73,6 +72,8 @@ class EmulateCustomerObserver implements ObserverInterface
      * Set persistent data to customer session
      *
      * @param \Magento\Framework\Event\Observer $observer
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
      * @return $this
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -95,7 +96,8 @@ class EmulateCustomerObserver implements ObserverInterface
                                 ? $address->getRegionId()
                                 : null,
                             'postcode' => $address->getPostcode(),
-                        ]);
+                        ]
+                    );
                 }
             }
 
