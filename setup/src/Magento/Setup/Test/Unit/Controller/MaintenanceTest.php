@@ -26,6 +26,9 @@ class MaintenanceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $this->markTestSkipped('Skipped for PHP 7');
+        }
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->controller = new Maintenance($this->maintenanceMode);
     }
