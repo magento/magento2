@@ -169,7 +169,10 @@
     top: 0;
     &.active {
         .lib-css(opacity, @_overlay-opacity);
-        filter: alpha(opacity=@_overlay-opacity-old);
+
+        & when not (@_overlay-opacity-old = false) {
+            filter: alpha(opacity=@_overlay-opacity-old);
+        }
     }
 }
 
