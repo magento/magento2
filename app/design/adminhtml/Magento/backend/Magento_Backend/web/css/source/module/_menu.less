@@ -233,7 +233,13 @@
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
+            
+            .ie10 &,
+            .ie11 & {
+                height: 100%;
+            }
         }
+
         &._show  {
             > .submenu {
                 transform: translateX(0);
@@ -253,9 +259,11 @@
             a {
                 display: block;
                 padding: @submenu-link__padding-vertical @submenu__padding-horizontal;
+
                 &:hover {
                     background-color: @submenu-link__focus__background-color;
                 }
+
                 &:active {
                     padding-top: @submenu-link__padding-vertical + .1rem;
                     padding-bottom: @submenu-link__padding-vertical - .1rem;
@@ -269,9 +277,11 @@
         li {
             min-width: @submenu-column__width;
         }
+
         a {
             color: @submenu-link__color;
             transition: background-color .1s linear;
+
             &:hover,
             &:focus {
                 box-shadow: none;
