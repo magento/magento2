@@ -61,7 +61,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Solr\Model\Indexer\Fulltext\Plugin\CustomerGroup(
+        $this->model = new CustomerGroup(
             $this->indexerRegistryMock,
             $this->customerOptionsMock
         );
