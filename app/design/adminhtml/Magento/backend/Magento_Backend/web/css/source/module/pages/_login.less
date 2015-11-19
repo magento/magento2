@@ -30,6 +30,7 @@
     background-color: @login-page__background-color;
     height: 101%;
     max-height: 100%;
+    min-width: 50rem;
 
     .page-wrapper {
         .lib-vendor-prefix-flex-grow(0);
@@ -105,22 +106,19 @@
 
 // Footer
 .login-footer {
+    color: @color-heathered-grey;
+    font-size: @font-size__xs;
+    font-weight: @font-weight__regular;
     left: 0;
+    margin: 5rem 0 2rem;
     position: absolute;
+    text-align: center;
     top: 100%;
     width: 100%;
 
-    .copyright {
-        color: @color-heathered-grey;
-        font-size: @font-size__xs;
-        font-weight: @font-weight__regular;
-        margin: 5rem 0 2rem;
-        text-align: center;
-
-        .link-copyright {
-            &:before {
-                display: none;
-            }
+    .link-copyright {
+        &:before {
+            display: none;
         }
     }
 }
