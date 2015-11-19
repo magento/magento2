@@ -36,6 +36,7 @@
 .readiness-check-content {
     margin-left: @readiness-check-content__indent;
     margin-right: @readiness-check-side__width;
+    position: relative;
     .readiness-check-title {
         margin-left: 0;
     }
@@ -45,9 +46,12 @@
 }
 
 .readiness-check-side {
-    float: right;
+    left: 100%;
     padding-left: 2.4rem;
+    position: absolute;
+    top: 0;
     width: @readiness-check-side__width;
+
     .side-title {
         margin-bottom: 0;
     }
@@ -66,5 +70,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .readiness-check-content {
         margin-right: 2rem;
+    }
+
+    .readiness-check-side {
+        padding: 2rem 0;
+        position: static;
     }
 }
