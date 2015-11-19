@@ -153,9 +153,7 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * Check if third party engine is selected and active
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isThirdPartyEngineAvailable()
     {
