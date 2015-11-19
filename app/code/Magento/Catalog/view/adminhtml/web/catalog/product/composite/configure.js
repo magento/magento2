@@ -6,7 +6,8 @@ define([
     "jquery",
     "jquery/ui",
     "mage/translate",
-    "prototype"
+    "prototype",
+    'Magento_Ui/js/modal/modal'
 ], function(jQuery){
 
 window.ProductConfigure = Class.create();
@@ -41,45 +42,20 @@ ProductConfigure.prototype = {
      * Initialize object
      */
     initialize: function() {
-        this._initWindowElements();
         var self = this;
-        this.dialog = jQuery('#product_composite_configure').dialog({
-            autoOpen: false,
-            title: jQuery.mage.__('Configure Product'),
-            modal: true,
-            minWidth: 500,
-            width: '75%',
-            dialogClass: 'popup-window',
-            position: {
-                my: 'left top',
-                at: 'center top',
-                of: 'body'
-            },
-            open: function () {
-                jQuery(this).addClass('magento_message').css('max-height', '500px');
-                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
-                var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
-                jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
-            },
-            close: function() {
-                jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-            },
+        this.dialog = jQuery('#product_composite_configure').modal({
+            title: jQuery.mage.__('Configure Product'),
+            type: 'slide',
             buttons: [{
                 text: jQuery.mage.__('OK'),
                 'class': 'action-primary',
-                click: function() {
+                click: function () {
                     self.onConfirmBtn();
-                }
-            }, {
-                id: "product_composite_configure_form_cancel",
-                text: "Cancel",
-                'class': 'action-close',
-                click: function() {
-                    jQuery(this).dialog("close");
                 }
             }]
         });
+        this._initWindowElements();
     },
 
     /**
@@ -440,7 +416,7 @@ ProductConfigure.prototype = {
      * Show configuration window
      */
     _showWindow: function() {
-        this.dialog.dialog('open');
+        this.dialog.modal('openModal');
         //this._toggleSelectsExceptBlock(false);
 
         if (Object.isFunction(this.showWindowCallback[this.current.listType])) {
@@ -472,7 +448,7 @@ ProductConfigure.prototype = {
      * Close configuration window
      */
     _closeWindow: function() {
-        this.dialog.dialog('close');
+        this.dialog.modal('closeModal');
         //this.blockWindow.style.display = 'none';
         //this.clean('window');
     },
