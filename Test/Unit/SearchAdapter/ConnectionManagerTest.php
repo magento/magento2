@@ -51,7 +51,6 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareClientOptions'])
             ->getMock();
 
         $this->clientConfig->expects($this->any())
