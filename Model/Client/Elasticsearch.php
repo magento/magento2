@@ -199,9 +199,9 @@ class Elasticsearch implements ClientInterface
      * Add mapping to Elasticsearch index
      *
      * @param array $fields
-     * @param string $index
-     * @param string $entityType
-     * @return void
+     * @param $index
+     * @param $entityType
+     * @throws \Exception
      */
     public function addFieldsMapping(array $fields, $index, $entityType)
     {

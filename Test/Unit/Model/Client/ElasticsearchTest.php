@@ -93,6 +93,16 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test validation of connection parameters
+     */
+    public function testTestConnectionPing()
+    {
+        $this->model = new ElasticsearchClient($this->getEmptyIndexOption(), $this->elasticsearchClientMock);
+        $this->model->ping();
+        $this->assertEquals(true, $this->model->testConnection());
+    }
+
+    /**
      * Test addDocuments() method
      */
     public function testAddDocuments()
@@ -318,6 +328,19 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             'port' => '9200',
             'timeout' => 15,
             'index' => 'magento2',
+            'enableAuth' => 1,
+            'username' => 'user',
+            'password' => 'passwd',
+        ];
+    }
+
+    protected function getEmptyIndexOption()
+    {
+        return [
+            'hostname' => 'localhost',
+            'port' => '9200',
+            'index' => '',
+            'timeout' => 15,
             'enableAuth' => 1,
             'username' => 'user',
             'password' => 'passwd',
