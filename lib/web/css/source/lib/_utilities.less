@@ -334,6 +334,18 @@
 }
 
 //
+//  Url existing check
+//  ---------------------------------------------
+
+.lib-url-check(@_path) {
+    @lib-url-check-output: @_path;
+}
+
+.lib-url-check(@_path) when not (@_path = false) {
+    @lib-url-check-output: url(@_path);
+}
+
+//
 //  Arrow
 //  ---------------------------------------------
 
@@ -352,28 +364,28 @@
     @_position,
     @_color
 ) when (@_position = left) {
-    border-right-color: @_color;
+    .lib-css(border-right-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = right) {
-    border-left-color: @_color;
+    .lib-css(border-left-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = up) {
-    border-bottom-color: @_color;
+    .lib-css(border-bottom-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = down) {
-    border-top-color: @_color;
+    .lib-css(border-top-color, @_color);
 }
 
 //
@@ -385,20 +397,20 @@
     @_input-placeholder-font-weight: @form-element-input__font-weight
 ) {
     &::-webkit-input-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
     &:-moz-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
     &::-moz-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
     &:-ms-input-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
 }
 
