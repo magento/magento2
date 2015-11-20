@@ -3,3 +3,32 @@
 // * See COPYING.txt for license details.
 // */
 
+.fotorama__fullscreen {
+    overflow: hidden;
+    .fotorama__zoom-in,
+    .fotorama__zoom-out {
+        overflow: hidden;
+        position: absolute;
+        width: @size-fotorama-block;
+        height: @size-fotorama-block;
+        display: block;
+        cursor: pointer;
+
+    }
+    .fotorama__zoom-out {
+        top: 83px;
+        &:extend(.fotorama-sprite);
+        background-position: 0 (-@size-fotorama-block) !important;
+        &.fotorama__zoom-out--disabled {
+            display: none
+        }
+    }
+    .fotorama__zoom-in {
+        top: 2px;
+        &:extend(.fotorama-sprite);
+        background-position: 0 0 !important;
+        &.fotorama__zoom-in--disabled {
+            display: none
+        }
+    }
+}
