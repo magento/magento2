@@ -121,7 +121,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Sales::emails') && !$order->isCanceled()) {
             $message = __('Are you sure you want to send an order email to customer?');
-            $this->addButton(
+            $this->buttonList->add(
                 'send_notification',
                 [
                     'label' => __('Send Email'),
@@ -149,7 +149,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         // invoice action intentionally
         if ($this->_isAllowedAction('Magento_Sales::invoice') && $order->canVoidPayment()) {
             $message = __('Are you sure you want to void the payment?');
-            $this->addButton(
+            $this->buttonList->add(
                 'void_payment',
                 [
                     'label' => __('Void'),
