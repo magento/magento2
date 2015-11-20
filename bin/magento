@@ -20,8 +20,8 @@ try {
 try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
-
-    $application = new Magento\Framework\Console\Cli('Magento CLI', AppInterface::VERSION);
+    $productMetadata = new \Magento\Framework\App\ProductMetadata();
+    $application = new Magento\Framework\Console\Cli('Magento CLI', $productMetadata->getVersion());
     $application->run();
 } catch (\Exception $e) {
     while ($e) {
