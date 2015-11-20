@@ -29,7 +29,6 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 
     /**
      * @param Context $context
-     * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
      * @param Config $eavConfig
@@ -37,7 +36,6 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      */
     public function __construct(
         Context $context,
-        ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         ProductRepositoryInterface $productRepository,
         Config $eavConfig,
@@ -45,7 +43,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     ) {
         $this->productRepository = $productRepository;
         $this->eavConfig = $eavConfig;
-        parent::__construct($context, $eventManager, $storeManager, $connectionName);
+        parent::__construct($context, $storeManager, $connectionName);
     }
 
     /**
