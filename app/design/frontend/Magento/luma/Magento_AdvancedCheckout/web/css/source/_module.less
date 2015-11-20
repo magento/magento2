@@ -40,6 +40,7 @@
             .qty {
                 .qty {
                     &:extend(.abs-input-qty all);
+
                     + .mage-error {
                         width: 80px;
                     }
@@ -104,7 +105,7 @@
             }
         }
 
-        .actions.secondary {
+        .actions {
             text-align: center;
 
             .action {
@@ -171,13 +172,19 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-cart-failed {
         &:extend(.abs-shopping-cart-items-desktop all);
-        .actions.secondary {
-            text-align: right;
 
+        .secondary {
             .action {
-                display: inline-block;
-                margin: 0 0 0 @indent__s;
+                margin: 0;
             }
+        }
+
+        .actions.primary {
+            float: right;
+        }
+
+        .block-content {
+            &:extend(.abs-add-clearfix-desktop all);
         }
     }
 }

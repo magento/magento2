@@ -101,10 +101,6 @@
 
             .action {
                 margin-bottom: @indent__s;
-
-                &.tocart {
-                    margin-right: @indent__s;
-                }
             }
         }
     }
@@ -157,8 +153,17 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-cart-failed {
         &:extend(.abs-shopping-cart-items-desktop all);
+
         .actions {
             text-align: left;
+        }
+
+        .actions.primary {
+            float: right;
+        }
+
+        .block-content {
+            &:extend(.abs-add-clearfix-desktop all);
         }
     }
 }
