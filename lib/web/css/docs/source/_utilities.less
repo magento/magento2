@@ -367,3 +367,60 @@
 //        </tr>
 //    </table>
 //  </pre>
+
+// # .lib-url-check()
+//
+//  The <code>.lib-url-check()</code> mixin wraps variable with "url( ... )" and return <code>@lib-url-check-output</code> variable. Can be used with <code>.lib-css()</code> mixin.
+//
+
+.example-url-check {
+    @_icon-image: '/image/test.png'; // set image path variable
+
+    .lib-url-check(@_icon-image); // "call" the mixin
+
+    .lib-css(background-image, @lib-url-check-output); // will return url('/image/test.png')
+}
+
+//
+//  If the variable is set to <code>false</code>, the <code>.lib-url-check()</code> will return false.
+//
+//  ```
+//  <div class="example-url-check">
+//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//  </div>
+//  ```
+//
+
+.example-url-check {
+    @_icon-image: false; // set usage image path to false
+
+    .lib-url-check(@_icon-image); // "call" the mixin
+
+    .lib-css(background-image, @lib-url-check-output); // will return 'false' and outputs nothing
+}
+
+//  ```
+//  <div class="example-url-check-2">
+//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//  </div>
+//  ```
+//
+
+//  # .lib-css() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Output variable</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_path</th>
+//            <td class="vars_value">'' | false | value</td>
+//            <td class="vars_value">@lib-url-check-output</td>
+//            <td>Passed url to wrapp in 'url( ... )'. If the 'false' value passed mixin will return 'false'.</td>
+//        </tr>
+//    </table>
+//  </pre>
