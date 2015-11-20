@@ -89,6 +89,13 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
     protected $productForSalesRule2;
 
     /**
+     * Second product from precondition.
+     *
+     * @array cartPrice
+     */
+    protected $cartPrice;
+
+    /**
      * Implementation assert.
      *
      * @return void
@@ -129,6 +136,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @param Address $address
      * @param int|null $isLoggedIn
      * @param array $shipping
+     * @param array $cartPrice
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -148,7 +156,8 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         CatalogProductSimple $productForSalesRule2 = null,
         Address $address = null,
         $isLoggedIn = null,
-        array $shipping = []
+        array $shipping = [],
+        array $cartPrice = []
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->cmsIndex = $cmsIndex;
@@ -159,6 +168,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         $this->customer = $customer;
         $this->productForSalesRule1 = $productForSalesRule1;
         $this->productForSalesRule2 = $productForSalesRule2;
+        $this->cartPrice = $cartPrice;
         $isLoggedIn ? $this->login() : $this->customerAccountLogout->open();
         $this->checkoutCart->open()->getCartBlock()->clearShoppingCart();
         $this->addProductsToCart($productQuantity);
