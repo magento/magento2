@@ -23,13 +23,10 @@ class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
         $actualPrices['discount'] =  $this->checkoutCart->getTotalsBlock()->getDiscount();
 
         if ($this->checkoutCart->getTotalsBlock()->isVisibleShippingPriceBlock()) {
-            $actualPrices['shipping_price'] = $this->checkoutCart->getTotalsBlock()->getShippingPrice();
-            $actualPrices['grand_total'] = number_format(($actualPrices['grand_total'] - $actualPrices['shipping_price']), 2);
-            $expectedPrices['shipping_price'] = $this->cartPrice['shipping_price'];
+            $shipping_price = $this->checkoutCart->getTotalsBlock()->getShippingPrice();
+            $actualPrices['grand_total'] = number_format(($actualPrices['grand_total'] - $shipping_price), 2);
         }
-        $expectedPrices['sub_total'] = $this->cartPrice['sub_total'];
-        $expectedPrices['grand_total'] = $this->cartPrice['grand_total'];
-        $expectedPrices['discount'] = $this->cartPrice['discount'];
+        $expectedPrices = $this->cartPrice;
 
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedPrices,

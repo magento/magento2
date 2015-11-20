@@ -53,9 +53,6 @@ class ApplySeveralSalesRuleEntityTest extends Injectable
     public function testApplySeveralSalesRules(array $salesRulesOriginal)
     {
         foreach ($salesRulesOriginal as $key => $salesRule) {
-           if ($salesRule == '-') {
-               continue;
-           }
            $salesRules[$key] = $this->fixtureFactory->createByCode(
                'salesRule',
                ['dataset' => $salesRule]
