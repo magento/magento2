@@ -43,6 +43,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) and not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span, @total-columns);
 }
@@ -53,6 +54,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) and (@end-column = true) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(
         @span,
@@ -66,6 +68,7 @@
     @end-column
 ) when (isnumber(@span)) and not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span);
 }
@@ -75,6 +78,7 @@
     @end-column
 ) when (isnumber(@span)) and ( @end-column = true ) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span);
     .lib-end-column();
@@ -101,6 +105,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(
         @span,
@@ -114,6 +119,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (@end-column = true) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(
         @span,
@@ -127,6 +133,7 @@
     @end-column
 ) when not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(@span);
 }
@@ -136,6 +143,7 @@
     @end-column
 ) when (@end-column = true) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(@span);
     .lib-inline-end-column();
@@ -173,6 +181,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+
     .lib-css(padding-left, @calc-column-width);
 }
 
@@ -181,6 +190,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+
     .lib-css(padding-right, @calc-column-width);
 }
 
@@ -189,6 +199,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+
     .lib-css(margin-left, @calc-column-width);
 }
 
@@ -197,6 +208,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)+@gutter-width) / @grid-width);
+
     .lib-css(margin-right, @calc-column-width);
 }
 
@@ -205,6 +217,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+
     .lib-css(margin-right, @calc-column-width);
 }
 
@@ -213,6 +226,7 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)-@gutter-width) / @grid-width);
+
     .lib-css(width, @calc-column-width);
 }
 
@@ -228,5 +242,6 @@
     @end-column: false
 ) when not (@end-column) {
     @calc-gutter-width: 100%*(@gutter-width/@grid-width);
+    
     .lib-css(margin-right, @calc-gutter-width);
 }
