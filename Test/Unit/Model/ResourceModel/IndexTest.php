@@ -169,7 +169,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new Index(
             $this->context,
-            $this->eventManager,
             $this->storeManager,
             $this->productRepository,
             $this->eavConfig,
