@@ -33,6 +33,7 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManager;
 
+
     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 
@@ -42,6 +43,12 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getEntityType', 'getAttribute', 'getEntityAttributeCodes'])
             ->getMock();
+
+        $this->fieldType = $this->getMockBuilder('\Magento\Elasticsearch\Model\Adapter\FieldType')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldType'])
+            ->getMock();
+
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $objectManager = new ObjectManagerHelper($this);
@@ -63,7 +70,8 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
             [
                 'eavConfig' => $this->eavConfig,
                 'coreRegistry' => $this->coreRegistry,
-                'storeManager' => $this->storeManager
+                'storeManager' => $this->storeManager,
+                'fieldType' => $this->fieldType
             ]
         );
     }
@@ -137,12 +145,6 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
         $this->eavAttributeResource->expects($this->any())
             ->method('getIsGlobal')
             ->willReturn(true);
-
-        $attributeMock->expects($this->any())->method('getBackendType')
-            ->will($this->returnValue($backendType));
-
-        $attributeMock->expects($this->any())->method('getFrontendInput')
-            ->will($this->returnValue($frontendType));
 
         $this->assertInternalType(
             'array',
