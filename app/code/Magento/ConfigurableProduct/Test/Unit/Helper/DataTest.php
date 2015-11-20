@@ -76,7 +76,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $currentProductMock = $this->getMock(
             'Magento\Catalog\Model\Product', ['getTypeInstance', '__wakeup'], [], '', false
         );
-
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
@@ -155,7 +154,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
             ],
         ];
-
         $this->_imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturnSelf();
