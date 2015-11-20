@@ -18,19 +18,17 @@ interface InventoryValidatorInterface
     /**
      * Validates inventory requests based on registry response
      *
-     * @param InventoryRequestInterface[] $requests
-     * @param InventoryResponseInterface[] $response
+     * @param InventoryRecordCollectionInterface[] $collections
      * @return InventoryErrorInterface[]
      */
-    public function validateRequests(array $requests, $response);
+    public function validateCollectionCriteriaRequests(array $collections);
 
     /**
      * In case if request does not satisfy minimum and maximum sale quantity or incremental options of item,
      * then a new request is returned, otherwise the same request is going to be used.
      *
-     * @param InventoryRecordInterface $inventoryRecord
-     * @param RequestInterface|null $currentRequest
-     * @return RequestInterface
+     * @param InventoryRecordCollectionInterface $collection
+     * @return InventoryRecordCriteriaInterface
      */
-    public function suggestRequest(InventoryRecordInterface $inventoryRecord, RequestInterface $currentRequest = null);
+    public function suggestCollectionCriteria(InventoryRecordCollectionInterface $collection);
 }

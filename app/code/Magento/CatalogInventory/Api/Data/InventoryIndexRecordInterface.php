@@ -14,7 +14,7 @@ interface InventoryIndexRecordInterface extends InventoryRecordDataInterface, Co
     /**
      * Returns true if product is available for purchase
      *
-     * @return string
+     * @return bool
      */
     public function isAvailable();
 }

@@ -8,7 +8,9 @@ use Magento\CatalogInventory\Api\LocationInformationInterface;
  * Interface of shared data of inventory with warehouse
  *
  */
-interface InventoryDataInterface extends LocationInformationInterface
+interface InventoryDataInterface
+    extends LocationInformationInterface,
+            StockInterface
 {
     /**
      * Returns inventory identifier
@@ -16,13 +18,6 @@ interface InventoryDataInterface extends LocationInformationInterface
      * @return int
      */
     public function getId();
-
-    /**
-     * Returns inventory name
-     *
-     * @return string
-     */
-    public function getName();
 
     /**
      * Returns unique inventory code

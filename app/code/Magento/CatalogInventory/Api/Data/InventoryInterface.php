@@ -17,14 +17,4 @@ interface InventoryInterface extends InventoryDataInterface, ConfigurationAwareI
      * @return bool
      */
     public function isIndexed();
-
-    /**
-     * Returns true if this inventory is virtual
-     *
-     * Used to restrict purchase of items from it,
-     * as it is might be just an aggregated inventory
-     *
-     * @return bool
-     */
-    public function isVirtual();
 }

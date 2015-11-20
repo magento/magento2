@@ -3,7 +3,7 @@
 namespace Magento\CatalogInventory\Api;
 
 use Magento\CatalogInventory\Api\Data\InventoryInterface;
-use Magento\CatalogInventory\Api\Data\InventoryRecordInterface;
+use Magento\CatalogInventory\Api\Data\InventoryIndexRecordInterface;
 
 /**
  * Inventory index registry interface
@@ -12,11 +12,11 @@ use Magento\CatalogInventory\Api\Data\InventoryRecordInterface;
  *
  * @api
  */
-interface InventoryIndexRegistryInterface
+interface InventoryIndexManagerInterface
 {
     /**
      * @param InventoryInterface $inventory
-     * @return mixed
+     * @return InventoryIndexInterface
      */
     public function getIndexerByInventory(InventoryInterface $inventory);
 

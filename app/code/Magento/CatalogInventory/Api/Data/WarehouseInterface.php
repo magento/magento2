@@ -15,14 +15,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface WarehouseInterface extends InventoryDataInterface, ExtensibleDataInterface
 {
     /**
-     * Sets name
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name);
-
-    /**
      * Sets unique code
      *
      * @param string $code
@@ -146,21 +138,4 @@ interface WarehouseInterface extends InventoryDataInterface, ExtensibleDataInter
      * @return WarehouseConfigurationInterface
      */
     public function getConfiguration();
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\CatalogInventory\Api\Data\WarehouseExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\CatalogInventory\Api\Data\WarehouseExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\CatalogInventory\Api\Data\WarehouseExtensionInterface $extensionAttributes
-    );
 }

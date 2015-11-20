@@ -13,28 +13,15 @@ use Magento\CatalogInventory\Api\Data\InventoryReservationInterface;
 interface InventoryReservationManagementInterface
 {
     /**
-     * Creates a single reservation for a request/response pair
+     * Creates a single reservation for a inventory collection interface
      *
      * Should be used only in case if developer would like to
      * reserve stock separately from checkout process
      *
-     * @param InventoryRequestInterface $request
-     * @param InventoryResponseInterface $response
+     * @param InventoryRecordCollectionInterface $request
      * @return InventoryReservationInterface[]
      */
-    public function createReservation(InventoryRequestInterface $request, InventoryResponseInterface $response);
-
-    /**
-     * Creates reservations for each supplied response/request pair
-     *
-     * It can be used before placing an order in Magento,
-     * in order to be able reserve a stock via simple database query that will not produce a deadlock
-     *
-     * @param InventoryRequestInterface[] $requests
-     * @param InventoryResponseInterface[] $responses
-     * @return InventoryReservationInterface[][]
-     */
-    public function createReservations($requests, $responses);
+    public function createReservation(InventoryRecordCollectionInterface $request);
 
     /**
      * Splits reservation instance into specified quantities

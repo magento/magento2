@@ -11,14 +11,15 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface WarehouseRecordInterface extends InventoryRecordDataInterface, ExtensibleDataInterface
+interface WarehouseRecordInterface
+    extends InventoryRecordDataInterface, ExtensibleDataInterface
 {
     /**
      * Returns identifier of assigned warehouse
      *
      * @return int
      */
-    public function getWebsiteId();
+    public function getWarehouseId();
 
     /**
      * Sets warehouse identifier
