@@ -134,7 +134,6 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">70.00</data>
             <data name="cartPrice/discount" xsi:type="string">80.00</data>
-            <data name="cartPrice/shipping_price" xsi:type="string">10.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
@@ -161,7 +160,6 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">75.00</data>
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
-            <data name="cartPrice/shipping_price" xsi:type="string">0.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
@@ -190,7 +188,6 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">75.00</data>
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
-            <data name="cartPrice/shipping_price" xsi:type="string">10.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
