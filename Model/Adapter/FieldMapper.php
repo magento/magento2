@@ -20,11 +20,6 @@ use \Magento\Customer\Model\Session as CustomerSession;
  */
 class FieldMapper implements FieldMapperInterface
 {
-    const ES_DATA_TYPE_STRING = 'string';
-    const ES_DATA_TYPE_FLOAT = 'float';
-    const ES_DATA_TYPE_INT = 'integer';
-    const ES_DATA_TYPE_DATE = 'date';
-
     /**
      * Core registry
      *
@@ -62,12 +57,18 @@ class FieldMapper implements FieldMapperInterface
     private $customerSession;
 
     /**
+     * @var FieldType
+     */
+    private $fieldType;
+
+    /**
      * @param Config $eavConfig
      * @param Registry $registry
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param ResolverInterface $localeResolver
      * @param CustomerSession $customerSession
+     * @param FieldType $fieldType
      */
     public function __construct(
         Config $eavConfig,
@@ -75,7 +76,8 @@ class FieldMapper implements FieldMapperInterface
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         ResolverInterface $localeResolver,
-        CustomerSession $customerSession
+        CustomerSession $customerSession,
+        FieldType $fieldType
     ) {
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
@@ -83,6 +85,7 @@ class FieldMapper implements FieldMapperInterface
         $this->scopeConfig = $scopeConfig;
         $this->localeResolver = $localeResolver;
         $this->customerSession = $customerSession;
+        $this->fieldType = $fieldType;
     }
 
     /**
@@ -132,7 +135,7 @@ class FieldMapper implements FieldMapperInterface
             foreach ($stores as $store) {
                 $attributeCodeByStore = $attribute->getIsGlobal() ? $attributeCode : $attributeCode.'_'.$store->getId();
                 $allAttributes[$attributeCodeByStore] = [
-                    'type' => $this->getFieldType($attribute)
+                    'type' => $this->fieldType->getFieldType($attribute)
                 ];
                 if ($notUsedInSearch) {
                     $allAttributes[$attributeCodeByStore] = array_merge(
@@ -189,30 +192,5 @@ class FieldMapper implements FieldMapperInterface
             ? $context['websiteId']
             : $this->storeManager->getStore()->getWebsiteId();
         return 'price_' . $customerGroupId . '_' . $websiteId;
-    }
-
-    /**
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return string
-     */
-    private function getFieldType($attribute)
-    {
-        $backendType = $attribute->getBackendType();
-        $frontendInput = $attribute->getFrontendInput();
-
-        if ($backendType === 'timestamp' || $backendType === 'datetime') {
-            $fieldType = self::ES_DATA_TYPE_DATE;
-        } elseif ($backendType === 'int' || $backendType === 'smallint') {
-            $fieldType = self::ES_DATA_TYPE_INT;
-        } elseif ($backendType === 'decimal') {
-            $fieldType = self::ES_DATA_TYPE_FLOAT;
-        } elseif ($backendType === 'varchar') {
-            $fieldType = self::ES_DATA_TYPE_STRING;
-        } elseif (in_array($frontendInput, ['multiselect', 'select', 'boolean'], true)) {
-            $fieldType = self::ES_DATA_TYPE_INT;
-        } else {
-            $fieldType = self::ES_DATA_TYPE_STRING;
-        }
-        return $fieldType;
     }
 }
