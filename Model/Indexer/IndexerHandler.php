@@ -9,7 +9,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
-use Magento\Elasticsearch\Model\AdapterFactoryInterface;
+use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 use Magento\Store\Model\Store;
 
 class IndexerHandler implements IndexerInterface
@@ -45,18 +45,18 @@ class IndexerHandler implements IndexerInterface
     protected $batchSize;
 
     /**
-     * @param AdapterFactoryInterface $adapterFactory
+     * @param ElasticsearchFactory $adapterFactory
      * @param Batch $batch
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
-        AdapterFactoryInterface $adapterFactory,
+        ElasticsearchFactory $adapterFactory,
         Batch $batch,
         array $data = [],
         $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
-        $this->adapter = $adapterFactory->createAdapter();
+        $this->adapter = $adapterFactory->create();
         $this->data = $data;
         $this->batch = $batch;
         $this->batchSize = $batchSize;

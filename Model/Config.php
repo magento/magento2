@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
  * Elasticsearch config model
@@ -41,7 +42,7 @@ class Config implements ClientOptionsInterface
     protected $encryptor;
 
     /**
-     * @var AdapterFactoryInterface
+     * @var ElasticsearchFactory
      */
     protected $adapterFactory;
 
@@ -57,12 +58,12 @@ class Config implements ClientOptionsInterface
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
-     * @param AdapterFactoryInterface $adapterFactory
+     * @param ElasticsearchFactory $adapterFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         EncryptorInterface $encryptor,
-        AdapterFactoryInterface $adapterFactory
+        ElasticsearchFactory $adapterFactory
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->encryptor = $encryptor;
@@ -129,7 +130,7 @@ class Config implements ClientOptionsInterface
      */
     public function isActiveEngine()
     {
-        return $this->adapterFactory->createAdapter()->ping();
+        return $this->adapterFactory->create()->ping();
     }
 
     /**

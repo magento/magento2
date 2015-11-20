@@ -31,11 +31,12 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\AdapterFactoryInterface')
+        $adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->setMethods(['create'])
+            ->getMock();
         $adapterFactory->expects($this->any())
-            ->method('createAdapter')
+            ->method('create')
             ->willReturn($this->adapter);
 
         $this->batch = $this->getMockBuilder('Magento\Framework\Indexer\SaveHandler\Batch')

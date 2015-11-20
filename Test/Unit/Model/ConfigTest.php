@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Elasticsearch\Model\AdapterFactoryInterface;
+use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
  * Class ConfigTest
@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $encryptor;
 
     /**
-     * @var AdapterFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElasticsearchFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterFactory;
 
@@ -48,9 +48,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\AdapterFactoryInterface')
+        $this->adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['createAdapter'])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->model = new Config(
@@ -113,7 +113,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['ping'])
             ->getMock();
         $this->adapterFactory->expects($this->once())
-            ->method('createAdapter')
+            ->method('create')
             ->willReturn($adapter);
         $adapter->expects($this->once())
             ->method('ping')
