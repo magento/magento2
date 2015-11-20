@@ -516,8 +516,11 @@ define([
             $image.find('.magnify-lens').remove();
             $image.on('click tap', function () {
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
-                    $('.fotorama__arr--next').hide();
-                    $('.fotorama__arr--prev').hide();
+                    if ($('.fotorama-item').data('fotorama').options.arrows) {
+                        $('.fotorama__arr--next').hide();
+                        $('.fotorama__arr--prev').hide();
+                    }
+
 
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
@@ -628,8 +631,10 @@ define([
                 $(this).remove();
                 $item.append(cloneVideoDiv);
                 $item.addClass('video-unplayed');
-                $('.fotorama__arr--next').show();
-                $('.fotorama__arr--prev').show();
+                if ($('.fotorama-item').data('fotorama').options.arrows) {
+                    $('.fotorama__arr--next').show();
+                    $('.fotorama__arr--prev').show();
+                }
                 self._hideCloseVideo();
 
             });
