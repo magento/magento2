@@ -104,7 +104,8 @@ define([
 
     var customerData = {
         init: function() {
-            if (_.isEmpty(storage.keys())) {
+            var privateContent = $.cookieStorage.get('private_content_version');
+            if (_.isEmpty(storage.keys()) && (typeof privateContent == 'object')) {
                 this.reload([], false);
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
