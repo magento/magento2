@@ -5,12 +5,11 @@
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Event\ManagerInterface;
 
-class Index extends Fulltext
+class Index extends AbstractDb
 {
     /**
      * @var StoreManagerInterface
@@ -19,19 +18,22 @@ class Index extends Fulltext
 
     /**
      * @param Context $context
-     * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
      * @param string $connectionName
      */
     public function __construct(
         Context $context,
-        ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         $connectionName = null
     ) {
         $this->storeManager = $storeManager;
-        parent::__construct($context, $eventManager, $connectionName);
+        parent::__construct($context, $connectionName);
     }
+
+    /**
+     * Implementation of abstract construct
+     */
+    protected function _construct(){}
 
     /**
      * Return array of price data per customer and website by products
