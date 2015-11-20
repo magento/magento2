@@ -45,17 +45,17 @@ var catalogWysiwygEditor = {
             this.modal.html(jQuery(data).html());
         } else {
             this.modal = jQuery(data).modal({
-                title: 'WYSIWYG Editor',
+                title: '<?php /* @escapeNotVerified */ echo __('WYSIWYG Editor'); ?>',
                 modalClass: 'magento',
                 type: 'slide',
                 firedElementId: elementId,
                 buttons: [{
-                    text: 'Cancel',
+                    text: jQuery.mage.__('Cancel'),
                     click: function () {
                         self.closeDialogWindow(this);
                     }
                 },{
-                    text: 'Submit',
+                    text: jQuery.mage.__('Submit'),
                     click: function () {
                         self.okDialogWindow(this);
                     }
