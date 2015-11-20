@@ -214,7 +214,7 @@ class DocumentDataMapper
         }
 
         $dateObj = $this->dateFormats[$storeId];
-        return $dateObj->format('c') . 'Z';
+        return $dateObj->format('c');
     }
 
     /**

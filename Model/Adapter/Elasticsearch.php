@@ -211,7 +211,7 @@ class Elasticsearch
      * @param string $action
      * @return array
      */
-    protected function &getDocsArrayInBulkIndexFormat(&$documents, $action = self::BULK_ACTION_INDEX)
+    protected function getDocsArrayInBulkIndexFormat($documents, $action = self::BULK_ACTION_INDEX)
     {
         $indexName = $this->clientConfig->getIndexName();
         $entityType = $this->clientConfig->getEntityType();
@@ -244,7 +244,8 @@ class Elasticsearch
     {
         $indexName = $this->clientConfig->getIndexName();
         $entityType = $this->clientConfig->getEntityType();
-        if ($this->connectionManager->getConnection()->createIndexIfNotExists($indexName)) {
+        if (!$this->connectionManager->getConnection()->indexExists($indexName)) {
+            $this->connectionManager->getConnection()->createIndex($indexName);
             $this->connectionManager->getConnection()->addFieldsMapping(
                 $this->fieldMapper->getAllAttributesTypes(),
                 $indexName,

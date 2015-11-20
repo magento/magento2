@@ -156,41 +156,31 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test createIndexIfNotExists() method, case when such index exists
+     * Test createIndex() method, case when such index exists
      */
     public function testCreateIndexExists()
     {
-        $this->indicesMock->expects($this->once())
-            ->method('getSettings')
-            ->with([
-                'index' => 'indexName',
-            ]);
-        $this->assertEquals(
-            false,
-            $this->model->createIndexIfNotExists('indexName')
-        );
-    }
-
-    /**
-     * Test createIndexIfNotExists() method, case when no such index exists
-     */
-    public function testCreateIndexNotExists()
-    {
-        $this->indicesMock->expects($this->once())
-            ->method('getSettings')
-            ->with([
-                'index' => 'indexName',
-            ])
-            ->willThrowException(new Missing404Exception());
         $this->indicesMock->expects($this->once())
             ->method('create')
             ->with([
                 'index' => 'indexName',
             ]);
-        $this->assertEquals(
-            true,
-            $this->model->createIndexIfNotExists('indexName')
-        );
+        $this->model->createIndex('indexName');
+    }
+
+    /**
+     * Test indexExists() method, case when no such index exists
+     */
+    public function testIndexExists()
+    {
+        $this->indicesMock->expects($this->once())
+            ->method('exists')
+            ->with([
+                'index' => 'indexName',
+            ])
+            ->willReturn(true);
+        $this->model->indexExists('indexName');
+
     }
 
     /**
@@ -200,12 +190,12 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testCreateIndexFailure()
     {
         $this->indicesMock->expects($this->once())
-            ->method('getSettings')
+            ->method('create')
             ->with([
                 'index' => 'indexName',
             ])
             ->willThrowException(new \Exception('Something went wrong'));
-        $this->model->createIndexIfNotExists('indexName');
+        $this->model->createIndex('indexName');
     }
 
     /**

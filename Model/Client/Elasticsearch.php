@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
@@ -15,13 +14,6 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
  */
 class Elasticsearch implements ClientInterface
 {
-    /**#@+
-     * Text flags for Elasticsearch ping statuses
-     */
-    const ELASTICSEARCH_PING_STATUS_OK = 'OK';
-    const ELASTICSEARCH_PING_STATUS_ERROR = 'ERROR';
-    /**#@-*/
-
     /**
      * Elasticsearch Client instance
      *
@@ -142,7 +134,7 @@ class Elasticsearch implements ClientInterface
                 ],
             ]);
         } catch (Missing404Exception $e) {
-            // Data wasn't indexer yet.
+            // Data wasn't indexed yet.
         }
     }
 
@@ -153,6 +145,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param string $entityType
      * @param $entityType
+     * @return void
      */
     public function deleteDocumentsByIds(array $ids, $index, $entityType)
     {
@@ -170,29 +163,30 @@ class Elasticsearch implements ClientInterface
                 ],
             ]);
         } catch (Missing404Exception $e) {
-            // Data wasn't indexer yet.
+            // Data wasn't indexed yet.
         }
     }
 
     /**
-     * Creates an Elasticsearch index if not exists
+     * Creates an Elasticsearch index
+     *
+     * @param string $index
+     * @return void
+     */
+    public function createIndex($index)
+    {
+        $this->client->indices()->create(['index' => $index]);
+    }
+
+    /**
+     * Checks whether Elasticsearch index exists
      *
      * @param string $index
      * @return bool
-     * @throws \Exception
      */
-    public function createIndexIfNotExists($index)
+    public function indexExists($index)
     {
-        $params['index'] = $index;
-        try {
-            $this->client->indices()->getSettings($params);
-        } catch (Missing404Exception $e) {
-            $this->client->indices()->create($params);
-            return true;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-        return false;
+        $this->client->indices()->exists(['index' => $index]);
     }
 
     /**
@@ -201,7 +195,7 @@ class Elasticsearch implements ClientInterface
      * @param array $fields
      * @param $index
      * @param $entityType
-     * @throws \Exception
+     * @return void
      */
     public function addFieldsMapping(array $fields, $index, $entityType)
     {
@@ -218,16 +212,10 @@ class Elasticsearch implements ClientInterface
                 ],
             ],
         ];
-
         foreach ($fields as $field => $fieldInfo) {
             $params['body'][$entityType]['properties'][$field] = $fieldInfo;
         }
-
-        try {
-            $this->client->indices()->putMapping($params);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $this->client->indices()->putMapping($params);
     }
 
     /**
@@ -236,17 +224,12 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @param string $entityType
      * @return void
-     * @throws \Exception
      */
     public function deleteMapping($index, $entityType)
     {
-        try {
-            $this->client->indices()->deleteMapping([
-                'index' => $index,
-                'type' => $entityType,
-            ]);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $this->client->indices()->deleteMapping([
+            'index' => $index,
+            'type' => $entityType,
+        ]);
     }
 }

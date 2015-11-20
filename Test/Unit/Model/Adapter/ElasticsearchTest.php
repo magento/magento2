@@ -119,7 +119,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'addDocuments',
                 'deleteDocumentsFromIndex',
                 'deleteDocumentsByIds',
-                'createIndexIfNotExists',
+                'createIndex',
+                'indexExists',
                 'addFieldsMapping',
             ])
             ->getMock();
@@ -308,8 +309,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testCheckIndex()
     {
         $this->client->expects($this->once())
-            ->method('createIndexIfNotExists')
-            ->willReturn(true);
+            ->method('indexExists')
+            ->willReturn(false);
         $this->client->expects($this->once())
             ->method('addFieldsMapping');
 

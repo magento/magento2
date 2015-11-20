@@ -18,11 +18,9 @@ class Builder
     public function build()
     {
         $document = [];
-
         foreach ($this->fields as $field => $value) {
             $document = $this->addFieldToDocument($document, $field, $value);
         }
-
         $this->clear();
         return $document;
     }
