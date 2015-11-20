@@ -420,6 +420,18 @@ class TypeProcessor
     }
 
     /**
+     * Check if given type is valid to use as an argument type declaration
+     *
+     * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     * @param $type
+     * @return bool
+     */
+    public function isValidTypeDeclaration($type)
+    {
+        return !($this->isTypeSimple($type) || $this->isTypeAny($type) || $this->isArrayType($type));
+    }
+
+    /**
      * Get item type of the array.
      *
      * @param string $arrayType
