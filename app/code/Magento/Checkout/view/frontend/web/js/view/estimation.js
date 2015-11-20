@@ -12,21 +12,24 @@ define(
     ],
     function (Component, quote, priceUtils, totals, sidebarModel) {
         'use strict';
+
         return Component.extend({
             isLoading: totals.isLoading,
-            getQuantity: function() {
+            getQuantity: function () {
                 if (totals.totals()) {
-                    return parseFloat(totals.totals().items_qty);
+                    return parseFloat(totals.totals()['items_qty']);
                 }
+
                 return 0;
             },
-            getPureValue: function() {
+            getPureValue: function () {
                 if (totals.totals()) {
                     return parseFloat(totals.getSegment('grand_total').value);
                 }
+
                 return 0;
             },
-            showSidebar: function() {
+            showSidebar: function () {
                 sidebarModel.show();
             },
             getFormattedPrice: function (price) {
