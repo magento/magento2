@@ -16,6 +16,11 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
+     * @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $typeProcessorMock;
+
+    /**
      * @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
@@ -26,11 +31,17 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->typeProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
             [
                 'config' => $this->configMock,
+                'typeProcessor' => $this->typeProcessorMock,
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
                 'resultClassName' => '\Magento\Catalog\Api\Data\ProductExtension',
                 'classGenerator' => null
@@ -53,6 +64,11 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
                         ],
                         'complex_object_attribute' => [
                             Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\OptionInterface[]',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
+                        // Ensure type declaration is added to argument of setter
+                        'complex_object_attribute_with_type_declaration' => [
+                            Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\BundleOptionInterface',
                             Converter::RESOURCE_PERMISSIONS => [],
                         ],
                     ],
