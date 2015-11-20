@@ -67,6 +67,10 @@ class ConfigProviderPluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool $persitenceEnabled
+     * @param bool $isPersistent
+     * @param bool $isLoggedIn
+     *
      * @dataProvider configDataProvider
      */
     public function testAfterGetConfigNegative($persitenceEnabled, $isPersistent, $isLoggedIn)
@@ -80,6 +84,9 @@ class ConfigProviderPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->plugin->afterGetConfig($this->subjectMock, $result));
     }
 
+    /**
+     * @return array
+     */
     public function configDataProvider()
     {
         return [
