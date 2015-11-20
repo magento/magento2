@@ -7,12 +7,17 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\AppInterface;
-
 class ProductMetadata implements ProductMetadataInterface
 {
     const EDITION_NAME  = 'Community';
     const PRODUCT_NAME  = 'Magento';
+
+    /**
+     * Product version
+     *
+     * @var string
+     */
+    protected $version;
 
     /**
      * Get Product version
@@ -21,7 +26,22 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
-        return AppInterface::VERSION;
+        if (!$this->version) {
+            $composerJsonFile = realpath(BP . DIRECTORY_SEPARATOR . 'composer.json');
+            if (!$composerJsonFile || !is_file($composerJsonFile)) {
+                return '';
+            }
+            $composerContent = file_get_contents($composerJsonFile);
+            if ($composerContent === false) {
+                return '';
+            }
+            $composerContent = json_decode($composerContent, true);
+            if (!$composerContent || !is_array($composerContent) || !array_key_exists('version', $composerContent)) {
+                return '';
+            }
+            $this->version = $composerContent['version'];
+        }
+        return $this->version;
     }
 
     /**
