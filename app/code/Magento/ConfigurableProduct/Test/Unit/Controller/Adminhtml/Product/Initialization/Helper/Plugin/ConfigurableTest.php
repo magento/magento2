@@ -5,10 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
+
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable
+     * @var Configurable
      */
     protected $plugin;
 
@@ -57,7 +59,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable($this->productTypeMock, $this->requestMock);
+        $this->plugin = new Configurable($this->productTypeMock, $this->requestMock);
     }
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameNotGenerateVariations()
