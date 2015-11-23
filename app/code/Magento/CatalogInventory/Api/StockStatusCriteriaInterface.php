@@ -20,12 +20,12 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
     public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria);
 
     /**
-     * Filter by website(s)
+     * Filter by scope(s)
      *
-     * @param int $website
+     * @param int $scope
      * @return bool
      */
-    public function setWebsiteFilter($website);
+    public function setScopeFilter($scope);
 
     /**
      * Add product(s) filter
