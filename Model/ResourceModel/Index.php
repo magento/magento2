@@ -33,7 +33,9 @@ class Index extends AbstractDb
     /**
      * Implementation of abstract construct
      */
-    protected function _construct(){}
+    protected function _construct()
+    {
+    }
 
     /**
      * Return array of price data per customer and website by products

@@ -14,5 +14,4 @@ interface ClientOptionsInterface
      * @return array
      */
     public function prepareClientOptions($options = []);
-
 }
