@@ -370,15 +370,18 @@
 
 // # .lib-url-check()
 //
-//  The <code>.lib-url-check()</code> mixin wraps variable with "url( ... )" and return <code>@lib-url-check-output</code> variable. Can be used with <code>.lib-css()</code> mixin.
+//  The <code>.lib-url-check()</code> mixin wraps passed value with 'url( ... )' and returns <code>@lib-url-check-output</code> variable. Can be used with <code>.lib-css()</code> mixin.
 //
 
 .example-url-check {
-    @_icon-image: '/image/test.png'; // set image path variable
+    //  set image path variable
+    @_icon-image: '/images/test.png';
 
-    .lib-url-check(@_icon-image); // "call" the mixin
+    //  "call" the mixin
+    .lib-url-check(@_icon-image);
 
-    .lib-css(background-image, @lib-url-check-output); // will return url('/image/test.png')
+    //  will return url('/images/test.png')
+    .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
 }
 
 //
@@ -386,27 +389,30 @@
 //
 //  ```
 //  <div class="example-url-check">
-//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//      Block with background.
 //  </div>
 //  ```
 //
 
 .example-url-check {
-    @_icon-image: false; // set usage image path to false
+    //  set usage image path to false
+    @_icon-image: false;
 
-    .lib-url-check(@_icon-image); // "call" the mixin
+    //  "call" the mixin
+    .lib-url-check(@_icon-image);
 
-    .lib-css(background-image, @lib-url-check-output); // will return 'false' and outputs nothing
+    //  will return 'false' and outputs nothing
+    .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
 }
 
 //  ```
 //  <div class="example-url-check-2">
-//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//      Block with no background.
 //  </div>
 //  ```
 //
 
-//  # .lib-css() variables
+//  # .lib-url-check() variables
 //
 //  <pre>
 //    <table>
@@ -420,7 +426,7 @@
 //            <th>@_path</th>
 //            <td class="vars_value">'' | false | value</td>
 //            <td class="vars_value">@lib-url-check-output</td>
-//            <td>Passed url to wrapp in 'url( ... )'. If the 'false' value passed mixin will return 'false'.</td>
+//            <td>Passed url to wrap in 'url( ... )'. If the 'false' value passed mixin will return 'false'.</td>
 //        </tr>
 //    </table>
 //  </pre>
