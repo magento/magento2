@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class XmlCatalogGenerateCommand Generates dictionary of URNs for the IDE
