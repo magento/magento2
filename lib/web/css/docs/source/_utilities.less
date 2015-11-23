@@ -374,13 +374,13 @@
 //
 
 .example-url-check {
-    //  set image path variable
+    //  Set image path variable
     @_icon-image: '/images/test.png';
 
-    //  "call" the mixin
+    //  "Call" the mixin
     .lib-url-check(@_icon-image);
 
-    //  will return url('/images/test.png')
+    //  Will return url('/images/test.png')
     .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
 }
 
@@ -395,13 +395,13 @@
 //
 
 .example-url-check {
-    //  set usage image path to false
+    //  Set usage image path to false
     @_icon-image: false;
 
-    //  "call" the mixin
+    //  "Call" the mixin
     .lib-url-check(@_icon-image);
 
-    //  will return 'false' and outputs nothing
+    //  Will return 'false' and outputs nothing
     .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
 }
 
