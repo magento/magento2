@@ -16,10 +16,6 @@ use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
  */
 class Config implements ClientOptionsInterface
 {
-    /**
-     * Current adapter name
-     */
-    const ELASTICSEARCH = 'elasticsearch';
 
     /**
      * Elasticsearch Entity type for product
@@ -45,13 +41,6 @@ class Config implements ClientOptionsInterface
      * @var ElasticsearchFactory
      */
     protected $adapterFactory;
-
-    /**
-     * Store result of third party search engine availability check
-     *
-     * @var bool|null
-     */
-    protected $isThirdPartyEngineAvailable = null;
 
     /**
      * Constructor
@@ -114,26 +103,6 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * Return true if third party search engine is used
-     *
-     * @return bool
-     */
-    public function isEsEnabled()
-    {
-        return $this->getSearchConfigData('engine') == self::ELASTICSEARCH;
-    }
-
-    /**
-     * Check if enterprise engine is available
-     *
-     * @return bool
-     */
-    public function isActiveEngine()
-    {
-        return $this->adapterFactory->create()->ping();
-    }
-
-    /**
      * Get Elasticsearch index name
      *
      * @return string
@@ -153,15 +122,4 @@ class Config implements ClientOptionsInterface
         return self::ELASTICSEARCH_TYPE_PRODUCT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isThirdPartyEngineAvailable()
-    {
-        if ($this->isThirdPartyEngineAvailable === null) {
-            $this->isThirdPartyEngineAvailable = $this->isEsEnabled() && $this->isActiveEngine();
-        }
-
-        return $this->isThirdPartyEngineAvailable;
-    }
 }
