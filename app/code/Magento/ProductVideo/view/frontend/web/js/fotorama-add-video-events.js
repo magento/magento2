@@ -396,8 +396,9 @@ define([
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
-
-            this._startPrepareForPlayer(e, fotorama);
+            this._checkForVideo(e, fotorama, -1);
+            this._checkForVideo(e, fotorama, 0);
+            this._checkForVideo(e, fotorama, 1);
         },
 
         /**
@@ -520,7 +521,6 @@ define([
                         $('.fotorama__arr--next').hide();
                         $('.fotorama__arr--prev').hide();
                     }
-
 
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
