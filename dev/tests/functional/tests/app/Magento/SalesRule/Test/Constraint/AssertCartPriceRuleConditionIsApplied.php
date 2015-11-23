@@ -18,7 +18,7 @@ class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
      */
     protected function assert()
     {
-        $this->checkoutCart->getTotalsBlock()->waitForShippingPriceBlock();
+        $this->checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         $actualPrices['sub_total'] = $this->checkoutCart->getTotalsBlock()->getSubtotal();
         $actualPrices['grand_total'] = $this->checkoutCart->getTotalsBlock()->getGrandTotal();
         $actualPrices['discount'] =  $this->checkoutCart->getTotalsBlock()->getDiscount();
