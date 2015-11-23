@@ -26,10 +26,9 @@ interface WriterInterface
      * Write dictionary data to language pack
      *
      * @param \Magento\Setup\Module\I18n\Dictionary $dictionary
-     * @param string $packPath
      * @param \Magento\Setup\Module\I18n\Locale $locale
      * @param string $mode One of const of WriterInterface::MODE_
      * @return void
      */
-    public function write(Dictionary $dictionary, $packPath, Locale $locale, $mode);
+    public function write(Dictionary $dictionary, Locale $locale, $mode);
 }
