@@ -23,7 +23,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | Magento\Catalog\Model\Product
      */
     protected $productMock;
 
@@ -46,6 +46,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',
             'setCanSaveConfigurableAttributes',
+            'getTypeId',
             '__wakeup',
         ];
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
@@ -86,6 +87,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $attributes,
             $this->productMock
         );
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
         $this->productTypeMock->expects(
             $this->once()
@@ -118,6 +120,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ['attributes', null, $attributes],
         ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $this->productTypeMock->expects(
             $this->once()
         )->method(
