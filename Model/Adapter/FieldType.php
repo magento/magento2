@@ -7,7 +7,6 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
  * Class FieldMapper
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FieldType
 {

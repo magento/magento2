@@ -12,8 +12,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\DocumentDataMapper;
 

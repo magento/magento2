@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Config;
