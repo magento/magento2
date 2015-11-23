@@ -33,4 +33,5 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Magento\CatalogRule\Api\Data\RuleInterface" type="Magento\CatalogRule\Model\Rule" />
 </config>
