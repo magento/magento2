@@ -93,6 +93,12 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Model\EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * Rule constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
@@ -103,7 +109,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param string $connectionName
+     * @param \Magento\Framework\Model\EntityManager $entityManager
+     * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,6 +124,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Model\EntityManager $entityManager,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -128,6 +136,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
+        $this->entityManager = $entityManager;
         parent::__construct($context, $connectionName);
     }
 
@@ -294,5 +303,51 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         );
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+
+        $this->beginTransaction();
+
+        try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+
+                $this->entityManager->save(
+                    'Magento\CatalogRule\Api\Data\RuleInterface',
+                    $object
+                );
+
+                $this->unserializeFields($object);
+                $this->processAfterSaves($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
     }
 }
