@@ -158,7 +158,7 @@
             <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
             <data name="productQuantity/productForSalesRule2" xsi:type="string">1</data>
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
-            <data name="cartPrice/grand_total" xsi:type="string">85.00</data>
+            <data name="cartPrice/grand_total" xsi:type="string">75.00</data>
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
