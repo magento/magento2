@@ -12,15 +12,10 @@ use Magento\Customer\Model\ResourceModel\Group;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Search\Model\Engine;
+use Magento\Search\Model\EngineResolver;
 
 class CustomerGroup extends AbstractPlugin
 {
-    /**
-     * MySQL search engine
-     */
-    const CATALOG_SEARCH_MYSQL_ENGINE = 'MySQL';
-
     /**
      * @var ClientOptionsInterface
      */
@@ -35,12 +30,12 @@ class CustomerGroup extends AbstractPlugin
     /**
      * @param IndexerRegistry $indexerRegistry
      * @param ClientOptionsInterface $clientOptions
-     * @param Engine $searchEngine
+     * @param EngineResolver $searchEngine
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
         ClientOptionsInterface $clientOptions,
-        Engine $searchEngine
+        EngineResolver $searchEngine
     ) {
         parent::__construct($indexerRegistry);
         $this->clientOptions = $clientOptions;
@@ -61,7 +56,7 @@ class CustomerGroup extends AbstractPlugin
         \Closure $proceed,
         AbstractModel $group
     ) {
-        $needInvalidation = ($this->searchEngine->getCurrentSearchEngine() != self::CATALOG_SEARCH_MYSQL_ENGINE)
+        $needInvalidation = ($this->searchEngine->getCurrentSearchEngine() != EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE)
             && ($group->isObjectNew() || $group->dataHasChangedFor('tax_class_id'));
         $result = $proceed($group);
         if ($needInvalidation) {
