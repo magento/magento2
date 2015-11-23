@@ -98,26 +98,4 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInternalType('string', $this->model->getEntityType());
     }
-
-    /**
-     * Test isThirdPartyEngineAvailable() method
-     */
-    public function testIsThirdPartyEngineAvailable()
-    {
-        $engine = 'elasticsearch';
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->willReturn($engine);
-        $adapter = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Elasticsearch')
-            ->disableOriginalConstructor()
-            ->setMethods(['ping'])
-            ->getMock();
-        $this->adapterFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($adapter);
-        $adapter->expects($this->once())
-            ->method('ping')
-            ->willReturn(true);
-        $this->assertEquals(true, $this->model->isThirdPartyEngineAvailable());
-    }
 }

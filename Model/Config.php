@@ -121,5 +121,4 @@ class Config implements ClientOptionsInterface
     {
         return self::ELASTICSEARCH_TYPE_PRODUCT;
     }
-
 }
