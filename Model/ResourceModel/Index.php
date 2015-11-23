@@ -75,19 +75,19 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     /**
      * @param array $array
      * @param string $glue
-     * @param bool $include_keys
-     * @param bool $trim_all
+     * @param bool $includeKeys
+     * @param bool $trimAll
      * @return string
      */
-    private function recursiveImplode(array $array, $glue = ',', $include_keys = false, $trim_all = true)
+    private function recursiveImplode(array $array, $glue = ',', $includeKeys = false, $trimAll = true)
     {
-        $glued_string = '';
-        array_walk_recursive($array, function ($value, $key) use ($glue, $include_keys, &$glued_string) {
-            $include_keys and $glued_string .= $key.$glue;
-            $glued_string .= $value.$glue;
+        $gluedString = '';
+        array_walk_recursive($array, function ($value, $key) use ($glue, $includeKeys, &$gluedString) {
+            $includeKeys and $gluedString .= $key.$glue;
+            $gluedString .= $value.$glue;
         });
-        strlen($glue) > 0 and $glued_string = substr($glued_string, 0, -strlen($glue));
-        $trim_all and $glued_string = preg_replace("/(\s)/ixsm", '', $glued_string);
-        return (string) $glued_string;
+        strlen($glue) > 0 and $gluedString = substr($gluedString, 0, -strlen($glue));
+        $trimAll and $gluedString = preg_replace("/(\s)/ixsm", '', $gluedString);
+        return (string) $gluedString;
     }
 }

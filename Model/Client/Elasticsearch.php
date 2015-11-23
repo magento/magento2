@@ -144,7 +144,6 @@ class Elasticsearch implements ClientInterface
      * @param array $ids
      * @param string $index
      * @param string $entityType
-     * @param $entityType
      * @return void
      */
     public function deleteDocumentsByIds(array $ids, $index, $entityType)
@@ -193,7 +192,7 @@ class Elasticsearch implements ClientInterface
      * Add mapping to Elasticsearch index
      *
      * @param array $fields
-     * @param $index
+     * @param string $index
      * @param $entityType
      * @return void
      */

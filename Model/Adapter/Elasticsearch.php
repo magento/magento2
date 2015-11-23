@@ -207,7 +207,7 @@ class Elasticsearch
     /**
      * Reformat documents array to bulk index format
      *
-     * @param $documents
+     * @param array $documents
      * @param string $action
      * @return array
      */
