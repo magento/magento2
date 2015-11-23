@@ -33,7 +33,6 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManager;
 
-
     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 

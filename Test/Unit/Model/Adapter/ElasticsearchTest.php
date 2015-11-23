@@ -116,9 +116,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'ping',
-                'addDocuments',
-                'deleteDocumentsFromIndex',
-                'deleteDocumentsByIds',
+                'bulkQuery',
+                'getAllIds',
                 'createIndex',
                 'indexExists',
                 'addFieldsMapping',
@@ -226,7 +225,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testAddDocs()
     {
         $this->client->expects($this->once())
-            ->method('addDocuments');
+            ->method('bulkQuery');
         $this->assertSame(
             $this->model,
             $this->model->addDocs([
@@ -244,7 +243,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testAddDocsFailure()
     {
         $this->client->expects($this->once())
-            ->method('addDocuments')
+            ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
         $this->model->addDocs([
             '1' => [
@@ -259,7 +258,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testCleanIndex()
     {
         $this->client->expects($this->once())
-            ->method('deleteDocumentsFromIndex');
+            ->method('getAllIds')
+            ->willReturn(['1' => 1]);
+        $this->client->expects($this->once())
+            ->method('bulkQuery');
         $this->assertSame(
             $this->model,
             $this->model->cleanIndex()
@@ -273,7 +275,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testCleanIndexFailure()
     {
         $this->client->expects($this->once())
-            ->method('deleteDocumentsFromIndex')
+            ->method('getAllIds')
+            ->willReturn(['1' => 1]);
+        $this->client->expects($this->once())
+            ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
         $this->model->cleanIndex();
     }
@@ -284,10 +289,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testDeleteDocs()
     {
         $this->client->expects($this->once())
-            ->method('deleteDocumentsByIds');
+            ->method('bulkQuery');
         $this->assertSame(
             $this->model,
-            $this->model->deleteDocs([1, ])
+            $this->model->deleteDocs(['1' => 1])
         );
     }
 
@@ -298,9 +303,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testDeleteDocsFailure()
     {
         $this->client->expects($this->once())
-            ->method('deleteDocumentsByIds')
+            ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
-        $this->model->deleteDocs([1, ]);
+        $this->model->deleteDocs(['1' => 1]);
     }
 
     /**

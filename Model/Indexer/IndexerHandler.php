@@ -86,7 +86,7 @@ class IndexerHandler implements IndexerInterface
     {
         $documentIds = [];
         foreach ($documents as $entityId => $document) {
-            $documentIds []= $entityId;
+            $documentIds [$entityId]= $entityId;
         }
         $this->adapter->checkIndex();
         $this->adapter->deleteDocs($documentIds);

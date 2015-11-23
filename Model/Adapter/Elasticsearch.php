@@ -153,7 +153,7 @@ class Elasticsearch
         if (count($documents)) {
             try {
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents);
-                $this->connectionManager->getConnection()->addDocuments($bulkIndexDocuments);
+                $this->connectionManager->getConnection()->bulkQuery($bulkIndexDocuments);
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
@@ -171,20 +171,16 @@ class Elasticsearch
      */
     public function cleanIndex()
     {
-        try {
-            $indexName = $this->clientConfig->getIndexName();
-            $entityType = $this->clientConfig->getEntityType();
-            $this->connectionManager->getConnection()->deleteDocumentsFromIndex($indexName, $entityType);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-            throw $e;
-        }
+        $indexName = $this->clientConfig->getIndexName();
+        $entityType = $this->clientConfig->getEntityType();
+        $documentIds = $this->connectionManager->getConnection()->getAllIds($indexName, $entityType);
+        $this->deleteDocs($documentIds);
 
         return $this;
     }
 
     /**
-     * Add prepared Elasticsearch documents to Elasticsearch index
+     * Delete documents from Elasticsearch index by Ids
      *
      * @param array $documentIds
      * @return $this
@@ -193,9 +189,8 @@ class Elasticsearch
     public function deleteDocs(array $documentIds)
     {
         try {
-            $indexName = $this->clientConfig->getIndexName();
-            $entityType = $this->clientConfig->getEntityType();
-            $this->connectionManager->getConnection()->deleteDocumentsByIds($documentIds, $indexName, $entityType);
+            $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat($documentIds, self::BULK_ACTION_DELETE);
+            $this->connectionManager->getConnection()->bulkQuery($bulkDeleteDocuments);
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw $e;
@@ -205,7 +200,7 @@ class Elasticsearch
     }
 
     /**
-     * Reformat documents array to bulk index format
+     * Reformat documents array to bulk format
      *
      * @param $documents
      * @param string $action
@@ -229,7 +224,11 @@ class Elasticsearch
                     '_index' => $indexName
                 ]
             ];
-            $bulkArray['body'][] = $document;
+            if ($action == self::BULK_ACTION_INDEX) {
+                $bulkArray['body'][] = $document;
+            } elseif ($action == self::BULK_ACTION_UPDATE) {
+                $bulkArray['body'][] = ['doc' => $document];
+            }
         }
 
         return $bulkArray;

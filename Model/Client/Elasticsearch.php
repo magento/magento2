@@ -104,67 +104,48 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Adds a collection of documents in bulk format to Elasticsearch index
+     * Performs bulk query over Elasticsearch index
      *
-     * @param array $documents
+     * @param array $query
      * @return void
      */
-    public function addDocuments($documents)
+    public function bulkQuery($query)
     {
-        $this->client->bulk($documents);
+        $this->client->bulk($query);
     }
 
     /**
-     * Delete all documents from index
-     *
+     * Gets all document Ids from specified index
+     * 
      * @param string $index
      * @param string $entityType
-     * @return void
+     * return array
      */
-    public function deleteDocumentsFromIndex($index, $entityType)
+    public function getAllIds($index, $entityType)
     {
-        try {
-            $this->client->deleteByQuery([
-                'index' => $index,
-                'type' => $entityType,
-                'body' => [
-                    'query' => [
-                        'match_all' => [],
-                    ],
-                ],
-            ]);
-        } catch (Missing404Exception $e) {
-            // Data wasn't indexed yet.
+        $ids = [];
+        $scrollData = $this->client->search([
+             'scroll' => '1m',
+             'search_type' => 'scan',
+             'index' => $index,
+             'type' => $entityType,
+             'body' => [
+                 'query' => [
+                     'match_all' => [],
+                 ],
+             ],
+        ]);
+        $scrollId = $scrollData['_scroll_id'];
+        $indexData = $this->client->scroll([
+            'scroll_id' => $scrollId,
+            'scroll' => '1m',
+        ]);
+        if (!empty($indexData['hits']['hits'])) {
+            foreach ($indexData['hits']['hits'] as $hit) {
+                $ids[$hit['_id']] = $hit['_id'];
+            }
         }
-    }
-
-    /**
-     * Delete documents from index by ids
-     *
-     * @param array $ids
-     * @param string $index
-     * @param string $entityType
-     * @param $entityType
-     * @return void
-     */
-    public function deleteDocumentsByIds(array $ids, $index, $entityType)
-    {
-        try {
-            $this->client->deleteByQuery([
-                'index' => $index,
-                'type' => $entityType,
-                'body' => [
-                    'query' => [
-                        'ids' => [
-                            'type' => $entityType,
-                            'values' => $ids,
-                        ],
-                    ],
-                ],
-            ]);
-        } catch (Missing404Exception $e) {
-            // Data wasn't indexed yet.
-        }
+        return $ids;
     }
 
     /**
@@ -186,7 +167,7 @@ class Elasticsearch implements ClientInterface
      */
     public function indexExists($index)
     {
-        $this->client->indices()->exists(['index' => $index]);
+         return $this->client->indices()->exists(['index' => $index]);
     }
 
     /**

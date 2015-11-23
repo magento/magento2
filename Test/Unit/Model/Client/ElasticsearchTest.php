@@ -37,7 +37,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'indices',
                 'ping',
                 'bulk',
-                'deleteByQuery',
+                'search',
+                'scroll',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,23 +104,25 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test addDocuments() method
+     * Test bulkQuery() method
      */
-    public function testAddDocuments()
+    public function testBulkQuery()
     {
         $this->elasticsearchClientMock->expects($this->once())
             ->method('bulk');
-        $this->model->addDocuments([]);
+        $this->model->bulkQuery([]);
     }
 
     /**
-     * Test deleteDocumentsFromIndex() method
+     * Test getAllIds() method
      */
-    public function testDeleteDocumentsFromIndex()
+    public function testGetAllIds()
     {
         $this->elasticsearchClientMock->expects($this->once())
-            ->method('deleteByQuery')
+            ->method('search')
             ->with([
+                'scroll' => '1m',
+                'search_type' => 'scan',
                 'index' => 'indexName',
                 'type' => 'product',
                 'body' => [
@@ -127,32 +130,25 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                         'match_all' => [],
                     ],
                 ],
-            ]);
-        $this->model->deleteDocumentsFromIndex('indexName', 'product');
-    }
-
-    /**
-     * Test deleteDocumentsByIds() method
-     */
-    public function testDeleteDocumentsByIds()
-    {
+            ])
+            ->willReturn(['_scroll_id' => 'scrollId']);
         $this->elasticsearchClientMock->expects($this->once())
-            ->method('deleteByQuery')
+            ->method('scroll')
             ->with([
-                'index' => 'indexName',
-                'type' => 'product',
-                'body' => [
-                    'query' => [
-                        'ids' => [
-                            'type' => 'product',
-                            'values' => [
-                                1,
-                            ],
-                        ],
+                'scroll_id' => 'scrollId',
+                'scroll' => '1m',
+            ])
+            ->willReturn([
+                'hits' => [
+                    'hits' => [
+                        '0' => [
+                            '_id' => 1,
+                            'sku' => 'SKU',
+                        ]
                     ],
                 ],
             ]);
-        $this->model->deleteDocumentsByIds([1], 'indexName', 'product');
+        $this->model->getAllIds('indexName', 'product');
     }
 
     /**
