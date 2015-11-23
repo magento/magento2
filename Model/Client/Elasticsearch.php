@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
@@ -174,7 +173,7 @@ class Elasticsearch implements ClientInterface
      * Add mapping to Elasticsearch index
      *
      * @param array $fields
-     * @param $index
+     * @param string $index
      * @param $entityType
      * @return void
      */
