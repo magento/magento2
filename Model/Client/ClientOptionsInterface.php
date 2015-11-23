@@ -15,10 +15,4 @@ interface ClientOptionsInterface
      */
     public function prepareClientOptions($options = []);
 
-    /**
-     * Check if third party engine is selected and active
-     *
-     * @return bool
-     */
-    public function isThirdPartyEngineAvailable();
 }
