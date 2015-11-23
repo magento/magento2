@@ -103,10 +103,9 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider attributeTypesProvider
      * @return array
      */
-    public function testGetAllAttributesTypes($backendType, $frontendType, $code)
+    public function testGetAllAttributesTypes()
     {
         $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->setMethods(['getBackendType', 'getFrontendInput'])
@@ -123,10 +122,10 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->eavConfig->expects($this->any())->method('getEntityAttributeCodes')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE)
-            ->willReturn([$code]);
+            ->willReturn(['attr1']);
 
         $this->eavConfig->expects($this->any())->method('getAttribute')
-            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $code)
+            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, 'attr1')
             ->willReturn($attributeMock);
 
         $this->eavAttributeResource->expects($this->any())
@@ -163,21 +162,6 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
             ['position', 'position_category_0'],
             ['test_code', 'test_code_1', ['type' => 'text']],
             ['test_code', 'test_code_2', ['type' => 'text', 'storeId'=>'2']],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function attributeTypesProvider()
-    {
-        return [
-            ['static', 'select', 'attr1'],
-            ['static', 'text', 'attr1'],
-            ['timestamp', 'select', 'attr1'],
-            ['int', 'select', 'attr1'],
-            ['decimal', 'select', 'attr1'],
-            ['varchar', 'select', 'attr1'],
         ];
     }
 }
