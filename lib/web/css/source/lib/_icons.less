@@ -289,7 +289,7 @@
 ) {
     .lib-url-check(@_icon-image);
 
-    .lib-css(background-image, @lib-url-check-output);
+    .lib-css(background-image, @lib-url-check-output); // @lib-url-check-output is a returned variable of .lib-url-check() mixin
     .lib-css(line-height, @_icon-image-height);
     .lib-css(margin, @_icon-image-margin);
     .lib-css(vertical-align, @_icon-image-vertical-align);
