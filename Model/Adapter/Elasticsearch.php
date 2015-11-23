@@ -226,8 +226,6 @@ class Elasticsearch
             ];
             if ($action == self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
-            } elseif ($action == self::BULK_ACTION_UPDATE) {
-                $bulkArray['body'][] = ['doc' => $document];
             }
         }
 

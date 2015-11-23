@@ -90,19 +90,6 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * Retrieve information from search engine configuration
-     *
-     * @param string $field
-     * @param int|null $storeId
-     * @return string|int
-     */
-    public function getSearchConfigData($field, $storeId = null)
-    {
-        $path = 'catalog/search/' . $field;
-        return $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $storeId);
-    }
-
-    /**
      * Get Elasticsearch index name
      *
      * @return string
