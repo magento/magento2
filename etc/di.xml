@@ -49,14 +49,6 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\CustomerGroup" type="Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup">
-        <arguments>
-            <argument name="clientOptions" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Customer\Model\ResourceModel\Group">
-        <plugin name="catalogsearchFulltextIndexerCustomerGroupEs" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\CustomerGroup"/>
-    </type>
     <virtualType name="Magento\Elasticsearch\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>
