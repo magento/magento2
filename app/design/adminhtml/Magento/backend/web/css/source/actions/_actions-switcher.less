@@ -46,6 +46,7 @@
     margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
     width: 200%;
+
     &:before,
     &:after {
         border-radius: @actions-switcher-border-radius;
@@ -57,10 +58,12 @@
         padding: 0;
         width: 50%;
     }
+
     &:before {
         background-color: @color-green-apple;
         content: "";
     }
+
     &:after {
         content: "";
         text-align: right;
@@ -92,14 +95,17 @@
 
 .actions-switch-checkbox {
     display: none;
+
     &:checked {
         + .actions-switch-label {
             .actions-switch-inner {
                 margin-left: 0;
             }
+
             .actions-switch-indicator {
                 right: 0;
             }
+
             .actions-switch-text {
                 &:after {
                     content: attr(data-label-yes);
